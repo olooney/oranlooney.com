@@ -1,9 +1,9 @@
 ---
 title: "Your First Two R Packages"
 author: "Oran Looney"
-date: 2018-06-16T16:27:14:00-06:00
-categories: ["R"]
-tags: ["tidyverse", "ggplot2"]
+date: 2018-06-16
+tags: ["R"]
+image: /post/r-first-two_files/lead.png
 ---
 
 
@@ -36,7 +36,7 @@ tags: ["tidyverse", "ggplot2"]
   geom_boxplot()
 ## Warning: Transformation introduced infinite values in continuous y-axis
 ## Warning: Removed 5 rows containing non-finite values (stat_boxplot).</code></pre>
-<p><img src="/post/2018-06-16-r-first-two_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(midwest, aes(x=percblack/100, y=percbelowpoverty/100)) +
   scale_x_log10(breaks=c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100), labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) + 
@@ -48,13 +48,13 @@ tags: ["tidyverse", "ggplot2"]
 
 ## Warning: Transformation introduced infinite values in continuous x-axis
 ## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
-<p><img src="/post/2018-06-16-r-first-two_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>One handy utility actually visualizes an entire <code>data.frame</code> and all pairwise interactions between columns:</p>
 <pre class="r"><code>GGally::ggpairs(iris, mapping=ggplot2::aes(color=Species, alpha=0.5))
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="/post/2018-06-16-r-first-two_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>This is more than just a pretty picture: it tells you almost everything you would need to know about the distribution of each column (along the diagonal) as well as giving you <em>two</em> separate visual representations of the relationship between each pair of variables. Usually you get a correlation in the upper triangle and a scatter plot in the lower triangle of the matrix, but <code>ggpairs()</code> is also aware of which data types are categorical factors and will use an appropriate visualization, such as a bar chart or boxplot, to help pack as much useful information into one grid as in mechanically possible.</p>
 </div>

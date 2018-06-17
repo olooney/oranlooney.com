@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Javascript on OranLooney.com</title>
+    <link>/tags/javascript/</link>
+    <description>Recent content in Javascript on OranLooney.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <lastBuildDate>Wed, 28 Apr 2010 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>So, Apparently I&#39;m an iPad Developer Now</title>
+      <link>/post/apparently-ipad-developer/</link>
+      <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
+      
+      <guid>/post/apparently-ipad-developer/</guid>
+      <description>Last week my boss stopped by and dropped a brand spanking new iPad on my desk.&amp;quot;Make our application work on this,&amp;quot; he commanded. &amp;quot;You have two days before we demo it at the trade show.&amp;quot; Madness? No, these are web apps! You see, for the last couple years we&#39;ve beenworking exclusively on AJAX applications: web pages stuffed with so muchJavaScript they look and feel like desktop apps. It&#39;s harder than writingdesktop software, but if you pull it off you get an application that can berun anywhere, instantly.</description>
+    </item>
+    
+  </channel>
+</rss>

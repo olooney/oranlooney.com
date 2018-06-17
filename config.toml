@@ -1,6 +1,6 @@
 #baseurl = "https://example.com/"
 baseurl = "/"
-title = "oran"
+title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"

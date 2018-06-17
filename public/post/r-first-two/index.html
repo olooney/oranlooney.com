@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <title>Your First Two R Packages - oran</title>
-  <meta property="og:title" content="Your First Two R Packages - oran" />
-  <meta name="twitter:title" content="Your First Two R Packages - oran" />
+  <title>Your First Two R Packages - OranLooney.com</title>
+  <meta property="og:title" content="Your First Two R Packages - OranLooney.com" />
+  <meta name="twitter:title" content="Your First Two R Packages - OranLooney.com" />
   <meta name="description" content="Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.">
   <meta property="og:description" content="Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.">
   <meta name="twitter:description" content="Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few …">
-  <meta name="author" content="Foo Bar"/>
-  <meta property="og:site_name" content="oran" />
+  <meta name="author" content="Oran Looney"/>
+  <meta property="og:site_name" content="OranLooney.com" />
   <meta property="og:url" content="/post/r-first-two/" />
   <meta property="og:type" content="article" />
+  <meta property="og:image" content="/post/r-first-two_files/lead.png" />
+  <meta name="twitter:image" content="/post/r-first-two_files/lead.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
@@ -26,9 +28,8 @@
 
 <header class="site-header">
   <nav class="site-navi">
-    <h1 class="site-title"><a href="/">oran</a></h1>
+    <h1 class="site-title"><a href="/">OranLooney.com</a></h1>
     <ul class="site-navi-items">
-      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
       <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
       <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
       <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
@@ -39,29 +40,17 @@
 
   <div class="main" role="main">
     <article class="article">
-      
+      <img src="/post/r-first-two_files/lead.png" class="article-image" />
       
       <h1 class="article-title">Your First Two R Packages</h1>
       
       <hr class="article-title-bottom">
       <ul class="article-meta">
-        <li class="article-meta-date"><time>January 1, 0001</time></li>
-        <li class="article-meta-categories">
-          <a href="/categories/r/">
-            <i class="fas fa-folder"></i>
+        <li class="article-meta-date"><time>June 16, 2018</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/r/">
+            <i class="fas fa-tag"></i>
             R
-          </a>&nbsp;
-        </li>
-        <li class="article-meta-tags">
-          <a href="/tags/tidyverse/">
-            <i class="fas fa-tag"></i>
-            tidyverse
-          </a>&nbsp;
-        </li>
-        <li class="article-meta-tags">
-          <a href="/tags/ggplot2/">
-            <i class="fas fa-tag"></i>
-            ggplot2
           </a>&nbsp;
         </li>
       </ul>
@@ -117,6 +106,7 @@
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>This is more than just a pretty picture: it tells you almost everything you would need to know about the distribution of each column (along the diagonal) as well as giving you <em>two</em> separate visual representations of the relationship between each pair of variables. Usually you get a correlation in the upper triangle and a scatter plot in the lower triangle of the matrix, but <code>ggpairs()</code> is also aware of which data types are categorical factors and will use an appropriate visualization, such as a bar chart or boxplot, to help pack as much useful information into one grid as in mechanically possible.</p>
 </div>
 
     </article>
@@ -151,10 +141,10 @@
 </ul>
 
     <ul class="pager article-pager">
-      <li class="pager-newer">
-          <a href="/post/hugoisforlovers/" data-toggle="tooltip" data-placement="top" title="Getting Started with Hugo">&lt; Newer</a>
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/apparently-ipad-developer/" data-toggle="tooltip" data-placement="top" title="So, Apparently I&#39;m an iPad Developer Now">Older &gt;</a>
       </li>
-      <li class="pager-older pager-noitem">Older &gt;</li>
     </ul>
   </div>
 
@@ -162,7 +152,6 @@
 <div class="site-footer">
   <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
   <ul class="site-footer-items">
-    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
   </ul>
   <div class="powerdby">
     Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
