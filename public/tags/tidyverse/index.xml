@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tidyverse on oran</title>
+    <link>/tags/tidyverse/</link>
+    <description>Recent content in Tidyverse on oran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    
+	<atom:link href="/tags/tidyverse/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Your First Two R Packages</title>
+      <link>/post/2018-06-16-r-first-two/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018-06-16-r-first-two/</guid>
+      <description>Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.</description>
+    </item>
+    
+  </channel>
+</rss>

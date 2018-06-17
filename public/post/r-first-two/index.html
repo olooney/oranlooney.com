@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Your First Two R Packages - oran</title>
+  <meta property="og:title" content="Your First Two R Packages - oran" />
+  <meta name="twitter:title" content="Your First Two R Packages - oran" />
+  <meta name="description" content="Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.">
+  <meta property="og:description" content="Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.">
+  <meta name="twitter:description" content="Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few …">
+  <meta name="author" content="Foo Bar"/>
+  <meta property="og:site_name" content="oran" />
+  <meta property="og:url" content="/post/r-first-two/" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">oran</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-categories"><a href="/categories/" title="Categories">Categories</a></li>
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      
+      
+      <h1 class="article-title">Your First Two R Packages</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>January 1, 0001</time></li>
+        <li class="article-meta-categories">
+          <a href="/categories/r/">
+            <i class="fas fa-folder"></i>
+            R
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/tidyverse/">
+            <i class="fas fa-tag"></i>
+            tidyverse
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/ggplot2/">
+            <i class="fas fa-tag"></i>
+            ggplot2
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <div id="dont-start-with-vanilla" class="section level1">
+<h1>Don’t Start With Vanilla!</h1>
+<p>It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you <em>do</em> learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code. Those two areas are:</p>
+<ol style="list-style-type: decimal">
+<li>Data Manipulation</li>
+<li>Visualization</li>
+</ol>
+<p>Wait a minute, you might say. Aren’t those both fundamental to applied statistics and data mining? If R has such a good reputation, how can it be absolutely terrible at those two things?</p>
+<p>Well, it’s really just R’s <em>built-in</em> utilities that are terrible. And not really that terrible in an absolute sense - I’m sure they were killer circa 1990 - just terrible in comparison to modern R packages or other modern frameworks like Pandas. It’s generally accepted in R development that the built-ins are just there for backwards compatability with legacy code (stretching back decades) and to get anything reasonable, you install a package.</p>
+<p>There are actually multiple options for improving R’s built-in <code>data.frame</code>, but the one I recommend is <code>dplyr</code>, which actually comes bundled in a package called the <code>tidyverse</code> containing many useful utilities.</p>
+<pre class="r"><code>mw_race &lt;- midwest %&gt;% 
+  transmute(
+    state, 
+    county, 
+    #popwhite = popwhite / poptotal, 
+    popblack = popblack / poptotal, 
+    popamerindian = popamerindian / poptotal, 
+    popasian = popasian / poptotal, 
+    popother = popother / poptotal
+  ) %&gt;%
+  gather(race, pop, -state, -county)</code></pre>
+<p>We can also form some nice plots:</p>
+<pre class="r"><code>ggplot(mw_race, aes(race, pop, fill=race)) + 
+  scale_y_log10(
+    labels = scales::percent) +
+  geom_boxplot()
+## Warning: Transformation introduced infinite values in continuous y-axis
+## Warning: Removed 5 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(midwest, aes(x=percblack/100, y=percbelowpoverty/100)) +
+  scale_x_log10(breaks=c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100), labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) + 
+  geom_point(aes(size=log(poptotal), col=state, alpha=0.5)) + 
+  scale_size(range=c(0.5, 4)) +
+  geom_smooth(method=&quot;lm&quot;) +
+  labs(title=&quot;Poverty Line and Race&quot;, x=&quot;Black Population (%)&quot;, y=&quot;Below Poverty Line (%)&quot;)
+## Warning: Transformation introduced infinite values in continuous x-axis
+
+## Warning: Transformation introduced infinite values in continuous x-axis
+## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>One handy utility actually visualizes an entire <code>data.frame</code> and all pairwise interactions between columns:</p>
+<pre class="r"><code>GGally::ggpairs(iris, mapping=ggplot2::aes(color=Species, alpha=0.5))
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="/post/r-first-two_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+
+    </article>
+
+    
+<ul class="article-share">
+  <li>
+    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </li>
+  <li>
+    <div class="fb-share-button" data-href="/post/r-first-two/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+  </li>
+  <li>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <g:plus action="share"></g:plus>
+  </li>
+  <li>
+    <a href="http://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label-counter" data-hatena-bookmark-lang="en" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </li>
+  <li>
+    <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="en"></a>
+    <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement("script");j.id=i;j.src="https://widgets.getpocket.com/v1/j/btn.js?v=1";var w=d.getElementById(i);d.body.appendChild(j);}}(document,"pocket-btn-js");</script>
+  </li>
+</ul>
+
+    <ul class="pager article-pager">
+      <li class="pager-newer">
+          <a href="/post/hugoisforlovers/" data-toggle="tooltip" data-placement="top" title="Getting Started with Hugo">&lt; Newer</a>
+      </li>
+      <li class="pager-older pager-noitem">Older &gt;</li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-about"><a href="/about/" title="About">About</a></li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

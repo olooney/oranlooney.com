@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on oran</title>
+    <link>/categories/r/</link>
+    <description>Recent content in R on oran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <lastBuildDate>Thu, 23 Jul 2015 21:13:14 -0500</lastBuildDate>
+    
+	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>/post/2015-07-23-r-rmarkdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/post/2015-07-23-r-rmarkdown/</guid>
+      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>Your First Two R Packages</title>
+      <link>/post/2018-06-16-r-first-two/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018-06-16-r-first-two/</guid>
+      <description>Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are few key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.</description>
+    </item>
+    
+  </channel>
+</rss>
