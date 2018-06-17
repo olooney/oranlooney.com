@@ -17,8 +17,36 @@
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
+
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
   <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+      processEscapes: true,
+      processEnvironments: true
+    },
+    // Center justify equations in code and markdown cells. Elsewhere
+    // we use CSS to left justify single line equations in code cells.
+    displayAlign: 'center',
+    "HTML-CSS": {
+      styles: {'.MathJax_Display': {"margin": 0}},
+      linebreaks: { automatic: true }
+    }
+  });
+  </script>
+
+  <link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
 </head>
 
 <body>
@@ -45,6 +73,16 @@
         <li class="archives-monthly-container">
           <ul>
             <li class="archives-item">
+              <a href="/post/complex-r/">Complex Numbers in R</a>
+              <ul class="taxonomies">
+                <li class="taxonomies-item"><a href="/tags/r/"><i class="fas fa-tag"></i>R</a></li>
+                <li class="taxonomies-item"><a href="/tags/math/"><i class="fas fa-tag"></i>math</a></li>
+              </ul>
+              <time>June 17, 2018</time>
+            </li>
+          </ul>
+          <ul>
+            <li class="archives-item">
               <a href="/post/r-first-two/">Your First Two R Packages</a>
               <ul class="taxonomies">
                 <li class="taxonomies-item"><a href="/tags/r/"><i class="fas fa-tag"></i>R</a></li>
@@ -66,6 +104,18 @@
             </li>
           </ul>
         </li>
+        <li class="archives-month">2009-11</li>
+        <li class="archives-monthly-container">
+          <ul>
+            <li class="archives-item">
+              <a href="/post/deep-copy-javascript/">Deep Copy in JavaScript</a>
+              <ul class="taxonomies">
+                <li class="taxonomies-item"><a href="/tags/javascript/"><i class="fas fa-tag"></i>JavaScript</a></li>
+              </ul>
+              <time>November 25, 2009</time>
+            </li>
+          </ul>
+        </li>
       </ul>
     </section>
     
@@ -78,7 +128,7 @@
   <ul class="site-footer-items">
     <li class="site-footer-item-rsslink">
       <a href="/archives/index.xml" type="application/rss+xml" target="_blank" title="RSS">
-        <i class="fas fa-rss"></i> RSS
+        <i class="fas fa-rss"></i>
       </a>
     </li>
   </ul>

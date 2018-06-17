@@ -48,8 +48,3 @@ copyright = "&copy; Copyright 2018 Oran Looney"
   identifier = "about"
   url = "/about/"
 
-[[menu.footer]]
-  name = "About"
-  weight = 1
-  identifier = "about"
-  url = "/about/"

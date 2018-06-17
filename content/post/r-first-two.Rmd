@@ -7,17 +7,17 @@ image: /post/r-first-two_files/lead.png
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(collapse=TRUE)
+knitr::opts_chunk$set(collapse=TRUE, warning=FALSE)
 library(tidyverse)
 library(ggplot2)
 library(GGally)
 data("midwest", package="ggplot2")
 ```
 
-# Don't Start With Vanilla!
+## Don't Start With Vanilla!
 
 It's natural to assume you should learn the built-in libraries of a new language before
-moving on to third-party libraries. Unfortunately, when it comes to R, there are few
+moving on to third-party libraries. Unfortunately, when it comes to R, there are 
 key areas where the built-in functionality is so terrible, and so out-dated, and so full
 of impossible-to-remember abbreviations, and frankly not very good even once you *do* learn
 it, that it's best to start with a few high quality libraries and treat the built-in functionality
@@ -77,7 +77,10 @@ One handy utility actually visualizes an entire `data.frame` and all pairwise in
 between columns:
 
 ```{r}
-GGally::ggpairs(iris, mapping=ggplot2::aes(color=Species, alpha=0.5))
+GGally::ggpairs(
+  iris, 
+  mapping=ggplot2::aes(color=Species, alpha=0.5), 
+  lower = list(combo = wrap("facethist", binwidth = 0.5)))
 ```
 
 This is more than just a pretty picture: it tells you almost everything you would need to

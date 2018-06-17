@@ -6,12 +6,12 @@
   <title>About - OranLooney.com</title>
   <meta property="og:title" content="About - OranLooney.com" />
   <meta name="twitter:title" content="About - OranLooney.com" />
-  <meta name="description" content="I&rsquo;m Oran Looney. You can contact me at olooney@gmail.com.
+  <meta name="description" content="Hi, I&rsquo;m Oran Looney.
 I hold dual master&rsquo;s degrees in physics and mathematics, but since graduating I&rsquo;ve worked as an HL7 Interface Analyst, a Software Engineer, a Director of Software Development, a Software Architect, and a Data Scientist. These days I&rsquo;m professionally interested in R, Python, Docker, data visualization, applied statistics, quantitative marketing, and healthcare data management.">
-  <meta property="og:description" content="I&rsquo;m Oran Looney. You can contact me at olooney@gmail.com.
+  <meta property="og:description" content="Hi, I&rsquo;m Oran Looney.
 I hold dual master&rsquo;s degrees in physics and mathematics, but since graduating I&rsquo;ve worked as an HL7 Interface Analyst, a Software Engineer, a Director of Software Development, a Software Architect, and a Data Scientist. These days I&rsquo;m professionally interested in R, Python, Docker, data visualization, applied statistics, quantitative marketing, and healthcare data management.">
-  <meta name="twitter:description" content="I&rsquo;m Oran Looney. You can contact me at olooney@gmail.com.
-I hold dual master&rsquo;s degrees in physics and mathematics, but since graduating I&rsquo;ve worked as an HL7 Interface Analyst, a …">
+  <meta name="twitter:description" content="Hi, I&rsquo;m Oran Looney.
+I hold dual master&rsquo;s degrees in physics and mathematics, but since graduating I&rsquo;ve worked as an HL7 Interface Analyst, a Software Engineer, a Director of …">
   <meta name="author" content="Oran Looney"/>
   <meta property="og:site_name" content="OranLooney.com" />
   <meta property="og:url" content="/about/" />
@@ -23,8 +23,36 @@ I hold dual master&rsquo;s degrees in physics and mathematics, but since graduat
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
+
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
   <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+      processEscapes: true,
+      processEnvironments: true
+    },
+    // Center justify equations in code and markdown cells. Elsewhere
+    // we use CSS to left justify single line equations in code cells.
+    displayAlign: 'center',
+    "HTML-CSS": {
+      styles: {'.MathJax_Display': {"margin": 0}},
+      linebreaks: { automatic: true }
+    }
+  });
+  </script>
+
+  <link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
 </head>
 
 <body>
@@ -63,7 +91,7 @@ I hold dual master&rsquo;s degrees in physics and mathematics, but since graduat
 
 </section>
 
-      <p>I&rsquo;m Oran Looney. You can contact me at olooney@gmail.com.</p>
+      <p>Hi, I&rsquo;m Oran Looney.</p>
 
 <p>I hold dual master&rsquo;s degrees in physics and mathematics, but since graduating
 I&rsquo;ve worked as an HL7 Interface Analyst, a Software Engineer, a Director of
@@ -80,7 +108,7 @@ statistics, quantitative marketing, and healthcare data management.</p>
   <ul class="site-footer-items">
     <li class="site-footer-item-rsslink">
       <a href="/about/index.xml" type="application/rss+xml" target="_blank" title="RSS">
-        <i class="fas fa-rss"></i> RSS
+        <i class="fas fa-rss"></i>
       </a>
     </li>
   </ul>

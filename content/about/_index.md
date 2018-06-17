@@ -2,7 +2,7 @@
 title = "About"
 date = "2014-04-09"
 +++
-I'm Oran Looney. You can contact me at olooney@gmail.com.
+Hi, I'm Oran Looney.
 
 I hold dual master's degrees in physics and mathematics, but since graduating
 I've worked as an HL7 Interface Analyst, a Software Engineer, a Director of

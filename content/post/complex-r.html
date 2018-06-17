@@ -1,0 +1,62 @@
+---
+title: "Complex Numbers in R"
+author: "Oran Looney"
+date: 2018-06-17
+tags: ["R", "math"]
+image: /post/complex-r_files/mandala.jpg
+---
+
+
+
+<p>R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.</p>
+<p>Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems.</p>
+<p>A Pythagorean triple is an integer solution to the Pythagorean equation:</p>
+<p><span class="math display">\[
+a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}
+\]</span></p>
+<p>You learned at least one these in school – the famous 3, 4, 5 triangle:</p>
+<p><img src="/post/complex-r_files/345.gif" alt="3-4-5 triangle"></p>
+<p>In general <a href="https://en.wikipedia.org/wiki/Diophantine_equation">Diophantine equations</a> – which require <em>integer</em> solutions – can be quite hard to solve, so it might suprise you to learn that it’s almost trivially easy to write down an infinite of Pythagorean triples. Well, it’s easy if we use complex numbers, anyway.</p>
+<p>A Gaussian integer is a complex number where both the real and imaginary parts are integers:</p>
+<p><span class="math display">\[
+  Z[i] = \{ x + iv \mid x,y \in \mathbb{Z} \} \tag{2}
+\]</span></p>
+<p>So one way of stating the problem of finding all Pythagorean triples is to find all Gaussian integers Which are an integer distance away from the origin. The distance of a complex number from the origin is called its “norm” and denoted <span class="math inline">\(\lVert z \rVert\)</span>.</p>
+<p><span class="math display">\[
+  T = \{ z \in \mathbb{C} \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
+\]</span></p>
+<pre class="r"><code>n = 200
+g &lt;- expand.grid(u=1:(2*n), v=1:(2*n))
+g &lt;- g[ g$u &gt; g$v, ]
+cx &lt;- function(x, y) complex(real=x, imaginary=y)
+cg &lt;- cx(g$u, g$v)
+cg2 &lt;- cg**2
+triples &lt;- data.frame(a=Re(cg2), b=Im(cg2), c=Mod(cg2))
+for ( m in c(2,3,5,7,11) ) {
+  triples &lt;- rbind(triples, triples*m);
+}
+halves &lt;- triples[ triples$a %% 2 == 0 &amp; triples$b %% 2 == 0, ] / 2
+triples &lt;- rbind(triples, halves)
+triples &lt;- unique(triples)
+triples &lt;- triples[ triples$a &lt;= n &amp; triples$b &lt;= n,]
+triples &lt;- rbind(triples, data.frame(a=triples$b, b=triples$a, c=triples$c))
+
+plot(triples$a, triples$b, pch=20, cex=0.5)
+title(paste(&quot;All Pythagorean Triples Up to&quot;, n))
+
+small_n = 25
+small_triples &lt;- triples[triples$a&lt;small_n &amp; triples$b&lt;small_n,]
+plot(small_triples$a, small_triples$b, pch=20, cex=0.5,   
+     ylim=c(0,small_n), xlim=c(0,small_n),
+     ylab=&quot;b&quot;, xlab=&quot;a&quot;)
+segments(small_triples$a, small_triples$b, 0, 0, col=&#39;grey&#39;)
+segments(small_triples$a, small_triples$b, small_triples$a, 0, col=&#39;grey&#39;)
+segments(small_triples$a, 0, 0, 0, col=&#39;grey&#39;)
+points(small_triples$a, small_triples$b, pch=20, cex=0.75)
+text(
+  x=small_triples$a, 
+  y=small_triples$b + ifelse(small_triples$a &gt; small_triples$b, +0.5, 0.5),
+  cex=0.8,
+  labels=paste0(&quot;(&quot;, small_triples$a, &quot;,&quot;, small_triples$b, &quot;,&quot;, small_triples$c, &quot;)&quot;)
+)
+title(paste(&quot;Pythagorean Triples Up to&quot;, small_n))</code></pre>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Complex Numbers in R - OranLooney.com</title>
+  <meta property="og:title" content="Complex Numbers in R - OranLooney.com" />
+  <meta name="twitter:title" content="Complex Numbers in R - OranLooney.com" />
+  <meta name="description" content="R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.
+Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems.
+A Pythagorean triple is an integer solution to the Pythagorean equation:
+\[a^2 &#43; b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^&#43; \tag{1}\]
+You learned at least one these in school – the famous 3, 4, 5 triangle:">
+  <meta property="og:description" content="R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.
+Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems.
+A Pythagorean triple is an integer solution to the Pythagorean equation:
+\[a^2 &#43; b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^&#43; \tag{1}\]
+You learned at least one these in school – the famous 3, 4, 5 triangle:">
+  <meta name="twitter:description" content="R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.
+Yet complex …">
+  <meta name="author" content="Oran Looney"/>
+  <meta property="og:site_name" content="OranLooney.com" />
+  <meta property="og:url" content="/post/complex-r/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="/post/complex-r_files/mandala.jpg" />
+  <meta name="twitter:image" content="/post/complex-r_files/mandala.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+      processEscapes: true,
+      processEnvironments: true
+    },
+    // Center justify equations in code and markdown cells. Elsewhere
+    // we use CSS to left justify single line equations in code cells.
+    displayAlign: 'center',
+    "HTML-CSS": {
+      styles: {'.MathJax_Display': {"margin": 0}},
+      linebreaks: { automatic: true }
+    }
+  });
+  </script>
+
+  <link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">OranLooney.com</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/complex-r_files/mandala.jpg" class="article-image" />
+      
+      <h1 class="article-title">Complex Numbers in R</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>June 17, 2018</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/r/">
+            <i class="fas fa-tag"></i>
+            R
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/math/">
+            <i class="fas fa-tag"></i>
+            math
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+      <p>R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.</p>
+<p>Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems.</p>
+<p>A Pythagorean triple is an integer solution to the Pythagorean equation:</p>
+<p><span class="math display">\[
+a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}
+\]</span></p>
+<p>You learned at least one these in school – the famous 3, 4, 5 triangle:</p>
+<p><img src="/post/complex-r_files/345.gif" alt="3-4-5 triangle"></p>
+<p>In general <a href="https://en.wikipedia.org/wiki/Diophantine_equation">Diophantine equations</a> – which require <em>integer</em> solutions – can be quite hard to solve, so it might suprise you to learn that it’s almost trivially easy to write down an infinite of Pythagorean triples. Well, it’s easy if we use complex numbers, anyway.</p>
+<p>A Gaussian integer is a complex number where both the real and imaginary parts are integers:</p>
+<p><span class="math display">\[
+  Z[i] = \{ x + iv \mid x,y \in \mathbb{Z} \} \tag{2}
+\]</span></p>
+<p>So one way of stating the problem of finding all Pythagorean triples is to find all Gaussian integers Which are an integer distance away from the origin. The distance of a complex number from the origin is called its “norm” and denoted <span class="math inline">\(\lVert z \rVert\)</span>.</p>
+<p><span class="math display">\[
+  T = \{ z \in \mathbb{C} \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
+\]</span></p>
+<pre class="r"><code>n = 200
+g &lt;- expand.grid(u=1:(2*n), v=1:(2*n))
+g &lt;- g[ g$u &gt; g$v, ]
+cx &lt;- function(x, y) complex(real=x, imaginary=y)
+cg &lt;- cx(g$u, g$v)
+cg2 &lt;- cg**2
+triples &lt;- data.frame(a=Re(cg2), b=Im(cg2), c=Mod(cg2))
+for ( m in c(2,3,5,7,11) ) {
+  triples &lt;- rbind(triples, triples*m);
+}
+halves &lt;- triples[ triples$a %% 2 == 0 &amp; triples$b %% 2 == 0, ] / 2
+triples &lt;- rbind(triples, halves)
+triples &lt;- unique(triples)
+triples &lt;- triples[ triples$a &lt;= n &amp; triples$b &lt;= n,]
+triples &lt;- rbind(triples, data.frame(a=triples$b, b=triples$a, c=triples$c))
+
+plot(triples$a, triples$b, pch=20, cex=0.5)
+title(paste(&quot;All Pythagorean Triples Up to&quot;, n))
+
+small_n = 25
+small_triples &lt;- triples[triples$a&lt;small_n &amp; triples$b&lt;small_n,]
+plot(small_triples$a, small_triples$b, pch=20, cex=0.5,   
+     ylim=c(0,small_n), xlim=c(0,small_n),
+     ylab=&quot;b&quot;, xlab=&quot;a&quot;)
+segments(small_triples$a, small_triples$b, 0, 0, col=&#39;grey&#39;)
+segments(small_triples$a, small_triples$b, small_triples$a, 0, col=&#39;grey&#39;)
+segments(small_triples$a, 0, 0, 0, col=&#39;grey&#39;)
+points(small_triples$a, small_triples$b, pch=20, cex=0.75)
+text(
+  x=small_triples$a, 
+  y=small_triples$b + ifelse(small_triples$a &gt; small_triples$b, +0.5, 0.5),
+  cex=0.8,
+  labels=paste0(&quot;(&quot;, small_triples$a, &quot;,&quot;, small_triples$b, &quot;,&quot;, small_triples$c, &quot;)&quot;)
+)
+title(paste(&quot;Pythagorean Triples Up to&quot;, small_n))</code></pre>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/r-first-two/" data-toggle="tooltip" data-placement="top" title="Your First Two R Packages">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

@@ -16,7 +16,7 @@ html .article img {
 	float: right;
 }
 
-html .article img.lead-photo {
+html .article img {
 	display: block;
 	margin: auto;
 }
@@ -28,6 +28,9 @@ html .article h1 {
 html .article h2 {
 	color: #800000;
 	text-decoration: none;
+}
+html .article .article-meta {
+	margin-bottom: 10px;
 }
 
 
@@ -43,14 +46,27 @@ html header.site-header {
 html header.site-header nav.site-navi {
 	max-width: 900px;
 	margin: auto;
-	padding: 0.5em;
+	padding: 0 0.5em 0.5em;
 }
 html .site-navi a:hover,
 html .site-navi a:active
 {
 	color: #ddd;
 }
+html .site-footer {
+	padding: 0 1em;
+}
+html .breadcrumb {
+	padding-left: 10px;
+	color: #800000;
+}
 
+html hr { 
+	border-top-color: #800000; 
+}
+html .list .article {
+	border-bottom-color: #800000; 
+}
 
 html body {
 	margin: 0;
@@ -61,6 +77,11 @@ html .site-header-bottom {
 html .article-image {
 	margin-bottom: 10px;
 }
+
+html aside.toc {
+	display: none;
+}
+
 
 /* Typography */
 html, body, * {

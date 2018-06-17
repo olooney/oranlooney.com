@@ -1,0 +1,148 @@
+---
+title: "Complex Numbers in R"
+author: "Oran Looney"
+date: 2018-06-17
+tags: ["R", "math"]
+image: /post/complex-r_files/mandala.jpg
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+R, like most scientific programming languages, has first-class support for complex numbers.
+And, just like in most languages, this functionality is ignored by the vast majority of users.
+
+Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems. Let's
+present one such problem and then show how we can use leverage R's complex number functionalty to tackle it.
+
+## The Problem
+
+A Pythagorean triple is an integer solution to the Pythagorean equation:
+
+\[
+a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}
+\]
+
+You learned at least one these in school -- the famous 3, 4, 5 triangle:
+
+<img src="/post/complex-r_files/345.gif" alt="3-4-5 triangle">
+
+In general [Diophantine equations](https://en.wikipedia.org/wiki/Diophantine_equation) -- which require *integer* solutions -- can be quite
+hard to solve, so it might suprise you to learn that it's almost trivially easy to write down an infinite of Pythagorean triples. Well, it's easy if we use complex numbers, anyway.
+
+A Gaussian integer is a complex number where both the real and imaginary parts are integers:
+
+\[
+  Z[i] = \{ x + iv \mid x,y \in \mathbb{Z} \} \tag{2}
+\]
+
+So one way of stating the problem of finding all Pythagorean triples is to find all Gaussian integers
+Which are an integer distance away from the origin. The distance of a complex number from the origin
+is called its "norm" and denoted $\lVert z \rVert$.
+
+\[
+  T = \{ z \in \mathbb{C} \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
+\]
+
+Now, in general the norm of Gaussian integer will be the square root of an integer (the integer $u^2 + v^2$
+to be precise.) Therefore if we square a Guassian integer, it will have an integer norm and therefore
+represent a Pythagorean triple!
+
+\[
+\forall z \in Z[i], z^2 \in T
+\]
+
+So that's a pretty good start: just a few minutes work, and we've already found an *infinite number* of Pythagorean triples, and we have a computationally trivial way of constructing new triples: we simply pick any two positive integers $u$ and $v$ and then square the complex number $u + iv$.
+
+Before address the more difficult question of whether or not we've found all possible Pythagorean triples
+using this construction, let's switch over to R and do some code our solution so far.
+
+## The Code
+
+Our algorithm first requires us to pick pairs of positive integers. Just to be thorough, we'll take
+all such pairs up to an arbitary threshold.
+
+```{r grid}
+n = 100
+g <- expand.grid(u=1:(2*n), v=1:(2*n))
+g <- g[ g$u > g$v, ]
+```
+
+Next we need to turn those pairs into R's complex number type. 
+
+```{r}
+cg <- complex(real=g$u, imaginary=g$v)
+```
+
+And finally we simply need to square them.
+
+```{r squares}
+cg2 <- cg**2
+```
+
+Did it work? Well to visualize them, let's put them into a `data.frame` and expand them out to three
+columns to explicitly represent the whole triple. Note that `Mod()` is R's name for what I called "norm" above.
+
+```{r df}
+triples <- data.frame(a=Re(cg2), b=Im(cg2), c=Mod(cg2))
+triples <- triples[ triples$a <= 100 & triples$b < 100,]
+plot(triples$a, triples$b, pch=20, cex=0.5, xlim=c(0,100), ylim=c(0,100))
+title(paste("Squared Gaussian Integers", n))
+```
+
+Now it turns out that our algorithm does not, in fact, generate all possible triples. One thing
+it misses are multiples: if $(3,4,5)$ is a triple, then $(6,8,10)$ should be a triple, and $(9,12,15)$
+should be a triple, and so on. So we have to expand our set to have all multiples.
+
+```{r multiples}
+
+multiples <- lapply(1:33, function(m) triples*m)
+triples <- do.call(rbind, multiples)
+```
+
+And it also turns out that in one special case, where both integers are even, we can divide by two and
+get a new triple that was missed by the inital net we cast. But that's the end of the special cases!
+
+```{r halves}
+halves <- triples[ triples$a %% 2 == 0 & triples$b %% 2 == 0, ] / 2
+triples <- rbind(triples, halves)
+```
+
+Now all we need to is clean up duplicates and duplicate along the mirror line of symmetry...
+
+```{r cleanup}
+triples <- unique(triples)
+triples <- triples[ triples$a <= n & triples$b <= n,]
+triples <- rbind(triples, data.frame(a=triples$b, b=triples$a, c=triples$c))
+```
+
+..and we're finally ready to visualize the real solution.
+
+```{r plotall}
+plot(triples$a, triples$b, pch=20, cex=0.5)
+title(paste("All Pythagorean Triples Up to", n))
+```
+
+That's almost too many to really understand, although there are definitely patterns emerging. Let's zoom in and just plot a small region,but with more detail.
+
+```{r plotsmall}
+small_n = 25
+small_triples <- triples[triples$a<small_n & triples$b<small_n,]
+plot(small_triples$a, small_triples$b, pch=20, cex=0.5,   
+     ylim=c(0,small_n), xlim=c(0,small_n),
+     ylab="b", xlab="a")
+segments(small_triples$a, small_triples$b, 0, 0, col='grey')
+segments(small_triples$a, small_triples$b, small_triples$a, 0, col='grey')
+segments(small_triples$a, 0, 0, 0, col='grey')
+points(small_triples$a, small_triples$b, pch=20, cex=0.75)
+text(
+  x=small_triples$a, 
+  y=small_triples$b + ifelse(small_triples$a > small_triples$b, +0.5, 0.5),
+  cex=0.8,
+  labels=paste0("(", small_triples$a, ",", small_triples$b, ",", small_triples$c, ")")
+)
+title(paste("Pythagorean Triples Up to", small_n))
+```
+
+
