@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Semantic Code - OranLooney.com</title>
+  <meta property="og:title" content="Semantic Code - OranLooney.com" />
+  <meta name="twitter:title" content="Semantic Code - OranLooney.com" />
+  <meta name="description" content="se-man-tic (si-man&rsquo;tik) adj. &nbsp; &nbsp; 1. Of or relating to meaning, especially meaning in language.
+ Programming destroys meaning. When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &mdash; that&rsquo;s why it&rsquo;s called coding.
+At its worst programming is write-only: the program accomplishes a task, but is incomprehensible to humans. See, for example, the story of Mel. Such a program is correct, yet at the same time meaningless.">
+  <meta property="og:description" content="se-man-tic (si-man&rsquo;tik) adj. &nbsp; &nbsp; 1. Of or relating to meaning, especially meaning in language.
+ Programming destroys meaning. When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &mdash; that&rsquo;s why it&rsquo;s called coding.
+At its worst programming is write-only: the program accomplishes a task, but is incomprehensible to humans. See, for example, the story of Mel. Such a program is correct, yet at the same time meaningless.">
+  <meta name="twitter:description" content="se-man-tic (si-man&rsquo;tik) adj. &nbsp; &nbsp; 1. Of or relating to meaning, especially meaning in language.
+ Programming destroys meaning. When we program, we first replace concepts with symbols …">
+  <meta name="author" content="Oran Looney"/>
+  <meta property="og:site_name" content="OranLooney.com" />
+  <meta property="og:url" content="/post/semantic-code/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="/post/semantic-code_files/15717226618_ecbcdbca50_b.jpg" />
+  <meta name="twitter:image" content="/post/semantic-code_files/15717226618_ecbcdbca50_b.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+
+  
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+      processEscapes: true,
+      processEnvironments: true
+    },
+    // Center justify equations in code and markdown cells. Elsewhere
+    // we use CSS to left justify single line equations in code cells.
+    displayAlign: 'center',
+    "HTML-CSS": {
+      styles: {'.MathJax_Display': {"margin": 0}},
+      linebreaks: { automatic: true }
+    }
+  });
+  </script>
+
+  <link rel="stylesheet"
+		href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    <h1 class="site-title"><a href="/">OranLooney.com</a></h1>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-tags"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-archives"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+  </nav>
+</header>
+<hr class="site-header-bottom">
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/semantic-code_files/15717226618_ecbcdbca50_b.jpg" class="article-image" />
+      
+      <h1 class="article-title">Semantic Code</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>April 30, 2008</time></li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#semantic-functions">Semantic Functions</a></li>
+<li><a href="#semantic-methods">Semantic Methods</a></li>
+<li><a href="#implementing-semantic-objects">Implementing Semantic Objects</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<blockquote>
+<p><a href="http://www.answers.com/topic/semantic">se-man-tic</a> (si-man&rsquo;tik) adj. <br> &nbsp; &nbsp;
+1. Of or relating to meaning, especially meaning in language.</p>
+</blockquote>
+
+<p>Programming destroys meaning.  When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &mdash; that&rsquo;s why it&rsquo;s called coding.</p>
+
+<p>At its worst programming is  <em>write-only</em>: the program accomplishes a task, but is incomprehensible to humans.  See, for example, <a href="http://www.pbm.com/~lindahl/mel.html">the story of Mel.</a>  Such a program is correct, yet at the same time meaningless.</p>
+
+<h2 id="semantic-functions">Semantic Functions</h2>
+
+<p>The opposite of write-only programming is <em>semantic programming</em>: writing code that has meaning encoded into it.  Let&rsquo;s take an example from C: <code>strcpy()</code>.  Instead of calling <code>strcpy()</code>, you could write this:</p>
+
+<pre><code>    while( *p++ = *q++ );
+</code></pre>
+
+<p>A good programmer will be able to puzzle out what you <em>meant</em> if he or she is familiar with pointers and null-terminated strings.  If instead we call <code>strcpy()</code>, equivalent code is executed but we&rsquo;ve also made in clear that we <em>mean</em> to copy a string.  <code>strcpy()</code> is more than just a block of code to execute; it is also a symbol with meaning, and when we use it we add meaning to the program.</p>
+
+<p>This becomes important when the implementation is not perfect, as it never is.  Consider this alternative code snippet:</p>
+
+<pre><code>    while( *q ) *p++ = *q++;
+</code></pre>
+
+<p>Which behaves identically to the above snippet for <em>almost</em> all inputs.  Which one is correct?  What did the programmer intend?  Did he or she do it on purpose?  There&rsquo;s no way to know from the code; all semantic meaning is gone.</p>
+
+<p>Functions like <code>strcpy()</code> are semantic symbols, and as such allow you to inject meaning directly into your code&mdash;not into the comments or even the variable names, but the structure of the code itself.</p>
+
+<p>Likewise, you can create new semantic symbols by writing functions that do one &mdash; and only one &mdash; thing and giving them a descriptive names.</p>
+
+<blockquote>
+<p>Functions should be short and sweet, and do just one thing.<br/>
+- Linus Torvalds</p>
+</blockquote>
+
+<p>The <a href="http://lxr.linux.no/linux/Documentation/CodingStyle#L342">Linux Coding Style</a> guide contains <a href="http://lxr.linux.no/linux/Documentation/CodingStyle#L342">good, practical advice</a> on how to write meaningful functions.  A program built out of such semantic functions will be more meaningful, hence more readable and understandable.</p>
+
+<h2 id="semantic-methods">Semantic Methods</h2>
+
+<p>In the object-oriented world, semantic programing means providing methods with good semantics.  An Array class doesn&rsquo;t <em>need</em> to provide a method for accessing the last element, because programmers could simply write:</p>
+
+<pre><code>    myArray[myArray.length-1]
+</code></pre>
+
+<p>and still be guaranteed constant-time access.  But this isn&rsquo;t semantic; you&rsquo;re saying <em>how</em> to do something, instead of <em>what</em> you want to do, programming procedurally instead of declaratively.  It would be better to be able to write:</p>
+
+<pre><code>    myArray.last()
+</code></pre>
+
+<p><em>How</em> is it better, you may ask?  Well, how should this code behave for an empty array?  With the <code>last()</code> method that decision is encapsulated in the Array class.  Even functions &ldquo;too simple to screw up&rdquo; can have edge cases anyone can miss when slamming out &ldquo;just one line of code.&rdquo;</p>
+
+<p>The client is busy trying to solve their own problem.  Having to write a even a simple algorithm (take the length, subtract one, get the element at that index) to get the last element is a distraction.    That shoud be <a href="http://everything2.com/e2node/Somebody%2520Else%2527s%2520Problem%2520Field">SEP</a>: Somebody Else&rsquo;s Problem.  (Specifically, Array&rsquo;s implementer.)</p>
+
+<p>Another example is the <code>.empty()</code> method provided for containers in the C++ STL.  Why not simply compare <code>.length()</code> to 0?  Because not all containers can compute their length in constant time.  <code>list&lt;&gt;</code>, which is implemented as a bi-directionally linked-list, must walk from the start node to the end code in to determine its own length.  However, to determine if it contains at least one node takes only constant time.</p>
+
+<p>The principle is the same: let the client define <em>what</em> to do, and let the object figure out <em>how</em> to do it.  The &ldquo;how&rdquo; might be different between different implementations of the interface, and it might change over time; therefore it should be encapsulated in the object.  By providing the semantic <code>.empty()</code> method, STL contains encapsulate that behavior and provide practical performance and maintainence advantages.</p>
+
+<p>To enable the client to declare <em>what</em> needs to be done without any <em>how</em>, we need to write semantic methods, like <code>.last()</code> and <code>.empty()</code>, that have clear, meaningful responsibilities.  Doing so makes it easier for programmers to learn the object&rsquo;s API, makes the client code simplier and more declarative, and improves encapsulation.</p>
+
+<h2 id="implementing-semantic-objects">Implementing Semantic Objects</h2>
+
+<p>So, semantic methods are useful to the object&rsquo;s client, because they don&rsquo;t have to think about implementations, but can simply say what they want and let the object provide it.  That&rsquo;s useful to the client, but doesn&rsquo;t it impose a burden on the classes implementor?</p>
+
+<p>No.  The reverse is the case; providing semantic methods gives the implementor great freedom to change the underlying implementation and prevents the object from being pushed into a passive, &ldquo;data&rdquo; role.</p>
+
+<p>Suppose a class provides various &ldquo;get&rdquo; methods &mdash; <code>getName()</code>, <code>getAge()</code>, <code>getGender()</code>, and so on &mdash; but no <code>getDescription()</code>  method.  The client can certainly construct a string representation of the object, but the class has no control over it&hellip; in particular it has no way to update those cobbled-together descriptions when the class changes and new fields are added.  In general, we <em>never</em> want the client to have to write procedural code acting on our object, and should provide semantic methods they can call instead.</p>
+
+<p>(C++ programmers may be familar with the idea of writing non-method, non-friend functions to provide convenience functionality that can be implemented in terms of the classes public interface.  That&rsquo;s fine; the important thing is to provide the semantics along with the object, so what I&rsquo;ve said about methods applies here too.)</p>
+
+<p>Programming destroys meaning.  However, this destruction does not need  to be wholesale.  With a little thought we can preserve much of the meaning.  Such &ldquo;semantic code&rdquo; can be understood, re-used, debugged, and modified far more easily than &ldquo;write-only code.&rdquo;</p>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer">
+          <a href="/post/deep-copy-javascript/" data-toggle="tooltip" data-placement="top" title="Deep Copy in JavaScript">&lt; Newer</a>
+      </li>
+      <li class="pager-older pager-noitem">Older &gt;</li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+</body>
+</html>

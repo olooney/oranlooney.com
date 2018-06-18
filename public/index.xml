@@ -50,5 +50,16 @@ The ProblemA Pythagorean triple is an integer solution to the Pythagorean equat
       <description>Update 2017-10-23: This article and code library have not kept up with the rapidly changing JavaScript landscape and are now hopelessly out of date. First came non-enumerable properties, and with ES2015 came the introduction of classes, proxies, symbols, and anonymous functions, all of which break the below logic. I&#39;m afraid I no longer know how to fully copy the full menagerie of JavaScript objects while preserving relative references, and it&#39;s quite possible that no one else knows either.</description>
     </item>
     
+    <item>
+      <title>Semantic Code</title>
+      <link>/post/semantic-code/</link>
+      <pubDate>Wed, 30 Apr 2008 00:00:00 +0000</pubDate>
+      
+      <guid>/post/semantic-code/</guid>
+      <description>se-man-tic (si-man&amp;rsquo;tik) adj. &amp;nbsp; &amp;nbsp; 1. Of or relating to meaning, especially meaning in language.
+ Programming destroys meaning. When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &amp;mdash; that&amp;rsquo;s why it&amp;rsquo;s called coding.
+At its worst programming is write-only: the program accomplishes a task, but is incomprehensible to humans. See, for example, the story of Mel. Such a program is correct, yet at the same time meaningless.</description>
+    </item>
+    
   </channel>
 </rss>
