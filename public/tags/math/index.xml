@@ -19,10 +19,8 @@
       
       <guid>/post/complex-r/</guid>
       <description>R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.
-Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems.
-A Pythagorean triple is an integer solution to the Pythagorean equation:
-\[a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}\]
-You learned at least one these in school – the famous 3, 4, 5 triangle:</description>
+Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems. Let’s present one such problem and then show how we can use leverage R’s complex number functionalty to tackle it.
+The ProblemA Pythagorean triple is an integer solution to the Pythagorean equation:</description>
     </item>
     
   </channel>

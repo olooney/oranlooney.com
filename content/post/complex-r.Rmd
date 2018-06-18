@@ -2,7 +2,7 @@
 title: "Complex Numbers in R"
 author: "Oran Looney"
 date: 2018-06-17
-tags: ["R", "math"]
+tags: ["R", "Math"]
 image: /post/complex-r_files/mandala.jpg
 ---
 
@@ -50,7 +50,7 @@ to be precise.) Therefore if we square a Guassian integer, it will have an integ
 represent a Pythagorean triple!
 
 \[
-\forall z \in Z[i], z^2 \in T
+\forall z \in Z[i], z^2 \in T \tag{4}
 \]
 
 So that's a pretty good start: just a few minutes work, and we've already found an *infinite number* of Pythagorean triples, and we have a computationally trivial way of constructing new triples: we simply pick any two positive integers $u$ and $v$ and then square the complex number $u + iv$.
@@ -78,17 +78,18 @@ cg <- complex(real=g$u, imaginary=g$v)
 And finally we simply need to square them.
 
 ```{r squares}
-cg2 <- cg**2
+cg2 <- cg^2
+head(sort(cg2), n=16)
 ```
 
-Did it work? Well to visualize them, let's put them into a `data.frame` and expand them out to three
+Did it work? We're certainly seeing some familiar pairings there, like $5+12i$ which maps to well-known triple $(5,12,13)$. To visualize them, let's put them into a `data.frame` and expand them out to three
 columns to explicitly represent the whole triple. Note that `Mod()` is R's name for what I called "norm" above.
 
 ```{r df}
 triples <- data.frame(a=Re(cg2), b=Im(cg2), c=Mod(cg2))
 triples <- triples[ triples$a <= 100 & triples$b < 100,]
 plot(triples$a, triples$b, pch=20, cex=0.5, xlim=c(0,100), ylim=c(0,100))
-title(paste("Squared Gaussian Integers", n))
+title(paste("Squared Gaussian Integers Up to", n))
 ```
 
 Now it turns out that our algorithm does not, in fact, generate all possible triples. One thing
@@ -138,11 +139,21 @@ segments(small_triples$a, 0, 0, 0, col='grey')
 points(small_triples$a, small_triples$b, pch=20, cex=0.75)
 text(
   x=small_triples$a, 
-  y=small_triples$b + ifelse(small_triples$a > small_triples$b, +0.5, 0.5),
+  y=small_triples$b + ifelse(small_triples$a > small_triples$b, +0.8, 0.8),
   cex=0.8,
   labels=paste0("(", small_triples$a, ",", small_triples$b, ",", small_triples$c, ")")
 )
 title(paste("Pythagorean Triples Up to", small_n))
 ```
 
+Here we can see each Pythagorean triple represented as a right triangle; we can see that the integer multiples
+of solutions form a series of similar triangles; we can see that there's a strong symmetry with every triple $(a,b,c)$ having a partner $(b,a,c)$ which is its mirror relection about the like $y=x$.
+
+From the zoomed out view we can see that the region close to either axis is essentially devoid of solutions; that there radiuses (e.g. close to 50) where triples are dense, and others where they are rare to non-existant;
+and it looks as if triples actually get less dense as we move away from the origin.
+
+This last observation, about triples thinning out as we move away from the origin, can be understood 
+and quantified by once again using the complex plane. Triples are more or less the squares of Gaussian integers; we can say the number of triples with norm less than $r$ is roughly proportional to the number
+of Gaussian integers in the first quadrant and inside a circle with radius $\sqrt{r}$, which is roughly
+proportional to the area of the quarter-circle of radius $\sqrt{r}$, which is $\frac{\pi r}{4}$ or very roughly just $r$.
 
