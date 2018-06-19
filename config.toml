@@ -27,7 +27,7 @@ copyright = "&copy; Copyright 2018 Oran Looney"
   tumblr = "honeycode"
   github = "olooney"
   stackoverflow = "273231/olooney"
-  email = "olooney@gmail.com"
+  # email = "olooney@gmail.com"
 
 [taxonomies]
   tag = "tags"
@@ -35,16 +35,13 @@ copyright = "&copy; Copyright 2018 Oran Looney"
 [[menu.main]]
   name = "Tags"
   weight = 2
-  identifier = "tags"
   url = "/tags/"
 [[menu.main]]
   name = "Archives"
   weight = 3
-  identifier = "archives"
   url = "/archives/"
 [[menu.main]]
   name = "About"
-  weight = 4
   identifier = "about"
   url = "/about/"
 

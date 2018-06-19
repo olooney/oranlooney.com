@@ -24,9 +24,11 @@ html .article img {
 html .article h1 {
 	color: #800000;
 	font-size: 1.8em;
+	font-weight: normal;
 }
 html .article h2 {
 	color: #800000;
+	font-weight: normal;
 	text-decoration: none;
 }
 html .article .article-meta {
@@ -81,21 +83,33 @@ html .article-image {
 html aside.toc {
 	display: none;
 }
-
+.site-header .author-social {
+  font-size: 13px;
+  margin-left: 10px;
+}
+.site-header ul.author-social li {
+  margin: 0 8px 0 8px;
+}
+html .author {
+ float: left;
+ margin-right: 20px;
+ height: 100%;
+}
+.about p {
+  text-align: left;
+}
 
 /* Typography */
 html, body, * {
-font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
+font-family: Georgia, serif;
 }
 body, html {
 }
 em {
-	font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
-    font-weight: bold;
+  font-weight: bold;
 }
 
 strong {
-	font-family: Verdana, sans-serif;
     color: #800000;
     font-weight: bold;
 }
@@ -108,7 +122,14 @@ html body a
 
 html body a:hover,
 html body a:active {
-	color: #DD0000;
+	color: #AA0000;
+}
+html .archives .archives-item > a:visited {
+  color: #800000;
+}
+
+.list .article-readmore {
+  float: right;
 }
 
 /*
