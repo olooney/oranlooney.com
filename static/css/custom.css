@@ -57,7 +57,7 @@ html header.site-header {
 html header.site-header .site-title {
   display: block;
   height: 50px;
-  width: 50px;
+  width: 100px;
   background-image: url('/favicon_master.png');
   background-size: 100px;
   background-repeat: no-repeat;
