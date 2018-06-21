@@ -48,11 +48,22 @@ html .article ul li::before {
 /* Site Layout */
 
 html header.site-header {
-	background-color: #880000;
+	background-color: #800000;
 	width: 100%;
 	max-width: none;
 	margin: 0;
 	color: white;
+}
+html header.site-header .site-title {
+  display: block;
+  height: 50px;
+  width: 50px;
+  background-image: url('/favicon_master.png');
+  background-size: 100px;
+  background-repeat: no-repeat;
+  background-position: 0px -25px;
+  text-indent: -9999px;
+  direction: ltr;
 }
 html header.site-header nav.site-navi {
 	max-width: 900px;
@@ -95,7 +106,7 @@ html aside.toc {
 html .author .author-avatar {
   background-size: 220px;
 }
-background-size: 200px;
+
 .site-header .author-social {
   font-size: 13px;
   margin-left: 10px;
@@ -145,6 +156,20 @@ html .archives .archives-item > a:visited {
   float: right;
 }
 
+@media screen and (max-width: 768px) {
+  .list .article-image {
+    width: 45%;
+    margin: 0 10px 0 0;
+    float: left;
+  }
+}
+@media screen and (max-width: 630px) {
+  .list .article-image {
+    width: 100%;
+    margin: 0;
+    float: none;
+  }
+}
 /*
 
 .content-page ul {
