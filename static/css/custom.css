@@ -35,6 +35,15 @@ html .article .article-meta {
 	margin-bottom: 10px;
 }
 
+/*
+html .article ul {
+	list-style: none;
+}
+html .article ul li::before {
+  content: "● ";
+  color: #800000;
+}
+*/
 
 /* Site Layout */
 
