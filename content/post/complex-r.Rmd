@@ -3,7 +3,7 @@ title: "Complex Numbers in R"
 author: "Oran Looney"
 date: 2018-06-17
 tags: ["R", "Math"]
-image: /post/complex-r_files/mandala.jpg
+image: /post/complex-r_files/mandala.png
 ---
 
 ```{r setup, include=FALSE}
