@@ -92,6 +92,10 @@ html .article-image {
 html aside.toc {
 	display: none;
 }
+html .author .author-avatar {
+  background-size: 220px;
+}
+background-size: 200px;
 .site-header .author-social {
   font-size: 13px;
   margin-left: 10px;
