@@ -2,7 +2,7 @@
 <header class="site-header">
   <nav class="site-navi">
     <!--<h1 class="site-title"><a href="{{ "/" | relURL }}">{{ .Site.Title }}</a></h1>-->
-    <a href="/" alt="logo" class="site-title">OWL</a>
+    <a href="/" class="site-title">OWL</a>
     <ul class="site-navi-items">
       {{- range .Site.Menus.main }}
       <li class="site-navi-item-{{ .Identifier }}"><a href="{{ .URL | safeURL }}" title="{{ .Name }}">{{ .Name }}</a></li>
