@@ -2,6 +2,7 @@
 title: "Semantic Code"
 author: "Oran Looney"
 date: 2008-04-30
+tags: ["Python"]
 image: /post/semantic-code_files/15717226618_ecbcdbca50_b.jpg
 ---
 

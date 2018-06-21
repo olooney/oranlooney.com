@@ -1,0 +1,49 @@
+
+<div class="site-footer">
+  <div class="copyright">{{ .Site.Copyright | safeHTML }}</div>
+  <ul class="site-footer-items">
+    {{- if .RSSLink }}
+    <li class="site-footer-item-rsslink">
+      <a href="{{ .RSSLink | relURL }}" type="application/rss+xml" target="_blank" title="RSS">
+        <i class="fas fa-rss"></i>
+      </a>
+    </li>
+    {{- end }}
+    {{- range .Site.Menus.footer }}
+    <li class="site-footer-item-{{ .Identifier }}"><a href="{{ .URL | safeURL }}" title="{{ .Name }}">{{ .Name }}</a></li>
+    {{- end }}
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/">Hugo</a> and <a href="https://github.com/taikii/whiteplain">Whiteplain</a>
+  </div>
+</div>
+<script src="{{ "js/script.js" | relURL }}"></script>
+<script src="{{ "js/custom.js" | relURL }}"></script>
+
+<!-- MathJax -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  }
+});
+</script>
+
+<!-- highlight.js -->
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+{{ template "_internal/google_analytics.html" . }}
