@@ -7,16 +7,26 @@ image: /post/complex-r_files/mandala.png
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, comment="#")
+library(zoo)
 ```
 
-R, like most scientific programming languages, has first-class support for complex numbers.
-And, just like in most languages, this functionality is ignored by the vast majority of users.
+R, like many scientific programming languages, has first-class support for
+complex numbers.  And, just as in most other programming languages, this
+functionality is ignored by the vast majority of users.
 
-Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems. Let's
-present one such problem and then show how we can use leverage R's complex number functionalty to tackle it.
+Yet complex numbers can often offer surprisingly elegant formulations and
+solutions to problems. I want to convince you that familiarizing yourself with
+R's excellent complex number functionality is well worth the effort and will
+pay off tenfold in two different ways: first by showing you how they are so
+amazingly useful you'll want to go out of your way to use them, and then by
+showing you how they are so common and fundamental to modern analysis that you
+couldn't avoid them if you wanted to. 
 
-## The Problem
+## Pythagorean Triples
+
+Let's start with a problem which *could* be solved in other ways, but is greatly simplified
+by the introduction of complex numbers that it almost seems magical.
 
 A Pythagorean triple is an integer solution to the Pythagorean equation:
 
@@ -24,136 +34,318 @@ A Pythagorean triple is an integer solution to the Pythagorean equation:
 a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}
 \]
 
-You learned at least one these in school -- the famous 3, 4, 5 triangle:
+You probably learned at least one of these in school -- the famous 3, 4, 5 triangle:
 
 <img src="/post/complex-r_files/345.gif" alt="3-4-5 triangle">
 
-In general [Diophantine equations](https://en.wikipedia.org/wiki/Diophantine_equation) -- which require *integer* solutions -- can be quite
-hard to solve, so it might suprise you to learn that it's almost trivially easy to write down an infinite of Pythagorean triples. Well, it's easy if we use complex numbers, anyway.
+In general [Diophantine equations][DIO] -- which require *integer* solutions --
+can be quite hard to solve, so it might surprise you to hear that it's almost
+trivially easy to write down an infinite of Pythagorean triples. Well, it's
+easy if we use complex numbers, anyway.
 
-A Gaussian integer is a complex number where both the real and imaginary parts are integers:
+A Gaussian integer is a complex number where both the real and imaginary parts
+are integers:
 
 \[
   Z[i] = \{ x + iv \mid x,y \in \mathbb{Z} \} \tag{2}
 \]
 
-So one way of stating the problem of finding all Pythagorean triples is to find all Gaussian integers
-Which are an integer distance away from the origin. The distance of a complex number from the origin
-is called its "norm" and denoted $\lVert z \rVert$.
+So one way of stating the problem of finding all Pythagorean triples is to find
+all Gaussian integers Which are an integer distance away from the origin. The
+distance of a complex number from the origin is called its "norm" and denoted
+$\lVert z \rVert$.
 
 \[
   T = \{ z \in \mathbb{C} \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
 \]
 
-Now, in general the norm of Gaussian integer will be the square root of an integer (the integer $u^2 + v^2$
-to be precise.) Therefore if we square a Guassian integer, it will have an integer norm and therefore
-represent a Pythagorean triple!
+Now, in general the norm of Gaussian integer will be the square root of an
+integer (the integer $u^2 + v^2$ to be precise.) Therefore if we square a
+Gaussian integer, it will have an integer norm and therefore represent a
+Pythagorean triple!
 
 \[
 \forall z \in Z[i], z^2 \in T \tag{4}
 \]
 
-So that's a pretty good start: just a few minutes work, and we've already found an *infinite number* of Pythagorean triples, and we have a computationally trivial way of constructing new triples: we simply pick any two positive integers $u$ and $v$ and then square the complex number $u + iv$.
+So that's a pretty good start: just a few minutes work, and we've already found
+an *infinite number* of Pythagorean triples, and we have a computationally
+trivial way of constructing new triples: we simply pick any two positive
+integers $u$ and $v$ and then square the complex number $u + iv$.
 
-Before address the more difficult question of whether or not we've found all possible Pythagorean triples
-using this construction, let's switch over to R and do some code our solution so far.
+Before address the more difficult question of whether or not we've found all
+possible Pythagorean triples using this construction, let's switch over to R
+and do some code our solution so far.
 
-## The Code
+Our algorithm first requires us to pick pairs of positive integers. Just to be
+thorough, we'll take all such pairs up to an arbitrary threshold.
 
-Our algorithm first requires us to pick pairs of positive integers. Just to be thorough, we'll take
-all such pairs up to an arbitary threshold.
+Now, if we wanted just one or two complex numbers, we could use the literal syntax:
+
+```{r literal}
+triples <- c( 3+4i, 5+12i, 9+12i )
+```
+
+But since we want them along a grid, we'll use the `complex()` constructor. The
+constructor is vectorized so by passing in two vectors of equal length we can
+construct a one-dimensional vector of complex numbers.
 
 ```{r grid}
-n = 100
-g <- expand.grid(u=1:(2*n), v=1:(2*n))
-g <- g[ g$u > g$v, ]
+n = 400
+grid <- expand.grid(u=1:(2*n), v=1:(2*n))
+grid <- grid[ grid$u > grid$v, ]
+gaussian_integers <- complex(real=grid$u, imaginary=grid$v)
 ```
 
-Next we need to turn those pairs into R's complex number type. 
-
-```{r}
-cg <- complex(real=g$u, imaginary=g$v)
-```
-
-And finally we simply need to square them.
+Per the theoretical discussion above, we can generate Pythagorean triples by
+simply squaring these.  All primitive math functions in R work just as well on
+complex numbers: `exp`, `log`, `sin`, `cos`and of course exponentiation:
 
 ```{r squares}
-cg2 <- cg^2
-head(sort(cg2), n=16)
+triples <- gaussian_integers^2
+
+# display the 10 with the smallest norm
+cat( triples[order(Mod(triples))][1:10], sep="\n")
 ```
 
-Did it work? We're certainly seeing some familiar pairings there, like $5+12i$ which maps to well-known triple $(5,12,13)$. To visualize them, let's put them into a `data.frame` and expand them out to three
-columns to explicitly represent the whole triple. Note that `Mod()` is R's name for what I called "norm" above.
+Did it work? We're certainly seeing some familiar pairings there, like $5+12i$
+which maps to well-known triple $(5,12,13)$. To visualize them, we can simply
+pass our complex vector to R's `plot()` function - it will conveniently plot
+them in the complex plane for us! 
 
 ```{r df}
-triples <- data.frame(a=Re(cg2), b=Im(cg2), c=Mod(cg2))
-triples <- triples[ triples$a <= 100 & triples$b < 100,]
-plot(triples$a, triples$b, pch=20, cex=0.5, xlim=c(0,100), ylim=c(0,100))
-title(paste("Squared Gaussian Integers Up to", n))
+triples <- triples[ Re(triples) <= n & Im(triples) <= n ]
+
+# helper function to colorize complex points by their angle.
+argcolor <- function(z) hsv(Arg(z)*2/pi, s=0.9, v=0.8)
+
+plot(
+  triples, 
+  col=argcolor(triples),
+  pch=20,
+  xlim=c(0,n),
+  ylim=c(0,n),
+  main=paste("Squared Gaussian Integers Up to", n)
+)
 ```
 
-Now it turns out that our algorithm does not, in fact, generate all possible triples. One thing
-it misses are multiples: if $(3,4,5)$ is a triple, then $(6,8,10)$ should be a triple, and $(9,12,15)$
-should be a triple, and so on. So we have to expand our set to have all multiples.
+Now it turns out that our algorithm does not, in fact, generate all possible
+triples. One thing it misses are multiples: if $(3,4,5)$ is a triple, then
+$(6,8,10)$ should be a triple, and $(9,12,15)$ should be a triple, and so on.
+So we have to expand our set to have all multiples.
 
 ```{r multiples}
 
-multiples <- lapply(1:33, function(m) triples*m)
-triples <- do.call(rbind, multiples)
+multiples <- lapply(1:(floor(n/3)), function(m) triples*m)
+triples <- unique(do.call(c, multiples))
 ```
 
-And it also turns out that in one special case, where both integers are even, we can divide by two and
-get a new triple that was missed by the inital net we cast. But that's the end of the special cases!
+It also turns out that in the special case where both integers are even we can
+divide by two and get a new triple that was missed by the initial net we cast.
+But that's the end of the special cases -- with this final rule in place, we're
+now guaranteed to hit *every* Pythagorean triple.
 
 ```{r halves}
-halves <- triples[ triples$a %% 2 == 0 & triples$b %% 2 == 0, ] / 2
-triples <- rbind(triples, halves)
+halves <- triples[ Re(triples) %% 2 == 0 & Im(triples) %% 2 == 0 ] / 2
+triples <- unique(c(triples, halves))
 ```
 
-Now all we need to is clean up duplicates and duplicate along the mirror line of symmetry...
+Now all we need to is clean up duplicates and duplicate along the mirror line
+of symmetry...
 
 ```{r cleanup}
-triples <- unique(triples)
-triples <- triples[ triples$a <= n & triples$b <= n,]
-triples <- rbind(triples, data.frame(a=triples$b, b=triples$a, c=triples$c))
+triples <- triples[ Re(triples) <= n & Im(triples) <= n]
+triples <- c(triples, complex(real=Im(triples), imaginary=Re(triples)))
 ```
 
 ..and we're finally ready to visualize the real solution.
 
 ```{r plotall}
-plot(triples$a, triples$b, pch=20, cex=0.5)
+plot(triples, col=argcolor(triples), pch=20)
 title(paste("All Pythagorean Triples Up to", n))
 ```
 
-That's almost too many to really understand, although there are definitely patterns emerging. Let's zoom in and just plot a small region,but with more detail.
+That's too many to really understand, although there are definitely
+patterns emerging. Let's zoom in and just plot a small region,but with more
+detail.
 
 ```{r plotsmall}
 small_n = 25
-small_triples <- triples[triples$a<small_n & triples$b<small_n,]
-plot(small_triples$a, small_triples$b, pch=20, cex=0.5,   
-     ylim=c(0,small_n), xlim=c(0,small_n),
-     ylab="b", xlab="a")
-segments(small_triples$a, small_triples$b, 0, 0, col='grey')
-segments(small_triples$a, small_triples$b, small_triples$a, 0, col='grey')
-segments(small_triples$a, 0, 0, 0, col='grey')
-points(small_triples$a, small_triples$b, pch=20, cex=0.75)
+small_triples <- triples[ Re(triples) < small_n & Im(triples) < small_n ]
+small_triples <- small_triples[ order(Mod(small_triples), decreasing=TRUE) ]
+
+# plot points
+plot(
+  small_triples, 
+  pch=20,
+  ylim=c(0,small_n), 
+  xlim=c(0,small_n),
+  ylab="b", xlab="a")
+
+# add triangles. Can't rely on automatic complex plane plotting here.
+segments(
+  Re(small_triples), Im(small_triples), 
+  0, 0, 
+  col=argcolor(small_triples))
+segments(
+  Re(small_triples), Im(small_triples), 
+  Re(small_triples), 0, 
+  col=argcolor(small_triples))
+segments(
+  Re(small_triples), 0, 
+  0, 0, 
+  col=argcolor(small_triples))
+
+# points again, so that they're in the foreground.
+points(small_triples, pch=20, col=argcolor(triples), cex=1)
+
+# text label for the points
 text(
-  x=small_triples$a, 
-  y=small_triples$b + ifelse(small_triples$a > small_triples$b, +0.8, 0.8),
+  x=small_triples + 1i, 
   cex=0.8,
-  labels=paste0("(", small_triples$a, ",", small_triples$b, ",", small_triples$c, ")")
+  labels=paste0(
+    "(", 
+    Re(small_triples), 
+    ",",
+    Im(small_triples),
+    ",",
+    Mod(small_triples),
+    ")"
+  )
 )
 title(paste("Pythagorean Triples Up to", small_n))
 ```
 
-Here we can see each Pythagorean triple represented as a right triangle; we can see that the integer multiples
-of solutions form a series of similar triangles; we can see that there's a strong symmetry with every triple $(a,b,c)$ having a partner $(b,a,c)$ which is its mirror relection about the like $y=x$.
+On the zoomed in view we can see each Pythagorean triple represented as a right
+triangle; we can see that the integer multiples of solutions form a series of
+similar triangles; we can see that there's a strong symmetry with every triple
+$(a,b,c)$ having a partner $(b,a,c)$ which is its mirror reflection about the
+like $y=x$.
 
-From the zoomed out view we can see that the region close to either axis is essentially devoid of solutions; that there radiuses (e.g. close to 50) where triples are dense, and others where they are rare to non-existant;
-and it looks as if triples actually get less dense as we move away from the origin.
+From the zoomed out view we can see that the region close to either axis is
+essentially devoid of solutions; that their radii (e.g. close to 50) where
+triples are dense, and others where they are rare to non-existent; and it looks
+as if triples actually get less dense as we move away from the origin.
 
-This last observation, about triples thinning out as we move away from the origin, can be understood 
-and quantified by once again using the complex plane. Triples are more or less the squares of Gaussian integers; we can say the number of triples with norm less than $r$ is roughly proportional to the number
-of Gaussian integers in the first quadrant and inside a circle with radius $\sqrt{r}$, which is roughly
-proportional to the area of the quarter-circle of radius $\sqrt{r}$, which is $\frac{\pi r}{4}$ or very roughly just $r$.
+This last observation, about triples thinning out as we move away from the
+origin, can be understood and quantified by once again using the complex plane.
+Triples are more or less the squares of Gaussian integers; we can say the
+number of triples with norm less than $r$ is roughly proportional to the number
+of Gaussian integers in the first quadrant and inside a circle with radius
+$\sqrt{r}$, which is roughly proportional to the area of the quarter-circle of
+radius $\sqrt{r}$, which is $\frac{\pi r}{4}$ or very roughly just $r$.
 
+## Complex Eigenvalues
+
+> Some problems are specific to complex numbers, some problems can be made
+> easier by a complex representation, and some problems have complex numbers
+> thrust upon them.
+>
+> -- <cite>William Shakespeare, 12 + 5i Night</cite>
+
+The Pythagorean Triples gave us an opportunity to dip our toes in the water by
+explicitly create some complex
+numbers and manipulating them in fairly basic ways. Next let's look at
+a some examples where complex are less of a choice an more of a necessity.
+One such case that is of interest to statisticians and scientists (I'm
+assuming you're not using R for embedded systems or game development) is
+solving the [eignproblem][EGN] for a non-symmetric matrix.
+
+Now, if your only exposure to eigenvalues is through [PCA][PCA], you might not
+even be aware that eigenvalues are usually complex numbers... even when
+the original matrix is comprised only of real numbers! However 
+PCA is actually a very special case: a covariance matrix is *always*
+a symmetric, positive-definite, real-valued matrix, therefore its
+eigenvalues are always positive real numbers. 
+
+However, there are plenty of situations in statistics where a non-symmetric
+matrix arises naturally and the eigenvalues can give us deep insight into
+the problem. Two such are [Markov Chains][MKV] and [AR models][AR]. Let's
+only look at a simple example of an AR model - that will suffice to
+demonstrate R's complex number functionality in this domain. 
+
+Let's start by constructing a small time series that exhibits very strong
+autocorrelation. To get some interesting behavior, I will give it a strongly
+positive one day correlation, but then reverse it the next day. This should
+give us both decay and oscillations.
+
+```{r ts}
+set.seed(43)
+t_0 <- zoo(rnorm(n=100))
+t_1 <- lag(t_0, k=1, na.pad=TRUE)
+t_2 <- lag(t_0, k=2, na.pad=TRUE)
+t_3 <- lag(t_0, k=3, na.pad=TRUE)
+t <- na.omit(t_0 + 0.7*t_1 - 0.2*t_2 + 0.2*t_3)
+plot(t, type='l')
+title('Time Series With Autocorrelation')
+pacf(t) # Partial Autocorrelation Plot
+```
+
+Next we construct the model. While I normally recommend the [forecast][FOR]
+package, we'll just use the built-in `ar()` function today.
+
+```{r ar}
+ar_model <- ar(t)
+ar_model
+```
+
+That's roughly what we'd expect based on how we constructed the time series and
+what we saw on the partial autocorrelation plot: A strong positive
+autocorrelation at lag one, a slightly less strong negative autocorrelation at
+lag 2, then some harmonics. 
+
+```{r roots}
+ar_coefs <- ar_model$ar  # coefficients(ar_model) doesn't work, IDK why
+roots <- polyroot( c(1,-ar_coefs) )
+roots
+plot(
+  1/roots, 
+  ylim=c(-1,1), 
+  asp=1,
+  main="Inverse AR Roots",
+  panel.first=c(
+    lines(complex(modulus=1, argument=0.01*2*pi)^(0:100), col='grey'),
+    abline(h=0, col='grey'),
+    abline(v=0, col='grey')
+  )
+)
+```
+
+Just to be clear, we're plotting the *inverse* roots, so we'd expect them to be
+*inside* the unit circle if the process is stationary.
+
+(Just as an Easter egg, we also used complex numbers to plot the unit circle.
+If you're not sure how that worked, just remember that multiplying complex
+numbers adds their arguments -- their angle with the x-axis -- together.)
+
+Just from looking at the roots and observing that some are far from the real
+axis, we can also say that this time series will experience a back-and-forth
+oscillations as each day tries to "correct" for the previous day. If the
+influence of history merely decayed away smoothly and exponentially, all the
+roots would have been close to the real axis. (It's a common misconception that
+how long effects last is related to the *order* of the model; when in fact even
+an AR(1) model can have a very long memory if it has its root close to 1.)
+
+Plotting the inverse roots of ARIMA models is standard practice because it can
+help you diagnose [non-stationary series][NSS] and near [unit roots][UR], both
+of which can ruin the predictive power and interpretability of a model. There's
+no getting away from the fact that a polynomial of degree two or higher might have
+complex roots.
+
+Let's just take a moment to realize what happened to us here: we started from a
+data set entirely comprised of real numbers, built a model with real number
+values for all parameters... but in the end we still had to understand our
+model in terms of complex numbers. This is not infrequent and hopefully these
+examples have demonstrated that its extremely helpful familiarize yourself with
+R's capabilities in this regard well ahead of encountering any analysis where
+they might be required.
+
+
+[DIO]: https://en.wikipedia.org/wiki/Diophantine_equation
+[EGN]: https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
+[PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+[MKV]: https://en.wikipedia.org/wiki/Markov_chain
+[AR]: https://en.wikipedia.org/wiki/Autoregressive_model
+[FOR]: https://cran.r-project.org/web/packages/forecast/index.html
+[NSS]: https://en.wikipedia.org/wiki/Stationary_process
+[UR]: https://en.wikipedia.org/wiki/Unit_root

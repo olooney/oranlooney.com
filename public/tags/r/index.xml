@@ -18,9 +18,8 @@
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/complex-r/</guid>
-      <description>R, like most scientific programming languages, has first-class support for complex numbers. And, just like in most languages, this functionality is ignored by the vast majority of users.
-Yet complex numbers can often offer suprisingly elegant formulations and solutions to problems. Let’s present one such problem and then show how we can use leverage R’s complex number functionalty to tackle it.
-The ProblemA Pythagorean triple is an integer solution to the Pythagorean equation:</description>
+      <description>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
+Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off tenfold in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</description>
     </item>
     
     <item>

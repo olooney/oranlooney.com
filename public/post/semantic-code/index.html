@@ -38,7 +38,7 @@ At its worst programming is write-only: the program accomplishes a task, but is 
 <header class="site-header">
   <nav class="site-navi">
     
-    <a href="/" alt="logo" class="site-title">OWL</a>
+    <a href="/" class="site-title">OWL</a>
     <ul class="site-navi-items">
       <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
       <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
@@ -208,7 +208,12 @@ MathJax.Hub.Config({
 <link rel="stylesheet"
 	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
 
 
 

@@ -5,7 +5,6 @@ html .article pre {
 	background: none;
 	font-family: "Bitstream Vera Sans Mono", monospace;
 	font-style: normal;
-	color: #005500;
 }
 
 html .article img {
@@ -124,13 +123,10 @@ html .author {
 }
 
 /* Typography */
-html, body, * {
+html, body {
 font-family: Georgia, serif;
 }
 body, html {
-}
-em {
-  font-weight: bold;
 }
 
 strong {
@@ -170,6 +166,13 @@ html .archives .archives-item > a:visited {
     float: none;
   }
 }
+
+
+.article .hljs-comment {
+  color: #007700;
+}
+
+
 /*
 
 .content-page ul {
