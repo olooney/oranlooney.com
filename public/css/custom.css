@@ -34,6 +34,10 @@ html .article .article-meta {
 	margin-bottom: 10px;
 }
 
+html .article .section {
+  overflow-x: visible;
+}
+
 /*
 html .article ul {
 	list-style: none;
