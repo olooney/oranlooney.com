@@ -546,7 +546,7 @@ data set entirely comprised of real numbers, built a model with real number
 values for all parameters (two models in fact: a regression and matrix)
 but in the end we still had to understand our
 model in terms of complex numbers. The real numbers are not closed under many
-interesting and natural numbers - work with real numbers long enough, and eventually
+interesting and natural operations - work with real numbers long enough, and eventually
 you'll be working in the complex plane. This is not infrequent and hopefully these
 examples have demonstrated that its extremely helpful familiarize yourself with
 R's capabilities in this regard.
