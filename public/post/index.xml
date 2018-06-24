@@ -2,50 +2,50 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on OranLooney.com</title>
-    <link>/post/</link>
+    <link>http://www.oranlooney.com/post/</link>
     <description>Recent content in Posts on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
     <lastBuildDate>Sun, 17 Jun 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.oranlooney.com/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Complex Numbers in R</title>
-      <link>/post/complex-r/</link>
+      <link>http://www.oranlooney.com/post/complex-r/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/complex-r/</guid>
+      <guid>http://www.oranlooney.com/post/complex-r/</guid>
       <description>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
 Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off tenfold in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</description>
     </item>
     
     <item>
       <title>So, Apparently I&#39;m an iPad Developer Now</title>
-      <link>/post/apparently-ipad-developer/</link>
+      <link>http://www.oranlooney.com/post/apparently-ipad-developer/</link>
       <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
       
-      <guid>/post/apparently-ipad-developer/</guid>
+      <guid>http://www.oranlooney.com/post/apparently-ipad-developer/</guid>
       <description>Last week my boss stopped by and dropped a brand spanking new iPad on my desk.&amp;quot;Make our application work on this,&amp;quot; he commanded. &amp;quot;You have two days before we demo it at the trade show.&amp;quot; Madness? No, these are web apps! You see, for the last couple years we&#39;ve beenworking exclusively on AJAX applications: web pages stuffed with so muchJavaScript they look and feel like desktop apps. It&#39;s harder than writingdesktop software, but if you pull it off you get an application that can berun anywhere, instantly.</description>
     </item>
     
     <item>
       <title>Deep Copy in JavaScript</title>
-      <link>/post/deep-copy-javascript/</link>
+      <link>http://www.oranlooney.com/post/deep-copy-javascript/</link>
       <pubDate>Wed, 25 Nov 2009 00:00:00 +0000</pubDate>
       
-      <guid>/post/deep-copy-javascript/</guid>
+      <guid>http://www.oranlooney.com/post/deep-copy-javascript/</guid>
       <description>Update 2017-10-23: This article and code library have not kept up with the rapidly changing JavaScript landscape and are now hopelessly out of date. First came non-enumerable properties, and with ES2015 came the introduction of classes, proxies, symbols, and anonymous functions, all of which break the below logic. I&#39;m afraid I no longer know how to fully copy the full menagerie of JavaScript objects while preserving relative references, and it&#39;s quite possible that no one else knows either.</description>
     </item>
     
     <item>
       <title>Semantic Code</title>
-      <link>/post/semantic-code/</link>
+      <link>http://www.oranlooney.com/post/semantic-code/</link>
       <pubDate>Wed, 30 Apr 2008 00:00:00 +0000</pubDate>
       
-      <guid>/post/semantic-code/</guid>
+      <guid>http://www.oranlooney.com/post/semantic-code/</guid>
       <description>se-man-tic (si-man&amp;rsquo;tik) adj. &amp;nbsp; &amp;nbsp; 1. Of or relating to meaning, especially meaning in language.
  Programming destroys meaning. When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &amp;mdash; that&amp;rsquo;s why it&amp;rsquo;s called coding.
 At its worst programming is write-only: the program accomplishes a task, but is incomprehensible to humans. See, for example, the story of Mel. Such a program is correct, yet at the same time meaningless.</description>

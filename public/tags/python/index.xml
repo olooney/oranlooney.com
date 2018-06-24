@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python on OranLooney.com</title>
-    <link>/tags/python/</link>
+    <link>http://www.oranlooney.com/tags/python/</link>
     <description>Recent content in Python on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
     <lastBuildDate>Wed, 30 Apr 2008 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.oranlooney.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Semantic Code</title>
-      <link>/post/semantic-code/</link>
+      <link>http://www.oranlooney.com/post/semantic-code/</link>
       <pubDate>Wed, 30 Apr 2008 00:00:00 +0000</pubDate>
       
-      <guid>/post/semantic-code/</guid>
+      <guid>http://www.oranlooney.com/post/semantic-code/</guid>
       <description>se-man-tic (si-man&amp;rsquo;tik) adj. &amp;nbsp; &amp;nbsp; 1. Of or relating to meaning, especially meaning in language.
  Programming destroys meaning. When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &amp;mdash; that&amp;rsquo;s why it&amp;rsquo;s called coding.
 At its worst programming is write-only: the program accomplishes a task, but is incomprehensible to humans. See, for example, the story of Mel. Such a program is correct, yet at the same time meaningless.</description>

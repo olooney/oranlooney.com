@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Math on OranLooney.com</title>
-    <link>/tags/math/</link>
+    <link>http://www.oranlooney.com/tags/math/</link>
     <description>Recent content in Math on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
     <lastBuildDate>Sun, 17 Jun 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/math/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.oranlooney.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Complex Numbers in R</title>
-      <link>/post/complex-r/</link>
+      <link>http://www.oranlooney.com/post/complex-r/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/complex-r/</guid>
+      <guid>http://www.oranlooney.com/post/complex-r/</guid>
       <description>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
 Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off tenfold in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</description>
     </item>

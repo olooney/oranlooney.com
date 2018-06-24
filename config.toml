@@ -1,5 +1,5 @@
-#baseurl = "https://example.com/"
-baseurl = "/"
+baseurl = "http://www.oranlooney.com/"
+#baseurl = "/"
 title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
@@ -7,7 +7,7 @@ languageCode = "en"
 # Disqus shortname
 #disqusShortname = ""
 # google analytics tracking id
-#googleAnalytics = ""
+#googleAnalytics = "UA-2535855-1"
 pygmentsCodefences = true
 pygmentsUseClasses = true
 pygmentsOptions = "linenos=table"
