@@ -64,7 +64,7 @@ html header.site-header .site-title {
   background-image: url('/favicon_master.png');
   background-size: 100px;
   background-repeat: no-repeat;
-  background-position: 0px -25px;
+  background-position: 0 -25px;
   text-indent: -9999px;
   direction: ltr;
 }
@@ -129,8 +129,6 @@ html .author {
 /* Typography */
 html, body {
 font-family: Georgia, serif;
-}
-body, html {
 }
 
 strong {
