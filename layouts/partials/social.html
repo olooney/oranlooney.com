@@ -26,7 +26,7 @@
     <li><a href="//slideshare.com/{{ . }}" target="_blank"><i class="fab fa-slideshare"></i></a></li>
     {{- end }}
     {{- with .github }}
-    <li><a href="https://github.com/{{ . }}" target="_blank"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://github.com/{{ . }}" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
     {{- end }}
     {{- with .gitlab }}
     <li><a href="//gitlab.com/{{ . }}" target="_blank"><i class="fab fa-gitlab"></i></a></li>
@@ -35,7 +35,7 @@
     <li><a href="//bitbucket.com/{{ . }}" target="_blank"><i class="fab fa-bitbucket"></i></a></li>
     {{- end }}
     {{- with .stackoverflow }}
-    <li><a href="https://stackoverflow.com/users/{{ . }}" target="_blank"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/{{ . }}" target="_blank" title="stackoverflow"><i class="fab fa-stack-overflow"></i></a></li>
     {{- end }}
     {{- with .jsfiddle }}
     <li><a href="//jsfiddle.com/{{ . }}" target="_blank"><i class="fab fa-jsfiddle"></i></a></li>
@@ -95,9 +95,9 @@
     <li><a href="mailto:{{ . }}" target="_blank"><i class="fas fa-envelope"></i></a></li>
     {{- end }}
     {{- with .tumblr }}
-    <li><a href="http://{{ . }}.tumblr.com" target="_blank"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="http://{{ . }}.tumblr.com" target="_blank"  title="honeycode microblog"><i class="fab fa-tumblr"></i></a></li>
     {{- end }}
-    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="library"><i class="far fa-bookmark"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="books I like"><i class="far fa-bookmark"></i></a></li>
     
   </ul>
 {{- end }}

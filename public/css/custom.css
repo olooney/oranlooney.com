@@ -49,6 +49,9 @@ html .article ul li::before {
 */
 
 /* Site Layout */
+html body .main {
+	padding: 1em;
+}
 
 html header.site-header {
 	background-color: #800000;
