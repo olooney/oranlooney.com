@@ -7,13 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
-    <lastBuildDate>Sun, 17 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Complex Numbers in R</title>
+      <title>Complex Numbers in R, Part II</title>
+      <link>http://www.oranlooney.com/post/complex-r-part-2/</link>
+      <pubDate>Sat, 30 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/complex-r-part-2/</guid>
+      <description>This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
+In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.
+In this second part, we’ll take a more in-depth look at some scenarios where complex numbers arise naturally – where they are less of a choice an more of a necessity.</description>
+    </item>
+    
+    <item>
+      <title>Complex Numbers in R, Part I</title>
       <link>http://www.oranlooney.com/post/complex-r/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
