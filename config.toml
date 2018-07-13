@@ -4,13 +4,10 @@ title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"
-# Disqus shortname
-#disqusShortname = ""
-# google analytics tracking id
-#googleAnalytics = "UA-2535855-1"
 pygmentsCodefences = true
 pygmentsUseClasses = true
 pygmentsOptions = "linenos=table"
+
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright 2018 Oran Looney"
 
@@ -27,6 +24,7 @@ copyright = "&copy; Copyright 2018 Oran Looney"
   tumblr = "honeycode"
   github = "olooney"
   stackoverflow = "273231/olooney"
+  crossvalidated = "48250/olooney"
   # email = "olooney@gmail.com"
 
 [taxonomies]

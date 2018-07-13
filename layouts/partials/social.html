@@ -35,7 +35,10 @@
     <li><a href="//bitbucket.com/{{ . }}" target="_blank"><i class="fab fa-bitbucket"></i></a></li>
     {{- end }}
     {{- with .stackoverflow }}
-    <li><a href="https://stackoverflow.com/users/{{ . }}" target="_blank" title="stackoverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/{{ . }}" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    {{- end }}
+    {{- with .crossvalidated }}
+    <li><a href="https://stats.stackexchange.com/users/{{ . }}" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
     {{- end }}
     {{- with .jsfiddle }}
     <li><a href="//jsfiddle.com/{{ . }}" target="_blank"><i class="fab fa-jsfiddle"></i></a></li>
@@ -95,9 +98,9 @@
     <li><a href="mailto:{{ . }}" target="_blank"><i class="fas fa-envelope"></i></a></li>
     {{- end }}
     {{- with .tumblr }}
-    <li><a href="http://{{ . }}.tumblr.com" target="_blank"  title="honeycode microblog"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="http://{{ . }}.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
     {{- end }}
-    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="books I like"><i class="far fa-bookmark"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
     
   </ul>
 {{- end }}
