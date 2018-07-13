@@ -64,12 +64,16 @@ html header.site-header .site-title {
   display: block;
   height: 50px;
   width: 100px;
-  background-image: url('/favicon_master.png');
+  font-family: garamond, "Times New Roman", serif;
+  font-weight: light;
+  font-size: 44px;
+  line-height: 50px;
+  /*background-image: url('/favicon_master.png');
   background-size: 100px;
   background-repeat: no-repeat;
   background-position: 0 -25px;
   text-indent: -9999px;
-  direction: ltr;
+  direction: ltr;*/
 }
 html header.site-header nav.site-navi {
 	max-width: 900px;
@@ -131,12 +135,12 @@ html .author {
 
 /* Typography */
 html, body {
-font-family: Georgia, serif;
+  font-family: Georgia, serif;
 }
 
 strong {
-    color: #800000;
-    font-weight: bold;
+  color: #800000;
+  font-weight: bold;
 }
 
 html body a
@@ -177,41 +181,8 @@ html .archives .archives-item > a:visited {
   color: #007700;
 }
 
-
-/*
-
-.content-page ul {
-	list-style-type: none;
-    padding-left: 1ex;
-}
-.content-page ul li {
-	background-image: url(../images/bullet_point.png);
-	background-repeat: no-repeat;
-	background-position: 0 2px;
-	padding-left: 20px;
-}
-.content-page ul li li {
-	background-image: url(../images/inner_bullet_point.png);
-}
-.content-page ul li li li {
-	background-image: url(../images/innermost_bullet_point.png);
+.home-list .article .article-content{
+  text-overflow: ellipsis;
+  max-height: 120px;
 }
 
-a.big-rss-link {
-	display: block;
-	position: absolute;
-	top: 10px;
-	left: 0px;
-	width: 59px;
-	height: 58px;
-	background-image: url(../images/rss.png);
-	text-indent: -999em;
-}
-a.big-rss-link:hover {
-	top: 7px;
-	left: -3px;
-	width: 62px;
-	height: 61px;
-	background-image: url(../images/rss_shadow.png);
-}
-*/
