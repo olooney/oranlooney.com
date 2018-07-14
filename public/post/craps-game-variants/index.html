@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Craps Variants - OranLooney.com</title>
+  <meta property="og:title" content="Craps Variants - OranLooney.com" />
+  <meta name="twitter:title" content="Craps Variants - OranLooney.com" />
+  <meta name="description" content="Anyone who&rsquo;s ever calculated the chances of winning at craps may remember being surprised by how fair the game is.
+(Spoiler Warning If you haven&rsquo;t calculated these odds but feel you might enjoy the challenge, you should do so before reading on, because I&rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case. A full solution may also be found in the rather excellent book, Fifty Challenging Problems in Probability with Solutions.">
+  <meta property="og:description" content="Anyone who&rsquo;s ever calculated the chances of winning at craps may remember being surprised by how fair the game is.
+(Spoiler Warning If you haven&rsquo;t calculated these odds but feel you might enjoy the challenge, you should do so before reading on, because I&rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case. A full solution may also be found in the rather excellent book, Fifty Challenging Problems in Probability with Solutions.">
+  <meta name="twitter:description" content="Anyone who&rsquo;s ever calculated the chances of winning at craps may remember being surprised by how fair the game is.
+(Spoiler Warning If you haven&rsquo;t calculated these odds but feel you might …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-2535855-1');
+  </script>
+
+ 
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+    <li><a href="http://honeycode.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
+    
+  </ul>
+
+  </nav>
+</header>
+
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/craps-game-variants_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">Craps Variants</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>July 11, 2018</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/math/">
+            <i class="fas fa-tag"></i>
+            Math
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/statistics/">
+            <i class="fas fa-tag"></i>
+            Statistics
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#definitions">Definitions</a></li>
+<li><a href="#computation">Computation</a></li>
+<li><a href="#original-game">Original Game</a></li>
+<li><a href="#generating-variants">Generating Variants</a></li>
+<li><a href="#investigation">Investigation</a></li>
+<li><a href="#empirical-confirmation">Empirical Confirmation</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>Anyone who&rsquo;s ever calculated the chances of winning at <a href="https://en.wikipedia.org/wiki/Craps">craps</a> may remember
+being surprised by how fair the game is.</p>
+
+<p>(<strong>Spoiler Warning</strong> If you <em>haven&rsquo;t</em> calculated these odds but feel you might
+enjoy the challenge, you should do so before reading on, because I&rsquo;m about to
+spoil it for you rather thoroughly in the name of exploring a more general
+case. A full solution may also be found in the rather excellent book, <a href="https://www.amazon.com/Challenging-Problems-Probability-Solutions-Mathematics/dp/0486653552">Fifty
+Challenging Problems in Probability with Solutions</a>.)</p>
+
+<p>It&rsquo;s so close to fair, in fact, that I actually had to check to see if the
+inventor had been a mathematician or statistician; and while he seemed like a
+<a href="https://en.wikipedia.org/wiki/Bernard_de_Marigny">very colorful character</a> there&rsquo;s little in his biography to suggest he had
+any deep knowledge of mathematical.</p>
+
+<p>Concretely, the exact odds are $\frac{244}{ 495} \approx 49.29\%$: That&rsquo;s less
+than 0.71% away from perfectly fair &ndash; and of course no reputable casino would
+ever host a game that was <em>perfectly</em> fair.  (Note that this means that the
+house edge is 1.4%, similar to Blackjack but without requiring any strategic
+play.)</p>
+
+<p>To appreciate how remarkable that is, note that fairest (&ldquo;fairest&rdquo; meaning the
+closest to 50% while still strictly less) outcome you can achieve with a single
+roll of a <a href="https://en.wikipedia.org/wiki/Icosahedron">1d20</a> is 45%, or even using two 10-sided die to roll 1d100 you
+can only get to 49%. And it seems like it should be utterly hopeless with just
+two six-sided die, because the probabilities of all outcomes are all multiples
+of $\frac{1}{36} \approx 2.78\%$. There just doesn&rsquo;t seem like there&rsquo;s enough
+<em>granularity</em> to get to $49.29\%$. But with the clever design of the &ldquo;on point&rdquo;
+rule, it seems we can get there with just two ordinary six-sided die.</p>
+
+<p>Honestly its so close to 50% it&rsquo;s actually a bit of a pain to test empirically:
+according to <a href="http://www.gpower.hhu.de/">G*Power3</a> you would need to play 54,000 games of craps to be
+reasonably sure that you are safe to reject the null hypothesis that the true
+odds were in fact <sup>50</sup>&frasl;<sub>50</sub>.</p>
+
+<p>We also note that the game appears to have been constructed by a very
+deliberate choice of numbers: 2, 3, 7, 11, and 12. We can imagine de Marigny
+sitting in front of a 19th century fire, rolling dice, taking notes,
+occasionally scratching out a 4 and replacing it with a 3, little by little
+adjusting his rules to try and find the perfect game.</p>
+
+<p>So the question of the day is this: is there anything unique or special about
+this particular assignment of numbers? In particular, does de Marigny&rsquo;s
+particular assignment of numbers to outcomes result in the <em>fairest possible</em>
+craps-like game? Is there any reason why convenience stores on the west coast
+are called 7-11s, and not 6-10s?</p>
+
+<p>And above all &ndash; is it possible to do better? To put it another way: could we
+choose these numbers differently such that the probability of winning our
+variant is greater than $\frac{244}{ 495}$ while still being strictly less than
+$\frac{1}{2}$?</p>
+
+<p>To answer this question we&rsquo;ll need a little bit of math and fair amount of
+Python.</p>
+
+<h2 id="definitions">Definitions</h2>
+
+<p>Let&rsquo;s start by laying out the original rules of Craps.</p>
+
+<p>In the game of craps a &ldquo;roll&rdquo; is always the sum of two random six-sided die.
+The individual dice results never matter: for example, {2,3} always leads to
+the same as outcome {1,4} because they both sum to 5.</p>
+
+<p>A game of Craps has two phases: A &ldquo;come out&rdquo; phase for the first dice roll, and
+an &ldquo;on point&rdquo; phase for all subsequent dice rolls in this game. In the &ldquo;come
+out&rdquo; phase, if the player rolls a 7 or an 11, they immediately win. if the
+player rolls a 2, a 3, or 12, they immediately lose. For any other roll, their
+first dice roll becomes their &ldquo;point&rdquo; - the point number is fixed by that first
+&ldquo;come out&rdquo; roll and remains the same until the end of the game. The player then
+repeatedly rolls until one of two things happen: either they roll a number
+which matches their &ldquo;point&rdquo; and they win, or they roll a 7 and they lose.</p>
+
+<p>Let&rsquo;s do a complete example. A player starts a new game. On his first roll -
+the &ldquo;come out&rdquo; roll - he rolls a 5. This is not 7 or 11 so he doesn&rsquo;t
+immediately win, and it&rsquo;s not 2, 3, or 12 so he doesn&rsquo;t immediately lose.
+Instead he &ldquo;passes&rdquo; and is now &ldquo;on point.&rdquo; His next roll is an 11. Because we
+are no longer in the come out phase, 11 has no special meaning. The only two
+numbers that matter are his &ldquo;point&rdquo; (5) and to the &ldquo;seven-out&rdquo; (7). Since 11 is
+neither of these, he rolls again and keeps rolling until eventually he rolls a
+5, winning the game.</p>
+
+<p>It&rsquo;s clear that the numbers play different roles. 7 and 11 are the &ldquo;naturals&rdquo;
+that let you win immediately in the come out phase; 2, 3, and 12 are the
+&ldquo;craps&rdquo; which let you lose immediately in the come out phase; and 7 is the
+&ldquo;out&rdquo; that causes a loss in the &ldquo;on point&rdquo; phase. There is no particular
+parameter for the &ldquo;point&rdquo; because this is decided by the &ldquo;come out&rdquo; roll.</p>
+
+<p>It&rsquo;s also clear there are some natural constraints. We cannot assign a number
+to be both a natural and a craps. There should be at least one natural and at
+least one craps &ndash; part of the excitement of the game is that it is possible to
+win or lose on every roll. On further reflection it can also be seen that the
+&ldquo;out&rdquo; must be the same as one of the naturals or the craps. If this were not
+true, it would be possible to enter the &ldquo;come out&rdquo; phase with your &ldquo;point&rdquo; the
+same as the &ldquo;out&rdquo; which would be fatally ambiguous. And finally, if <em>every</em>
+possible roll resulted in either a &ldquo;natural&rdquo; or a &ldquo;craps&rdquo; then it wouldn&rsquo;t be
+possible to enter the &ldquo;on point&rdquo; phase &ndash; and really wouldn&rsquo;t be very craps
+like.</p>
+
+<p>Therefore a game is &ldquo;craps-like&rdquo; and may be called a &ldquo;craps-variant&rdquo; if it is
+defined by a partition of the integers from 2 to 12 into three non-empty sets:
+$N$, $C$, and $P$, plus a single parameter $o \in N \cup C$. With this
+parameterization, every craps-variant has the same rules.</p>
+
+<p>Let  $\mathcal{D}(s)$ be the uniform distribution over the set of integers from
+1 to $s$. Let $(r_i)$ be an infinite sequence of i.i.d. random variables where
+$r_i \sim \mathcal{D}(6) + \mathcal{D}(6)$.  Then we define the game of craps
+and all its variants as the parameterized family of functions:</p>
+
+<p><span class="math display">\[
+\text{craps}(r; C,N,o)= 
+\begin{cases}
+  \text{win} & \text{ if } r_1 \in N \\
+  \text{lose} & \text{ if } r_1 \in C \\
+  \text{onpoint}(r, 2; o) & \text{ otherwise }
+\end{cases}
+\]</span></p>
+
+<p>Where we can recursively define the function $\text{onpoint}()$ as:</p>
+
+<p><span class="math display">\[
+\text{onpoint}(r,i; o) = \begin{cases}
+  \text{win} & \text{ if } r_i = r_1 \\
+  \text{lose} & \text{ if } r_i = o \\
+  \text{onpoint}(r,i+1; o) & \text{ otherwise }
+\end{cases}
+\]</span></p>
+
+<p>These formalisms make it clear that partitioning the numbers 2-12 into three
+non-empty sets is at the heart of the combinatorics of craps variants.  We&rsquo;ll
+need a way to count and generate such partitions if we want to search the space
+of all possible craps-variants. The functional definition of the craps game
+will simply serve as a guide to the Python implementation, which will perhaps
+be much easier to read.</p>
+
+<h2 id="computation">Computation</h2>
+
+<p>To compute probabilities exactly we will use the [fractions][F] package to
+precisely represent rational numbers.</p>
+
+<pre><code class="language-python">from itertools import islice
+import fractions
+from fractions import Fraction
+</code></pre>
+
+<p>We can also represent the p.m.f. of $\mathcal{D}(6) + \mathcal{D}(6)$ using a
+simple dict.</p>
+
+<pre><code class="language-python">p_roll = { total: Fraction(6-abs(total-7), 36) for total in range(2,12+1)}
+</code></pre>
+
+<pre><code>{2: Fraction(1, 36),
+ 3: Fraction(1, 18),
+ 4: Fraction(1, 12),
+ 5: Fraction(1, 9),
+ 6: Fraction(5, 36),
+ 7: Fraction(1, 6),
+ 8: Fraction(5, 36),
+ 9: Fraction(1, 9),
+ 10: Fraction(1, 12),
+ 11: Fraction(1, 18),
+ 12: Fraction(1, 36)}
+</code></pre>
+
+<p>The support of a random variable is the set for which it has non-zero
+probability; in other words, all possible outcomes.</p>
+
+<pre><code class="language-python">roll_support = list(p_roll.keys())
+</code></pre>
+
+<p>Next we will define a class which represents a single craps variant. The
+parameters will be instance members and the function <code>p_win()</code> will calculate
+the exact probability $P(\text{craps}(;N,S,o) = \text{win})$. Note this is not
+a Monte Carlo simulation or an approximation: using <code>Fraction()</code> and summing
+over the finite support gives us the exact answer.</p>
+
+<pre><code class="language-python">class Craps:
+    def __init__(self, craps=[2, 3, 12], naturals=[7, 11], out=7):
+        self.craps = craps
+        self.naturals = naturals
+        self.out = out
+    
+    def p_win(self):
+        return sum(
+            p_roll[total] * self.p_come_out(total) 
+            for total in roll_support)
+        
+    def p_come_out(self, total):
+        if total in self.craps:
+            return 0
+        elif total in self.naturals:
+            return 1
+        else:
+            return self.p_when_on_point(total)
+
+    def p_when_on_point(self, point):
+        p_out = p_roll[self.out]
+        p_point = p_roll[point]
+        return p_point / (p_out + p_point)
+
+</code></pre>
+
+<p>(I&rsquo;ve omitted a few double underscore methods to keep things high level;
+check the original <a href="/post/craps-game-variants_files/CrapsVariants.ipynb">notebook</a> for the full code listing.)</p>
+
+<p>What&rsquo;s important here are the methods <code>p_win()</code>, <code>p_come_out()</code>, and
+<code>p_when_on_point()</code> which closely correspond our mathematically definitions and
+in fact correspond to calculating the various conditional probabilities of each
+phase. Note that even though the game itself can go on forever and the we
+defined our game mathematically using infinite recursion, the expectation value
+calculated in <code>p_come_out()</code> does not require infinite recursion, or any
+recursion at all.</p>
+
+<h2 id="original-game">Original Game</h2>
+
+<p>With our class define, we can test it by feeding it the original parameters
+and verifying that it returns $\frac{244}{495}$.</p>
+
+<pre><code class="language-python">p = Craps(craps=[2, 3, 12], naturals=[7, 11], out=7).p_win()
+p_original = p
+p, float(p)
+</code></pre>
+
+<pre><code>(Fraction(244, 495), 0.49292929292929294)
+</code></pre>
+
+<p>If you haven&rsquo;t done so already, this is a good place to download the Jupyter
+<a href="/post/craps-game-variants_files/CrapsVariants.ipynb">notebook</a> and try some variants by hand to build intuition.</p>
+
+<h2 id="generating-variants">Generating Variants</h2>
+
+<p>We next turn our attention to generating all variants. This is a two step
+process: generate all 3-partitions of $[2,12]$ to obtain $C$, $N$, and $P$, and
+then pick our &ldquo;out&rdquo; from the set $C \cup N$. Note that the members of a
+partition are non-empty by definition so there will always be at least one
+craps, one natural, and one number which will advance us into the &ldquo;on point
+phase.&rdquo;</p>
+
+<p>We&rsquo;re going to be generating a <em>lot</em> of partitions so it behooves us to have a
+reasonable performant implementation. Knuth&rsquo;s <a href="https://gist.github.com/olooney/8607faf1ee609b7c4da26f41f766a977">algorithm u</a> is very fast
+and memory efficient but very far outside the scope of this article; so for now
+just note that its a generator expression yielding lists of lists to represent
+partitions and that it yields every valid partition exactly one before
+stopping.</p>
+
+<pre><code class="language-python"># Knuth's algorithm to partition ns into m sets.
+def algorithm_u(ns, m):
+  # 83 lines of code omitted 
+  # yields lists of lists
+</code></pre>
+
+<p>We wrap the partition generator in one extra layer to pick the &ldquo;out&rdquo;:</p>
+
+<pre><code class="language-python">def generate_craps_variants():
+    for craps, naturals, _ in algorithm_u(roll_support, 3):
+        for out in craps + naturals:
+            yield Craps(craps, naturals, out)
+</code></pre>
+
+<h2 id="investigation">Investigation</h2>
+
+<p>The first question that comes to mind is &ldquo;How many craps variations are there?&rdquo;</p>
+
+<pre><code class="language-python">sum( 1 for _ in generate_craps_variants() )
+</code></pre>
+
+<pre><code>229858
+</code></pre>
+
+<p>Just shy of a quarter million. Note that while all of these games are unique
+under our definition, they exhibit several kinds of strong symmetry. For
+example, if two games are the same except one has an out of 5 and the other an
+out of 9, they will always have the exact same probability winning the whole
+game because 5 and 9 have the same probability.  And there are many cases where
+we could exchange say a 3 in the naturals with an 11 in the craps set and once
+again get a game with the exact same probability of winning. So in some sense
+our quarter million is over counting. However these symmetries are quite
+complex so we will have to leave that for some future article.</p>
+
+<p>In any case, a quarter million is no obstacle explicit enumeration. If you
+would like to see the full list, here it is in <a href="/post/craps-game-variants_files/all_craps_variants.zip">compressed format</a>. And of
+course you could always generate them for yourself in a few minutes from the
+<a href="/post/craps-game-variants_files/CrapsVariants.ipynb">notebook code</a>.</p>
+
+<p>To answer the original question posed, we need to rank these games according to
+the rule &ldquo;closest to 50% while still strictly less.&rdquo; In Python we usually use
+the <a href="https://en.wikipedia.org/wiki/Schwartzian_transform">decorate-sort-undecorate</a> idiom for such problems.</p>
+
+<pre><code class="language-python">def decorate_with_scores(craps_variants):
+    one_half = Fraction(1, 2)
+    for craps_variant in craps_variants:
+        p = craps_variant.p_win() 
+        score = (one_half - p) if p &lt; one_half else 1 - p
+        yield (score, p, craps_variant)
+    
+scored_variants = list(decorate_with_scores(generate_craps_variants()))
+sorted_variants = sorted(scored_variants)
+</code></pre>
+
+<p>Let&rsquo;s just take a peek at the top 20:</p>
+
+<pre><code class="language-python">for score, p, craps_variant in sorted_variants[:20]:
+    print(&quot;{} : {}  {:.4f}%&quot;.format(craps_variant, p, 100*float(p)))
+</code></pre>
+
+<pre><code>craps: 2,8,10,12  naturals: 3,7  out: 10 : 5039/10080  49.9901%
+craps: 2,6,10,12  naturals: 3,7  out: 10 : 5039/10080  49.9901%
+craps: 2,4,8,12  naturals: 3,7  out: 4 : 5039/10080  49.9901%
+craps: 2-3,7,12  naturals: 4,8  out: 4 : 5039/10080  49.9901%
+craps: 2-3,7,12  naturals: 4,6  out: 4 : 5039/10080  49.9901%
+craps: 2,4,6,12  naturals: 3,7  out: 4 : 5039/10080  49.9901%
+craps: 2-3,6  naturals: 4,12  out: 4 : 5039/10080  49.9901%
+craps: 2,4,7  naturals: 3,6,12  out: 4 : 5039/10080  49.9901%
+craps: 2,4,7  naturals: 3,8,12  out: 4 : 5039/10080  49.9901%
+craps: 2-3,8  naturals: 4,12  out: 4 : 5039/10080  49.9901%
+craps: 2,7,10  naturals: 3,6,12  out: 10 : 5039/10080  49.9901%
+craps: 2,7,10  naturals: 3,8,12  out: 10 : 5039/10080  49.9901%
+craps: 2-3,6,11  naturals: 4,8,10  out: 8 : 3563/7128  49.9860%
+craps: 2-3,6,11  naturals: 4,8,10  out: 6 : 3563/7128  49.9860%
+craps: 2-3,8,11  naturals: 4,6,10  out: 6 : 3563/7128  49.9860%
+craps: 2-3,8,11  naturals: 4,6,10  out: 8 : 3563/7128  49.9860%
+craps: 2,6-7  naturals: 3,5,8-9  out: 8 : 1511/3024  49.9669%
+craps: 2,6-7  naturals: 3,5,8-9  out: 6 : 1511/3024  49.9669%
+craps: 2,7-8  naturals: 3,5-6,9  out: 6 : 1511/3024  49.9669%
+craps: 2,7-8  naturals: 3,5-6,9  out: 8 : 1511/3024  49.9669%
+</code></pre>
+
+<p>OK, wow, I wasn&rsquo;t expecting that. We&rsquo;re seeing lots of variations that are
+beating the original game by a wide margin. So the existence question is
+settled - there absolutely do exist craps variants which are much closer to
+fair than the original.</p>
+
+<p>In fact we note that the top 12 games all achieved the same remarkable score of
+49.99%.  This relates back to the symmetries I mentioned earlier: in general,
+craps-variants will belong to an equivalence class of similar games reachable
+through swaps and reflections about 7 and all games in an equivalence class
+will have the same probability of winning. But more on that in a future
+article.</p>
+
+<p>The next obvious question is how many craps variants are more fair than the
+original game?</p>
+
+<pre><code class="language-python">sum(p &gt; p_original and p &lt; Fraction(1,2) 
+    for _, p, _ in scored_variants)/len(scored_variants)
+</code></pre>
+
+<pre><code>0.01621000791793194
+</code></pre>
+
+<p>So of all possible craps variants, only 1.6% are better than the original. So
+in this sense the original game is exceptionally fair - if I picked a variant
+at random, then 98.4% is would be as fair or less fair then the original.</p>
+
+<p>However the best possible variants are really quite extraordinarily fair:
+$\frac{5039}{10080} \approx 49.99\%$  Less than 1 part in 10,000.  It&rsquo;s pretty
+amazing, really, what we can do with a pair of dice and a few simple rules.</p>
+
+<h2 id="empirical-confirmation">Empirical Confirmation</h2>
+
+<blockquote>
+<p>Beware of bugs in the above code; I have only proved it correct, not tried
+it.</p>
+
+<ul>
+<li>Donald Knuth</li>
+</ul>
+</blockquote>
+
+<p>I&rsquo;m fairly certain its a crime to conduct an analysis of a game of chance
+without including a Monte Carlo simulation and since I do not want to be tried
+by a court in Prague let&rsquo;s confirm our results with a simple simulation.</p>
+
+<p>The simulation code itself is obvious and straight-forward:</p>
+
+<pre><code class="language-python">import random
+
+class CrapsSimulation:
+    def __init__(self, craps=[2, 3, 12], naturals=[7, 11], out=7):
+        self.craps = craps
+        self.naturals = naturals
+        self.out = out
+    
+    def reset(self):
+        self.point = None
+        self.roll_log = []
+    
+    def roll(self):
+        roll = random.randint(1, 6) + random.randint(1, 6)
+        self.roll_log.append(roll)
+        return roll
+    
+    def play(self):
+        self.reset()
+        
+        come_out_roll = self.roll()
+        if come_out_roll in self.craps:
+            return 0
+        elif come_out_roll in self.naturals:
+            return 1
+        else:
+            self.point = come_out_roll
+            return self.play_on_point()
+    
+    def play_on_point(self):
+        while True:
+            roll = self.roll()
+            if roll == self.out:
+                return 0
+            if roll == self.point:
+                return 1
+</code></pre>
+
+<p>Now We can simply play the game 100 million times to confirm our results. (To
+get 4 significant figures, we need an error term on the order of $10^{-4} but
+the error terms deceases only with the square root of the number of trials so
+we need about 10^8 trials to get the accuracy we want.)</p>
+
+<pre><code class="language-python">n = int(1e8)
+
+original_game = CrapsSimulation(craps=[2, 3, 12], naturals=[7, 11], out=7)
+fairest_variant = CrapsSimulation(craps=[2, 8, 10, 12],  naturals=[3, 7],  out=10)
+
+outcomes = []
+for sim in [original_game, fairest_variant]:
+    win_loss_record = [ sim.play() for _ in range(n) ]
+    p_win = sum(win_loss_record) / len(win_loss_record)
+    outcomes.append(p_win)
+</code></pre>
+
+<pre><code>[0.49290737, 0.49991584]
+</code></pre>
+
+<p>Yep - that&rsquo;s the 49.29% and 49.99% we expect for the original and fairest
+variant respectively.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Craps is quite a fair game compared to other common casino games and even
+compared to 98% of possible variants. However my conjecture that craps had been
+explicitly designed as an optimally fair game was thoroughly disproved when we
+constructed many variants that were <em>much</em> fairer. However, now I am even more
+impressed with the power of the craps rule set to generate hyper-granular
+probabilities with only two dice a rule set which is very simple to learn and
+remember.</p>
+
+<p>One aspect of craps variants that we didn&rsquo;t explore in detail but which seems
+promising is the <a href="https://en.wikipedia.org/wiki/Symmetry_group">symmetry group</a> of craps variants. Variants can be
+divided into equivalence classes based which variants can reach each other
+using only outcome preserving operations.  We observe that equivalence classes
+vary in size quite a bit; for example the original game is part of an
+equivalence class class with two members while the fairest variant is part of
+an equivalence class with 12 members, and many other sizes are possible. It
+seems a moderate and amusing challenge to characterize this group and count the
+number of equivalence classes of games, but I will have to leave that to a
+future article.</p>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/complex-r-part-2/" data-toggle="tooltip" data-placement="top" title="Complex Numbers in R, Part II">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>

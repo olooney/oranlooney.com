@@ -4,9 +4,9 @@ title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"
-pygmentsCodefences = true
-pygmentsUseClasses = true
-pygmentsOptions = "linenos=table"
+#pygmentsCodefences = true
+#pygmentsUseClasses = true
+#pygmentsOptions = "linenos=table"
 
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright 2018 Oran Looney"

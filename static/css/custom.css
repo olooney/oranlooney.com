@@ -7,6 +7,13 @@ html .article pre {
 	font-style: normal;
 }
 
+html .article pre code {
+    border-left: solid 4px #b4c6c7;
+}
+html .article blockquote {
+  margin-left: 0;
+}
+
 html .article img {
 	border: none;
 }
