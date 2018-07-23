@@ -6,12 +6,11 @@
   <title>Craps Variants - OranLooney.com</title>
   <meta property="og:title" content="Craps Variants - OranLooney.com" />
   <meta name="twitter:title" content="Craps Variants - OranLooney.com" />
-  <meta name="description" content="Anyone who&rsquo;s ever calculated the chances of winning at craps may remember being surprised by how fair the game is.
-(Spoiler Warning If you haven&rsquo;t calculated these odds but feel you might enjoy the challenge, you should do so before reading on, because I&rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case. A full solution may also be found in the rather excellent book, Fifty Challenging Problems in Probability with Solutions.">
-  <meta property="og:description" content="Anyone who&rsquo;s ever calculated the chances of winning at craps may remember being surprised by how fair the game is.
-(Spoiler Warning If you haven&rsquo;t calculated these odds but feel you might enjoy the challenge, you should do so before reading on, because I&rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case. A full solution may also be found in the rather excellent book, Fifty Challenging Problems in Probability with Solutions.">
-  <meta name="twitter:description" content="Anyone who&rsquo;s ever calculated the chances of winning at craps may remember being surprised by how fair the game is.
-(Spoiler Warning If you haven&rsquo;t calculated these odds but feel you might …">
+  <meta name="description" content="Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, certain there was a mistake somewhere. How could it be closer than $\frac{1}{36}$?
+(Spoiler Warning If you haven&rsquo;t calculated these odds for yourself then you may want to do so before reading further. I&rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case.">
+  <meta property="og:description" content="Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, certain there was a mistake somewhere. How could it be closer than $\frac{1}{36}$?
+(Spoiler Warning If you haven&rsquo;t calculated these odds for yourself then you may want to do so before reading further. I&rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case.">
+  <meta name="twitter:description" content="Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -97,6 +96,7 @@
 <li>
 <ul>
 <li><a href="#definitions">Definitions</a></li>
+<li><a href="#parameterization">Parameterization</a></li>
 <li><a href="#computation">Computation</a></li>
 <li><a href="#original-game">Original Game</a></li>
 <li><a href="#generating-variants">Generating Variants</a></li>
@@ -109,25 +109,28 @@
 </aside>
       
 
-<p>Anyone who&rsquo;s ever calculated the chances of winning at <a href="https://en.wikipedia.org/wiki/Craps">craps</a> may remember
-being surprised by how fair the game is.</p>
+<p><a href="https://en.wikipedia.org/wiki/Craps">Craps</a> is a suprisingly fair game. I remember calculating the probability
+of winning craps for the first time in an undergraduate discrete math class: I
+went back through my calculations several times, certain there was a mistake
+somewhere.  How could it be closer than $\frac{1}{36}$?</p>
 
-<p>(<strong>Spoiler Warning</strong> If you <em>haven&rsquo;t</em> calculated these odds but feel you might
-enjoy the challenge, you should do so before reading on, because I&rsquo;m about to
-spoil it for you rather thoroughly in the name of exploring a more general
-case. A full solution may also be found in the rather excellent book, <a href="https://www.amazon.com/Challenging-Problems-Probability-Solutions-Mathematics/dp/0486653552">Fifty
-Challenging Problems in Probability with Solutions</a>.)</p>
+<p>(<strong>Spoiler Warning</strong> If you <em>haven&rsquo;t</em> calculated these odds for yourself then
+you may want to do so before reading further. I&rsquo;m about to spoil it for you
+rather thoroughly in the name of exploring a more general case. A full solution
+may also be found, for example, in the book <a href="https://www.amazon.com/Challenging-Problems-Probability-Solutions-Mathematics/dp/0486653552">Fifty Challenging Problems in
+Probability with Solutions</a>.)</p>
 
 <p>It&rsquo;s so close to fair, in fact, that I actually had to check to see if the
 inventor had been a mathematician or statistician; and while he seemed like a
 <a href="https://en.wikipedia.org/wiki/Bernard_de_Marigny">very colorful character</a> there&rsquo;s little in his biography to suggest he had
-any deep knowledge of mathematical.</p>
+any deep knowledge of mathematics.</p>
 
-<p>Concretely, the exact odds are $\frac{244}{ 495} \approx 49.29\%$: That&rsquo;s less
-than 0.71% away from perfectly fair &ndash; and of course no reputable casino would
-ever host a game that was <em>perfectly</em> fair.  (Note that this means that the
-house edge is 1.4%, similar to Blackjack but without requiring any strategic
-play.)</p>
+<p>Concretely, the exact odds are $\frac{244}{495} \approx 49.29\%$: That&rsquo;s less
+than 0.71% away from perfectly fair &ndash; and of course no casino would ever host
+a game that was <em>perfectly</em> fair.  (Note that this means that the house edge is
+1.4%, similar to Blackjack but without requiring the memorization of large
+tables of optimal moves. Any player who isn&rsquo;t able to play Blackjack perfectly
+will probably do better at the craps table.)</p>
 
 <p>To appreciate how remarkable that is, note that fairest (&ldquo;fairest&rdquo; meaning the
 closest to 50% while still strictly less) outcome you can achieve with a single
@@ -138,69 +141,75 @@ of $\frac{1}{36} \approx 2.78\%$. There just doesn&rsquo;t seem like there&rsquo
 <em>granularity</em> to get to $49.29\%$. But with the clever design of the &ldquo;on point&rdquo;
 rule, it seems we can get there with just two ordinary six-sided die.</p>
 
-<p>Honestly its so close to 50% it&rsquo;s actually a bit of a pain to test empirically:
+<p>Its so close to 50% it&rsquo;s actually a bit of a pain to test empirically:
 according to <a href="http://www.gpower.hhu.de/">G*Power3</a> you would need to play 54,000 games of craps to be
 reasonably sure that you are safe to reject the null hypothesis that the true
 odds were in fact <sup>50</sup>&frasl;<sub>50</sub>.</p>
 
 <p>We also note that the game appears to have been constructed by a very
 deliberate choice of numbers: 2, 3, 7, 11, and 12. We can imagine de Marigny
-sitting in front of a 19th century fire, rolling dice, taking notes,
-occasionally scratching out a 4 and replacing it with a 3, little by little
-adjusting his rules to try and find the perfect game.</p>
+sitting in front of a 19th century fireplace, drinking brandy and rolling dice,
+taking notes, occasionally scratching out a 4 and replacing it with a 3, little
+by little adjusting his rules to try and find the perfect game.</p>
 
 <p>So the question of the day is this: is there anything unique or special about
 this particular assignment of numbers? In particular, does de Marigny&rsquo;s
 particular assignment of numbers to outcomes result in the <em>fairest possible</em>
-craps-like game? Is there any reason why convenience stores on the west coast
-are called 7-11s, and not 6-10s?</p>
+craps-like game?</p>
 
 <p>And above all &ndash; is it possible to do better? To put it another way: could we
-choose these numbers differently such that the probability of winning our
-variant is greater than $\frac{244}{ 495}$ while still being strictly less than
+choose different numbers such that the probability of winning our variant is
+greater than $\frac{244}{ 495}$ while still being strictly less than
 $\frac{1}{2}$?</p>
 
-<p>To answer this question we&rsquo;ll need a little bit of math and fair amount of
+<p>To answer this question we&rsquo;ll need a little bit of math and little bit of
 Python.</p>
 
 <h2 id="definitions">Definitions</h2>
 
-<p>Let&rsquo;s start by laying out the original rules of Craps.</p>
+<p>Let&rsquo;s start by laying out the original rules of craps.</p>
 
 <p>In the game of craps a &ldquo;roll&rdquo; is always the sum of two random six-sided die.
-The individual dice results never matter: for example, {2,3} always leads to
-the same as outcome {1,4} because they both sum to 5.</p>
+The individual dice results never matter: for example, 2,3 always leads to
+the same as outcome as 1,4 because they both sum to 5.</p>
 
-<p>A game of Craps has two phases: A &ldquo;come out&rdquo; phase for the first dice roll, and
-an &ldquo;on point&rdquo; phase for all subsequent dice rolls in this game. In the &ldquo;come
-out&rdquo; phase, if the player rolls a 7 or an 11, they immediately win. if the
-player rolls a 2, a 3, or 12, they immediately lose. For any other roll, their
-first dice roll becomes their &ldquo;point&rdquo; - the point number is fixed by that first
-&ldquo;come out&rdquo; roll and remains the same until the end of the game. The player then
-repeatedly rolls until one of two things happen: either they roll a number
-which matches their &ldquo;point&rdquo; and they win, or they roll a 7 and they lose.</p>
+<p>A game of craps has two phases: A &ldquo;come out&rdquo; phase for the first dice roll, and
+an &ldquo;on point&rdquo; phase for all subsequent rolls. In the &ldquo;come out&rdquo; phase, if the
+player rolls a 7 or an 11, he or she immediately wins; this called a &ldquo;natural.&rdquo;
+If the player rolls a 2, a 3, or 12, he or she immediately loses; this is
+called a &ldquo;craps.&rdquo; For any other roll, the first dice roll becomes the &ldquo;point&rdquo;.
+The point number is fixed by that first &ldquo;come out&rdquo; roll and remains the same
+until the end of the game. The player then repeatedly rolls until one of two
+things happen: either they roll the &ldquo;point&rdquo; and win, or they roll a 7 and lose;
+this is called &ldquo;seven-out&rdquo;.</p>
 
 <p>Let&rsquo;s do a complete example. A player starts a new game. On his first roll -
 the &ldquo;come out&rdquo; roll - he rolls a 5. This is not 7 or 11 so he doesn&rsquo;t
 immediately win, and it&rsquo;s not 2, 3, or 12 so he doesn&rsquo;t immediately lose.
-Instead he &ldquo;passes&rdquo; and is now &ldquo;on point.&rdquo; His next roll is an 11. Because we
-are no longer in the come out phase, 11 has no special meaning. The only two
-numbers that matter are his &ldquo;point&rdquo; (5) and to the &ldquo;seven-out&rdquo; (7). Since 11 is
-neither of these, he rolls again and keeps rolling until eventually he rolls a
-5, winning the game.</p>
+Instead he is now &ldquo;on point&rdquo; and enters the second phase of the game. His next
+roll is an 11. Because we are no longer in the come out phase, 11 has no
+special meaning. The only two numbers that matter are his &ldquo;point&rdquo; (5) and to
+the &ldquo;seven-out&rdquo; (7). Since 11 is neither of these, he rolls again. This
+next roll is a 5, so he wins the game.</p>
 
-<p>It&rsquo;s clear that the numbers play different roles. 7 and 11 are the &ldquo;naturals&rdquo;
-that let you win immediately in the come out phase; 2, 3, and 12 are the
-&ldquo;craps&rdquo; which let you lose immediately in the come out phase; and 7 is the
-&ldquo;out&rdquo; that causes a loss in the &ldquo;on point&rdquo; phase. There is no particular
-parameter for the &ldquo;point&rdquo; because this is decided by the &ldquo;come out&rdquo; roll.</p>
+<h2 id="parameterization">Parameterization</h2>
+
+<p>Now that we have a good understanding of the rules, let&rsquo;s try to generalize
+the game. A full generalization would not have any specific magic numbers
+hard-coded in, but would instead treat all numbers used in the rules as parameters.</p>
+
+<p>It&rsquo;s clear that parameters have different roles. In the &ldquo;come out&rdquo;
+phase, 7 and 11 are the &ldquo;naturals&rdquo; while 2, 3, and 12 are the &ldquo;craps&rdquo;.; In &ldquo;on
+point&rdquo; phase 7 is the &ldquo;out&rdquo; that causes a loss in the &ldquo;on point&rdquo; phase. There
+is no particular parameter for the &ldquo;point&rdquo; because this is decided by the &ldquo;come
+out&rdquo; roll.</p>
 
 <p>It&rsquo;s also clear there are some natural constraints. We cannot assign a number
 to be both a natural and a craps. There should be at least one natural and at
 least one craps &ndash; part of the excitement of the game is that it is possible to
-win or lose on every roll. On further reflection it can also be seen that the
-&ldquo;out&rdquo; must be the same as one of the naturals or the craps. If this were not
-true, it would be possible to enter the &ldquo;come out&rdquo; phase with your &ldquo;point&rdquo; the
+win or lose on every roll. With some careful thought it can also be seen that the
+&ldquo;out&rdquo; must be the same as one of the naturals or the craps &ndash; if this were not
+the case it would be possible to enter the &ldquo;come out&rdquo; phase with your &ldquo;point&rdquo; the
 same as the &ldquo;out&rdquo; which would be fatally ambiguous. And finally, if <em>every</em>
 possible roll resulted in either a &ldquo;natural&rdquo; or a &ldquo;craps&rdquo; then it wouldn&rsquo;t be
 possible to enter the &ldquo;on point&rdquo; phase &ndash; and really wouldn&rsquo;t be very craps
@@ -225,7 +234,7 @@ and all its variants as the parameterized family of functions:</p>
 \end{cases}
 \]</span></p>
 
-<p>Where we can recursively define the function $\text{onpoint}()$ as:</p>
+<p>The function $\text{onpoint}()$ is defined recursively as:</p>
 
 <p><span class="math display">\[
 \text{onpoint}(r,i; o) = \begin{cases}
@@ -244,16 +253,15 @@ be much easier to read.</p>
 
 <h2 id="computation">Computation</h2>
 
-<p>To compute probabilities exactly we will use the [fractions][F] package to
+<p>To compute probabilities exactly we will use the <a href="https://docs.python.org/2/library/fractions.html">fractions</a> package to
 precisely represent rational numbers.</p>
 
-<pre><code class="language-python">from itertools import islice
-import fractions
+<pre><code class="language-python">import fractions
 from fractions import Fraction
 </code></pre>
 
-<p>We can also represent the p.m.f. of $\mathcal{D}(6) + \mathcal{D}(6)$ using a
-simple dict.</p>
+<p>We can also precompute p.m.f. of $\mathcal{D}(6) + \mathcal{D}(6)$ and
+represent the map of outcomes to probabilities as a Python dict:</p>
 
 <pre><code class="language-python">p_roll = { total: Fraction(6-abs(total-7), 36) for total in range(2,12+1)}
 </code></pre>
@@ -272,16 +280,18 @@ simple dict.</p>
 </code></pre>
 
 <p>The support of a random variable is the set for which it has non-zero
-probability; in other words, all possible outcomes.</p>
+probability; in other words, all possible outcomes. It is convenient to have
+this as separate variable since we we will need to refer to it several times.</p>
 
 <pre><code class="language-python">roll_support = list(p_roll.keys())
 </code></pre>
 
 <p>Next we will define a class which represents a single craps variant. The
 parameters will be instance members and the function <code>p_win()</code> will calculate
-the exact probability $P(\text{craps}(;N,S,o) = \text{win})$. Note this is not
-a Monte Carlo simulation or an approximation: using <code>Fraction()</code> and summing
-over the finite support gives us the exact answer.</p>
+the exact probability $P(\text{craps}(;N,S,o) = \text{win})$. (In general the
+prefix <code>p_</code> will denote &ldquo;probability of&rdquo;.) Note this is not a Monte Carlo
+simulation or an approximation: using <code>Fraction()</code> and summing over the finite
+support gives us exact probabilities.</p>
 
 <pre><code class="language-python">class Craps:
     def __init__(self, craps=[2, 3, 12], naturals=[7, 11], out=7):
@@ -318,11 +328,12 @@ in fact correspond to calculating the various conditional probabilities of each
 phase. Note that even though the game itself can go on forever and the we
 defined our game mathematically using infinite recursion, the expectation value
 calculated in <code>p_come_out()</code> does not require infinite recursion, or any
-recursion at all.</p>
+recursion at all. We need only take the ratio of the probability of the point
+and the probability of rolling the out.</p>
 
 <h2 id="original-game">Original Game</h2>
 
-<p>With our class define, we can test it by feeding it the original parameters
+<p>With our class defined, we can test it by feeding it the original parameters
 and verifying that it returns $\frac{244}{495}$.</p>
 
 <pre><code class="language-python">p = Craps(craps=[2, 3, 12], naturals=[7, 11], out=7).p_win()
@@ -333,19 +344,18 @@ p, float(p)
 <pre><code>(Fraction(244, 495), 0.49292929292929294)
 </code></pre>
 
-<p>If you haven&rsquo;t done so already, this is a good place to download the Jupyter
-<a href="/post/craps-game-variants_files/CrapsVariants.ipynb">notebook</a> and try some variants by hand to build intuition.</p>
+<p>Which is what we expect.</p>
 
 <h2 id="generating-variants">Generating Variants</h2>
 
-<p>We next turn our attention to generating all variants. This is a two step
+<p>We next turn our attention to generating all possible variants. This is a two step
 process: generate all 3-partitions of $[2,12]$ to obtain $C$, $N$, and $P$, and
 then pick our &ldquo;out&rdquo; from the set $C \cup N$. Note that the members of a
 partition are non-empty by definition so there will always be at least one
 craps, one natural, and one number which will advance us into the &ldquo;on point
 phase.&rdquo;</p>
 
-<p>We&rsquo;re going to be generating a <em>lot</em> of partitions so it behooves us to have a
+<p>We are going to be generating a <em>lot</em> of partitions so it behooves us to have a
 reasonable performant implementation. Knuth&rsquo;s <a href="https://gist.github.com/olooney/8607faf1ee609b7c4da26f41f766a977">algorithm u</a> is very fast
 and memory efficient but very far outside the scope of this article; so for now
 just note that its a generator expression yielding lists of lists to represent
@@ -355,7 +365,7 @@ stopping.</p>
 <pre><code class="language-python"># Knuth's algorithm to partition ns into m sets.
 def algorithm_u(ns, m):
   # 83 lines of code omitted 
-  # yields lists of lists
+  # yields partitions as lists of lists of integers
 </code></pre>
 
 <p>We wrap the partition generator in one extra layer to pick the &ldquo;out&rdquo;:</p>
@@ -377,14 +387,14 @@ def algorithm_u(ns, m):
 </code></pre>
 
 <p>Just shy of a quarter million. Note that while all of these games are unique
-under our definition, they exhibit several kinds of strong symmetry. For
+under our definition, they exhibit several kinds of symmetry. For
 example, if two games are the same except one has an out of 5 and the other an
 out of 9, they will always have the exact same probability winning the whole
 game because 5 and 9 have the same probability.  And there are many cases where
 we could exchange say a 3 in the naturals with an 11 in the craps set and once
 again get a game with the exact same probability of winning. So in some sense
-our quarter million is over counting. However these symmetries are quite
-complex so we will have to leave that for some future article.</p>
+our quarter million is overcounting. However these symmetries are quite
+complex so we will leave that for some future article.</p>
 
 <p>In any case, a quarter million is no obstacle explicit enumeration. If you
 would like to see the full list, here it is in <a href="/post/craps-game-variants_files/all_craps_variants.zip">compressed format</a>. And of
@@ -392,8 +402,8 @@ course you could always generate them for yourself in a few minutes from the
 <a href="/post/craps-game-variants_files/CrapsVariants.ipynb">notebook code</a>.</p>
 
 <p>To answer the original question posed, we need to rank these games according to
-the rule &ldquo;closest to 50% while still strictly less.&rdquo; In Python we usually use
-the <a href="https://en.wikipedia.org/wiki/Schwartzian_transform">decorate-sort-undecorate</a> idiom for such problems.</p>
+the rule &ldquo;closest to 50% while still strictly less.&rdquo; In Python we use
+the <a href="https://en.wikipedia.org/wiki/Schwartzian_transform">decorate-sort-undecorate</a> idiom.</p>
 
 <pre><code class="language-python">def decorate_with_scores(craps_variants):
     one_half = Fraction(1, 2)
@@ -475,11 +485,13 @@ it.</p>
 </ul>
 </blockquote>
 
-<p>I&rsquo;m fairly certain its a crime to conduct an analysis of a game of chance
-without including a Monte Carlo simulation and since I do not want to be tried
-by a court in Prague let&rsquo;s confirm our results with a simple simulation.</p>
-
-<p>The simulation code itself is obvious and straight-forward:</p>
+<p>The above code was careful to calculate exact probabilities. This was much
+faster and more accurate than a Monte Carlo simulation; indeed it would
+have been exorbitant to run a simulation for a quarter million variants
+and multiple hypothesis testing would have made it very difficult to search
+for extreme variants such as the &ldquo;fairest&rdquo; variant. However, it&rsquo;s always
+nice to see empirical results that confirm our theoretical calculations
+and in this case the simulation code itself is obvious and straight-forward:</p>
 
 <pre><code class="language-python">import random
 
@@ -519,7 +531,7 @@ class CrapsSimulation:
                 return 1
 </code></pre>
 
-<p>Now We can simply play the game 100 million times to confirm our results. (To
+<p>Now we can simply play the game 100 million times to confirm our results. (To
 get 4 significant figures, we need an error term on the order of $10^{-4} but
 the error terms deceases only with the square root of the number of trials so
 we need about 10^8 trials to get the accuracy we want.)</p>
@@ -545,12 +557,13 @@ variant respectively.</p>
 <h2 id="conclusion">Conclusion</h2>
 
 <p>Craps is quite a fair game compared to other common casino games and even
-compared to 98% of possible variants. However my conjecture that craps had been
-explicitly designed as an optimally fair game was thoroughly disproved when we
-constructed many variants that were <em>much</em> fairer. However, now I am even more
-impressed with the power of the craps rule set to generate hyper-granular
-probabilities with only two dice a rule set which is very simple to learn and
-remember.</p>
+compared to 98% of possible craps variants. Nevertheless, my conjecture that craps
+had been explicitly designed as a maximally fair game was thoroughly disproved
+when we were able to construct thousands of variants that were all fairer than the
+original. Some of these were <em>much</em> fairer than the original, deviating from
+perfectly fair by less than one game in 10,000. While this does take some of the
+shine off the original game, I am even more impressed with the power of the
+craps <em>rule set</em> to generate hyper-granular probabilities with only two die.</p>
 
 <p>One aspect of craps variants that we didn&rsquo;t explore in detail but which seems
 promising is the <a href="https://en.wikipedia.org/wiki/Symmetry_group">symmetry group</a> of craps variants. Variants can be
