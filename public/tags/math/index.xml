@@ -40,7 +40,7 @@ In this second part, we’ll take a more in-depth look at some scenarios where c
       
       <guid>http://www.oranlooney.com/post/complex-r/</guid>
       <description>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
-Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off tenfold in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</description>
+Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</description>
     </item>
     
   </channel>
