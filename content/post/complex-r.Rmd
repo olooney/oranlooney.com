@@ -18,7 +18,7 @@ functionality is ignored by the vast majority of users.
 Yet complex numbers can often offer surprisingly elegant formulations and
 solutions to problems. I want to convince you that familiarizing yourself with
 R's excellent complex number functionality is well worth the effort and will
-pay off tenfold in two different ways: first by showing you how they are so
+pay off in two different ways: first by showing you how they are so
 amazingly useful you'll want to go out of your way to use them, and then by
 showing you how they are so common and fundamental to modern analysis that you
 couldn't avoid them if you wanted to. 
@@ -46,38 +46,42 @@ trivially easy to write down an infinite of Pythagorean triples. Well, it's
 easy if we use complex numbers, anyway.
 
 A Gaussian integer is a complex number where both the real and imaginary parts
-are integers:
+are integers. The set of Gaussian integers is denoted by $\mathbb{Z}[i]$ and
+is defined as:
 
 \[
-  Z[i] = \{ x + iv \mid x,y \in \mathbb{Z} \} \tag{2}
+  \mathbb{Z}[i] = \{ x + iy \mid x,y \in \mathbb{Z} \} \tag{2}
 \]
 
 So one way of stating the problem of finding all Pythagorean triples is to find
-all Gaussian integers Which are an integer distance away from the origin. The
+all Gaussian integers which are an integer distance away from the origin. The
 distance of a complex number from the origin is called its "norm" and denoted
-$\lVert z \rVert$.
+$\lVert z \rVert$. We will call the set of Pythagorean triples $T$ and define
+it as:
 
 \[
-  T = \{ z \in \mathbb{C} \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
+  T = \{ z \in \mathbb{Z}[i] \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
 \]
 
 Now, in general the norm of Gaussian integer will be the square root of an
-integer (the integer $u^2 + v^2$ to be precise.) Therefore if we square a
+integer (the integer $x^2 + y^2$ to be precise.) Therefore if we square a
 Gaussian integer, it will have an integer norm and therefore represent a
 Pythagorean triple!
 
 \[
-\forall z \in Z[i], z^2 \in T \tag{4}
+\forall z \in \mathbb{C}, z \in \mathbb{Z}[i] \implies z^2 \in T \tag{4}
 \]
 
 So that's a pretty good start: just a few minutes work, and we've already found
 an *infinite number* of Pythagorean triples, and we have a computationally
 trivial way of constructing new triples: we simply pick any two positive
-integers $u$ and $v$ and then square the complex number $u + iv$.
+integers $x$ and $y$ and then square the complex number $x + iy$.
 
 Before address the more difficult question of whether or not we've found all
-possible Pythagorean triples using this construction, let's switch over to R
-and do some code our solution so far.
+*possible* Pythagorean triples using this construction, let's switch over to R
+and write some code to capture our solution so far.
+
+## Gaussian Integers in R
 
 Our algorithm first requires us to pick pairs of positive integers. Just to be
 thorough, we'll take all such pairs up to an arbitrary threshold.
@@ -88,8 +92,8 @@ Now, if we wanted just one or two complex numbers, we could use the literal synt
 triples <- c( 3+4i, 5+12i, 9+12i )
 ```
 
-But since we want them along a grid, we'll use the `complex()` constructor. The
-constructor is vectorized so by passing in two vectors of equal length we can
+But since want to construct them in bulk, we'll use the `complex()` constructor. This
+constructor is [vectorized][RV]: by passing in two vectors of equal length we can
 construct a one-dimensional vector of complex numbers.
 
 ```{r grid}
@@ -101,7 +105,7 @@ gaussian_integers <- complex(real=grid$u, imaginary=grid$v)
 
 Per the theoretical discussion above, we can generate Pythagorean triples by
 simply squaring these.  All primitive math functions in R work just as well on
-complex numbers: `exp`, `log`, `sin`, `cos`and of course exponentiation:
+complex numbers: `exp`, `log`, `sin`, `cos`and of course the power operator `^`:
 
 ```{r squares}
 triples <- gaussian_integers^2
@@ -112,8 +116,8 @@ cat( triples[order(Mod(triples))][1:10], sep="\n")
 
 Did it work? We're certainly seeing some familiar pairings there, like $5+12i$
 which maps to well-known triple $(5,12,13)$. To visualize them, we can simply
-pass our complex vector to R's `plot()` function - it will conveniently plot
-them in the complex plane for us! 
+pass our complex vector to R's `plot()` function -- it will conveniently plot
+them in the complex plane for us!
 
 ```{r triples}
 triples <- triples[ Re(triples) <= n & Im(triples) <= n ]
@@ -132,7 +136,7 @@ plot(
 ```
 
 Now it turns out that our algorithm does not, in fact, generate all possible
-triples. One thing it misses are multiples: if $(3,4,5)$ is a triple, then
+triples. For example, multiples are missing: if $(3,4,5)$ is a triple, then
 $(6,8,10)$ should be a triple, and $(9,12,15)$ should be a triple, and so on.
 So we have to expand our set to have all multiples.
 
@@ -166,6 +170,8 @@ triples <- c(triples, complex(real=Im(triples), imaginary=Re(triples)))
 plot(triples, col=argcolor(triples), pch=20)
 title(paste("All Pythagorean Triples Up to", n))
 ```
+
+## A Closer Look
 
 That's too many to really understand, although there are definitely
 patterns emerging. Let's zoom in and just plot a small region,but with more
@@ -219,18 +225,17 @@ title(paste("Pythagorean Triples Up to", small_n))
 ```
 
 On the zoomed in view we can see each Pythagorean triple represented as a right
-triangle; we can see that the integer multiples of solutions form a series of
-similar triangles; we can see that there's a strong symmetry with every triple
+triangle; that the integer multiples of solutions form a series of
+similar triangles; and that there's a strong symmetry with every triple
 $(a,b,c)$ having a partner $(b,a,c)$ which is its mirror reflection about the
 like $y=x$.
 
-From the zoomed out view we can see that the region close to either axis is
-essentially devoid of solutions; that their radii (e.g. close to 50) where
-triples are dense, and others where they are rare to non-existent; and it looks
+From the zoomed out view we can see that the region close to either the 
+x-axis or the y-axis is essentially devoid of solutions and that it looks
 as if triples actually get less dense as we move away from the origin.
 
-This last observation, about triples thinning out as we move away from the
-origin, can be understood and quantified by once again using the complex plane.
+By the way, this last observation about triples thinning out as we move away from the
+origin can be understood and quantified by once again using the complex plane.
 Triples are more or less the squares of Gaussian integers; we can say the
 number of triples with norm less than $r$ is roughly proportional to the number
 of Gaussian integers in the first quadrant and inside a circle with radius
@@ -240,11 +245,18 @@ radius $\sqrt{r}$, which is $\frac{\pi r}{4}$ or very roughly just $r$.
 ## Next Time
 
 In this first part of a planned series on complex numbers in R, we dipped our
-toes in the water by explicitly creating some complex numbers and showing how
-they worked with the most basic mathematical operators, functions, and plots.
+toes in the water by explicitly creating some complex numbers and manipulating them.
+We demonstrated the most important functions for working specificly with
+complex numbers such as `Re()`, `Im()`, `Mod()`, `Arg()`, and `complex()` but
+we emphasized that most built-in functions such as `exp()` and operators such
+as `*` and `^` work correctly with complex numbers and implement the natural
+analytic continuation of their equivalents on the real numbers. Finally, we
+showcased R's ability to plot on the complex plane.
 
-Next time in [Part II][P2], we will discuss in more depth at some scenarios
-where complex numbers arise naturally from the problem.
+Next time in [Part II][P2], we will discuss in more depth some scenarios
+where complex numbers arise naturally from the problem itself and cannot
+be reasonably avoided, while continuing to demostrate more advanced
+aspects of R's complex number functionalty.
 
 [P2]: /post/complex-r-part-2/
 [DIO]: https://en.wikipedia.org/wiki/Diophantine_equation
@@ -256,3 +268,4 @@ where complex numbers arise naturally from the problem.
 [NSS]: https://en.wikipedia.org/wiki/Stationary_process
 [UR]: https://en.wikipedia.org/wiki/Unit_root
 [LDS]: https://en.wikipedia.org/wiki/Linear_dynamical_system
+[RV]: https://stat.ethz.ch/R-manual/R-devel/library/base/html/Vectorize.html

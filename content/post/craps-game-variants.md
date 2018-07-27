@@ -432,9 +432,9 @@ class CrapsSimulation:
 ```
 
 Now we can simply play the game 100 million times to confirm our results. (To
-get 4 significant figures, we need an error term on the order of $10^{-4} but
-the error terms deceases only with the square root of the number of trials so
-we need about 10^8 trials to get the accuracy we want.)
+get 4 significant figures, we need an error term on the order of $10^{-4}$ but
+the error terms deceases with the *square root* of the number of trials so
+we need about $10^8$ trials to get 4 sig figs.)
 
 ```python
 n = int(1e8)

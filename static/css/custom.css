@@ -42,7 +42,7 @@ html .article .article-meta {
 }
 
 html .article .section {
-  overflow-x: visible;
+  overflow-x: hidden;
 }
 
 /*
