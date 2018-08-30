@@ -1,5 +1,5 @@
 ---
-title: "Visualizing Multiclass Classification Results with T-SNE"
+title: "Visualizing Multiclass Classification Results"
 author: "Oran Looney"
 draft: true
 date: 2018-08-23
@@ -10,32 +10,58 @@ image: /post/viz-tsne_files/tsne_10000_density_2d.png
 Introduction
 ------------
 
-Visualizing the results of a binary classifier is already quite challenging,
-but visualising the results of a multiclass classifier is extremely difficult
-and the current state of the art is not very satisfying.
+Visualizing the results of a binary classifier is already a challenge,
+but having more than two classes aggrevates the matter considerably. 
 
-Let's say we have $k$ classes. The primary challenge is that if a prediction is
-incorrect, the predicted class is not distributed evenly across all $k-1$ other
-classes, but heavily dependent on the both true class and the mistaken
-prediction. A good visualization would expose the underlying structure hidden
-in the $k^2$ possible outcomes. 
+Let's say we have $k$ classes. Then for each observation, there is one
+correct prediction and $k-1$ possible incorrect prediction. Instead of
+a $2 \times 2$ [confusion matrix][CM], we have a $k^2$ possibilities.
+Instead of having two kinds of error, false positives and false negatives,
+we have $k(k-1)$ kinds of errors. And not all errors are created equal:
+just as we choose an optimal balance of false positives and false negatives
+depending on the cost associated to each, certain kinds of errors in
+a multiclass problem will be more or less acceptable. For example, mistaking
+a lion for a tiger may be acceptable, but mistaking a tiger for a bunny
+may be fatal.
 
-Current [attempts][PA1] to solve this problem provide visualizations which
-expose this $k^2$ complexity and try to grapple with it visually:
+The goal of visualizing multiclass classification results is to allow
+the user to quickly and accurately see *which* errors are occuring
+and to start developing theories about *why* those errors are occuring;
+usually this would be to assist the user during iterative model development,
+but could also be used, for example, to communicate the behavior of a
+final classifier to a non-specialized audience.
 
-![Prior Art](/post/viz-tsne_files/prior_art2.png "Prior Art Example")
+In this article I employ two basic strategies to try and meet these goals:
+data visualization techniques and algorithmic techniques. It's worth a quick
+reminder about why data visualization is valuable at all. The human visual
+system is extremely good at picking up certain kinds of patterns (generally
+those that correspond to spatial relationships and color), but is completely
+unable to see other kinds of patterns (the digits of $\pi$ coded as greyscale
+pixel brightness would look like pure noise) and worse yet has a tendency
+to see patterns in clouds of purely random data where none exist. A good
+visualization, then, ensures that any interesting structure in the underlying
+data will be presented in a way that is ammenable to interpretation by the
+human visual system, while any irrelevant or statistically insignificant
+variation is suppressed. 
 
-While valuable as a diagnostic aid, especially for technically sophisticated
-researchers, such visualizations are difficult to interpret. In fact, they do
-little more than present the information graphically, and leave all of the work
-of detecting and understanding the structure up to the human eye.
+Algorithmic techniques, on the other hand, do
+not rely on the human visual system's ability to detect patterns, but automate
+the analysis that a human would have done anyway in some procedural way. Rather
+than merely making it easy to see where a relationship exists, an algorithmic
+solution would explicitly enumerate and rank the kinds of things the user
+is interested in. This approach can scale to large data sets much more efficiently,
+but requires us to trust the algorithm. Both data visualization and algorithmic
+techniques are useful in practice and are often best when combined.
 
-This is a difficult problem, and I don't hope to provide a definitive answer in
-this article. Instead I will present some of the visualizations I came up with
-while exploring this problem and discuss the pros and cons of each.
+The underlying problem is very open ended and I do not claim to have come up with
+any definitive solution, but I did find several novel and useful techniques
+that seem to me to be worth sharing.
+
 
 Case Study
 ----------
+
+To explore the problem, we need some data and a toy classifier to work with.
 
 The first step is to train and fit some reasonably good but not perfect
 classifier to some dataset that is reasonably amenable to classification but
@@ -283,12 +309,12 @@ misses and plotting them in full.
 ![Misses 3->5](/post/viz-tsne_files/misses_3_5.png "Misses 3->5")
 
 Some of these errors are more forgivable than others, but it's clear that
-the multinomial algorithm is struggling the way in which a digit is written
-shift critical features by a few pixels.An [algorithm][CNN] that didn't look at all 
+the multinomial algorithm is struggling when a digit is written in such a way as to
+shift critical features by a few pixels. An [algorithm][CNN] that didn't look at all 
 784 pixels at once but zoomed in and looked for certain features or patterns 
-in a translation invariant way would do a much better job... While we're
-not that interested in the particulars of this problem, the fact that a viable
-next step to improve the model is immediately suggested by looking at a few
+in a translation invariant way would do a much better job... While I'm
+not too interested in the particulars of the toy problem, the fact that way
+to improve the model is immediately leaps to mind just by looking at a few
 examples of misses suggest that this kind of deep dive is a useful diagnostic
 supplement.
 
@@ -297,18 +323,15 @@ Conclusion
 
 Performing hierarchical clustering on the $k \times k$ confusion matrix and
 displaying the results as a dendrogram was very successful at algorithmically finding real
-relationships between classes but hides directionality information. However, it
-can be supplemented with a diagram if directionality is important. I also found
+relationships between classes but hides directionality information. However, this
+can be supplemented with a digraph if directionality is important. I also found
 that presenting the dendrograms together with a heat map is an excellent way to
 visualize both the structure and raw results of a multiclass classification
 algorithm. Finally, I found that even a few concrete examples of each type of
 hit or miss went a long way towards providing insights about which cases the
-classifier could handle and which it could not, insights which would be
-invaluable on a real world project where the model was being iteratively
-refined.
+classifier could handle and which it could not.
 
 
-[PA1]: https://www.researchgate.net/figure/Techniques-for-visualizing-classification-results-a-an-interactive-confusion-matrix_fig1_270789956
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [TRP]: https://cran.r-project.org/web/packages/tsne/index.html
 [NNP]: https://cran.r-project.org/web/packages/nnet/index.html
@@ -316,3 +339,4 @@ refined.
 [M]: https://en.wikipedia.org/wiki/Metric_(mathematics)
 [CNN]: https://en.wikipedia.org/wiki/Convolutional_neural_network
 [IG]: http://igraph.org/r/
+[CM]: https://en.wikipedia.org/wiki/Confusion_matrix
