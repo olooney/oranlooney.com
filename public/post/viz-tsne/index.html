@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizing Multiclass Classification Results - OranLooney.com</title>
+  <meta property="og:title" content="Visualizing Multiclass Classification Results - OranLooney.com" />
+  <meta name="twitter:title" content="Visualizing Multiclass Classification Results - OranLooney.com" />
+  <meta name="description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
+Let&rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.">
+  <meta property="og:description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
+Let&rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.">
+  <meta name="twitter:description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
+Let&rsquo;s say we have $k$ classes. Then for …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.48" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-2535855-1');
+  </script>
+
+ 
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+    <li><a href="http://honeycode.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
+    
+  </ul>
+
+  </nav>
+</header>
+
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/viz-tsne_files/lead3.jpg" class="article-image" />
+      
+      <h1 class="article-title">Visualizing Multiclass Classification Results</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>August 23, 2018</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/r/">
+            <i class="fas fa-tag"></i>
+            R
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/machine-learning/">
+            <i class="fas fa-tag"></i>
+            Machine Learning
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/visualization/">
+            <i class="fas fa-tag"></i>
+            Visualization
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#case-study">Case Study</a></li>
+<li><a href="#off-the-shelf-pairs-plot">Off-the-Shelf Pairs Plot</a></li>
+<li><a href="#scatter-plot">Scatter Plot</a></li>
+<li><a href="#2d-kernel-density-plot">2D Kernel Density Plot</a></li>
+<li><a href="#hits-and-misses-plot">Hits and Misses Plot</a></li>
+<li><a href="#tree-plot">Tree Plot</a></li>
+<li><a href="#heat-map">Heat Map</a></li>
+<li><a href="#directed-graph">Directed Graph</a></li>
+<li><a href="#deep-dive-into-misses">Deep Dive into Misses</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Visualizing the results of a binary classifier is already a challenge,
+but having more than two classes aggravates the matter considerably.</p>
+
+<p>Let&rsquo;s say we have $k$ classes. Then for each observation, there is one
+correct prediction and $k-1$ possible incorrect prediction. Instead of
+a $2 \times 2$ <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a>, we have a $k^2$ possibilities.
+Instead of having two kinds of error, false positives and false negatives,
+we have $k(k-1)$ kinds of errors. And not all errors are created equal:
+just as we choose an optimal balance of false positives and false negatives
+depending on the cost associated to each, certain kinds of errors in
+a <a href="https://en.wikipedia.org/wiki/Multiclass_classification">multiclass</a> problem will be more or less acceptable. For example, mistaking
+a lion for a tiger may be acceptable, but mistaking a tiger for a bunny
+may be fatal.</p>
+
+<p>The goal of visualizing multiclass classification results is to allow
+the user to quickly and accurately see <em>which</em> errors are occurring
+and to start developing theories about <em>why</em> those errors are occurring;
+usually this would be to assist the user during iterative model development,
+but could also be used, for example, to communicate the behavior of a
+final classifier to a non-specialized audience.</p>
+
+<p>In this article I employ two basic strategies to try and meet these goals:
+data visualization techniques and algorithmic techniques. It&rsquo;s worth a quick
+reminder about why data visualization is valuable at all. The human visual
+system is extremely good at picking up certain kinds of patterns (generally
+those that correspond to spatial relationships and color), but is completely
+unable to see other kinds of patterns (the digits of $\pi$ coded as greyscale
+pixel brightness would look like pure noise) and worse yet has a tendency
+to see patterns in clouds of purely random data where none exist. A good
+visualization, then, ensures that any interesting structure in the underlying
+data will be presented in a way that is amenable to interpretation by the
+human visual system, while any irrelevant or statistically insignificant
+variation is suppressed.</p>
+
+<p>Algorithmic techniques, on the other hand, do
+not rely on the human visual system&rsquo;s ability to detect patterns, but automate
+the analysis that a human would have done anyway in some procedural way. Rather
+than merely making it easy to see where a relationship exists, an algorithmic
+solution would explicitly enumerate and rank the kinds of things the user
+is interested in. This approach can scale to large data sets much more efficiently,
+but requires us to trust the algorithm. Both data visualization and algorithmic
+techniques are useful in practice and are often best when combined.</p>
+
+<p>The underlying problem is very open ended and I do not claim to have come up with
+any definitive solution, but I did find several novel and useful techniques
+that seem to me to be worth sharing.</p>
+
+<h2 id="case-study">Case Study</h2>
+
+<p>To explore the problem, we need some data and a toy classifier to work with.</p>
+
+<p>The first step is to train and fit some reasonably good but not perfect
+classifier to some dataset that is reasonably amenable to classification but
+not linearly separable.</p>
+
+<p>To meet these requirements, I chose the MNIST handwritten digit dataset; This
+data set is popular for testing multiclass classification algorithms and has
+the advantage of having very intuitive classes. The MNIST problem is to
+classify 28x28 gray scale images, which represent center and scaled images of
+handwritten digits, and assign them to one of ten classes, namely the digits 0
+through 9. The MNIST data come pre-labeled and therefore ready to be fed into a
+supervised learning algorithm. Best of all, it is extremely easy to obtain in an
+R-friendly format due to its popularity.</p>
+
+<p>As a preprocessing step, we will use <a href="https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding">T-SNE</a> algorithm provided by the
+<a href="https://cran.r-project.org/web/packages/tsne/index.html">tsne</a> package to reduce the 784 dimensions of the raw pixel data to just
+two dimensions, which we will simply call <code>x</code> and <code>y</code>.</p>
+
+<pre><code>mnist_tsne &lt;- tsne(as.matrix(mnist_r10000[,1:784]))
+xy &lt;- as.data.frame(mnist_tsne)
+colnames(xy) &lt;- c('x', 'y')
+xy$label &lt;- mnist_r10000$Label
+</code></pre>
+
+<p>Next, we will apply a multinomial classifier from the <a href="https://cran.r-project.org/web/packages/nnet/index.html">nnet</a> package
+(despite the name, the package actually provides <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a> and multinomial log-linear
+models)</p>
+
+<pre><code>model &lt;- multinom(
+  label ~ I(x^3) + I(y^3) + I((x^2)*y) + I(x*y^2) + I(x^2) + I(y^2) + x * y, 
+  data=xy,
+  maxit=500
+)
+xy$prediction &lt;- predict(model)
+hits_and_misses = xy[xy$label != xy$prediction | rep_len(c(TRUE,FALSE), nrow(xy)),]
+</code></pre>
+
+<p>This model does an OK but not stellar job of classifying digits, achieving an
+overall accuracy of about 95%. This is what we want - a higher quality model
+would have too few misses to analyze deeply, while a simpler model wouldn&rsquo;t be
+realistic enough to make a good case study.</p>
+
+<h2 id="off-the-shelf-pairs-plot">Off-the-Shelf Pairs Plot</h2>
+
+<p>A good place to start with any dataset is a so-called &ldquo;pairs&rdquo; plot: a grid of
+plots showing relationships between every every possible pair of columns. The
+<a href="https://cran.r-project.org/web/packages/GGally/index.html">GGally</a> package provides a particularly high-quality pair plot, so let&rsquo;s
+start with that.</p>
+
+<p><img src="/post/viz-tsne_files/xy_pairs.png" alt="GGally Pair Plot" title="GGally Pair Plot" /></p>
+
+<p>This plot was easy to create, but most of the relationships turn out to be
+uninteresting, except in a negative sense: we can tell from the large amount of
+overlap between classes in the univariate kernel density plots that neither <code>x</code>
+nor <code>y</code> alone is able to classify digits very well. However, the leftmost plot
+in the middle column, which shows a scatter plot of <code>x</code> and <code>y</code> color-coded
+with the true class label, suggests that using both dimensions together with a
+non-linear classifier may be effective.</p>
+
+<h2 id="scatter-plot">Scatter Plot</h2>
+
+<p>To explore that further, let&rsquo;s create a full-size scatter plot on <code>x</code> and <code>y</code>.
+To compactly and intuitively represent both the <em>true</em> class and the
+<em>predicted</em> class in the same plot, we will plot each point with the <a href="https://glyphsapp.com/tutorials/unicode">glyph</a>
+representing the true class and a color representing the predicted class. To
+avoid overwhelming the plot, we plot only a random sample of 1,000 points.</p>
+
+<p><img src="/post/viz-tsne_files/tsne_10000.png" alt="MNIST Digits T-SNE Coordinates, Color Coded" title="MNIST Digits T-SNE Coordinates, Color Coded" /></p>
+
+<p>Pro: I was able to pack an extra dimension into each point by using a glyph
+to represent each point. It&rsquo;s easy to see that predictions form contiguous
+regions in the 2D space.</p>
+
+<p>Con: Misses can only be seen by carefully scanning the image for digits with
+the wrong color. Because only a sample of data is shown and there are relatively few
+misses, it is unclear exactly where the <a href="https://en.wikipedia.org/wiki/Decision_boundary">decision boundaries</a> are.</p>
+
+<h2 id="2d-kernel-density-plot">2D Kernel Density Plot</h2>
+
+<p>To correct these defects, I next moved away from a scatter plot of the <em>sample</em>
+and looked for a way to visualize the underlying <em>distribution</em>. One way to do this
+is to compute a two-dimensional kernel density estimate from the underlying
+data and to use a contour plot to display the result. Essentially, we
+get a &ldquo;hill&rdquo; for the region where a particular class is prevalent. These
+regions look like concentric rings, although the rings are very far from circular.
+The probability that a given point belongs to any particular class is
+proportional to the number of rings of the right color that completely surround
+that point. Points which are in the intersection between two regions are ambiguous
+and this is where we should expect to see the most misclassifications.</p>
+
+<pre><code>centers &lt;- xy %&gt;% 
+  group_by(label) %&gt;% 
+  summarise_all(funs(mean))
+
+ggplot(xy[1:1000,], aes(x, y, color=label)) + 
+  geom_density_2d() +
+  xlim(-120, 125) +
+  ylim(-130, 110) +
+  geom_text(
+    data=centers, 
+    aes(x, y, color=label, label=label),
+    fontface=&quot;bold&quot;,
+    size=10,
+    show.legend=FALSE
+  ) + 
+  theme(legend.position=&quot;bottom&quot;) +
+  guides(colour = guide_legend(nrow = 1)) +
+  ggtitle(&quot;t-SNE MNIST, 2D Kernel Density&quot;)
+</code></pre>
+
+<p><img src="/post/viz-tsne_files/tsne_10000_density_2d.png" alt="MNIST Digits Kernel Density Projected into T-SNE space" title="MNIST Digits Kernel Density Projected into T-SNE space" /></p>
+
+<p>Pro: the simple expedient of labelling each centroid with a large color coded digit
+makes works well and makes the color legend at the bottom almost unnecessary.</p>
+
+<p>The graph is highly interpretable at a glance, and can also be used to give
+precise predictions if you are patient enough to count rings.</p>
+
+<p>It is very easy to see where boundaries overlap and the classification model
+may be confused: not the large area of overlap between 3 and 5 on the left, for
+example. Such overlaps directly correspond to pairs of classes for which
+misclassification is common.</p>
+
+<p>Con: Directionality is rather unclear - if a point is in the overlap of 3 and
+5, it is at risk of being misclassified - but will 3&rsquo;s be misclassified as 5&rsquo;s,
+vice versa, or both? Also, people do need at least some training
+to interpret contour plots, especially <em>overlapping</em> contour plots, which are
+not very common at all.</p>
+
+<h2 id="hits-and-misses-plot">Hits and Misses Plot</h2>
+
+<p>Returning to the scatterplot concept and striking out in a different direction, my
+next idea was to draw attention to misses by color coding by accuracy instead of by class;
+in the below plot: correct predictions are labeled in blue, incorrect in red.</p>
+
+<p><img src="/post/viz-tsne_files/tsne_recovered_labels.png" alt="hits and misses" title="hits and misses" /></p>
+
+<p>Pro: this variation naturally calls the eye to the misses: Unlike our first
+scatterplot the misses now stand out vividly.</p>
+
+<p>It many ways this trick is successful: we can immediately see at a glance that
+misclassifications do indeed tend to fall near the boundary of two clusters,
+and we also get a sense of where such misses tend to belong to one class or the
+other. Finally, we can also easily pick out examples of misclassifications
+buried deep within other clusters - such cases are perhaps very far beyond the
+current model to correctly classify and represent the irreducible error of the
+current approach.</p>
+
+<p>Con: Obviously we gave up the detailed information about the predicted class
+that we previously encoded into the color. Many of the criticisms directed
+at the previous scatterplot still apply here too.</p>
+
+<h2 id="tree-plot">Tree Plot</h2>
+
+<p>While some of the above visualizations have succeeded at attracting attention
+to the signal in the noise, they cannot be said to have algorithmically
+extracted the relevant information. The best way I came up with for
+doing this was to use <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">hierarchical clustering</a> which is sometimes
+used for similar problems, such as finding correlation relationships in a
+data set.</p>
+
+<p>To apply the algorithm to this problem, I defined classes as &ldquo;closer&rdquo;
+to each other each other the more often they are misclassified as each
+other. If the algorithm does its job then those classes which are most
+likely to be mistaken together will be close together on the resulting tree.
+(Graphical plots of tree structures have the slightly pretentious name
+of &ldquo;dendrograms,&rdquo; terminology I will never-the-less adopt for precision.)</p>
+
+<pre><code>miss_table &lt;- table(misses$label, misses$prediction)
+sym_miss_table &lt;- as.matrix(prop.table(miss_table + t(miss_table)))
+diag(sym_miss_table) &lt;- 0.07
+sym_dist_table &lt;- round(0.07 - sym_miss_table,4)
+miss_dist &lt;- as.dist(round(0.07 - sym_miss_table,4))
+plot(hclust(miss_dist, method=&quot;ward.D&quot;))
+</code></pre>
+
+<p><img src="/post/viz-tsne_files/hclust_dendro_ward.png" alt="Dendrogram using Ward's Linkage" title="Dendrogram using Ward's Linkage" /></p>
+
+<p>Pro: I am very pleased to note that this clustering is fundamentally
+successful: it correctly pairs 3 with 5, 4 with 9, and so on. These are the
+same patterns we observed in the less rigorous analysis above, but we no longer
+have to rely on eyeballing the graph and making a subjective judgement.  The
+clustering algorithm is explicitly telling us that those are the most prevalent
+relationships.</p>
+
+<p>Con: The above relationships are symmetric (as is required by the definition of
+a <a href="https://en.wikipedia.org/wiki/Metric_(mathematics)">metric</a>.) The use of a symmetric metric was in turn a requirement of the
+agglomerative clustering algorithm we used. We will need a fundamentally
+different approach for deal with directionality.</p>
+
+<h2 id="heat-map">Heat Map</h2>
+
+<p>The dendrogram does obscure some of the raw data about the frequency of
+misclassifications, however. A standard way to have our cake and eat it to &ndash;
+to show both the algorithmic clusters and underling data in the same
+visualization &ndash; is to use a heatmap for the raw data, and attach the
+dendrograms to the rows and columns.</p>
+
+<pre><code>heatmap(sym_dist_table)
+</code></pre>
+
+<p><img src="/post/viz-tsne_files/misses_heatmap.png" alt="Heatmap" title="Heatmap" /></p>
+
+<p>Pro: If you look closely, you&rsquo;ll see that both the row and column dendrograms
+are in fact the same dendrogram from before, now being used to order the rows
+and columns of a heat map. This brings the 10 classes into a roughly block
+matrix form where squares along the diagonal indicate groups of classes that
+may be mistaken for one another. But the heatmap shows much more than this - we
+can see the isolated, bright red squares along the diagonal in the upper right,
+representing the easily classifiable cases. We can see not just pairs, but
+larger groups - the 3-5-8 group in the lower left stands out as a 3x3 block of
+related classes.</p>
+
+<p>Con: I am very pleased with this visualization, and feel the only thing lacking
+is the directionality information we had to discard in order to fit our data
+into the hierarchical clustering mold. Let&rsquo;s address that next.</p>
+
+<h2 id="directed-graph">Directed Graph</h2>
+
+<p>Let&rsquo;s address the directionality issue now by returning to the asymmetric
+results matrix, before we applied the symmetry condition, and instead
+interpret it as the <a href="https://en.wikipedia.org/wiki/Adjacency_matrix">adjacency matrix</a> of a <a href="https://en.wikipedia.org/wiki/Directed_graph">directed graph.</a>
+Then the classes will be the nodes
+of the graph and the edges will indicate common misclassifications. We
+can use the <a href="http://igraph.org/r/">igraph</a> package to visualize this digraph.</p>
+
+<pre><code>library(igraph)
+plot(
+    graph_from_adjacency_matrix(t(miss_table &gt; 12), mode='directed'), 
+    main=&quot;Digraph: Real -&gt; Mistaken Prediction&quot;)
+</code></pre>
+
+<p><img src="/post/viz-tsne_files/digraph_miss.png" alt="Digraph of Misses" /></p>
+
+<p>Pro: It makes certain imbalances in misclassification quite evident: while a 5
+might be misclassified as a 9, a 9 will almost never be misclassified as a 5.
+Such imbalances can be found simply by looking for edges with only one arrow.</p>
+
+<p>Con: Quite difficult to explain to a lay audience. No real sense of relative
+probability of each type of error. This graphic does not stand by itself, but
+may be a useful companion to the heatmap if directionality is present and
+relevant. While not necessarily a bad thing in and of itself, it does mean
+that we discarded directionality information.</p>
+
+<h2 id="deep-dive-into-misses">Deep Dive into Misses</h2>
+
+<p>The above hierarchy suggests a strong relationship between the classes 3
+and 5. We can explore this in depth by taking a random sample of such
+misses and plotting them in full.</p>
+
+<p><img src="/post/viz-tsne_files/misses_3_5.png" alt="Misses 3-&gt;5" title="Misses 3-&gt;5" /></p>
+
+<p>Some of these errors are more forgivable than others, but it&rsquo;s clear that the
+multinomial algorithm is struggling when a digit is written in such a way as to
+shift critical features by a few pixels. An <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">algorithm</a> that didn&rsquo;t look
+at all 784 pixels at once but zoomed in and looked for certain features or
+patterns in a translation invariant way would do a much better job&hellip; While I&rsquo;m
+not too interested in the particulars of the toy problem, the fact that way to
+improve the model is immediately leaps to mind just by looking at a few
+examples of misses suggest that this kind of deep dive is a useful diagnostic
+supplement.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Performing hierarchical clustering on the $k \times k$ confusion matrix and
+displaying the results as a dendrogram was very successful at algorithmically
+finding real relationships between classes but hides directionality
+information. However, this can be supplemented with a digraph if directionality
+is important. I also found that presenting the dendrograms together with a heat
+map is an excellent way to visualize both the structure and raw results of a
+multiclass classification algorithm. Finally, I found that even a few concrete
+examples of each type of hit or miss went a long way towards providing insights
+about which cases the classifier could handle and which it could not.</p>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/craps-game-variants/" data-toggle="tooltip" data-placement="top" title="Craps Variants">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>

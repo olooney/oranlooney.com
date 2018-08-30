@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning on OranLooney.com</title>
+    <link>http://www.oranlooney.com/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on OranLooney.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <lastBuildDate>Thu, 23 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.oranlooney.com/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualizing Multiclass Classification Results</title>
+      <link>http://www.oranlooney.com/post/viz-tsne/</link>
+      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/viz-tsne/</guid>
+      <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
+Let&amp;rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.</description>
+    </item>
+    
+  </channel>
+</rss>
