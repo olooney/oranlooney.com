@@ -3,7 +3,7 @@ title: "Visualizing Multiclass Classification Results"
 author: "Oran Looney"
 date: 2018-08-23
 tags: ["R", "Machine Learning", "Visualization"]
-image: /post/viz-tsne_files/lead3.jpg
+image: /post/viz-tsne_files/lead.jpg
 ---
 
 Introduction

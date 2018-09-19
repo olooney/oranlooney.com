@@ -3,7 +3,7 @@ title: "Semantic Code"
 author: "Oran Looney"
 date: 2008-04-30
 tags: ["Python"]
-image: /post/semantic-code_files/15717226618_ecbcdbca50_b.jpg
+image: /post/semantic-code_files/lead.jpg
 ---
 
 > [se-man-tic][SD] (si-man'tik) adj. <br> &nbsp; &nbsp;
