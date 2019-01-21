@@ -40,6 +40,15 @@
     </item>
     
     <item>
+      <title>Machine Learning</title>
+      <link>http://www.oranlooney.com/tags/machine-learning/</link>
+      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Math</title>
       <link>/tags/math/</link>
       <pubDate>Wed, 11 Jul 2018 00:00:00 +0000</pubDate>
@@ -59,7 +68,11 @@
     
     <item>
       <title>R</title>
+<<<<<<< HEAD
       <link>/tags/r/</link>
+=======
+      <link>http://www.oranlooney.com/tags/r/</link>
+>>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
       <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/r/</guid>
@@ -81,6 +94,15 @@
       <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/visualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Visualization</title>
+      <link>http://www.oranlooney.com/tags/visualization/</link>
+      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/tags/visualization/</guid>
       <description></description>
     </item>
     

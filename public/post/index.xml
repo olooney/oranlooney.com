@@ -7,12 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+<<<<<<< HEAD
     <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+=======
+    <lastBuildDate>Thu, 23 Aug 2018 00:00:00 +0000</lastBuildDate>
+>>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+<<<<<<< HEAD
       <title>ML From Scratch, Part 1: Linear Regression</title>
       <link>/post/ml-from-scratch-part-1-lm/</link>
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
@@ -41,6 +46,14 @@ We’re going to do it right, using QR decomposition. This is the same (or very 
       
       <guid>/post/viz-tsne/</guid>
       <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggrevates the matter considerably.
+=======
+      <title>Visualizing Multiclass Classification Results</title>
+      <link>http://www.oranlooney.com/post/viz-tsne/</link>
+      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/viz-tsne/</guid>
+      <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
+>>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 Let&amp;rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.</description>
     </item>
     
@@ -89,8 +102,13 @@ Yet complex numbers can often offer surprisingly elegant formulations and soluti
       <link>/post/apparently-ipad-developer/</link>
       <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
       
+<<<<<<< HEAD
       <guid>/post/apparently-ipad-developer/</guid>
       <description>Last week my boss stopped by and dropped a brand spanking new iPad on my desk.&amp;quot;Make our application work on this,&amp;quot; he commanded. &amp;quot;You have two days before we demo it at the trade show.&amp;quot; Madness? No, these are web apps! You see, for the last couple years we&#39;ve beenworking exclusively on AJAX applications: web pages stuffed with so muchJavaScript they look and feel like desktop apps. It&#39;s harder than writingdesktop software, but if you pull it off you get an application that can berun anywhere, instantly.</description>
+=======
+      <guid>http://www.oranlooney.com/post/apparently-ipad-developer/</guid>
+      <description>Last week my boss stopped by and dropped a brand spanking new iPad on my desk. &amp;quot;Make our application work on this,&amp;quot; he commanded. &amp;quot;You have two days before we demo it at the trade show.&amp;quot; Madness? No, these are web apps! You see, for the last couple years we&#39;ve been working exclusively on AJAX applications: web pages stuffed with so much JavaScript they look and feel like desktop apps. It&#39;s harder than writing desktop software, but if you pull it off you get an application that can be run anywhere, instantly.</description>
+>>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     </item>
     
     <item>

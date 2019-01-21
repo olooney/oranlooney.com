@@ -42,7 +42,7 @@
           {{- end }}
         </ul>
         {{- if .Params.image }}
-        <a href="{{ .Permalink | relURL }}"><img src="{{ .Params.image }}" class="article-image" /></a>
+        <a href="{{ .Permalink | relURL }}"><img src="{{ replace .Params.image "." ".192x128." }}" class="article-image" /></a>
         {{- end }}
         <div class="article-content">
           {{- if .Truncated }}
