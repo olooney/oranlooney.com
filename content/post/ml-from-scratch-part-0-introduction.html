@@ -1,0 +1,123 @@
+---
+title: 'ML From Scratch, Part 0: Introduction'
+author: Oran Looney
+date: '2019-11-12'
+slug: ml-from-scratch-part-0-introduction
+categories: []
+tags:
+  - Python
+  - Statistics
+  - From Scratch
+  - Machine Learning
+#subtitle: 'Introduction, Motivation, and Ground Rules'
+image: /post/ml-from-scratch-part-0-introduction_files/riccardo-pelati-221261-unsplash.jpg
+draft: true
+---
+
+
+
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>How do you know if you really understand something? You could just rely on the subjective experience of <em>feeling</em> like you understand. This sounds plausible - surely you yourself of all people should know, right? But it runs head-first into in the (Dunning-Kruger effect)<a href="https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect">DK</a>. A different criterion is found in this pithy quote:</p>
+<blockquote>
+<p>“What I cannot create, I do not understand.” - Richard Feynman</p>
+</blockquote>
+<p>This is a very famous and popular quote, but there are various ways of interpreting it, perhaps the most common interpretation could be paraphrased as, “what I cannot explain to a layperson and a curious child, I do not understand.” Feynman unambiguously valued the ability to explain complex physics in plain English, but I think the “cannot create” quote is talking about something related but distinct. Feynman expands on this with this story from his autobiography:</p>
+<blockquote>
+<p>“During the conference I was staying with my sister in Syracuse. I brought the paper home and said to her,”I can’t understand these things that Lee and Yang are saying. It’s all so complicated.&quot;</p>
+<p>“No,” she said, “what you mean is not that you can’t understand it, but that you didn’t invent it. You didn’t figure it out your own way, from hearing the clue. What you should do is imagine you’re a student again, and take this paper upstairs, read every line of it, and check the equations. Then you’ll understand it very easily.”</p>
+<p>I took her advice, and checked through the whole thing, and found it to be very obvious and simple. I had been afraid to read it, thinking it was too difficult.&quot; - Richard Feynman, Surely You’re Joking, Mr. Feynman!</p>
+</blockquote>
+<p>So in the context of mathematics, “create” means something like “derive from first principles by hand.” This is a very strong criteria. If a person could go into an empty office with a stack of scratch paper and supply of sharp pencils , write down all first principles of calculus from memory and proceed to derive every important theorem and result in calculus, then there is little doubt that that person thoroughly understands calculus.</p>
+<p>In the context of computer science and programming, “create” might mean something similar to be able to write a program from scratch that implements the given algorithm. Since machine learning straddles the two, “create” means both: pose a machine learning problem mathematically, reduce the problem to some tracable form on paper, then write and implement an algorithm to produce a numerical approximation of the answer.</p>
+<p>Now, if someone attempts this exercise, one of two things will happen. First, they may succeed completely on their first try. If so, great! They’ve proved what they set out to prove. But much more likely, they’ll partially succeed and get stuck on some point. Well, now they have the opportunity to correct a deficiency in their own understanding that they weren’t previously aware of, which is also a great outcome. After all, Feynman didn’t go in empty-handed - he took the challenging paper with him, and surely referenced it often. But at the end, his own notes would record his own complete derivation from start to finish and therefore serve as a testimonial to his own understanding.</p>
+</div>
+<div id="ground-rules-for-the-project" class="section level2">
+<h2>Ground Rules for the Project</h2>
+<p>It was in this spirit that I set myself a similar project in late 2018 on the subject of machine learning. While I had strong mathematical fundamentals from studying physics and math in college and graduate school, all of my training in statistical modeling and machine learning has be on-the-job. I certainly <em>felt</em> like I understood quite a bit - but did I really?</p>
+<p>Well, that’s what we’ll find out over the next series of blog posts. Before we get started, though, I should define a scope and set some ground rules.</p>
+<p>First, mathematical derivations are in scope. This usually means posing and solving an optimization problem of some form, such as <a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">MLE.</a> This is straight-forward for most of the algorithms on my list, but could get a little hairy for things like backpropagation (which requires some fairly non-trivial matrix calculus) or SVMs (which basically requires the entire theory of <a href="https://en.wikipedia.org/wiki/Quadratic_programming">Quadradic Programming</a>.)</p>
+<p>Second, the algorithm used with be state-of-the-art, or at least reasonably so. For example, I will not use gradient descent to solve linear regression, even though of course it would work. Instead, we’ll do something closer to what modern statistical software would do. This also means implementing vectorized versions of the algorithms whenever possible. While looping over every example in the training set is often easier to understand, it really isn’t representative of of current best practice.</p>
+<p>Third, I will implement and test all algorithms some data set. As the agile crowd would say, working software is the primary measure of progress. For convenience, I will use Python 3 and allow myself <code>numpy</code> arrays… but <em>not</em> <code>numpy.linalg</code> or other canned libraries like <code>scipy.optimize</code>; matrix multiplication is about the most complex operation we’ll let the libraries do for us. (I considered not using <code>numpy</code> at all, but it allows us to express algorithms in vectorized notation.) This restriction only applies to the implementation of the algorithm itself and excepts tests - I will routinely use higher-level libraries (like <code>pandas</code>, <code>scipy</code>, or <code>sklearn.datasets</code>) when <em>testing</em> the algorithm.</p>
+</div>
+<div id="project-scope" class="section level2">
+<h2>Project Scope</h2>
+<p>While I want to touch on every aspect of machine learning, there’s little point in implementing minor variations of basically the same algorithms over and over. Instead, we’ll pick one or two representative algorithms from each category and leave it at that. We want to make sure that we get reasonable coverage over the types of ML <em>problems</em> ( supervised/unsupervised, regression/classification, etc.) as well as good coverage over the most important <em>algorithms</em> that crop up repeatedly in ML.</p>
+<p>Here’s the short list of candidates:</p>
+<table>
+<colgroup>
+<col width="30%" />
+<col width="29%" />
+<col width="39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Problem</th>
+<th align="center">Model</th>
+<th align="center">Algorithm</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Regression</td>
+<td align="center">Linear Regression</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/QR_decomposition">QR Decomposition</a></td>
+</tr>
+<tr class="even">
+<td align="center">Classification</td>
+<td align="center">Logistic Regression</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Classification</td>
+<td align="center">Neural Network</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Backpropagation">Backpropagation</a></td>
+</tr>
+<tr class="even">
+<td align="center">Classification</td>
+<td align="center">Decision Tree</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Recursive_partitioning">Recursive Partition</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Clustering</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model">Gaussian Mixture Model</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm">EM Algorithm</a></td>
+</tr>
+<tr class="even">
+<td align="center">Clustering</td>
+<td align="center">Hierarchical Clustering</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">Agglomerative Clustering</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Dimension Reduction</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal Component Analysis</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/QR_algorithm">QR Algorithm</a></td>
+</tr>
+<tr class="even">
+<td align="center">Recommendation</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation">Low-Rank Matrix Approximation</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation#Alternating_projections_algorithm">Alternating Projections</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Regression</td>
+<td align="center">General Additive Models</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Backfitting_algorithm">Backfitting</a></td>
+</tr>
+<tr class="even">
+<td align="center">Classification</td>
+<td align="center">Support Vector Machines</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Sequential_minimal_optimization">SMO Algorithm</a></td>
+</tr>
+</tbody>
+</table>
+<p>Other candidates I considered but ultimately decided were out-of-scope for the “ML From Scratch”series include:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Factor_analysis">Factor Analysis</a> - We already have PCA for dimensional reduction and GMM as an example of using the EM algorithm to solve for latent random variables.</li>
+<li>Time Series Analysis with ARIMA - ARIMA is just linear regression under the hood so not a good fit for the “from scratch” project.</li>
+<li>K-Means -Just GMM with Euclidean distance instead of Gaussian distributions and hard assignment instead of soft assignment. We’ll do GMM instead.</li>
+<li><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">K-Nearest Neighbors</a> - A naive algorithm is trivial while a serious algorithm would mostly be implementing a spatial index (such as <a href="https://en.wikipedia.org/wiki/R-tree">R-Trees</a>) which takes us pretty far afield from learning algorithms.</li>
+<li>Ensemble models - e.g. Random Forest or Boosted Trees. Not a good fit for the “from scratch” approach and can best be understood as “composing” two or more other mature models.</li>
+<li><a href="https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464">CNN, RNN, etc.</a> - We’ll do the vanilla deep neural network from scratch but more advanced topologies are best explored with a framework with automated differentiation.</li>
+<li><a href="https://en.wikipedia.org/wiki/Learning_to_rank">Learning-to-Rank</a> - e.g. <a href="https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model">Bradley-Terry-Luce</a>, <a href="https://en.wikipedia.org/wiki/Rasch_model">Rasch model</a>, etc. These can generally be reduced to logistic regression or viewed as latent variable models solvable via the EM algorithm.</li>
+</ul>
+</div>
