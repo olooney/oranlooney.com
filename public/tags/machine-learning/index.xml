@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning on OranLooney.com</title>
+    <link>/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on OranLooney.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ML From Scratch, Part 1: Linear Regression</title>
+      <link>/post/ml-from-scratch-part-1-lm/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/ml-from-scratch-part-1-lm/</guid>
+      <description>To kick off this series, will start with something simply yet foundational: linear regression via ordinary least squares.
+Wait! don’t go yet!
+We’re going to do it right, using QR decomposition. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?</description>
+    </item>
+    
+    <item>
+      <title>ML From Scratch, Part 0: Introduction</title>
+      <link>/post/ml-from-scratch-part-0-introduction/</link>
+      <pubDate>Tue, 12 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/ml-from-scratch-part-0-introduction/</guid>
+      <description>MotivationHow do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you yourself of all people should know, right? But it runs head-first into in the (Dunning-Kruger effect)DK. A different criterion is found in this pithy quote:
+“What I cannot create, I do not understand.” - Richard Feynman
+This is a very famous and popular quote, but there are various ways of interpreting it, perhaps the most common interpretation could be paraphrased as, “what I cannot explain to a layperson and a curious child, I do not understand.</description>
+    </item>
+    
+  </channel>
+</rss>

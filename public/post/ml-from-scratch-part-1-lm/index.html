@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML From Scratch, Part 1: Linear Regression - OranLooney.com</title>
+  <meta property="og:title" content="ML From Scratch, Part 1: Linear Regression - OranLooney.com" />
+  <meta name="twitter:title" content="ML From Scratch, Part 1: Linear Regression - OranLooney.com" />
+  <meta name="description" content="To kick off this series, will start with something simply yet foundational: linear regression via ordinary least squares.
+Wait! don’t go yet!
+We’re going to do it right, using QR decomposition. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?">
+  <meta property="og:description" content="To kick off this series, will start with something simply yet foundational: linear regression via ordinary least squares.
+Wait! don’t go yet!
+We’re going to do it right, using QR decomposition. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?">
+  <meta name="twitter:description" content="To kick off this series, will start with something simply yet foundational: linear regression via ordinary least squares.
+Wait! don’t go yet!
+We’re going to do it right, using QR decomposition. This …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-2535855-1');
+  </script>
+
+ 
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+    <li><a href="http://honeycode.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
+    
+  </ul>
+
+  </nav>
+</header>
+
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/ml-from-scratch-part-1-linear-regression_files/mark-basarab-158876-unsplash.png" class="article-image" />
+      
+      <h1 class="article-title">ML From Scratch, Part 1: Linear Regression</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>November 20, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/statistics/">
+            <i class="fas fa-tag"></i>
+            Statistics
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/from-scratch/">
+            <i class="fas fa-tag"></i>
+            From Scratch
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/machine-learning/">
+            <i class="fas fa-tag"></i>
+            Machine Learning
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <p>To kick off this series, will start with something simply yet foundational: linear regression via <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">ordinary least squares</a>.</p>
+<p>Wait! don’t go yet!</p>
+<p>We’re going to do it <em>right</em>, using <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a>. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?</p>
+<div id="statistics" class="section level2">
+<h2>Statistics</h2>
+<p>(This section isn’t strictly necessary, but it’s always a good idea to motivate our algorithms with statistical arguments whenever possible. Readers uninterested in the statistical foundations of linear regression can simply skip to the next section.)</p>
+<p>Let’s start by posing the problem and deriving the so-called <a href="http://mathworld.wolfram.com/NormalEquation.html">normal equation.</a> Let’s say that <span class="math inline">\(X_p\)</span> is a random vector of length <span class="math inline">\(M\)</span> and <span class="math inline">\(y_p\)</span> is a scalar random variable. <span class="math inline">\(X_p\)</span> and <span class="math inline">\(y_p\)</span> are <em>not</em> independent, but have a joint probability distribution <span class="math inline">\(F(x, y; \Theta, \sigma)\)</span> parameterized by a non-random parameter vector <span class="math inline">\(\Theta_p\)</span>, a non-negative scalar <span class="math inline">\(\sigma\)</span>, and a random error term <span class="math inline">\(\epsilon \sim \mathcal{N}(0, \sigma^2)\)</span>.</p>
+<p><span class="math display">\[ y_p = X_p \Theta_p + \epsilon \]</span></p>
+<p>Then suppose we sample <span class="math inline">\(N\)</span> observations from this joint distribution. We place the <span class="math inline">\(N\)</span> observations into a real-valued <span class="math inline">\(N\times k\)</span> matrix <span class="math inline">\(X\)</span> and a real-valued vector <span class="math inline">\(y\)</span>. Just to be absolutely clear, <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span> are <em>not</em> random variables - they are the given data set we use to fit the model. We can then ask, what is the likelihood of obtaining the realization <span class="math inline">\((X, y)\)</span> from a parameter vector <span class="math inline">\(\Theta\)</span>? By rearranging our equation as <span class="math inline">\(y_p - X_p\Theta = \epsilon ~ \mathcal{N}(0, \sigma^2)\)</span> and using the p.d.f. of the normal distribution, we can see that:</p>
+<p><span class="math display">\[ L(\Theta|X,y) = \frac{1}{\sqrt{2\pi}\sigma} \prod_{i=1}^{N}\text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]</span> So, that looks pretty awful, but there are a couple things we can do to make it a look a <em>lot</em> simplier. First, That constant term out front doesn’t matter at all. We can also take that <span class="math inline">\(e^{-2\sigma^2}\)</span> outside the product as <span class="math inline">\(e^-{2N\sigma^2}\)</span>, and which we’ll also stuff in the constant <span class="math inline">\(C\)</span> because we’re only interested in <span class="math inline">\(\Theta\)</span> right now. Finally, we can take a log to get rid of the exponential and turn the product into a sum. All together, we get the log-likelihood expression:</p>
+<p><span class="math display">\[\log L(\Theta|X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2\]</span> Now, because log is a monotonically increasing function, maximizing <span class="math inline">\(l\)</span> is the same as maximizing <span class="math inline">\(L\)</span>. Therefore our <a href="http://mathworld.wolfram.com/MaximumLikelihood.html">maximum likelihood estimate</a> of <span class="math inline">\(\Theta\)</span> for a given data set <span class="math inline">\((X, y)\)</span> is simply:</p>
+<p><span class="math display">\[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} ||y - X\Theta||^2 \]</span> So, if your eyes were glazing over from all the statistical nomenclature, I have some good news for you: we’re done with the statistics. Everything in this equation is a real-valued vector or matrix and there’s not a random variable or probability distribution in sight. What we did above was essentially a short sketch of the relevant parts of the <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem">Gauss-Markov theorem</a> which proves that the OLS solution <em>is</em> the MLE for the statistical model we started with and it has a bunch of other nice properties that we won’t concern ourselves with here.</p>
+</div>
+<div id="ordinary-least-squares" class="section level2">
+<h2>Ordinary Least Squares</h2>
+<p>Note: for this next section, we’re going to be doing some fairly rapid vector calculus. I suggest you reference <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">the matrix cookbook</a> if any of the notation or concepts aren’t familiar.</p>
+<p>Let’s call the right-hand side (the part we’re trying to minimize) <span class="math inline">\(J\)</span>. Then we have:</p>
+<p><span class="math display">\[ J = || y - X\Theta ||^2 \]</span></p>
+<p>And the problem is to minimize J with respect to <span class="math inline">\(\Theta\)</span>. As optimization problems go, this one is pretty easy: it’s continous, quadradic, convex, everywhere differentiable, and unconstrained. Because of these nice properties, we know that it has a unique global minimum, and that the gradient is zero at this minimum.</p>
+<p><span class="math display">\[ \begin{split} \nabla_\Theta J &amp; = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \\
+&amp; = \nabla_\Theta \; y^T y - (X\Theta)^T y - y^T X\Theta + \Theta^T (X^T X) \Theta \end{split}\]</span></p>
+<p>It’s obvious that <span class="math inline">\(y^T y\)</span> is constant with respect to <span class="math inline">\(\Theta\)</span> so the first term simply vanishes. It’s less obvious but also true that the next two terms are equal to each other - remember that a J is a scalar, so those terms are each scalar, and the transpose of a scalar is itself. The final term is a quadradic form, and the <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F16/linearQuadraticGradients.pdf">general rule</a> is $ q x^T A x = A^T x + A x $ but because the product of a matrix with itself is always symetric (<span class="math inline">\(X^T X = (X^T X)^T\)</span>) we can use the simpler form <span class="math inline">\(\nabla x^T A x = 2 A x\)</span>.</p>
+<p><span class="math display">\[ \nabla_\Theta J = - 2 y^T X + 2 X^T X \Theta\]</span> Setting this equal to zero at <span class="math inline">\(\hat{\Theta}\)</span> we get:</p>
+<p><span class="math display">\[ (X^T X) \hat{\Theta} = y^T X \]</span> The right hand side is a known vector, the left-hand side is a matrix times an unknown vector, so this is just the familiar equation for solving for a particular solution to a system of equations <span class="math inline">\(Ax = b\)</span>.</p>
+<p>Because <span class="math inline">\(X^T X\)</span> is square, we <em>could</em> just left-multiply both sides by its inverse to get an explicit closed form for <span class="math inline">\(\hat{\Theta}\)</span>:</p>
+<p><span class="math display">\[ \hat{\Theta} = (X^T X)^{-1} y^T X \]</span></p>
+<p>However, it turns out there is a faster and more numerically stable way (although obviously theoretically equivalent) of solving for <span class="math inline">\(\hat{\Theta}\)</span> which relies on the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR Decomposition</a> of the matrix <span class="math inline">\(X^T X\)</span>.</p>
+</div>
+<div id="qr-decomposition" class="section level2">
+<h2>QR Decomposition</h2>
+<p>Since we’re going to be implementing QR in a minute, it’s worth making sure we understand how it works in detail. A QR decomposition of a matrix square <span class="math inline">\(A\)</span> is a product of an orthogonal matrix <span class="math inline">\(Q\)</span> and an upper-triangular matrix <span class="math inline">\(R\)</span> such that <span class="math inline">\(A = QR\)</span>. Why is this beneficial? Well, it turns out that to invert an orthogonal matrix, all you need to do is take its transpose. <span class="math inline">\(Q^T Q = \mathbb{1} \leftrightarrow Q^T = Q^{-1}\)</span>. So if we found <span class="math inline">\(QR = X^T X\)</span>, we could write our equation for <span class="math inline">\(\hat{\Theta}\)</span> as</p>
+<p><span class="math display">\[ QR \hat{\Theta} = y^T X \]</span> <span class="math display">\[ R \hat{\Theta} = Q^T y^T X \]</span> But R is upper triangular, and the right hand-side reduces to a single column vector, so we can solve this by back-substituion. Back-substitution is easiest to explain with an example.</p>
+<p>$$ </p>
+<p> = </p>
+<p>$$ In this problem, the matrix is upper triangular. We start on the bottom row, which is simply an equation <span class="math inline">\(4x_3 = 8\)</span>, so <span class="math inline">\(x_3 = 2\)</span>. The second row represents the equation <span class="math inline">\(x_2 + x_3 =2\)</span>, but we already know <span class="math inline">\(x_3\)</span>, so we can substitute that back in to get <span class="math inline">\(x_2 - 2 = 0\)</span>, so <span class="math inline">\(x_2 = 0\)</span>. The top row is <span class="math inline">\(2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2\)</span>, so <span class="math inline">\(x_1 = -2\)</span>.</p>
+<p>So we know know how to finish the problem once we have <span class="math inline">\(QR = X^X\)</span>. But how to get <span class="math inline">\(Q\)</span> and <span class="math inline">\(R\)</span>? There are two parts to understanding the algorithm. First, note that the product of any two orthogonal matrices is itself orthogonal. Also, the identity matrix is orthogonal. Therefore, if we have a candidate decomposition <span class="math inline">\(A = QR\)</span> where <span class="math inline">\(Q\)</span> is orthogonal (but R may not yet be square), then for any orthogonal matrix <span class="math inline">\(S\)</span> we have <span class="math inline">\(A = Q I R = Q S^T S R = (Q S^T) (S R) = Q&#39; R&#39;\)</span> where <span class="math inline">\(Q&#39; = Q S^T\)</span> and <span class="math inline">\(R&#39; = S R\)</span> is <em>also</em> a candidate decomposition! This is the general strategy behind not just QR decomposition, but behind many other decompositions in linear algebra. At each step we want to apply an orthogonal transformation to bring <span class="math inline">\(A\)</span> closer to the desired form, while simultaneously keeping track of a matrix to undo all of the transformations.</p>
+<p>That sets the rules and the goal of the game: we can apply any sequence of orthogonal transforms to a (square, non-singular) matrix <span class="math inline">\(A\)</span> that will bring it into upper triangular form. But is there such a sequence? And how would it be constructed? Suprisingly,this sequence always exist.</p>
+</div>
+<div id="householder-reflections" class="section level2">
+<h2>Householder Reflections</h2>
+<p>How would I make <em>just one column</em> of <span class="math inline">\(A\)</span> zero below the diagonal? Or even more concretely, how would I make just the <em>first column</em> of <span class="math inline">\(A\)</span> zero except for the first element?</p>
+<p>Let’s take a look at the “column view” of our matrix. It looks like this:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+    \vert &amp; \vert &amp; \vert \\
+    a_1   &amp; a_2 &amp; a_3 \\
+    \vert &amp; \vert &amp; \vert
+\end{bmatrix}
+\]</span></p>
+<p>We want <span class="math inline">\(a_1\)</span> to be zero except for the first element. What does that <em>mean</em>? Let’s call our basis vectors <span class="math inline">\(e_1 = [1\, 0\, 0]^T\)</span>, <span class="math inline">\(e_2 = [0\, 1\, 0]^T\)</span>, <span class="math inline">\(e_3 = [0\, 0\, 1]^T\)</span>. Every vector in our space is a linear combination of these basis vectors. So what it means for <span class="math inline">\(a_1\)</span> to be zero except for the first element is that <span class="math inline">\(a_1\)</span> is co-linear (in the same line) as <span class="math inline">\(e_1\)</span> in other words: $ | H a_i = e_i $</p>
+<p>We’re going to do this with an orthogonal transformation. But orthogonal transformations are <em>length preserving</em>. That means <span class="math inline">\(\alpha = ||a_1||\)</span>. So we now understand that we need to find an orthogonal matrix that sends the vector <span class="math inline">\(a_1\)</span> to the vector <span class="math inline">\(||a_1|| e_1\)</span>. Note that any two vectors lie in a plane. We could either <em>rotate</em> by $^{-1}  $, the angle between the vectors, or we can <em>reflect</em> across the line which bisects the two vectors in their plane. These two strategies are called the <a href="https://en.wikipedia.org/wiki/Givens_rotation">Givens rotation</a> and the <a href="https://en.wikipedia.org/wiki/Householder_transformation">Householder reflection</a> respectively. The rotation matrix is slightly less stable, so we will use the Householder reflection.</p>
+<p><a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a></p>
+</div>
+<div id="implementing-qr-decomposition" class="section level2">
+<h2>Implementing QR Decomposition</h2>
+<p>TODO</p>
+</div>
+<div id="implementing-linear-regression" class="section level2">
+<h2>Implementing Linear Regression</h2>
+<p>TODO</p>
+</div>
+<div id="testing" class="section level2">
+<h2>Testing</h2>
+<p>TODO</p>
+</div>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/ml-from-scratch-part-0-introduction/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 0: Introduction">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>

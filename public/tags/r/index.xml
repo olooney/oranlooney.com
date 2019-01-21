@@ -2,22 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>R on OranLooney.com</title>
-    <link>http://www.oranlooney.com/tags/r/</link>
+    <link>/tags/r/</link>
     <description>Recent content in R on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
-    <lastBuildDate>Sat, 30 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.oranlooney.com/tags/r/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Visualizing Multiclass Classification Results</title>
+      <link>/post/viz-tsne/</link>
+      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/viz-tsne/</guid>
+      <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggrevates the matter considerably.
+Let&amp;rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.</description>
+    </item>
+    
+    <item>
       <title>Complex Numbers in R, Part II</title>
-      <link>http://www.oranlooney.com/post/complex-r-part-2/</link>
+      <link>/post/complex-r-part-2/</link>
       <pubDate>Sat, 30 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/complex-r-part-2/</guid>
+      <guid>/post/complex-r-part-2/</guid>
       <description>This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
 In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.
 In this second part, we’ll take a more in-depth look at some scenarios where complex numbers arise naturally – where they are less of a choice an more of a necessity.</description>
@@ -25,12 +35,21 @@ In this second part, we’ll take a more in-depth look at some scenarios where c
     
     <item>
       <title>Complex Numbers in R, Part I</title>
-      <link>http://www.oranlooney.com/post/complex-r/</link>
+      <link>/post/complex-r/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/complex-r/</guid>
+      <guid>/post/complex-r/</guid>
       <description>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
 Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</description>
+    </item>
+    
+    <item>
+      <title>Your First Two R Packages</title>
+      <link>/post/r-first-two/</link>
+      <pubDate>Sat, 16 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/r-first-two/</guid>
+      <description>Don’t Start With Vanilla!It’s natural to assume you should learn the built-in libraries of a new language before moving on to third-party libraries. Unfortunately, when it comes to R, there are key areas where the built-in functionality is so terrible, and so out-dated, and so full of impossible-to-remember abbreviations, and frankly not very good even once you do learn it, that it’s best to start with a few high quality libraries and treat the built-in functionality as advanced functionalty that you’ll come back and learn when you need to interface with legacy code.</description>
     </item>
     
   </channel>
