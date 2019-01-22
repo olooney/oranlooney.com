@@ -9,7 +9,6 @@ tags:
   - Statistics
   - From Scratch
   - Machine Learning
-#subtitle: 'Introduction, Motivation, and Ground Rules'
 image: /post/ml-from-scratch-part-0-introduction_files/riccardo-pelati-221261-unsplash.jpg
 draft: true
 ---
@@ -162,11 +161,14 @@ Other candidates I considered but ultimately decided were out-of-scope for the
 
 * [Factor Analysis][FA] - We already have PCA for dimensional reduction and GMM as an example of using the EM algorithm to solve for latent random variables.
 * Time Series Analysis with ARIMA - ARIMA is just linear regression under the hood so not a good fit for the "from scratch" project.
-* K-Means -Just GMM with Euclidean distance instead of Gaussian distributions and hard assignment instead of soft assignment. We'll do GMM instead.
+* K-Means - We'll do GMM instead.
 * [K-Nearest Neighbors][KNN] - A naive algorithm is trivial while a serious algorithm would mostly be implementing a spatial index (such as [R-Trees][RT]) which takes us pretty far afield from learning algorithms.
 * Ensemble models - e.g. Random Forest or Boosted Trees. Not a good fit for the "from scratch" approach and can best be understood as "composing" two or more other mature models.
 * [CNN, RNN, etc.][NNZ] - We'll do the vanilla deep neural network from scratch but more advanced topologies are best explored with a framework with automated differentiation. 
-* [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], [Rasch model][RM], etc. These can generally be reduced to logistic regression or viewed as latent variable models solvable via the EM algorithm.
+* [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], [Rasch model][RM], etc. These can generally be reduced to logistic regression or viewed as latent variable models and solved with the EM algorithm.
+* Felligi-Sunter Record Linkage - another take on the EM algorithm.
+
+
 
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [LTR]: https://en.wikipedia.org/wiki/Learning_to_rank
