@@ -168,6 +168,102 @@ Other candidates I considered but ultimately decided were out-of-scope for the
 * [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], [Rasch model][RM], etc. These can generally be reduced to logistic regression or viewed as latent variable models and solved with the EM algorithm.
 * Felligi-Sunter Record Linkage - another take on the EM algorithm.
 
+The Basics
+----------
+
+In the spirit of the Feynman Technique, let's spend a few minutes talking
+through the problem in plain English before we dive into the math.
+
+The problem, in the broadest possible terms, is to get a computer to learn how
+to do something.  This is unusual. Computers do not usually "learn" anything,
+but follow a program written by a computer programmer. Computers also aren't
+very good at "doing" most things, although they are good at the few things they
+*can* do. 
+
+So, what *are* computers good at? In decreasing order (increasing by the amount
+of time it takes) computers can do the following:
+
+1. Addition and subtraction      
+2. Multiplication 
+3. Division
+4. Comparing two numbers to decide what to do next
+5. Other math functions like `exp()`, `log()`, `sin()`, `cos()`, etc.
+5. Remembering a billion numbers
+6. Looking something up in a file or database
+7. Talking to another computer over a network
+
+Just looking at this table, we already reach a few conclusions:
+
+1. Any "learning" that a computer does will have to be in the form of remembering a set of numbers.
+2. The "doing" will work best if it is mostly additions and multiplications, with an occasional division or comparison.
+
+Setting aside learning for a second, let's talk about representation. Let's say
+we've "remembered" some numbers $a$, $b$, $c$, and $d$.  These numbers are
+called our "parameters." How would we use this to do something? Let's say we
+want to drive a car. We can "do" this by returning a number $y$ which
+represents which direction we want to turn the wheel and how far. To make this
+decision, we can use a LIDAR system to check for obstacles in three directions:
+straight ahead, 30&#176; to the left, and 30&#176; to the right. Let's call
+those $x_l$, $x_s$, and $x_r$. These numbers are zero or very low if it's clear
+in that direction, and 1 or close to 1 if there's a close obstacle in that
+direction. A 0.5 would represent an obstacle that's still some distance away.
+How can we use the operations that computers are best at to get this computer
+to make a decision about how to turn the wheel? One way would be to use a
+linear equation:
+
+$$ y = a x_l + b x_s + c x_s + d $$
+
+Now, a human could come up with rules that would work passably. Say, if an
+obstacle is to the left, steer right. If an obstacle is to the right, steer
+left. If an obstacle is straight ahead, hard right. That would represent
+parameters
+
+$$ a=10 \; b=100 \; c=-10 \; d = 0 $$
+
+This rule isn't terrible, but it would be better if we took a hard *left*
+instead of a hard *right* when straight ahead was blocked but there was also
+something to the right. How would we express that rule with just addition
+and multiplication? One way would be to add a new term to our equation
+(along with another parameter $e$) which was the *product* of $x_r$ and
+$x_s$. This term will be large only when both $x_r$ AND $x_s$ are large.
+
+$$ y = a x_l + b x_s + c x_s + d + e x_s x_r $$
+
+Something fairly magical is starting to happen: our equation is starting
+to model *logic*. Not every complicated logic yet, but it points the
+way to much more complicated things.
+
+But the idea is not to have a human come up with rules and "code" them as
+parameters - the idea is to get the computer to figure out new parameters
+for itself. But it can't do this in a vacuum. It's going to need some
+kind of feedback which tells it if its getting closer. 
+
+Essentially we play a game of Hot or Cold with the computer. At each step it
+changes its parameters; We tell it it's now "warmer" or "colder" and how hot it
+is in absolute terms. If it usually explores in the "warmer" direction and
+keeps going until its found a "very hot" spot, it's very likely to be able to
+win the game. If we define "hot" as getting a high reward of a large set
+examples, then the parameters found at the final step substituted into
+the equation for the kind of model we're using give us will give us a function
+which gets pretty good performance at the task we trained it for.
+
+Two basic approaches in machine learning are [supervised learning][SL]
+and [reinforcement learning][RL]. The supervised learning approach is
+equivalent to hiring a driving instructor to give advice in the form "in
+situation X, do Y" and feedback in the form "you did $\hat{y}$ when you should
+have done $y$!  That's great/OK/acceptable/terrible/catastrophic." The
+reinforcement learning approach is letting the computer drive the car randomly,
+crash a lot, and after each crash revisit the decisions in the seconds leading
+up to the crash and ask, "what could have I have done differently?" 
+
+
+Linear regression (the subject of today's article) is a very simple approach to
+supervised learning. [OLS][OLS] is a particular algorithm that allows us to
+quickly and precisely solve linear regression problems. There are other
+algorithms that also solve the supervised learning algorithm but can learn more
+complicated functions, and we'll be talking about several of these later in the
+series.  We won't be talking about the reinforcement in this series, but that's
+also a strong technique for many real-world problems.
 
 
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
