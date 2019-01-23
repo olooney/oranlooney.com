@@ -1,15 +1,14 @@
 ---
 title: 'ML From Scratch, Part 1: Linear Regression'
 author: Oran Looney
-date: '2019-11-20'
-slug: ml-from-scratch-part-1-lm
-categories: []
+date: '2018-11-20'
+slug: ml-from-scratch-part-1-linear-regression
 tags:
   - Python
   - Statistics
   - From Scratch
   - Machine Learning
-image: /post/ml-from-scratch-part-1-linear-regression_files/mark-basarab-158876-unsplash.png
+image: /post/ml-from-scratch-part-1-linear-regression_files/lead.png
 draft: true
 ---
 

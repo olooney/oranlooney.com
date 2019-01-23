@@ -1,15 +1,14 @@
 ---
 title: 'ML From Scratch, Part 0: Introduction'
-author: Oran Looney
-date: '2019-11-12'
+author: "Oran Looney"
+date: '2018-11-12'
 slug: ml-from-scratch-part-0-introduction
-categories: []
 tags:
   - Python
   - Statistics
   - From Scratch
   - Machine Learning
-image: /post/ml-from-scratch-part-0-introduction_files/riccardo-pelati-221261-unsplash.jpg
+image: /post/ml-from-scratch-part-0-introduction_files/lead.jpg
 draft: true
 ---
 

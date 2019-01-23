@@ -61,24 +61,22 @@ def cropped_thumbnail(img, size):
 def lead_photos(size):
     size = flat(*size)
 
-    for filename in glob("static/post/*/lead*.{}x{}.*".format(*size)):
-        print('removing {}...'.format(filename))
-        os.remove(filename)
-
-    print('\n')
-
+    #for filename in glob("static/post/*/lead*.{}x{}.*".format(*size)):
     for filename in glob("static/post/*/lead.*"):
-        print('converting {}...'.format(filename))
+        if '.{}x{}'.format(*size) not in filename:
+            # derive new filename
+            basename, ext = os.path.splitext(filename)
+            thumb_filename = basename + '.{}x{}'.format(*size) + ext
 
-        # derive new filename
-        basename, ext = os.path.splitext(filename)
-        thumb_filename = basename + '.{}x{}'.format(*size) + ext
+            # if the thumbnail does not yet exist...
+            if not os.path.isfile(thumb_filename):
+                print('converting {}...'.format(filename))
 
-        # convert the image
-        img = Image.open(filename)
-        thumb = cropped_thumbnail(img, size)
-        thumb.save(thumb_filename, optimize=True)
-        print('saved {}.\n'.format(thumb_filename))
+                # make the thumbnail image
+                img = Image.open(filename)
+                thumb = cropped_thumbnail(img, size)
+                thumb.save(thumb_filename, optimize=True)
+                print('saved {}.\n'.format(thumb_filename))
 
 if __name__ == '__main__':
     lead_photos( (192, 128) )
