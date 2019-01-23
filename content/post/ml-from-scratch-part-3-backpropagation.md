@@ -11,6 +11,10 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 draft: true
 ---
 
+[DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
+[3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
+
+
 A typical neural network with one hidden layer would be 
 
 $$\hat{y} =\sigma(W_2 \sigma(W_1 X + b_1) + b_2)$$

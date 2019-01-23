@@ -45,15 +45,9 @@ html .article .section {
   overflow-x: hidden;
 }
 
-/*
-html .article ul {
-	list-style: none;
+html .article p.caption {
+	display: none;
 }
-html .article ul li::before {
-  content: "● ";
-  color: #800000;
-}
-*/
 
 /* Site Layout */
 html body .main {
