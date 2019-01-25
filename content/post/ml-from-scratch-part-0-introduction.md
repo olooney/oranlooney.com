@@ -15,6 +15,10 @@ draft: true
 Motivation
 ----------
 
+"As an apprentice, every new magician must prove to his own satisfaction, at
+least once, that there is truly great power in magic." - The Flying Sorcerers,
+by David Gerrold and Larry Niven
+
 How do you know if you really understand something? You could just rely on the
 subjective experience of *feeling* like you understand. This sounds plausible -
 surely you yourself of all people should know, right? But it runs head-first
@@ -28,9 +32,26 @@ This is a very famous and popular quote, but there are various ways of
 interpreting it, perhaps the most common interpretation could be paraphrased
 as, "what I cannot explain to a layperson and a curious child, I do not
 understand." Feynman unambiguously valued the ability to explain complex
-physics in plain English, but I think the "cannot create" quote is talking
-about something related but distinct. Feynman expands on this with this story
-from his autobiography:
+physics in plain English. 
+
+> Before the commercial announcement of the Connection Machine CM-1 and all of
+> our future products, Richard would give a sentence-by-sentence critique of
+> the planned presentation. "Don't say 'reflected acoustic wave.' Say [echo]."
+> Or, "Forget all that 'local minima' stuff. Just say there's a bubble caught
+> in the crystal and you have to shake it out." Nothing made him angrier than
+> making something simple sound complicated.
+
+[RFCM]: http://longnow.org/essays/richard-feynman-and-connection-machine/
+
+Not only is having things explained things in simple terms helpful to the student,
+but the act of translating complex mathematics into simple terms is helpful to
+the teacher because it helps build and reinforce intuitions. As the mathematics
+becomes more abstract, clear intuitions become increasingly important.
+
+If that is all that Feynman had meant, though, why use the term "create?"
+Surely "explain" or "teach" is closer to the meaning discussed above. So while
+"explain in simple terms" is certainly *part* of it, "create" includes more
+than just that. Feynman expands on this with this story from his autobiography:
 
 > "During the conference I was staying with my sister in Syracuse. I brought the
 > paper home and said to her, "I can't understand these things that Lee and Yang
@@ -46,19 +67,22 @@ from his autobiography:
 > obvious and simple. I had been afraid to read it, thinking it was too
 > difficult." - Richard Feynman, Surely You're Joking, Mr. Feynman!
 
-So in the context of mathematics, "create" means something like "derive from first
-principles by hand." This is a very strong criteria. If a person could go into
-an empty office with a stack of scratch paper and supply of sharp pencils ,
-write down all first principles of calculus from memory and
-proceed to derive every important theorem
-and result in calculus, then there is little doubt that that person thoroughly
-understands calculus. 
+So in the context of mathematics, "create" means something like "derive from
+first principles by hand." This is a very strong criteria. If a person could go
+into an empty office with a stack of scratch paper and supply of sharp pencils,
+write down all first principles of calculus from memory and proceed to derive
+every important theorem and result in calculus, then there is little doubt that
+that person thoroughly understands calculus. 
+
+Nor is sufficient to mechanically build up the formalism of the theory - at
+each step, it's important to understand the motivation behind each definition
+and axiom introduced.
 
 In the context of computer science and programming, "create" might mean something
 similar to be able to write a program from scratch that implements the given
 algorithm. Since machine learning straddles the two, "create" means
 both: pose a machine learning problem mathematically, reduce the problem
-to some tracable form on paper, then write and implement an algorithm to
+to some tractable form on paper, then write and implement an algorithm to
 produce a numerical approximation of the answer. 
 
 Now, if someone attempts this exercise, one of two things will happen. First,
