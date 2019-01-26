@@ -14,47 +14,48 @@ draft: true
 
 
 
-<p>To kick off this series, will start with something simply yet foundational: linear regression via <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">ordinary least squares</a>.</p>
-<p>Wait! don’t go yet!</p>
-<p>We’re going to do it <em>right</em>, using <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a>. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?</p>
+<p>To kick off this series, will start with something simple yet foundational: linear regression via [ordinary least squares][OLS].</p>
+<p>While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more complicated learning algorithms: the output layer of a deep neural network trained for regression with MSE loss, the “gradient boosting” used by gradient boosting trees, and the “local regression” part of LOWESS smoothing are all (modified) examples of linear regression.</p>
+<p>Linear regression is also the “simple harmonic oscillator” of machine learning; that is to say, a chance to apply our theoretical ideas about machine learning to a case that is not mathematically taxing.</p>
+<p>There is also the small matter of it being the most widely used statistical learning algorithm in the world - but because it is mainly used by people who call themselves “statisticians,” “analysts,” or “researchers” instead of “data scientists”, we can safely ignore that consideration; don’t you think?</p>
+<p>However, since I can feel your eyes glazing over from such an introductory topic, we can spice things up a little bit by doing something which isn’t often done in introductory machine learning - we can present the algorithm that [insert your favorite statistical software package here] uses to <em>actually</em> fit linear regression models: <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a>. This is commonly glossed over because it involves a lot of linear algebra and doesn’t generalize well to other machine learning algorithms so most teachers prefer to teach gradient descent here so they can build on it in later lectures - but that’s not how linear models are fit in the real world. Besides, the linear algebra involved is actually exceptionally beautiful and interesting.</p>
 <div id="statistics" class="section level2">
 <h2>Statistics</h2>
-<p>(This section isn’t strictly necessary, but it’s always a good idea to motivate our algorithms with statistical arguments whenever possible. Readers uninterested in the statistical foundations of linear regression can simply skip to the next section.)</p>
 <p>Let’s start by posing the problem and deriving the so-called <a href="http://mathworld.wolfram.com/NormalEquation.html">normal equation.</a> Let’s say that <span class="math inline">\(X_p\)</span> is a random vector of length <span class="math inline">\(M\)</span> and <span class="math inline">\(y_p\)</span> is a scalar random variable. <span class="math inline">\(X_p\)</span> and <span class="math inline">\(y_p\)</span> are <em>not</em> independent, but have a joint probability distribution <span class="math inline">\(F(x, y; \Theta, \sigma)\)</span> parameterized by a non-random parameter vector <span class="math inline">\(\Theta_p\)</span>, a non-negative scalar <span class="math inline">\(\sigma\)</span>, and a random error term <span class="math inline">\(\epsilon \sim \mathcal{N}(0, \sigma^2)\)</span>.</p>
 <p><span class="math display">\[ y_p = X_p \Theta_p + \epsilon \]</span></p>
 <p>Then suppose we sample <span class="math inline">\(N\)</span> observations from this joint distribution. We place the <span class="math inline">\(N\)</span> observations into a real-valued <span class="math inline">\(N\times k\)</span> matrix <span class="math inline">\(X\)</span> and a real-valued vector <span class="math inline">\(y\)</span>. Just to be absolutely clear, <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span> are <em>not</em> random variables - they are the given data set we use to fit the model. We can then ask, what is the likelihood of obtaining the realization <span class="math inline">\((X, y)\)</span> from a parameter vector <span class="math inline">\(\Theta\)</span>? By rearranging our equation as <span class="math inline">\(y_p - X_p\Theta = \epsilon ~ \mathcal{N}(0, \sigma^2)\)</span> and using the p.d.f. of the normal distribution, we can see that:</p>
 <p><span class="math display">\[ L(\Theta|X,y) = \frac{1}{\sqrt{2\pi}\sigma} \prod_{i=1}^{N}\text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]</span></p>
 <p>That looks pretty awful, but there are a couple easy things we can do to make it a look a lot simplier. First, That constant term out front doesn’t matter at all. We can also take that <span class="math inline">\(e^{-2\sigma^2}\)</span> outside the product as <span class="math inline">\(e^{-2N\sigma^2}\)</span>, and which we’ll also stuff in the constant <span class="math inline">\(C\)</span> because we’re only interested in <span class="math inline">\(\Theta\)</span> right now. Finally, we can take a log to get rid of the exponential and turn the product into a sum. All together, we get the log-likelihood expression:</p>
-<p><span class="math display">\[ log L(\Theta|X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2 \]</span></p>
-<p>Now, because log is a monotonically increasing function, maximizing <span class="math inline">\(l\)</span> is the same as maximizing <span class="math inline">\(L\)</span>. Therefore our <a href="http://mathworld.wolfram.com/MaximumLikelihood.html">maximum likelihood estimate</a> of <span class="math inline">\(\Theta\)</span> for a given data set <span class="math inline">\((X, y)\)</span> is simply:</p>
-<p><span class="math display">\[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} ||y - X\Theta||^2 \]</span></p>
-<p>So, if your eyes were glazing over from all the statistical nomenclature, I have some good news for you: we’re done with the statistics. Everything in this final equation is now a real-valued vector or matrix; there’s not a random variable or probability distribution in sight! It’s all over except for the linear algebra.</p>
-<p>What we did above was essentially a short sketch of the relevant parts of the <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem">Gauss-Markov theorem</a> which proves that the OLS solution <em>is</em> the MLE for the statistical model we started with. The full Gauss-Markov theorem also proves a bunch of other nice properties that we won’t concern ourselves with here.</p>
-<p>If you remember the motivating example I gave in <a href="/post/ml-from-scratch-part-0-introduction/">Part 0</a>, it wasn’t obvious that it was even <em>possible</em> to come up with parameters for a model, but now we know that not only is it always <em>possible</em>, but there’s actually at least one concrete algorithm which solves the the problem in polynomial time and requires only a small amount of data (usually some small multiple of the number of parameters to fit.) TODO</p>
-<p>Our key takeaway is that if its true that our response variable is related to our predictor variables by a linear equation plus a certain amount of random gaussian noise, then we can recover good, unbiased estimates of that linear equations coefficients from nothing more than a finite number of data points sampled from the underlying distribution, and the way to actually calculate those estimates is to solve the OLS problem for the data set.</p>
+<p><span class="math display">\[ \log L(\Theta|X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2 \]</span></p>
+<p>Now, because log is a monotonically increasing function, maximizing <span class="math inline">\(l\)</span> is the same as maximizing <span class="math inline">\(L\)</span>. And of course any constant <span class="math inline">\(C\)</span> has no effect whatsoever on the location of the maximum. We can also remove the minus sign and consider the problem as a minimization problem instead. Therefore our <a href="http://mathworld.wolfram.com/MaximumLikelihood.html">maximum likelihood estimate</a> of <span class="math inline">\(\Theta\)</span> for a given data set <span class="math inline">\((X, y)\)</span> is simply:</p>
+<p><span class="math display">\[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} \, ||y - X\Theta||^2 \]</span></p>
+<p>If your eyes were glazing over from all the statistical nomenclature, I have some good news for you: we’re done with the statistics. Everything in this final equation is now a real-valued vector or matrix; there’s not a random variable or probability distribution in sight! It’s all over except for the linear algebra.</p>
+<p>What we did above was essentially a short sketch of the relevant parts of the <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem">Gauss-Markov theorem</a> which proves that the OLS solution <em>is</em> the MLE for the particular statistical model we started with. The full Gauss-Markov theorem also proves a bunch of other nice properties that we won’t concern ourselves with here.</p>
+<p>If you remember the motivating example I gave in <a href="/post/ml-from-scratch-part-0-introduction/">Part 0</a>, it wasn’t obvious at the time that it was even <em>possible</em> to come up with parameters for a model in a systematic way. Now we know that not only is it always <em>possible</em>, but there’s actually at least one concrete algorithm which solves the problem in polynomial time and requires only a small amount of data (usually some small multiple of the number of parameters to fit.)</p>
+<p>Our key takeaway is that if it’s true that our response variable is related to our predictor variables by a linear equation plus a certain amount of random Gaussian noise, then we can recover good, unbiased estimates of that linear equations coefficients from nothing more than a finite number of data points sampled from the underlying distribution, and the way to actually calculate those estimates is to solve the OLS problem for the data set.</p>
 </div>
 <div id="ordinary-least-squares" class="section level2">
 <h2>Ordinary Least Squares</h2>
-<p>Note: for this next section, we’re going to be doing some fairly rapid vector calculus. I suggest you reference <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">the matrix cookbook</a> if any of the notation or concepts aren’t familiar.</p>
+<p>Note: for this next section, we’re going to be doing some light vector calculus. I suggest you reference <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">the matrix cookbook</a> if any of the notation or concepts aren’t familiar.</p>
 <p>Let’s call the right-hand side (the part we’re trying to minimize) <span class="math inline">\(J\)</span>. Then we have:</p>
 <p><span class="math display">\[ J = || y - X\Theta ||^2 \]</span></p>
-<p>And the problem is to minimize J with respect to <span class="math inline">\(\Theta\)</span>. As optimization problems go, this one is pretty easy: it’s continous, quadradic, convex, everywhere differentiable, and unconstrained. Because of these nice properties, we know that it has a unique global minimum, and that the gradient is zero at this minimum.</p>
+<p>And the problem is to minimize J with respect to <span class="math inline">\(\Theta\)</span>. As optimization problems go, this one is pretty easy: it’s continuous, quadratic, convex, everywhere differentiable, and unconstrained. Because of these nice properties, we know that it has a unique global minimum, and that the gradient is zero at this minimum. That’s a fancy way of saying that it’s shaped like a big, round bowl so it’s obvious where the bottom is.</p>
 <p><span class="math display">\[ \begin{split} \nabla_\Theta J &amp; = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \\
 &amp; = \nabla_\Theta \; y^T y - (X\Theta)^T y - y^T X\Theta + \Theta^T (X^T X) \Theta \end{split}\]</span></p>
-<p>It’s obvious that <span class="math inline">\(y^T y\)</span> is constant with respect to <span class="math inline">\(\Theta\)</span> so the first term simply vanishes. It’s less obvious but also true that the next two terms are equal to each other - remember that a J is a scalar, so those terms are each scalar, and the transpose of a scalar is itself. The final term is a quadradic form, and the <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F16/linearQuadraticGradients.pdf">general rule</a> is $ q x^T A x = A^T x + A x $ but because the product of a matrix with itself is always symetric (<span class="math inline">\(X^T X = (X^T X)^T\)</span>) we can use the simpler form <span class="math inline">\(\nabla x^T A x = 2 A x\)</span>.</p>
+<p>It’s obvious that <span class="math inline">\(y^T y\)</span> is constant with respect to <span class="math inline">\(\Theta\)</span> so the first term simply vanishes. It’s less obvious but also true that the next two terms are equal to each other - remember that a J is a scalar, so those terms are each scalar, and the transpose of a scalar is itself. The final term is a quadratic form, and the <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F16/linearQuadraticGradients.pdf">general rule</a> is $ q x^T A x = A^T x + A x $ but because the product of a matrix with itself is always symmetric (<span class="math inline">\(X^T X = (X^T X)^T\)</span>) we can use the simpler form <span class="math inline">\(\nabla x^T A x = 2 A x\)</span>.</p>
 <p><span class="math display">\[ \nabla_\Theta J = - 2 y^T X + 2 X^T X \Theta \]</span> Setting this equal to zero at <span class="math inline">\(\hat{\Theta}\)</span> we get:</p>
 <p><span class="math display">\[ (X^T X) \hat{\Theta} = y^T X \]</span></p>
 <p>The right hand side is a known vector, the left-hand side is a matrix times an unknown vector, so this is just the familiar equation for solving for a particular solution to a system of equations <span class="math inline">\(Ax = b\)</span>.</p>
 <p>Because <span class="math inline">\(X^T X\)</span> is square, we <em>could</em> just left-multiply both sides by its inverse to get an explicit closed form for <span class="math inline">\(\hat{\Theta}\)</span>:</p>
 <p><span class="math display">\[ \hat{\Theta} = (X^T X)^{-1} y^T X \]</span></p>
-<p>However, it turns out there is a faster and more numerically stable way (although obviously theoretically equivalent) of solving for <span class="math inline">\(\hat{\Theta}\)</span> which relies on the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR Decomposition</a> of the matrix <span class="math inline">\(X^T X\)</span>.</p>
+<p>It turns out there is a faster and more numerically stable way (although obviously theoretically equivalent) of solving for <span class="math inline">\(\hat{\Theta}\)</span> which relies on the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR Decomposition</a> of the matrix <span class="math inline">\(X^T X\)</span>.</p>
 </div>
 <div id="qr-decomposition" class="section level2">
 <h2>QR Decomposition</h2>
 <p>Since we’re going to be implementing QR in a minute, it’s worth making sure we understand how it works in detail. A QR decomposition of a matrix square <span class="math inline">\(A\)</span> is a product of an orthogonal matrix <span class="math inline">\(Q\)</span> and an upper-triangular matrix <span class="math inline">\(R\)</span> such that <span class="math inline">\(A = QR\)</span>. Why is this beneficial? Well, it turns out that to invert an orthogonal matrix, all you need to do is take its transpose. <span class="math inline">\(Q^T Q = \mathbb{1} \leftrightarrow Q^T = Q^{-1}\)</span>. So if we found <span class="math inline">\(QR = X^T X\)</span>, we could write our equation for <span class="math inline">\(\hat{\Theta}\)</span> as</p>
 <p><span class="math display">\[ QR \hat{\Theta} = y^T X \]</span></p>
 <p><span class="math display">\[ R \hat{\Theta} = Q^T y^T X \]</span></p>
-<p>But R is upper triangular, and the right hand-side reduces to a single column vector, so we can solve this by back-substituion. Back-substitution is easiest to explain with an example.</p>
+<p>But R is upper triangular, and the right hand-side reduces to a single column vector, so we can solve this by back-substitution. Back-substitution is easiest to explain with an example. Consider this system of equations in matrix form, where the matrix is upper-triangular:</p>
 <p><span class="math display">\[
  \begin{bmatrix}
    2 &amp; 1 &amp; 3 \\\
@@ -73,13 +74,13 @@ draft: true
    8 \\
   \end{bmatrix}
 \]</span></p>
-<p>In this problem, the matrix is upper triangular. We start on the bottom row, which is simply an equation <span class="math inline">\(4x_3 = 8\)</span>, so <span class="math inline">\(x_3 = 2\)</span>. The second row represents the equation <span class="math inline">\(x_2 + x_3 =2\)</span>, but we already know <span class="math inline">\(x_3\)</span>, so we can substitute that back in to get <span class="math inline">\(x_2 - 2 = 0\)</span>, so <span class="math inline">\(x_2 = 0\)</span>. The top row is <span class="math inline">\(2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2\)</span>, so <span class="math inline">\(x_1 = -2\)</span>.</p>
-<p>So we know know how to finish the problem once we have <span class="math inline">\(QR = X^X\)</span>. But how to get <span class="math inline">\(Q\)</span> and <span class="math inline">\(R\)</span>? There are two parts to understanding the algorithm. First, note that the product of any two orthogonal matrices is itself orthogonal. Also, the identity matrix is orthogonal. Therefore, if we have a candidate decomposition <span class="math inline">\(A = QR\)</span> where <span class="math inline">\(Q\)</span> is orthogonal (but R may not yet be square), then for any orthogonal matrix <span class="math inline">\(S\)</span> we have <span class="math inline">\(A = Q I R = Q S^T S R = (Q S^T) (S R) = Q&#39; R&#39;\)</span> where <span class="math inline">\(Q&#39; = Q S^T\)</span> and <span class="math inline">\(R&#39; = S R\)</span> is <em>also</em> a candidate decomposition! This is the general strategy behind not just QR decomposition, but behind many other decompositions in linear algebra. At each step we want to apply an orthogonal transformation to bring <span class="math inline">\(A\)</span> closer to the desired form, while simultaneously keeping track of a matrix to undo all of the transformations.</p>
-<p>That sets the rules and the goal of the game: we can apply any sequence of orthogonal transforms to a (square, non-singular) matrix <span class="math inline">\(A\)</span> that will bring it into upper triangular form. But is there such a sequence? And how would it be constructed? Suprisingly,this sequence always exist.</p>
+<p>We start on the bottom row, which is simply an equation <span class="math inline">\(4x_3 = 8\)</span>, so <span class="math inline">\(x_3 = 2\)</span>. The second row represents the equation <span class="math inline">\(x_2 + x_3 =2\)</span>, but we already know <span class="math inline">\(x_3\)</span>, so we can substitute that back in to get <span class="math inline">\(x_2 - 2 = 0\)</span>, so <span class="math inline">\(x_2 = 0\)</span>. The top row is <span class="math inline">\(2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2\)</span>, so <span class="math inline">\(x_1 = -2\)</span>. This is back-substitution, and it should be clear that we can do this quickly and efficiently for an upper-triangular matrix of any size. Furthermore, because we do at most one division per row, this method is very numerically stable. (If the matrix is <a href="https://en.wikipedia.org/wiki/Condition_number">ill-conditioned</a>, we could still run into numerical error, but this only occurs when the original data set <span class="math inline">\(X\)</span> suffers from <a href="https://en.wikipedia.org/wiki/Multicollinearity">multicolinearity</a>.)</p>
+<p>So we know know how to finish the problem once we have <span class="math inline">\(QR = X^X\)</span>. But how to get <span class="math inline">\(Q\)</span> and <span class="math inline">\(R\)</span>? There are two parts to understanding the algorithm. First, note that the product of any two orthogonal matrices is itself orthogonal. Also, the identity matrix is orthogonal. Therefore, if we have a candidate decomposition <span class="math inline">\(A = QR\)</span> where <span class="math inline">\(Q\)</span> is orthogonal (but R may not yet be square), then for any orthogonal matrix <span class="math inline">\(S\)</span> we have <span class="math inline">\(A = Q I R = Q S^T S R = (Q S^T) (S R) = Q&#39; R&#39;\)</span> where <span class="math inline">\(Q&#39; = Q S^T\)</span> and <span class="math inline">\(R&#39; = S R\)</span> is <em>also</em> a candidate decomposition! This is the general strategy behind not just QR decomposition, but behind many other decompositions in linear algebra: at each step we want to apply an orthogonal transformation to bring <span class="math inline">\(A\)</span> closer to the desired form, while simultaneously keeping track of a matrix to undo all of the transformations.</p>
+<p>That sets the rules and the goal of the game: we can apply any sequence of orthogonal transforms to a (square, non-singular) matrix <span class="math inline">\(A\)</span> that will bring it into upper triangular form. But is there such a sequence? And how would it be constructed?</p>
 </div>
 <div id="householder-reflections" class="section level2">
 <h2>Householder Reflections</h2>
-<p>How would I make <em>just one column</em> of <span class="math inline">\(A\)</span> zero below the diagonal? Or even more concretely, how would I make just the <em>first column</em> of <span class="math inline">\(A\)</span> zero except for the first element?</p>
+<p>Let’s break it down into an even easier problem first. How would I make <em>just one column</em> of <span class="math inline">\(A\)</span> zero below the diagonal? Or even more concretely, how would I make just the <em>first column</em> of <span class="math inline">\(A\)</span> zero except for the first element?</p>
 <p>Let’s take a look at the “column view” of our matrix. It looks like this:</p>
 <p><span class="math display">\[
 \begin{bmatrix}
@@ -88,12 +89,26 @@ draft: true
     \vert &amp; \vert &amp; \vert
 \end{bmatrix}
 \]</span></p>
-<p>We want <span class="math inline">\(a_1\)</span> to be zero except for the first element. What does that <em>mean</em>? Let’s call our basis vectors <span class="math inline">\(e_1 = [1\, 0\, 0]^T\)</span>, <span class="math inline">\(e_2 = [0\, 1\, 0]^T\)</span>, <span class="math inline">\(e_3 = [0\, 0\, 1]^T\)</span>. Every vector in our space is a linear combination of these basis vectors. So what it means for <span class="math inline">\(a_1\)</span> to be zero except for the first element is that <span class="math inline">\(a_1\)</span> is co-linear (in the same line) as <span class="math inline">\(e_1\)</span> in other words: <span class="math inline">\(\exists \alpha \in \mathbb{R} | H a_i = \alpha e_i \)</span>.</p>
+<p>We want <span class="math inline">\(a_1\)</span> to be zero except for the first element. What does that <em>mean</em>? Let’s call our basis vectors <span class="math inline">\(e_1 = [1\, 0\, 0]^T\)</span>, <span class="math inline">\(e_2 = [0\, 1\, 0]^T\)</span>, <span class="math inline">\(e_3 = [0\, 0\, 1]^T\)</span>. Every vector in our space is a linear combination of these basis vectors. So what it means for <span class="math inline">\(a_1\)</span> to be zero except for the first element is that <span class="math inline">\(a_1\)</span> is co-linear (in the same line) as <span class="math inline">\(e_1\)</span>: ( H a_i = e_i ).</p>
 <p>We’re going to do this with an orthogonal transformation. But orthogonal transformations are <em>length preserving</em>. That means <span class="math inline">\(\alpha = ||a_1||\)</span>. So we now understand that we need to find an orthogonal matrix that sends the vector <span class="math inline">\(a_1\)</span> to the vector <span class="math inline">\(||a_1|| e_1\)</span>. Note that any two vectors lie in a plane. We could either <em>rotate</em> by the angle between the vectors <span class="math inline">\(\cos^{-1} \frac{a_1 \dot e_1}{||a_1||} \)</span>, or we can <em>reflect</em> across the line which bisects the two vectors in their plane. These two strategies are called the <a href="https://en.wikipedia.org/wiki/Givens_rotation">Givens rotation</a> and the <a href="https://en.wikipedia.org/wiki/Householder_transformation">Householder reflection</a> respectively. The rotation matrix is slightly less stable, so we will use the Householder reflection.</p>
+<p>This diagram from Wikipedia illustrates this beautifully. Stare at it until you can see that reflecting about the dotted plane sends <span class="math inline">\(x\)</span> to <span class="math inline">\(||x||e_1\)</span>, and <em>believe</em> that <span class="math inline">\(v\)</span> is a unit vector orthogonal to the dotted plane of reflection.</p>
 <p><a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a></p>
+<p>Let’s say that <span class="math inline">\(v\)</span> is the unit normal vector of a plane; how would I reflect an arbitary vector <span class="math inline">\(x\)</span> across that plane? Well, if we subtracted <span class="math inline">\(\langle x, v \rangle v\)</span> from <span class="math inline">\(x\)</span>, that would be a projection into the plane, right? So if we just keep going the same direction and for the same distance again, we’ll end up a point on the other side of the plane <span class="math inline">\(x&#39;\)</span>. Both <span class="math inline">\(x\)</span> and <span class="math inline">\(x&#39;\)</span> project to the same point on the plane, and furthermore both are a distance <span class="math inline">\(\langle x, v \rangle\)</span> from the plane. In other words, this operation is a reflection.</p>
+<p>Because a reflection is a linear transformation, we can express it as a matrix, which we will call <span class="math inline">\(H\)</span>. Here is how we go from our geometric intuition to a matrix:</p>
+<p><span class="math display">\[
+    \begin{align}
+    H x &amp; \triangleq x - 2 \langle x, v \rangle v \\
+        &amp; = x - 2v \langle x, v \rangle \\
+        &amp; = Ix - 2 v (v^T x) \\
+        &amp; = Ix - 2 (v v^T) x \\
+        &amp; = (I - 2 (v v^T)) x 
+    \end{align}
+\]</span></p>
+<p>Here, note that <span class="math inline">\(v v^T\)</span> is the <em>outer</em> product of <span class="math inline">\(v\)</span> with itself so is a square matrix with elements <span class="math inline">\(v_i v_j\)</span>.</p>
 </div>
 <div id="implementing-the-lemmas" class="section level2">
 <h2>Implementing the Lemmas</h2>
+<p>Given the above theoretical presentation, and copious comments, I hope you will now be able to read and understand the following code:</p>
 <pre><code>def householder_reflection(a, e):
     &#39;&#39;&#39;
     Given a vector a and a unit vector e,
@@ -119,11 +134,8 @@ draft: true
     u = a - np.sign(a[0]) * norm(a) * e  
     v = u / norm(u)
     
-    # derivation of the matrix form of a reflection:
+    # matrix form of the reflection:
     # x - 2&lt;x, v&gt;v ==
-    # x - 2v&lt;x, v&gt; ==
-    # Ix - 2 v (v^T x) ==
-    # Ix - 2 (v v^T) x ==
     # (I - 2v v^T) x == H x
     H = np.eye(len(a)) - 2 * np.outer(v, v)
     
@@ -193,7 +205,7 @@ draft: true
         R = H @ R
     
     return Q, R</code></pre>
-<p>The last piece of the puzzle is backsubstitution. This is straight-forward and available in standard libaries, but to comply with the letter-of-law of the “from scratch” challenge we’ll implement our own version.</p>
+<p>The last piece of the puzzle is back-substitution. This is straight-forward and available in standard libraries, but to comply with the letter-of-law of the “from scratch” challenge we’ll implement our own version.</p>
 <pre><code>def solve_triangular(A, b):
     &#39;&#39;&#39;
     Solves the equation Ax = b when A is an upper-triangular square matrix
@@ -215,7 +227,8 @@ draft: true
         x = np.insert(x, 0, x_i)
   
     return x</code></pre>
-<p>So I won’t lie - that was a ton of linear algebra we just ploughed through. Before we move on to actually <em>using</em> our new functions, let’s spend some time making sure everything up to this point is correct.</p>
+<p>I won’t lie - that was a ton of linear algebra we just ploughed through. If you got through it, or if you had the good sense to skim ahead until you found something that made sense, congratulations.</p>
+<p>Before we move on to actually <em>using</em> our new functions, let’s spend some time making sure everything up to this point is correct.</p>
 <pre><code>class QRTestCase(unittest.TestCase):
     &#39;&#39;&#39;
     Unit tests for QR decomposition and its dependencies. 
@@ -265,7 +278,7 @@ draft: true
 </div>
 <div id="implementing-linear-regression" class="section level2">
 <h2>Implementing Linear Regression</h2>
-<p>The algorithm is almost disappointingly simple.</p>
+<p>The final algorithm is deceptively simple. Compare the normal equations derived above to the final two lines of the <code>fit()</code> method.</p>
 <pre><code>class LinearRegression:
     def __init__(self, add_intercept=True):
         self.add_intercept = bool(add_intercept)
@@ -297,6 +310,7 @@ draft: true
 </div>
 <div id="testing" class="section level2">
 <h2>Testing</h2>
+<p>Let’s first grab a bunch of test-only dependencies and also grab a copy of the famous <a href="https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html">Boston</a> so we have a simple regression problem to play with.</p>
 <pre><code># testing purposes only
 from sklearn.datasets import load_boston
 import matplotlib
@@ -321,7 +335,11 @@ train_test_split = int(0.8 * len(y_full))
 X_train = X_full[:train_test_split, :]
 y_train = y_full[:train_test_split]
 X_test = X_full[train_test_split:, :]
-y_test = y_full[train_test_split:]
+y_test = y_full[train_test_split:]</code></pre>
+<p>The model is fit to the training set only. If it fits the training set pretty well we know it has learned the examples we gave it; if it <em>also</em> fits the test set pretty well, we know it’s done more than just memorize the examples given but has also learned a more general lesson that it can apply to novel data that it’s never seen before.</p>
+<p>A good way to visualize model performance is to plot <span class="math inline">\(y\)</span> vs. <span class="math inline">\(\hat{y}\)</span> - in other words, actual vs predicted. A perfect predictor would be a 45° diagonal through the origin; random guessing would be a shapeless or circular cloud of points.</p>
+<pre><code>model = LinearRegression()
+model.fit(X_train, y_train)
 
 def goodness_of_fit_report(label, model, X, y):
     y_hat = model.predict(X)
@@ -344,16 +362,20 @@ goodness_of_fit_report(&quot;Training Set&quot;, model, X_train, y_train)
 plt.subplot(1, 2, 2)
 goodness_of_fit_report(&quot;Test Set&quot;, model, X_test, y_test)</code></pre>
 <blockquote>
-<p>Training Set mse=24.08 r2=0.72</p>
-<p>Test Set mse=13.84 r2=0.81</p>
+<p>Training Set mse=21.30 r2=0.73</p>
 </blockquote>
+<blockquote>
+<p>Test Set mse=25.12 r2=0.75</p>
+</blockquote>
+<p>And in point of fact this linear regression model does reasonably well on both the train and test set, with correlation scores around 75%. That means it’s able to explain about three-quarters of the variation that it finds in <span class="math inline">\(y\)</span> from what it was able to learn about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>It’s also nice to visualize both actual and predicted values as a function of the independent variable - but in this case <span class="math inline">\(X\)</span> is 13-dimensional so we will simply a few random dimensions to visualize. If the model has learned anything real about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span>, we should see two similar clouds of points for actual <span class="math inline">\(y\)</span> and predicted <span class="math inline">\(\hat{y}\)</span>.</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-1-linear-regression_files/predicted_vs_actual.png" alt="Prediction vs. Actual Scatterplot, training set and test set" />
 <p class="caption">Prediction vs. Actual Scatterplot, training set and test set</p>
 </div>
 <pre><code>y_hat = model.predict(X_train)
 plt.figure(figsize=(16,32))
-for i in range(12):
+for i in range(4, 8):
     plt.subplot(6, 2, i+1)
     plt.scatter(x=X_train[:, i], y=y_train, alpha=0.2, label=&#39;Actual&#39;)
     plt.scatter(x=X_train[:, i], y=y_hat, alpha=0.2, label=&#39;Predicted&#39;)
@@ -364,4 +386,9 @@ for i in range(12):
 <img src="/post/ml-from-scratch-part-1-linear-regression_files/scatter.png" alt="Predicted vs. Actual over pairs of independent variables" />
 <p class="caption">Predicted vs. Actual over pairs of independent variables</p>
 </div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>That was linear regression from scratch. There’s a lot more that could be said about linear regression even as a blackbox predictive model: polynomial and interaction terms, L1 and L2 regularization, and linear constraints on coefficients.</p>
+<p>There’s also a whole universe of techniques for doing statistical modeling and inference with linear regression: testing residuals for homoskedacity, normality, autocorrelation, variance inflation factors, orthogonal polynomial regression, Cook’s distance, leverage, studentized residuals, ANOVA, AIC, BIC, Omnibus F-tests on nested models. Just to be clear, these aren’t <em>variations</em> or <em>generalization</em> of linear regression (although there are ton of those too) these are just standard techniques for analyzing and understanding linear regression models of the exact same form we calculated above. The topic is very mature with a corresponding amount of associated mathematical machinery built up over the centuries.</p>
 </div>

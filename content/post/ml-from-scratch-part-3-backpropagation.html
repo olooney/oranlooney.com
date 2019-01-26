@@ -1,0 +1,32 @@
+---
+title: 'ML From Scratch, Part 3: Backpropagation'
+author: Oran Looney
+date: 2018-12-26
+tags:
+  - Python
+  - Statistics
+  - From Scratch
+  - Machine Learning
+image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
+draft: true
+---
+
+
+
+<p>A typical neural network with one hidden layer would be</p>
+<p>[ =(W_2 (W_1 X + b_1) + b_2)]</p>
+<p>Where <span class="math inline">\(\sigma()\)</span> is a sigmoid function, <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span> a weights for connections between layers, and <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span> are bias vectors. <span class="math inline">\(X\)</span> is a matrix of data with one row per observation and one column per feature. The parameters of the model are <span class="math inline">\(\Theta = (W_1, W_2, b_1, b_2)\)</span>. Let’s also say that the loss function is <span class="math inline">\(J(\Theta;X) = \frac{1}{2}||y - \hat{y}||^2\)</span> for simplicity.</p>
+<p>To fit the model to data, we find the parameters which minimize loss: <span class="math inline">\(\hat{\Theta} = \text{argmin} \, J(\Theta;X)\)</span>. One condition which must be true at a local minima is that <span class="math inline">\(\nabla_\Theta J = 0\)</span>. That gives us the equations:</p>
+<p>[  = 0,  = 0][ = 0,  = 0]</p>
+<p>The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for W) or a vector (for b.) The <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">matrix cookbook</a> may help you understand this notation.</p>
+<p>A full description of the forward pass of an <span class="math inline">\(L\)</span>-layer neural net is given recursively as:</p>
+<p>[ a^{(0)} = X][a^{(i)} = (z^{(i)})] [ z^{(i)} = W_i a^{(i-1)} + b_i][ = a^{(L)} ]</p>
+<p>For the backwards pass, therefore, we can use the chain rule. For example, let’s do <span class="math inline">\(W_1\)</span>:</p>
+<p>[  =      [</p>
+<p>Given the forward pass equations given above, it turns out that each of these partial derivatives is straight-forward to calculate. You can verify for yourself that:</p>
+<p>[  =  = y - ]</p>
+<p>[  = a^{(i)} (1-a^{(i)}) ]</p>
+<p>[  = W_i ]</p>
+<p>[  = a^{(i-1)} ]</p>
+<p>Which are all straight-forward, except perhaps the derivative of the sigmoid were we rely on the slightly non-obvious fact that <span class="math inline">\(\sigma&#39;(x) = \sigma(x) (1-\sigma(x))\)</span>.</p>
+<p>The justification for introducing the (technically extraneous) concept of <span class="math inline">\(z\)</span> is found in how absolutely obvious and clear it makes the separate steps of the forward and backwards pass. If we had to take <span class="math inline">\(\partial a^{(i)} / \partial a^{(i-1)}\)</span> directly without going through <span class="math inline">\(z\)</span> we would have to think about a non-linear function of a matrix all at once; with <span class="math inline">\(z\)</span> we’re able to view it as the element-wise application of a non-linear function (which is Calculus 101) and the partial derivative of a linear expression with respect to a matrix (which is Matrix Calculus 101; see the <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">Cookbook</a>).</p>

@@ -1,0 +1,77 @@
+---
+title: 'ML From Scratch, Part 2: Logistic Regression'
+author: Oran Looney
+date: 2018-12-05
+tags:
+  - Python
+  - Statistics
+  - From Scratch
+  - Machine Learning
+image: /post/ml-from-scratch-part-2-logistic-regression_files/lead.jpg
+draft: true
+---
+
+
+
+<p>In this second second installment of the [machine learning from scratch<a href="/tags/from-scratch/">MLFS</a> we switch the point of view from <em>regression</em> to <em>classification</em>: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A classic example is looking at a photo and deciding if its a <a href="https://www.kaggle.com/c/dogs-vs-cats">cat or a dog</a>.</p>
+<p>In practice, its extremely common to need to decide between <span class="math inline">\(k\)</span> classes where <span class="math inline">\(k &gt; 2\)</span> but in this series we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward. In fact, even if the algorithm doesn’t naturally generalize beyond binary classification (looking at you, <a href="https://en.wikipedia.org/wiki/Support-vector_machine">SVM</a>) there’s a general strategy for turing any binary classification algorithm into a multiclass classification algorithm called <a href="http://mlwiki.org/index.php/One-vs-All_Classification">one-vs-all</a>. So we can safely set aside the complexities of the multiclass problem and focus on binary classification for this series.</p>
+<p>The binary classification is extremely central in machine learning and in this series we’ll be looking at no fewer than four different algorithms. In an undergraduate machine learning class, you’d probably work through a few algorithms that today only have historical or pedagogical value to dip your toes in the water and get a feel for the binary classification problem: the one-unit perceptron, linear discriminant analysis, and the winnow algorithm. We will omit those and jump straight to the simplest classification that is in widespread use: logistic regression.</p>
+<p>I say, “simplest,” but most people don’t think of LR as “simple.” That’s because they’re thinking of it use within the context of statistical analysis and the analysis of experiments. In those contexts, there’s a ton of associated mathematical machinery that goes along with <em>validating</em> and <em>interpretting</em> logistic regression models, and that stuff <em>is</em> complicated. A good book on <em>that</em> side of logistic regression is <a href="https://www.amazon.com/Applied-Logistic-Regression-David-Hosmer/dp/0470582472/">Applied Logistic Regression by Hosmer et al.</a>. But within the context of machine learning, logistic regression is an extremely simple predictive model: as we’ll see, the heart of the algorithm is only a few lines of code.</p>
+<p>Nevertheless, it’s important for two reasons. First, it can be suprisingly effective. It’s not uncommon for some state-of-the-art algorithm to significantly contribute to global warming by running a hyperparameter grid search over a cluster of GPU instances in the cloud, only to end up with a final model with only marginally higher test set performance than the original. This isn’t always true: for example, LR tends to get only ~90% accuracy on the MNIST handwritten digit classification problem, which is much lower than either humans or deep learning. But in the many cases for which it <em>is</em> true, it’s worth asking if the problem is amenable to more advanced machine learning techniques at all.</p>
+<p>The second reason logistic regression is important is that it provides a important conceptual foundation for neural networks and deep learning, which we’ll visit later in this series.</p>
+<div id="the-logistic-function" class="section level2">
+<h2>The Logistic Function</h2>
+<p>The logistic function, also called the sigmoid function is given by</p>
+<p><span class="math display">\[ \sigma(x) = \frac{1}{1 + e^{-x}} \]</span></p>
+<p>and looks like so:</p>
+<p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>We will want to get acquainted with this function before proceeding as it has several interesting properties.</p>
+<p>First, we note that while its domain is <span class="math inline">\((-\infty, +\infty)\)</span>, its range is <span class="math inline">\((0, 1)\)</span>. Therefore its output will always be a valid probability. Note also that <span class="math inline">\(\sigma(0) = 0.5\)</span> so if we interpret the output as a probability, all negative numbers map to probabilities that are unlikely, while all positive numbers map to probabilities that are likely, while zero maps to exactly even odds.</p>
+<p>A few lines of simple algebra will show that its inverse function, also called the “logit” function, is given by</p>
+<p><span class="math display">\[ \sigma^{-1}(x) = \ln{\frac{x}{1-x}} \]</span></p>
+<p>Note that if <span class="math inline">\(x = e^p\)</span> where <span class="math inline">\(p\)</span> is a probability between 0 and 1, then we have</p>
+<p><span class="math display">\[ \sigma^{-1}(e^p) = \frac{p}{1-p} \]</span></p>
+<p>Where the right hand side is an <em>odds ratio</em>. So one interpretation of the logistic function is that it maps <em>log odds ratios</em> to <em>probabilities</em>.</p>
+<p>For example, if something has a probability of 0.2, then it has 4:1 odds, and a log odds ratio of <span class="math inline">\(ln 4 = -1.39\)</span>. So <span class="math inline">\(\sigma(0.2) = -1.39\)</span>.</p>
+<p>The logistic function also has a pretty interesting derivative. The easiest way to see this is to use implicit differentiation, but I’ll show a slightly longer but less magical derivation which only uses the chain rule and basic algebra.</p>
+<p><span class="math display">\[ \frac{d \sigma(x)}{dx} 
+    = \frac{d}{dx} \frac{1}{1 + e^{-x}} 
+    = \frac{-1}{( 1+ e^{-x})^2} -e^{-x}
+    = \frac{1}{1 + e^{-x}} \frac{1 + e^{-x} - 1}{ 1+ e^{-x}}
+    = \frac{1}{1 + e^{-x}} \big( \frac{1 + e^{-x}}{1+ e^{-x}} - \frac{1}{ 1+ e^{-x}} \big)
+    = \frac{1}{1 + e^{-x}} \big( 1                            - \frac{1}{ 1+ e^{-x}} \big)
+    = \sigma(x) ( 1 - \sigma(x) )
+\]</span></p>
+<p>So we can see that <span class="math inline">\(\sigma&#39;(x)\)</span> can expressed as a simple quadratic function of <span class="math inline">\(\sigma(x)\)</span>. It’s not often that a derivative can be most conveniently expressed in terms of the original function, but seems to be the case here.</p>
+</div>
+<div id="probability-regression" class="section level2">
+<h2>Probability Regression</h2>
+<p>Let’s say <span class="math inline">\(Y\)</span> is a discrete random variable with support <span class="math inline">\({0, 1}\)</span>. The joint probability distribution of <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> is such that</p>
+<p><span class="math inline">\(F_{Y|X} \sim Bernoulli(p(x))\)</span></p>
+<p><span class="math inline">\(Y \sim Bernoulli(p(x))\)</span>.</p>
+<p><span class="math display">\[ \hat{y} = E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]</span></p>
+<p><span class="math display">\[ L(\Theta; X, y) = \prod_{i=1}{N} P(Y=1|X_i)^{y_i} P(Y=0|X_i)^{(1 - y_i)} \]</span></p>
+<p>We’re using a simple notational trick to write this compactly: because <span class="math inline">\(y \in {0, 1}\)</span>, The first factor will be reduced to a constant 1 if <span class="math inline">\(y = 0\)</span> and likewise the second term will be reduced to a constant 1 if <span class="math inline">\(y = 1\)</span>. So that’s merely a compact way of writing the two scenarios without an explicit if/else.</p>
+<p>The log likelihood is simpler.</p>
+<p><span class="math display">\[ \ell(\Theta; X,y) = \ln L = \sum{i=1}{N} y_i \ln P(Y=1|X_i) + (1 - y_i) (1 - P(Y=1|X_i) \]</span></p>
+<p>Using the above formula for our predictor <span class="math inline">\(\hat{y}\)</span>:</p>
+<p><span class="math display">\[ \ell(\Theta; X,y) = \ln L = \sum{i=1}{N} y_i \ln \hat{y}_i + (1 - y_i) (1 - \hat{y}_i \]</span></p>
+<p>To find the MLE it suffices to minimize <span class="math inline">\(\ell(\Theta; X, y)\)</span> with respect to <span class="math inline">\(\Theta\)</span>. Because the function is once again smooth and convex, we can do this by finding the zero of the gradient.</p>
+<p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum{i=1}{N} \frac{y_i}{\hat{y}_i} \frac{\partial \hat{y}_i}{\partial \Theta_j} + \frac{(1-y_i)}{(1-\hat{y}_i)} \frac{\partial \hat{y}_i}{\partial \Theta_j} \]</span></p>
+<p>We can use our earlier lemma <span class="math inline">\(\sigma&#39;(x) = \sigma(x)(1-sigma(x))\)</span> for the partial derivative of <span class="math inline">\(\hat{y}\)</span>.</p>
+<p>Note also that because <span class="math inline">\(\hat{y} = \sigma(X \Theta) = \sigma( X_0 \Theta_0 + X_1 \Theta_1 + ... + X_k \Theta_k )\)</span>, we will pick up an additional <span class="math inline">\(X_j\)</span> factor from the chain rule when differentiating by <span class="math inline">\(\Theta_j\)</span>.</p>
+<p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum{i=1}{N} \frac{y_i}{\hat{y}_i} \hat{y}_i (1-\hat{y}_i) X_j - \frac{(1-y_i)}{(1-\hat{y}_i)} \hat{y}_i (1-\hat{y}_i) X_j \]</span></p>
+<p>Several cancellations occur and we are left with:</p>
+<p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum{i=1}{N} \X_j ( y_i (1 - \hat{y}_i) - (1 - y_i) \hat{y}_i ) 
+ = \sum{i=1}{N} \X_j ( y_i  - y_i \hat{y}_i) - \hat{y}_i + y_i \hat{y}_i)
+ = \sum{i=1}{N} \X_j ( y_i  - \hat{y}_i )
+\]</span></p>
+<p>If we define <span class="math inline">\(\mathbb{1} = (1, 1, ..., 1)\)</span> to be a vector consisting of all ones and use <span class="math inline">\(\circ\)</span> to denote the Hadamard product we can write this is a compact vectorized form:</p>
+<p><span class="math display">\[ \nabla_{\Theta} \ell(\Theta; X, y) = (X \circ  (y - \hat{y}))^T \mathbb{1} \]</span></p>
+<p>This is almost suspiciously neat, but it’s not really an accident. The reason why we chose the logistic function in the first place was precisely so this neat result would drop out at the end. This is because the logistic function is the <a href="https://en.wikipedia.org/wiki/Generalized_linear_model#Link_function">canonical link function</a> for the Bernoulli distribution.</p>
+<p>This raises a fairly interesting point. Is there any fundamental reason to believe the true population distribution <em>really</em> has a logistic link function, or is it an arbitrary choice we made solely for mathematical convenience? As far as I can tell, it’s the later case. More rigorous attempts to justify the choice of link function end up making a different choice, such as probit regression which uses the CDF of the normal distribution. However, in practice these curves are extremely similar, and if you showed me a plot of each side-by-side I could not for the life of me tell you which is which.</p>
+<p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="gradient-descent" class="section level2">
+<h2>Gradient Descent</h2>
+</div>
