@@ -15,13 +15,15 @@ draft: true
 
 
 <p>To kick off this series, will start with something simple yet foundational: linear regression via [ordinary least squares][OLS].</p>
-<p>While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more complicated learning algorithms: the output layer of a deep neural network trained for regression with MSE loss, the “gradient boosting” used by gradient boosting trees, and the “local regression” part of LOWESS smoothing are all (modified) examples of linear regression.</p>
-<p>Linear regression is also the “simple harmonic oscillator” of machine learning; that is to say, a chance to apply our theoretical ideas about machine learning to a case that is not mathematically taxing.</p>
+<p>While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more advanced learning algorithms: the output layer of a deep neural network trained for regression with MSE loss, the “gradient boosting” used by gradient boosting trees, and the “local regression” part of LOWESS smoothing are all (modified) examples of linear regression.</p>
+<p>Linear regression is also the “simple harmonic oscillator” of machine learning; that is to say, a pedagogically-motivated example that allows us to present deep theoretical ideas about machine learning with an example that is not mathematically taxing.</p>
 <p>There is also the small matter of it being the most widely used statistical learning algorithm in the world - but because it is mainly used by people who call themselves “statisticians,” “analysts,” or “researchers” instead of “data scientists”, we can safely ignore that consideration; don’t you think?</p>
-<p>However, since I can feel your eyes glazing over from such an introductory topic, we can spice things up a little bit by doing something which isn’t often done in introductory machine learning - we can present the algorithm that [insert your favorite statistical software package here] uses to <em>actually</em> fit linear regression models: <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a>. This is commonly glossed over because it involves a lot of linear algebra and doesn’t generalize well to other machine learning algorithms so most teachers prefer to teach gradient descent here so they can build on it in later lectures - but that’s not how linear models are fit in the real world. Besides, the linear algebra involved is actually exceptionally beautiful and interesting.</p>
+<p>However, since I can feel your eyes glazing over from such an introductory topic, we can spice things up a little bit by doing something which isn’t often done in introductory machine learning - we can present the algorithm that [insert your favorite statistical software package here] uses to <em>actually</em> fit linear regression models: <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a>. This is commonly glossed over because it involves more linear algebra than can be generally assumed, and because the clever exact solution we derive doesn’t generalize well to other machine learning algorithms or even to mild variants of linear regression such as <a href="https://en.wikipedia.org/wiki/Elastic_net_regularization">regularized regression</a> or <a href="https://en.wikipedia.org/wiki/Robust_regression">robust regression</a>.</p>
+<p>The current paradigm in machine learning is to apply very powerful, very general optimization algorithms (i.e., <a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">SGD</a>) that work for a wide variety of models and scale reasonably well to vast amounts of data. This allows researchers to iterate rapidly on the structure of the model without needing to spend a lot coming up with a clever algorithm which solves their special case efficiently. It’s good software engineering: it avoids <a href="https://en.wikipedia.org/wiki/Program_optimization#When_to_optimize">premature optimization</a> and promotes good <a href="https://en.wikipedia.org/wiki/Separation_of_concerns">separation of concerns</a>. Still, history has shown that for any given optimization problem, there probably is a specialized algorithm that leverages the specifics of the problem to achieve an order of magnitude better performance. For example, John Platt’s <a href="https://en.wikipedia.org/wiki/Sequential_minimal_optimization">Sequential Minimal Optimization</a> beat earlier, more general algorithms by such a wide margin that for a decade (1998-2009?) SVMs were one of the most promising approaches to machine learning. Today (2019) the machine learning industry is kind of in rapid prototyping mode, leveraging the flexibility and composability of deep neural networks to experiment with endless numbers of novel architectures. However, as our understanding of which architectures work best for particular problems matures, the industry will likely tip back in favor of researching specialized algorithms. If we are interested in understanding machine learning from scratch we should be prepared to study specialized algorithms when and where they arise naturally.</p>
 <div id="statistics" class="section level2">
 <h2>Statistics</h2>
-<p>Let’s start by posing the problem and deriving the so-called <a href="http://mathworld.wolfram.com/NormalEquation.html">normal equation.</a> Let’s say that <span class="math inline">\(X_p\)</span> is a random vector of length <span class="math inline">\(M\)</span> and <span class="math inline">\(y_p\)</span> is a scalar random variable. <span class="math inline">\(X_p\)</span> and <span class="math inline">\(y_p\)</span> are <em>not</em> independent, but have a joint probability distribution <span class="math inline">\(F(x, y; \Theta, \sigma)\)</span> parameterized by a non-random parameter vector <span class="math inline">\(\Theta_p\)</span>, a non-negative scalar <span class="math inline">\(\sigma\)</span>, and a random error term <span class="math inline">\(\epsilon \sim \mathcal{N}(0, \sigma^2)\)</span>.</p>
+<p>In this section we will use statistical considerations to motivate the definition of a particular mathematical optimization problem. Once we have posed this problem, we will afterwards ignore the statistical altogether and focus on numerical methods for solving the optimization problem. This is often how statistics is most useful in machine learning - a good way to first approach very abstract problems, but less necessary once the problem has been made concrete.</p>
+<p>Let’s start by deriving the so-called <a href="http://mathworld.wolfram.com/NormalEquation.html">normal equation.</a> Let’s say that <span class="math inline">\(X_p\)</span> is a random vector of length <span class="math inline">\(M\)</span> and <span class="math inline">\(y_p\)</span> is a scalar random variable. <span class="math inline">\(X_p\)</span> and <span class="math inline">\(y_p\)</span> are <em>not</em> independent, but have a joint probability distribution <span class="math inline">\(F(x, y; \Theta, \sigma)\)</span> parameterized by a non-random parameter vector <span class="math inline">\(\Theta_p\)</span>, a non-negative scalar <span class="math inline">\(\sigma\)</span>, and a random error term <span class="math inline">\(\epsilon \sim \mathcal{N}(0, \sigma^2)\)</span>.</p>
 <p><span class="math display">\[ y_p = X_p \Theta_p + \epsilon \]</span></p>
 <p>Then suppose we sample <span class="math inline">\(N\)</span> observations from this joint distribution. We place the <span class="math inline">\(N\)</span> observations into a real-valued <span class="math inline">\(N\times k\)</span> matrix <span class="math inline">\(X\)</span> and a real-valued vector <span class="math inline">\(y\)</span>. Just to be absolutely clear, <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span> are <em>not</em> random variables - they are the given data set we use to fit the model. We can then ask, what is the likelihood of obtaining the realization <span class="math inline">\((X, y)\)</span> from a parameter vector <span class="math inline">\(\Theta\)</span>? By rearranging our equation as <span class="math inline">\(y_p - X_p\Theta = \epsilon ~ \mathcal{N}(0, \sigma^2)\)</span> and using the p.d.f. of the normal distribution, we can see that:</p>
 <p><span class="math display">\[ L(\Theta|X,y) = \frac{1}{\sqrt{2\pi}\sigma} \prod_{i=1}^{N}\text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]</span></p>
@@ -104,11 +106,29 @@ draft: true
         &amp; = (I - 2 (v v^T)) x 
     \end{align}
 \]</span></p>
-<p>Here, note that <span class="math inline">\(v v^T\)</span> is the <em>outer</em> product of <span class="math inline">\(v\)</span> with itself so is a square matrix with elements <span class="math inline">\(v_i v_j\)</span>.</p>
+<p>Here, note that <span class="math inline">\(v v^T\)</span> is the <em>outer</em> product of <span class="math inline">\(v\)</span> with itself so is a square matrix with elements <span class="math inline">\(v_i v_j\)</span>. For example, if <span class="math inline">\(v = (\frac{1}{\sqrt{2}} \frac{1}{\sqrt{2}} 0)^T\)</span> (the 45° line in the xy-plane) we get:</p>
+<p><span class="math display">\[
+ H = I - 2 v v^T =
+ \begin{bmatrix}
+   1 &amp; 0 &amp; 0 \\\
+   0 &amp; 1 &amp; 0 \\
+   0 &amp; 0 &amp; 1 \\
+ \end{bmatrix} - 2
+ \begin{bmatrix}
+   \frac{1}{2} &amp; \frac{1}{2} &amp; 0 \\\
+   \frac{1}{2} &amp; \frac{1}{2} &amp; 0 \\
+   0 &amp; 0 &amp; 0 \\
+ \end{bmatrix} =
+ \begin{bmatrix}
+   0 &amp; -1 &amp; 0 \\\
+   -1 &amp; 0 &amp; 0 \\
+   0 &amp; 0 &amp; 1 \\
+ \end{bmatrix} 
+\]</span></p>
 </div>
 <div id="implementing-the-lemmas" class="section level2">
 <h2>Implementing the Lemmas</h2>
-<p>Given the above theoretical presentation, and copious comments, I hope you will now be able to read and understand the following code:</p>
+<p>Given the above theoretical presentation, and copious inline comments, I hope you will now be able to read and understand the following code:</p>
 <pre><code>def householder_reflection(a, e):
     &#39;&#39;&#39;
     Given a vector a and a unit vector e,
@@ -306,10 +326,10 @@ draft: true
         X = self._design_matrix(X)
         
         return X @ self.theta_hat</code></pre>
-<p>Note that while we follow the scikit-learn naming conventions, we haven’t imported anything from sklearn yet. All the code up to this point would work fine in an environment where the sklearn package wasn’t even present. However, to <em>test</em> the code, we are going to use a few sklearn and scipy dependencies.</p>
 </div>
 <div id="testing" class="section level2">
 <h2>Testing</h2>
+<p>Note that while we follow the scikit-learn naming conventions, we haven’t imported anything from sklearn yet. All the code up to this point would work fine in an environment where the sklearn package wasn’t even present. However, to <em>test</em> the code, we are going to use a few sklearn and scipy dependencies.</p>
 <p>Let’s first grab a bunch of test-only dependencies and also grab a copy of the famous <a href="https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html">Boston</a> so we have a simple regression problem to play with.</p>
 <pre><code># testing purposes only
 from sklearn.datasets import load_boston
@@ -368,7 +388,7 @@ goodness_of_fit_report(&quot;Test Set&quot;, model, X_test, y_test)</code></pre>
 <p>Test Set mse=25.12 r2=0.75</p>
 </blockquote>
 <p>And in point of fact this linear regression model does reasonably well on both the train and test set, with correlation scores around 75%. That means it’s able to explain about three-quarters of the variation that it finds in <span class="math inline">\(y\)</span> from what it was able to learn about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span>.</p>
-<p>It’s also nice to visualize both actual and predicted values as a function of the independent variable - but in this case <span class="math inline">\(X\)</span> is 13-dimensional so we will simply a few random dimensions to visualize. If the model has learned anything real about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span>, we should see two similar clouds of points for actual <span class="math inline">\(y\)</span> and predicted <span class="math inline">\(\hat{y}\)</span>.</p>
+<p>It’s also a good idea to visualize both actual and predicted values as a function of the independent variable.- In this case <span class="math inline">\(X\)</span> is 13-dimensional so hard to visual fully, so we will simply choose a few random pairs of dimensions dimensions. If the model has learned anything real about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span>, we should see two similar clouds of points for actual <span class="math inline">\(y\)</span> and predicted <span class="math inline">\(\hat{y}\)</span>.</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-1-linear-regression_files/predicted_vs_actual.png" alt="Prediction vs. Actual Scatterplot, training set and test set" />
 <p class="caption">Prediction vs. Actual Scatterplot, training set and test set</p>
@@ -389,6 +409,7 @@ for i in range(4, 8):
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>That was linear regression from scratch. There’s a lot more that could be said about linear regression even as a blackbox predictive model: polynomial and interaction terms, L1 and L2 regularization, and linear constraints on coefficients.</p>
-<p>There’s also a whole universe of techniques for doing statistical modeling and inference with linear regression: testing residuals for homoskedacity, normality, autocorrelation, variance inflation factors, orthogonal polynomial regression, Cook’s distance, leverage, studentized residuals, ANOVA, AIC, BIC, Omnibus F-tests on nested models. Just to be clear, these aren’t <em>variations</em> or <em>generalization</em> of linear regression (although there are ton of those too) these are just standard techniques for analyzing and understanding linear regression models of the exact same form we calculated above. The topic is very mature with a corresponding amount of associated mathematical machinery built up over the centuries.</p>
+<p>That was linear regression from scratch. There’s a lot more that could be said about linear regression even as a black box predictive model: polynomial and interaction terms, L1 and L2 regularization, and linear constraints on coefficients.</p>
+<p>There’s also a whole universe of techniques for doing statistical modeling and inference with linear regression: testing residuals for homoscedasticity, normality, autocorrelation, variance inflation factors, orthogonal polynomial regression, Cook’s distance, leverage, Studentized residuals, ANOVA, AIC, BIC, Omnibus F-tests on nested models, etc., etc. Just to be clear, these aren’t <em>variations</em> or <em>generalization</em> of linear regression (although there are ton of those too) these are just standard techniques for analyzing and understanding linear regression models of the exact same form we calculated above. The topic is very mature with a corresponding amount of associated mathematical machinery built up over the centuries (Gauss was studying OLS around 1800, and the problem is older than that.)</p>
+<p>However, if we go too deeply into linear regression, we won’t get a chance to explore the rest of machine learning. So for the next part of the series, we will switch our attention to <a href="/post/ml-from-scratch-part-3-backpropagation/">logistic regression</a> and use that as an excuse to explore <a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">SGD</a> in some detail; that will then serve as as jumping off point for our first “true” machine learning algorithm in part 3: [neural networks and backpropagation.][MLFS3]</p>
 </div>
