@@ -11,52 +11,399 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 draft: true
 ---
 
+
+
 [DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
 [3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
 
 
+
 A typical neural network with one hidden layer would be 
 
-[\hat{y} =\sigma(W_2 \sigma(W_1 X + b_1) + b_2)]
+\[ \hat{y} =\sigma(W_2 \sigma(W_1 X + b_1) + b_2) \]
 
 Where $\sigma()$ is a sigmoid function, $W_1$ and $W_2$ a weights for connections between layers, and $b_1$ and $b_2$ are bias vectors. $X$ is a matrix of data with one row per observation and one column per feature. The parameters of the model are $\Theta = (W_1, W_2, b_1, b_2)$. Let's also say that the loss function is $J(\Theta;X) = \frac{1}{2}||y - \hat{y}||^2$ for simplicity.
 
 To fit the model to data, we find the parameters which minimize loss: $\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. One condition which must be true at a local minima is that $\nabla_\Theta J = 0$. That gives us the equations:
 
-[ \frac{\partial J}{\partial W_1} = 0,  \frac{\partial J}{\partial W_2} = 0]
-[\frac{\partial J}{\partial b_1} = 0,  \frac{\partial J}{\partial b_2} = 0]
+\[ \frac{\partial J}{\partial W_1} = 0,  \frac{\partial J}{\partial W_2} = 0 \]
+\[\frac{\partial J}{\partial b_1} = 0,  \frac{\partial J}{\partial b_2} = 0 \]
 
 The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for W) or a vector (for b.) The [matrix cookbook][MC] may help you understand this notation. 
 
 A full description of the forward pass of an $L$-layer neural net is given recursively as:
 
-[ a^{(0)} = X]
-[a^{(i)} = \sigma(z^{(i)})]
-[ z^{(i)} = W_i a^{(i-1)} + b_i]
-[\hat{y} = a^{(L)} ]
+\[ a^{(0)} = X\]
+\[a^{(i)} = \sigma(z^{(i)})\]
+\[ z^{(i)} = W_i a^{(i-1)} + b_i\]
+\[\hat{y} = a^{(L)} \]
 
 For the backwards pass, therefore, we can use the chain rule. For example, let's do $W_1$:
 
-[ \frac{\partial J}{\partial W_1} = 
+\[ \frac{\partial J}{\partial W_1} = 
    \frac{\partial J}{\partial a^{(2)}} 
    \frac{\partial a^{(2)}}{\partial z^{(2)}} 
    \frac{\partial z^{(2)}}{\partial a^{(1)}} 
    \frac{\partial a^{(1)}}{\partial z^{(1)}} 
    \frac{\partial z^{(1)}}{\partial W_1}
-[
+\]
 
 Given the forward pass equations given above, it turns out that each of these partial derivatives is straight-forward to calculate. You can verify for yourself that:
 
-[ \frac{\partial J}{\partial a^{(2)}} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y}]
+\[ \frac{\partial J}{\partial a^{(2)}} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y} \]
 
-[ \frac{\partial a^{(i)}}{\partial z^{(i)}} = a^{(i)} \circ (1-a^{(i)}) ]
+\[ \frac{\partial a^{(i)}}{\partial z^{(i)}} = a^{(i)} \circ (1-a^{(i)}) \]
 
-[ \frac{\partial z^{(i)}}{\partial a^{(i-1)}} = W_i ]
+\[ \frac{\partial z^{(i)}}{\partial a^{(i-1)}} = W_i \]
 
-[ \frac{\partial z^{(i)}}{\partial W_i} = a^{(i-1)} ]
+\[ \frac{\partial z^{(i)}}{\partial W_i} = a^{(i-1)} \]
 
 Which are all straight-forward, except perhaps the derivative of the sigmoid were we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x) (1-\sigma(x))$. 
 
 The justification for introducing the (technically extraneous) concept of $z$ is found in how absolutely obvious and clear it makes the separate steps of the forward and backwards pass. If we had to take $\partial a^{(i)} / \partial a^{(i-1)}$ directly without going through $z$ we would have to think about a non-linear function of a matrix all at once; with $z$ we're able to view it as the element-wise application of a non-linear function (which is Calculus 101) and the partial derivative of a linear expression with respect to a matrix (which is Matrix Calculus 101; see the [Cookbook][MC]). 
 
 [MC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
+
+
+Implementation
+--------------
+
+	import numpy as np
+
+	def sigmoid(z):
+		return 1 / ( 1 + np.exp(-z) )
+
+	class NeuralNetwork:
+		def __init__(self, 
+					 n_hidden=(100,),
+					 learning_rate=0.05,
+					 max_iter=10,
+					 threshold=0.5):
+			# a list containing the number of nodes in 
+			# each hidden layer.
+			self.n_hidden = n_hidden
+			
+			# the input layer, output layer, and hidden layers.
+			self.n_layers = len(n_hidden) + 2
+			
+			# gradient descent parameters
+			self.learning_rate = float(learning_rate)
+			self.max_iter = int(max_iter)
+			self.threshold = float(threshold)
+
+Exactly how we initialize the network is surprisingly important; if we punt and
+simply initialize all weights to a constant, the network will flat out not work
+to any meaningful degree. That's new; linear regression and logistic regression
+certainly didn't exhibit that behavior.  Why is this the case?  Well, if all
+the weights in a given layer are exactly the same at iteration $i$, then the
+backpropagated error for each node with be exactly the same, so the gradient
+descent update will be exactly the same, so all the weights in the layer at
+iteration $i+1$ will be exactly the same. By induction, this will be true for
+all iterations. Because all the weights of given layer are constrained to be
+the same, we effectively have only one free parameter! Our model will never
+learn the complex representations we want it to. Luckily, this critical point
+is almost surely unstable, so we can break symmetry by simply initializing
+the weights slightly differently. There are a couple popular ways to do this (one
+due to [Glorot and Bengio][GB] and another due to [He et al.][HE]) but since
+I don't claim to understand either of those in great detail, to conform with
+the constraints of the "from scratch" project I'll do something I *do* understand
+and just randomly initialize them randomly distributed by $\mathcal{N}(0, 0.1^2)$.
+That suffices to break symmetry.
+
+		def _random_initialization(self):
+			# a small amount of randomization is necessary to
+			# break symmetry; otherwise all hidden layers would
+			# get updated in lockstep.
+			if not self.n_hidden:
+				layer_sizes = [ (self.n_output, self.n_input+1) ]
+			else:
+				layer_sizes = [ (self.n_hidden[0], self.n_input+1) ]
+				previous_size = self.n_hidden[0]
+
+				for size in self.n_hidden[1:]:
+					layer_sizes.append( (size, previous_size+1) )
+					previous_size = size
+
+				layer_sizes.append( (self.n_output, previous_size+1) )
+			
+			self.layers = [
+				[np.random.normal(0, 0.1, size=layer_size), sigmoid]
+				for layer_size in layer_sizes
+			]
+
+Fitting is straight-forward: for every iteration we do one forward-pass to
+calculated activations, then one backwards pass to calculated gradients and
+update all the weights.  You may notice that we've reverted to batch gradient
+descent; today's focus is on the representation of neural networks and the
+backpropagation algorithm, so we'll keep everything else as simple as possible.
+You can read about more sophisticated gradient descent methods in the [previous article in this series.][MLFS2]
+			
+		def fit(self, X, y):
+			self.n_input = X.shape[1]        
+			self.n_output = 1
+			y = np.atleast_2d(y).T
+			self._random_initialization()
+			
+			# fitting iterations
+			for iteration in range(self.max_iter):
+				self.forward_propagation(X)
+				self.back_propagation(y)
+			
+		def predict(self, X):
+			y_class_probabilities = self.predict_proba(X)
+			return np.where(y_class_probabilities[:,0] < self.threshold, 0, 1)
+		
+		def predict_proba(self, X):
+			self.forward_propagation(X)
+			return self._activations[-1]
+
+The forward pass follows our above recursive definition of the neural network
+very closely. We initialize activation with the given predictors \( a^{(0)} = X\)
+then iteratively compute $a^{(1)}$, $a^{(2)}$ until we reach $a^{(L)} = \hat{y}$.
+		
+		def forward_propagation(self, X):
+			# we will store the activations calculated at each layer
+			# because these can be used to efficiently calculate
+			# gradients during backpropagation.
+			self._activations = []
+			
+			# initialize the activation with the given data
+			activation = X  
+			
+			# forward propagation through all layers
+			for W, activation_function in self.layers:
+				bias = np.ones( (activation.shape[0], 1) )
+				activation = np.hstack([bias, activation])
+				self._activations.append(activation)
+				activation = activation_function(activation @ W.T)    
+			
+			# the final activation layer does not have a bias node added.
+			self._activations.append(activation)
+
+For the backwards pass, we generally use `error` to mean $\partial J / \partial
+z_i$ `delta` to represent $\partial J / \partial W_i$. We use the recurrence
+relations we derived from the chain rule to iteratively calculate the update
+for each layer counting down from $L$ to $1$.
+			
+		def back_propagation(self, y):
+			# this function relies on self._activations calculated by self.forward_propagation()
+			
+			# the final prediction is simply activation of the final layer.
+			y_hat = self._activations[-1]
+			
+			# this first error term is based on the gradient of the loss function:
+			# log-loss in our case. Subsequently, error terms will be based on the 
+			# gradient of the sigmoid function. 
+			error = y_hat - y
+			
+			# we can see where the backpropagation algorithm gets its name: we
+			# start at the last layer and work backwards, propagating the error
+			# term from each layer to the previous one.
+			for layer in range(self.n_layers-2, -1, -1):
+				# calculate the update (delta) for the weight matrix
+				a = self._activations[layer]
+				
+				delta = (error.T @ a)
+				
+				# every layer except the output layer has a bias node added.
+				if layer != self.n_layers-2:
+					delta = delta[1:, :]
+				
+				# propogate the error term back to the previous layer
+				W = self.layers[layer][0]
+				if layer > 0:
+					
+					# every layer except the output layer has a bias node added.
+					if layer != self.n_layers-2:
+						error = error[:, 1:]
+						
+					# the a(1-a) is of course the gradient of the sigmoid function.
+					# a different activation function would use a different formula.
+					error = (error @ W) * (a * (1-a))
+				
+				# update weights
+				W -= self.learning_rate * delta
+
+
+Testing
+-------
+
+Good test sets for a neural network or other machine learning algorithm are a bit
+tricky to come by. First, because you need something that exhibits strong non-linearities
+and interactions to prove the advanced algorithm is solving a problem that a simpler
+algorithm would choke on. Second, because you need quite a bit of data before any
+non-linear classifier has enough data to start to pick up on those second-order (or
+higher) regularities. I've tested the above NN on the classic [MNIST handwritten digit][MHD]
+problem but it worked too well on the training set and too poorly on the training
+set; that would be fine if I wanted to talk about diagnosing and solving regularlization
+in this article, but it's a bit of a problem since I want to talk about how adding
+layers to neural networks affects them. In the end I found a synthetic training set
+worked best.
+
+	from sklearn import datasets
+
+	X_full, y_full = datasets.make_classification(
+		n_samples=5000, n_features=20,
+		n_informative=15,
+		n_redundant=3,
+		n_repeated=0,
+		n_classes=2,
+		flip_y=0.05,
+		class_sep=1.0,
+		shuffle=True,
+		random_state=42)
+
+	# 80/20 train/test split. 
+	train_test_split = int(0.8 * len(y_full))
+	X_train = X_full[:train_test_split, :]
+	y_train = y_full[:train_test_split]
+	X_test = X_full[train_test_split:, :]
+	y_test = y_full[train_test_split:]
+
+This synthetic dataset has 4,000 examples in the training set and 1,000 in the
+test set.  There are two classes with equal prevalence. There are 20 features,
+but only about half of these have non-zero mututual information with the class.
+5% of examples simply have their class flipped, so the Bayes rate will be less
+than 0.05; in other words, the ceiling for accuracy is less than 95%. Each
+vertex is assigned to one class or the other and then data is sampled from a
+standard multivariate Gaussian distribution centered at each vertex. In
+particular, becase vertices are only one standard deviation away from each
+other these distributions will overlap a good deal and further reduce the Bayes
+rate. The problem is highly non-linear and classifiers with linear decision
+boundaries will struggle; however it not at all pathological and a good
+non-linear classifier should be able to acheive something quite close to the
+Bayes rate.
+
+When we fit a model, the number of hidden layers and the node of nodes
+in each layer is a hyperparameter. For example, two hidden layers with
+20 nodes in the first layer and 5 in the second would be `[20, 5]`. 
+
+	nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)
+	nn.fit(X_train, y_train)
+	y_hat = nn.predict(X_train)
+	p_hat = nn.predict_proba(X_train)
+	np.mean(y_train == y_hat)
+
+If we have no hidden layers at all then our neural network reduces to logistic
+regression. In particular that means it can only learn an linear decision 
+boundary. How well does that do on the synthetic dataset we cooked up?
+
+	nn = NeuralNetwork(n_hidden=[], max_iter=2000, learning_rate=0.001)
+	nn.fit(X_train, y_train)
+	y_hat = nn.predict(X_train)
+	p_hat = nn.predict_proba(X_train)
+	y_test_hat = nn.predict(X_test)
+	p_test_hat = nn.predict_proba(X_test)
+	np.mean(y_train == y_hat), np.mean(y_test == y_test_hat)
+
+> (0.71924999999999994, 0.71699999999999997)
+
+Not so hot: about 72% accuracy, and an AUC of 0.7866. That's pretty far away from
+the Bayes rate we estimated above; therefore we are probably underfitting.
+
+	from sklearn.metrics import roc_curve, roc_auc_score
+	from matplotlib import pyplot as plt
+	%matplotlib inline
+
+	fpr, tpr, threshold = roc_curve(y_test, p_test_hat)
+	plt.figure(figsize=(16,10))
+	plt.step(fpr, tpr, color='black')
+	plt.fill_between(fpr, tpr, step="pre", color='gray', alpha=0.2)
+	plt.xlabel("False Positive Rate")
+	plt.ylabel("True Positive Rate")
+	plt.title("ROC Curve")
+	plt.plot([0,1], [0,1], linestyle='--', color='gray')
+	plt.text(0.45, 0.55, 'AUC: {:.4f}'.format(roc_auc_score(y_test, p_test_hat)))
+	plt.minorticks_on()
+	plt.grid(True, which='both')
+	plt.axis([0, 1, 0, 1])
+
+![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/roc_null.png)
+
+On the other extreme, after trying a couple of hyperparameters, I found that
+`[8,3]` worked reasonably well.
+
+	nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)
+
+![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png)
+
+The `[8, 3]` model achieves 95% accuracy on the training set and 91% accuracy on the
+test set. That's two hidden layers of 8 nodes and 3 nodes respectively. All
+layers are fully connected, so there's a 9x3 matrix with 27 parameters
+connecting them, plus the 4x1 connections to the output node and the 21x8
+connections to the input layer, making for 199 parameters in all.
+
+We can get a better intuition for the relationship between the complexity of
+our neural network and performance by plotting test set AUC as a function of
+the number of node used:
+
+![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/test_auc_by_number_of_nodes_layers.png)
+
+There's a clear elbow in the graph around 10 nodes beyond which making the model
+more complex is not able to further reduce generalization error. This suggests
+that the `[8,3]` model we found earlier is about as good as we can do, although
+there are any number of other choices which would perform just as well. 
+
+As a rule of thumb, the more data available for training, the more features,
+and the more non-linear/interaction effects in the true population, the more
+that elbow gets pushed to the right; in other words, The model doesn't start to
+overfit until much later. The complexity of the neural network should mirror
+the complexity of the underlying problem. One advantage of neural networks is
+that they give us an easy way to make the model arbitrarily "smarter" simply by
+adding more layers and more neurons. This can be beneficial for difficult
+problems for which we have lots of training data. As always, cross-validation
+is required to make sure we don't go to far.
+
+Conclusion
+----------
+
+That was backpropagation from scratch, our first look at neural networks.  We
+saw how a sequential feed-forward network could be represented as alternating
+linear and non-linear transforms. We saw how to use the chain rule to calculate
+the gradient of the loss function with respect to any parameter in any layer of
+model, and how to calculate these gradients efficiently using the
+backpropagation algorithm. We demonstrated that a neural network could solve
+non-linear classification problems that logistic regression struggled with. And
+finally we saw how we could tune the number of layers and nodes in the neural
+network to take advantage of large datasets.
+
+This neural network (and the method used to fit it) is incredibly simple
+relative to the neural networks used to solve real world problems. For example,
+we haven't yet talked about the [vanishing gradient problem][VGP] and how it
+can be solved with [rectified linear units][RLU] or [batch normalization][BN],
+how [convolutional layers][CNN] or [pooling][P] can help when the data have a
+natural spatial structure, how [residual networks][RN] wire layers together as
+acyclic digraphs, how [recurrent neural networks][RNN] use short-term memory to
+handle arbitrary sequences of inputs, or a thousand other topics. Yet today,
+the state-of-the-art algorithm used to train all of these varied species of neural
+networks is backpropagation, exactly as presented here.
+
+Of course, it usually isn't necessary to actually do the calculus by hand.
+Modern machine learning frameworks like [Tensorflow][TF] or [PyTorch][PT]
+prominently feature automatic differentiation as a core capability. The basic
+idea is that the chain rule is straightforward to apply mechanically - the hard
+part is keeping track of all those indices! So it makes sense to have software
+handle that part.
+
+In the next installment in the Machine Learning From Scratch series, we will
+change tact and look at a completely different approach to non-linear
+classification: decision trees and the recursive partition algorithm. We will
+see how these two apparently diametrically opposed approaches can both be
+viewed as examples of learning adaptive basis functions, and how this
+point-of-view unifies disparate topics in machine learning.
+
+
+[TF]: https://www.tensorflow.org/tutorials/eager/automatic_differentiation
+[PT]: https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html
+[VGP]: https://en.wikipedia.org/wiki/Vanishing_gradient_problem
+[RLU]: https://en.wikipedia.org/wiki/Rectifier_(neural_networks)
+[BN]: https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c
+[CNN]: https://en.wikipedia.org/wiki/Convolutional_neural_network
+[P]: http://cs231n.github.io/convolutional-networks/#pool
+[RN]: https://en.wikipedia.org/wiki/Residual_neural_network
+[RNN]: https://en.wikipedia.org/wiki/Recurrent_neural_network
+[MHD]: https://en.wikipedia.org/wiki/MNIST_database
+[GB]: http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf
+[HE]: https://arxiv.org/pdf/1502.01852v1.pdf
+[MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
+[ABF]: https://www.quora.com/What-are-adaptive-basis-functions
