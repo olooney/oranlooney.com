@@ -11,57 +11,120 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 draft: true
 ---
 
-TODO: Introduction
+The 3Blue1Brown video is notable for one pedagogical trick in particular:
+by considering a "one-dimension" neural network with only a single node
+in each layer, he was able to present the key idea of using the chain
+rule using only high school calculus.
 
 [GORM]: https://gormanalysis.com/introduction-to-neural-networks/
 [DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
 [3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
 
+Representation
+--------------
 
-
-A typical neural network with one hidden layer would be 
-
-\[ \hat{y} =\sigma(W_2 \sigma(W_1 X + b_1) + b_2) \]
-
-Where $\sigma()$ is a sigmoid function, $W_1$ and $W_2$ a weights for connections between layers, and $b_1$ and $b_2$ are bias vectors. $X$ is a matrix of data with one row per observation and one column per feature. The parameters of the model are $\Theta = (W_1, W_2, b_1, b_2)$. Let's also say that the loss function is $J(\Theta;X) = \frac{1}{2}||y - \hat{y}||^2$ for simplicity.
-
-To fit the model to data, we find the parameters which minimize loss: $\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. One condition which must be true at a local minima is that $\nabla_\Theta J = 0$. That gives us the equations:
-
-\[ \frac{\partial J}{\partial W_1} = 0,  \frac{\partial J}{\partial W_2} = 0 \]
-\[\frac{\partial J}{\partial b_1} = 0,  \frac{\partial J}{\partial b_2} = 0 \]
-
-The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for W) or a vector (for b.) The [matrix cookbook][MC] may help you understand this notation. 
-
-A full description of the forward pass of an $L$-layer neural net is given recursively as:
+A full description of the forward pass of an simple $L$-layer neural net is given
+recursively as:
 
 \[ a^{(0)} = X\]
+\[ z^{(i)} = W^{(i)} a^{(i-1)} + b^{(i)}\]
 \[a^{(i)} = \sigma(z^{(i)})\]
-\[ z^{(i)} = W_i a^{(i-1)} + b_i\]
 \[\hat{y} = a^{(L)} \]
 
-For the backwards pass, therefore, we can use the chain rule. For example, let's do $W_1$:
+Where $\sigma()$ is a sigmoid function, $W^{(i)}$ are matrices of weights
+connecting layers, and $b^{(i)}$ are bias vectors.  $X$ is a matrix of data
+with one row per observation and one column per feature; while the final
+activation $a^{(L)}$ *is* our prediction $\hat{y}$. (Here, the superscript in
+parentheses is a layer index and the parentheses are meant to distinguish it
+from an exponent. This slightly verbose convention is used so that ordinary subscripts can be
+used to refer to the individual elements of $W$ and $b$, for example,
+$W_{jk}^{(i)}$ is the element in the $j$-th row of the $k$-th column of the
+weight matrix $W^{(i)}$ for the $i$-th layer.)
 
-\[ \frac{\partial J}{\partial W_1} = 
-   \frac{\partial J}{\partial a^{(2)}} 
-   \frac{\partial a^{(2)}}{\partial z^{(2)}} 
-   \frac{\partial z^{(2)}}{\partial a^{(1)}} 
-   \frac{\partial a^{(1)}}{\partial z^{(1)}} 
-   \frac{\partial z^{(1)}}{\partial W_1}
+Note that because of the restrictions on matrix multiplication, we can determine
+the number of rows and columns in each matrix $W^{(i)}$ by noting that it much have
+a number of columns equal to the number of nodes on the previous layer and a
+number of rows equal to the number of nodes of the next layer. In particular
+that means $W^{(1)}$ must have a number of columns equal to the number of features
+in the dataset $X$, while $W^{(L)}$ has only a single output row.
+
+The parameters of the model are the combination of *all* the weights of every
+connection matrix $W^{(i)}$ as well as the bias vectors $b^{(i)}$: $\Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)})$. 
+Since every element of every matrix is a separate parameter, neural networks
+tend to have a *lot* of parameters.
+
+Concretely, we can collapse this recurrence relation into a single equation for
+any given depth $L$. With zero hidden layers ($L=1$) a neural net reduces to the
+equation for logistic regression:
+
+\[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]
+
+If a zero-hidden-layer neural net is also trained with log-loss, both
+the model's representation and fitted parameters will be exactly the same
+as logistic regression.
+
+With one hidden layer ($L=2$) this expands slightly:
+
+\[ \hat{y} =\sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) \]
+
+A logistic regression of logistic regressions, if you will. As the chain grows
+longer the same pattern is repeated:
+
+\[ \hat{y} =\sigma(W^{(3)} \sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) + b^{(3)}) \]
+
+These examples are only included for the sake of concreteness.  The recursive
+definitions will allow us to reason about a sequential neural network with any
+number of layers.
+
+Fitting
+-------
+
+To fit the model to data, we find the parameters which minimize loss:
+$\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. One condition which must be true
+at a local minima is that $\nabla_\Theta J = 0$. That gives us the equations:
+
+\[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]
+
+The notation used here is from matrix calculus, and we are taking partial
+derivatives with respect to a matrix (for W) or a vector (for b.) The [matrix
+cookbook][MC] may help you understand this notation. 
+
+
+For the backwards pass, therefore, we can use the chain rule. For example,
+let's do $W^{(1)}$:
+
+\[ \frac{\partial J}{\partial W^{(1)}} = 
+   \frac{\partial J}{\partial a^{(2)}} \circ
+   \frac{\partial a^{(2)}}{\partial z^{(2)}} \circ
+   \frac{\partial z^{(2)}}{\partial a^{(1)}} \circ
+   \frac{\partial a^{(1)}}{\partial z^{(1)}} \circ
+   \frac{\partial z^{(1)}}{\partial W^{(1)}}
 \]
 
-Given the forward pass equations given above, it turns out that each of these partial derivatives is straight-forward to calculate. You can verify for yourself that:
+Given the forward pass equations given above, it turns out that each of these
+partial derivatives is straight-forward to calculate. You can verify for
+yourself that:
 
 \[ \frac{\partial J}{\partial a^{(2)}} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y} \]
 
 \[ \frac{\partial a^{(i)}}{\partial z^{(i)}} = a^{(i)} \circ (1-a^{(i)}) \]
 
-\[ \frac{\partial z^{(i)}}{\partial a^{(i-1)}} = W_i \]
+\[ \frac{\partial z^{(i)}}{\partial a^{(i-1)}} = W^{(i)} \]
 
-\[ \frac{\partial z^{(i)}}{\partial W_i} = a^{(i-1)} \]
+\[ \frac{\partial z^{(i)}}{\partial W^{(i)}} = a^{(i-1)} \]
 
-Which are all straight-forward, except perhaps the derivative of the sigmoid were we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x) (1-\sigma(x))$. 
+Which are all straight-forward, except perhaps the derivative of the sigmoid
+were we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x)
+(1-\sigma(x))$. 
 
-The justification for introducing the (technically extraneous) concept of $z$ is found in how absolutely obvious and clear it makes the separate steps of the forward and backwards pass. If we had to take $\partial a^{(i)} / \partial a^{(i-1)}$ directly without going through $z$ we would have to think about a non-linear function of a matrix all at once; with $z$ we're able to view it as the element-wise application of a non-linear function (which is Calculus 101) and the partial derivative of a linear expression with respect to a matrix (which is Matrix Calculus 101; see the [Cookbook][MC]). 
+The justification for introducing the (technically extraneous) concept of $z$
+is found in how absolutely obvious and clear it makes the separate steps of the
+forward and backwards pass. If we had to take $\partial a^{(i)} / \partial
+a^{(i-1)}$ directly without going through $z$ we would have to think about a
+non-linear function of a matrix all at once; with $z$ we're able to view it as
+the element-wise application of a non-linear function (which is Calculus 101)
+and the partial derivative of a linear expression with respect to a matrix
+(which is Matrix Calculus 101; see the [Cookbook][MC]). 
 
 [MC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
 
@@ -137,7 +200,8 @@ calculated activations, then one backwards pass to calculated gradients and
 update all the weights.  You may notice that we've reverted to batch gradient
 descent; today's focus is on the representation of neural networks and the
 backpropagation algorithm, so we'll keep everything else as simple as possible.
-You can read about more sophisticated gradient descent methods in the [previous article in this series.][MLFS2]
+You can read about more sophisticated gradient descent methods in the [previous
+article in this series.][MLFS2]
 			
 		def fit(self, X, y):
 			self.n_input = X.shape[1]        
@@ -341,20 +405,33 @@ the number of node used:
 
 ![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/test_auc_by_number_of_nodes_layers.png)
 
-There's a clear elbow in the graph around 10 nodes beyond which making the model
-more complex is not able to further reduce generalization error. This suggests
-that the `[8,3]` model we found earlier is about as good as we can do, although
-there are any number of other choices which would perform just as well. 
+There's a clear elbow in the graph around 10 nodes. Below that, the model
+makes steady gain in performance as more nodes to the model and its representation
+becomes better equipped to deal with the non-linearity of the true distribution.
+Above 10 nodes, making the model more complex is not able to further reduce
+generalization error; This suggests that the `[8,3]` model we found earlier is
+about as good as we can do. 
 
 As a rule of thumb, the more data available for training, the more features,
 and the more non-linear/interaction effects in the true population, the more
 that elbow gets pushed to the right; in other words, The model doesn't start to
-overfit until much later. The complexity of the neural network should mirror
-the complexity of the underlying problem. One advantage of neural networks is
-that they give us an easy way to make the model arbitrarily "smarter" simply by
-adding more layers and more neurons. This can be beneficial for difficult
-problems for which we have lots of training data. As always, cross-validation
-is required to make sure we don't go to far.
+overfit until much later. For best results, the complexity of the neural
+network should mirror the complexity of the underlying problem. One advantage
+of neural networks is that they give us an easy way to make the model
+arbitrarily "smarter" simply by adding more layers and more neurons. In
+fact, not only can we simply throw more neurons and layers at a problem,
+we also have a wide variety of specialized layers like [CNNs][CNN] which
+can make a neural network more suited to a particular problem. The neural
+network is a very "modular" learning algorithm in this sense and the flexibility
+means in can be adapted to a wide variety of problems.
+
+Unfortunately, the strategy of bigger, smarter neural networks is only really
+viable when we have a ton of training data. Smart neural networks trained on
+small datasets overfit horribly long before they learn to generalize. Neural
+networks don't solve the bias-variance tradeoff for us, and they certainly
+aren't a free lunch. But they do provide a framework for creating models
+with low bias even on very large and problems... and then it's our job to
+keep the variance in check.
 
 Conclusion
 ----------
@@ -387,11 +464,11 @@ idea is that the chain rule is straightforward to apply mechanically - the hard
 part is keeping track of all those indices! So it makes sense to have software
 handle that part.
 
-In the next installment in the Machine Learning From Scratch series, we will
+In the next installment in the [Machine Learning From Scratch series][MLFS], we will
 change tact and look at a completely different approach to non-linear
 classification: decision trees and the recursive partition algorithm. We will
 see how these two apparently diametrically opposed approaches can both be
-viewed as examples of learning adaptive basis functions, and how this
+viewed as examples of [adaptive basis functions][ABF], and how this
 point-of-view unifies disparate topics in machine learning.
 
 
@@ -408,4 +485,5 @@ point-of-view unifies disparate topics in machine learning.
 [GB]: http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf
 [HE]: https://arxiv.org/pdf/1502.01852v1.pdf
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
+[MLFS]: /tags/from-scratch/
 [ABF]: https://www.quora.com/What-are-adaptive-basis-functions
