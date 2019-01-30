@@ -13,6 +13,7 @@ draft: true
 
 
 
+<p>TODO: Introduction</p>
 <p>A typical neural network with one hidden layer would be</p>
 <p><span class="math display">\[ \hat{y} =\sigma(W_2 \sigma(W_1 X + b_1) + b_2) \]</span></p>
 <p>Where <span class="math inline">\(\sigma()\)</span> is a sigmoid function, <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span> a weights for connections between layers, and <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span> are bias vectors. <span class="math inline">\(X\)</span> is a matrix of data with one row per observation and one column per feature. The parameters of the model are <span class="math inline">\(\Theta = (W_1, W_2, b_1, b_2)\)</span>. Let’s also say that the loss function is <span class="math inline">\(J(\Theta;X) = \frac{1}{2}||y - \hat{y}||^2\)</span> for simplicity.</p>
@@ -226,7 +227,7 @@ plt.axis([0, 1, 0, 1])</code></pre>
 <img src="/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png" alt="ROC Curve for trivial NN" />
 <p class="caption">ROC Curve for trivial NN</p>
 </div>
-<p>The <code>[8, 3]</code> model achieves 95% accuracy on the training set and 91% accuracy on the test set. That’s two hidden layers of 8 nodes and 3 nodes respectively. All layers are fully connected, so there’s a 9x3 matrix with 27 parameters connecting them, plus the 4x1 connections to the output node and the 21x8 connections to the input layer, making for 199 parameters in all.</p>
+<p>The <code>[8, 3]</code> model achieves 95% accuracy on the training set and 91% accuracy on the test set. That’s two hidden layers of 8 nodes and 3 nodes respectively. All layers are fully connected, so there’s a <span class="math inline">\(9 \times 3\)</span> matrix with 27 parameters connecting them, plus the <span class="math inline">\(4 \times 1\)</span> connecting to the output node and the <span class="math inline">\(21 \times 8\)</span> matrix connecting to the input layer, making for 199 parameters in all.</p>
 <p>We can get a better intuition for the relationship between the complexity of our neural network and performance by plotting test set AUC as a function of the number of node used:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-3-backpropagation_files/test_auc_by_number_of_nodes_layers.png" alt="ROC Curve for trivial NN" />

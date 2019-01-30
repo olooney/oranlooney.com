@@ -11,8 +11,9 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 draft: true
 ---
 
+TODO: Introduction
 
-
+[GORM]: https://gormanalysis.com/introduction-to-neural-networks/
 [DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
 [3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
 
@@ -327,11 +328,12 @@ On the other extreme, after trying a couple of hyperparameters, I found that
 
 ![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png)
 
-The `[8, 3]` model achieves 95% accuracy on the training set and 91% accuracy on the
-test set. That's two hidden layers of 8 nodes and 3 nodes respectively. All
-layers are fully connected, so there's a 9x3 matrix with 27 parameters
-connecting them, plus the 4x1 connections to the output node and the 21x8
-connections to the input layer, making for 199 parameters in all.
+The `[8, 3]` model achieves 95% accuracy on the training set and 91% accuracy
+on the test set. That's two hidden layers of 8 nodes and 3 nodes respectively.
+All layers are fully connected, so there's a $9 \times 3$ matrix with 27
+parameters connecting them, plus the $4 \times 1$ connecting to the output
+node and the $21 \times 8$ matrix connecting to the input layer, making for 199
+parameters in all.
 
 We can get a better intuition for the relationship between the complexity of
 our neural network and performance by plotting test set AUC as a function of
