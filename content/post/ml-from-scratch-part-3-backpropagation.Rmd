@@ -11,6 +11,8 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 draft: true
 ---
 
+TODO
+
 The 3Blue1Brown video is notable for one pedagogical trick in particular:
 by considering a "one-dimension" neural network with only a single node
 in each layer, he was able to present the key idea of using the chain
@@ -23,8 +25,7 @@ rule using only high school calculus.
 Representation
 --------------
 
-A full description of the forward pass of an simple $L$-layer neural net is given
-recursively as:
+The forward pass of an simple $L$-layer neural net is given recursively as:
 
 \[ a^{(0)} = X\]
 \[ z^{(i)} = W^{(i)} a^{(i-1)} + b^{(i)}\]
@@ -36,10 +37,10 @@ connecting layers, and $b^{(i)}$ are bias vectors.  $X$ is a matrix of data
 with one row per observation and one column per feature; while the final
 activation $a^{(L)}$ *is* our prediction $\hat{y}$. (Here, the superscript in
 parentheses is a layer index and the parentheses are meant to distinguish it
-from an exponent. This slightly verbose convention is used so that ordinary subscripts can be
-used to refer to the individual elements of $W$ and $b$, for example,
-$W_{jk}^{(i)}$ is the element in the $j$-th row of the $k$-th column of the
-weight matrix $W^{(i)}$ for the $i$-th layer.)
+from an exponent. This slightly verbose convention is used so that ordinary
+subscripts can be used to refer to the individual elements of $W$ and $b$, for
+example, $W_{jk}^{(i)}$ is the element in the $j$-th row of the $k$-th column
+of the weight matrix $W^{(i)}$ for the $i$-th layer.)
 
 Note that because of the restrictions on matrix multiplication, we can determine
 the number of rows and columns in each matrix $W^{(i)}$ by noting that it much have
@@ -49,19 +50,20 @@ that means $W^{(1)}$ must have a number of columns equal to the number of featur
 in the dataset $X$, while $W^{(L)}$ has only a single output row.
 
 The parameters of the model are the combination of *all* the weights of every
-connection matrix $W^{(i)}$ as well as the bias vectors $b^{(i)}$: $\Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)})$. 
-Since every element of every matrix is a separate parameter, neural networks
-tend to have a *lot* of parameters.
+connection matrix $W^{(i)}$ as well as the bias vectors $b^{(i)}$: $\Theta =
+(W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)})$.  Since every element of every
+matrix is a separate parameter, neural networks tend to have a *lot* of
+parameters.
 
-Concretely, we can collapse this recurrence relation into a single equation for
-any given depth $L$. With zero hidden layers ($L=1$) a neural net reduces to the
-equation for logistic regression:
+We can collapse this recurrence relation into a single equation for any given
+depth $L$. For example, with zero hidden layers ($L=1$) a neural net reduces to
+the equation for logistic regression:
 
 \[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]
 
-If a zero-hidden-layer neural net is also trained with log-loss, both
-the model's representation and fitted parameters will be exactly the same
-as logistic regression.
+If a zero-hidden-layer neural net is also trained with log-loss, both the
+model's representation and fitted parameters will be exactly the same as
+logistic regression.
 
 With one hidden layer ($L=2$) this expands slightly:
 
@@ -300,7 +302,7 @@ algorithm would choke on. Second, because you need quite a bit of data before an
 non-linear classifier has enough data to start to pick up on those second-order (or
 higher) regularities. I've tested the above NN on the classic [MNIST handwritten digit][MHD]
 problem but it worked too well on the training set and too poorly on the training
-set; that would be fine if I wanted to talk about diagnosing and solving regularlization
+set; that would be fine if I wanted to talk about diagnosing and solving regularization
 in this article, but it's a bit of a problem since I want to talk about how adding
 layers to neural networks affects them. In the end I found a synthetic training set
 worked best.
@@ -327,16 +329,16 @@ worked best.
 
 This synthetic dataset has 4,000 examples in the training set and 1,000 in the
 test set.  There are two classes with equal prevalence. There are 20 features,
-but only about half of these have non-zero mututual information with the class.
+but only about half of these have non-zero mutual information with the class.
 5% of examples simply have their class flipped, so the Bayes rate will be less
 than 0.05; in other words, the ceiling for accuracy is less than 95%. Each
 vertex is assigned to one class or the other and then data is sampled from a
 standard multivariate Gaussian distribution centered at each vertex. In
-particular, becase vertices are only one standard deviation away from each
+particular, because vertices are only one standard deviation away from each
 other these distributions will overlap a good deal and further reduce the Bayes
 rate. The problem is highly non-linear and classifiers with linear decision
 boundaries will struggle; however it not at all pathological and a good
-non-linear classifier should be able to acheive something quite close to the
+non-linear classifier should be able to achieve something quite close to the
 Bayes rate.
 
 When we fit a model, the number of hidden layers and the node of nodes
@@ -428,7 +430,7 @@ means in can be adapted to a wide variety of problems.
 Unfortunately, the strategy of bigger, smarter neural networks is only really
 viable when we have a ton of training data. Smart neural networks trained on
 small datasets overfit horribly long before they learn to generalize. Neural
-networks don't solve the bias-variance tradeoff for us, and they certainly
+networks don't solve the bias-variance trade-off for us, and they certainly
 aren't a free lunch. But they do provide a framework for creating models
 with low bias even on very large and problems... and then it's our job to
 keep the variance in check.

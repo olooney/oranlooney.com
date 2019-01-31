@@ -18,53 +18,52 @@ linear regression via [ordinary least squares][OLS].
 While not exciting, linear regression finds widespread use both as a standalone
 learning algorithm and as a building block in more advanced learning
 algorithms: the output layer of a deep neural network trained for regression
-with MSE loss, the "gradient boosting" used by gradient boosting trees, and the
-"local regression" part of LOWESS smoothing are all (modified) examples of
-linear regression.
+with MSE loss, simple AR time series models, and the "local regression" part of
+LOWESS smoothing are all (modified) examples of linear regression.
 
 Linear regression is also the "simple harmonic oscillator" of machine learning;
 that is to say, a pedagogically-motivated example that allows us to present
-deep theoretical ideas about machine learning with an example that is not
+deep theoretical ideas about machine learning in a context that is not too
 mathematically taxing.
 
-There is also the small matter of it being the most widely used statistical
-learning algorithm in the world - but because it is mainly used by people who
-call themselves "statisticians," "analysts," or "researchers" instead of "data
-scientists", we can safely ignore that consideration; don't you think?
+There is also the small matter of it being the most widely used supervised
+learning algorithm in the world; although how much weight that carries I
+suppose depends on where you are on the "applied" to "theoretical" spectrum.
 
-However, since I can feel your eyes glazing over from such an introductory
-topic, we can spice things up a little bit by doing something which isn't often
-done in introductory machine learning - we can present the algorithm that
-[insert your favorite statistical software package here] uses to *actually* fit
-linear regression models: [QR decomposition][QRD]. This is commonly glossed
-over because it involves more linear algebra than can be generally assumed, 
-and because the clever exact solution we derive doesn't generalize well to
-other machine learning algorithms or even to mild variants of linear regression
-such as [regularized regression][EN] or [robust regression][RR].
+However, since I can already feel your eyes glazing over from such an
+introductory topic, we can spice things up a little bit by doing something
+which isn't often done in introductory machine learning - we can present the
+algorithm that [insert your favorite statistical software here] uses to
+*actually* fit linear regression models: [QR decomposition][QRD]. This is
+commonly glossed over because it involves more linear algebra than can be
+generally assumed, and because the clever exact solution we derive doesn't
+generalize well to other machine learning algorithms or to even close variants
+of linear regression such as [regularized regression][EN] or [robust
+regression][RR]. But what's a little linear algebra between friends?
 
 [EN]: https://en.wikipedia.org/wiki/Elastic_net_regularization
 [RR]: https://en.wikipedia.org/wiki/Robust_regression
 
 The current paradigm in machine learning is to apply very powerful, very
-general optimization algorithms (i.e., [SGD][SGD]) that work for a wide variety
-of models and scale reasonably well to vast amounts of data. This allows
-researchers to iterate rapidly on the structure of the model without needing to
-spend a lot coming up with a clever algorithm which solves their special case
-efficiently.  It's good software engineering: it avoids [premature
-optimization][WTO] and promotes good [separation of concerns][SOC].  Still,
-history has shown that for any given optimization problem, there probably is a
-specialized algorithm that leverages the specifics of the problem to achieve an
-order of magnitude better performance. For example, John Platt's [Sequential
-Minimal Optimization][SMO] beat earlier, more general algorithms by such a wide
-margin that for a decade (1998-2009?) SVMs were one of the most promising
-approaches to machine learning. Today (2019) the machine learning industry is
-kind of in rapid prototyping mode, leveraging the flexibility and composability
-of deep neural networks to experiment with endless numbers of novel
-architectures.  However, as our understanding of which architectures work best
-for particular problems matures, the industry will likely tip back in favor of
-researching specialized algorithms. If we are interested in understanding
-machine learning from scratch we should be prepared to study specialized
-algorithms when and where they arise naturally.
+general optimization algorithms that work for a wide variety of models and
+scale reasonably well to vast amounts of data. This allows researchers to
+iterate rapidly on the structure of the model without needing to spend a lot
+coming up with a clever algorithm which solves their special case efficiently.
+It's good software engineering: it avoids [premature optimization][WTO] and
+promotes good [separation of concerns][SOC]. Still, history has shown that for
+any given optimization problem, there probably is a specialized algorithm that
+leverages the specifics of the problem to achieve an order of magnitude better
+performance. For example, John Platt's [Sequential Minimal Optimization][SMO]
+beat earlier, more general algorithms by such a wide margin that for a decade
+(1998-2009?) SVMs were one of the most promising approaches to machine
+learning. Today (2019) the machine learning industry is in a kind of "rapid
+prototyping" mode, leveraging the flexibility and composability of deep neural
+networks to experiment with endless numbers of novel models. However, as our
+understanding of which models work best for particular problems matures, the
+industry will likely tip back in favor of researching specialized algorithms.
+If we are interested in understanding machine learning from scratch we should
+be prepared to study specialized algorithms when and where they arise
+naturally.
 
 [SGD]: https://en.wikipedia.org/wiki/Stochastic_gradient_descent 
 [SOC]: https://en.wikipedia.org/wiki/Separation_of_concerns
@@ -77,11 +76,8 @@ Statistics
 
 In this section we will use statistical considerations to motivate the
 definition of a particular mathematical optimization problem. Once we have
-posed this problem, we will afterwards ignore the statistical altogether and
-focus on numerical methods for solving the optimization problem. This is often
-how statistics is most useful in machine learning - a good way to first
-approach very abstract problems, but less necessary once the problem has been
-made concrete.
+posed this problem, we will afterwards ignore the statistics altogether and
+focus on numerical methods for solving the optimization problem.
 
 Let's start by deriving the so-called [normal equation.][NEQ] Let's say that
 $X_p$ is a random vector of length $M$ and $y_p$ is a scalar random variable.
@@ -92,118 +88,137 @@ $\epsilon \sim \mathcal{N}(0, \sigma^2)$.
 
 \[ y_p = X_p \Theta_p + \epsilon \]
 
-Then suppose we sample $N$ observations from this joint distribution. We place the $N$ observations
-into a real-valued $N\times k$ matrix $X$ and a real-valued vector $y$. Just to be absolutely clear,
-$X$ and $y$ are *not* random variables - they are the given data set we use to fit the model. We
-can then ask, what is the likelihood of obtaining the realization $(X, y)$ from a parameter vector $\Theta$?
-By rearranging our equation as $y_p - X_p\Theta = \epsilon ~ \mathcal{N}(0, \sigma^2)$ and using
-the p.d.f. of the normal distribution, we can see that:
+Then suppose we sample $N$ observations from this joint distribution. We place
+the $N$ observations into a real-valued $N\times k$ matrix $X$ and a
+real-valued vector $y$. Just to be absolutely clear, $X$ and $y$ are *not*
+random variables - they are what is called a "realization:" the
+given data used to fit the model. We can then ask, what is the likelihood
+of obtaining the data $(X, y)$ from an arbitrary parameter vector $\Theta$? By
+rearranging our equation as $y_p - X_p\Theta = \epsilon \sim \mathcal{N}(0,
+\sigma^2)$ and using the p.d.f. of the normal distribution, we can see that:
 
-\[ L(\Theta|X,y) = \frac{1}{\sqrt{2\pi}\sigma} \prod_{i=1}^{N}\text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]
+\[ L(\Theta;X,y) = \prod_{i=1}^{N} P(X,y;\Theta) = \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi}\sigma} \text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]
 
-That looks pretty awful, but there are a couple easy things we can do to make it a look a lot simplier. First,
-That constant term out front doesn't matter at all. We can also take that $e^{-2\sigma^2}$ outside the product
-as $e^{-2N\sigma^2}$, and which we'll also stuff in the constant $C$ because we're only interested in $\Theta$ right now. Finally, we can take a log to get rid of the exponential and turn the product into a sum. All together, we
-get the log-likelihood expression:
+That looks pretty awful, but there are a couple easy things we can do to make
+it a look a lot simpler. First, That constant term out front doesn't matter at
+all: let's just call it $C$ or something. We can also take that
+$e^{-2\sigma^2}$ outside the product as $e^{-2N\sigma^2}$, and which we'll also
+stuff in the constant $C$ because we're only interested in $\Theta$ right now.
+Finally, we can take a log to get rid of the exponential and turn the product
+into a sum. All together, we get the log-likelihood expression:
 
-\[ \log L(\Theta|X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2 \]
+\[ \ell(\Theta;X,y) = \log L(\Theta;X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2 \]
 
-Now, because log is a monotonically increasing function, maximizing $l$ is the same as maximizing $L$. And of course
-any constant $C$ has no effect whatsoever on the location of the maximum. We can also remove the minus sign and
-consider the problem as a minimization problem instead. Therefore
-our [maximum likelihood estimate][MLE] of $\Theta$ for a given data set $(X, y)$ is simply:
+Now, because log is a monotonically increasing function, maximizing $\ell$ is the
+same as maximizing $L$. And of course any constant $C$ has no effect whatsoever
+on the location of the maximum. We can also remove the minus sign and consider
+the problem as a minimization problem instead. Therefore our [maximum
+likelihood estimate][MLE] of $\Theta$ for a given data set $(X, y)$ is simply:
 
 \[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} \, ||y - X\Theta||^2 \]
 
-If your eyes were glazing over from all the statistical nomenclature, I have some good news for you: we're
-done with the statistics. Everything in this final equation is now a real-valued vector or matrix; there's not a
-random variable or probability distribution in sight! It's all over except for the linear algebra.
+If statistics isn't really your thing, I have some good news for you: we're
+done it. Everything in this final equation is now a real-valued vector or
+matrix; there's not a random variable or probability distribution in sight!
+It's all over except for the linear algebra.
 
 What we did above was essentially a short sketch of the relevant parts of the
 [Gauss-Markov theorem][GMT] which proves that the OLS solution *is* the MLE for
-the particular statistical model we started with. The full Gauss-Markov theorem also
-proves a bunch of other nice properties that we won't concern ourselves with
-here. 
+the particular statistical model we started with. The full Gauss-Markov theorem
+also proves a bunch of other nice properties that we won't concern ourselves
+with here. But if there's one thing you should remember, it's this: the fact
+that the p.d.f. of the Gaussian distribution has the quadratic term $(x
+-\mu)^2$ in the exponent is the *reason* why squared error is the "right" loss function for
+linear regression. If the error of our linear model had a different distribution,
+we'd have to [make a different choice][GLM].
 
-If you remember the motivating example I gave in [Part 0][ML0], it wasn't
-obvious at the time that it was even *possible* to come up with parameters for
-a model in a systematic way. Now we know that not only is it always *possible*,
-but there's actually at least one concrete algorithm which solves the problem
-in polynomial time and requires only a small amount of data (usually some small
-multiple of the number of parameters to fit.) 
+Do you remember the silly motivating example I gave in [Part 0][ML0] of a
+computer trying to drive a car with a linear equation? It wasn't obvious at the
+time that it was even *possible* to come up with parameters for a model in a
+systematic way. Now we know that not only is it always *possible*, but there's
+actually at least one concrete algorithm which solves the problem in polynomial
+time and requires only a small amount of data (usually some small multiple of
+the number of parameters to fit.) 
 
-Our key takeaway is that if it's true that our response variable is
-related to our predictor variables by a linear equation plus a certain amount
-of random Gaussian noise, then we can recover good, unbiased estimates of that
-linear equations coefficients from nothing more than a finite number of data
-points sampled from the underlying distribution, and the way to actually
-calculate those estimates is to solve the OLS problem for the data set.
+Our key takeaway is that if it's true that our response variable is related to
+our predictor variables by a linear equation plus a certain amount of random
+Gaussian noise, then we can recover good, unbiased estimates of that linear
+equations coefficients from nothing more than a finite number of data points
+sampled from the underlying distribution, and the way to actually calculate
+those estimates is to solve the OLS problem for the data set.
 
 [ML0]: /post/ml-from-scratch-part-0-introduction/
 
 Ordinary Least Squares
 ----------------------
 
-Note: for this next section, we're going to be doing some light vector calculus. I suggest
-you reference [the matrix cookbook][TMC] if any of the notation or concepts aren't familiar.
+Note: for this next section, we're going to be doing some light vector
+calculus. I suggest you reference [the matrix cookbook][TMC] if any of the
+notation or concepts aren't familiar.
 
-[TMC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
-
-Let's call the right-hand side (the part we're trying to minimize) $J$. Then we have:
+Let's call the right-hand side (the part we're trying to minimize) $J$. Then we
+have:
 
 \[ J = || y - X\Theta ||^2 \]
 
 And the problem is to minimize J with respect to $\Theta$. As optimization
 problems go, this one is pretty easy: it's continuous, quadratic, convex,
-everywhere differentiable, and unconstrained. 
-Because of these nice properties, we know that it has a unique global minimum,
-and that the gradient is zero at this minimum.
-That's a fancy way of saying that
-it's shaped like a big, round bowl so it's obvious where the bottom is.
+everywhere continuously differentiable, and unconstrained.  Because of these
+nice properties, we know that it has a unique global minimum, and that the
+gradient is zero at this minimum.  That's a fancy way of saying that it's
+shaped like a big, round bowl so it's obvious where the bottom is.
 
 \[ \begin{split} \nabla_\Theta J & = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \\
 & = \nabla_\Theta \; y^T y - (X\Theta)^T y - y^T X\Theta + \Theta^T (X^T X) \Theta \end{split}\]
    
-It's obvious that $y^T y$ is constant with respect to $\Theta$ so the first term simply vanishes. 
-It's less obvious but also true that the next two terms are equal to each other - 
-remember that a J is a scalar,
-so those terms are each scalar, and the transpose of a scalar is itself. The final term is a 
-quadratic form, and the [general rule][QFG] is $ q \nabla x^T A x = \frac{1}{2}A^T x + \frac{1}{2}A x $
-but because the product of a matrix with itself is always symmetric ($X^T X = (X^T X)^T$) we can use
-the simpler form $\nabla x^T A x = 2 A x$.
+It's obvious that $y^T y$ is constant with respect to $\Theta$ so the first
+term simply vanishes.  It's less obvious but also true that the next two terms
+are equal to each other - remember that a J is a scalar, so those terms are
+each scalar, and the transpose of a scalar is itself. The final term is a
+quadratic form, and the [general rule][QFG] is $ q \nabla x^T A x =
+\frac{1}{2}A^T x + \frac{1}{2}A x $ but because the product of a matrix with
+itself is always symmetric ($X^T X = (X^T X)^T$) we can use the simpler form
+$\nabla x^T A x = 2 A x$.
 
-\[ \nabla_\Theta J = - 2 y^T X + 2 X^T X \Theta \]
+\[ \nabla_\Theta J = - 2 X^T y + 2 X^T X \Theta \]
+
 Setting this equal to zero at $\hat{\Theta}$ we get:
 
-\[ (X^T X) \hat{\Theta} = y^T X \]
+\[ (X^T X) \hat{\Theta} = X^T y \]
 
-The right hand side is a known vector, the left-hand side is a matrix times an unknown vector, so this
-is just the familiar equation for solving for a particular solution to a system of equations $Ax = b$.
+The right hand side is a known vector, the left-hand side is a matrix times an
+unknown vector, so this is just the familiar equation for solving for a
+particular solution to a system of equations $Ax = b$.
 
-Because $X^T X$ is square, we *could* just left-multiply both sides by its inverse to get an explicit
-closed form for $\hat{\Theta}$:
+Because $X^T X$ is square and non-singular and therefore invertible,  we
+*could* just left-multiply both sides by its inverse to get an explicit closed
+form for $\hat{\Theta}$:
 
 \[ \hat{\Theta} = (X^T X)^{-1} y^T X \]
 
-It turns out there is a faster and more numerically stable way (although obviously theoretically
-equivalent) of solving for $\hat{\Theta}$ which relies on the [QR Decomposition][QRD] of the matrix $X^T X$.
+It turns out there is a faster and more numerically stable way (although
+obviously theoretically equivalent) of solving for $\hat{\Theta}$ which relies
+on the [QR Decomposition][QRD] of the matrix $X$.
 
 QR Decomposition
 ----------------
 
-Since we're going to be implementing QR in a minute, it's worth making sure we understand how it works in
-detail. A QR decomposition of a matrix square $A$ is a product of an orthogonal matrix $Q$ and an upper-triangular
-matrix $R$ such that $A = QR$. Why is this beneficial? Well, it turns out that to invert an orthogonal matrix,
-all you need to do is take its transpose. $Q^T Q = \mathbb{1} \leftrightarrow Q^T = Q^{-1}$. So if we found
-$QR = X^T X$, we could write our equation for $\hat{\Theta}$ as
+Since we're going to be both *implementing* and *relying on* QR in a minute,
+it's worth making sure we understand how it works in detail. A QR decomposition
+of a matrix square $A$ is a product of an orthogonal matrix $Q$ and an
+upper-triangular matrix $R$ such that $A = QR$. Why is this beneficial? Well,
+it turns out that to invert an orthogonal matrix, all you need to do is take
+its transpose. $Q^T Q = \mathbb{1} \leftrightarrow Q^T = Q^{-1}$. So if we
+found $QR = X^T X$, we could write our equation for $\hat{\Theta}$ as
 
 \[ QR \hat{\Theta} = y^T X \]
 
 \[ R \hat{\Theta} = Q^T y^T X \]
 
-But R is upper triangular, and the right hand-side reduces to a single column vector, so we can solve this by
-back-substitution. Back-substitution is easiest to explain with an example. Consider this system
-of equations in matrix form, where the matrix is upper-triangular:
+But R is upper triangular, and the right hand-side reduces to a single column
+vector, so we can solve this by back-substitution. Back-substitution is easiest
+to explain with an example. Consider this system of equations in matrix form,
+where the matrix is upper-triangular:
 
 \[
  \begin{bmatrix}
@@ -224,37 +239,43 @@ of equations in matrix form, where the matrix is upper-triangular:
   \end{bmatrix}
 \]
 
-We start on the bottom row, which is simply an equation
-$4x_3 = 8$, so $x_3 = 2$. The second row represents the equation $x_2 + x_3 =2$, but we already know $x_3$,
-so we can substitute that back in to get $x_2 - 2 = 0$, so $x_2 = 0$. The top row is $2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2$, so $x_1 = -2$.
-This is back-substitution, and it should be clear that we can do this quickly and efficiently for an upper-triangular
-matrix of any size. Furthermore, because we do at most one division per row, this method is very numerically stable.
-(If the matrix is [ill-conditioned][IC], we could still run into numerical error, but this only occurs when the original
-data set $X$ suffers from [multicolinearity][MC].)
+We start on the bottom row, which is simply an equation $4x_3 = 8$, so $x_3 =
+2$. The second row represents the equation $x_2 + x_3 =2$, but we already know
+$x_3$, so we can substitute that back in to get $x_2 - 2 = 0$, so $x_2 = 0$.
+The top row is $2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2$, so $x_1 = -2$.  This is
+back-substitution, and it should be clear that we can do this quickly and
+efficiently for an upper-triangular matrix of any size. Furthermore, because we
+do at most one division per row, this method is very numerically stable.  (If
+the matrix is [ill-conditioned][IC], we could still run into numerical error,
+but this only occurs when the original data set $X$ suffers from
+[multicolinearity][MC].)
 
 [IC]: https://en.wikipedia.org/wiki/Condition_number
 [MC]: https://en.wikipedia.org/wiki/Multicollinearity
 
-So we know know how to finish the problem once we have $QR = X^X$. But how to get $Q$ and $R$? There are two
-parts to understanding the algorithm. First, note that the product of any two orthogonal matrices is itself
-orthogonal. Also, the identity matrix is orthogonal. Therefore, if we have a
-candidate decomposition $A = QR$ where $Q$ is orthogonal (but R may not yet be square), then for any orthogonal
-matrix $S$ we have $A = Q I R = Q S^T S R = (Q S^T) (S R) = Q' R'$ where $Q' = Q S^T$ and $R' = S R$ is *also*
-a candidate decomposition! This is the general strategy behind not just QR decomposition, but behind many other
-decompositions in linear algebra: at each step we want to apply an orthogonal transformation to bring $A$ closer
-to the desired form, while simultaneously keeping track of a matrix to undo all of the transformations. 
+So we know know how to finish the problem once we have $QR = X^X$. But how to
+get $Q$ and $R$? There are two parts to understanding the algorithm. First,
+note that the product of any two orthogonal matrices is itself orthogonal.
+Also, the identity matrix is orthogonal. Therefore, if we have a candidate
+decomposition $A = QR$ where $Q$ is orthogonal (but R may not yet be square),
+then for any orthogonal matrix $S$ we have $A = Q I R = Q S^T S R = (Q S^T) (S
+R) = Q' R'$ where $Q' = Q S^T$ and $R' = S R$ is *also* a candidate
+decomposition! This is the general strategy behind not just QR decomposition,
+but behind many other decompositions in linear algebra: at each step we want to
+apply an orthogonal transformation designed to bring $R$ closer to the desired
+form, while simultaneously keeping track of all the transformations applied so
+far in a single matrix $Q$.
 
 That sets the rules and the goal of the game: we can apply any sequence of
 orthogonal transforms to a (square, non-singular) matrix $A$ that will bring it
-into upper triangular form. But is there such a sequence? And how would it be
-constructed?
+into upper triangular form. But what orthogonal transform will do that?
 
 Householder Reflections
 -----------------------
 
-Let's break it down into an even easier problem first.
-How would I make *just one column* of $A$ zero below the diagonal? Or even more concretely, how would I 
-make just the *first column* of $A$ zero except for the first element? 
+Let's break it down into an even easier problem first.  How would I make *just
+one column* of $A$ zero below the diagonal? Or even more concretely, how would
+I make just the *first column* of $A$ zero except for the first element? 
 
 Let's take a look at the "column view" of our matrix. It looks like this:
 
@@ -266,34 +287,41 @@ Let's take a look at the "column view" of our matrix. It looks like this:
 \end{bmatrix}
 \]
 
-We want $a_1$ to be zero except for the first element. What does that *mean*? Let's call our basis
-vectors $e_1 = [1\, 0\, 0]^T$, $e_2 = [0\, 1\, 0]^T$, $e_3 = [0\, 0\, 1]^T$. Every vector in our space is a
-linear combination of these basis vectors. So what it means for $a_1$ to be zero except for the
-first element is that $a_1$ is co-linear (in the same line) as 
-$e_1$: \( H a_i = \alpha e_i \).
+We want $a_1$ to be zero except for the first element. What does that *mean*?
+Let's call our basis vectors $e_1 = [1\, 0\, 0]^T$, $e_2 = [0\, 1\, 0]^T$, $e_3
+= [0\, 0\, 1]^T$. Every vector in our space is a linear combination of these
+basis vectors. So what it means for $a_1$ to be zero except for the first
+element is that $a_1$ is co-linear (in the same line) as $e_1$: \( H a_i =
+\alpha e_i \).
 
-We're going to do this with an orthogonal transformation. But orthogonal transformations are *length preserving*.
-That means $\alpha = ||a_1||$. So we now understand that we need to find an orthogonal matrix that sends
-the vector $a_1$ to the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We could either
-*rotate* by the angle between the vectors \(\cos^{-1} \frac{a_1 \dot e_1}{||a_1||} \), or we can *reflect*
-across the line which bisects the two vectors in their plane. These two strategies are called the
-[Givens rotation][GOR] and the [Householder reflection][HOR] respectively. The rotation matrix is slightly
-less stable, so we will use the Householder reflection.
+We're going to do this with an orthogonal transformation. But orthogonal
+transformations are *length preserving*.  That means $\alpha = ||a_1||$. So we
+now understand that we need to find an orthogonal matrix that sends the vector
+$a_1$ to the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We
+could either *rotate* by the angle between the vectors \(\cos^{-1} \frac{a_1
+\dot e_1}{||a_1||} \), or we can *reflect* across the line which bisects the
+two vectors in their plane. These two strategies are called the [Givens
+rotation][GOR] and the [Householder reflection][HOR] respectively. The rotation
+matrix is slightly less stable, so we will use the Householder reflection.
 
-This diagram from Wikipedia illustrates this beautifully. Stare at it until you can see that reflecting
-about the dotted plane sends $x$ to $||x||e_1$, and *believe* that $v$ is a unit vector orthogonal
-to the dotted plane of reflection.
+This diagram from Wikipedia illustrates this beautifully. Stare at it until you
+can *see* that reflecting about the dotted plane sends $x$ to $||x||e_1$, and
+*believe* that $v$ is a unit vector orthogonal to the dotted plane of
+reflection.
 
 <a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
 
-Let's say that $v$ is the unit normal vector of a plane; how would I reflect an arbitary vector $x$ across that plane?
-Well, if we subtracted $\langle x, v \rangle v$ from $x$, that would be a projection into the plane, right? So if we just
-keep going the same direction and for the same distance again, we'll end up a point on the other side of the plane $x'$.
-Both $x$ and $x'$ project to the same point on the plane, and furthermore both are a distance $\langle x, v \rangle$ from
-the plane. In other words, this operation is a reflection. 
+Let's say that $v$ is the unit normal vector of a plane; how would I reflect an
+arbitary vector $x$ across that plane?  Well, if we subtracted $\langle x, v
+\rangle v$ from $x$, that would be a projection into the plane, right? So if we
+just keep going the same direction and for the same distance again, we'll end
+up a point on the other side of the plane $x'$.  Both $x$ and $x'$ project to
+the same point on the plane, and furthermore both are a distance $\langle x, v
+\rangle$ from the plane. In other words, this operation is a reflection. 
 
-Because a reflection is a linear transformation, we can express it as a matrix, which we will call $H$. Here is how we
-go from our geometric intuition to a matrix:
+Because a reflection is a linear transformation, we can express it as a matrix,
+which we will call $H$. Here is how we go from our geometric intuition to a
+matrix:
 
 \[
 	\begin{align}
@@ -305,8 +333,9 @@ go from our geometric intuition to a matrix:
 	\end{align}
 \]
 
-Here, note that $v v^T$ is the *outer* product of $v$ with itself so is a square matrix with elements $v_i v_j$. For example,
-if $v = (\frac{1}{\sqrt{2}} \frac{1}{\sqrt{2}} 0)^T$ (the 45&deg; line in the xy-plane) we get:
+Here, note that $v v^T$ is the *outer* product of $v$ with itself so is a
+square matrix with elements $v_i v_j$. For example, if $v = (\frac{1}{\sqrt{2}}
+\frac{1}{\sqrt{2}} 0)^T$ (the 45&deg; line in the xy-plane) we get:
 
 \[
  H = I - 2 v v^T =
@@ -331,7 +360,8 @@ if $v = (\frac{1}{\sqrt{2}} \frac{1}{\sqrt{2}} 0)^T$ (the 45&deg; line in the xy
 Implementing the Lemmas
 -----------------------
 
-Given the above theoretical presentation, and copious inline comments, I hope you will now be able to read and understand the following code:
+Given the above theoretical presentation, and copious inline comments, I hope
+you will now be able to read and understand the following code:
 
 	def householder_reflection(a, e):
 		'''
@@ -342,8 +372,8 @@ Given the above theoretical presentation, and copious inline comments, I hope yo
 		'''
 		
 		# better safe than sorry.
-		a = a.flatten()
-		e = e / norm(e)  
+		assert a.ndim == 1
+		assert np.allclose(1, np.sum(e**2))
 		
 		# a and norm(a) * e are of equal length so
 		# form an isosceles triangle. Therefore the third side
@@ -358,8 +388,11 @@ Given the above theoretical presentation, and copious inline comments, I hope yo
 		u = a - np.sign(a[0]) * norm(a) * e  
 		v = u / norm(u)
 		
-		# matrix form of the reflection:
+		# derivation of the matrix form of a reflection:
 		# x - 2<x, v>v ==
+		# x - 2v<x, v> ==
+		# Ix - 2 v (v^T x) ==
+		# Ix - 2 (v v^T) x ==
 		# (I - 2v v^T) x == H x
 		H = np.eye(len(a)) - 2 * np.outer(v, v)
 		
@@ -371,27 +404,29 @@ on each column in turn to transform `A` into an upper triangular matrix.
 
 	def qr_decomposition(A):
 		'''
-		Given an n x n invertable matrix A, returns the pair:
-			Q an orthogonal n x n matrix
-			R an upper triangular n x n matrix
+		Given an n x m invertable matrix A, returns the pair:
+			Q an orthogonal n x m matrix
+			R an upper triangular m x m matrix
 		such that QR = A.
 		'''
 		
-		N = A.shape[0]
+		n, m = A.shape
+		assert n >= m
 		
 		# Q starts as a simple identity matrix.
 		# R is not yet upper-triangular, but will be.
-		Q = np.eye(N)
+		Q = np.eye(n)
 		R = A.copy()
 		
-		for i in range(N-1):
+		# if the matrix is square, we can stop at m-1
+		# because there are no elements below the pivot
+		# in the last column to zero out. Otherwise we
+		# need to do all m columns.
+		for i in range(m - int(n==m)):
 			# we don't actually need to construct it,
 			# but conceptually we're working to update
 			# the minor matrix R[i:, i:] during the i-th
-			# iteration. We can stop at N-1 because the
-			# N-th column of an NxN matrix already has
-			# the pivot element on the last row with
-			# nothing below that needs to be zeroed out. 
+			# iteration. 
 			
 			# the first column vector of the minor matrix.
 			r = R[i:, i]
@@ -402,9 +437,8 @@ on each column in turn to transform `A` into an upper triangular matrix.
 			if np.allclose(r[1:], 0):
 				continue
 				
-			# e is "e hat sub-i," the i-th basis vector of
-			# the minor matrix.
-			e = np.zeros(N-i)
+			# e is the i-th basis vector of the minor matrix.
+			e = np.zeros(n-i)
 			e[0] = 1  
 			
 			# The householder reflection is only
@@ -414,7 +448,7 @@ on each column in turn to transform `A` into an upper triangular matrix.
 			# Note that means H is in block diagonal form
 			# where every block is orthogonal, therefore H
 			# itself is orthogonal.
-			H = np.eye(N)
+			H = np.eye(n)
 			H[i:, i:] = householder_reflection(r, e)
 
 			# QR = A is invariant. Proof:
@@ -450,9 +484,10 @@ available in standard libraries, but to comply with the letter-of-law of the
 		'''
 		
 		# starting at the bottom, the last row is just a_N_N * x = b_N
-		x = b[-1:] / A[-1,-1]
+		n, m = A.shape
+		x = b[(m-1):m] / A[m-1, m-1]
 		
-		for i in range(A.shape[0] - 2, -1, -1):
+		for i in range(m - 2, -1, -1):
 			back_substitutions = np.dot(A[i, (i+1):], x)
 			rhs = b[i] - back_substitutions
 			x_i = rhs / A[i, i]  # possible ill-conditioning warning?
@@ -485,7 +520,16 @@ time making sure everything up to this point is correct.
 				b = A @ x
 				x2 = solve_triangular(A, b)
 				assert_allclose(x, x2, atol=1e-5)
-		
+
+		def test_solve_rect_triangular(self):
+			for N in range(1, 20):
+				for N2 in [1, 5, 100]:
+					A = np.triu(np.random.normal(size=(N+N2, N)))
+					x = np.random.normal(size=(N,))
+					b = A @ x
+					x2 = solve_triangular(A, b)
+					assert_allclose(x, x2, atol=1e-5)
+		 
 		def test_reflection(self):
 			x = np.array([1,1,1])
 			e1 = np.array([1,0,0])
@@ -493,7 +537,7 @@ time making sure everything up to this point is correct.
 			assert_allclose(H @ (sqrt(3)* np.array([1, 0, 0])), x, atol=1e-5)
 			assert_allclose(H @ np.array([1,1,1]), sqrt(3) * e1, atol=1e-5)
 		
-		def test_qr(self):
+		def test_square_qr(self):
 			# already upper triangular
 			A = np.array([[2,1], [0, 3]])
 			Q, R = qr_decomposition(A)
@@ -512,11 +556,56 @@ time making sure everything up to this point is correct.
 			assert_allclose(R2[2, 0], 0, atol=1e-5)
 			assert_allclose(R2[2, 1], 0, atol=1e-5)
 			assert_allclose(R2[1, 0], 0, atol=1e-5)
+			
+		def test_rect_qr(self):
+			A = np.array([
+				[2,1],
+				[0,3],
+				[4,5],
+				[1,1],
+			])
+			Q, R = qr_decomposition(A)
+			assert_allclose(R[1:, 0], np.zeros(A.shape[0]-1), atol=1e-5)
+			assert_allclose(R[2:, 0], np.zeros(A.shape[0]-2), atol=1e-5)
+			assert_allclose(Q @ R, A, atol=1e-5)
 
-With these tools in hand, we're ready to tackle linear regression proper.
+	unittest.main(argv=[''], exit=False)
+
+With our trusty tools in hand, we're ready to tackle linear regression proper.
+
 
 Implementing Linear Regression
 ------------------------------
+
+Recall that our problem was to solve the normal equation:
+
+\[ X^T X \hat{\Theta} = X^T y \]
+
+If we now let $QR$ be the QR-decomposition of $X$:
+
+\[ (R^T Q^T)(Q R) \hat{\Theta} = R^T Q^T y \]
+
+Since $Q$ is orthogonal, $Q^T Q = I$ and we can simply to:
+
+\[ R^T R \hat{\Theta} = R^T Q^T y \]
+
+For the next step, we have to assume the $R$ is invertible. This
+is always the case if our original $X$ was free of multicollinearity.
+It is also equivalent to $X^T X$ being invertible so the naive approach
+of taking $(X^T X)^{-1}$ also fails in this case. Even gradient descent
+has issues because the problem is no longer strongly convex but merely
+convex.) There is a method based on SVD (singular value decomposition)
+which can handle linear regression in the presence of multicollinearity
+but in general its are better handled with regularization. In any case,
+let's just assume that $R^{-1}$ exists. We don't actually have to
+calculate it, though! The mere fact of its existence lets us left
+multiply both side of the equation by $(R^T)^{-1}$ and cancel the $R^T$
+on both sides.
+
+\[ R \hat{\Theta} = Q^T y \]
+
+Because $R$ is an upper triangular matrix, we can use our `solve_triangular()`
+function to solve this equation very quickly. 
 
 The final algorithm is deceptively simple. Compare the normal
 equations derived above to the final two lines of the `fit()` method.
@@ -532,21 +621,11 @@ equations derived above to the final two lines of the `fit()` method.
 
 		def fit(self, X, y):
 			X = self._design_matrix(X)
-			
-			# We need to solve the normal equations: 
-			#    (X^T X) Theta_hat = X^T y
-			# Let QR = (X^T X), giving 
-			#     QR Theta_hat = X^T y
-			# Q is orthogonal, so we can left multiply by Q^T
-			#     R Theta_hat = Q^T X^T y
-			# The right hand side is a vector and because R is
-			# triangular, we can quickly solve for Theta_hat.         
-			Q, R = qr_decomposition(X.T @ X)
-			self.theta_hat = solve_triangular(R, Q.T @ X.T @ y)
+			Q, R = qr_decomposition(X)
+			self.theta_hat = solve_triangular(R, Q.T @ y)
 		
 		def predict(self, X):
 			X = self._design_matrix(X)
-			
 			return X @ self.theta_hat
 
 
@@ -599,8 +678,9 @@ but has also learned a more general lesson that it can apply
 to novel data that it's never seen before.
 
 A good way to visualize model performance is to plot $y$ vs. $\hat{y}$ - in
-other words, actual vs predicted. A perfect predictor would be a 45&deg; diagonal
-through the origin; random guessing would be a shapeless or circular cloud of points. 
+other words, actual vs predicted. A perfect predictor would be a 45&deg;
+diagonal through the origin; random guessing would be a shapeless or circular
+cloud of points. 
 
 	model = LinearRegression()
 	model.fit(X_train, y_train)
@@ -632,8 +712,8 @@ through the origin; random guessing would be a shapeless or circular cloud of po
 
 And in point of fact this linear regression model does reasonably well on both
 the train and test set, with correlation scores around 75%. That means it's
-able to explain about three-quarters of the variation that it finds in $y$
-from what it was able to learn about the relationship between $X$ and $y$.
+able to explain about three-quarters of the variation that it finds in $y$ from
+what it was able to learn about the relationship between $X$ and $y$.
 
 It's also a good idea to visualize both actual and predicted values as a
 function of the independent variable.- In this case $X$ is 13-dimensional so
@@ -693,3 +773,6 @@ networks and backpropagation.][MLFS3]
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS2]: /post/ml-from-scratch-part-3-backpropagation/
+[TMC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
+[OLS]: https://en.wikipedia.org/wiki/Ordinary_least_squares
+[GLM]: https://en.wikipedia.org/wiki/Generalized_linear_model

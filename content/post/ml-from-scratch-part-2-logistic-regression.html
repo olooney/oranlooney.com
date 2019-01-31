@@ -22,11 +22,11 @@ draft: true
 <p>And the third and final reason is that it cannot be solved with linear algebra trickery so serves as a legitimate reason to introduce one of the most important tools in machine learning: gradient descent. Just as in part 1, we’ll do gradient descent <em>right</em> and develop (step-by-step) an algorithm which could actually be used in production without embarrassment.</p>
 <div id="the-logistic-function" class="section level2">
 <h2>The Logistic Function</h2>
+<p>Before we get to the regression model, let’s take a minute to make sure we have a good understanding of the logistic function and some of its key properties.</p>
 <p>The logistic function, also called the sigmoid function is given by</p>
 <p><span class="math display">\[ \sigma(x) = \frac{1}{1 + e^{-x}} \]</span></p>
-<p>and looks like so:</p>
+<p>It looks like this:</p>
 <p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>We will want to get acquainted with this function before proceeding as it has several interesting properties.</p>
 <p>First, we note that while its domain is <span class="math inline">\((-\infty, +\infty)\)</span>, its range is <span class="math inline">\((0, 1)\)</span>. Therefore its output will always be a valid probability. Note also that <span class="math inline">\(\sigma(0) = 0.5\)</span> so if we interpret the output as a probability, all negative numbers map to probabilities that are unlikely, while all positive numbers map to probabilities that are likely, while zero maps to exactly even odds.</p>
 <p>A few lines of simple algebra will show that its inverse function, also called the “logit” function, is given by</p>
 <p><span class="math display">\[ \sigma^{-1}(x) = \ln{\frac{x}{1-x}} \]</span></p>
@@ -34,7 +34,7 @@ draft: true
 <p><span class="math display">\[ \sigma^{-1}(e^p) = \frac{p}{1-p} \]</span></p>
 <p>Where the right hand side is an <em>odds ratio</em>. So one interpretation of the logistic function is that it maps <em>log odds ratios</em> to <em>probabilities</em>.</p>
 <p>For example, if something has a probability of 0.2, then it has 4:1 odds, therefore the odds ratio is 4, therefore the log odds ratio of <span class="math inline">\(\ln 4 = -1.39\)</span>. So <span class="math inline">\(\sigma(0.2) = -1.39\)</span>.</p>
-<p>The logistic function also has a pretty interesting derivative. The easiest way to see this is to use implicit differentiation, but I’ll show a slightly longer but less magical derivation which only uses the chain rule and basic algebra.</p>
+<p>The logistic function also has a pretty interesting derivative. The slickest way to show the following result is to use implicit differentiation, but I’ll show a longer and less magical derivation which only uses the chain rule and basic algebra.</p>
 <p><span class="math display">\[ 
     \frac{d \sigma(x)}{dx} = \frac{d}{dx} \frac{1}{1 + e^{-x}} 
     = \frac{-1}{( 1+ e^{-x})^2} -e^{-x}
@@ -44,25 +44,24 @@ draft: true
     = \sigma(x) ( 1 - \sigma(x) )
 \]</span></p>
 <p>So we can see that <span class="math inline">\(\sigma&#39;(x)\)</span> can expressed as a simple quadratic function of <span class="math inline">\(\sigma(x)\)</span>. It’s not often that a derivative can be most conveniently expressed in terms of the original function, but it turned out to be the case here. This apparently useless fact is actually quite important numerically because it means we can calculate the derivative with a single multiplication.</p>
-<p>Later, we will use this vectorized implementation of sigmoid. This applies the sigmoid function element-wise to every element in a <code>numpy.ndarray</code> of any shape.</p>
+<p>For our Python implementation, we will need a vectorized implementation of <span class="math inline">\(\sigma()\)</span>. This function applies the sigmoid function element-wise to every element in a <code>numpy.ndarray</code> of any shape.</p>
 <pre><code>import numpy as np
 
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))</code></pre>
-<p>Now that we’re familiar with the sigmoid function, lets get started on everybody’s favorite part: the <em>statistics</em>!</p>
 </div>
 <div id="probability-regression" class="section level2">
 <h2>Probability Regression</h2>
-<p>Let’s say <span class="math inline">\(Y\)</span> is a discrete random variable with support <span class="math inline">\({0, 1}\)</span>. The joint probability distribution of <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> is such that</p>
-<p>TODO</p>
-<p><span class="math display">\[ \hat{y} = E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]</span></p>
+<p>Let’s say <span class="math inline">\(Y\)</span> is a discrete random variable with support <span class="math inline">\({0, 1}\)</span> and <span class="math inline">\(X\)</span> is a random vector. Let’s assume that the joint probability distribution <span class="math inline">\(F_{X,Y}\)</span> of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> has the following form for some unknown real-valued vector <span class="math inline">\(\Theta\)</span>.</p>
+<p><span class="math display">\[ E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]</span></p>
+<p>Let’s say that <span class="math inline">\((y_i, X_i)\)</span> are <span class="math inline">\(N\)</span> realizations sampled independently from <span class="math inline">\(F_{X,Y}\)</span>; then we can write down the likelihood function:</p>
 <p><span class="math display">\[ L(\Theta; X, y) = \prod_{i=1}^N P(Y=1|X_i)^{y_i} P(Y=0|X_i)^{(1 - y_i)} \]</span></p>
 <p>We’re using a simple notational trick to write this compactly: because <span class="math inline">\(y \in {0, 1}\)</span>, The first factor will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 0\)</span> and likewise the second term will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 1\)</span>. So that’s merely a compact way of writing the two scenarios without an explicit if/else.</p>
-<p>We can simplify this expression by taking the log of both sides and working with the <em>log-likelihood</em> from now on. In particular note that because log is monotonically increasing, <span class="math inline">\(argmax f(x) = argmax \ln f(x)\)</span>.</p>
+<p>We can simplify this expression by taking the log of both sides and working with the <em>log-likelihood</em> from now on.</p>
 <p><span class="math display">\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln P(Y=1|X_i) + (1 - y_i) (1 - P(Y=1|X_i) \]</span></p>
-<p>Using the above formula for our predictor <span class="math inline">\(\hat{y}\)</span>:</p>
+<p>Substituting <span class="math inline">\(\hat{y} = P(Y=1|X)\)</span>:</p>
 <p><span class="math display">\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln \hat{y}_i + (1 - y_i) (1 - \hat{y}_i) \]</span></p>
-<p>To find the MLE it suffices to minimize <span class="math inline">\(\ell(\Theta; X, y)\)</span> with respect to <span class="math inline">\(\Theta\)</span>. Because the function is once again smooth and convex, we can do this by finding the zero of the gradient.</p>
+<p>Because <span class="math inline">\(ln\)</span> is monotonic, it suffices to minimize <span class="math inline">\(\ell(\Theta; X, y)\)</span> with respect to <span class="math inline">\(\Theta\)</span> in order to find the maximum likelihood estimate. Because <span class="math inline">\(\ell\)</span> convex and has a continuous derivative, we can find this maximum by solving <span class="math inline">\(\nabla \ell = 0\)</span>.</p>
 <p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N \frac{y_i}{\hat{y}_i} \frac{\partial \hat{y}_i}{\partial \Theta_j} + \frac{(1-y_i)}{(1-\hat{y}_i)} \frac{\partial \hat{y}_i}{\partial \Theta_j} \]</span></p>
 <p>We can use our earlier lemma <span class="math inline">\(\sigma&#39;(x) = \sigma(x)(1-\sigma(x))\)</span> for the partial derivative of <span class="math inline">\(\hat{y}\)</span>. Note also that because <span class="math inline">\(\hat{y} = \sigma(X \Theta) = \sigma( X_0 \Theta_0 + ... + X_j \Theta_j + ... + X_k \Theta_k )\)</span>, we will pick up an additional <span class="math inline">\(X_j\)</span> factor from the chain rule when differentiating by <span class="math inline">\(\Theta_j\)</span>.</p>
 <p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N \frac{y_i}{\hat{y}_i} \hat{y}_i (1-\hat{y}_i) X_j - \frac{(1-y_i)}{(1-\hat{y}_i)} \hat{y}_i (1-\hat{y}_i) X_j \]</span></p>
@@ -71,23 +70,20 @@ def sigmoid(z):
  = \sum_{i=1}^N X_j ( y_i  - y_i \hat{y}_i - \hat{y}_i + y_i \hat{y}_i)
  = \sum_{i=1}^N X_j ( y_i  - \hat{y}_i )
 \]</span></p>
-<p>If we define <span class="math inline">\(\textbf{1} = (1, 1, ..., 1)\)</span> to be a vector consisting of all ones and use <span class="math inline">\(\circ\)</span> to denote the Hadamard product we can write this is a compact vectorized form:</p>
+<p>This doesn’t admit a closed form solution, but it is amenable to numerical methods.</p>
+<p>For our implementation below it will be convenient to have this in vectorized form. Leaving behind the statistical context and no longer using random variables, let <span class="math inline">\(X\)</span> be a <span class="math inline">\(N \times m\)</span> real-valued matrix (not a random variable) such that each row of <span class="math inline">\(X\)</span> is <span class="math inline">\(X_i\)</span> from above, and let <span class="math inline">\(y\)</span> the corresponding non-random real-valued <span class="math inline">\(N\)</span>-vector, the above equation becomes:</p>
 <p><span class="math display">\[ \nabla_{\Theta} \ell(\Theta; X, y) = (X \circ  (y - \hat{y}))^T \textbf{1} \]</span></p>
+<p>(Here, we use the notation that <span class="math inline">\(\textbf{1} = (1, 1, ..., 1)\)</span> is the vector consisting of all ones and <span class="math inline">\(\circ\)</span> is the Hadamard product.)</p>
 <p>This is almost suspiciously neat, but it’s not really an accident. The reason why we chose the logistic function in the first place was precisely so this neat result would drop out at the end: the logistic function is the <a href="https://en.wikipedia.org/wiki/Generalized_linear_model#Link_function">canonical link function</a> for the Bernoulli distribution.</p>
 <p>This raises a fairly interesting question. Is there any fundamental reason to believe the true population distribution <em>really</em> behaves as if it were using a logistic link function, or is this an arbitrary choice we made solely for mathematical convenience? As far as I can tell, it’s the later case. More rigorous attempts to justify the choice of link function end up making a different choice, such as probit regression which uses the CDF of the normal distribution. However, in practice these curves are extremely similar, and if you showed me a plot of each side-by-side I could not for the life of me tell you which is which.</p>
 <p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
-<div id="gradient-descent" class="section level2">
-<h2>Gradient Descent</h2>
-<p>Once again, we set aside statistical considerations and consider the following numerical optimization problem:</p>
-<p><span class="math display">\[ \hat{Theta} = \text{argmin} \ell(\Theta; X,y) \sum_{i=1}^N y_i \ln \hat{y}_i + (1 - y_i) (1 - \hat{y}_i \]</span></p>
-<p>where we already know the gradient in closed form:</p>
-<p><span class="math display">\[ \nabla_{\Theta} \ell(\Theta; X, y) = (X \circ  (y - \hat{y}))^T \mathbb{1} \]</span></p>
-<p>TODO</p>
-<p>TODO: Line search vs trust region, unconstrained, convex</p>
-</div>
 <div id="batch-gradient-descent" class="section level2">
 <h2>Batch Gradient Descent</h2>
+<p>The final algorithm we will use actually a number of moving parts and is somewhat overwhelming to understand at once. We will implement it in stages, adding sophistication at each stage as well as taking benchmarks that will prove the value of each improvement we add.</p>
+<p>Since we have both the loss function we want to minimize and its gradient in closed form, the obvious numerical method is gradient descent, also called batch gradient descent. This is an iterative method that simply updates an approximation of <span class="math inline">\(\hat{\Theta}\)</span> by taking a smalls step in the direction of steepest descent.</p>
+<p><span class="math display">\[ \hat{\Theta}_{i+1} := \hat{\Theta}_i - \alpha \nabla \ell |_{\hat{\Theta}_i} \]</span></p>
+<p>For some suitable learning rate <span class="math inline">\(\alpha\)</span> this will always converge, and because <span class="math inline">\(\ell\)</span> is convex it will in fact always converge to a number <span class="math inline">\(\hat{\Theta}\)</span> that represents the maximum likelihood estimate for <span class="math inline">\(\Theta\)</span>.</p>
 <pre><code>class LogisticClassifier:
     def __init__(self, learning_rate=0.1, tolerance=1e-4, max_iter=1000):
         # gradient descent parameters
@@ -404,6 +400,7 @@ model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 <div id="early-stopping" class="section level2">
 <h2>Early Stopping</h2>
 <p>The basic idea behind early stopping is taken from looking at the shape of the above validation loss curve. If we want to minimize validation loss, and we know that it goes down for a while then starts to rise, why don’t we just <em>stop</em> once it starts to go back up? Really the only wrinkle is that because the validation loss curve is a little noisy we don’t want to stop the first time we see validation loss rise even a little bit but rather wait to make sure it’s the start of an upward trend before we pull the rip-cord. We can do that simply by waiting for a certain number of epochs with no improvement in validation loss.</p>
+<p>One theoretical problem with early stopping is that the parameters estimated in this way are <em>not</em> the maximum likelihood estimates! This makes it harder to reason about them from a statistical point of view. One justification is that although we haven’t found an MLE, we are performing <a href="https://en.wikipedia.org/wiki/Empirical_risk_minimization">empirical risk minimization</a> and have found a step of parameters that generalize optimally to the validation set. That in turn raises more questions because we haven’t actually minimized empirical risk <em>globally</em> but only along the path of steepest of descent traced out by gradient descent. Ultimately this is a pragmatic technique recommended mainly by its simplicity, improved validation and test set performance, and decreased training times.</p>
 <p>Here is the “final” version of the code for the <code>LogisticClassifier</code>, including implementation details omitted above:</p>
 <pre><code>class LogisticClassifier:
     def __init__(self, 
