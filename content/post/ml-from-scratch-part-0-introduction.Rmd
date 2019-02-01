@@ -15,47 +15,46 @@ draft: true
 Motivation
 ----------
 
-"As an apprentice, every new magician must prove to his own satisfaction, at
-least once, that there is truly great power in magic." - The Flying Sorcerers,
-by David Gerrold and Larry Niven
+> "As an apprentice, every new magician must prove to his own satisfaction, at
+> least once, that there is truly great power in magic." - The Flying Sorcerers,
+> by David Gerrold and Larry Niven
 
-How do you know if you really understand something? You *could* just rely on the
-subjective experience of *feeling* like you understand. This sounds plausible -
-surely you yourself of all people should know, right? But it runs head-first
-into in the (Dunning-Kruger effect)[DK]. In general, introspection has not
-proven to be a reliable guide to self-knowledge.
+How do you know if you really understand something? You *could* just rely on
+the subjective experience of *feeling* like you understand. This sounds
+plausible - surely you of all people should know. But this runs head-first into
+in the [Dunning-Kruger effect][DK]. Introspection is not a reliable guide to
+self-knowledge.
 
-A different criterion is found in this pithy quote:
+A different way is suggested by this pithy quote:
 
-[DK]: https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect
 > "What I cannot create, I do not understand." - Richard Feynman
 
-This is a very famous and popular quote, but it's not entirely unambiguous.  If
-we're going to use it as a guide, we'll first have to break it down a little.
+This is a very famous quote, but it's not entirely unambiguous.  If we're going
+to use it as a guide, we'll first have to break it down a little.
 
-Perhaps the most common interpretation could be paraphrased
-as, "what I cannot explain to a layperson and a curious child, I do not
-understand." Feynman unambiguously valued the ability to explain complex
-physics in plain English, as exemplified in this anecdote:
+The most common interpretation might be, "what I cannot explain to a layperson
+or to a curious child, I do not understand." Feynman unambiguously valued the
+ability to explain complex physics in plain English, as exemplified in this
+anecdote:
 
 > Before the commercial announcement of the Connection Machine CM-1 and all of
 > our future products, Richard would give a sentence-by-sentence critique of
 > the planned presentation. "Don't say 'reflected acoustic wave.' Say [echo]."
 > Or, "Forget all that 'local minima' stuff. Just say there's a bubble caught
 > in the crystal and you have to shake it out." Nothing made him angrier than
-> making something simple sound complicated.
+> making something simple sound complicated. - [Danny Hillis][RFCM]
 
 [RFCM]: http://longnow.org/essays/richard-feynman-and-connection-machine/
 
-Not only is having things explained things in simple terms helpful to the student,
-but the act of translating complex mathematics into simple terms is helpful to
-the teacher because it helps build and reinforce intuitions. As the mathematics
-becomes more abstract, clear intuitions become increasingly important.
+As has often been remarked, explaining things well is often just as beneficial
+to the teacher than the student; it helps reinforce ideas and built up
+intuition.
 
-If that is all that Feynman had meant, though, why use the term "create?"
-Surely "explain" or "teach" is closer to the meaning discussed above. So while
-"explain in simple terms" is certainly *part* of it, "create" includes more
-than just that. Feynman gives us a clue in this story from his autobiography:
+If that is all that Feynman had meant, though, why use the term "create" at
+all?  Surely "explain" or "teach" is closer to the meaning discussed above. So
+while "explain in simple terms" is certainly *part* of it, "create" includes
+more than just that. Feynman gives us a clue in this story from his
+autobiography:
 
 > "During the conference I was staying with my sister in Syracuse. I brought the
 > paper home and said to her, "I can't understand these things that Lee and Yang
@@ -69,14 +68,14 @@ than just that. Feynman gives us a clue in this story from his autobiography:
 > 
 > I took her advice, and checked through the whole thing, and found it to be very
 > obvious and simple. I had been afraid to read it, thinking it was too
-> difficult." - Richard Feynman, Surely You're Joking, Mr. Feynman!
+> difficult." - Richard Feynman, <i>Surely You're Joking, Mr. Feynman!</i>
 
-So in the context of math or physics, "create" means something like "derive
-from first principles by hand." This is a very strong criteria. If a person
-could go into an empty office with a stack of scratch paper and supply of sharp
-pencils, write down all first principles of calculus from memory and proceed to
-derive every important theorem and result in calculus, then there is little
-doubt that person thoroughly understands calculus. 
+So in the context of math or physics, "create" means something closer to
+"derive from first principles by hand." This is a very strong criteria! If a
+person could go into an empty office with a stack of scratch paper and supply
+of sharp pencils, write down all first principles and proceed to derive every
+important theorem in their chosen field by hand then it must be conceded
+that such a person has some real knowledge.
 
 In the context of computer science and programming, "create" might mean
 something like, "write a program from scratch that implements the given
@@ -99,37 +98,56 @@ to his own understanding.
 Ground Rules for the Project
 ----------------------------
 
-It was in this spirit that I set myself a similar project in late 2018 on the
-subject of machine learning. While I had a solid mathematical foundation from
-college, all of my training in statistical modeling and machine learning has
-been on-the-job or from self-directed study. I certainly *felt* like I
-understood quite a bit - but did I really? 
+It was in the spirit of the above considerations that in the fall of 2018 I set
+myself a goal: I would, over the course of the next year, derive and implement
+a representative sample of models and algorithms from machine learning,
+entirely from scratch and (insofar as was possible) entirely from memory. Where
+I found my understanding sufficient this would be an exercise in recreational
+programming; where my understanding failed me it would be a chance to shore up
+the foundations.
 
-Well, that's what we'll find out over the next series of blog posts. Before
-we get started, though, I should define a scope and set some ground rules.
+This is possibly less insane than it may appear. Although there are aspects of
+machine learning that are [very][VC] technical, for the most part the
+implementation of practical algorithms requires little more than some
+moderately advanced statistics, quite a bit linear algebra, some familiarity
+with numerical optimization and of course basic programming skills. While today
+there are specialized degrees one could obtain, I've always felt that I was
+well served by my physics degree in that regard. For example, physics
+undergraduates are first exposed to the [method of Lagrange multipliers][LP] in
+the context of classical mechanics where it is quite easy to understand. So
+when the same method shows up in a much more abstract form in the study of
+[SVMs][SVM] the learning curve isn't quite so vertical. I don't envy students
+trying to understand the method for the first time in the context of an
+implicit high-dimensional feature space!
 
-First, mathematical derivations are in scope. This usually means posing
-and solving an optimization problem of some form, such as [MLE.][MLE] This
-is straight-forward for most of the algorithms on my list, but could get a
-little hairy for things like backpropagation (which requires some fairly
-non-trivial matrix calculus) or SVMs (which basically requires the entire
-theory of [Quadradic Programming][QP].) 
+Because an open-ended project like this has a tendency to get out of control,
+I also decided to set some ground rules to help keep things sane.
+
+First, mathematical derivations are in scope. This usually means posing and
+solving an optimization problem of some form, such as [MLE.][MLE] This is
+straight-forward for most of the algorithms on my list, but could get a little
+hairy for things like backpropagation (which requires some fairly non-trivial
+matrix calculus) or SVMs (which basically requires the entire theory of
+[Quadradic Programming][QP].) In practice, the presentation of these
+derivations is bottlenecked by the necessity of typesetting the equations
+in $\LaTeX$ so these will typically little more than sketches of the proofs.
 
 [MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
 [QP]: https://en.wikipedia.org/wiki/Quadratic_programming
 
-Second, the algorithm used will be state-of-the-art, or at least reasonably so.
-For example, I will not use gradient descent to solve linear regression,
-although of course it would work. Instead, we'll do something closer to what
-modern statistical software would do. This also means implementing vectorized
-versions of the algorithms whenever possible. While looping over every example
-in the training set is often easier to understand, it really isn't
-representative of of current best practice.
+Second, the algorithms used will be state-of-the-art, or at least reasonably
+so.  For example, while we *could* solve linear regression with gradient
+descent, we're not going to punt like that. Instead, we'll do something closer
+to what modern statistical software would do. This also means implementing
+vectorized versions of the algorithms whenever possible: while iterating over
+every example in the training set is often easier to understand, it's also
+pretty far removed from the realities of modern implementations which rely
+heavily on vectorization or even GPU acceleration for performance.
 
 Third, I will implement and test all algorithms some data set. As the agile
 crowd would say, working software is the primary measure of progress. For
 convenience, I will use Python 3 and allow myself `numpy` arrays... but *not*
-`numpy.linalg` or other canned libraries like `scipy.optimize`; matrix
+`numpy.linalg` or other high-level libraries like `scipy.optimize`; matrix
 multiplication is about the most complex operation we'll let the libraries do
 for us. (I considered not using `numpy` at all, but it allows us to express
 algorithms in vectorized notation.) This restriction only applies to the
@@ -137,13 +155,18 @@ implementation of the algorithm itself and excepts tests - I will routinely use
 higher-level libraries (like `pandas`, `scipy`, or `sklearn.datasets`) when
 *testing* the algorithm.
 
+Fourth and finally, I'll be publishing write-ups as I go. I've found in
+practice this can be more time consuming than the original exercise, but
+it attempting to explain each in simple terms to a broad audience should
+help me come to understand them a little better as well.
+
 
 Project Scope
 -------------
 
 While I want to touch on every aspect of machine learning, there's little point
 in implementing minor variations of basically the same algorithms over and
-over. Instead, we'll pick one or two representative algorithms from each
+over. Instead, let's pick one or two representative algorithms from each
 category and leave it at that. We want to make sure that we get reasonable
 coverage over the types of ML *problems* ( supervised/unsupervised,
 regression/classification, etc.) as well as good coverage over the most
@@ -152,7 +175,7 @@ important *algorithms* that crop up repeatedly in ML.
 Here's the short list of candidates:
 
 |Problem|Model|Algorithm|
-|:----------------------:|:---------------------:|:-----------------------------:|
+|:-------------------------:|:-----------------------:|:-------------------------------:|
 |Regression|Linear Regression| [QR Decomposition][QRD] |
 |Classification|Logistic Regression| [Gradient Descent][GD] |
 |Classification|Neural Network| [Backpropagation][BPA] |
@@ -179,13 +202,10 @@ Here's the short list of candidates:
 [LRA]: https://en.wikipedia.org/wiki/Low-rank_approximation
 [APA]: https://en.wikipedia.org/wiki/Low-rank_approximation#Alternating_projections_algorithm
 
-Other candidates I considered but ultimately decided were out-of-scope for the
-"ML From Scratch" series include:
+Other candidates I considered but ultimately decided were out-of-scope:
 
 * [Factor Analysis][FA] - We already have PCA for dimensional reduction and GMM
   as an example of using the EM algorithm to solve for latent random variables.
-* Time Series Analysis with ARIMA - ARIMA is just linear regression under the
-  hood so not a good fit for the "from scratch" project.
 * K-Means - We'll do GMM instead.
 * [K-Nearest Neighbors][KNN] - A naive algorithm is trivial while a serious
   algorithm would mostly be implementing a spatial index (such as
@@ -201,10 +221,10 @@ Other candidates I considered but ultimately decided were out-of-scope for the
   latent variable models and solved with the EM algorithm.
 * Felligi-Sunter Record Linkage - another take on the EM algorithm.
 
-The Basics
-----------
+How can a Machine Learn?
+------------------------
 
-In the spirit of the Feynman Technique, let's spend a few minutes talking
+In the spirit of the Feynman technique, let's spend a few minutes talking
 through the problem in plain English before we dive into the math.
 
 The problem, in the broadest possible terms, is to get a computer to learn how
@@ -225,7 +245,15 @@ of time it takes) computers can do the following:
 6. Looking something up in a file or database
 7. Talking to another computer over a network
 
-Just from looking at this table 
+This fairly standard set of relative costs actually leads directly to some
+important insights that guide research into practical machine learning.  While
+we could just have the computer "memorize" a bunch of examples by storing them
+in a database, that's actually quite slow relative to arithmetic.
+[Instance-based learning algorithms][IBL] do exist but they tend too bog down
+on too much data, which algorithms based mostly on arithmetic
+actually do better and better when given more data. 
+
+[IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
 
 1. Any "learning" that a computer does will have to be in the form of
    remembering a set of numbers.
@@ -246,7 +274,7 @@ an obstacle that's still some distance away.  How can we use the operations
 that computers are best at to get this computer to make a decision about how to
 turn the wheel? One way would be to use a linear equation:
 
-[\ y = a x_l + b x_s + c x_s + d \]
+\[ y = a x_l + b x_s + c x_s + d \]
 
 Now, a human could come up with rules that would work passably. Say, if an
 obstacle is to the left, steer right. If an obstacle is to the right, steer
@@ -291,23 +319,23 @@ examples, then the parameters found at the final step substituted into the
 equation for the kind of model we're using give us will give us a function
 which gets pretty good performance at the task we trained it for.
 
-Two basic approaches in machine learning are [supervised learning][SL] and
-[reinforcement learning][RL]. The supervised learning approach is equivalent to
-hiring a driving instructor to give advice in the form "in situation X, do Y"
-and feedback in the form "you did $\hat{y}$ when you should have done $y$!
-That's great/OK/acceptable/terrible/catastrophic." The reinforcement learning
-approach is letting the computer drive the car randomly, crash a lot, and after
-each crash revisit the decisions in the seconds leading up to the crash and
-ask, "what could have I have done differently?" 
+Two basic approaches ways to approach this problem are [supervised
+learning][SL] and [reinforcement learning][RL]. The supervised learning
+approach is equivalent to hiring a driving instructor to give advice in the
+form "in situation X, do Y" and feedback in the form "you did $\hat{y}$ when
+you should have done $y$!  That's great/OK/acceptable/terrible/catastrophic."
+The reinforcement learning approach is letting the computer drive the car
+randomly, crash a lot, and after each crash revisit the decisions in the
+seconds leading up to the crash and ask, "what could have I have done
+differently?"
 
-Linear regression (the subject of today's article) is a very simple approach to
-supervised learning. [OLS][OLS] is a particular algorithm that allows us to
-quickly and precisely solve linear regression problems. There are other
-algorithms that also solve the supervised learning algorithm but can learn more
-complicated functions, and we'll be talking about several of these later in the
-series.  We won't be talking about the reinforcement in this series, but that's
-also a strong technique for many real-world problems.
+Conclusion
+----------
 
+Next time, we'll start with [linear regression][MLFS1], followed by
+[logistic regression][MLFS2] and some simple [neural networks][MLFS3].
+As new articles are added, you can find them collected under the ["from scratch"][MLFS]
+tag.
 
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [LTR]: https://en.wikipedia.org/wiki/Learning_to_rank
@@ -317,5 +345,16 @@ also a strong technique for many real-world problems.
 [RM]: https://en.wikipedia.org/wiki/Rasch_model
 [KNN]: https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm
 [RT]: https://en.wikipedia.org/wiki/R-tree
+[DK]: https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect
+[LP]: https://en.wikipedia.org/wiki/Lagrange_multiplier
+[SVM]: https://en.wikipedia.org/wiki/Support-vector_machine
+[VC]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory
+[SL]: https://en.wikipedia.org/wiki/Supervised_learning
+[USL]: https://en.wikipedia.org/wiki/Unsupervised_learning
+[RL]: https://en.wikipedia.org/wiki/Reinforcement_learning
 
+[MLFS]: /tags/from-scratch/
+[MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
+[MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
+[MLFS3]: /post/ml-from-scratch-part-3-backpropagation/
 

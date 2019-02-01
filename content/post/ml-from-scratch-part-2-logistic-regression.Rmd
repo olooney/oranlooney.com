@@ -899,9 +899,9 @@ Conclusion
 That was logistic regression from scratch. In this article, we've learned about
 a simple but powerful classifier called logistic regression. We derived the
 equations for MLE and, in our attempts to solve these equations numerically,
-developed an incredibly powerful piece of technology: mini-batch stochastic
-gradient descent with Nesterov accelerated momentum and early stopping; NAG
-Mini-batch SGD with early stopping for short.
+developed an incredibly powerful piece of technology:  Mini-batch SGD with
+early stopping and NAG. This optimizer is actually more important than logistic
+regression because it turns out it can be re-used for a wide variety of models.
 
 There are variations on SGD that we haven't talked about, in particular
 adaptive variations which don't need a `learning_rate` hyperparameter or have

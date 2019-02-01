@@ -1,0 +1,170 @@
+---
+title: 'ML From Scratch, Part 0: Introduction'
+author: "Oran Looney"
+date: '2018-11-12'
+slug: ml-from-scratch-part-0-introduction
+tags:
+  - Python
+  - Statistics
+  - From Scratch
+  - Machine Learning
+image: /post/ml-from-scratch-part-0-introduction_files/lead.jpg
+draft: true
+---
+
+
+
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<blockquote>
+<p>“As an apprentice, every new magician must prove to his own satisfaction, at least once, that there is truly great power in magic.” - The Flying Sorcerers, by David Gerrold and Larry Niven</p>
+</blockquote>
+<p>How do you know if you really understand something? You <em>could</em> just rely on the subjective experience of <em>feeling</em> like you understand. This sounds plausible - surely you of all people should know. But this runs head-first into in the <a href="https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect">Dunning-Kruger effect</a>. Introspection is not a reliable guide to self-knowledge.</p>
+<p>A different way is suggested by this pithy quote:</p>
+<blockquote>
+<p>“What I cannot create, I do not understand.” - Richard Feynman</p>
+</blockquote>
+<p>This is a very famous quote, but it’s not entirely unambiguous. If we’re going to use it as a guide, we’ll first have to break it down a little.</p>
+<p>The most common interpretation might be, “what I cannot explain to a layperson or to a curious child, I do not understand.” Feynman unambiguously valued the ability to explain complex physics in plain English, as exemplified in this anecdote:</p>
+<blockquote>
+<p>Before the commercial announcement of the Connection Machine CM-1 and all of our future products, Richard would give a sentence-by-sentence critique of the planned presentation. “Don’t say ‘reflected acoustic wave.’ Say [echo].” Or, “Forget all that ‘local minima’ stuff. Just say there’s a bubble caught in the crystal and you have to shake it out.” Nothing made him angrier than making something simple sound complicated. - <a href="http://longnow.org/essays/richard-feynman-and-connection-machine/">Danny Hillis</a></p>
+</blockquote>
+<p>As has often been remarked, explaining things well is often just as beneficial to the teacher than the student; it helps reinforce ideas and built up intuition.</p>
+<p>If that is all that Feynman had meant, though, why use the term “create” at all? Surely “explain” or “teach” is closer to the meaning discussed above. So while “explain in simple terms” is certainly <em>part</em> of it, “create” includes more than just that. Feynman gives us a clue in this story from his autobiography:</p>
+<blockquote>
+<p>“During the conference I was staying with my sister in Syracuse. I brought the paper home and said to her,”I can’t understand these things that Lee and Yang are saying. It’s all so complicated.&quot;</p>
+<p>“No,” she said, “what you mean is not that you can’t understand it, but that you didn’t invent it. You didn’t figure it out your own way, from hearing the clue. What you should do is imagine you’re a student again, and take this paper upstairs, read every line of it, and check the equations. Then you’ll understand it very easily.”</p>
+<p>I took her advice, and checked through the whole thing, and found it to be very obvious and simple. I had been afraid to read it, thinking it was too difficult.&quot; - Richard Feynman, <i>Surely You’re Joking, Mr. Feynman!</i></p>
+</blockquote>
+<p>So in the context of math or physics, “create” means something closer to “derive from first principles by hand.” This is a very strong criteria! If a person could go into an empty office with a stack of scratch paper and supply of sharp pencils, write down all first principles and proceed to derive every important theorem in their chosen field by hand then it must be conceded that such a person has some real knowledge.</p>
+<p>In the context of computer science and programming, “create” might mean something like, “write a program from scratch that implements the given algorithm.” Since machine learning straddles the two, “create” means both: pose a machine learning problem mathematically, reduce the problem to some tractable form on paper, then write and implement an algorithm to produce a numerical approximation of the answer.</p>
+<p>Now, if someone attempts this exercise, one of two things will happen. First, they may succeed completely on their first try. If so, great! They’ve proved what they set out to prove. But a much more likely outcome is that they’ll succeed only partially and get stuck on several points. Well, now they have the opportunity to correct a deficiency in their own understanding that they weren’t previously aware of, which is also a great outcome. After all, Feynman didn’t go in empty-handed - he took the challenging paper with him, and surely referenced it often. But at the end, his own notes would record his own complete derivation from start to finish and therefore serve as a testimonial to his own understanding.</p>
+</div>
+<div id="ground-rules-for-the-project" class="section level2">
+<h2>Ground Rules for the Project</h2>
+<p>It was in the spirit of the above considerations that in the fall of 2018 I set myself a goal: I would, over the course of the next year, derive and implement a representative sample of models and algorithms from machine learning, entirely from scratch and (insofar as was possible) entirely from memory. Where I found my understanding sufficient this would be an exercise in recreational programming; where my understanding failed me it would be a chance to shore up the foundations.</p>
+<p>This is possibly less insane than it may appear. Although there are aspects of machine learning that are <a href="https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory">very</a> technical, for the most part the implementation of practical algorithms requires little more than some moderately advanced statistics, quite a bit linear algebra, some familiarity with numerical optimization and of course basic programming skills. While today there are specialized degrees one could obtain, I’ve always felt that I was well served by my physics degree in that regard. For example, physics undergraduates are first exposed to the <a href="https://en.wikipedia.org/wiki/Lagrange_multiplier">method of Lagrange multipliers</a> in the context of classical mechanics where it is quite easy to understand. So when the same method shows up in a much more abstract form in the study of <a href="https://en.wikipedia.org/wiki/Support-vector_machine">SVMs</a> the learning curve isn’t quite so vertical. I don’t envy students trying to understand the method for the first time in the context of an implicit high-dimensional feature space!</p>
+<p>Because an open-ended project like this has a tendency to get out of control, I also decided to set some ground rules to help keep things sane.</p>
+<p>First, mathematical derivations are in scope. This usually means posing and solving an optimization problem of some form, such as <a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">MLE.</a> This is straight-forward for most of the algorithms on my list, but could get a little hairy for things like backpropagation (which requires some fairly non-trivial matrix calculus) or SVMs (which basically requires the entire theory of <a href="https://en.wikipedia.org/wiki/Quadratic_programming">Quadradic Programming</a>.) In practice, the presentation of these derivations is bottlenecked by the necessity of typesetting the equations in <span class="math inline">\(\LaTeX\)</span> so these will typically little more than sketches of the proofs.</p>
+<p>Second, the algorithms used will be state-of-the-art, or at least reasonably so. For example, while we <em>could</em> solve linear regression with gradient descent, we’re not going to punt like that. Instead, we’ll do something closer to what modern statistical software would do. This also means implementing vectorized versions of the algorithms whenever possible: while iterating over every example in the training set is often easier to understand, it’s also pretty far removed from the realities of modern implementations which rely heavily on vectorization or even GPU acceleration for performance.</p>
+<p>Third, I will implement and test all algorithms some data set. As the agile crowd would say, working software is the primary measure of progress. For convenience, I will use Python 3 and allow myself <code>numpy</code> arrays… but <em>not</em> <code>numpy.linalg</code> or other high-level libraries like <code>scipy.optimize</code>; matrix multiplication is about the most complex operation we’ll let the libraries do for us. (I considered not using <code>numpy</code> at all, but it allows us to express algorithms in vectorized notation.) This restriction only applies to the implementation of the algorithm itself and excepts tests - I will routinely use higher-level libraries (like <code>pandas</code>, <code>scipy</code>, or <code>sklearn.datasets</code>) when <em>testing</em> the algorithm.</p>
+<p>Fourth and finally, I’ll be publishing write-ups as I go. I’ve found in practice this can be more time consuming than the original exercise, but it attempting to explain each in simple terms to a broad audience should help me come to understand them a little better as well.</p>
+</div>
+<div id="project-scope" class="section level2">
+<h2>Project Scope</h2>
+<p>While I want to touch on every aspect of machine learning, there’s little point in implementing minor variations of basically the same algorithms over and over. Instead, let’s pick one or two representative algorithms from each category and leave it at that. We want to make sure that we get reasonable coverage over the types of ML <em>problems</em> ( supervised/unsupervised, regression/classification, etc.) as well as good coverage over the most important <em>algorithms</em> that crop up repeatedly in ML.</p>
+<p>Here’s the short list of candidates:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="31%" />
+<col width="29%" />
+<col width="38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Problem</th>
+<th align="center">Model</th>
+<th align="center">Algorithm</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Regression</td>
+<td align="center">Linear Regression</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/QR_decomposition">QR Decomposition</a></td>
+</tr>
+<tr class="even">
+<td align="center">Classification</td>
+<td align="center">Logistic Regression</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Classification</td>
+<td align="center">Neural Network</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Backpropagation">Backpropagation</a></td>
+</tr>
+<tr class="even">
+<td align="center">Classification</td>
+<td align="center">Decision Tree</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Recursive_partitioning">Recursive Partition</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Clustering</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model">Gaussian Mixture Model</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm">EM Algorithm</a></td>
+</tr>
+<tr class="even">
+<td align="center">Clustering</td>
+<td align="center">Hierarchical Clustering</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">Agglomerative Clustering</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Dimension Reduction</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal Component Analysis</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/QR_algorithm">QR Algorithm</a></td>
+</tr>
+<tr class="even">
+<td align="center">Recommendation</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation">Low-Rank Matrix Approximation</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation#Alternating_projections_algorithm">Alternating Projections</a></td>
+</tr>
+<tr class="odd">
+<td align="center">Regression</td>
+<td align="center">General Additive Models</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Backfitting_algorithm">Backfitting</a></td>
+</tr>
+<tr class="even">
+<td align="center">Classification</td>
+<td align="center">Support Vector Machines</td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/Sequential_minimal_optimization">SMO Algorithm</a></td>
+</tr>
+</tbody>
+</table>
+<p>Other candidates I considered but ultimately decided were out-of-scope:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Factor_analysis">Factor Analysis</a> - We already have PCA for dimensional reduction and GMM as an example of using the EM algorithm to solve for latent random variables.</li>
+<li>K-Means - We’ll do GMM instead.</li>
+<li><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">K-Nearest Neighbors</a> - A naive algorithm is trivial while a serious algorithm would mostly be implementing a spatial index (such as <a href="https://en.wikipedia.org/wiki/R-tree">R-Trees</a>) which takes us pretty far afield from learning algorithms.</li>
+<li>Ensemble models - e.g. Random Forest or Boosted Trees. Not a good fit for the “from scratch” approach and can best be understood as “composing” two or more other mature models.</li>
+<li><a href="https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464">CNN, RNN, etc.</a> - We’ll do the vanilla deep neural network from scratch but more advanced topologies are best explored with a framework with automated differentiation.</li>
+<li><a href="https://en.wikipedia.org/wiki/Learning_to_rank">Learning-to-Rank</a> - e.g. <a href="https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model">Bradley-Terry-Luce</a>, <a href="https://en.wikipedia.org/wiki/Rasch_model">Rasch model</a>, etc. These can generally be reduced to logistic regression or viewed as latent variable models and solved with the EM algorithm.</li>
+<li>Felligi-Sunter Record Linkage - another take on the EM algorithm.</li>
+</ul>
+</div>
+<div id="how-can-a-machine-learn" class="section level2">
+<h2>How can a Machine Learn?</h2>
+<p>In the spirit of the Feynman technique, let’s spend a few minutes talking through the problem in plain English before we dive into the math.</p>
+<p>The problem, in the broadest possible terms, is to get a computer to learn how to do something. This is in contract to traditional programming, where the computer does not usually “learn” anything, but follow a program written by a human programmer. Computers also aren’t very good at “doing” most things, although they are very good (and very fast!) at the few things they <em>can</em> do.</p>
+<p>So, what <em>are</em> computers good at? In decreasing order (increasing by the amount of time it takes) computers can do the following:</p>
+<ol style="list-style-type: decimal">
+<li>Addition and subtraction<br />
+</li>
+<li>Multiplication</li>
+<li>Division</li>
+<li>Comparing two numbers to decide what to do next</li>
+<li>Other math functions like <code>exp()</code>, <code>log()</code>, <code>sin()</code>, <code>cos()</code>, etc.</li>
+<li>Remembering a billion numbers</li>
+<li>Looking something up in a file or database</li>
+<li>Talking to another computer over a network</li>
+</ol>
+<p>This fairly standard set of relative costs actually leads directly to some important insights that guide research into practical machine learning. While we could just have the computer “memorize” a bunch of examples by storing them in a database, that’s actually quite slow relative to arithmetic. <a href="https://en.wikipedia.org/wiki/Instance-based_learning">Instance-based learning algorithms</a> do exist but they tend too bog down on too much data, which algorithms based mostly on arithmetic actually do better and better when given more data.</p>
+<ol style="list-style-type: decimal">
+<li>Any “learning” that a computer does will have to be in the form of remembering a set of numbers.</li>
+<li>The “doing” will work best if it is mostly additions and multiplications, with an occasional division or comparison.</li>
+</ol>
+<p>Setting aside learning for a second, let’s talk about “doing”. Let’s say we’ve “remembered” some numbers <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(d\)</span>. These numbers are called our “parameters.” How would we use this to do something? Specifically, how do we turn a set of numbers into a decision? Let’s say we want to drive a car. We can “do” this by returning a number <span class="math inline">\(y\)</span> which represents which direction we want to turn the wheel and how far. To make this decision, we can use a LIDAR system to check for obstacles in three directions: straight ahead, 30° to the left, and 30° to the right. Let’s call those <span class="math inline">\(x_l\)</span>, <span class="math inline">\(x_s\)</span>, and <span class="math inline">\(x_r\)</span>. These numbers are zero or very low if it’s clear in that direction, and 1 or close to 1 if there’s a close obstacle in that direction. A 0.5 would represent an obstacle that’s still some distance away. How can we use the operations that computers are best at to get this computer to make a decision about how to turn the wheel? One way would be to use a linear equation:</p>
+<p><span class="math display">\[ y = a x_l + b x_s + c x_s + d \]</span></p>
+<p>Now, a human could come up with rules that would work passably. Say, if an obstacle is to the left, steer right. If an obstacle is to the right, steer left. If an obstacle is straight ahead, hard right. That would represent parameters</p>
+<p><span class="math display">\[ a=10 \; b=100 \; c=-10 \; d = 0 \]</span></p>
+<p>This rule isn’t terrible, but it would be better if we took a hard <em>left</em> instead of a hard <em>right</em> when straight ahead was blocked but there was also something to the right. How would we express that rule with just addition and multiplication? One way would be to add a new term to our equation (along with another parameter <span class="math inline">\(e\)</span>) which was the <em>product</em> of <span class="math inline">\(x_r\)</span> and <span class="math inline">\(x_s\)</span>. This term will be large only when both <span class="math inline">\(x_r\)</span> AND <span class="math inline">\(x_s\)</span> are large.</p>
+<p><span class="math display">\[ y = a x_l + b x_s + c x_s + d + e x_s x_r \]</span></p>
+<p>Something fairly magical is starting to happen: our equation is starting to model <em>logic</em>. Not every complicated logic yet, but it points the way to much more complicated things.</p>
+<p>But the idea is not to have a human come up with rules and “code” them as parameters - the idea is to get the computer to figure out new parameters for itself. However this intermediate idea of merely having the computer learn a set of number (parameters) which it can then turn into decisions via some equation that can combines both the parameters and data - this already greatly simplifies the problem. Maybe I wasn’t sure how to get the program to “learn” a program, but I’m certain I can get a computer to remember a set of numbers.</p>
+<p>Not just remember - it actually has to come up with those parameters. Good parameters - parameters that <em>work.</em> Unfortunately the computer won’t have any idea what “works” unless we tell it; we’re going to need some kind of feedback which tells it if its getting closer.</p>
+<p>Essentially, we play a game of Hot or Cold with the computer. At each step it changes its parameters; We tell it it’s now “warmer” or “colder” and how hot it is in absolute terms. If it usually explores in the “warmer” direction and keeps going until its found a “very hot” spot, it’s very likely to be able to win the game. If we define “hot” as getting a high reward of a large set examples, then the parameters found at the final step substituted into the equation for the kind of model we’re using give us will give us a function which gets pretty good performance at the task we trained it for.</p>
+<p>Two basic approaches ways to approach this problem are <a href="https://en.wikipedia.org/wiki/Supervised_learning">supervised learning</a> and <a href="https://en.wikipedia.org/wiki/Reinforcement_learning">reinforcement learning</a>. The supervised learning approach is equivalent to hiring a driving instructor to give advice in the form “in situation X, do Y” and feedback in the form “you did <span class="math inline">\(\hat{y}\)</span> when you should have done <span class="math inline">\(y\)</span>! That’s great/OK/acceptable/terrible/catastrophic.” The reinforcement learning approach is letting the computer drive the car randomly, crash a lot, and after each crash revisit the decisions in the seconds leading up to the crash and ask, “what could have I have done differently?”</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Next time, we’ll start with <a href="/post/ml-from-scratch-part-1-linear-regression/">linear regression</a>, followed by <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression</a> and some simple <a href="/post/ml-from-scratch-part-3-backpropagation/">neural networks</a>. As new articles are added, you can find them collected under the <a href="/tags/from-scratch/">“from scratch”</a> tag.</p>
+</div>

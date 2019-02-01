@@ -461,13 +461,12 @@ networks is backpropagation, exactly as presented here.
 
 Of course, it usually isn't necessary to actually do the calculus by hand.
 Modern machine learning frameworks like [Tensorflow][TF] or [PyTorch][PT]
-prominently feature automatic differentiation as a core capability. The basic
-idea is that the chain rule is straightforward to apply mechanically - the hard
-part is keeping track of all those indices! So it makes sense to have software
-handle that part.
+prominently feature automatic differentiation as a core capability. The chain
+rule is straightforward to apply mechanically - the hard part is keeping track
+of all those indices! So it makes sense to have software handle it. 
 
-In the next installment in the [Machine Learning From Scratch series][MLFS], we will
-change tact and look at a completely different approach to non-linear
+In the next installment of the [Machine Learning From Scratch series][MLFS], we
+will change tact and look at a completely different approach to non-linear
 classification: decision trees and the recursive partition algorithm. We will
 see how these two apparently diametrically opposed approaches can both be
 viewed as examples of [adaptive basis functions][ABF], and how this
