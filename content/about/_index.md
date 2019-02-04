@@ -2,30 +2,29 @@
 title = "About"
 date = "2014-04-09"
 +++
-Hi, I'm Oran Looney. I do math. I write programs. I science... data? That doesn't sound right.
+Hi, I'm Oran Looney. I do math. I write programs. I science... data? That
+doesn't sound right.
 
-The best way to get in touch with me is through email: <a href="mailto:olooney@gmail.com">olooney@gmail.com</a>.
+The best way to get in touch with me is through email: 
+<a href="mailto:olooney@gmail.com">olooney@gmail.com</a>.
 
-I hold master's degrees in physics and mathematics, but since graduating
-I've been an Interface Analyst, a Software Engineer, a Director of
-Software Development, a Software Architect, and a Data Scientist. These days
-I'm professionally interested in R, Python, data visualization, applied
-statistics, quantitative marketing, and healthcare data management.
+I hold master's degrees in physics and math and have worked as an Interface
+Analyst, a Software Engineer, a Director of Software Development, a Software
+Architect, and a Data Scientist. These days I'm professionally interested in R,
+Python, data visualization, applied statistics, machine learning, quantitative
+marketing, and healthcare data management.
 
-Other than work, I like puzzles: programming challenges such as [Advent of
+Outside of work, I like puzzles: programming challenges such as [Advent of
 Code][1] or [leetcode][2]; traditional puzzles like [the Moscow puzzles][3];
-puzzle games like [euclidea][4] or the [Professor Layton][5] games.  <a
-href="mailto:olooney@gmail.com">Drop me a line</a> if you want to share a
-puzzle or game you like.
-
-If you have some spare time and are looking for something interesting to watch
-I recommend [3Blue1Brown][6], [Ben Eater][7], or [Mathologer][10]. I think
-these guys are doing a fantastic job popularizing highly technical subjects and
-encourage you to support them on [Patreon][11] if you enjoy their videos. If
-you've found something on this site useful and want to pay it forward, or if
-you're just feeling charitable, I encourage you to consider supporting
-[Wikipedia][8] or [helping hungry children in Wisconsin][9].
-
+puzzle games like [euclidea][4] or the [Professor Layton][5] games. I've also
+been thrilled by the recent wave of recreational mathematics and other
+educational content on Youtube and elsewhere: [3Blue1Brown][6], [Ben Eater][7],
+[Mathologer][10], [back-pen/red-pen][13], [Presh Talwakar][14] or [Dr.
+Peyam][12]. I think this new wave of math and science popularizers are doing a
+great job and I encourage you to check them out and support them on
+[Patreon][11] if you enjoy their videos.  Or if you're just feeling charitable
+in general, consider supporting [Wikipedia][8] or [helping hungry children in
+Wisconsin][9].
 
 
 [1]: https://adventofcode.com/
@@ -39,3 +38,6 @@ you're just feeling charitable, I encourage you to consider supporting
 [9]: https://www.charitynavigator.org/index.cfm?bay=search.summary&orgid=8121
 [10]: https://www.youtube.com/channel/UC1_uAIS3r8Vu6JjXWvastJg
 [11]: https://www.patreon.com/home
+[12]: https://www.youtube.com/channel/UCoOjTxz-u5zU0W38zMkQIFw
+[13]: https://www.youtube.com/user/blackpenredpen
+[14]: https://www.youtube.com/user/MindYourDecisions

@@ -24,17 +24,17 @@ classes are usually both tedious and straight-forward. In fact, even if the
 algorithm doesn't naturally generalize beyond binary classification (looking at
 you, [SVM][SVM]) there's a general strategy for turning any binary
 classification algorithm into a multiclass classification algorithm called
-[one-vs-all][OVA]. So we can safely set aside the complexities of the multiclass
+[one-vs-all][OVA]. Let's agree to set aside the complexities of the multiclass
 problem and focus on binary classification for now. 
 
 The binary classification problem is extremely central in machine learning and
 in this series we'll be looking at no fewer than four different "serious"
 classification algorithms. In an undergraduate machine learning class, you'd
-probably work through a few "non-serious" algorithms before tackling the hard
-stuff that today only have historical or pedagogical value: the one-unit
-perceptron, linear discriminant analysis, the winnow algorithm. We will omit
-those and jump straight to the simplest classification that is in widespread
-use: logistic regression. 
+probably work through a few "non-serious" or "toy" algorithms that have only
+have historical or pedagogical value: the one-unit perceptron, linear
+discriminant analysis, the winnow algorithm. We will omit those and jump
+straight to the simplest classification that is in widespread use: logistic
+regression. 
 
 I say, "simplest," but most people don't think of LR as "simple." That's
 because they're thinking of it use within the context of statistical analysis
@@ -50,7 +50,7 @@ Nevertheless, it's important for three reasons. First, it can be surprisingly
 effective. It's not uncommon for some state-of-the-art algorithm to
 significantly contribute to global warming by running a hyperparameter grid
 search over a cluster of GPU instances in the cloud, only to end up with a
-final model with only marginally higher test set performance than logistic
+final model with only slightly higher test set performance than logistic
 regression.  This isn't always true: for example, LR tends to get only ~90%
 accuracy on the MNIST handwritten digit classification problem, which is much
 lower than either humans or deep learning. But in the many cases for which it
@@ -63,9 +63,10 @@ we'll visit later in this series.
 
 And the third and final reason is that it cannot be solved with linear algebra
 trickery so serves as a legitimate reason to introduce one of the most
-important tools in machine learning: gradient descent.  Just as in part 1,
-we'll do gradient descent *right* and develop (step-by-step) an algorithm which
-could actually be used in production without embarrassment.
+important tools in machine learning: gradient descent.  Just as in [part
+1][MLFS1], we'll take the hard path through the mud and develop (step-by-step)
+an algorithm which could actually be used in production without too much
+embarrassment.
 
 The Logistic Function
 ---------------------
@@ -74,7 +75,7 @@ Before we get to the regression model, let's take a minute to make
 sure we have a good understanding of the logistic function and some
 of its key properties.
 
-The logistic function, also called the sigmoid function is given by
+The logistic function (also called the sigmoid function) is given by:
 
 \[ \sigma(x) = \frac{1}{1 + e^{-x}} \]
 
@@ -92,8 +93,8 @@ the output as a probability, all negative numbers map to probabilities
 that are unlikely, while all positive numbers map to probabilities that
 are likely, while zero maps to exactly even odds.
 
-A few lines of simple algebra will show that its inverse function,
-also called the "logit" function, is given by
+A few lines of simple algebra will show that its inverse function (also called
+the "logit" function) is given by
 
 \[ \sigma^{-1}(x) = \ln{\frac{x}{1-x}} \]
 
@@ -138,7 +139,7 @@ element in a `numpy.ndarray` of any shape.
     def sigmoid(z):
         return 1 / (1 + np.exp(-z))
 
-Probability Regression
+Statistical Motivation
 ----------------------
 
 Let's say $Y$ is a discrete random variable with support ${0, 1}$ and $X$ is a
@@ -186,8 +187,8 @@ Several cancellations occur and we are left with:
  = \sum_{i=1}^N X_j ( y_i  - \hat{y}_i )
 \]
 
-This doesn't admit a closed form solution, but it is amenable to numerical
-methods. 
+Unlike linear regression, this doesn't admit a closed form solution. However,
+it is amenable to numerical methods, which we will cover in great detail.
 
 For our implementation below it will be convenient to have this in vectorized
 form. Leaving behind the statistical context and no longer using random variables,
@@ -230,10 +231,12 @@ adding sophistication at each stage as well as taking benchmarks that will
 prove the value of each improvement we add.
 
 Since we have both the loss function we want to minimize and its gradient in
-closed form, the obvious numerical method is gradient descent, also called
-batch gradient descent.  This is an iterative method that simply updates an
-approximation of $\hat{\Theta}$ by taking a smalls step in the direction of
-steepest descent.
+closed form, the obvious numerical method is gradient descent, called "batch"
+gradient descent when the target function is the sum over a full set of
+training data.
+
+Gradient descent is an iterative method that simply updates an approximation of
+$\hat{\Theta}$ by taking a smalls step in the direction of steepest descent.
 
 \[ \hat{\Theta}_{i+1} := \hat{\Theta}_i - \alpha \nabla \ell |_{\hat{\Theta}_i} \]
 
@@ -413,7 +416,7 @@ convergence. Because the validation curve also decreases monotonically we at
 least know we are not overfitting.
 
 So, the batch gradient descent algorithm is finding parameters which minimize
-training loss to 5 sig-figs, which in turn allow it to achieve 97% accuracy on
+training loss to 5 decimal places, which in turn allow it to achieve 97% accuracy on
 the validation set. There's no evidence of overfitting.  The only real concern
 is the slow convergence and poor runtime performance. If it takes us 3 seconds
 to fit 400 data points, how are we going to deal with 400,000 or 40 million?
@@ -440,27 +443,32 @@ to weigh in on, but it's a good story, isn't it?
 
 The reason batch gradient descent is slow is that we evaluate the gradient
 over the entire training set each time we update the parameters. Not only
-is this fairly expensive, but it violates a basic principle of gradient
-descent algorithms: gradients evaluated at a point close to a minima
-are more valuable than gradients evaluated far from a minima. (This
-principle actually leads to *two* important optimizations; we'll see 
-the other shortly.)
+is this fairly expensive, but it violates the basic rule for making gradient
+descent algorithm fast: 
 
-That means if we have the opportunity to take lots of cheap steps instead one
-expensive step, we should take it, because the first step will get us somewhat
-closer to a minima which makes the later gradient evaluations more relevant. 
+> gradients evaluated at a point close to a minima provide more information
+> about the true location of the minima than gradients evaluated far from a
+> minima. 
+
+(This principle actually leads to *two* important optimizations; we'll see the
+other shortly.)
+
+A consequence is that if we have the opportunity to take lots of cheap steps
+instead one expensive step, we should take it. The first step will get us
+somewhat closer to a minima which makes the later gradient evaluations more
+valuable.
 
 Because our loss and gradient functions are written as a sum over the rows of
-some training set, we have a natural way to divide up the work. One approach
-is to go as far as possible and treat every individual row in the training
-set as a separate step. This is called stochastic gradient descent. While
-stochastic gradient descent is fairly stellar early on and can get close
-to a true minima in just a few minutes, it struggles to converge to an
-exact value later on when it is close to the final solution. Instead, it
-can oscillate back and forth around a minima as every row moves it in a
-contradictory direction. Another issue with SGD is that we can't really
-take advantage of vectorization. 10 single row updates can easily take
-5 times as long as a single vectorized operation on 10-row matrices.
+some training set, we have a natural way to divide up the work. One approach is
+to go as far as possible and treat every individual row in the training set as
+a separate step. This is called stochastic gradient descent. While stochastic
+gradient descent is fairly stellar early on and can get close to a true minima
+in just a few minutes, it struggles to converge to an exact value later on when
+it is close to the final solution. Instead, it can oscillate back and forth
+around a minima as every row moves it in a contradictory direction. Another
+issue with SGD is that we can't really take advantage of vectorization. 10
+single row updates can easily take 5 times as long as a single vectorized
+operation on 10-row matrices.
 
 A good compromise is something called mini-batch gradient descent. We pick a
 batch size, say between 5 and 100 records each, and partition our training set
@@ -698,13 +706,15 @@ is because we were on the lookout for the exact phenomenon. And now our caution
 has paid dividends, because we've caught a example of [overfitting][OF].
 
 
-One solution to this kind of overfitting - the kind that gets worse and worse
-as the number of iterations increases - is to treat `max_iterations` as a hyperparameter
-and to use a grid search to find the optimal number of iterations. Or to add regularization,
-to to play around with batch size, etc. But there's a rather clever solution which is as
-close to a free lunch as anything I know in machine learning, in the sense that it saves
-computation time, minimizes generalization error, and basically costs nothing and has
-no downside. This piece of magic is called [early stopping.][ES]
+One solution to this kind of overfitting - I mean the kind that gets worse and
+worse as the number of iterations increases - is to treat `max_iterations` as a
+hyperparameter and to use a grid search to find the optimal number of
+iterations. Or to add regularization, to to play around with batch size, etc.
+But there's a rather clever solution which is as close to a free lunch as
+anything I know in machine learning, in the sense that it saves computation
+time, minimizes generalization error, and basically costs nothing and has no
+downside except for a loss in theoretical rigor. This piece of (black?) magic
+is called [early stopping.][ES]
 
 
 Early Stopping
@@ -876,7 +886,7 @@ OK, one last time: how's the performance?
 > Wall time: 49.1 ms
 > (False, True, 10, 0.053536116001088603)
 
-Convergence is bonkers fast. 49 ms? Is that some kind of joke? We started with
+Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with
 3 seconds and now you're telling me its 49 ms? As in, 60X faster? It's not a
 joke, and it's fairly representative of the power of these techniques when
 combined.
@@ -940,3 +950,4 @@ particular.
 [COD]: https://www.kaggle.com/c/dogs-vs-cats
 [OF]: https://en.wikipedia.org/wiki/Overfitting
 [ERM]: https://en.wikipedia.org/wiki/Empirical_risk_minimization
+[MLFS1]: /post/ml-from-scratch-part-1-linear-regression/

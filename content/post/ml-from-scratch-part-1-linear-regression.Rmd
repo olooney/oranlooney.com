@@ -168,8 +168,17 @@ nice properties, we know that it has a unique global minimum, and that the
 gradient is zero at this minimum.  That's a fancy way of saying that it's
 shaped like a big, round bowl so it's obvious where the bottom is.
 
-\[ \begin{split} \nabla_\Theta J & = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \\
-& = \nabla_\Theta \; y^T y - (X\Theta)^T y - y^T X\Theta + \Theta^T (X^T X) \Theta \end{split}\]
+We can find the minimum - the bottom of the bowl - by using the [KKT conditions][KKT].
+In this simple this case there is only one: the gradient must be zero. This is
+analogous to finding the critical points of of a univariate function by looking
+for points where the derivative is zero.
+
+\[ \nabla_\Theta J = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \]
+
+Expanding it out with FOIL:
+
+
+\[ \nabla_\Theta J = \nabla_\Theta \; y^T y - (X\Theta)^T y - y^T X\Theta + \Theta^T (X^T X) \Theta \]
    
 It's obvious that $y^T y$ is constant with respect to $\Theta$ so the first
 term simply vanishes.  It's less obvious but also true that the next two terms
@@ -196,29 +205,32 @@ form for $\hat{\Theta}$:
 
 \[ \hat{\Theta} = (X^T X)^{-1} y^T X \]
 
-It turns out there is a faster and more numerically stable way (although
-obviously theoretically equivalent) of solving for $\hat{\Theta}$ which relies
-on the [QR Decomposition][QRD] of the matrix $X$.
+It turns out there is a faster and more numerically stable way of solving for
+$\hat{\Theta}$ which relies on the [QR Decomposition][QRD] of the matrix $X$.
 
 QR Decomposition
 ----------------
 
-Since we're going to be both *implementing* and *relying on* QR in a minute,
-it's worth making sure we understand how it works in detail. A QR decomposition
-of a matrix square $A$ is a product of an orthogonal matrix $Q$ and an
-upper-triangular matrix $R$ such that $A = QR$. Why is this beneficial? Well,
-it turns out that to invert an orthogonal matrix, all you need to do is take
-its transpose. $Q^T Q = \mathbb{1} \leftrightarrow Q^T = Q^{-1}$. So if we
-found $QR = X^T X$, we could write our equation for $\hat{\Theta}$ as
+Since we're going to be both *implementing* and *relying on* the QR
+decomposition in a minute, it's worth making sure we understand how it works in
+detail. A QR decomposition of a matrix square $A$ is a product of an orthogonal
+matrix $Q$ and an upper-triangular matrix $R$ such that $A = QR$. It always
+exists and there's a reasonably performant algorithm for calculating it. Why is
+it beneficial?  In short, because the QR decomposition makes it very easy to
+compute solutions to systems of equation in matrix form $Ax = b$. By computing
+$A = QR$ and writing the problem as $R x = Q^{-1} b$ we can solve system of linear
+equations very cheaply.
 
-\[ QR \hat{\Theta} = y^T X \]
+Why is $Q$ is to invert? Recall that $Q$ is orthogonal which implies that
+$Q^{-1} = Q^T$. Most linear algebra libraries don't even have to explicitly
+copy a matrix to take a transpose but simply operate on it row-wise instead of
+column-wise or vice versa; taking a transpose is O(1) - free for all intents and
+purposes.
 
-\[ R \hat{\Theta} = Q^T y^T X \]
-
-But R is upper triangular, and the right hand-side reduces to a single column
-vector, so we can solve this by back-substitution. Back-substitution is easiest
-to explain with an example. Consider this system of equations in matrix form,
-where the matrix is upper-triangular:
+Why is $Rx = Q^T b$ easy to solve? R is upper triangular, and the right hand-side
+reduces to a single column vector, so we can solve this by back-substitution.
+Back-substitution is easiest to explain with an example. Consider this system
+of equations in matrix form, where the matrix is upper-triangular:
 
 \[
  \begin{bmatrix}
@@ -253,7 +265,7 @@ but this only occurs when the original data set $X$ suffers from
 [IC]: https://en.wikipedia.org/wiki/Condition_number
 [MC]: https://en.wikipedia.org/wiki/Multicollinearity
 
-So we know know how to finish the problem once we have $QR = X^X$. But how to
+So hopefully you're convinced by now the $QR$ form is desirable. But how to
 get $Q$ and $R$? There are two parts to understanding the algorithm. First,
 note that the product of any two orthogonal matrices is itself orthogonal.
 Also, the identity matrix is orthogonal. Therefore, if we have a candidate
@@ -589,18 +601,23 @@ Since $Q$ is orthogonal, $Q^T Q = I$ and we can simply to:
 
 \[ R^T R \hat{\Theta} = R^T Q^T y \]
 
-For the next step, we have to assume the $R$ is invertible. This
-is always the case if our original $X$ was free of multicollinearity.
-It is also equivalent to $X^T X$ being invertible so the naive approach
-of taking $(X^T X)^{-1}$ also fails in this case. Even gradient descent
-has issues because the problem is no longer strongly convex but merely
-convex.) There is a method based on SVD (singular value decomposition)
-which can handle linear regression in the presence of multicollinearity
-but in general its are better handled with regularization. In any case,
-let's just assume that $R^{-1}$ exists. We don't actually have to
-calculate it, though! The mere fact of its existence lets us left
-multiply both side of the equation by $(R^T)^{-1}$ and cancel the $R^T$
-on both sides.
+For the next step, we have to assume the $R$ is invertible. This is always the
+case if our original $X$ was free of multicollinearity.  It is also equivalent
+to $X^T X$ being invertible so the naive approach of taking $(X^T X)^{-1}$
+isn't any stronger. Even gradient descent has issues with singular matrices
+because the problem is no longer strongly convex but merely convex.) There is a
+method based on SVD (singular value decomposition) which can handle linear
+regression in the presence of multicollinearity but it's slower and in general
+the whole problem is better handled by removing redundant features or adding
+regularization, neither of which are in scope for this article. 
+
+> A guy goes to the doctor and says, "Doctor, it hurts when I perform
+> linear regression on a dataset with strong or perfect multicollinearity."
+> The doctor says, "don't do that."
+
+In any case, let's just assume that $R^{-1}$ exists. We don't actually have to
+calculate it, though! The mere fact of its existence lets us left multiply both
+side of the equation by $(R^T)^{-1}$ and cancel the $R^T$ on both sides.
 
 \[ R \hat{\Theta} = Q^T y \]
 
@@ -752,9 +769,9 @@ Omnibus F-tests on nested models, etc., etc. Just to be clear, these aren't
 *variations* or *generalization* of linear regression (although there are ton
 of those too) these are just standard techniques for analyzing and
 understanding linear regression models of the exact same form we calculated
-above. The topic is very mature with a corresponding amount of associated
-mathematical machinery built up over the centuries (Gauss was studying OLS
-around 1800, and the problem is older than that.)
+above. The topic is very mature and a huge amount of auxiliary mathematical
+machinery has built up over the centuries (Gauss was studying OLS around 1800,
+and the problem is older than that.)
 
 However, if we go too deeply into linear regression, we won't get a chance to
 explore the rest of machine learning. So for the next part of the series, we
@@ -772,7 +789,8 @@ networks and backpropagation.][MLFS3]
 [NEQ]: http://mathworld.wolfram.com/NormalEquation.html
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
-[MLFS2]: /post/ml-from-scratch-part-3-backpropagation/
+[MLFS3]: /post/ml-from-scratch-part-3-backpropagation/
 [TMC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
 [OLS]: https://en.wikipedia.org/wiki/Ordinary_least_squares
 [GLM]: https://en.wikipedia.org/wiki/Generalized_linear_model
+[KKT]: https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions

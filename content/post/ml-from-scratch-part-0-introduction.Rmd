@@ -95,8 +95,8 @@ referenced it often. But at the end, his own notes would record his own
 complete derivation from start to finish and therefore serve as a testimonial
 to his own understanding.
 
-Ground Rules for the Project
-----------------------------
+Ground Rules
+------------
 
 It was in the spirit of the above considerations that in the fall of 2018 I set
 myself a goal: I would, over the course of the next year, derive and implement
@@ -109,16 +109,8 @@ the foundations.
 This is possibly less insane than it may appear. Although there are aspects of
 machine learning that are [very][VC] technical, for the most part the
 implementation of practical algorithms requires little more than some
-moderately advanced statistics, quite a bit linear algebra, some familiarity
-with numerical optimization and of course basic programming skills. While today
-there are specialized degrees one could obtain, I've always felt that I was
-well served by my physics degree in that regard. For example, physics
-undergraduates are first exposed to the [method of Lagrange multipliers][LP] in
-the context of classical mechanics where it is quite easy to understand. So
-when the same method shows up in a much more abstract form in the study of
-[SVMs][SVM] the learning curve isn't quite so vertical. I don't envy students
-trying to understand the method for the first time in the context of an
-implicit high-dimensional feature space!
+moderately advanced statistics, a few semesters of linear algebra, some general
+familiarity with numerical optimization and of course basic programming skills. 
 
 Because an open-ended project like this has a tendency to get out of control,
 I also decided to set some ground rules to help keep things sane.
@@ -137,12 +129,13 @@ in $\LaTeX$ so these will typically little more than sketches of the proofs.
 
 Second, the algorithms used will be state-of-the-art, or at least reasonably
 so.  For example, while we *could* solve linear regression with gradient
-descent, we're not going to punt like that. Instead, we'll do something closer
-to what modern statistical software would do. This also means implementing
-vectorized versions of the algorithms whenever possible: while iterating over
-every example in the training set is often easier to understand, it's also
-pretty far removed from the realities of modern implementations which rely
-heavily on vectorization or even GPU acceleration for performance.
+descent, that would be a bit cheap. Instead, we'll implement something pretty
+close to what modern statistical software actually does under the hood. One
+consequence of this rule is that I will be implementing vectorized versions of
+the algorithms whenever possible: while iterating over every example in the
+training set is often easier to understand, it's also pretty far removed from
+the realities of modern implementations which rely heavily on vectorization or
+even GPU acceleration for performance.
 
 Third, I will implement and test all algorithms some data set. As the agile
 crowd would say, working software is the primary measure of progress. For
@@ -150,10 +143,11 @@ convenience, I will use Python 3 and allow myself `numpy` arrays... but *not*
 `numpy.linalg` or other high-level libraries like `scipy.optimize`; matrix
 multiplication is about the most complex operation we'll let the libraries do
 for us. (I considered not using `numpy` at all, but it allows us to express
-algorithms in vectorized notation.) This restriction only applies to the
-implementation of the algorithm itself and excepts tests - I will routinely use
-higher-level libraries (like `pandas`, `scipy`, or `sklearn.datasets`) when
-*testing* the algorithm.
+algorithms in vectorized notation and frankly the algorithms are both
+clearer and more realistic with it.) This restriction only applies to the
+implementation of the algorithm itself and excludes tests - I will routinely
+use higher-level libraries (like `numpy.linalg`, `pandas`, `scipy`, or
+`sklearn.datasets`) when *testing* the algorithm.
 
 Fourth and finally, I'll be publishing write-ups as I go. I've found in
 practice this can be more time consuming than the original exercise, but
@@ -172,7 +166,7 @@ coverage over the types of ML *problems* ( supervised/unsupervised,
 regression/classification, etc.) as well as good coverage over the most
 important *algorithms* that crop up repeatedly in ML. 
 
-Here's the short list of candidates:
+Here's a tentative list of algorithms I would like to tackle:
 
 |Problem|Model|Algorithm|
 |:-------------------------:|:-----------------------:|:-------------------------------:|
@@ -216,16 +210,20 @@ Other candidates I considered but ultimately decided were out-of-scope:
 * [CNN, RNN, etc.][NNZ] - We'll do the vanilla deep neural network from scratch
   but more advanced topologies are best explored with a framework with
   automated differentiation. 
-* [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], [Rasch model][RM],
-  etc. These can generally be reduced to logistic regression or viewed as
-  latent variable models and solved with the EM algorithm.
+* [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], etc. These can
+  generally be reduced to logistic regression or viewed as latent variable
+  models and solved with the EM algorithm.
 * Felligi-Sunter Record Linkage - another take on the EM algorithm.
 
-How can a Machine Learn?
-------------------------
+
+Bottom-Up Approach to Machine Learning
+--------------------------------------
 
 In the spirit of the Feynman technique, let's spend a few minutes talking
-through the problem in plain English before we dive into the math.
+through the problem in plain English and see if we can understand why machine
+learning seems to focus so heavily on a few mathematical techniques and
+approaches; this is turn should make it clear why it's worth understanding
+these techniques in depth.
 
 The problem, in the broadest possible terms, is to get a computer to learn how
 to do something. This is in contract to traditional programming, where the
@@ -246,96 +244,108 @@ of time it takes) computers can do the following:
 7. Talking to another computer over a network
 
 This fairly standard set of relative costs actually leads directly to some
-important insights that guide research into practical machine learning.  While
-we could just have the computer "memorize" a bunch of examples by storing them
-in a database, that's actually quite slow relative to arithmetic.
-[Instance-based learning algorithms][IBL] do exist but they tend too bog down
-on too much data, which algorithms based mostly on arithmetic
-actually do better and better when given more data. 
+important insights that guide research into practical machine learning.  
 
-[IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
+First, we want to restrict ourselves as much as possible to simple arithmetic.
+While we may occasionally allow ourselves a division or even *gasp* an
+exponentiation, we really want to stick to fast operations like addition,
+multiplication, `max(a,b)`, or `sign(a)`.
 
-1. Any "learning" that a computer does will have to be in the form of
-   remembering a set of numbers.
-2. The "doing" will work best if it is mostly additions and multiplications,
-   with an occasional division or comparison.
+Second, any "learning" we do will have to be in the form of updating a
+structured set of numbers. We call these the "parameters" to distinguished them
+from the "data." The parameters may be shaped like a vector, a matrix, or a
+tree, but if we want to combine parameters and data with simple arithmetic then
+both must ultimately be represented as structures of numbers.
 
-Setting aside learning for a second, let's talk about "doing". Let's say we've
-"remembered" some numbers $a$, $b$, $c$, and $d$.  These numbers are called our
-"parameters." How would we use this to do something? Specifically, how do we
-turn a set of numbers into a decision?  Let's say we want to drive a car. We
-can "do" this by returning a number $y$ which represents which direction we
-want to turn the wheel and how far. To make this decision, we can use a LIDAR
-system to check for obstacles in three directions: straight ahead, 30&#176; to
-the left, and 30&#176; to the right. Let's call those $x_l$, $x_s$, and $x_r$.
-These numbers are zero or very low if it's clear in that direction, and 1 or
-close to 1 if there's a close obstacle in that direction. A 0.5 would represent
-an obstacle that's still some distance away.  How can we use the operations
-that computers are best at to get this computer to make a decision about how to
-turn the wheel? One way would be to use a linear equation:
+For example, one thing we *don't* want to do is to represent our learning as a
+arbitrary program. For example, the internal state of our learning algorithm  could
+literally be a C program as a string:
 
-\[ y = a x_l + b x_s + c x_s + d \]
+	float f(float* x) { 
+		float z = 42; 
+		if ( x[0] < 5 && x[1] > 2 ) z -= 10; 
+		if ( x[2] > 7 || x[5] == 2 ) z += 3; 
+		for ( int i=6; i<11; i++ ) { z += x[i] }
+		if ( x[1] == 1 ) {
+			for ( int i=3; i<5; i++ ) { z -= 2 * x[i] }
+		}
+		return z;
+	}
 
-Now, a human could come up with rules that would work passably. Say, if an
-obstacle is to the left, steer right. If an obstacle is to the right, steer
-left. If an obstacle is straight ahead, hard right. That would represent
-parameters
+To apply this to data, we would compile this C program and pass our data
+into the function `f()`. To "learn", the algorithm would add, remove, and
+modify individual lines, characters, or perhaps syntactic statements or
+expressions. This is sometimes called [genetic programming][GP].
+(To be 100% clear, this is only bad if we allow *arbitrary* programs
+involving `AND`, `OR`, `NOT`, `if/else`, `while`, `for`, intermediate
+variables, and the like. Genetic programming can work well if the "genes" of
+the program are very carefully designed.)
 
-\[ a=10 \; b=100 \; c=-10 \; d = 0 \]
+Why is learning an arbitrary program problematic? Does it simply not work?
+Surely any equation we write down could also be represented in a more general
+form as a program, and surely we could find that program given sufficient
+search, by exhaustive breadth-first search if necessary. And isn't it also true
+that every program has a [G&ouml;del number][GN]? So how is this fundamentally any
+different than learning a set of numbers?
 
-This rule isn't terrible, but it would be better if we took a hard *left*
-instead of a hard *right* when straight ahead was blocked but there was also
-something to the right. How would we express that rule with just addition
-and multiplication? One way would be to add a new term to our equation
-(along with another parameter $e$) which was the *product* of $x_r$ and
-$x_s$. This term will be large only when both $x_r$ AND $x_s$ are large.
+The problem isn't that it doesn't work, or that there's anything wrong with
+that approach in theory. The problem is simply that the space of programs we
+would need to search is extremely large (the number of legal programs grows
+exponentially with the length of the program with very high fan-out), and it is
+exceedingly difficult to know if we're getting "closer" to the right answer or
+not.  That's a bad combination, and means that "sufficient time" is often a lot
+longer than we're willing to wait.
 
-\[ y = a x_l + b x_s + c x_s + d + e x_s x_r \]
+To illustrate that second point, consider this (correct) program which finds
+the greatest common divisor of a pair of numbers:
 
-Something fairly magical is starting to happen: our equation is starting
-to model *logic*. Not every complicated logic yet, but it points the
-way to much more complicated things.
+	def gcd(x, y):
+		while y != 0:
+			(x, y) = (y, x % y)
+		return x
 
-But the idea is not to have a human come up with rules and "code" them as
-parameters - the idea is to get the computer to figure out new parameters
-for itself. However this intermediate idea of merely having the computer
-learn a set of number (parameters) which it can then turn into decisions
-via some equation that can combines both the parameters and data - this
-already greatly simplifies the problem. Maybe I wasn't sure how to get
-the program to "learn" a program, but I'm certain I can get a computer
-to remember a set of numbers.
+Let's say that the `"def gcd(x, y)"` is fixed as part of the problem
+specification.  Then there's literally not a single character, word, or symbol
+we could change in the body of that function which would not make it incorrect.
+If I change `%` to `*`, it doesn't terminate, if I change `y != 0` to `y != 1`
+it's so completely wrong it can never return a correct solution even by
+accident, and so on.  Therefore, in the space of all possible programs, this
+correct program is surrounded on all sides by wildly incorrect programs. That
+means that a greedy or even an evolutionary algorithm is unlikely to find this
+elegant program. It *is* possible to find it via exhaustive breadth first search
+(where depth is the length of the program) but this is brute force and hard to
+scale.
 
-Not just remember - it actually has to come up with those parameters.  Good
-parameters - parameters that *work.* Unfortunately the computer won't have any
-idea what "works" unless we tell it; we're going to need some kind of feedback
-which tells it if its getting closer. 
+So, in practical machine learning we do not try to learn arbitrary *programs*,
+we learn functions from a some highly constrained family of functions. For
+example, let's say a data point is represented as the vector $\vec{x} \in
+\mathbb{R}^n$ and our parameters are the vector $\vec{p} \in \mathbb{R}^n$.
+Then, keeping in mind that we mostly want to stick to arithmetic, the simplest
+thing we could do is a dot product between these two vectors:
 
-Essentially, we play a game of Hot or Cold with the computer. At each step it
-changes its parameters; We tell it it's now "warmer" or "colder" and how hot it
-is in absolute terms. If it usually explores in the "warmer" direction and
-keeps going until its found a "very hot" spot, it's very likely to be able to
-win the game. If we define "hot" as getting a high reward of a large set
-examples, then the parameters found at the final step substituted into the
-equation for the kind of model we're using give us will give us a function
-which gets pretty good performance at the task we trained it for.
+\[ f(\vec{x} ; \vec{p} ) = \vec{x} \cdot \vec{p} = \sum_{i=1}^n x_i p_i \]
 
-Two basic approaches ways to approach this problem are [supervised
-learning][SL] and [reinforcement learning][RL]. The supervised learning
-approach is equivalent to hiring a driving instructor to give advice in the
-form "in situation X, do Y" and feedback in the form "you did $\hat{y}$ when
-you should have done $y$!  That's great/OK/acceptable/terrible/catastrophic."
-The reinforcement learning approach is letting the computer drive the car
-randomly, crash a lot, and after each crash revisit the decisions in the
-seconds leading up to the crash and ask, "what could have I have done
-differently?"
+That looks too simple to work, but in fact we'll see in the [next article in
+this series][MLFS1] that it works surprisingly well for a very large class of
+problems.  Not for all problems of course; and throughout the series we will
+gradually add complexity to the representation. This will in turn create
+problems for us in terms of fitting/training these more complex models, so we
+will also be developing in parallel ever more powerful techniques to deal with
+these problems as they arise. In particular we will see again and again how a
+well chosen representation will allow us to find very fast algorithms for
+learning optimal parameters. 
+
+This approach of gradually adding complexity to very simple representations
+while staying "close to the shore" in the sense of sticking to representations
+which can be trained very quickly is what I mean by the "bottom up" approach to
+applied machine learning.
 
 Conclusion
 ----------
 
-Next time, we'll start with [linear regression][MLFS1], followed by
-[logistic regression][MLFS2] and some simple [neural networks][MLFS3].
-As new articles are added, you can find them collected under the ["from scratch"][MLFS]
-tag.
+Next time, we'll start with [linear regression][MLFS1], followed by [logistic
+regression][MLFS2] and some simple [neural networks][MLFS3]. As new articles
+are added, you can find them collected under the ["from scratch"][MLFS] tag.
 
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [LTR]: https://en.wikipedia.org/wiki/Learning_to_rank
@@ -358,3 +368,6 @@ tag.
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS3]: /post/ml-from-scratch-part-3-backpropagation/
 
+[IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
+[GP]: https://en.wikipedia.org/wiki/Genetic_programming
+[GN]: https://en.wikipedia.org/wiki/G%C3%B6del_numbering

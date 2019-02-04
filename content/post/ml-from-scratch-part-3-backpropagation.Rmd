@@ -11,30 +11,37 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 draft: true
 ---
 
-TODO
+In today's installment of [Machine Learning From Scratch][MLFS], I want to
+build on the [logistic regression][MLFS2] to build a classifier which is able
+to automatically linear non-linear relationships and interactions between
+features: the neural network. In particular I want to focus on a central
+algorithm which makes the neural network fast and easy to train and therefore
+very attractive from an applied point-of-view: the backpropagation algorithm.
 
-The 3Blue1Brown video is notable for one pedagogical trick in particular:
-by considering a "one-dimension" neural network with only a single node
-in each layer, he was able to present the key idea of using the chain
-rule using only high school calculus.
-
-[GORM]: https://gormanalysis.com/introduction-to-neural-networks/
-[DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
-[3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
+I don't think the world needs another Neural Net 101 blog post, so I will send
+you to [other][GORM] authors who [already have][DL2] first-rate
+[presentations.][3B1B] My intention with this article is simply to derive and
+implement that backpropagation algorithm from scratch, and to discuss how we
+can mitigate some of the dangers introduced when we move beyond logistic to
+more complex representations.
 
 Representation
 --------------
 
-The forward pass of an simple $L$-layer neural net is given recursively as:
+A simple feed-forward $L$-layer neural net is given recursively as:
 
-\[ a^{(0)} = X\]
-\[ z^{(i)} = W^{(i)} a^{(i-1)} + b^{(i)}\]
-\[a^{(i)} = \sigma(z^{(i)})\]
-\[\hat{y} = a^{(L)} \]
+\[ 
+	\begin{split} 
+		a^{(0)} & = X \\
+		z^{(i)} & = W^{(i)} a^{(i-1)} + b^{(i)} \\
+		a^{(i)} & = \sigma(z^{(i)}) \\
+		\hat{y} & = a^{(L)} 
+	\end{split}
+\]
 
 Where $\sigma()$ is a sigmoid function, $W^{(i)}$ are matrices of weights
-connecting layers, and $b^{(i)}$ are bias vectors.  $X$ is a matrix of data
-with one row per observation and one column per feature; while the final
+connecting layers, and $b^{(i)}$ are bias vectors.  $X$ is the given matrix of
+data with one row per observation and one column per feature; while the final
 activation $a^{(L)}$ *is* our prediction $\hat{y}$. (Here, the superscript in
 parentheses is a layer index and the parentheses are meant to distinguish it
 from an exponent. This slightly verbose convention is used so that ordinary
@@ -91,44 +98,99 @@ The notation used here is from matrix calculus, and we are taking partial
 derivatives with respect to a matrix (for W) or a vector (for b.) The [matrix
 cookbook][MC] may help you understand this notation. 
 
-
-For the backwards pass, therefore, we can use the chain rule. For example,
-let's do $W^{(1)}$:
-
-\[ \frac{\partial J}{\partial W^{(1)}} = 
-   \frac{\partial J}{\partial a^{(2)}} \circ
-   \frac{\partial a^{(2)}}{\partial z^{(2)}} \circ
-   \frac{\partial z^{(2)}}{\partial a^{(1)}} \circ
-   \frac{\partial a^{(1)}}{\partial z^{(1)}} \circ
-   \frac{\partial z^{(1)}}{\partial W^{(1)}}
-\]
-
-Given the forward pass equations given above, it turns out that each of these
-partial derivatives is straight-forward to calculate. You can verify for
+Given the forward pass equations given above, we can easily calculate the 
+partial derivatives for the individual components. You can verify for
 yourself that:
 
-\[ \frac{\partial J}{\partial a^{(2)}} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y} \]
-
-\[ \frac{\partial a^{(i)}}{\partial z^{(i)}} = a^{(i)} \circ (1-a^{(i)}) \]
-
-\[ \frac{\partial z^{(i)}}{\partial a^{(i-1)}} = W^{(i)} \]
-
-\[ \frac{\partial z^{(i)}}{\partial W^{(i)}} = a^{(i-1)} \]
+\[ 
+	\begin{split}
+		\color{blue}
+		\frac{\partial J}{\partial a^{(L)}} & \color{blue} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y} \\
+		\color{green}
+		\frac{\partial a^{(i)}}{\partial z^{(i)}} & \color{green} = a^{(i)} \circ (1-a^{(i)}) \\
+		\color{green}
+		\frac{\partial z^{(i)}}{\partial a^{(i-1)}} & \color{green} = W^{(i)} \\
+		\color{red}
+		\frac{\partial z^{(i)}}{\partial W^{(i)}} & \color{red} = a^{(i-1)} 
+	\end{split}
+\]
 
 Which are all straight-forward, except perhaps the derivative of the sigmoid
 were we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x)
-(1-\sigma(x))$. 
+(1-\sigma(x))$ which we proved in [Part 2][MLFS2].
 
-The justification for introducing the (technically extraneous) concept of $z$
-is found in how absolutely obvious and clear it makes the separate steps of the
-forward and backwards pass. If we had to take $\partial a^{(i)} / \partial
-a^{(i-1)}$ directly without going through $z$ we would have to think about a
-non-linear function of a matrix all at once; with $z$ we're able to view it as
-the element-wise application of a non-linear function (which is Calculus 101)
-and the partial derivative of a linear expression with respect to a matrix
-(which is Matrix Calculus 101; see the [Cookbook][MC]). 
 
-[MC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
+To take a partial derivative of $J$ with respect to any parameter in any layer we can use
+the chain rule. For $W^{(L)}$ we have:
+
+\[ 
+	\frac{\partial J}{\partial W^{(L)}} = 
+	\color{blue}
+	\frac{\partial J}{\partial a^{(L)}} \color{black} \circ
+	\color{green}
+	\frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \circ
+	\color{red}
+	\frac{\partial z^{(L)}}{\partial W^{(L)}}
+\]
+
+Next, let's do $W^{(L-1)}$:
+
+\[ 
+	\frac{\partial J}{\partial W^{(L-1)}} = 
+	\color{blue}
+	\frac{\partial J}{\partial a^{(L)}} \color{black} \circ
+	\color{green}
+	\frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
+	\frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
+	\frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \color{black} \circ
+	\color{red}
+	\frac{\partial z^{(L-1)}}{\partial W^{(L-1)}}
+\]
+
+Then $W^{(L-2)}$:
+
+\[ 
+	\frac{\partial J}{\partial W^{(L-1)}} = 
+	\color{blue}
+	\frac{\partial J}{\partial a^{(L)}} \color{black} \circ
+	\color{green}
+	\frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
+	\frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
+	\frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \circ
+	\frac{\partial z^{(L-1)}}{\partial a^{(L-2)}} \circ
+	\frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} \color{black} \circ
+	\color{red}
+	\frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
+\]
+
+I hope you are starting to see the pattern here. As we go back layer by
+layer, the left-most part of the equation (blue and green) for layer $i$ is always
+the same as the blue and green part from layer $i+1$ plus two more new green factors.
+
+Think of it like a snake: We always start with the (blue) derivative of our
+loss function with respect to the prediction. This only happens once so stays
+at the "head" of the equation. At the (red) "tail", we always take a derivative
+with respect to the parameters of interest. And in between we between we have a
+growing (green) "body" of partial derivatives.
+
+It should also be clear that we can implement this iteratively if we start at
+layer $L$ and work backwards: If we save the result of the blue and green parts
+from layer $i$, we can add on another pair of green partial derivates to grow
+the "body" get to layer $i-$.  Note that in order to calculate $\color{green}
+\partial a / \partial z$ we need to know the activations which are most easily
+obtained by first performing a forward pass and remembering the activations for
+use in the backwards pass.
+
+Finally, I'd like to point out that the justification for introducing the
+(technically extraneous) concept of $z$ is found in how absolutely obvious and
+clear it makes the separate steps of the forward and backwards pass. If we had
+to take $\partial a^{(i)} / \partial a^{(i-1)}$ directly without going through
+$z$ we would have to think about a non-linear function of a matrix all at once;
+with $z$ we're able to view it as the element-wise application of a non-linear
+function (which is Calculus 101) and the partial derivative of a linear
+expression with respect to a matrix (which is Matrix Calculus 101; see the
+[Cookbook][MC]). I think this a neat trick and one of the things that really
+helped me understand the algorithm.
 
 
 Implementation
@@ -157,24 +219,24 @@ Implementation
 			self.max_iter = int(max_iter)
 			self.threshold = float(threshold)
 
-Exactly how we initialize the network is surprisingly important; if we punt and
-simply initialize all weights to a constant, the network will flat out not work
-to any meaningful degree. That's new; linear regression and logistic regression
-certainly didn't exhibit that behavior.  Why is this the case?  Well, if all
-the weights in a given layer are exactly the same at iteration $i$, then the
-backpropagated error for each node with be exactly the same, so the gradient
-descent update will be exactly the same, so all the weights in the layer at
-iteration $i+1$ will be exactly the same. By induction, this will be true for
-all iterations. Because all the weights of given layer are constrained to be
-the same, we effectively have only one free parameter! Our model will never
-learn the complex representations we want it to. Luckily, this critical point
-is almost surely unstable, so we can break symmetry by simply initializing
-the weights slightly differently. There are a couple popular ways to do this (one
-due to [Glorot and Bengio][GB] and another due to [He et al.][HE]) but since
-I don't claim to understand either of those in great detail, to conform with
-the constraints of the "from scratch" project I'll do something I *do* understand
-and just randomly initialize them randomly distributed by $\mathcal{N}(0, 0.1^2)$.
-That suffices to break symmetry.
+Exactly how we initialize the network turns out to be very important. If we
+punt and simply initialize all weights to a constant, the network will flat out
+not work to any meaningful degree. That's new; linear regression and logistic
+regression certainly didn't exhibit that behavior.  Why is this the case?
+Well, if all the weights in a given layer are exactly the same at iteration
+$i$, then the backpropagated error for each node with be exactly the same, so
+the gradient descent update will be exactly the same, so all the weights in the
+layer at iteration $i+1$ will be exactly the same. By induction, this will be
+true for all iterations. Because all the weights of given layer are constrained
+to be the same, we effectively have only one free parameter! Our model will
+never learn the complex representations we want it to. Luckily, this critical
+point is almost surely unstable, so we can break symmetry by simply
+initializing the weights slightly differently. There are a couple popular ways
+to do this (one due to [Glorot and Bengio][GB] and another due to [He et
+al.][HE]) but since I don't claim to understand either of those in great
+detail, to conform with the constraints of the "from scratch" project I'll do
+something I *do* understand and just randomly initialize them randomly
+distributed by $\mathcal{N}(0, 0.1^2)$.  That suffices to break symmetry.
 
 		def _random_initialization(self):
 			# a small amount of randomization is necessary to
@@ -465,12 +527,12 @@ prominently feature automatic differentiation as a core capability. The chain
 rule is straightforward to apply mechanically - the hard part is keeping track
 of all those indices! So it makes sense to have software handle it. 
 
-In the next installment of the [Machine Learning From Scratch series][MLFS], we
-will change tact and look at a completely different approach to non-linear
-classification: decision trees and the recursive partition algorithm. We will
-see how these two apparently diametrically opposed approaches can both be
-viewed as examples of [adaptive basis functions][ABF], and how this
-point-of-view unifies disparate topics in machine learning.
+In the next installment of the [Machine Learning From Scratch series][MLFS]
+(coming soon!) we will change tact and look at a completely different approach
+to non-linear classification: decision trees and the recursive partition
+algorithm. We will see how these two apparently diametrically opposed
+approaches can both be viewed as examples of [adaptive basis functions][ABF],
+and how this point-of-view unifies disparate topics in machine learning.
 
 
 [TF]: https://www.tensorflow.org/tutorials/eager/automatic_differentiation
@@ -488,3 +550,8 @@ point-of-view unifies disparate topics in machine learning.
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS]: /tags/from-scratch/
 [ABF]: https://www.quora.com/What-are-adaptive-basis-functions
+[MC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
+
+[GORM]: https://gormanalysis.com/introduction-to-neural-networks/
+[DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
+[3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
