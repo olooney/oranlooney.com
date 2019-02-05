@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>OranLooney.com</title>
-    <link>/archives/</link>
+    <link>http://www.oranlooney.com/archives/</link>
     <description>Recent content on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
     
-	<atom:link href="/archives/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.oranlooney.com/archives/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

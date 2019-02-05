@@ -64,12 +64,12 @@
   <div class="main" role="main">
     <section class="list taxonomy-list">
       <article class="article">
-        <a href="/post/ml-from-scratch-part-1-lm/" class="article-titles">
-          <h2 class="article-title">ML From Scratch, Part 1: Linear Regression</h2>
+        <a href="/post/ml-from-scratch-part-3-backpropagation/" class="article-titles">
+          <h2 class="article-title">ML From Scratch, Part 3: Backpropagation</h2>
           
         </a>
         <ul class="article-meta">
-          <li class="article-meta-date"><time>November 20, 2019</time></li>
+          <li class="article-meta-date"><time>February 3, 2019</time></li>
           <li class="article-meta-tags">
             <a href="/tags/python/">
               <i class="fas fa-tag"></i>
@@ -95,13 +95,91 @@
             </a>&nbsp;
           </li>
         </ul>
-        <a href="/post/ml-from-scratch-part-1-lm/"><img src="/post/ml-from-scratch-part-1-linear-regression_files/mark-basarab-158876-unsplash.png" class="article-image" /></a>
+        <a href="/post/ml-from-scratch-part-3-backpropagation/"><img src="/post/ml-from-scratch-part-3-backpropagation_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          To kick off this series, will start with something simply yet foundational: linear regression via ordinary least squares.
-Wait! don’t go yet!
-We’re going to do it right, using QR decomposition. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?
+          In today’s installment of Machine Learning From Scratch we’ll build on logistic regression to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the backpropagation algorithm. Gradient descent can be very fast which makes them very attractive from a practical point of view.
         </div>
-        <div class="article-readmore"><a href="/post/ml-from-scratch-part-1-lm/">Read more...</a></div>
+        <div class="article-readmore"><a href="/post/ml-from-scratch-part-3-backpropagation/">Read more...</a></div>
+        <div class="article-floatclear"></div>
+      </article>
+      <article class="article">
+        <a href="/post/ml-from-scratch-part-2-logistic-regression/" class="article-titles">
+          <h2 class="article-title">ML From Scratch, Part 2: Logistic Regression</h2>
+          
+        </a>
+        <ul class="article-meta">
+          <li class="article-meta-date"><time>December 27, 2018</time></li>
+          <li class="article-meta-tags">
+            <a href="/tags/python/">
+              <i class="fas fa-tag"></i>
+              Python
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/statistics/">
+              <i class="fas fa-tag"></i>
+              Statistics
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/from-scratch/">
+              <i class="fas fa-tag"></i>
+              From Scratch
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/machine-learning/">
+              <i class="fas fa-tag"></i>
+              Machine Learning
+            </a>&nbsp;
+          </li>
+        </ul>
+        <a href="/post/ml-from-scratch-part-2-logistic-regression/"><img src="/post/ml-from-scratch-part-2-logistic-regression_files/lead.192x128.jpg" class="article-image" /></a>
+        <div class="article-content">
+          In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a cat or a dog.
+In practice, its extremely common to need to decide between \(k\) classes where \(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward.
+        </div>
+        <div class="article-readmore"><a href="/post/ml-from-scratch-part-2-logistic-regression/">Read more...</a></div>
+        <div class="article-floatclear"></div>
+      </article>
+      <article class="article">
+        <a href="/post/ml-from-scratch-part-1-linear-regression/" class="article-titles">
+          <h2 class="article-title">ML From Scratch, Part 1: Linear Regression</h2>
+          
+        </a>
+        <ul class="article-meta">
+          <li class="article-meta-date"><time>November 29, 2018</time></li>
+          <li class="article-meta-tags">
+            <a href="/tags/python/">
+              <i class="fas fa-tag"></i>
+              Python
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/statistics/">
+              <i class="fas fa-tag"></i>
+              Statistics
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/from-scratch/">
+              <i class="fas fa-tag"></i>
+              From Scratch
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/machine-learning/">
+              <i class="fas fa-tag"></i>
+              Machine Learning
+            </a>&nbsp;
+          </li>
+        </ul>
+        <a href="/post/ml-from-scratch-part-1-linear-regression/"><img src="/post/ml-from-scratch-part-1-linear-regression_files/lead.192x128.png" class="article-image" /></a>
+        <div class="article-content">
+          To kick off this series, will start with something simple yet foundational: linear regression via ordinary least squares.
+While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more advanced learning algorithms: the output layer of a deep neural network trained for regression with MSE loss, simple AR time series models, and the “local regression” part of LOWESS smoothing are all (modified) examples of linear regression.
+        </div>
+        <div class="article-readmore"><a href="/post/ml-from-scratch-part-1-linear-regression/">Read more...</a></div>
         <div class="article-floatclear"></div>
       </article>
       <article class="article">
@@ -110,7 +188,7 @@ We’re going to do it right, using QR decomposition. This is the same (or very 
           
         </a>
         <ul class="article-meta">
-          <li class="article-meta-date"><time>November 12, 2019</time></li>
+          <li class="article-meta-date"><time>November 11, 2018</time></li>
           <li class="article-meta-tags">
             <a href="/tags/python/">
               <i class="fas fa-tag"></i>
@@ -136,11 +214,10 @@ We’re going to do it right, using QR decomposition. This is the same (or very 
             </a>&nbsp;
           </li>
         </ul>
-        <a href="/post/ml-from-scratch-part-0-introduction/"><img src="/post/ml-from-scratch-part-0-introduction_files/riccardo-pelati-221261-unsplash.jpg" class="article-image" /></a>
+        <a href="/post/ml-from-scratch-part-0-introduction/"><img src="/post/ml-from-scratch-part-0-introduction_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          MotivationHow do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you yourself of all people should know, right? But it runs head-first into in the (Dunning-Kruger effect)DK. A different criterion is found in this pithy quote:
-“What I cannot create, I do not understand.” - Richard Feynman
-This is a very famous and popular quote, but there are various ways of interpreting it, perhaps the most common interpretation could be paraphrased as, “what I cannot explain to a layperson and a curious child, I do not understand.
+          Motivation“As an apprentice, every new magician must prove to his own satisfaction, at least once, that there is truly great power in magic.” - The Flying Sorcerers, by David Gerrold and Larry Niven
+How do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you of all people should know, right? But this runs head-first into in the Dunning-Kruger effect.
         </div>
         <div class="article-readmore"><a href="/post/ml-from-scratch-part-0-introduction/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -184,7 +261,8 @@ MathJax.Hub.Config({
   "HTML-CSS": {
     styles: {'.MathJax_Display': {"margin": 0}},
     linebreaks: { automatic: true }
-  }
+  },
+  TeX: { extensions: ["color.js"] }
 });
 </script>
 

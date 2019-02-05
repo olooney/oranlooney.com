@@ -2,39 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Visualization on OranLooney.com</title>
-<<<<<<< HEAD
-    <link>/tags/visualization/</link>
-=======
     <link>http://www.oranlooney.com/tags/visualization/</link>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     <description>Recent content in Visualization on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
     <lastBuildDate>Thu, 23 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-<<<<<<< HEAD
-	<atom:link href="/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
-=======
 	<atom:link href="http://www.oranlooney.com/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     
     
     <item>
       <title>Visualizing Multiclass Classification Results</title>
-<<<<<<< HEAD
-      <link>/post/viz-tsne/</link>
-      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/viz-tsne/</guid>
-      <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggrevates the matter considerably.
-=======
       <link>http://www.oranlooney.com/post/viz-tsne/</link>
       <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>http://www.oranlooney.com/post/viz-tsne/</guid>
       <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 Let&amp;rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.</description>
     </item>
     

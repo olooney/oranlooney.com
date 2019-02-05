@@ -3,168 +3,130 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-<<<<<<< HEAD
-    <loc>/post/ml-from-scratch-part-1-lm/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/post/ml-from-scratch-part-3-backpropagation/</loc>
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/ml-from-scratch-part-0-introduction/</loc>
-    <lastmod>2019-11-12T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/post/ml-from-scratch-part-2-logistic-regression/</loc>
+    <lastmod>2018-12-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/viz-tsne/</loc>
-=======
+    <loc>http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/</loc>
+    <lastmod>2018-11-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.oranlooney.com/post/ml-from-scratch-part-0-introduction/</loc>
+    <lastmod>2018-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.oranlooney.com/post/viz-tsne/</loc>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     <lastmod>2018-08-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-<<<<<<< HEAD
-    <loc>/post/craps-game-variants/</loc>
-=======
     <loc>http://www.oranlooney.com/post/craps-game-variants/</loc>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     <lastmod>2018-07-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/complex-r-part-2/</loc>
+    <loc>http://www.oranlooney.com/post/complex-r-part-2/</loc>
     <lastmod>2018-06-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/complex-r/</loc>
+    <loc>http://www.oranlooney.com/post/complex-r/</loc>
     <lastmod>2018-06-17T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/r-first-two/</loc>
-    <lastmod>2018-06-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/about/</loc>
+    <loc>http://www.oranlooney.com/about/</loc>
     <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/apparently-ipad-developer/</loc>
+    <loc>http://www.oranlooney.com/post/apparently-ipad-developer/</loc>
     <lastmod>2010-04-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/deep-copy-javascript/</loc>
+    <loc>http://www.oranlooney.com/post/deep-copy-javascript/</loc>
     <lastmod>2009-11-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/semantic-code/</loc>
+    <loc>http://www.oranlooney.com/post/semantic-code/</loc>
     <lastmod>2008-04-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/archives/</loc>
+    <loc>http://www.oranlooney.com/archives/</loc>
   </url>
   
   <url>
-    <loc>/tags/from-scratch/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/tags/from-scratch/</loc>
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/javascript/</loc>
+    <loc>http://www.oranlooney.com/tags/javascript/</loc>
     <lastmod>2010-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-<<<<<<< HEAD
-    <loc>/tags/machine-learning/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-=======
     <loc>http://www.oranlooney.com/tags/machine-learning/</loc>
-    <lastmod>2018-08-23T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://www.oranlooney.com/tags/math/</loc>
     <lastmod>2018-07-11T00:00:00+00:00</lastmod>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     <priority>0</priority>
   </url>
   
   <url>
-<<<<<<< HEAD
-    <loc>/tags/math/</loc>
-    <lastmod>2018-07-11T00:00:00+00:00</lastmod>
-=======
     <loc>http://www.oranlooney.com/</loc>
-    <lastmod>2018-08-23T00:00:00+00:00</lastmod>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-<<<<<<< HEAD
-    <loc>/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-=======
     <loc>http://www.oranlooney.com/post/</loc>
-    <lastmod>2018-08-23T00:00:00+00:00</lastmod>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/tags/python/</loc>
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-<<<<<<< HEAD
-    <loc>/tags/python/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-=======
     <loc>http://www.oranlooney.com/tags/r/</loc>
     <lastmod>2018-08-23T00:00:00+00:00</lastmod>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/r/</loc>
-    <lastmod>2018-08-23T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/tags/statistics/</loc>
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/statistics/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/tags/</loc>
+    <lastmod>2019-02-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/visualization/</loc>
-    <lastmod>2018-08-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-<<<<<<< HEAD
-    <loc>/tags/web/</loc>
-=======
     <loc>http://www.oranlooney.com/tags/visualization/</loc>
     <lastmod>2018-08-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -172,7 +134,6 @@
   
   <url>
     <loc>http://www.oranlooney.com/tags/web/</loc>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
     <lastmod>2010-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>

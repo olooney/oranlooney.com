@@ -2,47 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on OranLooney.com</title>
-    <link>/tags/</link>
+    <link>http://www.oranlooney.com/tags/</link>
     <description>Recent content in Tags on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
-    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.oranlooney.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>From Scratch</title>
-      <link>/tags/from-scratch/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <link>http://www.oranlooney.com/tags/from-scratch/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/from-scratch/</guid>
+      <guid>http://www.oranlooney.com/tags/from-scratch/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Javascript</title>
-      <link>/tags/javascript/</link>
+      <link>http://www.oranlooney.com/tags/javascript/</link>
       <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
       
-      <guid>/tags/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machine Learning</title>
-      <link>/tags/machine-learning/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/machine-learning/</guid>
+      <guid>http://www.oranlooney.com/tags/javascript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Machine Learning</title>
       <link>http://www.oranlooney.com/tags/machine-learning/</link>
-      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>http://www.oranlooney.com/tags/machine-learning/</guid>
       <description></description>
@@ -50,50 +41,37 @@
     
     <item>
       <title>Math</title>
-      <link>/tags/math/</link>
+      <link>http://www.oranlooney.com/tags/math/</link>
       <pubDate>Wed, 11 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/math/</guid>
+      <guid>http://www.oranlooney.com/tags/math/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Python</title>
-      <link>/tags/python/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <link>http://www.oranlooney.com/tags/python/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/python/</guid>
+      <guid>http://www.oranlooney.com/tags/python/</guid>
       <description></description>
     </item>
     
     <item>
       <title>R</title>
-<<<<<<< HEAD
-      <link>/tags/r/</link>
-=======
       <link>http://www.oranlooney.com/tags/r/</link>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
       <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/r/</guid>
+      <guid>http://www.oranlooney.com/tags/r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Statistics</title>
-      <link>/tags/statistics/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <link>http://www.oranlooney.com/tags/statistics/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/statistics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Visualization</title>
-      <link>/tags/visualization/</link>
-      <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/visualization/</guid>
+      <guid>http://www.oranlooney.com/tags/statistics/</guid>
       <description></description>
     </item>
     
@@ -108,10 +86,10 @@
     
     <item>
       <title>Web</title>
-      <link>/tags/web/</link>
+      <link>http://www.oranlooney.com/tags/web/</link>
       <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
       
-      <guid>/tags/web/</guid>
+      <guid>http://www.oranlooney.com/tags/web/</guid>
       <description></description>
     </item>
     

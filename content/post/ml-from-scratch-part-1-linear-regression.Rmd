@@ -1,7 +1,7 @@
 ---
 title: 'ML From Scratch, Part 1: Linear Regression'
 author: Oran Looney
-date: '2018-11-20'
+date: 2018-11-29
 slug: ml-from-scratch-part-1-linear-regression
 tags:
   - Python
@@ -9,7 +9,6 @@ tags:
   - From Scratch
   - Machine Learning
 image: /post/ml-from-scratch-part-1-linear-regression_files/lead.png
-draft: true
 ---
 
 To kick off this series, will start with something simple yet foundational:
@@ -84,18 +83,18 @@ $X_p$ is a random vector of length $M$ and $y_p$ is a scalar random variable.
 $X_p$ and $y_p$ are *not* independent, but have a joint probability
 distribution $F(x, y; \Theta, \sigma)$ parameterized by a non-random parameter
 vector $\Theta_p$, a non-negative scalar $\sigma$, and a random error term
-$\epsilon \sim \mathcal{N}(0, \sigma^2)$.
+$\epsilon \sim \mathcal{N}(0, \sigma^2)$. The model is:
 
 \[ y_p = X_p \Theta_p + \epsilon \]
 
 Then suppose we sample $N$ observations from this joint distribution. We place
 the $N$ observations into a real-valued $N\times k$ matrix $X$ and a
 real-valued vector $y$. Just to be absolutely clear, $X$ and $y$ are *not*
-random variables - they are what is called a "realization:" the
-given data used to fit the model. We can then ask, what is the likelihood
-of obtaining the data $(X, y)$ from an arbitrary parameter vector $\Theta$? By
-rearranging our equation as $y_p - X_p\Theta = \epsilon \sim \mathcal{N}(0,
-\sigma^2)$ and using the p.d.f. of the normal distribution, we can see that:
+random variables they are the  given data used to fit the model. We can then
+ask, what is the likelihood of obtaining the data $(X, y)$ from an arbitrary
+parameter vector $\Theta$? By rearranging our equation as $y_p - X_p\Theta =
+\epsilon \sim \mathcal{N}(0, \sigma^2)$ and using the p.d.f. of the normal
+distribution, we can see that:
 
 \[ L(\Theta;X,y) = \prod_{i=1}^{N} P(X,y;\Theta) = \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi}\sigma} \text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]
 
@@ -118,27 +117,22 @@ likelihood estimate][MLE] of $\Theta$ for a given data set $(X, y)$ is simply:
 \[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} \, ||y - X\Theta||^2 \]
 
 If statistics isn't really your thing, I have some good news for you: we're
-done it. Everything in this final equation is now a real-valued vector or
-matrix; there's not a random variable or probability distribution in sight!
+quits with it. Everything in this final equation is now a real-valued vector or
+matrix; there's not a random variable or probability distribution in sight.
 It's all over except for the linear algebra.
 
-What we did above was essentially a short sketch of the relevant parts of the
-[Gauss-Markov theorem][GMT] which proves that the OLS solution *is* the MLE for
-the particular statistical model we started with. The full Gauss-Markov theorem
-also proves a bunch of other nice properties that we won't concern ourselves
-with here. But if there's one thing you should remember, it's this: the fact
-that the p.d.f. of the Gaussian distribution has the quadratic term $(x
--\mu)^2$ in the exponent is the *reason* why squared error is the "right" loss function for
-linear regression. If the error of our linear model had a different distribution,
-we'd have to [make a different choice][GLM].
+What we did above was essentially a short sketch of parts of the [Gauss-Markov
+theorem][GMT] the OLS solution *is* the MLE for the particular statistical
+model we started with. The full Gauss-Markov theorem proves a bunch of other
+nice properties: it turns out this estimator is unbiased and we can even say
+that it's optimal in the sense that it is the *best possible* linear unbiased
+estimator. 
 
-Do you remember the silly motivating example I gave in [Part 0][ML0] of a
-computer trying to drive a car with a linear equation? It wasn't obvious at the
-time that it was even *possible* to come up with parameters for a model in a
-systematic way. Now we know that not only is it always *possible*, but there's
-actually at least one concrete algorithm which solves the problem in polynomial
-time and requires only a small amount of data (usually some small multiple of
-the number of parameters to fit.) 
+If there's one thing you should remember, it's this: the fact that the p.d.f.
+of the Gaussian distribution has the quadratic term $(x -\mu)^2$ in the
+exponent is the *reason* why squared error is the "right" loss function for
+linear regression. If the error of our linear model had a different
+distribution, we'd have to [make a different choice][GLM].
 
 Our key takeaway is that if it's true that our response variable is related to
 our predictor variables by a linear equation plus a certain amount of random
@@ -171,7 +165,9 @@ shaped like a big, round bowl so it's obvious where the bottom is.
 We can find the minimum - the bottom of the bowl - by using the [KKT conditions][KKT].
 In this simple this case there is only one: the gradient must be zero. This is
 analogous to finding the critical points of of a univariate function by looking
-for points where the derivative is zero.
+for points where the derivative is zero. It's not at first obvious how to
+take the gradient of the squared norm of a vector, but recall that it is
+the inner product of that vector with its dual:
 
 \[ \nabla_\Theta J = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \]
 
@@ -182,7 +178,7 @@ Expanding it out with FOIL:
    
 It's obvious that $y^T y$ is constant with respect to $\Theta$ so the first
 term simply vanishes.  It's less obvious but also true that the next two terms
-are equal to each other - remember that a J is a scalar, so those terms are
+are equal to each other - just remember that a J is a scalar, so those terms are
 each scalar, and the transpose of a scalar is itself. The final term is a
 quadratic form, and the [general rule][QFG] is $ q \nabla x^T A x =
 \frac{1}{2}A^T x + \frac{1}{2}A x $ but because the product of a matrix with
@@ -227,10 +223,11 @@ copy a matrix to take a transpose but simply operate on it row-wise instead of
 column-wise or vice versa; taking a transpose is O(1) - free for all intents and
 purposes.
 
-Why is $Rx = Q^T b$ easy to solve? R is upper triangular, and the right hand-side
-reduces to a single column vector, so we can solve this by back-substitution.
-Back-substitution is easiest to explain with an example. Consider this system
-of equations in matrix form, where the matrix is upper-triangular:
+Why is $Rx = Q^T b$ easy to solve? Well, the right had side is just a vector. R
+is upper triangular, so we can solve this with a technique called
+back-substitution. Back-substitution is easiest to explain with an example.
+Consider this system of equations in matrix form, where the matrix is
+upper-triangular:
 
 \[
  \begin{bmatrix}
@@ -257,7 +254,7 @@ $x_3$, so we can substitute that back in to get $x_2 - 2 = 0$, so $x_2 = 0$.
 The top row is $2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2$, so $x_1 = -2$.  This is
 back-substitution, and it should be clear that we can do this quickly and
 efficiently for an upper-triangular matrix of any size. Furthermore, because we
-do at most one division per row, this method is very numerically stable.  (If
+do at most one division per row, this method is very numerically stable. (If
 the matrix is [ill-conditioned][IC], we could still run into numerical error,
 but this only occurs when the original data set $X$ suffers from
 [multicolinearity][MC].)
@@ -265,13 +262,13 @@ but this only occurs when the original data set $X$ suffers from
 [IC]: https://en.wikipedia.org/wiki/Condition_number
 [MC]: https://en.wikipedia.org/wiki/Multicollinearity
 
-So hopefully you're convinced by now the $QR$ form is desirable. But how to
-get $Q$ and $R$? There are two parts to understanding the algorithm. First,
-note that the product of any two orthogonal matrices is itself orthogonal.
-Also, the identity matrix is orthogonal. Therefore, if we have a candidate
-decomposition $A = QR$ where $Q$ is orthogonal (but R may not yet be square),
-then for any orthogonal matrix $S$ we have $A = Q I R = Q S^T S R = (Q S^T) (S
-R) = Q' R'$ where $Q' = Q S^T$ and $R' = S R$ is *also* a candidate
+So hopefully you're convinced by now the $QR$ form is desirable. But how do we
+calculate $Q$ and $R$? There are two parts to understanding the algorithm.
+First, note that the product of any two orthogonal matrices is itself
+orthogonal.  Also, the identity matrix is orthogonal. Therefore, if we have a
+candidate decomposition $A = QR$ where $Q$ is orthogonal (but R may not yet be
+square), then for any orthogonal matrix $S$ we have $A = Q I R = Q S^T S R = (Q
+S^T) (S R) = Q' R'$ where $Q' = Q S^T$ and $R' = S R$ is *also* a candidate
 decomposition! This is the general strategy behind not just QR decomposition,
 but behind many other decompositions in linear algebra: at each step we want to
 apply an orthogonal transformation designed to bring $R$ closer to the desired
@@ -324,7 +321,7 @@ reflection.
 <a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
 
 Let's say that $v$ is the unit normal vector of a plane; how would I reflect an
-arbitary vector $x$ across that plane?  Well, if we subtracted $\langle x, v
+arbitrary vector $x$ across that plane?  Well, if we subtracted $\langle x, v
 \rangle v$ from $x$, that would be a projection into the plane, right? So if we
 just keep going the same direction and for the same distance again, we'll end
 up a point on the other side of the plane $x'$.  Both $x$ and $x'$ project to
@@ -617,7 +614,7 @@ regularization, neither of which are in scope for this article.
 
 In any case, let's just assume that $R^{-1}$ exists. We don't actually have to
 calculate it, though! The mere fact of its existence lets us left multiply both
-side of the equation by $(R^T)^{-1}$ and cancel the $R^T$ on both sides.
+side of the equation by $(R^T)^{-1}$ and cancel the $R^T$ on both sides, leaving only:
 
 \[ R \hat{\Theta} = Q^T y \]
 
@@ -741,6 +738,10 @@ and predicted $\hat{y}$.
 
 ![Prediction vs. Actual Scatterplot, training set and test set](/post/ml-from-scratch-part-1-linear-regression_files/predicted_vs_actual.png)
 
+We can also plot the actual and predicted response as a function of various
+predictors to get a sense of whether or not our function is truly fitting the
+data:
+
 	y_hat = model.predict(X_train)
 	plt.figure(figsize=(16,32))
 	for i in range(4, 8):
@@ -752,6 +753,9 @@ and predicted $\hat{y}$.
 		plt.ylabel("Response Variable")
 
 ![Predicted vs. Actual over pairs of independent variables](/post/ml-from-scratch-part-1-linear-regression_files/scatter.png)
+
+The eyeball test confirms that this model is fitting the data rather well,
+just as we'd expect when $r^2 = 0.75$. 
 
 Conclusion
 ----------

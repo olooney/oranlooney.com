@@ -12,6 +12,11 @@ html .article pre code {
 }
 html .article blockquote {
   margin-left: 0;
+  padding: 1em;
+  padding-left: 1.5em;
+  background: #eee;
+  border: none;
+  color: rgb(68,68,68);
 }
 
 html .article img {
@@ -45,15 +50,9 @@ html .article .section {
   overflow-x: hidden;
 }
 
-/*
-html .article ul {
-	list-style: none;
+html .article p.caption {
+	display: none;
 }
-html .article ul li::before {
-  content: "● ";
-  color: #800000;
-}
-*/
 
 /* Site Layout */
 html body .main {

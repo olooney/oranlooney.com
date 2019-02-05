@@ -6,17 +6,6 @@
   <title>Visualizing Multiclass Classification Results - OranLooney.com</title>
   <meta property="og:title" content="Visualizing Multiclass Classification Results - OranLooney.com" />
   <meta name="twitter:title" content="Visualizing Multiclass Classification Results - OranLooney.com" />
-<<<<<<< HEAD
-  <meta name="description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggrevates the matter considerably.
-Let&rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.">
-  <meta property="og:description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggrevates the matter considerably.
-Let&rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.">
-  <meta name="twitter:description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggrevates the matter considerably.
-Let&rsquo;s say we have $k$ classes. Then for …">
-  <meta name="author" content="Oran Looney"/>
-
-  <meta name="generator" content="Hugo 0.42.1" />
-=======
   <meta name="description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
 Let&rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.">
   <meta property="og:description" content="Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
@@ -25,8 +14,7 @@ Let&rsquo;s say we have $k$ classes. Then for each observation, there is one cor
 Let&rsquo;s say we have $k$ classes. Then for …">
   <meta name="author" content="Oran Looney"/>
 
-  <meta name="generator" content="Hugo 0.48" />
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
+  <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
@@ -76,11 +64,7 @@ Let&rsquo;s say we have $k$ classes. Then for …">
 
   <div class="main" role="main">
     <article class="article">
-<<<<<<< HEAD
-      <img src="/post/viz-tsne_files/tsne_10000_density_2d.png" class="article-image" />
-=======
       <img src="/post/viz-tsne_files/lead.jpg" class="article-image" />
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
       
       <h1 class="article-title">Visualizing Multiclass Classification Results</h1>
       
@@ -94,15 +78,12 @@ Let&rsquo;s say we have $k$ classes. Then for …">
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
-<<<<<<< HEAD
-=======
           <a href="/tags/machine-learning/">
             <i class="fas fa-tag"></i>
             Machine Learning
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
           <a href="/tags/visualization/">
             <i class="fas fa-tag"></i>
             Visualization
@@ -135,11 +116,7 @@ Let&rsquo;s say we have $k$ classes. Then for …">
 <h2 id="introduction">Introduction</h2>
 
 <p>Visualizing the results of a binary classifier is already a challenge,
-<<<<<<< HEAD
-but having more than two classes aggrevates the matter considerably.</p>
-=======
 but having more than two classes aggravates the matter considerably.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <p>Let&rsquo;s say we have $k$ classes. Then for each observation, there is one
 correct prediction and $k-1$ possible incorrect prediction. Instead of
@@ -148,22 +125,13 @@ Instead of having two kinds of error, false positives and false negatives,
 we have $k(k-1)$ kinds of errors. And not all errors are created equal:
 just as we choose an optimal balance of false positives and false negatives
 depending on the cost associated to each, certain kinds of errors in
-<<<<<<< HEAD
-a multiclass problem will be more or less acceptable. For example, mistaking
-=======
 a <a href="https://en.wikipedia.org/wiki/Multiclass_classification">multiclass</a> problem will be more or less acceptable. For example, mistaking
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 a lion for a tiger may be acceptable, but mistaking a tiger for a bunny
 may be fatal.</p>
 
 <p>The goal of visualizing multiclass classification results is to allow
-<<<<<<< HEAD
-the user to quickly and accurately see <em>which</em> errors are occuring
-and to start developing theories about <em>why</em> those errors are occuring;
-=======
 the user to quickly and accurately see <em>which</em> errors are occurring
 and to start developing theories about <em>why</em> those errors are occurring;
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 usually this would be to assist the user during iterative model development,
 but could also be used, for example, to communicate the behavior of a
 final classifier to a non-specialized audience.</p>
@@ -177,11 +145,7 @@ unable to see other kinds of patterns (the digits of $\pi$ coded as greyscale
 pixel brightness would look like pure noise) and worse yet has a tendency
 to see patterns in clouds of purely random data where none exist. A good
 visualization, then, ensures that any interesting structure in the underlying
-<<<<<<< HEAD
-data will be presented in a way that is ammenable to interpretation by the
-=======
 data will be presented in a way that is amenable to interpretation by the
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 human visual system, while any irrelevant or statistically insignificant
 variation is suppressed.</p>
 
@@ -206,21 +170,13 @@ that seem to me to be worth sharing.</p>
 classifier to some dataset that is reasonably amenable to classification but
 not linearly separable.</p>
 
-<<<<<<< HEAD
-<p>To meet these requirements I chose the MNIST handwritten digit dataset; This
-=======
 <p>To meet these requirements, I chose the MNIST handwritten digit dataset; This
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 data set is popular for testing multiclass classification algorithms and has
 the advantage of having very intuitive classes. The MNIST problem is to
 classify 28x28 gray scale images, which represent center and scaled images of
 handwritten digits, and assign them to one of ten classes, namely the digits 0
 through 9. The MNIST data come pre-labeled and therefore ready to be fed into a
-<<<<<<< HEAD
-supervised learning algorithm. Finally, it is extremely easy to obtain in an
-=======
 supervised learning algorithm. Best of all, it is extremely easy to obtain in an
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 R-friendly format due to its popularity.</p>
 
 <p>As a preprocessing step, we will use <a href="https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding">T-SNE</a> algorithm provided by the
@@ -234,11 +190,7 @@ xy$label &lt;- mnist_r10000$Label
 </code></pre>
 
 <p>Next, we will apply a multinomial classifier from the <a href="https://cran.r-project.org/web/packages/nnet/index.html">nnet</a> package
-<<<<<<< HEAD
-(despite the name, the package actually provides MLP and multinomial log-linear
-=======
 (despite the name, the package actually provides <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a> and multinomial log-linear
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 models)</p>
 
 <pre><code>model &lt;- multinom(
@@ -257,15 +209,9 @@ realistic enough to make a good case study.</p>
 
 <h2 id="off-the-shelf-pairs-plot">Off-the-Shelf Pairs Plot</h2>
 
-<<<<<<< HEAD
-<p>A good place to start with any dataset is a &ldquo;pairs plot:&rdquo; a simple grid of
-plots showing relationships between every every pair of columns. The
-<a href="https://cran.r-project.org/web/packages/GGally/index.html">GGally</a> package provides a particularly high quality pair plot, so let&rsquo;s
-=======
 <p>A good place to start with any dataset is a so-called &ldquo;pairs&rdquo; plot: a grid of
 plots showing relationships between every every possible pair of columns. The
 <a href="https://cran.r-project.org/web/packages/GGally/index.html">GGally</a> package provides a particularly high-quality pair plot, so let&rsquo;s
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 start with that.</p>
 
 <p><img src="/post/viz-tsne_files/xy_pairs.png" alt="GGally Pair Plot" title="GGally Pair Plot" /></p>
@@ -274,52 +220,20 @@ start with that.</p>
 uninteresting, except in a negative sense: we can tell from the large amount of
 overlap between classes in the univariate kernel density plots that neither <code>x</code>
 nor <code>y</code> alone is able to classify digits very well. However, the leftmost plot
-<<<<<<< HEAD
-in the middle column, which shows a scatter plot of <code>x</code> and <code>y</code> color coded
-=======
 in the middle column, which shows a scatter plot of <code>x</code> and <code>y</code> color-coded
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 with the true class label, suggests that using both dimensions together with a
 non-linear classifier may be effective.</p>
 
 <h2 id="scatter-plot">Scatter Plot</h2>
 
-<<<<<<< HEAD
-<p>To explore that further, let&rsquo;s create a full size scatter plot on <code>x</code> and <code>y</code>.
-To compactly and intuitively represent both the <em>true</em> class and the
-<em>predicted</em> class in the same plot, we will use the character of digit of the
-true class, while color-coding that digit based on the predicted class. To
-=======
 <p>To explore that further, let&rsquo;s create a full-size scatter plot on <code>x</code> and <code>y</code>.
 To compactly and intuitively represent both the <em>true</em> class and the
 <em>predicted</em> class in the same plot, we will plot each point with the <a href="https://glyphsapp.com/tutorials/unicode">glyph</a>
 representing the true class and a color representing the predicted class. To
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 avoid overwhelming the plot, we plot only a random sample of 1,000 points.</p>
 
 <p><img src="/post/viz-tsne_files/tsne_10000.png" alt="MNIST Digits T-SNE Coordinates, Color Coded" title="MNIST Digits T-SNE Coordinates, Color Coded" /></p>
 
-<<<<<<< HEAD
-<p>Pros: The use of the digit itself as the data point marker allows us to
-concisely and unambiguously label many points - the viewer does not need to
-refer to an arbitrary color legend to know the true class of each point.</p>
-
-<p>Cons: misses can only be seen by carefully scanning the image for digits with
-the wrong color. Because only a sample of data is shown, it is not at all clear
-where the classification boundaries of the model are.</p>
-
-<h2 id="2d-kernel-density-plot">2D Kernel Density Plot</h2>
-
-<p>One way to correct these defects is to move away from a scatter plot
-and try to visualize the underlying distributions. One way to do this
-is to compute a two dimensional kernel density estimate from the underlying
-data and to use a contour plot to display the result. Essentially, we
-get a &ldquo;hill&rdquo; for the region where a particular class is prevalent. These
-hills look like concentric rings, although the rings are very far from circular.
-The probability that a given point belongs to any particular class is
-proportional to the number of rings of the right color that completely surround
-that point.</p>
-=======
 <p>Pro: I was able to pack an extra dimension into each point by using a glyph
 to represent each point. It&rsquo;s easy to see that predictions form contiguous
 regions in the 2D space.</p>
@@ -340,7 +254,6 @@ The probability that a given point belongs to any particular class is
 proportional to the number of rings of the right color that completely surround
 that point. Points which are in the intersection between two regions are ambiguous
 and this is where we should expect to see the most misclassifications.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <pre><code>centers &lt;- xy %&gt;% 
   group_by(label) %&gt;% 
@@ -364,14 +277,8 @@ ggplot(xy[1:1000,], aes(x, y, color=label)) +
 
 <p><img src="/post/viz-tsne_files/tsne_10000_density_2d.png" alt="MNIST Digits Kernel Density Projected into T-SNE space" title="MNIST Digits Kernel Density Projected into T-SNE space" /></p>
 
-<<<<<<< HEAD
-<p>Pro: the handy trick of labelling each centroid with a large color coded digit
-makes works as well here as it does on geographic maps and makes referring to
-the color legend at the bottom unnecessary.</p>
-=======
 <p>Pro: the simple expedient of labelling each centroid with a large color coded digit
 makes works well and makes the color legend at the bottom almost unnecessary.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <p>The graph is highly interpretable at a glance, and can also be used to give
 precise predictions if you are patient enough to count rings.</p>
@@ -389,17 +296,6 @@ not very common at all.</p>
 
 <h2 id="hits-and-misses-plot">Hits and Misses Plot</h2>
 
-<<<<<<< HEAD
-<p>Taking the above scatterplot in a different direction, we can draw attention
-to misses by color coding by correctness instead of by class: correct predictions
-are labeled in blue, incorrect in red.</p>
-
-<p><img src="/post/viz-tsne_files/tsne_recovered_labels.png" alt="hits and misses" title="hits and misses" /></p>
-
-<p>Pro: this technique naturally calls the eye to the misses and rather than
-almost getting lost in the crowd (as with the previous scatterplot) the misses
-now stand out vividly.</p>
-=======
 <p>Returning to the scatterplot concept and striking out in a different direction, my
 next idea was to draw attention to misses by color coding by accuracy instead of by class;
 in the below plot: correct predictions are labeled in blue, incorrect in red.</p>
@@ -408,39 +304,23 @@ in the below plot: correct predictions are labeled in blue, incorrect in red.</p
 
 <p>Pro: this variation naturally calls the eye to the misses: Unlike our first
 scatterplot the misses now stand out vividly.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <p>It many ways this trick is successful: we can immediately see at a glance that
 misclassifications do indeed tend to fall near the boundary of two clusters,
 and we also get a sense of where such misses tend to belong to one class or the
-<<<<<<< HEAD
-other. Finally we can also easily pick out examples of misclassifications
-=======
 other. Finally, we can also easily pick out examples of misclassifications
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 buried deep within other clusters - such cases are perhaps very far beyond the
 current model to correctly classify and represent the irreducible error of the
 current approach.</p>
 
-<<<<<<< HEAD
-=======
 <p>Con: Obviously we gave up the detailed information about the predicted class
 that we previously encoded into the color. Many of the criticisms directed
 at the previous scatterplot still apply here too.</p>
 
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 <h2 id="tree-plot">Tree Plot</h2>
 
 <p>While some of the above visualizations have succeeded at attracting attention
 to the signal in the noise, they cannot be said to have algorithmically
-<<<<<<< HEAD
-extracted the relevant information. To move closer to this ideal, we can
-try applying a clustering method. We define classes as &ldquo;closer&rdquo;
-to each other each other the more often they are misclassified as each
-other, then we apply an agglomerative hierarchical clustering method to
-place them into a tree. The closer two classes are on the tree, the more
-likely they are to be mistaken for each other.</p>
-=======
 extracted the relevant information. The best way I came up with for
 doing this was to use <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">hierarchical clustering</a> which is sometimes
 used for similar problems, such as finding correlation relationships in a
@@ -452,7 +332,6 @@ other. If the algorithm does its job then those classes which are most
 likely to be mistaken together will be close together on the resulting tree.
 (Graphical plots of tree structures have the slightly pretentious name
 of &ldquo;dendrograms,&rdquo; terminology I will never-the-less adopt for precision.)</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <pre><code>miss_table &lt;- table(misses$label, misses$prediction)
 sym_miss_table &lt;- as.matrix(prop.table(miss_table + t(miss_table)))
@@ -464,22 +343,6 @@ plot(hclust(miss_dist, method=&quot;ward.D&quot;))
 
 <p><img src="/post/viz-tsne_files/hclust_dendro_ward.png" alt="Dendrogram using Ward's Linkage" title="Dendrogram using Ward's Linkage" /></p>
 
-<<<<<<< HEAD
-<p>This clustering is fundamentally successful as it correctly pairs 3 with 5, 4
-with 9, and so on. These are the same patterns we observed in the less rigorous
-analysis above, but we no longer have to rely on eyeballing the graph and making
-a subjective judgement. The clustering algorithm is explicitly telling us those
-are the most prevalent relationships.</p>
-
-<p>Con: The above relationships are symmetric, as is required by the definition of
-a <a href="https://en.wikipedia.org/wiki/Metric_(mathematics)">metric</a>. The use of a symmetric metric was in turn a requirement of the
-agglomerative clustering algorithm we used.</p>
-
-<h2 id="heat-map">Heat Map</h2>
-
-<p>The dendrogram does obscure some of the raw relationships, however. A standard
-way to visualize that exact same data is with a heatmap:</p>
-=======
 <p>Pro: I am very pleased to note that this clustering is fundamentally
 successful: it correctly pairs 3 with 5, 4 with 9, and so on. These are the
 same patterns we observed in the less rigorous analysis above, but we no longer
@@ -499,39 +362,22 @@ misclassifications, however. A standard way to have our cake and eat it to &ndas
 to show both the algorithmic clusters and underling data in the same
 visualization &ndash; is to use a heatmap for the raw data, and attach the
 dendrograms to the rows and columns.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <pre><code>heatmap(sym_dist_table)
 </code></pre>
 
 <p><img src="/post/viz-tsne_files/misses_heatmap.png" alt="Heatmap" title="Heatmap" /></p>
 
-<<<<<<< HEAD
-<p>If you look closely, you&rsquo;ll see that both the row and column dendrograms are in fact the
-same dendrogram from before, now being used to order the rows and columns of
-a heat map. This brings the 10 classes into a roughly block matrix form where
-squares along the diagonal indicate groups of classes that may be mistaken for
-one another. But the heatmap shows much more than this - we can see the
-isolated, bright red squares along the diagonal in the upper right,
-=======
 <p>Pro: If you look closely, you&rsquo;ll see that both the row and column dendrograms
 are in fact the same dendrogram from before, now being used to order the rows
 and columns of a heat map. This brings the 10 classes into a roughly block
 matrix form where squares along the diagonal indicate groups of classes that
 may be mistaken for one another. But the heatmap shows much more than this - we
 can see the isolated, bright red squares along the diagonal in the upper right,
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 representing the easily classifiable cases. We can see not just pairs, but
 larger groups - the 3-5-8 group in the lower left stands out as a 3x3 block of
 related classes.</p>
 
-<<<<<<< HEAD
-<h2 id="directed-graph">Directed Graph</h2>
-
-<p>Earlier we noted that we lost directionality by using hierarchical clustering;
-let&rsquo;s address that now by reinterpreting the distance matrix as the
-adjacency matrix of a directed graph. Then the classes will be the nodes
-=======
 <p>Con: I am very pleased with this visualization, and feel the only thing lacking
 is the directionality information we had to discard in order to fit our data
 into the hierarchical clustering mold. Let&rsquo;s address that next.</p>
@@ -542,7 +388,6 @@ into the hierarchical clustering mold. Let&rsquo;s address that next.</p>
 results matrix, before we applied the symmetry condition, and instead
 interpret it as the <a href="https://en.wikipedia.org/wiki/Adjacency_matrix">adjacency matrix</a> of a <a href="https://en.wikipedia.org/wiki/Directed_graph">directed graph.</a>
 Then the classes will be the nodes
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 of the graph and the edges will indicate common misclassifications. We
 can use the <a href="http://igraph.org/r/">igraph</a> package to visualize this digraph.</p>
 
@@ -554,17 +399,9 @@ plot(
 
 <p><img src="/post/viz-tsne_files/digraph_miss.png" alt="Digraph of Misses" /></p>
 
-<<<<<<< HEAD
-<p>Pro: Does make clear certain imbalances in misclassification: while a 5 might
-be misclassified as a 9, a 9 will almost never be misclassified as a 5. Several
-other such imbalances can be seen in this visualization; while technically this
-same directionality information is present in the above heat map and scatter
-plots, this is the only one where it is completely obvious.</p>
-=======
 <p>Pro: It makes certain imbalances in misclassification quite evident: while a 5
 might be misclassified as a 9, a 9 will almost never be misclassified as a 5.
 Such imbalances can be found simply by looking for edges with only one arrow.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
 <p>Con: Quite difficult to explain to a lay audience. No real sense of relative
 probability of each type of error. This graphic does not stand by itself, but
@@ -580,15 +417,6 @@ misses and plotting them in full.</p>
 
 <p><img src="/post/viz-tsne_files/misses_3_5.png" alt="Misses 3-&gt;5" title="Misses 3-&gt;5" /></p>
 
-<<<<<<< HEAD
-<p>Some of these errors are more forgivable than others, but it&rsquo;s clear that
-the multinomial algorithm is struggling when a digit is written in such a way as to
-shift critical features by a few pixels. An <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">algorithm</a> that didn&rsquo;t look at all
-784 pixels at once but zoomed in and looked for certain features or patterns
-in a translation invariant way would do a much better job&hellip; While I&rsquo;m
-not too interested in the particulars of the toy problem, the fact that way
-to improve the model is immediately leaps to mind just by looking at a few
-=======
 <p>Some of these errors are more forgivable than others, but it&rsquo;s clear that the
 multinomial algorithm is struggling when a digit is written in such a way as to
 shift critical features by a few pixels. An <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">algorithm</a> that didn&rsquo;t look
@@ -596,23 +424,12 @@ at all 784 pixels at once but zoomed in and looked for certain features or
 patterns in a translation invariant way would do a much better job&hellip; While I&rsquo;m
 not too interested in the particulars of the toy problem, the fact that way to
 improve the model is immediately leaps to mind just by looking at a few
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 examples of misses suggest that this kind of deep dive is a useful diagnostic
 supplement.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
 <p>Performing hierarchical clustering on the $k \times k$ confusion matrix and
-<<<<<<< HEAD
-displaying the results as a dendrogram was very successful at algorithmically finding real
-relationships between classes but hides directionality information. However, this
-can be supplemented with a digraph if directionality is important. I also found
-that presenting the dendrograms together with a heat map is an excellent way to
-visualize both the structure and raw results of a multiclass classification
-algorithm. Finally, I found that even a few concrete examples of each type of
-hit or miss went a long way towards providing insights about which cases the
-classifier could handle and which it could not.</p>
-=======
 displaying the results as a dendrogram was very successful at algorithmically
 finding real relationships between classes but hides directionality
 information. However, this can be supplemented with a digraph if directionality
@@ -621,7 +438,6 @@ map is an excellent way to visualize both the structure and raw results of a
 multiclass classification algorithm. Finally, I found that even a few concrete
 examples of each type of hit or miss went a long way towards providing insights
 about which cases the classifier could handle and which it could not.</p>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
 
     </article>
 
@@ -629,13 +445,9 @@ about which cases the classifier could handle and which it could not.</p>
 
 
     <ul class="pager article-pager">
-<<<<<<< HEAD
       <li class="pager-newer">
           <a href="/post/ml-from-scratch-part-0-introduction/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 0: Introduction">&lt; Newer</a>
       </li>
-=======
-      <li class="pager-newer pager-noitem">&lt; Newer</li>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8
       <li class="pager-older">
         <a href="/post/craps-game-variants/" data-toggle="tooltip" data-placement="top" title="Craps Variants">Older &gt;</a>
       </li>
@@ -670,7 +482,8 @@ MathJax.Hub.Config({
   "HTML-CSS": {
     styles: {'.MathJax_Display': {"margin": 0}},
     linebreaks: { automatic: true }
-  }
+  },
+  TeX: { extensions: ["color.js"] }
 });
 </script>
 

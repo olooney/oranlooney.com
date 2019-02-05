@@ -2,44 +2,61 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Statistics on OranLooney.com</title>
-    <link>/tags/statistics/</link>
+    <link>http://www.oranlooney.com/tags/statistics/</link>
     <description>Recent content in Statistics on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
-    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.oranlooney.com/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>ML From Scratch, Part 1: Linear Regression</title>
-      <link>/post/ml-from-scratch-part-1-lm/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <title>ML From Scratch, Part 3: Backpropagation</title>
+      <link>http://www.oranlooney.com/post/ml-from-scratch-part-3-backpropagation/</link>
+      <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/ml-from-scratch-part-1-lm/</guid>
-      <description>To kick off this series, will start with something simply yet foundational: linear regression via ordinary least squares.
-Wait! don’t go yet!
-We’re going to do it right, using QR decomposition. This is the same (or very close to the same) method your favorite statistical software uses under the hood, and its quite a bit more interesting than the way its usually presented to first-time students. Assuming you find linear algebra interesting, which I do, otherwise why would you be reading this?</description>
+      <guid>http://www.oranlooney.com/post/ml-from-scratch-part-3-backpropagation/</guid>
+      <description>In today’s installment of Machine Learning From Scratch we’ll build on logistic regression to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the backpropagation algorithm. Gradient descent can be very fast which makes them very attractive from a practical point of view.</description>
+    </item>
+    
+    <item>
+      <title>ML From Scratch, Part 2: Logistic Regression</title>
+      <link>http://www.oranlooney.com/post/ml-from-scratch-part-2-logistic-regression/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/ml-from-scratch-part-2-logistic-regression/</guid>
+      <description>In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a cat or a dog.
+In practice, its extremely common to need to decide between \(k\) classes where \(k &amp;gt; 2\) but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward.</description>
+    </item>
+    
+    <item>
+      <title>ML From Scratch, Part 1: Linear Regression</title>
+      <link>http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/</guid>
+      <description>To kick off this series, will start with something simple yet foundational: linear regression via ordinary least squares.
+While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more advanced learning algorithms: the output layer of a deep neural network trained for regression with MSE loss, simple AR time series models, and the “local regression” part of LOWESS smoothing are all (modified) examples of linear regression.</description>
     </item>
     
     <item>
       <title>ML From Scratch, Part 0: Introduction</title>
-      <link>/post/ml-from-scratch-part-0-introduction/</link>
-      <pubDate>Tue, 12 Nov 2019 00:00:00 +0000</pubDate>
+      <link>http://www.oranlooney.com/post/ml-from-scratch-part-0-introduction/</link>
+      <pubDate>Sun, 11 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/ml-from-scratch-part-0-introduction/</guid>
-      <description>MotivationHow do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you yourself of all people should know, right? But it runs head-first into in the (Dunning-Kruger effect)DK. A different criterion is found in this pithy quote:
-“What I cannot create, I do not understand.” - Richard Feynman
-This is a very famous and popular quote, but there are various ways of interpreting it, perhaps the most common interpretation could be paraphrased as, “what I cannot explain to a layperson and a curious child, I do not understand.</description>
+      <guid>http://www.oranlooney.com/post/ml-from-scratch-part-0-introduction/</guid>
+      <description>Motivation“As an apprentice, every new magician must prove to his own satisfaction, at least once, that there is truly great power in magic.” - The Flying Sorcerers, by David Gerrold and Larry Niven
+How do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you of all people should know, right? But this runs head-first into in the Dunning-Kruger effect.</description>
     </item>
     
     <item>
       <title>Craps Variants</title>
-      <link>/post/craps-game-variants/</link>
+      <link>http://www.oranlooney.com/post/craps-game-variants/</link>
       <pubDate>Wed, 11 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/craps-game-variants/</guid>
+      <guid>http://www.oranlooney.com/post/craps-game-variants/</guid>
       <description>Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, certain there was a mistake somewhere. How could it be closer than $\frac{1}{36}$?
 (Spoiler Warning If you haven&amp;rsquo;t calculated these odds for yourself then you may want to do so before reading further. I&amp;rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case.</description>
     </item>

@@ -1,7 +1,7 @@
 ---
 title: 'ML From Scratch, Part 0: Introduction'
 author: "Oran Looney"
-date: '2018-11-12'
+date: '2018-11-11'
 slug: ml-from-scratch-part-0-introduction
 tags:
   - Python
@@ -9,7 +9,6 @@ tags:
   - From Scratch
   - Machine Learning
 image: /post/ml-from-scratch-part-0-introduction_files/lead.jpg
-draft: true
 ---
 
 Motivation
@@ -21,11 +20,11 @@ Motivation
 
 How do you know if you really understand something? You *could* just rely on
 the subjective experience of *feeling* like you understand. This sounds
-plausible - surely you of all people should know. But this runs head-first into
-in the [Dunning-Kruger effect][DK]. Introspection is not a reliable guide to
-self-knowledge.
+plausible - surely you of all people should know, right? But this runs
+head-first into in the [Dunning-Kruger effect][DK]. Introspection is not a
+reliable guide to self-knowledge.
 
-A different way is suggested by this pithy quote:
+A more objective criterion is suggested by this pithy quote:
 
 > "What I cannot create, I do not understand." - Richard Feynman
 
@@ -86,7 +85,7 @@ approximation of the answer.
 
 Now, if someone attempts this exercise, one of two things will happen. First,
 they may succeed completely on their first try. If so, great! They've proved
-what they set out to prove. But a much more likely outcome is that they'll
+what they set out to prove. But more likely, they'll
 succeed only partially and get stuck on several points. Well, now they have the
 opportunity to correct a deficiency in their own understanding that they
 weren't previously aware of, which is also a great outcome. After all, Feynman
@@ -100,11 +99,11 @@ Ground Rules
 
 It was in the spirit of the above considerations that in the fall of 2018 I set
 myself a goal: I would, over the course of the next year, derive and implement
-a representative sample of models and algorithms from machine learning,
-entirely from scratch and (insofar as was possible) entirely from memory. Where
-I found my understanding sufficient this would be an exercise in recreational
-programming; where my understanding failed me it would be a chance to shore up
-the foundations.
+a representative sample of fundamental models and algorithms from machine
+learning, entirely from scratch and (insofar as was possible) entirely from my
+own understanding. Where I found my understanding sufficient this would be an
+exercise in recreational programming; where my understanding failed me it would
+be a chance to shore up the foundations.
 
 This is possibly less insane than it may appear. Although there are aspects of
 machine learning that are [very][VC] technical, for the most part the
@@ -122,17 +121,17 @@ hairy for things like backpropagation (which requires some fairly non-trivial
 matrix calculus) or SVMs (which basically requires the entire theory of
 [Quadradic Programming][QP].) In practice, the presentation of these
 derivations is bottlenecked by the necessity of typesetting the equations
-in $\LaTeX$ so these will typically little more than sketches of the proofs.
+in $\LaTeX$ so these will typically be little more than sketches of the proofs.
 
 [MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
 [QP]: https://en.wikipedia.org/wiki/Quadratic_programming
 
 Second, the algorithms used will be state-of-the-art, or at least reasonably
 so.  For example, while we *could* solve linear regression with gradient
-descent, that would be a bit cheap. Instead, we'll implement something pretty
-close to what modern statistical software actually does under the hood. One
-consequence of this rule is that I will be implementing vectorized versions of
-the algorithms whenever possible: while iterating over every example in the
+descent, it would be a bit of a cop out. Instead, we'll implement what modern
+statistical software actually does under the hood. One particular consequence
+of this rule is that I will be implementing vectorized versions of the
+algorithms whenever possible: while iterating over every example in the
 training set is often easier to understand, it's also pretty far removed from
 the realities of modern implementations which rely heavily on vectorization or
 even GPU acceleration for performance.

@@ -13,7 +13,7 @@
   <meta name="twitter:description" content="Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, …">
   <meta name="author" content="Oran Looney"/>
 
-  <meta name="generator" content="Hugo 0.48" />
+  <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
@@ -460,7 +460,7 @@ article.</p>
 original game?</p>
 
 <pre><code class="language-python">sum(p &gt; p_original and p &lt; Fraction(1,2) 
-	for _, p, _ in scored_variants)/len(scored_variants)
+    for _, p, _ in scored_variants)/len(scored_variants)
 </code></pre>
 
 <pre><code>0.01621000791793194
@@ -619,7 +619,8 @@ MathJax.Hub.Config({
   "HTML-CSS": {
     styles: {'.MathJax_Display': {"margin": 0}},
     linebreaks: { automatic: true }
-  }
+  },
+  TeX: { extensions: ["color.js"] }
 });
 </script>
 

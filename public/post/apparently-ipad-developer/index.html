@@ -11,7 +11,7 @@
   <meta name="twitter:description" content="Last week my boss stopped by and dropped a brand spanking new iPad on my desk. &quot;Make our application work on this,&quot; he commanded. &quot;You have two days before we demo it at the trade …">
   <meta name="author" content="Oran Looney"/>
 
-  <meta name="generator" content="Hugo 0.48" />
+  <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
@@ -84,217 +84,6 @@
       
 <aside class="toc">
   
-<<<<<<< HEAD
-</aside>
-      <div id="apparently-ipad-developer" class="section level1">
-
-<p>Last week my boss stopped by and dropped a brand spanking new iPad on my desk.
-   &quot;Make our application work on this,&quot; he commanded.  &quot;You have two days before 
-   we demo it at the trade show.&quot; 
-</p>
-<p>Madness? No, these are web apps!  You see, for the last couple years we've been
-   working exclusively on AJAX applications: web pages stuffed with so much
-   JavaScript they look and feel like desktop apps.  It's harder than writing
-   desktop software, but if you pull it off you get an application that can be
-   run anywhere, instantly.
-</p>
-<p>So, I'm not a &quot;real&quot; iPhone/iPad developer; I've never even seen the dev
-   kit.  I just do web apps.  Although maybe &quot;just&quot; isn't the right word.  We had
-   a 60,000 line application running on a completely new platform the same week it
-   launched.
-</p>
-<p>Can your app do that?
-</p>
-<p>We already supported Safari, so you'd expect it to work on the iPad too... and it
-   did, mostly, except for a couple of bugs.  Flipping the iPad on its side would
-   mess up the layout, double clicks didn't work, stuff like that.  Here are the
-   problems we hit, and what we did to solve them.
-</p>
-
-<h2>Browser Detect</h2>
-<p>To fix a browser-specific JavaScript bug you need to know when you're on that
-   browser.  Detecting the iPad is easy: the iPad user agent contains the unique 
-   string &quot;iPad&quot;, so we checked for that.  <br>
-</p>
-<pre><code>// a function to parse the user agent string; useful for 
-// detecting lots of browsers, not just the iPad.
-function checkUserAgent(vs) {
-    var pattern = new RegExp(vs, 'i');
-    return !!pattern.test(navigator.userAgent);
-}
-
-if ( checkUserAgent('iPad') ) {
-    // iPad specific stuff here
-}
-</code></pre><p>Simple enough.
-</p>
-
-<h2>Orientation Change</h2>
-<p>Flipping the iPad would also mess up our layouts.  iPads use an accelerometer
-   to detect if they're being held vertically or horizontally (or upside down.)
-   From the browser's point of view it looks like the window was resized from
-   1024x768 to 768x1024; and you get the normal window resize event you'd expect.
-</p>
-<p>We use <a href="http://extjs.com/">ExtJS</a>, and their <a href="http://www.extjs.com/deploy/dev/examples/layout-browser/layout-browser.html">Layout framework</a> usually does a great 
-   job handling the window resize event on normal browsers.  It knew that 
-   <em>something</em> had happened but didn't recalculate all the sizes correctly.  (To
-   be fair, we use some pretty complicated layouts.) 
-   This is probably do to subtle timing issues or some such.  I didn't waste much 
-   time figuring out what was going on, because there's a way to cut this Gordian 
-   knot: the iPad specific <code>orientationchange</code> event.
-</p>
-<pre><code>window.onorientationchange = function() {
-    alert(window.orientation);
-}
-</code></pre><p>window.orientation is one of 0, 90, -90, or 180.  0 and 180 are portrait; 90 and
-   -90 are landscape.  The onorientationchange event fires whenever it changes.
-   For us, it was sufficient to say <code>viewport.doLayout()</code> on orientation change;
-   that gave <a href="http://extjs.com/">ExtJS</a> the hint it needed to get the sizes right.
-</p>
-
-<h2>Double Click</h2>
-<p>Safari on the iPad co-opts the double click event for its own use (a local
-   zoom.)  You can listen for the <code>dblclick</code> event in JavaScript... it just never 
-   fires.  That was a bit of a problem, because we'd consistently allowed the user 
-   to double click stuff (a row in a grid, for example) to jump to a more detailed view.
-</p>
-<p>We settled on a two finger touch gesture to emulate the double click: 
-   touch an item in one place and tap it in another.  <br>
-   <img class="small" src="/post/apparently-ipad-developer/double_tap.png" alt="Diagram of a two-finger simultaneous tap">
-   Tapping with two figures
-   simultaneously also works.  When I say emulate, I mean that literally: when
-   we detect one of these double touches, we actually tell the DOM to fire a
-   <code>dblclick</code> event.  That way, the solution worked everywhere and we
-   didn't have to track down every single place we registered a dblclick
-   listener.  <br>
-</p>
-<pre><code>document.body.addEventListener('touchstart', function(e) {
-    touch = e.touches[0];
-    if ( !touch ) return;
-    var me = document.createEvent(&quot;MouseEvents&quot;);
-    me.initMouseEvent('dblclick', true, true, window,
-        1, // detail / mouse click count
-        touch.screenX, 
-        touch.screenY, 
-        touch.clientX, 
-        touch.clientY, 
-        false, false, false, false, // key modifiers
-        0, // primary mouse button
-        null  // related target not used for dblclick event
-    );
-    touch.target.dispatchEvent(me);
-});
-</code></pre><p>Unfortunately, this code is too simple.  You see, both the iPad and
-   iPhone use &quot;two finger scrolling&quot; for scrollable regions (elements with CSS
-   <code>overflow: scroll;</code>) within a website.
-   <img class="small" src="/post/apparently-ipad-developer/double_scroll.png" alt="Diagram of a two-finger scroll">
-   There's no way to turn this off, and it doesn't even show a scrollbar: it's 
-   two finger scrolling or nothing.
-</p>
-<p>If you use the above code as is, the dblclick event will fire as soon as the
-   user tries to use two finger scrolling.  We ran into this because we have grids
-   with thousands of rows to scroll from where the user can double click a row to
-   go to a detailed view.  To fix this problem, we had to make sure we only
-   fired an emulated <code>dblclick</code> event if the user quickly double tapped a row, not
-   if they pressed and dragged.  So instead we only set up a timer in the 
-   <code>touchstart</code> event and actually fired the <code>dblclick</code> from <code>touchend</code>.  This 
-   requires more code, but lets us handle &quot;double clicking&quot; inside of scrollable 
-   regions.
-</p>
-
-<h2>Nitpicking</h2>
-<p>Pretty much every reviewer has mentioned the iPad's &quot;gorgeous screen,&quot; but
-   it's just a 1024x768 display at fairly low DPI, so I'm not sure what that's about.
-   We test everything down to 800x600 so we were ok, usability-wise, but it sure 
-   looks a lot better on a large monitor.
-</p>
-<p>We also embed Google maps, using them as backdrops to display geographic
-   data, and the web experience for Google maps is somewhat diminished compared to
-   the full fledged Google Maps iPad app.  They still work, though.
-</p>
-<p>Safari on the iPad and iPhone doesn't fire mouse events on elements it doesn't
-   consider &quot;clickable&quot;.  Registering a <code>click</code> event listener, even if it doesn't
-   do anything, will allow the element to receive the full set of mouse events.
-</p>
-
-<h2>Aftermath</h2>
-<p>We made the two day deadline.
-</p>
-<p>Did it work?  Man, people were stopping by our booth just for the <em>chance</em>
-   to touch an iPad.  This was less than two weeks after it launched;
-   there was a lot of curiosity.  We use a bunch of data visualization like
-   Google maps and charts, and it was just stunning.  It was like a thick, juicy 
-   slice of future, served of a piece of future toast.  I can't say for sure it
-   generated a sales lead, but it sure brought in some serious foot traffic.
-</p>
-<p>But what do you expect?  Web apps can and should run anywhere, even on stuff
-   that hasn't been invented yet.
-</p>
-</div>
-
-    </article>
-
-    <hr>
-
-
-    <ul class="pager article-pager">
-      <li class="pager-newer">
-          <a href="/post/r-first-two/" data-toggle="tooltip" data-placement="top" title="Your First Two R Packages">&lt; Newer</a>
-      </li>
-      <li class="pager-older">
-        <a href="/post/deep-copy-javascript/" data-toggle="tooltip" data-placement="top" title="Deep Copy in JavaScript">Older &gt;</a>
-      </li>
-    </ul>
-  </div>
-
-
-<div class="site-footer">
-  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
-  <ul class="site-footer-items">
-  </ul>
-  <div class="powerdby">
-    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
-  </div>
-</div>
-<script src="/js/script.js"></script>
-<script src="/js/custom.js"></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
-    processEscapes: true,
-    processEnvironments: true
-  },
-  // Center justify equations in code and markdown cells. Elsewhere
-  // we use CSS to left justify single line equations in code cells.
-  displayAlign: 'center',
-  "HTML-CSS": {
-    styles: {'.MathJax_Display': {"margin": 0}},
-    linebreaks: { automatic: true }
-  }
-});
-</script>
-
-
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>
-  hljs.configure({
-    languages: ['python', 'r', 'javascript']
-  })
-  hljs.initHighlightingOnLoad()
-</script>
-
-
-
-</body>
-</html>
-=======
 </aside>
       <div id="apparently-ipad-developer" class="section level1">
 
@@ -485,7 +274,8 @@ MathJax.Hub.Config({
   "HTML-CSS": {
     styles: {'.MathJax_Display': {"margin": 0}},
     linebreaks: { automatic: true }
-  }
+  },
+  TeX: { extensions: ["color.js"] }
 });
 </script>
 
@@ -504,4 +294,3 @@ MathJax.Hub.Config({
 
 </body>
 </html>
->>>>>>> 163e3597f19a59ef992958d9d05ea0bfc7eac7a8

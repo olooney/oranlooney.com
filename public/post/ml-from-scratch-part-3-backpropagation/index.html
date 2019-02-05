@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML From Scratch, Part 3: Backpropagation - OranLooney.com</title>
+  <meta property="og:title" content="ML From Scratch, Part 3: Backpropagation - OranLooney.com" />
+  <meta name="twitter:title" content="ML From Scratch, Part 3: Backpropagation - OranLooney.com" />
+  <meta name="description" content="In today’s installment of Machine Learning From Scratch we’ll build on logistic regression to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the backpropagation algorithm. Gradient descent can be very fast which makes them very attractive from a practical point of view.">
+  <meta property="og:description" content="In today’s installment of Machine Learning From Scratch we’ll build on logistic regression to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the backpropagation algorithm. Gradient descent can be very fast which makes them very attractive from a practical point of view.">
+  <meta name="twitter:description" content="In today’s installment of Machine Learning From Scratch we’ll build on logistic regression to build a classifier which is able to represent non-linear relationships and interactions between features: …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-2535855-1');
+  </script>
+
+ 
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+    <li><a href="http://honeycode.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
+    
+  </ul>
+
+  </nav>
+</header>
+
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/ml-from-scratch-part-3-backpropagation_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">ML From Scratch, Part 3: Backpropagation</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>February 3, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/statistics/">
+            <i class="fas fa-tag"></i>
+            Statistics
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/from-scratch/">
+            <i class="fas fa-tag"></i>
+            From Scratch
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/machine-learning/">
+            <i class="fas fa-tag"></i>
+            Machine Learning
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression</a> to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the backpropagation algorithm. Gradient descent can be very fast which makes them very attractive from a practical point of view.</p>
+<p>I don’t think the world needs another Neural Net 101 blog post, so I will send you to <a href="https://gormanalysis.com/introduction-to-neural-networks/">other</a> authors who <a href="http://neuralnetworksanddeeplearning.com/chap2.html">already have</a> first-rate <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">presentations.</a> My intention with this article is simply to derive and implement that backpropagation algorithm from scratch, and to discuss how we can mitigate some of the dangers introduced when we move beyond logistic to more complex representations.</p>
+<div id="representation" class="section level2">
+<h2>Representation</h2>
+<p>There’s a lot of mysticism around neural networks but a lot of the perceived complexity vanishes once you look at the math. A typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural net is given recursively in just four simple equations, the first and last of which merely define how we get data in and predictions out of the network:</p>
+<p><span class="math display">\[ 
+    \begin{split} 
+        a^{(0)} &amp; = X \\
+        z^{(i)} &amp; = W^{(i)} a^{(i-1)} + b^{(i)} \\
+        a^{(i)} &amp; = \sigma(z^{(i)}) \\
+        \hat{y} &amp; = a^{(L)} 
+    \end{split}
+\]</span></p>
+<p>Where <span class="math inline">\(\sigma()\)</span> is a sigmoid function, <span class="math inline">\(W^{(i)}\)</span> are matrices of weights connecting layers, <span class="math inline">\(b^{(i)}\)</span> are bias vectors, <span class="math inline">\(X\)</span> is the given matrix of data with one row per observation and one column per feature, and the final activation <span class="math inline">\(a^{(L)}\)</span> is also our prediction <span class="math inline">\(\hat{y}\)</span>.</p>
+<p>(A brief aside about notation. Here, a superscript inside of parentheses is a layer index; the parentheses are meant to distinguish it from an exponent. This notation is used so that ordinary subscripts can be used to refer to the individual elements of <span class="math inline">\(W\)</span> and <span class="math inline">\(b\)</span>, for example, <span class="math inline">\(W_{jk}^{(i)}\)</span> is the element in the <span class="math inline">\(j\)</span>-th row of the <span class="math inline">\(k\)</span>-th column of the weight matrix <span class="math inline">\(W^{(i)}\)</span> for the <span class="math inline">\(i\)</span>-th layer.)</p>
+<p>All that’s really going on here is that we are alternating matrix multiplication with the element-wise application of a non-linear function, <span class="math inline">\(\sigma()\)</span> in this case. Start with a signal <span class="math inline">\(X\)</span>. To propagate the signal through the network, multiply by a matrix <span class="math inline">\(W^{(1)}\)</span>; add in the bias, apply the activation function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Keep doing that until you reach the output layer.</p>
+<p>Note that because of the restrictions on matrix multiplication, we can determine the number of rows and columns in each matrix <span class="math inline">\(W^{(i)}\)</span> by noting that it much have a number of columns equal to the number of rows in <span class="math inline">\(W^{(i-1)}\)</span>. In particular that means <span class="math inline">\(W^{(1)}\)</span> must have a number of columns equal to the number of features in the dataset <span class="math inline">\(X\)</span>, while <span class="math inline">\(W^{(L)}\)</span> has only a single output row.</p>
+<p>The parameters of the model are all the elements of every connection matrix <span class="math inline">\(W^{(i)}\)</span> plus the elements of the bias vectors <span class="math inline">\(b^{(i)}\)</span>. In symbols:</p>
+<p><span class="math display">\[ \Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)}) \]</span></p>
+<p>Since every element of every matrix is a separate parameter, neural networks tend to have a <em>lot</em> of parameters. (This implies that neural nets have high <a href="https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension">VC dimension</a> and can easily overfit if not watched closely.)</p>
+<p>To make this abstract recurrence relation concrete, we can collapse this recurrence relation into a single equation for any given depth <span class="math inline">\(L\)</span>. For example, with zero hidden layers (<span class="math inline">\(L=1\)</span>) a neural net reduces to the equation for logistic regression:</p>
+<p><span class="math display">\[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]</span></p>
+<p>If a zero-hidden-layer neural net is also trained with log-loss, both the model’s representation and fitted parameters will be exactly the same as logistic regression. We can view LR as a special case of neural nets or equivalently neural nets as a generalization of LR.</p>
+<p>With one hidden layer (<span class="math inline">\(L=2\)</span>) this expands to:</p>
+<p><span class="math display">\[ \hat{y} =\sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) \]</span></p>
+<p>A logistic regression of logistic regressions, if you will. As the chain grows longer the same pattern is repeated:</p>
+<p><span class="math display">\[ \hat{y} =\sigma(W^{(3)} \sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) + b^{(3)}) \]</span></p>
+<p>These examples are only included for the sake of concreteness. The recursive definitions will allow us to reason about a sequential neural network with any number of layers.</p>
+</div>
+<div id="fitting" class="section level2">
+<h2>Fitting</h2>
+<p>To fit the model to data, we find the parameters which minimize loss: <span class="math inline">\(\hat{\Theta} = \text{argmin} \, J(\Theta;X)\)</span>. One condition which must be true at a local minima is that <span class="math inline">\(\nabla_\Theta J = 0\)</span>. That gives us the equations:</p>
+<p><span class="math display">\[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]</span></p>
+<p>The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for <span class="math inline">\(W\)</span>) or a vector (for <span class="math inline">\(b\)</span>.) The <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">matrix cookbook</a> may help you understand this notation.</p>
+<p>Given the forward pass equations given above, we can easily calculate the partial derivatives for the individual components. You can verify for yourself that:</p>
+<p><span class="math display">\[ 
+    \begin{split}
+        \color{blue}
+        \frac{\partial J}{\partial a^{(L)}} &amp; \color{blue} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y} \\
+        \color{green}
+        \frac{\partial a^{(i)}}{\partial z^{(i)}} &amp; \color{green} = a^{(i)} \circ (1-a^{(i)}) \\
+        \color{green}
+        \frac{\partial z^{(i)}}{\partial a^{(i-1)}} &amp; \color{green} = W^{(i)} \\
+        \color{red}
+        \frac{\partial z^{(i)}}{\partial W^{(i)}} &amp; \color{red} = a^{(i-1)} 
+    \end{split}
+\]</span></p>
+<p>Which are all straight-forward, except perhaps the derivative of the sigmoid where we rely on the slightly non-obvious fact that <span class="math inline">\(\sigma&#39;(x) = \sigma(x) (1-\sigma(x))\)</span> which we proved in <a href="/post/ml-from-scratch-part-2-logistic-regression/">Part 2</a>.</p>
+<p>To take a partial derivative of <span class="math inline">\(J\)</span> with respect to any parameter in any layer we can use the chain rule. For <span class="math inline">\(W^{(L)}\)</span> we have:</p>
+<p><span class="math display">\[ 
+    \frac{\partial J}{\partial W^{(L)}} = 
+    \color{blue}
+    \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
+    \color{green}
+    \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \circ
+    \color{red}
+    \frac{\partial z^{(L)}}{\partial W^{(L)}}
+\]</span></p>
+<p>Next, let’s do <span class="math inline">\(W^{(L-1)}\)</span>:</p>
+<p><span class="math display">\[ 
+    \frac{\partial J}{\partial W^{(L-1)}} = 
+    \color{blue}
+    \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
+    \color{green}
+    \frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
+    \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
+    \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \color{black} \circ
+    \color{red}
+    \frac{\partial z^{(L-1)}}{\partial W^{(L-1)}}
+\]</span></p>
+<p>Then <span class="math inline">\(W^{(L-2)}\)</span>:</p>
+<p><span class="math display">\[ 
+    \frac{\partial J}{\partial W^{(L-1)}} = 
+    \color{blue}
+    \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
+    \color{green}
+    \frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
+    \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
+    \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \circ
+    \frac{\partial z^{(L-1)}}{\partial a^{(L-2)}} \circ
+    \frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} \color{black} \circ
+    \color{red}
+    \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
+\]</span></p>
+<p>By now you be starting to see a pattern emerge: as we go back layer by layer, the left-most part of the equation (blue and green) for layer <span class="math inline">\(i\)</span> is always the same as the blue and green part from layer <span class="math inline">\(i+1\)</span> plus two more new green factors, and capped off by the final red factor.</p>
+<p>Think of it like a snake: We always start with the (blue) derivative of our loss function with respect to the prediction. This only happens once so stays at the “head” of the equation. At the (red) “tail”, we always take a derivative with respect to the parameters of interest. And in between we between we have a growing (green) “body” of partial derivatives.</p>
+<p>It should also be clear that we can implement this iteratively if we start at layer <span class="math inline">\(L\)</span> and work backwards: If we save the result of the blue and green parts from layer <span class="math inline">\(i\)</span>, we can add on another pair of green partial derivates to grow the “body” and quickly compute layer <span class="math inline">\(i-1\)</span>. Note also that in order to calculate <span class="math inline">\(\color{green} \partial a / \partial z\)</span> we need to know the activations which are most easily obtained by first performing a forward pass and remembering the activations for use in the backwards pass.</p>
+<p>Finally, I’d like to point out that the justification for introducing the (technically extraneous) concept of <span class="math inline">\(z\)</span> is found in how absolutely obvious and clear it makes the separate steps of the forward and backwards pass. If we had to take <span class="math inline">\(\partial a^{(i)} / \partial a^{(i-1)}\)</span> directly without going through <span class="math inline">\(z\)</span> we would have to think about a non-linear function of a matrix all at once; with <span class="math inline">\(z\)</span> we’re able to view it as the element-wise application of a non-linear function (which is Calculus 101) and the partial derivative of a linear expression with respect to a matrix (which is Matrix Calculus 101; see the <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">Cookbook</a>).</p>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+<p>The above equations are straight-forward to turn into working code. The only wrinkle is that while above we represented the bias as separate vectors <span class="math inline">\(b^{(i)}\)</span>, in the implementation we will instead implement the bias by assuring that the matrix <span class="math inline">\(X\)</span> and all intermediate activations <span class="math inline">\(a^{(i)}\)</span> have a constant 1 in their first column. Thus, in the Python implementation the first column of each <span class="math inline">\(W^{(i)}\)</span> plays the role of the bias vector. This simplifies the code in some ways but complicates it in others; pay attention to where we are stacking the bias node (or removing it during the backwards pass) and the apparent off-by-one “mismatch” in matrix dimensions this introduces.</p>
+<pre><code>import numpy as np
+
+def sigmoid(z):
+    return 1 / ( 1 + np.exp(-z) )
+
+class NeuralNetwork:
+    def __init__(self, 
+                 n_hidden=(100,),
+                 learning_rate=0.05,
+                 max_iter=10,
+                 threshold=0.5):
+        # a list containing the number of nodes in 
+        # each hidden layer.
+        self.n_hidden = n_hidden
+        
+        # the input layer, output layer, and hidden layers.
+        self.n_layers = len(n_hidden) + 2
+        
+        # gradient descent parameters
+        self.learning_rate = float(learning_rate)
+        self.max_iter = int(max_iter)
+        self.threshold = float(threshold)</code></pre>
+<p>Initializing a neural network correctly turns out to be very important. If we punt and simply initialize all weights to a constant, the network will flat out not work to any meaningful degree. That’s new; linear regression and logistic regression certainly didn’t exhibit that behavior. Why is this the case? Well, if all the weights in a given layer are exactly the same at iteration <span class="math inline">\(i\)</span>, then the backpropagated error for each node with be exactly the same, so the gradient descent update will be exactly the same, so all the weights in the layer at iteration <span class="math inline">\(i+1\)</span> will be exactly the same. By induction, this will be true for all iterations. Because all the weights of given layer are constrained to be the same, we effectively have only one free parameter! Our model will never learn the complex representations we want it to. Luckily, this critical point is almost surely unstable, so we can break symmetry by simply initializing the weights slightly differently. There are a couple popular ways to do this (one due to <a href="http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf">Glorot and Bengio</a> and another due to <a href="https://arxiv.org/pdf/1502.01852v1.pdf">He et al.</a>) but since I don’t claim to understand either of those in great detail, to conform with the constraints of the “from scratch” project I’ll do something I <em>do</em> understand and just randomly initialize them randomly distributed by <span class="math inline">\(\mathcal{N}(0, 0.1^2)\)</span>. That suffices to break symmetry.</p>
+<pre><code>    def _random_initialization(self):
+        # a small amount of randomization is necessary to
+        # break symmetry; otherwise all hidden layers would
+        # get updated in lockstep.
+        if not self.n_hidden:
+            layer_sizes = [ (self.n_output, self.n_input+1) ]
+        else:
+            layer_sizes = [ (self.n_hidden[0], self.n_input+1) ]
+            previous_size = self.n_hidden[0]
+
+            for size in self.n_hidden[1:]:
+                layer_sizes.append( (size, previous_size+1) )
+                previous_size = size
+
+            layer_sizes.append( (self.n_output, previous_size+1) )
+        
+        self.layers = [
+            [np.random.normal(0, 0.1, size=layer_size), sigmoid]
+            for layer_size in layer_sizes
+        ]</code></pre>
+<p>Fitting is straight-forward: for every iteration we do one forward-pass to calculated activations, then one backwards pass to calculated gradients and update all the weights. You may notice that we’ve reverted to batch gradient descent; today’s focus is on the representation of neural networks and the backpropagation algorithm, so we’ll keep everything else as simple as possible. You can read about more sophisticated gradient descent methods in the <a href="/post/ml-from-scratch-part-2-logistic-regression/">previous article in this series.</a></p>
+<pre><code>    def fit(self, X, y):
+        self.n_input = X.shape[1]        
+        self.n_output = 1
+        y = np.atleast_2d(y).T
+        self._random_initialization()
+        
+        # fitting iterations
+        for iteration in range(self.max_iter):
+            self.forward_propagation(X)
+            self.back_propagation(y)
+        
+    def predict(self, X):
+        y_class_probabilities = self.predict_proba(X)
+        return np.where(y_class_probabilities[:,0] &lt; self.threshold, 0, 1)
+    
+    def predict_proba(self, X):
+        self.forward_propagation(X)
+        return self._activations[-1]</code></pre>
+<p>The forward pass follows our above recursive definition of the neural network very closely. We initialize activation with the given predictors ( a^{(0)} = X) then iteratively compute <span class="math inline">\(a^{(1)}\)</span>, <span class="math inline">\(a^{(2)}\)</span> until we reach <span class="math inline">\(a^{(L)} = \hat{y}\)</span>.</p>
+<pre><code>    def forward_propagation(self, X):
+        # we will store the activations calculated at each layer
+        # because these can be used to efficiently calculate
+        # gradients during backpropagation.
+        self._activations = []
+        
+        # initialize the activation with the given data
+        activation = X  
+        
+        # forward propagation through all layers
+        for W, activation_function in self.layers:
+            bias = np.ones( (activation.shape[0], 1) )
+            activation = np.hstack([bias, activation])
+            self._activations.append(activation)
+            activation = activation_function(activation @ W.T)    
+        
+        # the final activation layer does not have a bias node added.
+        self._activations.append(activation)</code></pre>
+<p>For the backwards pass, we use <code>error</code> to mean <span class="math inline">\(\partial J / \partial z_i\)</span> and <code>delta</code> to mean <span class="math inline">\(\partial J / \partial W_i\)</span>. We use the recurrence relations we derived from the chain rule to iteratively calculate the update for each layer counting down from <span class="math inline">\(L\)</span> to <span class="math inline">\(1\)</span>.</p>
+<pre><code>    def back_propagation(self, y):
+        # this function relies on self._activations calculated by self.forward_propagation()
+        
+        # the final prediction is simply activation of the final layer.
+        y_hat = self._activations[-1]
+        
+        # this first error term is based on the gradient of the loss function:
+        # log-loss in our case. Subsequently, error terms will be based on the 
+        # gradient of the sigmoid function. 
+        error = y_hat - y
+        
+        # we can see where the backpropagation algorithm gets its name: we
+        # start at the last layer and work backwards, propagating the error
+        # term from each layer to the previous one.
+        for layer in range(self.n_layers-2, -1, -1):
+            # calculate the update (delta) for the weight matrix
+            a = self._activations[layer]
+            
+            delta = (error.T @ a)
+            
+            # every layer except the output layer has a bias node added.
+            if layer != self.n_layers-2:
+                delta = delta[1:, :]
+            
+            # propogate the error term back to the previous layer
+            W = self.layers[layer][0]
+            if layer &gt; 0:
+                
+                # every layer except the output layer has a bias node added.
+                if layer != self.n_layers-2:
+                    error = error[:, 1:]
+                    
+                # the a(1-a) is of course the gradient of the sigmoid function.
+                # a different activation function would use a different formula.
+                error = (error @ W) * (a * (1-a))
+            
+            # update weights
+            W -= self.learning_rate * delta</code></pre>
+</div>
+<div id="testing" class="section level2">
+<h2>Testing</h2>
+<p>Good toy datasets for testing a neural network are a bit hard to come by. You need something that exhibits strong non-linearities and interactions to prove the advanced algorithm is solving a problem that a simpler algorithm would choke on; <em>and</em> you need quite a bit of data before any non-linear classifier has enough data to start to pick up on those second-order (or higher) regularities. I’ve tested the above NN on the classic <a href="https://en.wikipedia.org/wiki/MNIST_database">MNIST handwritten digit</a> problem but it worked too well on the training set and too poorly on the training set; that would be fine if I wanted to talk about diagnosing and solving regularization in this article, but it’s a bit of a problem since I want to talk about how adding layers to neural networks affects them. In the end, instead of shopping around for an organic dataset that met all of my requirements, I simply synthesized one to spec using scikit-learn’s handy generators.</p>
+<pre><code>from sklearn import datasets
+
+X_full, y_full = datasets.make_classification(
+    n_samples=5000, n_features=20,
+    n_informative=15,
+    n_redundant=3,
+    n_repeated=0,
+    n_classes=2,
+    flip_y=0.05,
+    class_sep=1.0,
+    shuffle=True,
+    random_state=42)
+
+# 80/20 train/test split. 
+train_test_split = int(0.8 * len(y_full))
+X_train = X_full[:train_test_split, :]
+y_train = y_full[:train_test_split]
+X_test = X_full[train_test_split:, :]
+y_test = y_full[train_test_split:]</code></pre>
+<p>This synthetic dataset has 4,000 examples in the training set and 1,000 in the test set. There are two classes with equal prevalence. There are 20 features, but only about half of these have non-zero mutual information with the class. 5% of examples simply have their class flipped, so the Bayes rate will be less than 0.05; in other words, the ceiling for accuracy is less than 95%. Each vertex is assigned to one class or the other and then data is sampled from a standard multivariate Gaussian distribution centered at each vertex. In particular, because vertices are only one standard deviation away from each other these distributions will overlap a good deal and further reduce the Bayes rate. The problem is highly non-linear and classifiers with linear decision boundaries will struggle; however it not at all pathological and a good non-linear classifier should be able to achieve something quite close to the Bayes rate.</p>
+<p>When we fit a model, the number of hidden layers and the node of nodes in each layer is a hyperparameter. For example, two hidden layers with 20 nodes in the first layer and 5 in the second would be <code>[20, 5]</code>.</p>
+<pre><code>nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)
+nn.fit(X_train, y_train)
+y_hat = nn.predict(X_train)
+p_hat = nn.predict_proba(X_train)
+np.mean(y_train == y_hat)</code></pre>
+<p>If we have no hidden layers at all then our neural network reduces to logistic regression. In particular that means it can only learn an linear decision boundary. How well does that do on the synthetic dataset we cooked up?</p>
+<pre><code>nn = NeuralNetwork(n_hidden=[], max_iter=2000, learning_rate=0.001)
+nn.fit(X_train, y_train)
+y_hat = nn.predict(X_train)
+p_hat = nn.predict_proba(X_train)
+y_test_hat = nn.predict(X_test)
+p_test_hat = nn.predict_proba(X_test)
+np.mean(y_train == y_hat), np.mean(y_test == y_test_hat)</code></pre>
+<blockquote>
+<p>(0.71924999999999994, 0.71699999999999997)</p>
+</blockquote>
+<p>Not so hot: about 72% accuracy, and an AUC of 0.7866. That’s pretty far away from the Bayes rate we estimated above; therefore we are probably underfitting.</p>
+<pre><code>from sklearn.metrics import roc_curve, roc_auc_score
+from matplotlib import pyplot as plt
+%matplotlib inline
+
+fpr, tpr, threshold = roc_curve(y_test, p_test_hat)
+plt.figure(figsize=(16,10))
+plt.step(fpr, tpr, color=&#39;black&#39;)
+plt.fill_between(fpr, tpr, step=&quot;pre&quot;, color=&#39;gray&#39;, alpha=0.2)
+plt.xlabel(&quot;False Positive Rate&quot;)
+plt.ylabel(&quot;True Positive Rate&quot;)
+plt.title(&quot;ROC Curve&quot;)
+plt.plot([0,1], [0,1], linestyle=&#39;--&#39;, color=&#39;gray&#39;)
+plt.text(0.45, 0.55, &#39;AUC: {:.4f}&#39;.format(roc_auc_score(y_test, p_test_hat)))
+plt.minorticks_on()
+plt.grid(True, which=&#39;both&#39;)
+plt.axis([0, 1, 0, 1])</code></pre>
+<div class="figure">
+<img src="/post/ml-from-scratch-part-3-backpropagation_files/roc_null.png" alt="ROC Curve for trivial NN" />
+<p class="caption">ROC Curve for trivial NN</p>
+</div>
+<p>On the other extreme, after trying a couple of hyperparameters, I found that <code>[8,3]</code> worked reasonably well.</p>
+<pre><code>nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)</code></pre>
+<div class="figure">
+<img src="/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png" alt="ROC Curve for trivial NN" />
+<p class="caption">ROC Curve for trivial NN</p>
+</div>
+<p>The <code>[8, 3]</code> model achieves 95% accuracy on the training set and 91% accuracy on the test set. It has two hidden layers of 8 nodes and 3 nodes respectively. All layers are fully connected, so there’s a <span class="math inline">\(9 \times 3\)</span> matrix with 27 parameters connecting them, plus the <span class="math inline">\(4 \times 1\)</span> connecting to the output node and the <span class="math inline">\(21 \times 8\)</span> matrix connecting to the input layer, making for 199 parameters in all.</p>
+<p>We can get a better intuition for the relationship between the complexity of our neural network and performance by plotting test set AUC as a function of the number of node used:</p>
+<div class="figure">
+<img src="/post/ml-from-scratch-part-3-backpropagation_files/test_auc_by_number_of_nodes_layers.png" alt="ROC Curve for trivial NN" />
+<p class="caption">ROC Curve for trivial NN</p>
+</div>
+<p>There’s a clear elbow in the graph around 10 nodes. Below that, the model makes steady gain in performance as more nodes to the model and its representation becomes better equipped to deal with the non-linearity of the true distribution. Above 10 nodes, making the model more complex is not able to further reduce generalization error; This suggests that the <code>[8,3]</code> model we found earlier is about as good as we can do.</p>
+<p>As a rule of thumb, the more data available for training, the more features, and the more non-linear/interaction effects in the true population, the more that elbow gets pushed to the right; in other words, The model doesn’t start to overfit until much later. For best results, the complexity of the neural network should mirror the complexity of the underlying problem. One advantage of neural networks is that they give us an easy way to make the model arbitrarily “smarter” simply by adding more layers and more neurons. In fact, not only can we simply throw more neurons and layers at a problem, we also have a wide variety of specialized layers like <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNNs</a> which can make a neural network more suited to a particular problem. The neural network is a very “modular” learning algorithm in this sense and the flexibility means in can be adapted to a wide variety of problems.</p>
+<p>Unfortunately, the strategy of bigger, smarter neural networks is only really viable when we have a ton of training data. Smart neural networks trained on small datasets overfit horribly long before they learn to generalize. Neural networks don’t solve the bias-variance trade-off for us, and they certainly aren’t a free lunch. But they do provide a framework for creating models with low bias even on very large and difficult problems… then it’s our job to keep the variance in check.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>That was backpropagation from scratch, our first look at neural networks. We saw how a sequential feed-forward network could be represented as alternating linear and non-linear transforms. We saw how to use the chain rule to calculate the gradient of the loss function with respect to any parameter in any layer of model, and how to calculate these gradients efficiently using the backpropagation algorithm. We demonstrated that a neural network could solve non-linear classification problems that logistic regression struggled with. And finally we saw how we could tune the number of layers and nodes in the neural network to take advantage of large datasets.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">specific neural network</a> presented in this article is incredibly simple relative to the neural networks used to solve real world problems. For example, we haven’t yet talked about the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">vanishing gradient problem</a> and how it can be solved with <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">rectified linear units</a> or <a href="https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c">batch normalization</a>, how <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">convolutional layers</a> or <a href="http://cs231n.github.io/convolutional-networks/#pool">pooling</a> can help when the data have a natural spatial structure, how <a href="https://en.wikipedia.org/wiki/Residual_neural_network">residual networks</a> wire layers together as acyclic digraphs, how <a href="https://en.wikipedia.org/wiki/Recurrent_neural_network">recurrent neural networks</a> use short-term memory to handle arbitrary sequences of inputs, or a thousand other topics. Yet today, the state-of-the-art algorithm used to train all of these varied species of neural networks is backpropagation, exactly as presented here.</p>
+<p>Of course, it usually isn’t necessary to actually do the calculus by hand. Modern machine learning frameworks like <a href="https://www.tensorflow.org/tutorials/eager/automatic_differentiation">Tensorflow</a> or <a href="https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html">PyTorch</a> prominently feature automatic differentiation as a core capability. The chain rule is straightforward to apply mechanically - the hard part is keeping track of all those indices! So it makes sense to have software handle it.</p>
+<p>In the next installment of the <a href="/tags/from-scratch/">Machine Learning From Scratch series</a> (coming soon!) we will change tact and look at a completely different approach to non-linear classification: decision trees and the recursive partition algorithm. We will see how these two apparently diametrically opposed approaches can both be viewed as examples of <a href="https://www.quora.com/What-are-adaptive-basis-functions">adaptive basis functions</a>, and how this point-of-view unifies disparate topics in machine learning.</p>
+</div>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/ml-from-scratch-part-2-logistic-regression/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 2: Logistic Regression">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">&copy; Copyright 2018 Oran Looney</div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  },
+  TeX: { extensions: ["color.js"] }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>

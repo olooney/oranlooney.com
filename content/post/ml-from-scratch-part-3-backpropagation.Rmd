@@ -1,22 +1,22 @@
 ---
 title: 'ML From Scratch, Part 3: Backpropagation'
 author: Oran Looney
-date: 2018-12-26
+date: 2019-02-03
 tags:
   - Python
   - Statistics
   - From Scratch
   - Machine Learning
 image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
-draft: true
 ---
 
-In today's installment of [Machine Learning From Scratch][MLFS], I want to
-build on the [logistic regression][MLFS2] to build a classifier which is able
-to automatically linear non-linear relationships and interactions between
-features: the neural network. In particular I want to focus on a central
-algorithm which makes the neural network fast and easy to train and therefore
-very attractive from an applied point-of-view: the backpropagation algorithm.
+In today's installment of [Machine Learning From Scratch][MLFS] we'll build on
+[logistic regression][MLFS2] to build a classifier which is able to represent
+non-linear relationships and interactions between features: the neural network.
+In particular I want to focus on one central algorithm which allows us to apply
+gradient descent to deep neural networks: the backpropagation algorithm.
+Gradient descent can be very fast which makes them very attractive from a
+practical point of view.
 
 I don't think the world needs another Neural Net 101 blog post, so I will send
 you to [other][GORM] authors who [already have][DL2] first-rate
@@ -28,7 +28,11 @@ more complex representations.
 Representation
 --------------
 
-A simple feed-forward $L$-layer neural net is given recursively as:
+There's a lot of mysticism around neural networks but a lot of the perceived
+complexity vanishes once you look at the math. A typical fully-connected
+feed-forward $L$-layer neural net is given recursively in just four simple
+equations, the first and last of which merely define how we get data in and
+predictions out of the network:
 
 \[ 
 	\begin{split} 
@@ -40,39 +44,53 @@ A simple feed-forward $L$-layer neural net is given recursively as:
 \]
 
 Where $\sigma()$ is a sigmoid function, $W^{(i)}$ are matrices of weights
-connecting layers, and $b^{(i)}$ are bias vectors.  $X$ is the given matrix of
-data with one row per observation and one column per feature; while the final
-activation $a^{(L)}$ *is* our prediction $\hat{y}$. (Here, the superscript in
-parentheses is a layer index and the parentheses are meant to distinguish it
-from an exponent. This slightly verbose convention is used so that ordinary
-subscripts can be used to refer to the individual elements of $W$ and $b$, for
-example, $W_{jk}^{(i)}$ is the element in the $j$-th row of the $k$-th column
-of the weight matrix $W^{(i)}$ for the $i$-th layer.)
+connecting layers, $b^{(i)}$ are bias vectors, $X$ is the given matrix of data
+with one row per observation and one column per feature, and the final
+activation $a^{(L)}$ is also our prediction $\hat{y}$. 
+
+(A brief aside about notation. Here, a superscript inside of parentheses is a
+layer index; the parentheses are meant to distinguish it from an exponent. This
+notation is used so that ordinary subscripts can be used to refer to the
+individual elements of $W$ and $b$, for example, $W_{jk}^{(i)}$ is the element
+in the $j$-th row of the $k$-th column of the weight matrix $W^{(i)}$ for the
+$i$-th layer.)
+
+All that's really going on here is that we are alternating matrix
+multiplication with the element-wise application of a non-linear function,
+$\sigma()$ in this case. Start with a signal $X$. To propagate the signal
+through the network, multiply by a matrix $W^{(1)}$; add in the bias, apply the
+activation function. Multiply by $W^{(2)}$, add in the bias, apply the
+application function.  Multiply by $W^{(2)}$, add in the bias, apply the
+application function. Keep doing that until you reach the output layer.
 
 Note that because of the restrictions on matrix multiplication, we can determine
 the number of rows and columns in each matrix $W^{(i)}$ by noting that it much have
-a number of columns equal to the number of nodes on the previous layer and a
-number of rows equal to the number of nodes of the next layer. In particular
+a number of columns equal to the number of rows in $W^{(i-1)}$. In particular
 that means $W^{(1)}$ must have a number of columns equal to the number of features
-in the dataset $X$, while $W^{(L)}$ has only a single output row.
+in the dataset $X$, while $W^{(L)}$ has only a single output row. 
 
-The parameters of the model are the combination of *all* the weights of every
-connection matrix $W^{(i)}$ as well as the bias vectors $b^{(i)}$: $\Theta =
-(W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)})$.  Since every element of every
-matrix is a separate parameter, neural networks tend to have a *lot* of
-parameters.
+The parameters of the model are all the elements of every connection matrix
+$W^{(i)}$ plus the elements of the bias vectors $b^{(i)}$. In symbols: 
 
-We can collapse this recurrence relation into a single equation for any given
-depth $L$. For example, with zero hidden layers ($L=1$) a neural net reduces to
-the equation for logistic regression:
+\[ \Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)}) \]
+
+Since every element of every matrix is a separate parameter, neural networks
+tend to have a *lot* of parameters. (This implies that neural nets have high
+[VC dimension][VCD] and can easily overfit if not watched closely.)
+
+To make this abstract recurrence relation concrete, we can collapse this
+recurrence relation into a single equation for any given depth $L$. For
+example, with zero hidden layers ($L=1$) a neural net reduces to the equation
+for logistic regression:
 
 \[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]
 
 If a zero-hidden-layer neural net is also trained with log-loss, both the
 model's representation and fitted parameters will be exactly the same as
-logistic regression.
+logistic regression. We can view LR as a special case of neural nets or
+equivalently neural nets as a generalization of LR.
 
-With one hidden layer ($L=2$) this expands slightly:
+With one hidden layer ($L=2$) this expands to:
 
 \[ \hat{y} =\sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) \]
 
@@ -95,7 +113,7 @@ at a local minima is that $\nabla_\Theta J = 0$. That gives us the equations:
 \[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]
 
 The notation used here is from matrix calculus, and we are taking partial
-derivatives with respect to a matrix (for W) or a vector (for b.) The [matrix
+derivatives with respect to a matrix (for $W$) or a vector (for $b$.) The [matrix
 cookbook][MC] may help you understand this notation. 
 
 Given the forward pass equations given above, we can easily calculate the 
@@ -116,12 +134,11 @@ yourself that:
 \]
 
 Which are all straight-forward, except perhaps the derivative of the sigmoid
-were we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x)
+where we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x)
 (1-\sigma(x))$ which we proved in [Part 2][MLFS2].
 
-
-To take a partial derivative of $J$ with respect to any parameter in any layer we can use
-the chain rule. For $W^{(L)}$ we have:
+To take a partial derivative of $J$ with respect to any parameter in any layer
+we can use the chain rule. For $W^{(L)}$ we have:
 
 \[ 
 	\frac{\partial J}{\partial W^{(L)}} = 
@@ -163,9 +180,10 @@ Then $W^{(L-2)}$:
 	\frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
 \]
 
-I hope you are starting to see the pattern here. As we go back layer by
-layer, the left-most part of the equation (blue and green) for layer $i$ is always
-the same as the blue and green part from layer $i+1$ plus two more new green factors.
+By now you be starting to see a pattern emerge: as we go back layer by layer,
+the left-most part of the equation (blue and green) for layer $i$ is always the
+same as the blue and green part from layer $i+1$ plus two more new green
+factors, and capped off by the final red factor.
 
 Think of it like a snake: We always start with the (blue) derivative of our
 loss function with respect to the prediction. This only happens once so stays
@@ -176,10 +194,10 @@ growing (green) "body" of partial derivatives.
 It should also be clear that we can implement this iteratively if we start at
 layer $L$ and work backwards: If we save the result of the blue and green parts
 from layer $i$, we can add on another pair of green partial derivates to grow
-the "body" get to layer $i-$.  Note that in order to calculate $\color{green}
-\partial a / \partial z$ we need to know the activations which are most easily
-obtained by first performing a forward pass and remembering the activations for
-use in the backwards pass.
+the "body" and quickly compute layer $i-1$.  Note also that in order to
+calculate $\color{green} \partial a / \partial z$ we need to know the
+activations which are most easily obtained by first performing a forward pass
+and remembering the activations for use in the backwards pass.
 
 Finally, I'd like to point out that the justification for introducing the
 (technically extraneous) concept of $z$ is found in how absolutely obvious and
@@ -189,12 +207,21 @@ $z$ we would have to think about a non-linear function of a matrix all at once;
 with $z$ we're able to view it as the element-wise application of a non-linear
 function (which is Calculus 101) and the partial derivative of a linear
 expression with respect to a matrix (which is Matrix Calculus 101; see the
-[Cookbook][MC]). I think this a neat trick and one of the things that really
-helped me understand the algorithm.
+[Cookbook][MC]). 
 
 
 Implementation
 --------------
+
+The above equations are straight-forward to turn into working code. The only
+wrinkle is that while above we represented the bias as separate vectors
+$b^{(i)}$, in the implementation we will instead implement the bias by assuring
+that the matrix $X$ and all intermediate activations $a^{(i)}$ have a constant
+1 in their first column. Thus, in the Python implementation the first column of
+each $W^{(i)}$ plays the role of the bias vector. This simplifies the code in
+some ways but complicates it in others; pay attention to where we are stacking
+the bias node (or removing it during the backwards pass) and the apparent
+off-by-one "mismatch" in matrix dimensions this introduces.
 
 	import numpy as np
 
@@ -219,7 +246,7 @@ Implementation
 			self.max_iter = int(max_iter)
 			self.threshold = float(threshold)
 
-Exactly how we initialize the network turns out to be very important. If we
+Initializing a neural network correctly turns out to be very important. If we
 punt and simply initialize all weights to a constant, the network will flat out
 not work to any meaningful degree. That's new; linear regression and logistic
 regression certainly didn't exhibit that behavior.  Why is this the case?
@@ -309,10 +336,10 @@ then iteratively compute $a^{(1)}$, $a^{(2)}$ until we reach $a^{(L)} = \hat{y}$
 			# the final activation layer does not have a bias node added.
 			self._activations.append(activation)
 
-For the backwards pass, we generally use `error` to mean $\partial J / \partial
-z_i$ `delta` to represent $\partial J / \partial W_i$. We use the recurrence
-relations we derived from the chain rule to iteratively calculate the update
-for each layer counting down from $L$ to $1$.
+For the backwards pass, we use `error` to mean $\partial J / \partial z_i$ and
+`delta` to mean $\partial J / \partial W_i$. We use the recurrence relations we
+derived from the chain rule to iteratively calculate the update for each layer
+counting down from $L$ to $1$.
 			
 		def back_propagation(self, y):
 			# this function relies on self._activations calculated by self.forward_propagation()
@@ -357,17 +384,18 @@ for each layer counting down from $L$ to $1$.
 Testing
 -------
 
-Good test sets for a neural network or other machine learning algorithm are a bit
-tricky to come by. First, because you need something that exhibits strong non-linearities
-and interactions to prove the advanced algorithm is solving a problem that a simpler
-algorithm would choke on. Second, because you need quite a bit of data before any
-non-linear classifier has enough data to start to pick up on those second-order (or
-higher) regularities. I've tested the above NN on the classic [MNIST handwritten digit][MHD]
-problem but it worked too well on the training set and too poorly on the training
-set; that would be fine if I wanted to talk about diagnosing and solving regularization
-in this article, but it's a bit of a problem since I want to talk about how adding
-layers to neural networks affects them. In the end I found a synthetic training set
-worked best.
+Good toy datasets for testing a neural network are a bit hard to come by.  You
+need something that exhibits strong non-linearities and interactions to prove
+the advanced algorithm is solving a problem that a simpler algorithm would
+choke on; *and* you need quite a bit of data before any non-linear classifier
+has enough data to start to pick up on those second-order (or higher)
+regularities. I've tested the above NN on the classic [MNIST handwritten
+digit][MHD] problem but it worked too well on the training set and too poorly
+on the training set; that would be fine if I wanted to talk about diagnosing
+and solving regularization in this article, but it's a bit of a problem since I
+want to talk about how adding layers to neural networks affects them. In the
+end, instead of shopping around for an organic dataset that met all of my requirements,
+I simply synthesized one to spec using scikit-learn's handy generators.
 
 	from sklearn import datasets
 
@@ -390,7 +418,7 @@ worked best.
 	y_test = y_full[train_test_split:]
 
 This synthetic dataset has 4,000 examples in the training set and 1,000 in the
-test set.  There are two classes with equal prevalence. There are 20 features,
+test set. There are two classes with equal prevalence. There are 20 features,
 but only about half of these have non-zero mutual information with the class.
 5% of examples simply have their class flipped, so the Bayes rate will be less
 than 0.05; in other words, the ceiling for accuracy is less than 95%. Each
@@ -457,7 +485,7 @@ On the other extreme, after trying a couple of hyperparameters, I found that
 ![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png)
 
 The `[8, 3]` model achieves 95% accuracy on the training set and 91% accuracy
-on the test set. That's two hidden layers of 8 nodes and 3 nodes respectively.
+on the test set. It has two hidden layers of 8 nodes and 3 nodes respectively.
 All layers are fully connected, so there's a $9 \times 3$ matrix with 27
 parameters connecting them, plus the $4 \times 1$ connecting to the output
 node and the $21 \times 8$ matrix connecting to the input layer, making for 199
@@ -493,9 +521,9 @@ Unfortunately, the strategy of bigger, smarter neural networks is only really
 viable when we have a ton of training data. Smart neural networks trained on
 small datasets overfit horribly long before they learn to generalize. Neural
 networks don't solve the bias-variance trade-off for us, and they certainly
-aren't a free lunch. But they do provide a framework for creating models
-with low bias even on very large and problems... and then it's our job to
-keep the variance in check.
+aren't a free lunch. But they do provide a framework for creating models with
+low bias even on very large and difficult problems... then it's our job to keep
+the variance in check.
 
 Conclusion
 ----------
@@ -510,7 +538,7 @@ non-linear classification problems that logistic regression struggled with. And
 finally we saw how we could tune the number of layers and nodes in the neural
 network to take advantage of large datasets.
 
-This neural network (and the method used to fit it) is incredibly simple
+The [specific neural network][MLP] presented in this article is incredibly simple
 relative to the neural networks used to solve real world problems. For example,
 we haven't yet talked about the [vanishing gradient problem][VGP] and how it
 can be solved with [rectified linear units][RLU] or [batch normalization][BN],
@@ -555,3 +583,5 @@ and how this point-of-view unifies disparate topics in machine learning.
 [GORM]: https://gormanalysis.com/introduction-to-neural-networks/
 [DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
 [3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
+[VCD]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension
+[MLP]: https://en.wikipedia.org/wiki/Multilayer_perceptron
