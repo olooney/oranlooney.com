@@ -14,25 +14,25 @@ In today's installment of [Machine Learning From Scratch][MLFS] we'll build on
 [logistic regression][MLFS2] to build a classifier which is able to represent
 non-linear relationships and interactions between features: the neural network.
 In particular I want to focus on one central algorithm which allows us to apply
-gradient descent to deep neural networks: the backpropagation algorithm.
-Gradient descent can be very fast which makes them very attractive from a
-practical point of view.
+gradient descent to deep neural networks: the [backpropagation algorithm][BA]. The
+history of this algorithm appears to be [somewhat complex][BPH], as you can
+hear from [Yann LeCun himself in this 2018 interview][YLC], but luckily for
+us the algorithm in its modern form is not difficult - although it does require
+a solid handle on linear algebra and calculus.
 
 I don't think the world needs another Neural Net 101 blog post, so I will send
 you to [other][GORM] authors who [already have][DL2] first-rate
 [presentations.][3B1B] My intention with this article is simply to derive and
-implement that backpropagation algorithm from scratch, and to discuss how we
-can mitigate some of the dangers introduced when we move beyond logistic to
-more complex representations.
+implement that backpropagation algorithm from scratch, implement a working
+version, and to discuss how we can mitigate some of the dangers introduced when
+we move beyond logistic to more complex representations.
 
 Representation
 --------------
 
-There's a lot of mysticism around neural networks but a lot of the perceived
-complexity vanishes once you look at the math. A typical fully-connected
-feed-forward $L$-layer neural net is given recursively in just four simple
-equations, the first and last of which merely define how we get data in and
-predictions out of the network:
+A typical fully-connected feed-forward $L$-layer neural net is given
+recursively in just four simple equations, the first and last of which merely
+define how we get data in and predictions out of the network:
 
 \[ 
 	\begin{split} 
@@ -113,8 +113,8 @@ at a local minima is that $\nabla_\Theta J = 0$. That gives us the equations:
 \[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]
 
 The notation used here is from matrix calculus, and we are taking partial
-derivatives with respect to a matrix (for $W$) or a vector (for $b$.) The [matrix
-cookbook][MC] may help you understand this notation. 
+derivatives with respect to a matrix (for $W$) or a vector (for $b$.) The
+[matrix cookbook][MC] may help you understand this notation. 
 
 Given the forward pass equations given above, we can easily calculate the 
 partial derivatives for the individual components. You can verify for
@@ -128,25 +128,31 @@ yourself that:
 		\frac{\partial a^{(i)}}{\partial z^{(i)}} & \color{green} = a^{(i)} \circ (1-a^{(i)}) \\
 		\color{green}
 		\frac{\partial z^{(i)}}{\partial a^{(i-1)}} & \color{green} = W^{(i)} \\
-		\color{red}
-		\frac{\partial z^{(i)}}{\partial W^{(i)}} & \color{red} = a^{(i-1)} 
+		\color{maroon}
+		\frac{\partial z^{(i)}}{\partial W^{(i)}} & \color{maroon} = a^{(i-1)} 
 	\end{split}
 \]
 
 Which are all straight-forward, except perhaps the derivative of the sigmoid
 where we rely on the slightly non-obvious fact that $\sigma'(x) = \sigma(x)
-(1-\sigma(x))$ which we proved in [Part 2][MLFS2].
+(1-\sigma(x))$ which we proved in [Part 2][MLFS2]. From now on, we will be
+describing the equations for $\nabla J$ in terms of partial derivatives - 
+if you want to know how to actually calculate anything concretely, refer to these
+four equations.
 
 To take a partial derivative of $J$ with respect to any parameter in any layer
 we can use the chain rule. For $W^{(L)}$ we have:
 
 \[ 
 	\frac{\partial J}{\partial W^{(L)}} = 
+	\Bigg(
 	\color{blue}
 	\frac{\partial J}{\partial a^{(L)}} \color{black} \circ
 	\color{green}
-	\frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \circ
-	\color{red}
+	\frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} 
+	\Bigg)
+	\circ
+	\color{maroon}
 	\frac{\partial z^{(L)}}{\partial W^{(L)}}
 \]
 
@@ -154,42 +160,57 @@ Next, let's do $W^{(L-1)}$:
 
 \[ 
 	\frac{\partial J}{\partial W^{(L-1)}} = 
+	\Bigg(
 	\color{blue}
 	\frac{\partial J}{\partial a^{(L)}} \color{black} \circ
 	\color{green}
-	\frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
+	\frac{\partial a^{(L)}}{\partial z^{(L)}} 
+	\color{black} \Bigg) \circ \Bigg( \color{green}
 	\frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
-	\frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \color{black} \circ
-	\color{red}
+	\frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
+	\color{black} \Bigg) \circ
+	\color{maroon}
 	\frac{\partial z^{(L-1)}}{\partial W^{(L-1)}}
 \]
 
 Then $W^{(L-2)}$:
 
 \[ 
-	\frac{\partial J}{\partial W^{(L-1)}} = 
+	\frac{\partial J}{\partial W^{(L-2)}} = 
+	\Bigg(
 	\color{blue}
 	\frac{\partial J}{\partial a^{(L)}} \color{black} \circ
 	\color{green}
 	\frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
 	\frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
-	\frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \circ
+	\frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
+	\color{black} \Bigg) \circ \Bigg( \color{green}
 	\frac{\partial z^{(L-1)}}{\partial a^{(L-2)}} \circ
-	\frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} \color{black} \circ
-	\color{red}
+	\frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} 
+	\color{black} \Bigg) \circ
+	\color{maroon}
 	\frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
 \]
 
 By now you be starting to see a pattern emerge: as we go back layer by layer,
 the left-most part of the equation (blue and green) for layer $i$ is always the
 same as the blue and green part from layer $i+1$ plus two more new green
-factors, and capped off by the final red factor.
+factors, and capped off by the final maroon factor. 
 
 Think of it like a snake: We always start with the (blue) derivative of our
 loss function with respect to the prediction. This only happens once so stays
-at the "head" of the equation. At the (red) "tail", we always take a derivative
+at the "head" of the equation. At the (maroon) "tail", we always take a derivative
 with respect to the parameters of interest. And in between we between we have a
-growing (green) "body" of partial derivatives.
+growing (green) "body" of partial derivatives. To capture this insight
+in symbols, let's introduce a new recurrence relation:
+
+\[
+	\begin{split} 
+	\color{purple} \delta^{(L)} & = \color{blue} \frac{\partial J}{\partial a^{(L)}} \color{black} \circ \color{green} \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \\
+	\color{purple} \delta^{(i-1)} & = \color{purple} \delta^{(i)} \color{black} \circ \Bigg( \color{green} \frac{\partial z^{(i)}}{\partial a^{(i-1)}} \circ \frac{\partial a^{(i-1)}}{\partial z^{(i-1)}} \color{black} \Bigg) \\
+	\frac{\partial J}{\partial W^{(i)}} & = \color{purple} \delta^{(i)} \color{black} \circ \color{maroon} \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
+	\end{split}
+\]
 
 It should also be clear that we can implement this iteratively if we start at
 layer $L$ and work backwards: If we save the result of the blue and green parts
@@ -585,3 +606,7 @@ and how this point-of-view unifies disparate topics in machine learning.
 [3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
 [VCD]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension
 [MLP]: https://en.wikipedia.org/wiki/Multilayer_perceptron
+[BPH]: http://people.idsia.ch/~juergen/who-invented-backpropagation.html
+[YLC]: https://youtu.be/Svb1c6AkRzE
+[BA]: https://en.wikipedia.org/wiki/Backpropagation
+
