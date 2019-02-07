@@ -22,10 +22,10 @@ a solid handle on linear algebra and calculus.
 
 I don't think the world needs another Neural Net 101 blog post, so I will send
 you to [other][GORM] authors who [already have][DL2] first-rate
-[presentations.][3B1B] My intention with this article is simply to derive and
-implement that backpropagation algorithm from scratch, implement a working
-version, and to discuss how we can mitigate some of the dangers introduced when
-we move beyond logistic to more complex representations.
+[presentations.][3B1B] My intention with this article is simply to derive the
+backpropagation algorithm, implement a working version from scratch, and to
+discuss how we can mitigate some of the dangers introduced when we move beyond
+logistic to more complex representations.
 
 Representation
 --------------
