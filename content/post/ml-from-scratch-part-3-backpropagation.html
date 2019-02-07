@@ -12,11 +12,11 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 
 
 
-<p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression</a> to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the backpropagation algorithm. Gradient descent can be very fast which makes them very attractive from a practical point of view.</p>
-<p>I don’t think the world needs another Neural Net 101 blog post, so I will send you to <a href="https://gormanalysis.com/introduction-to-neural-networks/">other</a> authors who <a href="http://neuralnetworksanddeeplearning.com/chap2.html">already have</a> first-rate <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">presentations.</a> My intention with this article is simply to derive and implement that backpropagation algorithm from scratch, and to discuss how we can mitigate some of the dangers introduced when we move beyond logistic to more complex representations.</p>
+<p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression</a> to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropagation algorithm</a>. The history of this algorithm appears to be <a href="http://people.idsia.ch/~juergen/who-invented-backpropagation.html">somewhat complex</a>, as you can hear from <a href="https://youtu.be/Svb1c6AkRzE">Yann LeCun himself in this 2018 interview</a>, but luckily for us the algorithm in its modern form is not difficult - although it does require a solid handle on linear algebra and calculus.</p>
+<p>I don’t think the world needs another Neural Net 101 blog post, so I will send you to <a href="https://gormanalysis.com/introduction-to-neural-networks/">other</a> authors who <a href="http://neuralnetworksanddeeplearning.com/chap2.html">already have</a> first-rate <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">presentations.</a> My intention with this article is simply to derive and implement that backpropagation algorithm from scratch, implement a working version, and to discuss how we can mitigate some of the dangers introduced when we move beyond logistic to more complex representations.</p>
 <div id="representation" class="section level2">
 <h2>Representation</h2>
-<p>There’s a lot of mysticism around neural networks but a lot of the perceived complexity vanishes once you look at the math. A typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural net is given recursively in just four simple equations, the first and last of which merely define how we get data in and predictions out of the network:</p>
+<p>A typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural net is given recursively in just four simple equations, the first and last of which merely define how we get data in and predictions out of the network:</p>
 <p><span class="math display">\[ 
     \begin{split} 
         a^{(0)} &amp; = X \\
@@ -55,49 +55,65 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
         \frac{\partial a^{(i)}}{\partial z^{(i)}} &amp; \color{green} = a^{(i)} \circ (1-a^{(i)}) \\
         \color{green}
         \frac{\partial z^{(i)}}{\partial a^{(i-1)}} &amp; \color{green} = W^{(i)} \\
-        \color{red}
-        \frac{\partial z^{(i)}}{\partial W^{(i)}} &amp; \color{red} = a^{(i-1)} 
+        \color{maroon}
+        \frac{\partial z^{(i)}}{\partial W^{(i)}} &amp; \color{maroon} = a^{(i-1)} 
     \end{split}
 \]</span></p>
-<p>Which are all straight-forward, except perhaps the derivative of the sigmoid where we rely on the slightly non-obvious fact that <span class="math inline">\(\sigma&#39;(x) = \sigma(x) (1-\sigma(x))\)</span> which we proved in <a href="/post/ml-from-scratch-part-2-logistic-regression/">Part 2</a>.</p>
+<p>Which are all straight-forward, except perhaps the derivative of the sigmoid where we rely on the slightly non-obvious fact that <span class="math inline">\(\sigma&#39;(x) = \sigma(x) (1-\sigma(x))\)</span> which we proved in <a href="/post/ml-from-scratch-part-2-logistic-regression/">Part 2</a>. From now on, we will be describing the equations for <span class="math inline">\(\nabla J\)</span> in terms of partial derivatives - if you want to know how to actually calculate anything concretely, refer to these four equations.</p>
 <p>To take a partial derivative of <span class="math inline">\(J\)</span> with respect to any parameter in any layer we can use the chain rule. For <span class="math inline">\(W^{(L)}\)</span> we have:</p>
 <p><span class="math display">\[ 
     \frac{\partial J}{\partial W^{(L)}} = 
+    \Bigg(
     \color{blue}
     \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
     \color{green}
-    \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \circ
-    \color{red}
+    \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} 
+    \Bigg)
+    \circ
+    \color{maroon}
     \frac{\partial z^{(L)}}{\partial W^{(L)}}
 \]</span></p>
 <p>Next, let’s do <span class="math inline">\(W^{(L-1)}\)</span>:</p>
 <p><span class="math display">\[ 
     \frac{\partial J}{\partial W^{(L-1)}} = 
+    \Bigg(
     \color{blue}
     \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
     \color{green}
-    \frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
+    \frac{\partial a^{(L)}}{\partial z^{(L)}} 
+    \color{black} \Bigg) \circ \Bigg( \color{green}
     \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
-    \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \color{black} \circ
-    \color{red}
+    \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
+    \color{black} \Bigg) \circ
+    \color{maroon}
     \frac{\partial z^{(L-1)}}{\partial W^{(L-1)}}
 \]</span></p>
 <p>Then <span class="math inline">\(W^{(L-2)}\)</span>:</p>
 <p><span class="math display">\[ 
-    \frac{\partial J}{\partial W^{(L-1)}} = 
+    \frac{\partial J}{\partial W^{(L-2)}} = 
+    \Bigg(
     \color{blue}
     \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
     \color{green}
     \frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
     \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
-    \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} \circ
+    \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
+    \color{black} \Bigg) \circ \Bigg( \color{green}
     \frac{\partial z^{(L-1)}}{\partial a^{(L-2)}} \circ
-    \frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} \color{black} \circ
-    \color{red}
+    \frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} 
+    \color{black} \Bigg) \circ
+    \color{maroon}
     \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
 \]</span></p>
-<p>By now you be starting to see a pattern emerge: as we go back layer by layer, the left-most part of the equation (blue and green) for layer <span class="math inline">\(i\)</span> is always the same as the blue and green part from layer <span class="math inline">\(i+1\)</span> plus two more new green factors, and capped off by the final red factor.</p>
-<p>Think of it like a snake: We always start with the (blue) derivative of our loss function with respect to the prediction. This only happens once so stays at the “head” of the equation. At the (red) “tail”, we always take a derivative with respect to the parameters of interest. And in between we between we have a growing (green) “body” of partial derivatives.</p>
+<p>By now you be starting to see a pattern emerge: as we go back layer by layer, the left-most part of the equation (blue and green) for layer <span class="math inline">\(i\)</span> is always the same as the blue and green part from layer <span class="math inline">\(i+1\)</span> plus two more new green factors, and capped off by the final maroon factor.</p>
+<p>Think of it like a snake: We always start with the (blue) derivative of our loss function with respect to the prediction. This only happens once so stays at the “head” of the equation. At the (maroon) “tail”, we always take a derivative with respect to the parameters of interest. And in between we between we have a growing (green) “body” of partial derivatives. To capture this insight in symbols, let’s introduce a new recurrence relation:</p>
+<p><span class="math display">\[
+    \begin{split} 
+    \color{purple} \delta^{(L)} &amp; = \color{blue} \frac{\partial J}{\partial a^{(L)}} \color{black} \circ \color{green} \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \\
+    \color{purple} \delta^{(i-1)} &amp; = \color{purple} \delta^{(i)} \color{black} \circ \Bigg( \color{green} \frac{\partial z^{(i)}}{\partial a^{(i-1)}} \circ \frac{\partial a^{(i-1)}}{\partial z^{(i-1)}} \color{black} \Bigg) \\
+    \frac{\partial J}{\partial W^{(i)}} &amp; = \color{purple} \delta^{(i)} \color{black} \circ \color{maroon} \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
+    \end{split}
+\]</span></p>
 <p>It should also be clear that we can implement this iteratively if we start at layer <span class="math inline">\(L\)</span> and work backwards: If we save the result of the blue and green parts from layer <span class="math inline">\(i\)</span>, we can add on another pair of green partial derivates to grow the “body” and quickly compute layer <span class="math inline">\(i-1\)</span>. Note also that in order to calculate <span class="math inline">\(\color{green} \partial a / \partial z\)</span> we need to know the activations which are most easily obtained by first performing a forward pass and remembering the activations for use in the backwards pass.</p>
 <p>Finally, I’d like to point out that the justification for introducing the (technically extraneous) concept of <span class="math inline">\(z\)</span> is found in how absolutely obvious and clear it makes the separate steps of the forward and backwards pass. If we had to take <span class="math inline">\(\partial a^{(i)} / \partial a^{(i-1)}\)</span> directly without going through <span class="math inline">\(z\)</span> we would have to think about a non-linear function of a matrix all at once; with <span class="math inline">\(z\)</span> we’re able to view it as the element-wise application of a non-linear function (which is Calculus 101) and the partial derivative of a linear expression with respect to a matrix (which is Matrix Calculus 101; see the <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">Cookbook</a>).</p>
 </div>
