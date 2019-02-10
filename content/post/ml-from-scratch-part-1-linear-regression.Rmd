@@ -16,7 +16,7 @@ linear regression via [ordinary least squares][OLS].
 
 While not exciting, linear regression finds widespread use both as a standalone
 learning algorithm and as a building block in more advanced learning
-algorithms: the output layer of a deep neural network trained for regression
+algorithms. For example, the output layer of a deep neural network trained for regression
 with MSE loss, simple AR time series models, and the "local regression" part of
 LOWESS smoothing are all (modified) examples of linear regression.
 
@@ -46,16 +46,16 @@ regression][RR]. But what's a little linear algebra between friends?
 The current paradigm in machine learning is to apply very powerful, very
 general optimization algorithms that work for a wide variety of models and
 scale reasonably well to vast amounts of data. This allows researchers to
-iterate rapidly on the structure of the model without needing to spend a lot
+iterate rapidly on the structure of the model without needing to spend a lot of time
 coming up with a clever algorithm which solves their special case efficiently.
-It's good software engineering: it avoids [premature optimization][WTO] and
+It's good software engineering; it avoids [premature optimization][WTO] and
 promotes good [separation of concerns][SOC]. Still, history has shown that for
 any given optimization problem, there probably is a specialized algorithm that
-leverages the specifics of the problem to achieve an order of magnitude better
+leverages the specifics of the problem to achieve an order of magnitude improvement in 
 performance. For example, John Platt's [Sequential Minimal Optimization][SMO]
 beat earlier, more general algorithms by such a wide margin that for a decade
 (1998-2009?) SVMs were one of the most promising approaches to machine
-learning. Today (2019) the machine learning industry is in a kind of "rapid
+learning. Today (2019), the machine learning industry is in a kind of "rapid
 prototyping" mode, leveraging the flexibility and composability of deep neural
 networks to experiment with endless numbers of novel models. However, as our
 understanding of which models work best for particular problems matures, the
@@ -99,17 +99,17 @@ distribution, we can see that:
 \[ L(\Theta;X,y) = \prod_{i=1}^{N} P(X,y;\Theta) = \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi}\sigma} \text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]
 
 That looks pretty awful, but there are a couple easy things we can do to make
-it a look a lot simpler. First, That constant term out front doesn't matter at
+it a look a lot simpler. First, that constant term out front doesn't matter at
 all: let's just call it $C$ or something. We can also take that
-$e^{-2\sigma^2}$ outside the product as $e^{-2N\sigma^2}$, and which we'll also
-stuff in the constant $C$ because we're only interested in $\Theta$ right now.
+$e^{-2\sigma^2}$ outside the product as $e^{-2N\sigma^2}$, which we'll also
+stuff into the constant $C$ because we're only interested in $\Theta$ right now.
 Finally, we can take a log to get rid of the exponential and turn the product
 into a sum. All together, we get the log-likelihood expression:
 
 \[ \ell(\Theta;X,y) = \log L(\Theta;X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2 \]
 
 Now, because log is a monotonically increasing function, maximizing $\ell$ is the
-same as maximizing $L$. And of course any constant $C$ has no effect whatsoever
+same as maximizing $L$. Any constant $C$ has no effect whatsoever
 on the location of the maximum. We can also remove the minus sign and consider
 the problem as a minimization problem instead. Therefore our [maximum
 likelihood estimate][MLE] of $\Theta$ for a given data set $(X, y)$ is simply:
@@ -164,7 +164,7 @@ shaped like a big, round bowl so it's obvious where the bottom is.
 
 We can find the minimum - the bottom of the bowl - by using the [KKT conditions][KKT].
 In this simple this case there is only one: the gradient must be zero. This is
-analogous to finding the critical points of of a univariate function by looking
+analogous to finding the critical points of a univariate function by looking
 for points where the derivative is zero. It's not at first obvious how to
 take the gradient of the squared norm of a vector, but recall that it is
 the inner product of that vector with its dual:
@@ -213,17 +213,17 @@ detail. A QR decomposition of a matrix square $A$ is a product of an orthogonal
 matrix $Q$ and an upper-triangular matrix $R$ such that $A = QR$. It always
 exists and there's a reasonably performant algorithm for calculating it. Why is
 it beneficial?  In short, because the QR decomposition makes it very easy to
-compute solutions to systems of equation in matrix form $Ax = b$. By computing
-$A = QR$ and writing the problem as $R x = Q^{-1} b$ we can solve system of linear
-equations very cheaply.
+compute solutions to systems of equations in matrix form $Ax = b$; all we
+have to do is compute $A = QR$ and write the problem as $R x = Q^{-1} b$
+which is easy to compute.
 
-Why is $Q$ is to invert? Recall that $Q$ is orthogonal which implies that
+Why is $Q$ easy to invert? Recall that $Q$ is orthogonal which implies that
 $Q^{-1} = Q^T$. Most linear algebra libraries don't even have to explicitly
 copy a matrix to take a transpose but simply operate on it row-wise instead of
 column-wise or vice versa; taking a transpose is O(1) - free for all intents and
 purposes.
 
-Why is $Rx = Q^T b$ easy to solve? Well, the right had side is just a vector. R
+Why is $Rx = Q^T b$ easy to solve? Well, the right-hand side is just a vector. R
 is upper triangular, so we can solve this with a technique called
 back-substitution. Back-substitution is easiest to explain with an example.
 Consider this system of equations in matrix form, where the matrix is
@@ -257,12 +257,12 @@ efficiently for an upper-triangular matrix of any size. Furthermore, because we
 do at most one division per row, this method is very numerically stable. (If
 the matrix is [ill-conditioned][IC], we could still run into numerical error,
 but this only occurs when the original data set $X$ suffers from
-[multicolinearity][MC].)
+[multicollinearity][MC].)
 
 [IC]: https://en.wikipedia.org/wiki/Condition_number
 [MC]: https://en.wikipedia.org/wiki/Multicollinearity
 
-So hopefully you're convinced by now the $QR$ form is desirable. But how do we
+So hopefully you're convinced by now that the $QR$ form is desirable. But how do we
 calculate $Q$ and $R$? There are two parts to understanding the algorithm.
 First, note that the product of any two orthogonal matrices is itself
 orthogonal.  Also, the identity matrix is orthogonal. Therefore, if we have a
@@ -304,12 +304,12 @@ element is that $a_1$ is co-linear (in the same line) as $e_1$: \( H a_i =
 \alpha e_i \).
 
 We're going to do this with an orthogonal transformation. But orthogonal
-transformations are *length preserving*.  That means $\alpha = ||a_1||$. So we
-now understand that we need to find an orthogonal matrix that sends the vector
-$a_1$ to the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We
-could either *rotate* by the angle between the vectors \(\cos^{-1} \frac{a_1
-\dot e_1}{||a_1||} \), or we can *reflect* across the line which bisects the
-two vectors in their plane. These two strategies are called the [Givens
+transformations are *length preserving*.  That means $\alpha = ||a_1||$.
+Therefore we need to find an orthogonal matrix that sends the vector $a_1$ to
+the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We could
+either *rotate* by the angle between the vectors \(\cos^{-1} \frac{a_1 \dot
+e_1}{||a_1||} \), or we can *reflect* across the line which bisects the two
+vectors in their plane. These two strategies are called the [Givens
 rotation][GOR] and the [Householder reflection][HOR] respectively. The rotation
 matrix is slightly less stable, so we will use the Householder reflection.
 
@@ -322,7 +322,7 @@ reflection.
 
 Let's say that $v$ is the unit normal vector of a plane; how would I reflect an
 arbitrary vector $x$ across that plane?  Well, if we subtracted $\langle x, v
-\rangle v$ from $x$, that would be a projection into the plane, right? So if we
+\rangle v$ from $x$, that would be a projection into the plane, right? So, if we
 just keep going the same direction and for the same distance again, we'll end
 up a point on the other side of the plane $x'$.  Both $x$ and $x'$ project to
 the same point on the plane, and furthermore both are a distance $\langle x, v
@@ -477,7 +477,7 @@ on each column in turn to transform `A` into an upper triangular matrix.
 		
 		return Q, R
 
-The last piece of the puzzle is back-substitution. This is straight-forward and
+The last piece of the puzzle is back-substitution. This is straightforward and
 available in standard libraries, but to comply with the letter-of-law of the
 "from scratch" challenge we'll implement our own version.
 
@@ -580,7 +580,7 @@ time making sure everything up to this point is correct.
 
 	unittest.main(argv=[''], exit=False)
 
-With our trusty tools in hand, we're ready to tackle linear regression proper.
+With our trusty tools in hand, we're ready to tackle linear regression properly.
 
 
 Implementing Linear Regression
@@ -594,7 +594,7 @@ If we now let $QR$ be the QR-decomposition of $X$:
 
 \[ (R^T Q^T)(Q R) \hat{\Theta} = R^T Q^T y \]
 
-Since $Q$ is orthogonal, $Q^T Q = I$ and we can simply to:
+Since $Q$ is orthogonal, $Q^T Q = I$ and we can simplify this to:
 
 \[ R^T R \hat{\Theta} = R^T Q^T y \]
 
@@ -602,7 +602,7 @@ For the next step, we have to assume the $R$ is invertible. This is always the
 case if our original $X$ was free of multicollinearity.  It is also equivalent
 to $X^T X$ being invertible so the naive approach of taking $(X^T X)^{-1}$
 isn't any stronger. Even gradient descent has issues with singular matrices
-because the problem is no longer strongly convex but merely convex.) There is a
+because the problem is no longer strongly convex. There is a
 method based on SVD (singular value decomposition) which can handle linear
 regression in the presence of multicollinearity but it's slower and in general
 the whole problem is better handled by removing redundant features or adding
@@ -614,7 +614,7 @@ regularization, neither of which are in scope for this article.
 
 In any case, let's just assume that $R^{-1}$ exists. We don't actually have to
 calculate it, though! The mere fact of its existence lets us left multiply both
-side of the equation by $(R^T)^{-1}$ and cancel the $R^T$ on both sides, leaving only:
+sides of the equation by $(R^T)^{-1}$ and cancel the $R^T$ on both sides, leaving only:
 
 \[ R \hat{\Theta} = Q^T y \]
 
@@ -646,14 +646,13 @@ equations derived above to the final two lines of the `fit()` method.
 Testing
 -------
 
-Note that while we follow the scikit-learn naming conventions,
-we haven't imported anything from sklearn yet. All the code
-up to this point would work fine in an environment where the
-sklearn package wasn't even present. However, to *test* the
-code, we are going to use a few sklearn and scipy dependencies.
+Note that while we follow the scikit-learn naming conventions, up to this point
+we haven't imported anything from sklearn. That's in keeping with the "from
+scratch" challenge.  However, to *test* the code, we are going to use a few
+sklearn and scipy dependencies.
 
 Let's first grab a bunch of test-only dependencies and also
-grab a copy of the famous [Boston][BD] so we have a simple
+grab a copy of the famous [Boston][BD] data set so we have a simple
 regression problem to play with.
 
 [BD]: https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html
@@ -729,12 +728,12 @@ the train and test set, with correlation scores around 75%. That means it's
 able to explain about three-quarters of the variation that it finds in $y$ from
 what it was able to learn about the relationship between $X$ and $y$.
 
-It's also a good idea to visualize both actual and predicted values as a
-function of the independent variable.- In this case $X$ is 13-dimensional so
-hard to visual fully, so we will simply choose a few random pairs of dimensions
-dimensions. If the model has learned anything real about the relationship
-between $X$ and $y$, we should see two similar clouds of points for actual $y$
-and predicted $\hat{y}$. 
+It's also a good idea to visualize actual responses $y$ and predictions
+$\hat{y}$ as a function of the independent variables $X$. In this case $X$ is
+13-dimensional so hard to visualized fully, so we will simply choose a few
+random pairs of dimensions dimensions so we can work in 2D. If the model has
+learned anything real about the relationship between $X$ and $y$, we should see
+two similar clouds of points for actual $y$ and predicted $\hat{y}$. 
 
 ![Prediction vs. Actual Scatterplot, training set and test set](/post/ml-from-scratch-part-1-linear-regression_files/predicted_vs_actual.png)
 
@@ -770,17 +769,17 @@ inference with linear regression: testing residuals for homoscedasticity,
 normality, autocorrelation, variance inflation factors, orthogonal polynomial
 regression, Cook's distance, leverage, Studentized residuals, ANOVA, AIC, BIC,
 Omnibus F-tests on nested models, etc., etc. Just to be clear, these aren't
-*variations* or *generalization* of linear regression (although there are ton
+*variations* or *generalization* of linear regression (although there are tons
 of those too) these are just standard techniques for analyzing and
 understanding linear regression models of the exact same form we calculated
 above. The topic is very mature and a huge amount of auxiliary mathematical
-machinery has built up over the centuries (Gauss was studying OLS around 1800,
+machinery has been built up over the centuries (Gauss was studying OLS around 1800,
 and the problem is older than that.)
 
 However, if we go too deeply into linear regression, we won't get a chance to
 explore the rest of machine learning. So for the next part of the series, we
 will switch our attention to [logistic regression][MLFS2] and use that as an
-excuse to explore [SGD][SGD] in some detail; that will then serve as as jumping
+excuse to explore [SGD][SGD] in some detail. That will then serve as a jumping
 off point for our first "true" machine learning algorithm in part 3: [neural
 networks and backpropagation.][MLFS3] 
 
