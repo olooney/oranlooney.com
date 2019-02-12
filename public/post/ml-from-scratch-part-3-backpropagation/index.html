@@ -267,7 +267,7 @@ class NeuralNetwork:
     def predict_proba(self, X):
         self.forward_propagation(X)
         return self._activations[-1]</code></pre>
-<p>The forward pass follows our above recursive definition of the neural network very closely. We initialize activation with the given predictors ( a^{(0)} = X) then iteratively compute <span class="math inline">\(a^{(1)}\)</span>, <span class="math inline">\(a^{(2)}\)</span> until we reach <span class="math inline">\(a^{(L)} = \hat{y}\)</span>.</p>
+<p>The forward pass follows our above recursive definition of the neural network very closely. We initialize activation with the given predictors <span class="math inline">\(a^{(0)} = X\)</span> then iteratively compute <span class="math inline">\(a^{(1)}\)</span>, <span class="math inline">\(a^{(2)}\)</span> until we reach <span class="math inline">\(a^{(L)} = \hat{y}\)</span>.</p>
 <pre><code>    def forward_propagation(self, X):
         # we will store the activations calculated at each layer
         # because these can be used to efficiently calculate

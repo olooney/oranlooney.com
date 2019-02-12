@@ -44,6 +44,7 @@ def memoized_fib(n):
 <p>Fair warning: this is a bit of rabbit hole, with no other purpose than to optimize the hell out something for which there is frankly no practical use. But we get to do a bit of linear algebra and try out some pretty interesting optimization techniques so that’s what I call a good time.</p>
 <div id="matrix-form" class="section level2">
 <h2>Matrix Form</h2>
+<p>TODO: MATH</p>
 <p>Now, we could also do this by defining <code>F1 = numpy.array([[1,1],[1,]], dtype='object')</code> and using <code>numpy.linalg.matrix_power(F1, n)</code>. As much as love numpy though, I don’t think we need to drag it in as a dependency just to multiply <span class="math inline">\(2 \times 2\)</span> matrices when we’re not even using native types! Also, we’ll see see in a second that there are some optimizations we can make that wouldn’t be possible to implement if we let numpy handle everything for us.</p>
 <pre><code>def matrix_multiply(A, B):
     a, b, c, d = A

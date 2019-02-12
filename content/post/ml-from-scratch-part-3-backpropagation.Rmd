@@ -341,7 +341,7 @@ article in this series.][MLFS2]
 			return self._activations[-1]
 
 The forward pass follows our above recursive definition of the neural network
-very closely. We initialize activation with the given predictors \( a^{(0)} = X\)
+very closely. We initialize activation with the given predictors $a^{(0)} = X$
 then iteratively compute $a^{(1)}$, $a^{(2)}$ until we reach $a^{(L)} = \hat{y}$.
 		
 		def forward_propagation(self, X):
