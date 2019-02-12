@@ -11,28 +11,29 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 ---
 
 In today's installment of [Machine Learning From Scratch][MLFS] we'll build on
-[logistic regression][MLFS2] to build a classifier which is able to represent
-non-linear relationships and interactions between features: the neural network.
-In particular I want to focus on one central algorithm which allows us to apply
-gradient descent to deep neural networks: the [backpropagation algorithm][BA]. The
-history of this algorithm appears to be [somewhat complex][BPH], as you can
-hear from [Yann LeCun himself in this 2018 interview][YLC], but luckily for
-us the algorithm in its modern form is not difficult - although it does require
-a solid handle on linear algebra and calculus.
+the [logistic regression from last time][MLFS2] to create a classifier which is
+able to automatically represent non-linear relationships and interactions
+between features: the neural network.  In particular I want to focus on one
+central algorithm which allows us to apply gradient descent to deep neural
+networks: the [backpropagation algorithm][BA]. The history of this algorithm
+appears to be [somewhat complex][BPH], as you can hear from [Yann LeCun himself
+in this 2018 interview][YLC], but luckily for us the algorithm in its modern
+form is not difficult - although it does require a solid handle on linear
+algebra and calculus.
 
 I don't think the world needs another Neural Net 101 blog post, so I will send
 you to [other][GORM] authors who [already have][DL2] first-rate
 [presentations.][3B1B] My intention with this article is simply to derive the
 backpropagation algorithm, implement a working version from scratch, and to
-discuss how we can mitigate some of the dangers introduced when we move beyond
-logistic to more complex representations.
+discuss the practical implications of introducing are more powerful
+representation.
 
 Representation
 --------------
 
-A typical fully-connected feed-forward $L$-layer neural net is given
-recursively in just four simple equations, the first and last of which merely
-define how we get data in and predictions out of the network:
+A complete description of typical fully-connected feed-forward $L$-layer neural network 
+can be given in just four equations: Two boundary conditions for the input and output
+layers, and two recurrence relationships for the connections between layers:
 
 \[ 
 	\begin{split} 
@@ -43,13 +44,13 @@ define how we get data in and predictions out of the network:
 	\end{split}
 \]
 
-Where $\sigma()$ is a sigmoid function, $W^{(i)}$ are matrices of weights
+Here $\sigma()$ is a sigmoid function, $W^{(i)}$ are matrices of weights
 connecting layers, $b^{(i)}$ are bias vectors, $X$ is the given matrix of data
 with one row per observation and one column per feature, and the final
 activation $a^{(L)}$ is also our prediction $\hat{y}$. 
 
-(A brief aside about notation. Here, a superscript inside of parentheses is a
-layer index; the parentheses are meant to distinguish it from an exponent. This
+(A brief aside about notation. A superscript inside of parentheses is a *layer
+index*; the parentheses are meant to distinguish it from an exponent. This
 notation is used so that ordinary subscripts can be used to refer to the
 individual elements of $W$ and $b$, for example, $W_{jk}^{(i)}$ is the element
 in the $j$-th row of the $k$-th column of the weight matrix $W^{(i)}$ for the
@@ -67,25 +68,30 @@ Note that because of the restrictions on matrix multiplication, we can determine
 the number of rows and columns in each matrix $W^{(i)}$ by noting that it much have
 a number of columns equal to the number of rows in $W^{(i-1)}$. In particular
 that means $W^{(1)}$ must have a number of columns equal to the number of features
-in the dataset $X$, while $W^{(L)}$ has only a single output row. 
+in the dataset $X$, while $W^{(L)}$ has only a single output row. We call this
+shared dimension the "number of nodes" in that layer of the neural network.
 
 The parameters of the model are all the elements of every connection matrix
 $W^{(i)}$ plus the elements of the bias vectors $b^{(i)}$. In symbols: 
 
 \[ \Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)}) \]
 
-Since every element of every matrix is a separate parameter, neural networks
-tend to have a *lot* of parameters. (This implies that neural nets have high
-[VC dimension][VCD] and can easily overfit if not watched closely.)
+A quick aside about the total number of parameters: Since every element of
+every weight matrix for every layer is a separate parameter, large neural
+networks tend to have a *lot* of parameters. This implies that neural nets have
+high [VC dimension][VCD], which in turn implies that they tend to badly overfit
+unless the number of data points in the training set is a high multiple of the
+number of parameters. This is the fundamental reason why "deep neural networks"
+and "big data" go hand-in-hand.
 
-To make this abstract recurrence relation concrete, we can collapse this
-recurrence relation into a single equation for any given depth $L$. For
-example, with zero hidden layers ($L=1$) a neural net reduces to the equation
+Returning to the mathematics of our representation, let's make this abstract
+recurrence relation concrete by showing explicit examples for small $L$. For
+example, with zero hidden layers ($L=1$) a neural network reduces to the equation
 for logistic regression:
 
 \[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]
 
-If a zero-hidden-layer neural net is also trained with log-loss, both the
+If a zero-hidden-layer neural network is also trained with log-loss, both the
 model's representation and fitted parameters will be exactly the same as
 logistic regression. We can view LR as a special case of neural nets or
 equivalently neural nets as a generalization of LR.
@@ -252,7 +258,7 @@ off-by-one "mismatch" in matrix dimensions this introduces.
 	class NeuralNetwork:
 		def __init__(self, 
 					 n_hidden=(100,),
-					 learning_rate=0.05,
+					 learning_rate=1.0,
 					 max_iter=10,
 					 threshold=0.5):
 			# a list containing the number of nodes in 
@@ -380,7 +386,7 @@ counting down from $L$ to $1$.
 				# calculate the update (delta) for the weight matrix
 				a = self._activations[layer]
 				
-				delta = (error.T @ a)
+				delta = (error.T @ a) / y.shape[0]
 				
 				# every layer except the output layer has a bias node added.
 				if layer != self.n_layers-2:
@@ -405,18 +411,9 @@ counting down from $L$ to $1$.
 Testing
 -------
 
-Good toy datasets for testing a neural network are a bit hard to come by.  You
-need something that exhibits strong non-linearities and interactions to prove
-the advanced algorithm is solving a problem that a simpler algorithm would
-choke on; *and* you need quite a bit of data before any non-linear classifier
-has enough data to start to pick up on those second-order (or higher)
-regularities. I've tested the above NN on the classic [MNIST handwritten
-digit][MHD] problem but it worked too well on the training set and too poorly
-on the training set; that would be fine if I wanted to talk about diagnosing
-and solving regularization in this article, but it's a bit of a problem since I
-want to talk about how adding layers to neural networks affects them. In the
-end, instead of shopping around for an organic dataset that met all of my requirements,
-I simply synthesized one to spec using scikit-learn's handy generators.
+Real world data are messy. Instead of shopping around for a toy data set which
+exhibits all the properties we want, we'll cook up an idealized data set that
+is designed to only be solvable by a non-linear classifier. 
 
 	from sklearn import datasets
 
@@ -456,7 +453,7 @@ When we fit a model, the number of hidden layers and the node of nodes
 in each layer is a hyperparameter. For example, two hidden layers with
 20 nodes in the first layer and 5 in the second would be `[20, 5]`. 
 
-	nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)
+	nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000)
 	nn.fit(X_train, y_train)
 	y_hat = nn.predict(X_train)
 	p_hat = nn.predict_proba(X_train)
@@ -466,7 +463,7 @@ If we have no hidden layers at all then our neural network reduces to logistic
 regression. In particular that means it can only learn an linear decision 
 boundary. How well does that do on the synthetic dataset we cooked up?
 
-	nn = NeuralNetwork(n_hidden=[], max_iter=2000, learning_rate=0.001)
+	nn = NeuralNetwork(n_hidden=[], max_iter=2000)
 	nn.fit(X_train, y_train)
 	y_hat = nn.predict(X_train)
 	p_hat = nn.predict_proba(X_train)
@@ -501,7 +498,7 @@ the Bayes rate we estimated above; therefore we are probably underfitting.
 On the other extreme, after trying a couple of hyperparameters, I found that
 `[8,3]` worked reasonably well.
 
-	nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)
+	nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000)
 
 ![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png)
 

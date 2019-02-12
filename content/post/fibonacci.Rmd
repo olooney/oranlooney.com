@@ -1,0 +1,401 @@
+---
+title: "A Fairly Fast Fibonacci Function"
+author: "Oran Looney"
+date: 2019-02-10
+tags: ["Python", "C++", "Math"]
+image: /post/fibonacci_files/lead.jpg
+draft: true
+---
+
+A common example of recursion is the function to calculate the $n$-th fibonacci number:
+
+	def naive_fib(n):
+		if n <= 2:
+			return 1
+		else:
+			return naive_fib(n-1) + naive_fib(n-2)
+
+This follows the mathematical definition very closely but of course it's performance
+is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with [dynamic programming][DP] - 
+either with [memoization][DPM]:
+
+	@lru_cache(100)
+	def memoized_fib(n):
+		if n <= 2:
+			return 1
+		else:
+			return memoized_fib(n-1) + memoized_fib(n-2)
+
+or [tabulation][DPT]:
+
+	def table_fib(n):
+		if n <= 2:
+			return 1
+		table = [-1] * (n+1)
+		table[0] = None
+		table[1] = 1
+		table[2] = 1
+		for i in range(3, n+1):
+			table[i] = table[i-1] + table[i-2]
+		return table[n]
+
+And of course the tabular solution can easily be made iterative:
+
+	def iterative_fib(n):
+		previous, current = (1, 1)
+		for i in range(3, n+1):
+			previous, current = (current, previous + current)
+		return current
+
+And that, oddly enough, is where often it stops. For example, this presentation
+of solving the Fibonacci sequence as an [interview question][IQ] presents the
+above two solutions and then... nothing. Not so much as an off-hand mention of
+better solutions. Googling around, I got the impression this is a fairly common
+(but by no means universal) misconception, perhaps because teachers use it to
+illustrate the idea of dynamic programming without caring too much about the
+details of the problem.
+
+Which is a shame, because we can do so much better.
+
+Fair warning: this is a bit of rabbit hole, with no other purpose than to
+optimize the hell out something for which there is frankly no practical use.
+But we get to do a bit of linear algebra and try out some pretty interesting
+optimization techniques so that's what I call a good time.
+
+
+Matrix Form
+-----------
+
+TODO: MATH
+
+Now, we could also do this by defining `F1 = numpy.array([[1,1],[1,]],
+dtype='object')` and using `numpy.linalg.matrix_power(F1, n)`. As much as love
+numpy though, I don't think we need to drag it in as a dependency just to
+multiply $2 \times 2$ matrices when we're not even using native types! Also,
+we'll see see in a second that there are some optimizations we can make that
+wouldn't be possible to implement if we let numpy handle everything for us.
+
+	def matrix_multiply(A, B):
+		a, b, c, d = A
+		x, y, z, w = B
+		
+		return (
+			a*x + b*z,
+			a*y + b*w,
+			c*x + d*z,
+			c*y + d*w,
+		)
+
+	def naive_matrix_power(A, m):
+		if m == 0:
+			return [1, 0, 0, 1]
+		B = A
+		for _ in range(m-1):
+			B = matrix_multiply(B, A)
+		return B
+
+	def naive_matrix_fib(n):
+		return naive_matrix_power(F1, n)[1]
+
+	def matrix_power(A, m):
+		if m == 0:
+			return [1, 0, 0, 1]
+		elif m == 1:
+			return A
+		else:
+			B = A
+			n = 2
+			while n <= m:
+				# repeated square B until n = 2^q > m
+				B = matrix_multiply(B, B)
+				n = n*2
+			# add on the remainder
+			R = matrix_power(A, m-n//2)
+			return matrix_multiply(B, R)
+
+	F1 = [1, 1, 
+		  1, 0]
+
+	def matrix_fib(n):
+		return matrix_power(F1, n)[1]
+
+
+Eigenvalues
+-----------
+
+	import numpy as np
+
+	def eigen_fib(n):
+		F1 = np.array([[1, 1], [1, 0]])
+		eigenvalues, eigenvectors = np.linalg.eig(F1)
+		Fn = eigenvectors @ np.diag(eigenvalues ** n) @ eigenvectors.T
+		return int(np.rint(Fn[0, 1]))
+
+Implicit Matrix Form
+--------------------
+
+	def multiply(a, b, x, y):
+		return x*(a+b) + a*y, a*x + b*y
+
+	def square(a, b):
+		return multiply(a, b, a, b)
+
+	def power(a, b, m):
+		if m == 0:
+			return (0, 1)
+		elif m == 1:
+			return (a, b)
+		else:
+			x, y = a, b
+			n = 2
+			while n <= m:
+				# repeated square until n = 2^q > m
+				x, y = square(x, y)
+				n = n*2
+			# add on the remainder
+			a, b = power(a, b, m-n//2)
+			return multiply(x, y, a, b)
+
+	def implicit_fib(n):
+		a, b = power(1, 0, n)
+		return a
+
+
+Cython
+------
+
+Another think to try - something which in fact usually works - 
+is to try converting our program to [cython][CY].
+
+	%%cython
+
+	cdef cython_multiply(a, b, x, y):
+		return x*(a+b) + a*y, a*x + b*y
+
+	cdef cython_square(a, b):
+		a2 = a*a
+		b2 = b*b
+		ab = a*b
+		return a2 + ab + ab, a2 + b2
+
+	cdef cython_power(a, b, int m):
+		cdef int n = 2
+		if m == 0:
+			return (0, 1)
+		elif m == 1:
+			return (a, b)
+		else:
+			x, y = a, b
+			while n <= m:
+				# repeated square until n = 2^q > m
+				x, y = cython_square(x, y)
+				n = n*2
+			# add on the remainder
+			a, b = cython_power(a, b, m-n//2)
+			return cython_multiply(x, y, a, b)
+		
+	cpdef cython_fib(n):
+		a, b = cython_power(1, 0, n)
+		return a
+
+	print(cython_fib(103))
+
+Unfortunately, the one type that we want to use, Python's native `int` type, is
+represented by Cython as a C-style int - fixed precision signed integer. It
+doesn't have Python's ability to trasparently handle large numbers.
+
+Never fret, though, because we can use something even *better*.
+
+
+The GNU Multiple Precision Arithmetic Library
+--------------------------
+
+The GNU Multiple Precision Arithmetic Library, or [GMP][GMP] for short, is
+nothing short of a work of art. Often used for calculating $\pi$ to a number
+of decimal places descibed as "silly" by their [own documentation][PI], GMP
+is able to add, multiply, divide and perform arithmetic on larger and larger
+numbers until your computer runs out of RAM. The multipication algorithm used
+*starts* with [Karatsuba][KT] - and then they get [serious][MULT].
+
+	import gmpy2
+	from gmpy2 import mpz
+
+	def gmp_fib(n):
+		a, b = power(mpz(1), mpz(0), mpz(n))
+		return a
+
+Note that we didn't have to define `power()` or `multiply()` again: this
+implementation re-uses those functions. Every Python function is a
+type-agnostic template function.
+
+
+Final Python Fibonacci
+----------------------
+
+	# what a pretty pattern! fib(0) = 0 under the classical definition.
+	small_fib = [
+		0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597,
+		2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418,
+		317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465,
+		14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296,
+		433494437, 701408733, 1134903170, 1836311903, 2971215073, 4807526976,
+		7778742049, 12586269025, 20365011074, 32951280099, 53316291173,
+		86267571272, 139583862445, 225851433717, 365435296162, 591286729879,
+		956722026041, 1548008755920, 2504730781961, 4052739537881, 6557470319842,
+		10610209857723, 17167680177565, 27777890035288, 44945570212853,
+		72723460248141, 117669030460994, 190392490709135, 308061521170129,
+		498454011879264, 806515533049393, 1304969544928657, 2111485077978050,
+		3416454622906707, 5527939700884757, 8944394323791464, 14472334024676221,
+		23416728348467685, 37889062373143906, 61305790721611591, 99194853094755497,
+		160500643816367088, 259695496911122585, 420196140727489673,
+		679891637638612258, 1100087778366101931, 1779979416004714189,
+		2880067194370816120, 4660046610375530309, 7540113804746346429
+	]
+
+	def fibonacci(n):
+		if n <= len(small_fib):
+			return small_fib[n]
+		elif n <= 2**13:
+			return cython_fib(n)
+		else:
+			return gmp_fib(n)
+
+C++ Fibonacci
+-------------
+
+	// memoized version
+	ImplicitMatrix repeatedSquares(int n)
+	{
+		// 0 squares means the original basis matrix f1
+		static std::vector<ImplicitMatrix> cache = { {1, 0} };
+
+		// repeatedly square as often as necessary.
+		while (n >= cache.size() ) {
+			cache.push_back( square(cache.back()) );
+		}
+
+		// the n-th element is always f1^n.
+		return cache[n];
+	}
+
+	ImplicitMatrix power(
+		const ImplicitMatrix& x,
+		const bigint& m)
+	{
+		if ( m == 0 ) {
+			return {0, 1};
+		} else if ( m == 1 ) {
+			return x;
+		}
+
+		// powers of two by iterated squaring
+		// ImplicitMatrix powerOfTwo = x;
+		bigint n = 2;
+		int n_squares_needed = 0;
+		while ( n <= m ) {
+			n = n*2;
+			n_squares_needed++;
+		//powerOfTwo = square(powerOfTwo);
+		}
+		ImplicitMatrix powerOfTwo = repeatedSquares(n_squares_needed);
+
+		// recurse for remainder
+		ImplicitMatrix remainder = power(x, m-n/2);
+
+		return multiply(powerOfTwo, remainder);
+	}
+
+I installed these libraries on Debian/Ubuntu like so:
+
+	sudo apt install libboost-all-dev libgmp-dev
+
+The above program was built like so:
+
+	g++ -std=c++17 -O3 -o fib main.cpp -lgmp
+
+Note that `-O3` tells the compiler to apply maximum optimization
+to the program. That's also why we need the `volatile` keyword - 
+the optimizer notices my program doesn't actually *do* anything
+and optimizes the whole thing away!
+
+	~/fib$ time ./fib 10000003
+
+	real    0m0.427s
+	user    0m0.360s
+	sys     0m0.060s
+
+	~/fib$ time ./fib 1000000003
+
+	real    1m24.088s
+	user    1m22.550s
+	sys     0m1.430s
+
+
+Dynamic Programming Redux
+-------------------------
+
+In the end, we did up using dynamic programming, just like the naïve programs
+I was making fun of at the start. The difference is that we are only caching
+results of the form $F_1^{2^n}$. Thus we will never need to store more than
+$\mathcal{O}(\ln n)$ such results. It's interesting to compare data flow graphs
+with and without this caching.
+
+If we just recalculate each power of two every time we need it, we get a tree-shaped DFG:
+
+![naïve DFG for fib(103)](/post/fibonacci_files/fib_103_dfg_bad.png "naïve DFG for fib(103)")
+
+With the caching added for powers of two, we get a much smaller acyclic graph:
+
+![DFG for fib(103) with dynamic programming](/post/fibonacci_files/fib_103_dfg_dynamic_programming.png "DFG for fib(103) with dynamic programming")
+
+I also generated an [absurdly long DFG][DFG] for `fib(1000000003)` if you want to see an extreme example. 
+
+It should be clear from graph that in the worst case scenario, where $n = 2^m
+-1$, the cached algorithm performs $2m$ multiplications, compared to the
+$m(m-1)/2$ needed for the algorithm without caching. Despite this, the benefit
+of the cache is surprisingly minor: maybe 10% in practice. That's because
+almost all of the run time of the entire calculation is actually spent in a
+handful of very large multiplications - the smaller ones just don't matter as
+much. "Logical multiplications" just isn't the right operation to count: when
+dealing with multiple precision numbers we need to count the number of bytes
+multiplied, and the number of bytes is growing as $2^m$. I've heard those
+two effects more or less cancel out and the final algorithm is $\mathcal{O}(n \log n)$
+but wouldn't be able to prove it myself. In practice it seems to hold empirically:
+every time $n$ goes up by a factor of 10, time increases by about 20. 
+
+Conclusion
+----------
+
+Imagine if instead of indexing webpages and serving ads, Google's business was
+calculating Fibonacci numbers. Maybe in some parallel universe, that was how
+BitCoin worked or something. Call it FibCoin. They had whole buildings full of
+server racks just chugging away at the $\mathcal{O}(n^2)$ algorithm, billions
+of dollars worth of infrastructure.  Entire teams that do nothing but yank and
+replace defective units. An air conditioning bill larger than some nation's
+GDP. Then one day some team comes along with this crazy matrix based approach,
+babbling about "eigen-somethings" and "multiple sclerosis arithmetic" or
+something. And a week later they're churning out FibCoins at $\mathcal{O}(n \log n)$.
+What happens to that infrastructure giant?
+
+*Algorithms are disruptive.*
+
+John Platt SMO.
+
+two order of magnitude improvement from batch gradient to optimized algorithms.
+Another order of magnitude or more by moving to GPUs.
+
+Gradient Boosting isn't just better than decision trees, it's so much better
+it's hard to believe.
+
+When I graduated school, 
+
+[DFG]: /post/fibonacci_files/fib_1000000003_dfg.png
+[DP]: https://en.wikipedia.org/wiki/Dynamic_programming
+[DPM]: https://en.wikipedia.org/wiki/Memoization
+[DPT]: https://www.geeksforgeeks.org/tabulation-vs-memoizatation/
+[IQ]: https://medium.com/quick-code/fibonacci-sequence-javascript-interview-question-iterative-and-recursive-solutions-6a0346d24053
+[CY]: https://cython.org/
+[GMP]: https://gmplib.org/
+[PI]: https://gmplib.org/pi-with-gmp.html
+[MULT]: https://gmplib.org/manual/Multiplication-Algorithms.html
+[KT]: https://en.wikipedia.org/wiki/Karatsuba_algorithm

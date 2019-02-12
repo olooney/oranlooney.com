@@ -12,11 +12,11 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 
 
 
-<p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression</a> to build a classifier which is able to represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropagation algorithm</a>. The history of this algorithm appears to be <a href="http://people.idsia.ch/~juergen/who-invented-backpropagation.html">somewhat complex</a>, as you can hear from <a href="https://youtu.be/Svb1c6AkRzE">Yann LeCun himself in this 2018 interview</a>, but luckily for us the algorithm in its modern form is not difficult - although it does require a solid handle on linear algebra and calculus.</p>
-<p>I don’t think the world needs another Neural Net 101 blog post, so I will send you to <a href="https://gormanalysis.com/introduction-to-neural-networks/">other</a> authors who <a href="http://neuralnetworksanddeeplearning.com/chap2.html">already have</a> first-rate <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">presentations.</a> My intention with this article is simply to derive the backpropagation algorithm, implement a working version from scratch, and to discuss how we can mitigate some of the dangers introduced when we move beyond logistic to more complex representations.</p>
+<p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on the <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression from last time</a> to create a classifier which is able to automatically represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropagation algorithm</a>. The history of this algorithm appears to be <a href="http://people.idsia.ch/~juergen/who-invented-backpropagation.html">somewhat complex</a>, as you can hear from <a href="https://youtu.be/Svb1c6AkRzE">Yann LeCun himself in this 2018 interview</a>, but luckily for us the algorithm in its modern form is not difficult - although it does require a solid handle on linear algebra and calculus.</p>
+<p>I don’t think the world needs another Neural Net 101 blog post, so I will send you to <a href="https://gormanalysis.com/introduction-to-neural-networks/">other</a> authors who <a href="http://neuralnetworksanddeeplearning.com/chap2.html">already have</a> first-rate <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">presentations.</a> My intention with this article is simply to derive the backpropagation algorithm, implement a working version from scratch, and to discuss the practical implications of introducing are more powerful representation.</p>
 <div id="representation" class="section level2">
 <h2>Representation</h2>
-<p>A typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural net is given recursively in just four simple equations, the first and last of which merely define how we get data in and predictions out of the network:</p>
+<p>A complete description of typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural network can be given in just four equations: Two boundary conditions for the input and output layers, and two recurrence relationships for the connections between layers:</p>
 <p><span class="math display">\[ 
     \begin{split} 
         a^{(0)} &amp; = X \\
@@ -25,16 +25,16 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
         \hat{y} &amp; = a^{(L)} 
     \end{split}
 \]</span></p>
-<p>Where <span class="math inline">\(\sigma()\)</span> is a sigmoid function, <span class="math inline">\(W^{(i)}\)</span> are matrices of weights connecting layers, <span class="math inline">\(b^{(i)}\)</span> are bias vectors, <span class="math inline">\(X\)</span> is the given matrix of data with one row per observation and one column per feature, and the final activation <span class="math inline">\(a^{(L)}\)</span> is also our prediction <span class="math inline">\(\hat{y}\)</span>.</p>
-<p>(A brief aside about notation. Here, a superscript inside of parentheses is a layer index; the parentheses are meant to distinguish it from an exponent. This notation is used so that ordinary subscripts can be used to refer to the individual elements of <span class="math inline">\(W\)</span> and <span class="math inline">\(b\)</span>, for example, <span class="math inline">\(W_{jk}^{(i)}\)</span> is the element in the <span class="math inline">\(j\)</span>-th row of the <span class="math inline">\(k\)</span>-th column of the weight matrix <span class="math inline">\(W^{(i)}\)</span> for the <span class="math inline">\(i\)</span>-th layer.)</p>
+<p>Here <span class="math inline">\(\sigma()\)</span> is a sigmoid function, <span class="math inline">\(W^{(i)}\)</span> are matrices of weights connecting layers, <span class="math inline">\(b^{(i)}\)</span> are bias vectors, <span class="math inline">\(X\)</span> is the given matrix of data with one row per observation and one column per feature, and the final activation <span class="math inline">\(a^{(L)}\)</span> is also our prediction <span class="math inline">\(\hat{y}\)</span>.</p>
+<p>(A brief aside about notation. A superscript inside of parentheses is a <em>layer index</em>; the parentheses are meant to distinguish it from an exponent. This notation is used so that ordinary subscripts can be used to refer to the individual elements of <span class="math inline">\(W\)</span> and <span class="math inline">\(b\)</span>, for example, <span class="math inline">\(W_{jk}^{(i)}\)</span> is the element in the <span class="math inline">\(j\)</span>-th row of the <span class="math inline">\(k\)</span>-th column of the weight matrix <span class="math inline">\(W^{(i)}\)</span> for the <span class="math inline">\(i\)</span>-th layer.)</p>
 <p>All that’s really going on here is that we are alternating matrix multiplication with the element-wise application of a non-linear function, <span class="math inline">\(\sigma()\)</span> in this case. Start with a signal <span class="math inline">\(X\)</span>. To propagate the signal through the network, multiply by a matrix <span class="math inline">\(W^{(1)}\)</span>; add in the bias, apply the activation function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Keep doing that until you reach the output layer.</p>
-<p>Note that because of the restrictions on matrix multiplication, we can determine the number of rows and columns in each matrix <span class="math inline">\(W^{(i)}\)</span> by noting that it much have a number of columns equal to the number of rows in <span class="math inline">\(W^{(i-1)}\)</span>. In particular that means <span class="math inline">\(W^{(1)}\)</span> must have a number of columns equal to the number of features in the dataset <span class="math inline">\(X\)</span>, while <span class="math inline">\(W^{(L)}\)</span> has only a single output row.</p>
+<p>Note that because of the restrictions on matrix multiplication, we can determine the number of rows and columns in each matrix <span class="math inline">\(W^{(i)}\)</span> by noting that it much have a number of columns equal to the number of rows in <span class="math inline">\(W^{(i-1)}\)</span>. In particular that means <span class="math inline">\(W^{(1)}\)</span> must have a number of columns equal to the number of features in the dataset <span class="math inline">\(X\)</span>, while <span class="math inline">\(W^{(L)}\)</span> has only a single output row. We call this shared dimension the “number of nodes” in that layer of the neural network.</p>
 <p>The parameters of the model are all the elements of every connection matrix <span class="math inline">\(W^{(i)}\)</span> plus the elements of the bias vectors <span class="math inline">\(b^{(i)}\)</span>. In symbols:</p>
 <p><span class="math display">\[ \Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)}) \]</span></p>
-<p>Since every element of every matrix is a separate parameter, neural networks tend to have a <em>lot</em> of parameters. (This implies that neural nets have high <a href="https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension">VC dimension</a> and can easily overfit if not watched closely.)</p>
-<p>To make this abstract recurrence relation concrete, we can collapse this recurrence relation into a single equation for any given depth <span class="math inline">\(L\)</span>. For example, with zero hidden layers (<span class="math inline">\(L=1\)</span>) a neural net reduces to the equation for logistic regression:</p>
+<p>A quick aside about the total number of parameters: Since every element of every weight matrix for every layer is a separate parameter, large neural networks tend to have a <em>lot</em> of parameters. This implies that neural nets have high <a href="https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension">VC dimension</a>, which in turn implies that they tend to badly overfit unless the number of data points in the training set is a high multiple of the number of parameters. This is the fundamental reason why “deep neural networks” and “big data” go hand-in-hand.</p>
+<p>Returning to the mathematics of our representation, let’s make this abstract recurrence relation concrete by showing explicit examples for small <span class="math inline">\(L\)</span>. For example, with zero hidden layers (<span class="math inline">\(L=1\)</span>) a neural network reduces to the equation for logistic regression:</p>
 <p><span class="math display">\[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]</span></p>
-<p>If a zero-hidden-layer neural net is also trained with log-loss, both the model’s representation and fitted parameters will be exactly the same as logistic regression. We can view LR as a special case of neural nets or equivalently neural nets as a generalization of LR.</p>
+<p>If a zero-hidden-layer neural network is also trained with log-loss, both the model’s representation and fitted parameters will be exactly the same as logistic regression. We can view LR as a special case of neural nets or equivalently neural nets as a generalization of LR.</p>
 <p>With one hidden layer (<span class="math inline">\(L=2\)</span>) this expands to:</p>
 <p><span class="math display">\[ \hat{y} =\sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) \]</span></p>
 <p>A logistic regression of logistic regressions, if you will. As the chain grows longer the same pattern is repeated:</p>
@@ -128,7 +128,7 @@ def sigmoid(z):
 class NeuralNetwork:
     def __init__(self, 
                  n_hidden=(100,),
-                 learning_rate=0.05,
+                 learning_rate=1.0,
                  max_iter=10,
                  threshold=0.5):
         # a list containing the number of nodes in 
@@ -220,7 +220,7 @@ class NeuralNetwork:
             # calculate the update (delta) for the weight matrix
             a = self._activations[layer]
             
-            delta = (error.T @ a)
+            delta = (error.T @ a) / y.shape[0]
             
             # every layer except the output layer has a bias node added.
             if layer != self.n_layers-2:
@@ -243,7 +243,7 @@ class NeuralNetwork:
 </div>
 <div id="testing" class="section level2">
 <h2>Testing</h2>
-<p>Good toy datasets for testing a neural network are a bit hard to come by. You need something that exhibits strong non-linearities and interactions to prove the advanced algorithm is solving a problem that a simpler algorithm would choke on; <em>and</em> you need quite a bit of data before any non-linear classifier has enough data to start to pick up on those second-order (or higher) regularities. I’ve tested the above NN on the classic <a href="https://en.wikipedia.org/wiki/MNIST_database">MNIST handwritten digit</a> problem but it worked too well on the training set and too poorly on the training set; that would be fine if I wanted to talk about diagnosing and solving regularization in this article, but it’s a bit of a problem since I want to talk about how adding layers to neural networks affects them. In the end, instead of shopping around for an organic dataset that met all of my requirements, I simply synthesized one to spec using scikit-learn’s handy generators.</p>
+<p>Real world data are messy. Instead of shopping around for a toy data set which exhibits all the properties we want, we’ll cook up an idealized data set that is designed to only be solvable by a non-linear classifier.</p>
 <pre><code>from sklearn import datasets
 
 X_full, y_full = datasets.make_classification(
@@ -265,13 +265,13 @@ X_test = X_full[train_test_split:, :]
 y_test = y_full[train_test_split:]</code></pre>
 <p>This synthetic dataset has 4,000 examples in the training set and 1,000 in the test set. There are two classes with equal prevalence. There are 20 features, but only about half of these have non-zero mutual information with the class. 5% of examples simply have their class flipped, so the Bayes rate will be less than 0.05; in other words, the ceiling for accuracy is less than 95%. Each vertex is assigned to one class or the other and then data is sampled from a standard multivariate Gaussian distribution centered at each vertex. In particular, because vertices are only one standard deviation away from each other these distributions will overlap a good deal and further reduce the Bayes rate. The problem is highly non-linear and classifiers with linear decision boundaries will struggle; however it not at all pathological and a good non-linear classifier should be able to achieve something quite close to the Bayes rate.</p>
 <p>When we fit a model, the number of hidden layers and the node of nodes in each layer is a hyperparameter. For example, two hidden layers with 20 nodes in the first layer and 5 in the second would be <code>[20, 5]</code>.</p>
-<pre><code>nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)
+<pre><code>nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000)
 nn.fit(X_train, y_train)
 y_hat = nn.predict(X_train)
 p_hat = nn.predict_proba(X_train)
 np.mean(y_train == y_hat)</code></pre>
 <p>If we have no hidden layers at all then our neural network reduces to logistic regression. In particular that means it can only learn an linear decision boundary. How well does that do on the synthetic dataset we cooked up?</p>
-<pre><code>nn = NeuralNetwork(n_hidden=[], max_iter=2000, learning_rate=0.001)
+<pre><code>nn = NeuralNetwork(n_hidden=[], max_iter=2000)
 nn.fit(X_train, y_train)
 y_hat = nn.predict(X_train)
 p_hat = nn.predict_proba(X_train)
@@ -303,7 +303,7 @@ plt.axis([0, 1, 0, 1])</code></pre>
 <p class="caption">ROC Curve for trivial NN</p>
 </div>
 <p>On the other extreme, after trying a couple of hyperparameters, I found that <code>[8,3]</code> worked reasonably well.</p>
-<pre><code>nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000, learning_rate=0.001)</code></pre>
+<pre><code>nn = NeuralNetwork(n_hidden=[8, 3], max_iter=2000)</code></pre>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png" alt="ROC Curve for trivial NN" />
 <p class="caption">ROC Curve for trivial NN</p>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C&#43;&#43; on OranLooney.com</title>
+    <link>/tags/c&#43;&#43;/</link>
+    <description>Recent content in C&#43;&#43; on OranLooney.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <lastBuildDate>Sun, 10 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/c++/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Fairly Fast Fibonacci Function</title>
+      <link>/post/fibonacci/</link>
+      <pubDate>Sun, 10 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/fibonacci/</guid>
+      <description>A common example of recursion is the function to calculate the \(n\)-th fibonacci number:
+def naive_fib(n):if n &amp;lt;= 2:return 1else:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but of course it’s performance is terrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamic programming - either with memoization:
+@lru_cache(100)def memoized_fib(n):if n &amp;lt;= 2:return 1else:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:</description>
+    </item>
+    
+  </channel>
+</rss>
