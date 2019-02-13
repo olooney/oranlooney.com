@@ -101,7 +101,7 @@
 <p>I am indebted to the many <a href="https://www.youtube.com/watch?v=qyyJKd-zXRE&amp;list=PLA89DCFA6ADACE599&amp;index=6">dedicated educators</a> who taken the time to prepare <a href="https://gormanalysis.com/introduction-to-neural-networks/">in-depth</a>, <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">easy-to-understand</a>, and <a href="http://neuralnetworksanddeeplearning.com/chap2.html">mathematically rigorous</a> presentations of the subject and will not attempt to yet another; my intention with this article is simply to derive the backpropagation algorithm, implement a working version from scratch, and to discuss the practical implications of introducing are more powerful representation.</p>
 <div id="representation" class="section level2">
 <h2>Representation</h2>
-<p>A complete description of typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural network can be given in just four equations: Two boundary conditions for the input and output layers, and two recurrence relationships for the connections between layers:</p>
+<p>A complete description of typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural network can be given in just four equations: two boundary conditions for the input and output layers, and two recurrence relationships for the connections between layers:</p>
 <p><span class="math display">\[ 
     \begin{split} 
         a^{(0)} &amp; = X \\
@@ -110,10 +110,10 @@
         \hat{y} &amp; = a^{(L)} 
     \end{split}
 \]</span></p>
-<p>Here <span class="math inline">\(\sigma()\)</span> is a sigmoid function, <span class="math inline">\(W^{(i)}\)</span> are matrices of weights connecting layers, <span class="math inline">\(b^{(i)}\)</span> are bias vectors, <span class="math inline">\(X\)</span> is the given matrix of data with one row per observation and one column per feature, and the final activation <span class="math inline">\(a^{(L)}\)</span> is also our prediction <span class="math inline">\(\hat{y}\)</span>.</p>
+<p>Here <span class="math inline">\(\sigma(x)\)</span> is a sigmoid function, <span class="math inline">\(W^{(i)}\)</span> are matrices of weights connecting layers, <span class="math inline">\(b^{(i)}\)</span> are bias vectors, <span class="math inline">\(X\)</span> is the given matrix of data with one row per observation and one column per feature, and the final activation <span class="math inline">\(a^{(L)}\)</span> is also our prediction <span class="math inline">\(\hat{y}\)</span>.</p>
 <p>(A brief aside about notation. A superscript inside of parentheses is a <em>layer index</em>; the parentheses are meant to distinguish it from an exponent. This notation is used so that ordinary subscripts can be used to refer to the individual elements of <span class="math inline">\(W\)</span> and <span class="math inline">\(b\)</span>, for example, <span class="math inline">\(W_{jk}^{(i)}\)</span> is the element in the <span class="math inline">\(j\)</span>-th row of the <span class="math inline">\(k\)</span>-th column of the weight matrix <span class="math inline">\(W^{(i)}\)</span> for the <span class="math inline">\(i\)</span>-th layer.)</p>
-<p>All that’s really going on here is that we are alternating matrix multiplication with the element-wise application of a non-linear function, <span class="math inline">\(\sigma()\)</span> in this case. Start with a signal <span class="math inline">\(X\)</span>. To propagate the signal through the network, multiply by a matrix <span class="math inline">\(W^{(1)}\)</span>; add in the bias, apply the activation function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Keep doing that until you reach the output layer.</p>
-<p>Note that because of the restrictions on matrix multiplication, we can determine the number of rows and columns in each matrix <span class="math inline">\(W^{(i)}\)</span> by noting that it much have a number of columns equal to the number of rows in <span class="math inline">\(W^{(i-1)}\)</span>. In particular that means <span class="math inline">\(W^{(1)}\)</span> must have a number of columns equal to the number of features in the dataset <span class="math inline">\(X\)</span>, while <span class="math inline">\(W^{(L)}\)</span> has only a single output row. We call this shared dimension the “number of nodes” in that layer of the neural network.</p>
+<p>All that’s really going on here is that we are alternating matrix multiplication with the element-wise application of a non-linear function, <span class="math inline">\(\sigma(x)\)</span> in this case. Start with a signal <span class="math inline">\(X\)</span>. To propagate the signal through the network, multiply by a matrix <span class="math inline">\(W^{(1)}\)</span>; add in the bias, apply the activation function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Multiply by <span class="math inline">\(W^{(2)}\)</span>, add in the bias, apply the application function. Repeat until you reach the output layer.</p>
+<p>Note that because of the restrictions on matrix multiplication, we can determine the number of rows and columns in each matrix <span class="math inline">\(W^{(i)}\)</span> by noting that it much have a number of columns equal to the number of rows in <span class="math inline">\(W^{(i-1)}\)</span>. In particular that means <span class="math inline">\(W^{(1)}\)</span> must have a number of columns equal to the number of features in the dataset <span class="math inline">\(X\)</span>, while <span class="math inline">\(W^{(L)}\)</span> has only a single output row. We call this shared dimension the “number of nodes” in that layer of the neural network; you will see me use this terminology in the code below especially when initializing the network.</p>
 <p>The parameters of the model are all the elements of every connection matrix <span class="math inline">\(W^{(i)}\)</span> plus the elements of the bias vectors <span class="math inline">\(b^{(i)}\)</span>. In symbols:</p>
 <p><span class="math display">\[ \Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)}) \]</span></p>
 <p>A quick aside about the total number of parameters: Since every element of every weight matrix for every layer is a separate parameter, large neural networks tend to have a <em>lot</em> of parameters. This implies that neural nets have high <a href="https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension">VC dimension</a>, which in turn implies that they tend to badly overfit unless the number of data points in the training set is a high multiple of the number of parameters. This is the fundamental reason why “deep neural networks” and “big data” go hand-in-hand.</p>
@@ -132,24 +132,25 @@
 <p><span class="math display">\[
 J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
 \]</span></p>
-<p>Note that we have introduced a <span class="math inline">\(1/N\)</span> scale factor. We are free to do this because multiplying by a positive constant does not change the optimization problem. We do this so that the gradient will be an <em>average</em> over all the training examples and therefore will be invariant w.r.t. training set size. It turns out to be convenient because it means we will not need to change our learning rate when fitting larger or smaller datasets.</p>
+<p>Note that we have introduced a <span class="math inline">\(1/N\)</span> scale factor. We are free to do this because multiplying by a positive constant does not change the optimization problem. We do this so that the gradient will be an <em>average</em> over all the training examples and therefore will be invariant w.r.t. training set size. This turns out to be convenient because it means we will not need to change our learning rate when fitting larger or smaller datasets.</p>
 <p>One condition which must be true at a local minima is that <span class="math inline">\(\nabla_\Theta J = 0\)</span>. That gives us the equations:</p>
 <p><span class="math display">\[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]</span></p>
 <p>The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for <span class="math inline">\(W\)</span>) or a vector (for <span class="math inline">\(b\)</span>.) The <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">matrix cookbook</a> may help with this notation.</p>
-<p>Given the forward pass equations given above, we can easily calculate the partial derivatives for the individual components. For the derivation of <span class="math inline">\(\partial J / \partial a^{(L)}\)</span> you can follow pretty much the same proof given in the <a href="/post/ml-from-scratch-part-2-logistic-regression/">previous article on logistic regression.</a> For the others you should be able to easily verify from the above definitions that:</p>
+<p>Given the forward pass equations given above, we can easily calculate the partial derivatives for the individual components. For the derivation of <span class="math inline">\(\partial J / \partial a^{(L)}\)</span> you can follow pretty much the same proof given in the <a href="/post/ml-from-scratch-part-2-logistic-regression/">previous article on logistic regression.</a> For the others it is easy to verify from the above definitions that:</p>
 <p><span class="math display">\[ 
     \begin{split}
         \color{blue}
-        \frac{\partial J}{\partial a^{(L)}} &amp; \color{blue} = \frac{1}{N} \frac{\partial J}{(\partial \hat{y}} = y - \hat{y})^T \\
+        \frac{\partial J}{\partial a^{(L)}} &amp; \color{blue} = \frac{\partial J}{\partial \hat{y}} = \frac{1}{N} (y - \hat{y}) \\
         \color{green}
         \frac{\partial a^{(i)}}{\partial z^{(i)}} &amp; \color{green} = a^{(i)} \circ (1-a^{(i)}) \\
         \color{green}
         \frac{\partial z^{(i)}}{\partial a^{(i-1)}} &amp; \color{green} = W^{(i)} \\
         \color{maroon}
-        \frac{\partial z^{(i)}}{\partial W^{(i)}} &amp; \color{maroon} = a^{(i-1)} 
+        \frac{\partial z^{(i)}}{\partial W^{(i)}} &amp; \color{maroon} = (a^{(i-1)})^T 
     \end{split}
 \]</span></p>
-<p>Which are all straight-forward, except perhaps the derivative of the sigmoid where we rely on the slightly non-obvious fact that <span class="math inline">\(\sigma&#39;(x) = \sigma(x) (1-\sigma(x))\)</span> which we proved in <a href="/post/ml-from-scratch-part-2-logistic-regression/">Part 2</a>. From now on, we will be describing the equations for <span class="math inline">\(\nabla J\)</span> in terms of partial derivatives - if you want to know how to actually calculate anything concretely, refer to these four equations.</p>
+<p>For the element-wise derivative of the sigmoid we use the slightly non-obvious fact that <span class="math inline">\(\sigma&#39;(x) = \sigma(x) (1-\sigma(x))\)</span> which we proved in <a href="/post/ml-from-scratch-part-2-logistic-regression/">Part 2</a>. Also, take special note of the transpose on the last equation! This follows immediately from proposition (70) in the <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">matrix cookbook</a> but its importance is to introduce the inner product that sums over all the training examples; all the other terms have a number of rows equal to <span class="math inline">\(N\)</span> (the number of training examples) and it is only in this last step that we reduce dimensionality to match that of <span class="math inline">\(W\)</span>. The practical implication is that the activations and backpropagated error terms we carry around during the calculation require an amount of memory proportional to <span class="math inline">\(N\)</span>. This is part of the reason why <em>mini</em>-batch gradient descent is a good idea when training neural networks.</p>
+<p>From now on, we will be describing the equations for <span class="math inline">\(\nabla J\)</span> in terms of partial derivatives - if you want to know how to actually calculate anything concretely, refer to these four equations.</p>
 <p>To take a partial derivative of <span class="math inline">\(J\)</span> with respect to any parameter in any layer we can use the chain rule. For <span class="math inline">\(W^{(L)}\)</span> we have:</p>
 <p><span class="math display">\[ 
     \frac{\partial J}{\partial W^{(L)}} = 
@@ -163,18 +164,23 @@ J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
     \color{maroon}
     \frac{\partial z^{(L)}}{\partial W^{(L)}}
 \]</span></p>
-<p>Where the dot product is defined as <span class="math inline">\(x \cdot y = (x^T y)^T\)</span>. This corresponds to the usual definition when <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are vectors but is extended to matrices. You can think of it as summing over all the examples in the training set. This notation isn’t standard but I’m going to use it anyway because it lets us write out the chain rule in a convenient left-to-right manner. If it bothers you, feel free to rewrite these with <span class="math inline">\(\partial J / \partial W^{(L)} = 1/N (y - \hat{y})^T\)</span> on the left.</p>
+<p>Where the dot product is defined as <span class="math inline">\(x \cdot y = (x^T y)^T\)</span>. This corresponds to the usual definition when <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are vectors but is extended to matrices. You can think of it as summing over all the examples in the training set. This notation isn’t 100% standard but I’m going to use it anyway because it lets us write out the chain rule in the usual left-to-right manner.</p>
 <p>Next, let’s do <span class="math inline">\(W^{(L-1)}\)</span>:</p>
 <p><span class="math display">\[ 
     \frac{\partial J}{\partial W^{(L-1)}} = 
     \Bigg(
+    \underbrace{
     \color{blue}
     \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
     \color{green}
     \frac{\partial a^{(L)}}{\partial z^{(L)}} 
-    \color{black} \Bigg) \circ \Bigg( \color{green}
+    }_{Old}
+    \color{green} \circ \color{black}
+    \underbrace{
+    \color{green}
     \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
     \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
+    }_{\text{New}}
     \color{black} \Bigg) 
     \cdot
     \color{maroon}
@@ -184,16 +190,22 @@ J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
 <p><span class="math display">\[ 
     \frac{\partial J}{\partial W^{(L-2)}} = 
     \Bigg(
+    \underbrace{
     \color{blue}
     \frac{\partial J}{\partial a^{(L)}} \color{black} \circ
     \color{green}
     \frac{\partial a^{(L)}}{\partial z^{(L)}} \circ
     \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
     \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
-    \color{black} \Bigg) \circ \Bigg( \color{green}
+    }_{Old}
+    \color{green} \circ \color{black}
+    \underbrace{
+    \color{green}
     \frac{\partial z^{(L-1)}}{\partial a^{(L-2)}} \circ
     \frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} 
-    \color{black} \Bigg) 
+    \color{black} 
+    }_{New}
+    \Bigg) 
     \cdot
     \color{maroon}
     \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
@@ -297,6 +309,8 @@ class NeuralNetwork:
 <p>For the backwards pass, we use <code>error</code> to mean <span class="math inline">\(\partial J / \partial z_i\)</span> and <code>delta</code> to mean <span class="math inline">\(\partial J / \partial W_i\)</span>. We use the recurrence relations we derived from the chain rule to iteratively calculate the update for each layer counting down from <span class="math inline">\(L\)</span> to <span class="math inline">\(1\)</span>.</p>
 <pre><code>    def back_propagation(self, y):
         # this function relies on self._activations calculated by self.forward_propagation()
+
+        N = y.shape[0]
         
         # the final prediction is simply activation of the final layer.
         y_hat = self._activations[-1]
@@ -313,7 +327,7 @@ class NeuralNetwork:
             # calculate the update (delta) for the weight matrix
             a = self._activations[layer]
             
-            delta = (error.T @ a) / y.shape[0]
+            delta = (error.T @ a) / N
             
             # every layer except the output layer has a bias node added.
             if layer != self.n_layers-2:
