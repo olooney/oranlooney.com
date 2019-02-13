@@ -16,17 +16,17 @@ able to automatically represent non-linear relationships and interactions
 between features: the neural network.  In particular I want to focus on one
 central algorithm which allows us to apply gradient descent to deep neural
 networks: the [backpropagation algorithm][BA]. The history of this algorithm
-appears to be [somewhat complex][BPH] (as you can hear from [Yann LeCun himself
-in this 2018 interview][YLC]) but luckily for us the algorithm in its modern
+appears to be [somewhat complex][BPH], as you can hear from [Yann LeCun himself
+in this 2018 interview][YLC], but luckily for us the algorithm in its modern
 form is not difficult - although it does require a solid handle on linear
-algebra and calculus. 
+algebra and calculus.
 
-I am indebted to the many [dedicated educators][ANG] who taken the time to
-prepare [in-depth][GORM], [easy-to-understand][3B1B], and [mathematically
-rigorous][DL2] presentations of the subject and will not attempt to yet
-another; my intention with this article is simply to derive the backpropagation
-algorithm, implement a working version from scratch, and to discuss the
-practical implications of introducing are more powerful representation.
+I don't think the world needs another Neural Net 101 blog post, so I will send
+you to [other][GORM] authors who [already have][DL2] first-rate
+[presentations.][3B1B] My intention with this article is simply to derive the
+backpropagation algorithm, implement a working version from scratch, and to
+discuss the practical implications of introducing are more powerful
+representation.
 
 Representation
 --------------
@@ -113,19 +113,17 @@ Fitting
 -------
 
 To fit the model to data, we find the parameters which minimize loss:
-$\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. Just as with logistic regression
-we use binary cross-entropy (a.k.a. log-loss) which means our loss function $J$
-is given by:
+$\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. Where $J$ is given by:
 
 \[
 J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
 \]
 
-Note that we have introduced a $1/N$ scale factor. We are free to do this
-because multiplying by a positive constant does not change the optimization
-problem. We do this so that the gradient will be an *average* over all the
-training examples and therefore will be invariant w.r.t. training set size.
-It turns out to be convenient because it means we will not need to change our
+Note that we have introduced an $1/N$ scale factor. We are free to do this
+because multiplying by an arbitary positive number does not change the
+optimization problem. We do this because the gradient will be the *average*
+over all the training examples and therefore will be invariant w.r.t. training
+set size. That's convenient because it means we will not need to change our
 learning rate when fitting larger or smaller datasets.
 
 One condition which must be true at a local minima is that $\nabla_\Theta J =
@@ -182,10 +180,9 @@ we can use the chain rule. For $W^{(L)}$ we have:
 Where the dot product is defined as $x \cdot y = (x^T y)^T$.  This corresponds
 to the usual definition when $x$ and $y$ are vectors but is extended to
 matrices. You can think of it as summing over all the examples in the training
-set. This notation isn't standard but I'm going to use it anyway because it
-lets us write out the chain rule in a convenient left-to-right manner. If it
-bothers you, feel free to rewrite these with $\partial J / \partial W^{(L)} =
-1/N (y - \hat{y})^T$ on the left.
+set.  This notation isn't common and requires some explanation, but I'm going
+to use it anyway because it lets us write out the chain rule in a convenient
+left-to-right manner.
 
 Next, let's do $W^{(L-1)}$:
 
@@ -529,17 +526,12 @@ On the other extreme, after trying a couple of hyperparameters, I found that
 
 ![ROC Curve for trivial NN](/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png)
 
-The `[8, 3]` model achieves 0.96 AUC and 95% accuracy on the training set and
-91% accuracy on the test set. This is enormously better than what was possible
-with a linear decision boundary. 
-
-This new model has two hidden layers of 8 nodes and 3 nodes respectively; all
-layers are fully connected, so there's a $9 \times 3$ matrix with 27 parameters
-connecting them, plus the $4 \times 1$ connecting to the output node and the
-$21 \times 8$ matrix connecting to the input layer, making for 199 parameters
-in all. Therefore it's no surprise that its able to fit the training set much
-more closely, but it is very pleasant surprise that this means its test set
-performance is also much improved!
+The `[8, 3]` model achieves 95% accuracy on the training set and 91% accuracy
+on the test set. It has two hidden layers of 8 nodes and 3 nodes respectively.
+All layers are fully connected, so there's a $9 \times 3$ matrix with 27
+parameters connecting them, plus the $4 \times 1$ connecting to the output
+node and the $21 \times 8$ matrix connecting to the input layer, making for 199
+parameters in all.
 
 We can get a better intuition for the relationship between the complexity of
 our neural network and performance by plotting test set AUC as a function of
@@ -599,9 +591,9 @@ handle arbitrary sequences of inputs, or a thousand other topics. Yet today,
 the state-of-the-art algorithm used to train all of these varied species of neural
 networks is backpropagation, exactly as presented here.
 
-In practice, it isn't usually necessary to actually do the calculus by hand.
+Of course, it usually isn't necessary to actually do the calculus by hand.
 Modern machine learning frameworks like [Tensorflow][TF] or [PyTorch][PT]
-prominently feature [automatic differentiation][AD] as a core capability. The chain
+prominently feature automatic differentiation as a core capability. The chain
 rule is straightforward to apply mechanically - the hard part is keeping track
 of all those indices! So it makes sense to have software handle it. 
 
@@ -638,5 +630,4 @@ and how this point-of-view unifies disparate topics in machine learning.
 [BPH]: http://people.idsia.ch/~juergen/who-invented-backpropagation.html
 [YLC]: https://youtu.be/Svb1c6AkRzE
 [BA]: https://en.wikipedia.org/wiki/Backpropagation
-[AD]: https://en.wikipedia.org/wiki/Automatic_differentiation
-[ANG]: https://www.youtube.com/watch?v=qyyJKd-zXRE&list=PLA89DCFA6ADACE599&index=6
+

@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
-    <lastBuildDate>Sun, 10 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 13 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/c++/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>A Fairly Fast Fibonacci Function</title>
+      <title>Fairly Fast Fibonacci Function</title>
       <link>/post/fibonacci/</link>
-      <pubDate>Sun, 10 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 13 Feb 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/fibonacci/</guid>
       <description>A common example of recursion is the function to calculate the \(n\)-th fibonacci number:

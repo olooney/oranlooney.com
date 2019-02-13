@@ -12,8 +12,8 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 
 
 
-<p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on the <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression from last time</a> to create a classifier which is able to automatically represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropagation algorithm</a>. The history of this algorithm appears to be <a href="http://people.idsia.ch/~juergen/who-invented-backpropagation.html">somewhat complex</a>, as you can hear from <a href="https://youtu.be/Svb1c6AkRzE">Yann LeCun himself in this 2018 interview</a>, but luckily for us the algorithm in its modern form is not difficult - although it does require a solid handle on linear algebra and calculus.</p>
-<p>I don’t think the world needs another Neural Net 101 blog post, so I will send you to <a href="https://gormanalysis.com/introduction-to-neural-networks/">other</a> authors who <a href="http://neuralnetworksanddeeplearning.com/chap2.html">already have</a> first-rate <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">presentations.</a> My intention with this article is simply to derive the backpropagation algorithm, implement a working version from scratch, and to discuss the practical implications of introducing are more powerful representation.</p>
+<p>In today’s installment of <a href="/tags/from-scratch/">Machine Learning From Scratch</a> we’ll build on the <a href="/post/ml-from-scratch-part-2-logistic-regression/">logistic regression from last time</a> to create a classifier which is able to automatically represent non-linear relationships and interactions between features: the neural network. In particular I want to focus on one central algorithm which allows us to apply gradient descent to deep neural networks: the <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropagation algorithm</a>. The history of this algorithm appears to be <a href="http://people.idsia.ch/~juergen/who-invented-backpropagation.html">somewhat complex</a> (as you can hear from <a href="https://youtu.be/Svb1c6AkRzE">Yann LeCun himself in this 2018 interview</a>) but luckily for us the algorithm in its modern form is not difficult - although it does require a solid handle on linear algebra and calculus.</p>
+<p>I am indebted to the many <a href="https://www.youtube.com/watch?v=qyyJKd-zXRE&amp;list=PLA89DCFA6ADACE599&amp;index=6">dedicated educators</a> who taken the time to prepare <a href="https://gormanalysis.com/introduction-to-neural-networks/">in-depth</a>, <a href="https://www.youtube.com/watch?v=tIeHLnjs5U8">easy-to-understand</a>, and <a href="http://neuralnetworksanddeeplearning.com/chap2.html">mathematically rigorous</a> presentations of the subject and will not attempt to yet another; my intention with this article is simply to derive the backpropagation algorithm, implement a working version from scratch, and to discuss the practical implications of introducing are more powerful representation.</p>
 <div id="representation" class="section level2">
 <h2>Representation</h2>
 <p>A complete description of typical fully-connected feed-forward <span class="math inline">\(L\)</span>-layer neural network can be given in just four equations: Two boundary conditions for the input and output layers, and two recurrence relationships for the connections between layers:</p>
@@ -43,14 +43,19 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
 </div>
 <div id="fitting" class="section level2">
 <h2>Fitting</h2>
-<p>To fit the model to data, we find the parameters which minimize loss: <span class="math inline">\(\hat{\Theta} = \text{argmin} \, J(\Theta;X)\)</span>. One condition which must be true at a local minima is that <span class="math inline">\(\nabla_\Theta J = 0\)</span>. That gives us the equations:</p>
+<p>To fit the model to data, we find the parameters which minimize loss: <span class="math inline">\(\hat{\Theta} = \text{argmin} \, J(\Theta;X)\)</span>. Just as with logistic regression we use binary cross-entropy (a.k.a. log-loss) which means our loss function <span class="math inline">\(J\)</span> is given by:</p>
+<p><span class="math display">\[
+J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
+\]</span></p>
+<p>Note that we have introduced a <span class="math inline">\(1/N\)</span> scale factor. We are free to do this because multiplying by a positive constant does not change the optimization problem. We do this so that the gradient will be an <em>average</em> over all the training examples and therefore will be invariant w.r.t. training set size. It turns out to be convenient because it means we will not need to change our learning rate when fitting larger or smaller datasets.</p>
+<p>One condition which must be true at a local minima is that <span class="math inline">\(\nabla_\Theta J = 0\)</span>. That gives us the equations:</p>
 <p><span class="math display">\[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]</span></p>
-<p>The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for <span class="math inline">\(W\)</span>) or a vector (for <span class="math inline">\(b\)</span>.) The <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">matrix cookbook</a> may help you understand this notation.</p>
-<p>Given the forward pass equations given above, we can easily calculate the partial derivatives for the individual components. You can verify for yourself that:</p>
+<p>The notation used here is from matrix calculus, and we are taking partial derivatives with respect to a matrix (for <span class="math inline">\(W\)</span>) or a vector (for <span class="math inline">\(b\)</span>.) The <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">matrix cookbook</a> may help with this notation.</p>
+<p>Given the forward pass equations given above, we can easily calculate the partial derivatives for the individual components. For the derivation of <span class="math inline">\(\partial J / \partial a^{(L)}\)</span> you can follow pretty much the same proof given in the <a href="/post/ml-from-scratch-part-2-logistic-regression/">previous article on logistic regression.</a> For the others you should be able to easily verify from the above definitions that:</p>
 <p><span class="math display">\[ 
     \begin{split}
         \color{blue}
-        \frac{\partial J}{\partial a^{(L)}} &amp; \color{blue} = \frac{\partial J}{\partial \hat{y}} = y - \hat{y} \\
+        \frac{\partial J}{\partial a^{(L)}} &amp; \color{blue} = \frac{1}{N} \frac{\partial J}{(\partial \hat{y}} = y - \hat{y})^T \\
         \color{green}
         \frac{\partial a^{(i)}}{\partial z^{(i)}} &amp; \color{green} = a^{(i)} \circ (1-a^{(i)}) \\
         \color{green}
@@ -69,10 +74,11 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
     \color{green}
     \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} 
     \Bigg)
-    \circ
+    \cdot
     \color{maroon}
     \frac{\partial z^{(L)}}{\partial W^{(L)}}
 \]</span></p>
+<p>Where the dot product is defined as <span class="math inline">\(x \cdot y = (x^T y)^T\)</span>. This corresponds to the usual definition when <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are vectors but is extended to matrices. You can think of it as summing over all the examples in the training set. This notation isn’t standard but I’m going to use it anyway because it lets us write out the chain rule in a convenient left-to-right manner. If it bothers you, feel free to rewrite these with <span class="math inline">\(\partial J / \partial W^{(L)} = 1/N (y - \hat{y})^T\)</span> on the left.</p>
 <p>Next, let’s do <span class="math inline">\(W^{(L-1)}\)</span>:</p>
 <p><span class="math display">\[ 
     \frac{\partial J}{\partial W^{(L-1)}} = 
@@ -84,7 +90,8 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
     \color{black} \Bigg) \circ \Bigg( \color{green}
     \frac{\partial z^{(L)}}{\partial a^{(L-1)}} \circ
     \frac{\partial a^{(L-1)}}{\partial z^{(L-1)}} 
-    \color{black} \Bigg) \circ
+    \color{black} \Bigg) 
+    \cdot
     \color{maroon}
     \frac{\partial z^{(L-1)}}{\partial W^{(L-1)}}
 \]</span></p>
@@ -101,11 +108,12 @@ image: /post/ml-from-scratch-part-3-backpropagation_files/lead.jpg
     \color{black} \Bigg) \circ \Bigg( \color{green}
     \frac{\partial z^{(L-1)}}{\partial a^{(L-2)}} \circ
     \frac{\partial a^{(L-2)}}{\partial z^{(L-2)}} 
-    \color{black} \Bigg) \circ
+    \color{black} \Bigg) 
+    \cdot
     \color{maroon}
     \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
 \]</span></p>
-<p>By now you be starting to see a pattern emerge: as we go back layer by layer, the left-most part of the equation (blue and green) for layer <span class="math inline">\(i\)</span> is always the same as the blue and green part from layer <span class="math inline">\(i+1\)</span> plus two more new green factors, and capped off by the final maroon factor.</p>
+<p>By now you should be starting to see a pattern emerge: as we go back layer by layer, the left-most part of the equation (blue and green) for layer <span class="math inline">\(i\)</span> is always the same as the blue and green part from layer <span class="math inline">\(i+1\)</span> plus two more new green factors, and capped off by the final maroon factor.</p>
 <p>Think of it like a snake: We always start with the (blue) derivative of our loss function with respect to the prediction. This only happens once so stays at the “head” of the equation. At the (maroon) “tail”, we always take a derivative with respect to the parameters of interest. And in between we between we have a growing (green) “body” of partial derivatives. To capture this insight in symbols, let’s introduce a new recurrence relation:</p>
 <p><span class="math display">\[
     \begin{split} 
@@ -308,7 +316,8 @@ plt.axis([0, 1, 0, 1])</code></pre>
 <img src="/post/ml-from-scratch-part-3-backpropagation_files/roc_8_3.png" alt="ROC Curve for trivial NN" />
 <p class="caption">ROC Curve for trivial NN</p>
 </div>
-<p>The <code>[8, 3]</code> model achieves 95% accuracy on the training set and 91% accuracy on the test set. It has two hidden layers of 8 nodes and 3 nodes respectively. All layers are fully connected, so there’s a <span class="math inline">\(9 \times 3\)</span> matrix with 27 parameters connecting them, plus the <span class="math inline">\(4 \times 1\)</span> connecting to the output node and the <span class="math inline">\(21 \times 8\)</span> matrix connecting to the input layer, making for 199 parameters in all.</p>
+<p>The <code>[8, 3]</code> model achieves 0.96 AUC and 95% accuracy on the training set and 91% accuracy on the test set. This is enormously better than what was possible with a linear decision boundary.</p>
+<p>This new model has two hidden layers of 8 nodes and 3 nodes respectively; all layers are fully connected, so there’s a <span class="math inline">\(9 \times 3\)</span> matrix with 27 parameters connecting them, plus the <span class="math inline">\(4 \times 1\)</span> connecting to the output node and the <span class="math inline">\(21 \times 8\)</span> matrix connecting to the input layer, making for 199 parameters in all. Therefore it’s no surprise that its able to fit the training set much more closely, but it is very pleasant surprise that this means its test set performance is also much improved!</p>
 <p>We can get a better intuition for the relationship between the complexity of our neural network and performance by plotting test set AUC as a function of the number of node used:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-3-backpropagation_files/test_auc_by_number_of_nodes_layers.png" alt="ROC Curve for trivial NN" />
@@ -322,6 +331,6 @@ plt.axis([0, 1, 0, 1])</code></pre>
 <h2>Conclusion</h2>
 <p>That was backpropagation from scratch, our first look at neural networks. We saw how a sequential feed-forward network could be represented as alternating linear and non-linear transforms. We saw how to use the chain rule to calculate the gradient of the loss function with respect to any parameter in any layer of model, and how to calculate these gradients efficiently using the backpropagation algorithm. We demonstrated that a neural network could solve non-linear classification problems that logistic regression struggled with. And finally we saw how we could tune the number of layers and nodes in the neural network to take advantage of large datasets.</p>
 <p>The <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">specific neural network</a> presented in this article is incredibly simple relative to the neural networks used to solve real world problems. For example, we haven’t yet talked about the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">vanishing gradient problem</a> and how it can be solved with <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">rectified linear units</a> or <a href="https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c">batch normalization</a>, how <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">convolutional layers</a> or <a href="http://cs231n.github.io/convolutional-networks/#pool">pooling</a> can help when the data have a natural spatial structure, how <a href="https://en.wikipedia.org/wiki/Residual_neural_network">residual networks</a> wire layers together as acyclic digraphs, how <a href="https://en.wikipedia.org/wiki/Recurrent_neural_network">recurrent neural networks</a> use short-term memory to handle arbitrary sequences of inputs, or a thousand other topics. Yet today, the state-of-the-art algorithm used to train all of these varied species of neural networks is backpropagation, exactly as presented here.</p>
-<p>Of course, it usually isn’t necessary to actually do the calculus by hand. Modern machine learning frameworks like <a href="https://www.tensorflow.org/tutorials/eager/automatic_differentiation">Tensorflow</a> or <a href="https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html">PyTorch</a> prominently feature automatic differentiation as a core capability. The chain rule is straightforward to apply mechanically - the hard part is keeping track of all those indices! So it makes sense to have software handle it.</p>
+<p>In practice, it isn’t usually necessary to actually do the calculus by hand. Modern machine learning frameworks like <a href="https://www.tensorflow.org/tutorials/eager/automatic_differentiation">Tensorflow</a> or <a href="https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html">PyTorch</a> prominently feature <a href="https://en.wikipedia.org/wiki/Automatic_differentiation">automatic differentiation</a> as a core capability. The chain rule is straightforward to apply mechanically - the hard part is keeping track of all those indices! So it makes sense to have software handle it.</p>
 <p>In the next installment of the <a href="/tags/from-scratch/">Machine Learning From Scratch series</a> (coming soon!) we will change tact and look at a completely different approach to non-linear classification: decision trees and the recursive partition algorithm. We will see how these two apparently diametrically opposed approaches can both be viewed as examples of <a href="https://www.quora.com/What-are-adaptive-basis-functions">adaptive basis functions</a>, and how this point-of-view unifies disparate topics in machine learning.</p>
 </div>

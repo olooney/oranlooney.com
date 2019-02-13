@@ -165,11 +165,11 @@ without an explicit if/else.
 We can simplify this expression by taking the log of both sides and working
 with the *log-likelihood* $\ell$ from now on:
 
-\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln P(Y=1|X_i) + (1 - y_i) (1 - P(Y=1|X_i) \]
+\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln P(Y=1|X_i) + (1 - y_i) \ln (1 - P(Y=1|X_i) \]
 
 Substituting $\hat{y} = P(Y=1|X)$:
 
-\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln \hat{y}_i + (1 - y_i) (1 - \hat{y}_i) \]
+\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln \hat{y}_i + (1 - y_i) \ln (1 - \hat{y}_i) \]
 
 Because $\ln()$ is monotonically increasing, it suffices to minimize
 $\ell(\Theta; X, y)$ with respect to $\Theta$ in order to find the maximum
