@@ -418,7 +418,8 @@ derived from the chain rule to iteratively calculate the update for each layer
 counting down from $L$ to $1$.
 			
 		def back_propagation(self, y):
-			# this function relies on self._activations calculated by self.forward_propagation()
+			# this function relies on self._activations calculated
+			# by self.forward_propagation()
 
 			N = y.shape[0]
 			
@@ -451,13 +452,11 @@ counting down from $L$ to $1$.
 					if layer != self.n_layers-2:
 						error = error[:, 1:]
 						
-					# the a(1-a) is of course the gradient of the sigmoid function.
-					# a different activation function would use a different formula.
+					# the a(1-a) is the gradient of the sigmoid function.
 					error = (error @ W) * (a * (1-a))
 				
 				# update weights
 				W -= self.learning_rate * delta
-
 
 Testing
 -------

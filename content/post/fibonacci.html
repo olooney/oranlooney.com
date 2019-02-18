@@ -9,43 +9,199 @@ draft: true
 
 
 
-<p>A common example of recursion is the function to calculate the <span class="math inline">\(n\)</span>-th fibonacci number:</p>
+<p>A common example of recursion is the function to calculate the <span class="math inline">\(n\)</span>-th Fibonacci number:</p>
 <pre><code>def naive_fib(n):
-    if n &lt;= 2:
-        return 1
+    if n &lt; 2:
+        return n
     else:
         return naive_fib(n-1) + naive_fib(n-2)</code></pre>
 <p>This follows the mathematical definition very closely but of course it’s performance is terrible: roughly <span class="math inline">\(\mathcal{O}(2^n)\)</span>. This is commonly patched up with <a href="https://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a> - either with <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>:</p>
 <pre><code>@lru_cache(100)
 def memoized_fib(n):
-    if n &lt;= 2:
-        return 1
+    if n &lt; 2:
+        return n
     else:
         return memoized_fib(n-1) + memoized_fib(n-2)</code></pre>
 <p>or <a href="https://www.geeksforgeeks.org/tabulation-vs-memoizatation/">tabulation</a>:</p>
 <pre><code>def table_fib(n):
-    if n &lt;= 2:
-        return 1
+    if n &lt; 2:
+        return n
     table = [-1] * (n+1)
-    table[0] = None
+    table[0] = 0
     table[1] = 1
-    table[2] = 1
-    for i in range(3, n+1):
+    for i in range(_2, n+1):
         table[i] = table[i-1] + table[i-2]
     return table[n]</code></pre>
-<p>And of course the tabular solution can easily be made iterative:</p>
+<p>If we note that we only ever have to use the two most recent Fibonacci numbers, the tabular solution can easily be made iterative for a large space savings:</p>
 <pre><code>def iterative_fib(n):
-    previous, current = (1, 1)
-    for i in range(3, n+1):
+    previous, current = (0, 1)
+    for i in range(2, n+1):
         previous, current = (current, previous + current)
     return current</code></pre>
 <p>And that, oddly enough, is where often it stops. For example, this presentation of solving the Fibonacci sequence as an <a href="https://medium.com/quick-code/fibonacci-sequence-javascript-interview-question-iterative-and-recursive-solutions-6a0346d24053">interview question</a> presents the above two solutions and then… nothing. Not so much as an off-hand mention of better solutions. Googling around, I got the impression this is a fairly common (but by no means universal) misconception, perhaps because teachers use it to illustrate the idea of dynamic programming without caring too much about the details of the problem.</p>
-<p>Which is a shame, because we can do so much better.</p>
-<p>Fair warning: this is a bit of rabbit hole, with no other purpose than to optimize the hell out something for which there is frankly no practical use. But we get to do a bit of linear algebra and try out some pretty interesting optimization techniques so that’s what I call a good time.</p>
+<p>Which is a shame, because the problem only gets more interesting the deeper we go.</p>
+<p>Fair warning: this is a bit of rabbit hole, with no other purpose than to optimize the hell out something for which there is frankly no practical use. But we get to do a bit of linear algebra and try out some pretty interesting optimization techniques; that’s what I call a good time!</p>
 <div id="matrix-form" class="section level2">
 <h2>Matrix Form</h2>
-<p>TODO: MATH</p>
-<p>Now, we could also do this by defining <code>F1 = numpy.array([[1,1],[1,]], dtype='object')</code> and using <code>numpy.linalg.matrix_power(F1, n)</code>. As much as love numpy though, I don’t think we need to drag it in as a dependency just to multiply <span class="math inline">\(2 \times 2\)</span> matrices when we’re not even using native types! Also, we’ll see see in a second that there are some optimizations we can make that wouldn’t be possible to implement if we let numpy handle everything for us.</p>
+<p>The <span class="math inline">\(n\)</span>-th Fibonacci number is given by the recurrence relation:</p>
+<p><span class="math display">\[
+    \begin{align}
+        F_0 &amp;= 0 \\
+        F_1 &amp;= 1 \\
+        F_n &amp;= F_{n-1} + F_{n-2}
+    \end{align}
+\]</span></p>
+<p>Define the first Fibonacci matrix to be:</p>
+<p><span class="math display">\[
+    \mathbf{F}_1 = \begin{bmatrix}
+        1 &amp; 1 \\
+        1 &amp; 0 
+    \end{bmatrix}
+\]</span></p>
+<p>And define the <span class="math inline">\(n\)</span>-th Fibonacci matrix to be:</p>
+<p><span class="math display">\[
+    \mathbf{F}_n = \mathbf{F}_1^n
+\]</span></p>
+<p>Then we have the following theorem:</p>
+<p><span class="math display">\[
+    \forall n &gt; 0, \mathbf{F}_n = \begin{bmatrix}
+        F_{n+1} &amp; F_n \\
+        F_n &amp; F_{n-1}
+    \end{bmatrix}
+\]</span></p>
+<p>I didn’t just pluck this out of thin air - there’s a general way to turn <em>any</em> <a href="http://mathworld.wolfram.com/LinearRecurrenceEquation.html">linear recurrence relation</a> into a matrix which I’ll describe in a moment. But first let’s prove this theorem.</p>
+<p>For the case of <span class="math inline">\(n = 1\)</span>, this is true by inspection because we know <span class="math inline">\(F_0 = 0\)</span> and <span class="math inline">\(F_1 = F_2 = 1\)</span>.</p>
+<p>Suppose it is true for <span class="math inline">\(n-1\)</span>.</p>
+<p><span class="math display">\[
+    \mathbf{F}_n = \mathbf{F}_1^{n} = \mathbf{F}_1^{n-1} \mathbf{F}_1 = 
+    \begin{bmatrix}
+        F_n &amp; F_{n-1} \\
+        F_{n-1} &amp; F_{n-2}
+    \end{bmatrix}
+    \begin{bmatrix}
+        1 &amp; 1 \\
+        1 &amp; 0 
+    \end{bmatrix}
+\]</span></p>
+<p>Multiplying these two matrices, we have:</p>
+<p><span class="math display">\[
+    \mathbf{F}_n = 
+    \begin{bmatrix}
+        F_n + F_{n-1} &amp; F_{n} \\
+        F_{n-1} + F_{n-2} &amp; F_{n-1} 
+    \end{bmatrix}
+\]</span></p>
+<p>We can use the Fibonacci definition twice (once for each element of the first column) to get:</p>
+<p><span class="math display">\[
+    \mathbf{F}_n = 
+    \begin{bmatrix}
+        F_{n+1} &amp; F_{n} \\
+        F_{n} &amp; F_{n-1} 
+    \end{bmatrix}
+\]</span></p>
+<p>The theorem holds by inspection for the base case <span class="math inline">\(1\)</span>, we’ve just proved that if it is true for <span class="math inline">\(n-1\)</span> then it is also true for <span class="math inline">\(n\)</span>, so by mathematical induction it is true for all <span class="math inline">\(n &gt; 0\)</span>. Q.E.D.</p>
+<p>Wikipedia has a <a href="https://en.wikipedia.org/wiki/Recurrence_relation#Solving_via_linear_algebra">good explanation</a> for how any linear recurrence relation can be expressed in matrix form and I’ve described it myself in <a href="/post/complex-r-part-2/">a prior article</a>. Essentially, we use the first dimension to store the current value, and the rest of the vector as <a href="https://en.wikipedia.org/wiki/Shift_register">shift registers</a> to “remember” <span class="math inline">\(k\)</span> previous states. The recurrence relation is encoded along the first row, and the history is rolled forward by simply placing ones along the <a href="http://mathworld.wolfram.com/Subdiagonal.html">subdiagonal</a>. It’s actually easier to see in higher dimensions, so here’s an example of encoding a linear recurrence relationship which uses the four most recent numbers instead of just two.</p>
+<p><span class="math display">\[
+  y_{n+1} = c_0 y_n + c_1 y_{n-1} + c_2 y_{n-2} + c_3 y_{n-3} \\  
+  \iff \\
+  \begin{bmatrix}
+  y_{n+1} \\
+  y_{n} \\
+  y_{n-1} \\
+  y_{n-2} \\
+  y_{n-3} \\
+  \end{bmatrix} = 
+    \begin{bmatrix}
+  c_0 &amp; c_0 &amp; c_1 &amp; c_2 &amp; c_3 \\
+  1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+  y_n \\
+  y_{n-1} \\
+  y_{n-2} \\
+  y_{n-3} \\
+  y_{n-4} \\
+  \end{bmatrix}
+\]</span></p>
+<p>If we squint at our Fibonacci basis matrix, we can see it has this form too. The first row is <span class="math inline">\([ 1 \,\, 1 ]\)</span> because recurrence relation is the unweighted sum of the prior two, and the second row <span class="math inline">\([ 1 \,\, 0 ]\)</span> contains the <span class="math inline">\(1\)</span> on the <a href="http://mathworld.wolfram.com/Subdiagonal.html">subdiagonal</a> which “remembers” the previous value.</p>
+<p>At first this may not seem at all helpful. But by framing the problem as taking the exponent of a matrix instead of repeated addition, we can derive two much faster algorithms: a constant time <span class="math inline">\(\mathcal{O}(n)\)</span> approximate solution using eigenvalues, and a fast <span class="math inline">\(\mathcal{O}(n \log n)\)</span> exact solution.</p>
+</div>
+<div id="eigenvalue-solution" class="section level2">
+<h2>Eigenvalue Solution</h2>
+<p>Note that the matrix <span class="math inline">\(\mathbf{F}_1\)</span> is symmetric and real-valued. Therefore it has real eigenvalues which we’ll call <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>. The eigenvalue decomposition allows us to diagonalize <span class="math inline">\(\mathbf{F}_1\)</span> like so:</p>
+<p><span class="math display">\[
+    \mathbf{F}_1 = 
+    \mathbf{Q} 
+    \mathbf{\Lambda}
+    \mathbf{Q}^T
+    =
+    \mathbf{Q} 
+    \begin{bmatrix}
+        \lambda_1 &amp; 0 \\
+        0 &amp; \lambda_2
+    \end{bmatrix}
+    \mathbf{Q}^T
+\]</span></p>
+<p>Writing <span class="math inline">\(\mathbf{F}_1\)</span> in this form makes it easy to square it:</p>
+<p><span class="math display">\[
+    \begin{align}
+     \mathbf{F}_1^2 &amp; = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \\
+                     &amp; = \mathbf{Q} \mathbf{\Lambda}^2 \mathbf{Q}^T \\
+                     &amp; = \mathbf{Q}  
+                    \begin{bmatrix}
+                        \lambda_1^2 &amp; 0 \\
+                        0 &amp; \lambda_2^2
+                    \end{bmatrix}
+                    \mathbf{Q}^T
+    \end{align}
+\]</span></p>
+<p>or to raise it to an arbitrary power:</p>
+<p><span class="math display">\[
+     \mathbf{F_n} 
+     = \mathbf{F}_1^n 
+     = \mathbf{Q} \mathbf{\Lambda}^n \mathbf{Q}^T 
+     = 
+        \mathbf{Q}  
+        \begin{bmatrix}
+            \lambda_1^n &amp; 0 \\
+            0 &amp; \lambda_2^n
+        \end{bmatrix}
+        \mathbf{Q}^T
+\]</span></p>
+<p>We can calculate the two eigenvalues numerically or analytically by solving the characteristic equation <span class="math inline">\((1-\lambda)\lambda - 1 = 0\)</span>. Since this is a quadratic equation, we can use the quadratic equation to obtain both solutions in closed form:</p>
+<p><span class="math display">\[
+    \begin{align}
+    \lambda_1 &amp; = \frac{1 + \sqrt(5)}{2} = \phi \\
+    \lambda_2 &amp; = \frac{1 - \sqrt(5)}{2} 
+    \end{align}
+\]</span></p>
+<p>Where the largest eigenvalue is in fact <span class="math inline">\(\phi\)</span>, the golden ratio. In fact, the matrix formulation is an easy way to see <a href="https://www.quickanddirtytips.com/education/math/what-is-the-golden-ratio-and-how-is-it-related-to-the-fibonacci-sequence">famous connection</a> between the Fibonacci numbers and <span class="math inline">\(\phi\)</span>. To calculate <span class="math inline">\(F_n\)</span> for large values of <span class="math inline">\(n\)</span>, it suffices to calculate <span class="math inline">\(\phi^n\)</span> and then do some constant time <span class="math inline">\(\mathcal{O}(1)\)</span> bookkeeping, like so:</p>
+<pre><code>import numpy as np
+
+def eigen_fib(n):
+    F1 = np.array([[1, 1], [1, 0]])
+    eigenvalues, eigenvectors = np.linalg.eig(F1)
+    Fn = eigenvectors @ np.diag(eigenvalues ** n) @ eigenvectors.T
+    return int(np.rint(Fn[0, 1]))</code></pre>
+<p>So there you have it - a <span class="math inline">\(\mathcal{O}(1)\)</span> algorithm for any Fibonacci number. There’s just one tiny little problem with it: <span class="math inline">\(\phi\)</span>, being irrational, is not particularly convenient for numerical analysis. In particular, if we run the above Python program, it will use 64-bit floating point arithmetic and will never be able to precisely represent more than 15 decimal digits. That only lets us calculate up to <span class="math inline">\(F_{93}\)</span> before we start having precision errors. Our clever little “exact” eigenvalue algorithm is good for nothing but a rough approximation. We <em>could</em> use a high precision rational numbers, but that approach turns out to always require strictly more space and time that just sticking to integers. So, abandoning the eigenvalue approach on the garbage heap of ivory tower theory, let’s turn our attention to simply calculating the powers of an integer matrix.</p>
+</div>
+<div id="fast-exponentiation" class="section level2">
+<h2>Fast Exponentiation</h2>
+<p>At first, this may not seem helpful. All we’ve done is reformulate our problem so that instead of calculating <span class="math inline">\(n\)</span> terms in a sequence using simple addition, we now have to multiply <span class="math inline">\(n\)</span> matrices together. In fact, we’ve made it worse! Multiplication is slower than addition, especially for large numbers, and computing the production of two <span class="math inline">\(2 \times 2\)</span> matrices requires <em>eight</em> multiplications!</p>
+<p>However, there’s a <a href="https://en.wikipedia.org/wiki/Exponentiation_by_squaring">trick</a> to calculating large powers quickly. Imagine we want to calculate <span class="math inline">\(x^n\)</span> where <span class="math inline">\(n\)</span> is a power of two <span class="math inline">\(n = 2^m\)</span>. If we square <span class="math inline">\(x\)</span>, then square it again, and keep doing that <span class="math inline">\(m\)</span> times, we get</p>
+<p><span class="math display">\[ ((x^2)^2...)^2 = x^{2^m} = x^n \]</span></p>
+<p>In other words, we only need to perform <span class="math inline">\(m = \log_2 n\)</span> matrix multiplications to calculate <span class="math inline">\(x^n\)</span>.</p>
+<p>We can generalize this to calculate any large power <span class="math inline">\(n\)</span> (not necessary a power of two) by first finding the largest power of two less than <span class="math inline">\(n\)</span> and factoring it out:</p>
+<p><span class="math display">\[ x^n = x^{2^m} x^{n-2^m} \]</span></p>
+<p>The left factor can be calculated by repeated squaring and the right factor by can calculated by recursively applying the same trick. However, we will never need to do that more than <span class="math inline">\(\log_2 n\)</span> times and each time the power of two gets smaller.</p>
+<p>The upshot is that we can calculate <span class="math inline">\(x^n\)</span> in <span class="math inline">\(\mathcal{O}(\log n)\)</span> multiplications. This is mostly commonly seen in cryptography such as the RSA<a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a> algorithm and <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">Diffie-Hellman</a> where it is done modulo some large but fixed sized integer, making all the multiplications roughly equal cost. Here, we are using multiple precision integers which are doubling in size with each multiplication, so abstract “multiplications” are the wrong thing to count; we won’t be getting <span class="math inline">\(\mathcal{O}(\log n)\)</span> runtime performance because the top multiplications keep getting more expensive. Nevertheless, the squaring by exponentiation trick hugely reduces the amount of work we have to do relative to the naive iterative solution.</p>
+</div>
+<div id="matrix-implementation" class="section level2">
+<h2>Matrix Implementation</h2>
+<p>Now, we could implement this by defining <code>F1 = numpy.array([[1,1],[1,]], dtype='object')</code> and using <code>numpy.linalg.matrix_power(F1, n)</code>. As much as love numpy though, I don’t think we need to drag it in as a dependency just to multiply <span class="math inline">\(2 \times 2\)</span> matrices when we’re not even using native integer types! Also, we’ll see see in a second that there are some optimizations we can make that wouldn’t be possible to implement if we let numpy handle everything for us. For now though, let’s implement the naive matrix algorithm; we’ll come back and refactor in the next section.</p>
 <pre><code>def matrix_multiply(A, B):
     a, b, c, d = A
     x, y, z, w = B
@@ -90,18 +246,9 @@ F1 = [1, 1,
 def matrix_fib(n):
     return matrix_power(F1, n)[1]</code></pre>
 </div>
-<div id="eigenvalues" class="section level2">
-<h2>Eigenvalues</h2>
-<pre><code>import numpy as np
-
-def eigen_fib(n):
-    F1 = np.array([[1, 1], [1, 0]])
-    eigenvalues, eigenvectors = np.linalg.eig(F1)
-    Fn = eigenvectors @ np.diag(eigenvalues ** n) @ eigenvectors.T
-    return int(np.rint(Fn[0, 1]))</code></pre>
-</div>
 <div id="implicit-matrix-form" class="section level2">
 <h2>Implicit Matrix Form</h2>
+<p>The above has reasonably good asymptotic performance but it bothers me that it’s doing 8 multiplications each time. We really only need to keep track of two elements in the right-hand column of the matrix. Then we can multiply two different Fibonacci matrices with just four multiplications, and we can even get that down to three if we’re squaring a matrix! I call this form where we’re passing around only the two numbers necessary to characterize the matrix the “implicit matrix form.” It’s only a constant time speed-up but every little bit helps.</p>
 <pre><code>def multiply(a, b, x, y):
     return x*(a+b) + a*y, a*x + b*y
 
@@ -163,23 +310,57 @@ cpdef cython_fib(n):
     return a
 
 print(cython_fib(103))</code></pre>
-<p>Unfortunately, the one type that we want to use, Python’s native <code>int</code> type, is represented by Cython as a C-style int - fixed precision signed integer. It doesn’t have Python’s ability to trasparently handle large numbers.</p>
+<p>Unfortunately, the one type that we want to use, Python’s native <code>int</code> type, is represented by Cython as a C-style int - fixed precision signed integer. It doesn’t have Python’s ability to transparently handle large numbers. We can either use the native C <code>long</code> in which case we overflow around <span class="math inline">\(\mathbf{F}_93\)</span> or we can continue to use the Python type in which case we gain only a modest speed up.</p>
 <p>Never fret, though, because we can use something even <em>better</em>.</p>
 </div>
 <div id="the-gnu-multiple-precision-arithmetic-library" class="section level2">
 <h2>The GNU Multiple Precision Arithmetic Library</h2>
-<p>The GNU Multiple Precision Arithmetic Library, or <a href="https://gmplib.org/">GMP</a> for short, is nothing short of a work of art. Often used for calculating <span class="math inline">\(\pi\)</span> to a number of decimal places descibed as “silly” by their <a href="https://gmplib.org/pi-with-gmp.html">own documentation</a>, GMP is able to add, multiply, divide and perform arithmetic on larger and larger numbers until your computer runs out of RAM. The multipication algorithm used <em>starts</em> with <a href="https://en.wikipedia.org/wiki/Karatsuba_algorithm">Karatsuba</a> - and then they get <a href="https://gmplib.org/manual/Multiplication-Algorithms.html">serious</a>.</p>
+<p>The GNU Multiple Precision Arithmetic Library, or <a href="https://gmplib.org/">GMP</a> for short, is nothing short of a work of art. Often used for calculating <span class="math inline">\(\pi\)</span> to a number of decimal places described as “silly” by their <a href="https://gmplib.org/pi-with-gmp.html">own documentation</a>, GMP is able to add, multiply, divide and perform arithmetic on larger and larger numbers until your computer runs out of RAM. The multiplication algorithm used <em>starts</em> with <a href="https://en.wikipedia.org/wiki/Karatsuba_algorithm">Karatsuba</a> - and then they get <em><a href="https://gmplib.org/manual/Multiplication-Algorithms.html">serious</a></em>.</p>
 <pre><code>import gmpy2
 from gmpy2 import mpz
 
 def gmp_fib(n):
     a, b = power(mpz(1), mpz(0), mpz(n))
     return a</code></pre>
-<p>Note that we didn’t have to define <code>power()</code> or <code>multiply()</code> again: this implementation re-uses those functions. Every Python function is a type-agnostic template function.</p>
+<p>Note that we didn’t have to define the <code>power()</code> or <code>multiply()</code> functions again: this implementation re-uses the exact same functions we wrote for Python native types when implementing <code>implicit_fib()</code> above. Every Python function is a type-agnostic template function!</p>
+<p>You may also wonder why the large integer type is called <code>mpz</code>: the “mp” is for “multiple precision”, just as in “GMP”, while the “z” stands for <span class="math inline">\(\mathbb{Z}\)</span> the conventional name for the set of integers. There is also <code>mpq</code> for the set of rationals <span class="math inline">\(\mathbb{Q}\)</span> and so on.</p>
 </div>
 <div id="final-python-fibonacci" class="section level2">
 <h2>Final Python Fibonacci</h2>
-<pre><code># what a pretty pattern! fib(0) = 0 under the classical definition.
+<p>Our performance testing has revealed something interesting - there is no one implementation which <a href="https://en.wikipedia.org/wiki/Strategic_dominance">strictly dominates</a> all the others over all possible inputs. This is actually pretty common - more sophisticated algorithms with better asymptotic behavior also tend to have worse constant factors. Simple algorithms tend to dominate when <span class="math inline">\(n\)</span> is small, while more complex algorithms are able to pull ahead when <span class="math inline">\(n\)</span> is large.</p>
+<p>A common way to squeeze as much performance as possible across all possible inputs is to use a <a href="https://en.wikipedia.org/wiki/Hybrid_algorithm">hybrid algorithm</a> which selects an algorithm from a family based on heuristics that estimate which should perform best in which regions. Probably the most famous hybrid algorithm in use today is <a href="https://en.wikipedia.org/wiki/Timsort">Timsort</a>.</p>
+<p>We will use the above data to define three regions:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Region</th>
+<th align="center">Name</th>
+<th align="center">Algorithm</th>
+<th align="center">Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">n &lt;= 92</td>
+<td align="center">Small</td>
+<td align="center">Table Lookup</td>
+<td align="center">Python</td>
+</tr>
+<tr class="even">
+<td align="center">92 &lt; n &lt;= <span class="math inline">\(2^12\)</span></td>
+<td align="center">Medium</td>
+<td align="center">Implicit Matrix</td>
+<td align="center">Cython</td>
+</tr>
+<tr class="odd">
+<td align="center">n &gt; <span class="math inline">\(2^12\)</span></td>
+<td align="center">Large</td>
+<td align="center">Implicit Matrix</td>
+<td align="center">GMP</td>
+</tr>
+</tbody>
+</table>
+<pre><code># what a pretty pattern! 
 small_fib = [
     0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597,
     2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418,
@@ -206,6 +387,22 @@ def fibonacci(n):
         return cython_fib(n)
     else:
         return gmp_fib(n)</code></pre>
+</div>
+<div id="head-to-head-competition" class="section level2">
+<h2>Head-to-Head Competition</h2>
+<p>As I’ve implementing these, I’ve been informally testing and benchmarking them with <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">IPython’s %timeit magic.</a> But now that we have a large number of candidate implementations, <em>ad hoc</em> testing is becoming tiresome. Let’s benchmark all of our functions across a wide range of inputs to see which emerges as the leader. All of these are measured at <span class="math inline">\(2^k-1\)</span> to force worst-case performance from the main algorithms.</p>
+<div class="figure">
+<img src="/post/fibonacci_files/competing_fibonacci_implementations.png" alt="competing Fibonacci implementations" />
+<p class="caption">competing Fibonacci implementations</p>
+</div>
+<p>We can make a few observations:</p>
+<ul>
+<li>The naive implementation isn’t useful past about 100.</li>
+<li>The table based method actually runs out of memory before its runtime performance becomes a problem.</li>
+<li>The mauve line for the “eigen” implementation is basically constant time - until it starts overflowing to infinity once it can no longer represent its solution as a 64-bit floating point number.</li>
+<li>The best asymptotic performance is from the version using both GMP and the dynamic programming cache.</li>
+<li>By construction, the “hybrid” algorithm traces out lower bound - constant until 92, then follows the Cython, then the dynamic GMP solution for large numbers.</li>
+</ul>
 </div>
 <div id="c-fibonacci" class="section level2">
 <h2>C++ Fibonacci</h2>
@@ -269,11 +466,11 @@ sys     0m1.430s</code></pre>
 </div>
 <div id="dynamic-programming-redux" class="section level2">
 <h2>Dynamic Programming Redux</h2>
-<p>In the end, we did up using dynamic programming, just like the naïve programs I was making fun of at the start. The difference is that we are only caching results of the form <span class="math inline">\(F_1^{2^n}\)</span>. Thus we will never need to store more than <span class="math inline">\(\mathcal{O}(\ln n)\)</span> such results. It’s interesting to compare data flow graphs with and without this caching.</p>
+<p>In the end, we did up using dynamic programming, just like the naive programs I was making fun of at the start. The difference is that we are only caching results of the form <span class="math inline">\(F_1^{2^n}\)</span>. Thus we will never need to store more than <span class="math inline">\(\mathcal{O}(\ln n)\)</span> such results. It’s interesting to compare data flow graphs with and without this caching.</p>
 <p>If we just recalculate each power of two every time we need it, we get a tree-shaped DFG:</p>
 <div class="figure">
-<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naïve DFG for fib(103)" alt="naïve DFG for fib(103)" />
-<p class="caption">naïve DFG for fib(103)</p>
+<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naïve DFG for fib(103)" alt="naive DFG for fib(103)" />
+<p class="caption">naive DFG for fib(103)</p>
 </div>
 <p>With the caching added for powers of two, we get a much smaller acyclic graph:</p>
 <div class="figure">
@@ -283,12 +480,26 @@ sys     0m1.430s</code></pre>
 <p>I also generated an <a href="/post/fibonacci_files/fib_1000000003_dfg.png">absurdly long DFG</a> for <code>fib(1000000003)</code> if you want to see an extreme example.</p>
 <p>It should be clear from graph that in the worst case scenario, where <span class="math inline">\(n = 2^m -1\)</span>, the cached algorithm performs <span class="math inline">\(2m\)</span> multiplications, compared to the <span class="math inline">\(m(m-1)/2\)</span> needed for the algorithm without caching. Despite this, the benefit of the cache is surprisingly minor: maybe 10% in practice. That’s because almost all of the run time of the entire calculation is actually spent in a handful of very large multiplications - the smaller ones just don’t matter as much. “Logical multiplications” just isn’t the right operation to count: when dealing with multiple precision numbers we need to count the number of bytes multiplied, and the number of bytes is growing as <span class="math inline">\(2^m\)</span>. I’ve heard those two effects more or less cancel out and the final algorithm is <span class="math inline">\(\mathcal{O}(n \log n)\)</span> but wouldn’t be able to prove it myself. In practice it seems to hold empirically: every time <span class="math inline">\(n\)</span> goes up by a factor of 10, time increases by about 20.</p>
 </div>
+<div id="feynman-fuse-problem" class="section level2">
+<h2>Feynman Fuse Problem</h2>
+<blockquote>
+<p>The problem was to design a machine like the other one - what they called a director - but this time I thought the problem was easier, because the gunner would be following behind in another machine at the same altitude. The gunner would set into my my machine his altitude and an estimate of his disance behind the other airplane. My machine would automatically tilt the gun up at the correct angle and set the fuse.</p>
+<p>As director of this project, I would be making trips down to Aberdeen to get the firing tables. However, they already had some preliminary data and it turned out that the fuses they were going to use were not clock fuses, but powder-train fuses, which didn’t work at those altitudes - they fizzled out in the thin air.</p>
+<p>I thought I only had to correct for the air resistance at different altitudes. Instead my job was to invent a machine that would make the shell explode at the right moment, when the fuse won’t burn!</p>
+<p>I decided that was too hard for me and went back to Princeton.</p>
+<ul>
+<li><a href="https://books.google.com/books?id=7papZR4oVssC&amp;lpg=PA103&amp;ots=euSVb9oLXZ&amp;dq=feynman%20%22altitude%22%20problem&amp;pg=PA103#v=onepage&amp;q=feynman%20%22altitude%22%20problem&amp;f=false">Richard Feynman</a></li>
+</ul>
+</blockquote>
+</div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
 <p>Imagine if instead of indexing webpages and serving ads, Google’s business was calculating Fibonacci numbers. Maybe in some parallel universe, that was how BitCoin worked or something. Call it FibCoin. They had whole buildings full of server racks just chugging away at the <span class="math inline">\(\mathcal{O}(n^2)\)</span> algorithm, billions of dollars worth of infrastructure. Entire teams that do nothing but yank and replace defective units. An air conditioning bill larger than some nation’s GDP. Then one day some team comes along with this crazy matrix based approach, babbling about “eigen-somethings” and “multiple sclerosis arithmetic” or something. And a week later they’re churning out FibCoins at <span class="math inline">\(\mathcal{O}(n \log n)\)</span>. What happens to that infrastructure giant?</p>
-<p><em>Algorithms are disruptive.</em></p>
+<blockquote>
+<p>Algorithms are disruptive.</p>
+</blockquote>
 <p>John Platt SMO.</p>
 <p>two order of magnitude improvement from batch gradient to optimized algorithms. Another order of magnitude or more by moving to GPUs.</p>
 <p>Gradient Boosting isn’t just better than decision trees, it’s so much better it’s hard to believe.</p>
-<p>When I graduated school,</p>
+<p>When I graduated, <a href="https://en.wikipedia.org/wiki/Quicksort">quicksort</a> was considered state-of-the-art. Since then, <a href="https://en.wikipedia.org/wiki/Timsort">Timsort</a> has supplanted it in a number of standard libraries such as <a href="https://stackoverflow.com/questions/4018332/is-java-7-using-tim-sort-for-the-method-arrays-sort">Java’s.</a></p>
 </div>
