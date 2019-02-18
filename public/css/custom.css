@@ -3,20 +3,25 @@
 html .article code,
 html .article pre {
 	background: none;
-	font-family: "Bitstream Vera Sans Mono", monospace;
+	font-family: Consolas, "Bitstream Vera Sans Mono", monospace;
 	font-style: normal;
 }
 
 html .article pre code {
-    border-left: solid 4px #b4c6c7;
+    /*border-left: solid 4px #b4c6c7;*/
 }
 html .article blockquote {
-  margin-left: 0;
-  padding: 1em;
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  padding: 0.5em;
   padding-left: 1.5em;
-  background: #eee;
-  border: none;
+  border: 5px solid #ddd;
+  background: #f8f8f8;
   color: rgb(68,68,68);
+}
+
+html .article {
+	font-size: 1.1em;
 }
 
 html .article img {
@@ -144,7 +149,6 @@ html, body {
 }
 
 strong {
-  color: #800000;
   font-weight: bold;
 }
 
@@ -188,6 +192,6 @@ html .archives .archives-item > a:visited {
 
 .home-list .article .article-content{
   text-overflow: ellipsis;
-  max-height: 120px;
+  max-height: 130px;
 }
 

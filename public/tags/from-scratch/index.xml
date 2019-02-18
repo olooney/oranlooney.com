@@ -6,7 +6,7 @@
     <description>Recent content in From Scratch on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
     <lastBuildDate>Sun, 03 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/tags/from-scratch/index.xml" rel="self" type="application/rss+xml" />

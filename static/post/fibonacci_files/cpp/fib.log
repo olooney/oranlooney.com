@@ -1,0 +1,127 @@
+time ./fib 1000003
+1000003 8274235876441555200548853191702439042416225170443997880402 ...
+// hundreds of lines omitted
+...551245328096421877
+real    0m0.061s
+user    0m0.050s
+sys     0m0.000s
+
+
+# raw times by power of 10. Note that eventually, 
+# O(log N) is a pipe dream and we're scaling worse
+# than linearly as we manipulate larger and larger
+# numbers
+olooney@40542cdcf54f:~/fib$ time ./fib 10000003
+
+real    0m0.428s
+user    0m0.390s
+sys     0m0.030s
+olooney@40542cdcf54f:~/fib$ time ./fib 100000003
+
+real    0m7.198s
+user    0m6.970s
+sys     0m0.210s
+olooney@40542cdcf54f:~/fib$ time ./fib 1000000003
+
+real    1m41.169s
+user    1m38.960s
+sys     0m2.150s
+
+
+
+
+
+
+
+
+olooney@40542cdcf54f:~/fib$ time ./fib 1000000003
+
+1000000003 = (2^(2^29) = 1073741824) + 463129091
+463129091 = (2^(2^28) = 536870912) + 194693635
+194693635 = (2^(2^27) = 268435456) + 60475907
+60475907 = (2^(2^25) = 67108864) + 26921475
+26921475 = (2^(2^24) = 33554432) + 10144259
+10144259 = (2^(2^23) = 16777216) + 1755651
+1755651 = (2^(2^20) = 2097152) + 707075
+707075 = (2^(2^19) = 1048576) + 182787
+182787 = (2^(2^17) = 262144) + 51715
+51715 = (2^(2^15) = 65536) + 18947
+18947 = (2^(2^14) = 32768) + 2563
+2563 = (2^(2^11) = 4096) + 515
+515 = (2^(2^9) = 1024) + 3
+3 = (2^(2^1) = 4) + 1
+
+# in this run, 29 squares and 14 multipications.
+# but almost all the time is spent on the handful of largest multipication
+
+
+
+
+
+
+
+
+# C++ solution with cached powers of two
+olooney@40542cdcf54f:~/fib$ time ./fib 103
+power 103 = (2^(2^6) = 128) * 39
+power 39 = (2^(2^5) = 64) * 7
+power 7 = (2^(2^2) = 8) * 3
+power 3 = (2^(2^1) = 4) * 1
+
+real    0m0.004s
+user    0m0.000s
+sys     0m0.000s
+olooney@40542cdcf54f:~/fib$ time ./fib 104
+power 104 = (2^(2^6) = 128) * 40
+power 40 = (2^(2^5) = 64) * 8
+power 8 = (2^(2^3) = 16) * 0
+
+real    0m0.006s
+user    0m0.000s
+sys     0m0.010s
+olooney@40542cdcf54f:~/fib$ time ./fib 1003
+power 1003 = (2^(2^9) = 1024) * 491
+power 491 = (2^(2^8) = 512) * 235
+power 235 = (2^(2^7) = 256) * 107
+power 107 = (2^(2^6) = 128) * 43
+power 43 = (2^(2^5) = 64) * 11
+power 11 = (2^(2^3) = 16) * 3
+power 3 = (2^(2^1) = 4) * 1
+
+real    0m0.005s
+user    0m0.000s
+sys     0m0.000s
+olooney@40542cdcf54f:~/fib$ time ./fib 10003
+power 10003 = (2^(2^13) = 16384) * 1811
+power 1811 = (2^(2^10) = 2048) * 787
+power 787 = (2^(2^9) = 1024) * 275
+power 275 = (2^(2^8) = 512) * 19
+power 19 = (2^(2^4) = 32) * 3
+power 3 = (2^(2^1) = 4) * 1
+
+real    0m0.005s
+user    0m0.000s
+sys     0m0.000s
+olooney@40542cdcf54f:~/fib$ time ./fib 100003
+power 100003 = (2^(2^16) = 131072) * 34467
+power 34467 = (2^(2^15) = 65536) * 1699
+power 1699 = (2^(2^10) = 2048) * 675
+power 675 = (2^(2^9) = 1024) * 163
+power 163 = (2^(2^7) = 256) * 35
+power 35 = (2^(2^5) = 64) * 3
+power 3 = (2^(2^1) = 4) * 1
+
+real    0m0.006s
+user    0m0.000s
+sys     0m0.000s
+olooney@40542cdcf54f:~/fib$ time ./fib 10000003
+
+real    0m0.427s
+user    0m0.360s
+sys     0m0.060s
+
+olooney@40542cdcf54f:~/fib$ time ./fib 1000000003
+
+real    1m24.088s
+user    1m22.550s
+sys     0m1.430s

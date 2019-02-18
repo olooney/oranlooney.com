@@ -6,7 +6,7 @@
     <description>Recent content in About on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>&amp;copy; Copyright 2018 Oran Looney</copyright>
+    <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
     <lastBuildDate>Wed, 09 Apr 2014 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/about/index.xml" rel="self" type="application/rss+xml" />

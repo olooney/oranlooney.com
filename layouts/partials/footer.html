@@ -1,6 +1,8 @@
 
 <div class="site-footer">
-  <div class="copyright">{{ .Site.Copyright | safeHTML }}</div>
+  <div class="copyright">
+	  {{ replace .Site.Copyright "{year}" now.Year | safeHTML }}
+  </div>
   <ul class="site-footer-items">
     {{- if .RSSLink }}
     <li class="site-footer-item-rsslink">

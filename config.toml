@@ -9,7 +9,7 @@ languageCode = "en"
 #pygmentsOptions = "linenos=table"
 
 # Copyright notice. This is displayer in the footer.
-copyright = "&copy; Copyright 2018 Oran Looney"
+copyright = "&copy; Copyright {year} Oran Looney"
 
 [params]
   # Date format
