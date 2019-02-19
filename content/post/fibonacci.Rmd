@@ -15,9 +15,11 @@ A common example of recursion is the function to calculate the $n$-th Fibonacci 
         else:
             return naive_fib(n-1) + naive_fib(n-2)
 
-This follows the mathematical definition very closely but of course it's performance
-is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with [dynamic programming][DP] - 
-either with [memoization][DPM]:
+This follows the mathematical definition very closely but it's performance is
+terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with [dynamic
+programming][DP]; specifically, either the [memoization][DPM]:
+
+    from functools import lru_cache
 
     @lru_cache(100)
     def memoized_fib(n):
@@ -49,11 +51,12 @@ the tabular solution can easily be made iterative for a large space savings:
 
 And that, oddly enough, is where often it stops. For example, this presentation
 of solving the Fibonacci sequence as an [interview question][IQ] presents the
-above two solutions and then... nothing. Not so much as an off-hand mention of
-better solutions. Googling around, I got the impression this is a fairly common
-(but by no means universal) misconception, perhaps because teachers use it to
-illustrate the idea of dynamic programming without caring too much about the
-details of the problem.
+above two solutions and then... nothing. Not so much as an off-hand mention
+that better solutions might exist. Googling around, I got the impression this
+is a fairly common (but by no means universal) misconception, perhaps because
+teachers use the Fibonacci function to illustrate the *idea* of dynamic
+programming but are not interested in spending too much time going too far into
+the specifics of one particular algorithm.
 
 Which is a shame, because the problem only gets more interesting the deeper we go.
 
@@ -66,7 +69,12 @@ optimization techniques; that's what I call a good time!
 Matrix Form
 -----------
 
-The $n$-th Fibonacci number is given by the recurrence relation:
+There exist several [closed-form solutions][CFS] to Fibonacci sequence which gives
+us the false hope that there might be an $\mathcal{O}(1)$ solution. Unfortunately
+this all turn out to be non-optimal if you want an exact solution for a large $n$.
+We will use to so-called "matrix form" instead, which we will now describe in some detail.
+
+Recall that the $n$-th Fibonacci number is given by the recurrence relation:
 
 \[
     \begin{align}
@@ -91,22 +99,20 @@ And define the $n$-th Fibonacci matrix to be:
     \mathbf{F}_n = \mathbf{F}_1^n
 \]
 
-Then we have the following theorem: 
+I didn't just pluck this out of thin air - there's a general way
+to turn *any* [linear recurrence relation][LRR] into a matrix which I'll
+describe in a moment. But first let's prove the following theorem:
 
 \[
-    \forall n > 0, \mathbf{F}_n = \begin{bmatrix}
+    \forall n \in \mathbb{N}, \mathbf{F}_n = \begin{bmatrix}
         F_{n+1} & F_n \\
         F_n & F_{n-1}
     \end{bmatrix}
 \]
 
-I didn't just pluck this out of thin air - there's a general way
-to turn *any* [linear recurrence relation][LRR] into a matrix which I'll
-describe in a moment. But first let's prove this theorem.
+We proceed by induction. For the case of $n = 1$, the theorem is true by inspection because we know $F_0 = 0$ and $F_1 = F_2 = 1$.
 
-For the case of $n = 1$, this is true by inspection because we know $F_0 = 0$ and $F_1 = F_2 = 1$.
-
-Suppose it is true for $n-1$.
+Suppose it is true for $n-1$. Then we have:
 
 \[
     \mathbf{F}_n = \mathbf{F}_1^{n} = \mathbf{F}_1^{n-1} \mathbf{F}_1 = 
@@ -141,8 +147,8 @@ get:
     \end{bmatrix}
 \]
 
-The theorem holds by inspection for the base case $1$, we've just proved that if it is
-true for $n-1$ then it is also true for $n$, so by mathematical induction it is true
+Therefore if the theorem is true for $n-1$, it is also true for $n$. We have
+already shown it is true for $n = 1$, so by mathematical induction it is true
 for all $n > 0$. Q.E.D.
 
 Wikipedia has a [good explanation][RRLA] for how any linear recurrence relation
@@ -154,8 +160,6 @@ history is rolled forward by simply placing ones along the [subdiagonal][SD]. It
 actually easier to see in higher dimensions, so here's an example of encoding a
 linear recurrence relationship which uses the four most recent numbers instead
 of just two.
-
-[SR]: https://en.wikipedia.org/wiki/Shift_register
 
 \[
   y_{n+1} = c_0 y_n + c_1 y_{n-1} + c_2 y_{n-2} + c_3 y_{n-3} \\  
@@ -192,6 +196,7 @@ At first this may not seem at all helpful. But by framing the problem as taking
 the exponent of a matrix instead of repeated addition, we can derive two much
 faster algorithms: a constant time $\mathcal{O}(n)$ approximate solution using
 eigenvalues, and a fast $\mathcal{O}(n \log n)$ exact solution.
+
 
 Eigenvalue Solution
 -------------------
@@ -269,12 +274,12 @@ bookkeeping, like so:
         Fn = eigenvectors @ np.diag(eigenvalues ** n) @ eigenvectors.T
         return int(np.rint(Fn[0, 1]))
 
-So there you have it - a $\mathcal{O}(1)$ algorithm for any Fibonacci number.
+So there you have it -- a $\mathcal{O}(1)$ algorithm for any Fibonacci number.
 There's just one tiny little problem with it: $\phi$, being irrational, is not
 particularly convenient for numerical analysis. In particular, if we run the
 above Python program, it will use 64-bit floating point arithmetic and will
 never be able to precisely represent more than 15 decimal digits.  That only
-lets us calculate up to $F_{93}$ before we start having precision errors.  Our
+lets us calculate up to $F_{93}$ before we start having precision errors. Our
 clever little "exact" eigenvalue algorithm is good for nothing but a rough
 approximation.  We *could* use a high precision rational numbers, but that
 approach turns out to always require strictly more space and time that just
@@ -286,12 +291,11 @@ powers of an integer matrix.
 Fast Exponentiation
 -------------------
 
-At first, this may not seem helpful. All we've done is reformulate our
-problem so that instead of calculating $n$ terms in a sequence using
-simple addition, we now have to multiply $n$ matrices together. In
-fact, we've made it worse! Multiplication is slower than addition, especially
-for large numbers, and computing the production of two $2 \times 2$ matrices
-requires *eight* multiplications!
+All we've done so far is reformulate our problem so that instead of calculating
+$n$ terms in a sequence using simple addition, we now have to multiply $n$
+matrices together. In fact, we've made it worse! Multiplication is slower than
+addition, especially for large numbers, and computing the production of two $2
+\times 2$ matrices requires *eight* multiplications!
 
 However, there's a [trick][ES] to calculating large powers quickly. Imagine
 we want to calculate $x^n$ where $n$ is a power of two $n = 2^m$. If
@@ -314,32 +318,38 @@ need to do that more than $\log_2 n$ times and each time the power of two gets
 smaller. 
 
 The upshot is that we can calculate $x^n$ in $\mathcal{O}(\log n)$
-multiplications. This is mostly commonly seen in cryptography such as the
-RSA[RSA] algorithm and [Diffie-Hellman][DH] where it is done modulo some large
-but fixed sized integer, making all the multiplications roughly equal cost.
-Here, we are using multiple precision integers which are doubling in size with
-each multiplication, so abstract "multiplications" are the wrong thing to
-count; we won't be getting $\mathcal{O}(\log n)$ runtime performance because
-the top multiplications keep getting more expensive. Nevertheless, the squaring
-by exponentiation trick hugely reduces the amount of work we have to do
-relative to the naive iterative solution.
+multiplications. This is mostly commonly seen in cryptography such as the [RSA
+algorithm][RSA] and [Diffie-Hellman key exchange][DH] where it is done modulo
+some large but fixed sized integer, making all the multiplications roughly
+equal cost.  Here, we are using multiple precision integers which are doubling
+in size with each multiplication, so abstract "multiplications" are the wrong
+thing to count; we won't be getting $\mathcal{O}(\log n)$ runtime performance
+because the top multiplications keep getting more expensive. Nevertheless, the
+squaring by exponentiation trick hugely reduces the amount of work we have to
+do relative to the naive iterative solution.
 
-
-[ES]: https://en.wikipedia.org/wiki/Exponentiation_by_squaring
-[DH]: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
-[RSA]: https://en.wikipedia.org/wiki/RSA_(cryptosystem)
 
 Matrix Implementation
 ---------------------
 
-Now, we could implement this by defining `F1 = numpy.array([[1,1],[1,]],
-dtype='object')` and using `numpy.linalg.matrix_power(F1, n)`. As much as love
+A fact which is perhaps not as widely known as it should be is that Python
+integers have multiple precision baked in. If you exceed the normal limits
+of a 64-bit integer, Python will transparently substitute a high precision
+type. This makes Python an unusually convenient language for working with
+very large numbers.
+
+Now, we *could* implement this by defining `F1 = numpy.array([[1,1],[1,]],
+dtype='object')` and using `numpy.linalg.matrix_power(F1, n)`.  As much as love
 numpy though, I don't think we need to drag it in as a dependency just to
 multiply $2 \times 2$ matrices when we're not even using native integer types!
+
 Also, we'll see see in a second that there are some optimizations we can make
 that wouldn't be possible to implement if we let numpy handle everything for
 us.  For now though, let's implement the naive matrix algorithm; we'll come
 back and refactor in the next section.
+
+First, for testing and benchmarking purposes, we'll write a version that
+just implements matrix powers in a straightforward but performance naive way:
 
     def matrix_multiply(A, B):
         a, b, c, d = A
@@ -362,6 +372,9 @@ back and refactor in the next section.
 
     def naive_matrix_fib(n):
         return naive_matrix_power(F1, n)[1]
+
+But we'll immediately want to move on to a version which implements
+the fast exponentiation by repeated squares described above:
 
     def matrix_power(A, m):
         if m == 0:
@@ -389,20 +402,21 @@ back and refactor in the next section.
 Implicit Matrix Form
 --------------------
 
-The above has reasonably good asymptotic performance but it
-bothers me that it's doing 8 multiplications each time. We
-really only need to keep track of two elements in the right-hand
-column of the matrix. Then we can multiply two different 
-Fibonacci matrices with just four multiplications, and we can
-even get that down to three if we're squaring a matrix! I call
-this form where we're passing around only the two numbers necessary
-to characterize the matrix the "implicit matrix form." It's only
-a constant time speed-up but every little bit helps.
+The above has reasonably good asymptotic performance but it bothers me that
+it's doing 8 multiplications each time. We really only need to keep track of
+two elements in the right-hand column of the matrix. I call this this "implicit
+matrix form." Using the implicit matrix form, we can multiply two different
+Fibonacci matrices with just four multiplications, and we can squaring a matrix
+with only three! It's only a constant time speed-up but every little bit helps.
 
     def multiply(a, b, x, y):
         return x*(a+b) + a*y, a*x + b*y
 
     def square(a, b):
+        a2 = a * a
+        b2 = b * b
+        ab = a * b
+        return a2 + ab + ab, a2 + b2
         return multiply(a, b, a, b)
 
     def power(a, b, m):
@@ -485,6 +499,9 @@ is able to add, multiply, divide and perform arithmetic on larger and larger
 numbers until your computer runs out of RAM. The multiplication algorithm used
 *starts* with [Karatsuba][KT] - and then they get *[serious][MULT]*.
 
+It's almost embarrassingly easy to convert our algorithm to use GMP because
+`mpz` is a drop-in replacement for `int`:
+
     import gmpy2
     from gmpy2 import mpz
 
@@ -497,88 +514,88 @@ again: this implementation re-uses the exact same functions we wrote for Python
 native types when implementing `implicit_fib()` above. Every Python function is
 a type-agnostic template function!
 
-You may also wonder why the large integer type is called `mpz`: the "mp" is
-for "multiple precision", just as in "GMP", while the "z" stands for $\mathbb{Z}$
-the conventional name for the set of integers. There is also `mpq` for the set
-of rationals $\mathbb{Q}$ and so on. 
+You may also wonder why the large integer type is called `mpz`: the "mp" is for
+"multiple precision", just like the "MP" in "GMP," while the "z" stands for
+$\mathbb{Z}$ the conventional name for the set of integers. There is also `mpq`
+for the set of rationals $\mathbb{Q}$ and so on. 
 
+Dynamic Programming Redux
+-------------------------
 
-Final Python Fibonacci
-----------------------
+The GMP version is really quite extraordinarily fast, but if we look at the
+call graph we can still see some redundant effort. It turns out that we
+are recalculating each power of two every time we need it, resulting
+in this ever widening tree-shaped DFG:
 
-Our performance testing has revealed something interesting - there is no
-one implementation which [strictly dominates][STD] all the others over all
-possible inputs. This is actually pretty common - more sophisticated algorithms
-with better asymptotic behavior also tend to have worse constant factors. Simple
-algorithms tend to dominate when $n$ is small, while more complex algorithms
-are able to pull ahead when $n$ is large.
+![naive DFG for fib(103)](/post/fibonacci_files/fib_103_dfg_bad.png "naïve DFG for fib(103)")
 
-A common way to squeeze as much performance as possible across all possible
-inputs is to use a [hybrid algorithm][HA] which selects an algorithm from a family
-based on heuristics that estimate which should perform best in which regions.
-Probably the most famous hybrid algorithm in use today is [Timsort][TS].
+We can fix this with - you guessed it - dynamic programming! With dynamic
+programming, it's a good idea to only cache the results of sub-problems which
+are likely to be re-used. Here, we can be reasonably certain that the only
+results worth caching are the powers of two, so we refactor that to its
+own function and apply memoization there.
 
-We will use the above data to define three regions:
-
-|    Region    |  Name  |    Algorithm    |  Implementation |
-|:------------:|:------:|:---------------:|:----------:|
-|    n <= 92   | Small  | Table Lookup    |   Python   |
-| 92 < n <= $2^12$ | Medium | Implicit Matrix | Cython |
-|   n > $2^12$     | Large  | Implicit Matrix | GMP    |
-
-
-    # what a pretty pattern! 
-    small_fib = [
-        0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597,
-        2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418,
-        317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465,
-        14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296,
-        433494437, 701408733, 1134903170, 1836311903, 2971215073, 4807526976,
-        7778742049, 12586269025, 20365011074, 32951280099, 53316291173,
-        86267571272, 139583862445, 225851433717, 365435296162, 591286729879,
-        956722026041, 1548008755920, 2504730781961, 4052739537881, 6557470319842,
-        10610209857723, 17167680177565, 27777890035288, 44945570212853,
-        72723460248141, 117669030460994, 190392490709135, 308061521170129,
-        498454011879264, 806515533049393, 1304969544928657, 2111485077978050,
-        3416454622906707, 5527939700884757, 8944394323791464, 14472334024676221,
-        23416728348467685, 37889062373143906, 61305790721611591, 99194853094755497,
-        160500643816367088, 259695496911122585, 420196140727489673,
-        679891637638612258, 1100087778366101931, 1779979416004714189,
-        2880067194370816120, 4660046610375530309, 7540113804746346429
-    ]
-
-    def fibonacci(n):
-        if n <= len(small_fib):
-            return small_fib[n]
-        elif n <= 2**13:
-            return cython_fib(n)
+    # improve the algorithm slightly by caching
+    # and re-using powers of two. 
+    @lru_cache(100)
+    def dynamic_repeated_squares(a, b, n):
+        # n must be a power of two. 
+        if n == 0:
+            return (0, 1)
+        elif n == 1:
+            return (a, b)
+        return square(*dynamic_repeated_squares(a, b, n//2))
+        
+    def dynamic_power(a, b, m):
+        if m == 0:
+            return (0, 1)
+        elif m == 1:
+            return (a, b)
         else:
-            return gmp_fib(n)
+            # hit the cache for powers of 2
+            n = 2
+            while n <= m:
+                n = n*2
+            n = n // 2
+            x, y = dynamic_repeated_squares(a, b, n)
 
-Head-to-Head Competition
-------------------------
+            # add on the remainder
+            a, b = dynamic_power(a, b, m-n)
+            return multiply(x, y, a, b)
+        
+    def dynamic_fib(n):
+        a, b = dynamic_power(mpz(1), mpz(0), mpz(n))
+        return a
 
-As I've implementing these, I've been informally testing and benchmarking them with
-[IPython's %timeit magic.][ITM] But now that we have a large number of candidate
-implementations, *ad hoc* testing is becoming tiresome. Let's benchmark all of our
-functions across a wide range of inputs to see which emerges as the leader. All of
-these are measured at $2^k-1$ to force worst-case performance from the main algorithms.
+With the caching added for powers of two, we get a much smaller DFG, now an acyclic graph
+with no duplicate effort at all:
 
-![competing Fibonacci implementations](/post/fibonacci_files/competing_fibonacci_implementations.png)
+![DFG for fib(103) with dynamic programming](/post/fibonacci_files/fib_103_dfg_dynamic_programming.png "DFG for fib(103) with dynamic programming")
 
-We can make a few observations:
+It should be clear from graph that in the worst case scenario, where $n = 2^m
+-1$, the cached algorithm performs $2m$ multiplications, compared to the
+$m(m-1)/2$ needed for the algorithm without caching. Despite this, the benefit
+of the cache is surprisingly minor: maybe 10% in practice. That's because
+almost all of the run time of the entire calculation is actually spent in a
+handful of very large multiplications - the smaller ones just don't matter as
+much. "Logical multiplications" just isn't the right operation to count: when
+dealing with multiple precision numbers we need to count the number of bytes
+multiplied, and the number of bytes is growing as $2^m$. I've heard those
+two effects more or less cancel out and the final algorithm is $\mathcal{O}(n \log n)$
+but wouldn't be able to prove it myself. In practice it seems to hold empirically:
+every time $n$ goes up by a factor of 10, time increases by about 20. 
 
-* The naive implementation isn't useful past about 100.
-* The table based method actually runs out of memory before its runtime performance becomes a problem.
-* The mauve line for the "eigen" implementation is basically constant time - until it starts overflowing
-  to infinity once it can no longer represent its solution as a 64-bit floating point number.
-* The best asymptotic performance is from the version using both GMP and the dynamic programming cache.
-* By construction, the "hybrid" algorithm traces out lower bound - constant
-  until 92, then follows the Cython, then the dynamic GMP solution for large
-  numbers.
 
 C++ Fibonacci
 -------------
+
+Now that we've exhausted my ideas for algorithmic optimizations, there's really
+only one thing approach left: micro-optimization. So far we've been working in
+Python, but Python has a reputation for being slow and we did see a small
+speed-up when we started using Cython. The GMP library is native to C; maybe a
+C or C++ program would eliminate all the Python overhead? 
+
+To find out, I ported the above logic pretty faithfully to C++, almost line-for-line:
 
     // memoized version
     ImplicitMatrix repeatedSquares(int n)
@@ -635,6 +652,8 @@ to the program. That's also why we need the `volatile` keyword -
 the optimizer notices my program doesn't actually *do* anything
 and optimizes the whole thing away!
 
+The results we mildly disappointing: 
+
     ~/fib$ time ./fib 10000003
 
     real    0m0.427s
@@ -647,41 +666,99 @@ and optimizes the whole thing away!
     user    1m22.550s
     sys     0m1.430s
 
+If this is any faster than the Python version, it can't be be measured. This
+result isn't actually too surprising - at this point, 99.9% of computation time
+is spent in the GMP multiplication routines, and only a few microseconds are
+spent in Python. So we're not going to squeeze any more performance out that way.
 
-Dynamic Programming Redux
--------------------------
 
-In the end, we did up using dynamic programming, just like the naive programs
-I was making fun of at the start. The difference is that we are only caching
-results of the form $F_1^{2^n}$. Thus we will never need to store more than
-$\mathcal{O}(\ln n)$ such results. It's interesting to compare data flow graphs
-with and without this caching.
+Final Python Fibonacci
+----------------------
 
-If we just recalculate each power of two every time we need it, we get a tree-shaped DFG:
+Our performance testing has revealed something interesting - there is no
+one implementation which [strictly dominates][STD] all the others over all
+possible inputs. This is actually pretty common - more sophisticated algorithms
+with better asymptotic behavior also tend to have worse constant factors. Simple
+algorithms tend to dominate when $n$ is small, while more complex algorithms
+are able to pull ahead when $n$ is large.
 
-![naive DFG for fib(103)](/post/fibonacci_files/fib_103_dfg_bad.png "naïve DFG for fib(103)")
+A common way to squeeze as much performance as possible across all possible
+inputs is to use a [hybrid algorithm][HA] which selects an algorithm from a family
+based on heuristics that estimate which should perform best in which regions.
+Probably the most famous hybrid algorithm in use today is [Timsort][TS].
 
-With the caching added for powers of two, we get a much smaller acyclic graph:
+We will use earlier benchmarks to define three regions:
 
-![DFG for fib(103) with dynamic programming](/post/fibonacci_files/fib_103_dfg_dynamic_programming.png "DFG for fib(103) with dynamic programming")
+|    Region                 |  Name  |Algorithm        |  Implementation     |
+|:-------------------------:|:------:|:---------------:|:-------------------:|
+|    n <= 92                | Small  | Table Lookup    |      Python         |
+| 92 < n <= $2^{12}$        | Medium | Implicit Matrix |      Cython         |
+|   n > $2^{12}$            | Large  | Implicit Matrix |       GMP           |
 
-I also generated an [absurdly long DFG][DFG] for `fib(1000000003)` if you want to see an extreme example. 
+For the first region, we introduce a pre-calculated table indexed at zero which
+stores every Fibonacci number small enough to fit into 64-bits.
 
-It should be clear from graph that in the worst case scenario, where $n = 2^m
--1$, the cached algorithm performs $2m$ multiplications, compared to the
-$m(m-1)/2$ needed for the algorithm without caching. Despite this, the benefit
-of the cache is surprisingly minor: maybe 10% in practice. That's because
-almost all of the run time of the entire calculation is actually spent in a
-handful of very large multiplications - the smaller ones just don't matter as
-much. "Logical multiplications" just isn't the right operation to count: when
-dealing with multiple precision numbers we need to count the number of bytes
-multiplied, and the number of bytes is growing as $2^m$. I've heard those
-two effects more or less cancel out and the final algorithm is $\mathcal{O}(n \log n)$
-but wouldn't be able to prove it myself. In practice it seems to hold empirically:
-every time $n$ goes up by a factor of 10, time increases by about 20. 
+    # what a pretty pattern! 
+    small_fib = [
+        0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597,
+        2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418,
+        317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465,
+        14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296,
+        433494437, 701408733, 1134903170, 1836311903, 2971215073, 4807526976,
+        7778742049, 12586269025, 20365011074, 32951280099, 53316291173,
+        86267571272, 139583862445, 225851433717, 365435296162, 591286729879,
+        956722026041, 1548008755920, 2504730781961, 4052739537881, 6557470319842,
+        10610209857723, 17167680177565, 27777890035288, 44945570212853,
+        72723460248141, 117669030460994, 190392490709135, 308061521170129,
+        498454011879264, 806515533049393, 1304969544928657, 2111485077978050,
+        3416454622906707, 5527939700884757, 8944394323791464, 14472334024676221,
+        23416728348467685, 37889062373143906, 61305790721611591, 99194853094755497,
+        160500643816367088, 259695496911122585, 420196140727489673,
+        679891637638612258, 1100087778366101931, 1779979416004714189,
+        2880067194370816120, 4660046610375530309, 7540113804746346429
+    ]
+
+Past that, we will use either the Cython or GMP implementation depending on
+whether a better constant or better asymptotic performance is more beneficial.
+
+    def hybrid_fib(n):
+        if n <= len(small_fib):
+            return small_fib[n]
+        elif n <= 2**12:
+            return cython_fib(n)
+        else:
+            return gmp_fib(n)
+
+Benchmarking Results
+--------------------
+
+As I've been implementing these, I've been informally testing and benchmarking them with
+[IPython's %timeit magic.][ITM] But now that we have a large number of candidate
+implementations, *ad hoc* testing is becoming tiresome. Let's benchmark all of our
+functions across a wide range of inputs to see which emerges as the leader. All of
+these are measured at $2^k-1$ to force worst-case performance from the main algorithms.
+
+![competing Fibonacci implementations](/post/fibonacci_files/competing_fibonacci_implementations.png)
+
+We can make a few observations:
+
+* The naive implementation's $\mathcal{O}(2^n)$ performance hits a wall around
+  100, after which it's no longer practical.
+* The table based method actually runs out of memory before its runtime
+  performance becomes a problem.
+* The "eigen" implementation is basically constant time - until it starts
+  overflowing once it can no longer represent its solution as a 64-bit floating
+  point number.
+* The best asymptotic performance is from the version using both GMP and the
+  dynamic programming cache.
+* By construction, the "hybrid" algorithm traces out lower bound - constant
+  until 92, then follows the Cython, then the dynamic GMP solution for large
+  numbers.
 
 Feynman Fuse Problem
 -------------------
+
+The current state of the problem reminds me of this story:
 
 > The problem was to design a machine like the other one - what they called a
 > director - but this time I thought the problem was easier, because the
@@ -704,35 +781,65 @@ Feynman Fuse Problem
 >
 > - [Richard Feynman][SYJ]
 
-[SYJ]: https://books.google.com/books?id=7papZR4oVssC&lpg=PA103&ots=euSVb9oLXZ&dq=feynman%20%22altitude%22%20problem&pg=PA103#v=onepage&q=feynman%20%22altitude%22%20problem&f=false
+The problem is no longer to calculate Fibonacci numbers -- the problem is
+now to find a way to multiply large integers together efficiently. As far as I can
+tell, GMP is already [state-of-the-art][MULT] when it comes to that, and
+tends to come out ahead on most benchmarks. So I think we've taken it as
+far as we can reasonably go.
 
 Conclusion
 ----------
 
-Imagine if instead of indexing webpages and serving ads, Google's business was
-calculating Fibonacci numbers. Maybe in some parallel universe, that was how
-BitCoin worked or something. Call it FibCoin. They had whole buildings full of
-server racks just chugging away at the $\mathcal{O}(n^2)$ algorithm, billions
-of dollars worth of infrastructure.  Entire teams that do nothing but yank and
-replace defective units. An air conditioning bill larger than some nation's
-GDP. Then one day some team comes along with this crazy matrix based approach,
-babbling about "eigen-somethings" and "multiple sclerosis arithmetic" or
-something. And a week later they're churning out FibCoins at $\mathcal{O}(n \log n)$.
-What happens to that infrastructure giant?
+When I started this project, I would not have believed that the millionth
+Fibonacci number could be calculated in a fraction of a second. Certainly
+the first few algorithms we looked at couldn't come close to that. But
+my surprise should come as no surprise.
 
-> Algorithms are disruptive.
+New algorithms are being discovered all the time.  When I graduated,
+[quicksort][QS] was considered state-of-the-art. Since then, [Timsort][TS] has
+supplanted it in a number of standard libraries such as [Java's.][J7] Some
+people believe [improvements in algorithms are outpacing Moore's law.][ABM]
+Sometimes an algorithm comes along and just blows everything else out of the water,
+like John Platt's [Sequential Minimal Optimization][SMO]. For a decade after
+that was invented, SVM's were considered one of the best off-the-shelf
+classifiers, until [even better][GBT] algorithms came along. Even today, the
+best way to fit an [ElasticNet][EN] model is to reduce it to an SVM and use a
+[fast solver][LS] based on SMO. 
 
-John Platt SMO.
+New algorithms take even dedicated professionals by surprise. [Kolmogorov][AK]
+-- perhaps one of the greatest mathematicians of all time -- actually stated
+the conjecture that multiplication was necessarily $\mathcal{O}(n^2)$ a few
+weeks before his student [Karatsuba][AAK] showed how a few simple additions and
+subtractions would allow three multiplications to do the work of four,
+decreasing the bound to $\mathcal{O}(n^{\log_2 3})$. So simple, yet until 1960
+not one computer scientist in the world had thought of it. And yet it is this
+trick (and later more complicated versions in the same vein) that account for
+the almost magical speed of the GMP library. It's also closely related to the
+same divide-and-conquer strategy for matrix multiplication that makes linear
+algebra libraries like [OpenBLAS][OB] so fast.
 
-two order of magnitude improvement from batch gradient to optimized algorithms.
-Another order of magnitude or more by moving to GPUs.
+The lower bounds on good algorithms can often seem impossible. It doesn't sound
+possible to search a length $n$ string for a substring of length $m$ in less
+than $\mathcal{O}(nm)$, but [Rabin-Karp][RK] and other similar algorithms do it
+in $\mathcal{O}(n+m)$ through the clever use of a rolling hash. It doesn't sound possible
+to store and retrieve items in less than $\mathcal{O}(\log n)$, but hash tables
+do it in amortized $\mathcal{O}(1)$. A standard priority heap seems pretty fast
+too me at $\mathcal{O}(\log n)$, but a Fibonacci heap can do both insert and
+extract-min in amortized $\mathcal{O}(1)$ time.  Obviously, there's absolutely
+no way to estimate the cardinality of the union of two possibly overlapping
+sets in less than $\mathcal{O}(n \log n)$...  unless you use HyperLogLog. Bloom
+filters let you (for the price of a small change of a false positive but no
+chance of a false negative) test set membership while using only
+$\mathcal{O}(\log n)$ space. How can it possibly do that? Hash functions again.
+In my own work, I frequently rely on
+[sophisticated gradient descent algorithms][MLFS2] to fit models that would
+take hours or days to fit on the same hardware if naive algorithms were used.
+All of these algorithms are somewhere between magical and impossible, yet they
+all work, both in theory and practice. 
 
-Gradient Boosting isn't just better than decision trees, it's so much better
-it's hard to believe.
+As good as today's hardware is, it's often the algorithm that makes the 
+impossible possible.
 
-When I graduated, [quicksort][QS] was considered state-of-the-art. Since then,
-[Timsort][TS] has supplanted it in a number of standard libraries such as
-[Java's.][J7]
 
 [DFG]: /post/fibonacci_files/fib_1000000003_dfg.png
 [DP]: https://en.wikipedia.org/wiki/Dynamic_programming
@@ -755,3 +862,19 @@ When I graduated, [quicksort][QS] was considered state-of-the-art. Since then,
 [TS]: https://en.wikipedia.org/wiki/Timsort
 [ITM]: https://ipython.readthedocs.io/en/stable/interactive/magics.html
 [J7]: https://stackoverflow.com/questions/4018332/is-java-7-using-tim-sort-for-the-method-arrays-sort
+[CFS]: https://en.wikipedia.org/wiki/Fibonacci_number#Closed-form_expression
+[ES]: https://en.wikipedia.org/wiki/Exponentiation_by_squaring
+[DH]: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
+[RSA]: https://en.wikipedia.org/wiki/RSA_(cryptosystem)
+[SR]: https://en.wikipedia.org/wiki/Shift_register
+[SYJ]: https://books.google.com/books?id=7papZR4oVssC&lpg=PA103&ots=euSVb9oLXZ&dq=feynman%20%22altitude%22%20problem&pg=PA103#v=onepage&q=feynman%20%22altitude%22%20problem&f=false
+[ABM]: https://agtb.wordpress.com/2010/12/23/progress-in-algorithms-beats-moore%E2%80%99s-law/
+[SMO]: https://en.wikipedia.org/wiki/Sequential_minimal_optimization
+[GBT]: https://en.wikipedia.org/wiki/Gradient_boosting#Gradient_tree_boosting
+[LS]: https://www.csie.ntu.edu.tw/~cjlin/libsvm/
+[EN]: https://en.wikipedia.org/wiki/Elastic_net_regularization
+[AK]: https://en.wikipedia.org/wiki/Andrey_Kolmogorov
+[AAK]: https://en.wikipedia.org/wiki/Anatoly_Karatsuba
+[OB]: https://en.wikipedia.org/wiki/OpenBLAS
+[MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
+[RK]: https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm
