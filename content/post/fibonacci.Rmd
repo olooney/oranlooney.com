@@ -921,19 +921,17 @@ possible to search a length $n$ string for a substring of length $m$ in less
 than $\mathcal{O}(nm)$, but [Rabin-Karp][RK] and other similar algorithms do it
 in $\mathcal{O}(n+m)$ through the clever use of a rolling hash. It doesn't
 sound possible to store and retrieve items in less than $\mathcal{O}(\log n)$,
-but hash tables do it in amortized $\mathcal{O}(1)$. A standard priority heap
-seems pretty fast too me at $\mathcal{O}(\log n)$, but a Fibonacci heap can do
-both insert and extract-min in amortized $\mathcal{O}(1)$ time.  Obviously,
-there's absolutely no way to estimate the cardinality of the union of two
-possibly overlapping sets in less than $\mathcal{O}(n \log n)$...  unless you
-use HyperLogLog. Bloom filters let you (for the price of a small change of a
-false positive but no chance of a false negative) test set membership while
-using only $\mathcal{O}(\log n)$ space. How can it possibly do that? Hash
-functions again. In my own work, I frequently rely on [sophisticated gradient
-descent algorithms][MLFS2] to fit models that would take hours or days to fit
-on the same hardware if naive algorithms were used.  All of these algorithms
-are somewhere between magical and impossible. Yet they all work, both in theory
-and practice. 
+but hash tables do it in amortized $\mathcal{O}(1)$. Obviously, there's
+absolutely no way to estimate the cardinality of the union of two possibly
+overlapping sets in less than $\mathcal{O}(n \log n)$...  unless you use
+HyperLogLog. Bloom filters let you (for the price of a small change of a false
+positive but no chance of a false negative) test set membership while using
+only $\mathcal{O}(\log n)$ space. How can it possibly do that? Hash functions
+again. In my own work, I frequently rely on [sophisticated gradient descent
+algorithms][MLFS2] to fit models that would take hours or days to fit on the
+same hardware if naive algorithms were used.  All of these algorithms are
+somewhere between magical and impossible. Yet they all work, both in theory and
+practice. 
 
 As good as today's hardware is, it's often the algorithm that makes the
 impossible possible.
