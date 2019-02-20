@@ -64,6 +64,41 @@
   <div class="main" role="main">
     <section class="list taxonomy-list">
       <article class="article">
+        <a href="/post/fibonacci/" class="article-titles">
+          <h2 class="article-title">A Fairly Fast Fibonacci Function</h2>
+          
+        </a>
+        <ul class="article-meta">
+          <li class="article-meta-date"><time>February 19, 2019</time></li>
+          <li class="article-meta-tags">
+            <a href="/tags/python/">
+              <i class="fas fa-tag"></i>
+              Python
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/c&#43;&#43;/">
+              <i class="fas fa-tag"></i>
+              C&#43;&#43;
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/math/">
+              <i class="fas fa-tag"></i>
+              Math
+            </a>&nbsp;
+          </li>
+        </ul>
+        <a href="/post/fibonacci/"><img src="/post/fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
+        <div class="article-content">
+          A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
+def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance is terrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamic programming. Specifically, either the memoization:
+from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:
+        </div>
+        <div class="article-readmore"><a href="/post/fibonacci/">Read more...</a></div>
+        <div class="article-floatclear"></div>
+      </article>
+      <article class="article">
         <a href="/post/craps-game-variants/" class="article-titles">
           <h2 class="article-title">Craps Variants</h2>
           

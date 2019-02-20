@@ -1,12 +1,9 @@
 baseurl = "http://www.oranlooney.com/"
-#baseurl = "/"
 title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"
-#pygmentsCodefences = true
-#pygmentsUseClasses = true
-#pygmentsOptions = "linenos=table"
+paginate = 25
 
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright {year} Oran Looney"

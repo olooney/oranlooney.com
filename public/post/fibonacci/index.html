@@ -72,7 +72,7 @@ def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) &#43; naive_
       
       <hr class="article-title-bottom">
       <ul class="article-meta">
-        <li class="article-meta-date"><time>February 13, 2019</time></li>
+        <li class="article-meta-date"><time>February 19, 2019</time></li>
         <li class="article-meta-tags">
           <a href="/tags/python/">
             <i class="fas fa-tag"></i>
@@ -436,7 +436,7 @@ def implicit_fib(n):
 </div>
 <div id="cython" class="section level2">
 <h2>Cython</h2>
-<p>Another thing to try – something which <em>usually</em> helps a lot – is to try converting our program to <a href="https://cython.readthedocs.io/en/latest/src/quickstart/install.html#install">cython</a>.</p>
+<p>Another thing to try – something which <em>usually</em> helps a lot – is to try converting our program to <a href="https://cython.org/">cython</a>.</p>
 <p>Unfortunately, the one type that we want to use, Python’s native <code>int()</code> type, is represented by Cython as a C-style int - fixed precision signed integer. It doesn’t have Python’s ability to transparently handle large numbers. We can either use the native C <code>long</code> in which case we overflow around <span class="math inline">\(F_{93}\)</span>, or we can continue to use the Python <code>int()</code> type in which case we gain only a modest speed up.</p>
 <pre><code>%%cython
 
@@ -707,9 +707,7 @@ sys     0m1.430s</code></pre>
 
 
     <ul class="pager article-pager">
-      <li class="pager-newer">
-          <a href="/post/ml-from-scratch-part-4-decision-tree/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 4: Decision Trees">&lt; Newer</a>
-      </li>
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
       <li class="pager-older">
         <a href="/post/ml-from-scratch-part-3-backpropagation/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 3: Backpropagation">Older &gt;</a>
       </li>

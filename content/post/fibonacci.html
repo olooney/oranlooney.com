@@ -1,10 +1,9 @@
 ---
 title: "A Fairly Fast Fibonacci Function"
 author: "Oran Looney"
-date: 2019-02-13
+date: 2019-02-19
 tags: ["Python", "C++", "Math"]
 image: /post/fibonacci_files/lead.jpg
-draft: true
 ---
 
 
@@ -349,7 +348,7 @@ def implicit_fib(n):
 </div>
 <div id="cython" class="section level2">
 <h2>Cython</h2>
-<p>Another thing to try – something which <em>usually</em> helps a lot – is to try converting our program to <a href="https://cython.readthedocs.io/en/latest/src/quickstart/install.html#install">cython</a>.</p>
+<p>Another thing to try – something which <em>usually</em> helps a lot – is to try converting our program to <a href="https://cython.org/">cython</a>.</p>
 <p>Unfortunately, the one type that we want to use, Python’s native <code>int()</code> type, is represented by Cython as a C-style int - fixed precision signed integer. It doesn’t have Python’s ability to transparently handle large numbers. We can either use the native C <code>long</code> in which case we overflow around <span class="math inline">\(F_{93}\)</span>, or we can continue to use the Python <code>int()</code> type in which case we gain only a modest speed up.</p>
 <pre><code>%%cython
 

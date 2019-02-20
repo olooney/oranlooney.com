@@ -1,10 +1,9 @@
 ---
 title: "A Fairly Fast Fibonacci Function"
 author: "Oran Looney"
-date: 2019-02-13
+date: 2019-02-19
 tags: ["Python", "C++", "Math"]
 image: /post/fibonacci_files/lead.jpg
-draft: true
 ---
 
 A common example of recursion is the function to calculate the $n$-th Fibonacci number:
@@ -941,7 +940,7 @@ impossible possible.
 
 The code for today's article is available as a [Jupyter notebook][JN] if you'd
 like to hack on  it. You will need to install [GMP][GMP], its Python wrapper
-[gmpy2][G2], and [Cython][CY].
+[gmpy2][G2], and [Cython][CYI].
 
 [DFG]: /post/fibonacci_files/fib_1000000003_dfg.png
 [DP]: https://en.wikipedia.org/wiki/Dynamic_programming
@@ -981,7 +980,7 @@ like to hack on  it. You will need to install [GMP][GMP], its Python wrapper
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [RK]: https://en.wikipedia.org/wiki/Rabin%E2%80%93Karp_algorithm
 [G2]: https://pypi.org/project/gmpy2/
-[CY]: https://cython.readthedocs.io/en/latest/src/quickstart/install.html#install
+[CYI]: https://cython.readthedocs.io/en/latest/src/quickstart/install.html#install
 [JN]: /post/fibonacci_files/Fibonacci.ipynb
 [GFB]: https://gmplib.org/manual/Number-Theoretic-Functions.html#index-mpz_005ffib_005fui-396
 [GR]: https://en.wikipedia.org/wiki/Golden_ratio
