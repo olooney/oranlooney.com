@@ -192,7 +192,7 @@ two.
   \end{bmatrix}
 \]
 
-If we squint at our Fibonacci basis matrix, we can see it has this form too.
+If we squint at $\mathbf{F}_1$, we can see it has this form too.
 The first row is $[ 1 \,\, 1 ]$ because recurrence relation is a simple
 unweighted sum, while the second row $[ 1 \,\, 0 ]$ contains the $1$ on the
 [subdiagonal][SD] which "remembers" the previous value. The effect is
@@ -321,7 +321,7 @@ matrix.
 Fast Exponentiation
 -------------------
 
-We've reformulated our problem so that instead of calculating
+So far, all we've done is reformulate our problem so that instead of calculating
 $n$ terms in a sequence using simple addition, we now have to multiply $n$
 matrices together. We've made things worse! Multiplication is slower than
 addition, especially for large numbers, and computing the production of two $2
@@ -353,7 +353,7 @@ algorithm][RSA] and [Diffie-Hellman key exchange][DH] where it is done modulo
 some large but fixed sized integer, making all the multiplications roughly
 equal cost.  Here, we are using multiple precision integers which are doubling
 in size with each multiplication. That means abstract "multiplications" are the
-wrong thing to count. We won't be getting $\mathcal{O}(\log n)$ runtime
+wrong thing to count. We won't get $\mathcal{O}(\log n)$ runtime
 performance because the top multiplications keep getting more expensive.
 Nevertheless, the squaring by exponentiation trick hugely reduces the amount of
 work we have to do relative to the naive iterative solution.
@@ -364,8 +364,8 @@ Matrix Implementation
 
 Fun fact: Python has multiple precision baked in. If if an arithmetic operation
 on Python's `int()` type exceed the normal limits of a 64-bit integer, Python
-will transparently substitute a high precision type. This makes Python an
-unusually convenient language for working with very large numbers.
+will transparently substitute a high precision type. This makes Python a
+convenient language for working with very large numbers.
 
 Now, we *could* implement matrix multiplication like so:
 
@@ -373,7 +373,7 @@ Now, we *could* implement matrix multiplication like so:
     numpy.linalg.matrix_power(F1, n)
 
 This works. (Although strangely enough matrix multiplication with the `@`
-operator *doesn't*w work when `dtype='object'`.) As much as love numpy though,
+operator *doesn't* work when `dtype='object'`.) As much as love numpy though,
 I don't think we need to drag it in as a dependency just to multiply $2 \times
 2$ matrices when we're not even using native integer types.
 
@@ -533,7 +533,7 @@ Cython
 ------
 
 Another thing to try -- something which *usually* helps a lot --
-is to try converting our program to [cython][CY]. 
+is to try converting our program to [Cython][CY]. 
 
 Unfortunately, the one type that we want to use, Python's native `int()` type, is
 represented by Cython as a C-style int - fixed precision signed integer. It
@@ -592,8 +592,8 @@ is able to add, multiply, divide and perform arithmetic on larger and larger
 numbers until your computer runs out of RAM. The multiplication algorithm used
 *starts* with [Karatsuba][KT] - and then they get *[serious][MULT]*.
 
-It's almost embarrassingly easy to convert our algorithm to use GMP because
-`mpz` is a drop-in replacement for `int`:
+It's almost embarrassingly easy to convert our algorithm to use GMP because the
+`mpz()` type is a drop-in replacement for `int()`:
 
     import gmpy2
     from gmpy2 import mpz
@@ -605,7 +605,7 @@ It's almost embarrassingly easy to convert our algorithm to use GMP because
 Note that we didn't have to define the `power()` or `multiply()` functions
 again: this implementation re-uses the exact same functions we wrote for Python
 native types when implementing `implicit_fib()` above. Every Python function is
-a type-agnostic template function!
+a type-agnostic template function.
 
 You may also wonder why the large integer type is called `mpz`: the "mp" is for
 "multiple precision", just like the "MP" in "GMP," while the "z" stands for
@@ -669,13 +669,13 @@ It should be clear from graph that in the worst case scenario, where $n = 2^m
 -1$, the cached algorithm performs a maximum of $2m$ multiplications, compared to the
 $m(m-1)/2$ needed for the algorithm without caching. Despite this, the benefit
 of the cache is surprisingly minor: maybe 10% in practice. That's because
-almost all of the run time of the entire calculation is actually spent in a
-handful of very large multiplications - the smaller ones just don't matter as
-much. "Logical multiplications" just isn't the right operation to count: when
-dealing with multiple precision numbers we need to count the number of bytes
-multiplied, and the number of bytes is growing as $2^m$. I've heard those
+almost all the time is spent in a
+handful of very large multiplications -- the smaller ones just don't matter as
+much. "Logical multiplications" just isn't the right operation to count. When
+dealing with multiple precision numbers we need to look at the number of bytes
+multiplied, and the number of bytes doubling with each multiplication. I've heard those
 two effects more or less cancel out and the final algorithm is $\mathcal{O}(n \log n)$
-but wouldn't be able to prove it myself. It seems to roughly hold empirically:
+but won't venture to prove it myself. It seems to roughly hold empirically:
 every time $n$ goes up by a factor of 10, time increases by about 20. (See the
 benchmarks below.)
 
@@ -776,6 +776,7 @@ algorithms are able to pull ahead when $n$ is large.
 A common way to squeeze as much performance as possible across all possible
 inputs is to use a [hybrid algorithm][HA] which selects an algorithm from a family
 based on heuristics that estimate which should perform best in which regions.
+A hybrid solution is the [Annie Oakley][AO] solution: "Anything you can do I can do better; I can do anything better than you." 
 Probably the most famous hybrid algorithm in use today is [Timsort][TS].
 
 We will use earlier benchmarks to define three regions:
@@ -844,6 +845,7 @@ We can make a few observations:
 * By construction, the "hybrid" algorithm traces out lower bound - constant
   until 92, then hugs the Cython curve for a while, then switches to the
   dynamic GMP solution for large numbers.
+
 
 Feynman Fuse Problem
 -------------------
@@ -929,7 +931,7 @@ positive but no chance of a false negative) test set membership while using
 only $\mathcal{O}(\log n)$ space. How can it possibly do that? Hash functions
 again. In my own work, I frequently rely on [sophisticated gradient descent
 algorithms][MLFS2] to fit models that would take hours or days to fit on the
-same hardware if naive algorithms were used.  All of these algorithms are
+same hardware if naive algorithms were used. All of these algorithms are
 somewhere between magical and impossible. Yet they all work, both in theory and
 practice. 
 
@@ -938,7 +940,8 @@ impossible possible.
 
 The code for today's article is available as a [Jupyter notebook][JN] if you'd
 like to hack on  it. You will need to install [GMP][GMP], its Python wrapper
-[gmpy2][G2], and [Cython][CYI].
+[gmpy2][G2], and [Cython][CYI]. I am sure there is another order of magnitude
+of performance to be found somewhere.
 
 [DFG]: /post/fibonacci_files/fib_1000000003_dfg.png
 [DP]: https://en.wikipedia.org/wiki/Dynamic_programming
@@ -982,3 +985,4 @@ like to hack on  it. You will need to install [GMP][GMP], its Python wrapper
 [JN]: /post/fibonacci_files/Fibonacci.ipynb
 [GFB]: https://gmplib.org/manual/Number-Theoretic-Functions.html#index-mpz_005ffib_005fui-396
 [GR]: https://en.wikipedia.org/wiki/Golden_ratio
+[AO]: https://en.wikipedia.org/wiki/Anything_You_Can_Do_(I_Can_Do_Better)
