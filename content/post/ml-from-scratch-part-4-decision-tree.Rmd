@@ -38,8 +38,11 @@ to fully classify the data and our tree will be a little deeper.
 Gini Impurity and Information Gain
 ----------------------------------
 
+
+
 Gini impurity is defined as the probability that a randomly chosen element
-would be misclassified:
+will be misclassified if we randomly choose a prediction from the distribution
+of classes itself.
 
 \[
     I_G(\mathbf{p}) = \sum_{i} \mathbf{p}_i \sum_{j \neq i} \mathbf{p}_j 
@@ -53,7 +56,41 @@ much simpler expression:
     I_G(p) = p(1-p) + (1-p)p = 2p(1-p)
 \]
 
-TODO: information gain, comparison
+Interestingly enough, this is *not* how we will actually make predictions --
+we will in fact always choose the most likely class.
+
+An example can make this much more concrete. Suppose we have 100 observations
+with two balanced classes; exactly 50 each. If our decision tree consists of
+only a root, we have to make the constant prediction 0.5 for all possible
+inputs, so our gini impurity is 0.5. But once we split the root node, we'll
+have two leafs, and these will unbalanced classes, say 40/10 and 10/40. The
+gini impurity of these two nodes is $2 \times .2 \times .8 = .32$. When we make
+a prediction, every input will be assigned to one of these two leaf nodes. If
+it ends up in the left node, we will predict class 0 and be right 80% of the
+time. If it ends up in the right node, we will predict class 1 and still be
+right 80% of the time. Accuracy has improved from 50% to 80%.  However, if
+instead of always choosing the most likely class, we instead made our
+predictions randomly, sampling from a Bernoulli distribution with parameter $p
+= 0.2$ for the left node and $p = 0.8$ for the right node, we would be right
+68% of time. This is the converse of Gini impurity. It's a trivial theorem that
+we can always minimize error and maximum accuracy by choosing the most likely
+class, so that's what we'll use for decision rule. But gini impurity does a
+better job of capturing / representing how much we've learned, so that's what
+we'll use to train.
+
+There's a competing metric called information gain which is often used instead
+of Gini impurity. This approach has its roots in information theory. While
+information theory is often abused in machine learning, this specific use
+stays very close to Shannon's original generalization of entropy. 
+
+TODO
+
+```{r gini_info, echo=FALSE}
+curve( 4*x*(1-x), xlim=c(0, 1), ylim=c(0, 1), col='blue', xlab="p", ylab="Normalized Score")
+curve( (1/C) * 0.5 * (-x*log(x) - (1-x)*log(1-x)),n=1000, add=TRUE, col='darkgreen')
+title("Gini Impurity vs. Information Gain (Normalized)")
+legend("bottom", c("Gini Impurity", "Information Gain"), col=c("blue", "darkgreen"), lty=1)
+```
 
 
 Finding The Best Cut Point
@@ -392,7 +429,7 @@ boundary. However, decision trees do very well when given discrete features.
 [CART]: https://www.amazon.com/Classification-Regression-Wadsworth-Statistics-Probability/dp/0412048418
 [RF]: https://www.stat.berkeley.edu/~breiman/randomforest2001.pdf
 [XGB]: https://blog.exploratory.io/introduction-to-extreme-gradient-boosting-in-exploratory-7bbec554ac7
-
+[SA]: https://en.wikipedia.org/wiki/Stirling%27s_approximation
 
 [WL1]: http://rob.schapire.net/papers/strengthofweak.pdf
 [WL2]: https://www.cis.upenn.edu/~mkearns/papers/boostnote.pdf
