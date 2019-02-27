@@ -38,8 +38,6 @@ to fully classify the data and our tree will be a little deeper.
 Gini Impurity and Information Gain
 ----------------------------------
 
-
-
 Gini impurity is defined as the probability that a randomly chosen element
 will be misclassified if we randomly choose a prediction from the distribution
 of classes itself.
@@ -53,7 +51,10 @@ to $\mathbf{p}_1 = p$ and $\mathbf{p}_2 = 1-p$, yielding this
 much simpler expression:
 
 \[
-    I_G(p) = p(1-p) + (1-p)p = 2p(1-p)
+	\begin{align}
+    I_G(p)     & = p(1-p) + (1-p)p = 2p(1-p) \\
+	\Delta I_G & = I_{parent} - p_{left} I_{left} - p_{right} I_{right}
+	\end{align}
 \]
 
 Interestingly enough, this is *not* how we will actually make predictions --
@@ -79,11 +80,21 @@ better job of capturing / representing how much we've learned, so that's what
 we'll use to train.
 
 There's a competing metric called information gain which is often used instead
-of Gini impurity. This approach has its roots in information theory. While
-information theory is often abused in machine learning, this specific use
-stays very close to Shannon's original generalization of entropy. 
+of Gini impurity. There's a long derivation where entropy is defined as the log
+of the probability mass function of a multinomial distribution, information is
+defined as the opposite of entropy, and information gain is defined as the
+difference between the entropy of the parent node and the weighted sum of the
+entropies of all child nodes, but long story short, for the simple binary case
+the formula looks like this:
 
-TODO
+\[
+	\begin{align}
+		       H & = -p \ln p - (1-p) \ln (1-p) \\
+		\Delta H & = H_{parent} - p_{left} H_{left} - p_{right} H_{right}
+	\end{align}
+\]
+
+Modulo a scaling factor, entropy has almost the same shape as the Gini impurity:
 
 ```{r gini_info, echo=FALSE}
 curve( 4*x*(1-x), xlim=c(0, 1), ylim=c(0, 1), col='blue', xlab="p", ylab="Normalized Score")
@@ -91,6 +102,10 @@ curve( (1/C) * 0.5 * (-x*log(x) - (1-x)*log(1-x)),n=1000, add=TRUE, col='darkgre
 title("Gini Impurity vs. Information Gain (Normalized)")
 legend("bottom", c("Gini Impurity", "Information Gain"), col=c("blue", "darkgreen"), lty=1)
 ```
+
+Decision trees trained on one or the other will often be identical and
+usually have identical performance, so we will use Gini impurity because
+it is slightly cheaper to calculate a square than a log.
 
 
 Finding The Best Cut Point
@@ -105,7 +120,7 @@ form
 \]
 
 While it would be possible to simply brute force our way through
-all possible cut points, calculating gini impurity from scratch
+all possible cut points, calculating Gini impurity from scratch
 each and every time, this is hugely slower than a more efficient
 but slightly harder to understand vectorized algorithm.
 
@@ -140,7 +155,7 @@ but slightly harder to understand vectorized algorithm.
         # above_total = class_0_above + class_1_above
         above_total = np.arange(len(y)-1, -1, -1)
 
-        # we can now calculate gini impurity in a single
+        # we can now calculate Gini impurity in a single
         # vectorized operation. The naive formula would be:
         #
         #     (class_1_below/below_total)*(class_0_below/below_total)
@@ -173,7 +188,7 @@ TODO: recursive partition algorithm
 Every node starts life as a leaf node, but when its `.split()` method is
 called, it mutates into a branch node with two leaf nodes underneath.  The
 split is made by calculating the optimal split point for each feature, then
-choosing the feature and split point which minimizes gini impurity.  This
+choosing the feature and split point which minimizes Gini impurity.  This
 continues recursively for both children until a node is perfectly pure or the
 maximum `depth` parameter is reached.
 
