@@ -192,39 +192,56 @@ Several cancellations occur and we are left with:
 \]
 
 Unlike linear regression, this doesn't admit a closed form solution. However,
-it is amenable to numerical methods, which we will cover in great detail.
-
-For our implementation below it will be convenient to have this in vectorized
-form. Leaving behind the statistical context and no longer using random variables,
-let $X$ be a $N \times m$ real-valued matrix (not a random variable) such that
-each row of $X$ is $X_i$ from above, and let $y$ the corresponding non-random
-real-valued $N$-vector, the above equation becomes:
-
-\[ \nabla_{\Theta} \ell(\Theta; X, y) = (X \circ  (y - \hat{y}))^T \textbf{1} \]
-
-(Here, we use the notation that $\textbf{1} = (1, 1, ..., 1)$ is the vector
-consisting of all ones and $\circ$ is the Hadamard product.)
+it is amenable to numerical methods, which we will cover in great detail below.
 
 This is almost suspiciously neat, but it's not really an accident. The reason
 why we chose the logistic function in the first place was precisely so this
-neat result would drop out at the end: the logistic function is the [canonical
-link function][CLF] for the Bernoulli distribution.
+result would drop out at the end. Indeed, there are other choices with an equally
+good theoretical basis, yet we chose logit because it's simple and fast to calculate.
 
-This raises a fairly interesting question. Is there any fundamental reason to
-believe the true population distribution *really* behaves as if it were using a
-logistic link function, or is this an arbitrary choice we made solely for
-mathematical convenience? As far as I can tell, it's the later case. More
-rigorous attempts to justify the choice of link function end up making a
-different choice, such as probit regression which uses the CDF of the normal
-distribution. However, in practice these curves are extremely similar, and if
-you showed me a plot of each side-by-side I could not for the life of me tell
-you which is which.
+One such alternative, preferred by some statisticians and scientific
+specializations, is the [probit link function][PM], which uses the CDF of the
+normal distribution instead of sigmoid. However, in practice these curves are
+extremely similar, and if you showed me an unlabeled plot with both of them I
+could not for the life of me tell you which is which:
 
 ```{r, echo=FALSE}
 curve(1/(1+exp(-x)), xlim=c(-6,6), col='blue', ylab='p', xaxt='n')
 curve(pnorm(x/1.96), xlim=c(-6,6), add=TRUE, col='darkgreen')
 title("Sigmoid vs. Normal CDF")
 ```
+
+It's worth bearing in mind that logistic regression is so popular, not because
+there's some theorem which proves it's *the* model to use, but because it is
+the simplest and easiest to work with out of a family of equally valid choices.
+
+Vectorization
+-------------
+
+For our implementation below it will be convenient to have $\nabla \ell$ in
+vectorized form. Leaving behind the statistical context and no longer using
+random variables, let $X$ be a $N \times m$ real-valued matrix (not a random
+variable) such that each row of $X$ is $X_i$ from above, and let $y$ the
+corresponding non-random real-valued $N$-vector, the above equation becomes:
+
+\[ \nabla_{\Theta} \ell(\Theta; X, y) = \Bigg( \sum_{i=1}^{N} (X \circ  (y - \hat{y}))_{ij} \Bigg)^T \]
+
+The summation is over rows and across columns -- afterwards, we have a single
+$1 \times p$ row vector containing the sum of each column, which we transpose
+to match the $p \times 1$ column vector $\Theta$. 
+
+Here $``A \circ B"$ denotes the [Hadamard product][HP].  We will be seeing this slightly
+unusual operator quite a bit going forward, so make sure you get familiar with
+it if you aren't already.
+
+This is the same as the 
+summation over training examples above -- but has the advantage of being harder
+to read. No wait -- I mean it has the advantage of being naturally translated
+into vectorized numpy code. Sorry about that.
+
+
+[HP]: https://en.wikipedia.org/wiki/Hadamard_product_(matrices)
+
 
 Batch Gradient Descent
 ----------------------
@@ -972,3 +989,4 @@ particular.
 [OF]: https://en.wikipedia.org/wiki/Overfitting
 [ERM]: https://en.wikipedia.org/wiki/Empirical_risk_minimization
 [MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
+[PM]: https://en.wikipedia.org/wiki/Probit_model

@@ -57,7 +57,7 @@ autocorrelation. To get some interesting behavior, I will give it a strongly
 positive one day correlation, but then reverse it the next day. This should
 give us both decay and oscillations.
 
-```{r ts}
+```{r ts, fig.retina=1}
 set.seed(43)
 t_0 <- zoo(rnorm(n=100))
 t_1 <- lag(t_0, k=1, na.pad=TRUE)
@@ -72,7 +72,7 @@ pacf(t) # Partial Autocorrelation Plot
 Next we construct the model. While I normally recommend the [forecast][FOR]
 package, we'll just use the built-in `ar()` function today.
 
-```{r ar}
+```{r ar, fig.retina=1}
 ar_model <- ar(t)
 ar_model
 ```
@@ -82,7 +82,7 @@ what we saw on the partial autocorrelation plot: A strong positive
 autocorrelation at lag one, a slightly less strong negative autocorrelation at
 lag 2, then some harmonics. 
 
-```{r roots}
+```{r roots, fig.retina=1}
 ar_coefs <- ar_model$ar  # coefficients(ar_model) doesn't work, IDK why
 roots <- polyroot( c(1,-ar_coefs) )
 roots
@@ -297,7 +297,7 @@ are (to within numerical precision) exactly the same as the inverse roots!
 
 Yes, it's true. This is very obvious if we plot them together:
 
-```{r eigenplot}
+```{r eigenplot, fig.retina=1}
 plot(
   ar_eigen$values, 
   ylim=c(-1,1), 

@@ -29,9 +29,9 @@ t_3 &lt;- lag(t_0, k=3, na.pad=TRUE)
 t &lt;- na.omit(t_0 + 0.7*t_1 - 0.2*t_2 + 0.2*t_3)
 plot(t, type=&#39;l&#39;)
 title(&#39;Time Series With Autocorrelation&#39;)</code></pre>
-<p><img src="/post/complex-r-part-2_files/figure-html/ts-1.png" width="672" /></p>
+<p><img src="/post/complex-r-part-2_files/figure-html/ts-1.png" /><!-- --></p>
 <pre class="r"><code>pacf(t) # Partial Autocorrelation Plot</code></pre>
-<p><img src="/post/complex-r-part-2_files/figure-html/ts-2.png" width="672" /></p>
+<p><img src="/post/complex-r-part-2_files/figure-html/ts-2.png" /><!-- --></p>
 <p>Next we construct the model. While I normally recommend the <a href="https://cran.r-project.org/web/packages/forecast/index.html">forecast</a> package, we’ll just use the built-in <code>ar()</code> function today.</p>
 <pre class="r"><code>ar_model &lt;- ar(t)
 ar_model</code></pre>
@@ -61,7 +61,7 @@ roots</code></pre>
     abline(v=0, col=&#39;grey&#39;)
   )
 )</code></pre>
-<p><img src="/post/complex-r-part-2_files/figure-html/roots-1.png" width="672" /></p>
+<p><img src="/post/complex-r-part-2_files/figure-html/roots-1.png" /><!-- --></p>
 <p>Just to be clear, we’re plotting the <em>inverse</em> roots, so we’d expect them to be <em>inside</em> the unit circle if the process is stationary.</p>
 <p>(Just as an Easter egg, we also used complex numbers to plot the unit circle. If you’re not sure how that worked, just remember that multiplying complex numbers adds their arguments – their angle with the x-axis – together.)</p>
 <p>Just from looking at the roots and observing that some are far from the real axis, we can also say that this time series will experience a back-and-forth oscillations as each day tries to “correct” for the previous day. If the influence of history merely decayed away smoothly and exponentially, all the roots would have been close to the real axis. (It’s a common misconception that how long effects last is related to the <em>order</em> of the model; when in fact even an AR(1) model can have a very long memory if it has its root close to 1.)</p>
@@ -232,7 +232,7 @@ points(
   cex=2,
   col=&#39;red&#39;
 )</code></pre>
-<p><img src="/post/complex-r-part-2_files/figure-html/eigenplot-1.png" width="672" /></p>
+<p><img src="/post/complex-r-part-2_files/figure-html/eigenplot-1.png" /><!-- --></p>
 <p>They are exactly the same. You’re welcome to prove this for yourself by writing down the characteristic polynomial for a matrix in this form and verifying it’s the exact same polynomial we found the roots for in the AR formulation of the problem.</p>
 <p>In fact, you can see the many parallels in the two approaches: in one analysis, we said that an AR model would only be stationary if all its inverse roots were inside the unit circle, in the other we said the dynamic system would converge to a steady state at the origin. Different language, indeed two historically different mathematical treatments, but the same conclusions. In both cases we found that the system was characterized by a sequence of 5 complex numbers, and that both the norm and the argument of each number meaningfully impacted the behavior of the system. And so on.</p>
 <p>There’s no escaping it: those 5 complex numbers <em>are</em> the best way to understand this system, and any sufficiently sophisticated approach will lead us to this same conclusion.</p>

@@ -119,7 +119,7 @@ which maps to well-known triple $(5,12,13)$. To visualize them, we can simply
 pass our complex vector to R's `plot()` function -- it will conveniently plot
 them in the complex plane for us!
 
-```{r triples}
+```{r triples, fig.retina=1}
 triples <- triples[ Re(triples) <= n & Im(triples) <= n ]
 
 # helper function to colorize complex points by their angle.
@@ -166,7 +166,7 @@ triples <- c(triples, complex(real=Im(triples), imaginary=Re(triples)))
 
 ..and we're finally ready to visualize the real solution.
 
-```{r plotall}
+```{r plotall, fig.retina=1}
 plot(triples, col=argcolor(triples), pch=20)
 title(paste("All Pythagorean Triples Up to", n))
 ```
@@ -177,7 +177,7 @@ That's too many to really understand, although there are definitely
 patterns emerging. Let's zoom in and just plot a small region,but with more
 detail.
 
-```{r plotsmall}
+```{r plotsmall, fig.retina=1}
 small_n = 25
 small_triples <- triples[ Re(triples) < small_n & Im(triples) < small_n ]
 small_triples <- small_triples[ order(Mod(small_triples), decreasing=TRUE) ]

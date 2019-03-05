@@ -277,7 +277,10 @@ expressions. This is sometimes called [genetic programming][GP].
 To be 100% clear, this is only bad if we allow *arbitrary* programs
 involving `AND`, `OR`, `NOT`, `if/else`, `while`, `for`, intermediate
 variables, and the like. Genetic programming can work well if the "genes" of
-the program are very carefully designed.
+the program are very carefully designed. Indeed, it is sometimes used as
+the "top level" learning algorithm in so-called automated machine learning
+frameworks such as [TPOT][TPOT]. However, for the kind of fitting and optimization
+we're discussing here, genetic algorithms are hopelessly inefficient.
 
 Why is learning an arbitrary program problematic? Does it simply not work?
 Surely any equation we write down could also be represented in a more general
@@ -364,3 +367,4 @@ are added, you can find them collected under the ["from scratch"][MLFS] tag.
 [IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
 [GP]: https://en.wikipedia.org/wiki/Genetic_programming
 [GN]: https://en.wikipedia.org/wiki/G%C3%B6del_numbering
+[TPOT]: https://automl.info/tpot/

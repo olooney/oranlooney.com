@@ -96,16 +96,18 @@ the formula looks like this:
 
 Modulo a scaling factor, entropy has almost the same shape as the Gini impurity:
 
-```{r gini_info, echo=FALSE}
+```{r gini_info, fig.retina=1, echo=FALSE}
 curve( 4*x*(1-x), xlim=c(0, 1), ylim=c(0, 1), col='blue', xlab="p", ylab="Normalized Score")
-curve( (1/C) * 0.5 * (-x*log(x) - (1-x)*log(1-x)),n=1000, add=TRUE, col='darkgreen')
+curve( (x*log(x) + (1-x)*log(1-x))/log(0.5),n=1000, add=TRUE, col='darkgreen')
 title("Gini Impurity vs. Information Gain (Normalized)")
 legend("bottom", c("Gini Impurity", "Information Gain"), col=c("blue", "darkgreen"), lty=1)
 ```
 
-Decision trees trained on one or the other will often be identical and
-usually have identical performance, so we will use Gini impurity because
-it is slightly cheaper to calculate a square than a log.
+These small differences in shape don't usually result in different decisions
+about which feature to choose or where to make the split, so decision trees
+trained on one or the other will often be identical and usually have identical
+performance. We will use Gini impurity because it is slightly cheaper to
+calculate a square than a log.
 
 
 Finding The Best Cut Point

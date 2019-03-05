@@ -19,15 +19,29 @@ draft: true
 <p>What happens if we’re wrong? What if this isn’t the best possible cut point after we consider future decisions as well? Is our final model worse? No, not at all. All that happens is that it will take a few extra cuts to fully classify the data and our tree will be a little deeper.</p>
 <div id="gini-impurity-and-information-gain" class="section level2">
 <h2>Gini Impurity and Information Gain</h2>
-<p>Gini impurity is defined as the probability that a randomly chosen element would be misclassified:</p>
+<p>Gini impurity is defined as the probability that a randomly chosen element will be misclassified if we randomly choose a prediction from the distribution of classes itself.</p>
 <p><span class="math display">\[
     I_G(\mathbf{p}) = \sum_{i} \mathbf{p}_i \sum_{j \neq i} \mathbf{p}_j 
 \]</span></p>
 <p>In the binary case, we usually simplify the notation and refer to <span class="math inline">\(\mathbf{p}_1 = p\)</span> and <span class="math inline">\(\mathbf{p}_2 = 1-p\)</span>, yielding this much simpler expression:</p>
 <p><span class="math display">\[
-    I_G(p) = p(1-p) + (1-p)p = 2p(1-p)
+    \begin{align}
+    I_G(p)     &amp; = p(1-p) + (1-p)p = 2p(1-p) \\
+    \Delta I_G &amp; = I_{parent} - p_{left} I_{left} - p_{right} I_{right}
+    \end{align}
 \]</span></p>
-<p>TODO: information gain, comparison</p>
+<p>Interestingly enough, this is <em>not</em> how we will actually make predictions – we will in fact always choose the most likely class.</p>
+<p>An example can make this much more concrete. Suppose we have 100 observations with two balanced classes; exactly 50 each. If our decision tree consists of only a root, we have to make the constant prediction 0.5 for all possible inputs, so our gini impurity is 0.5. But once we split the root node, we’ll have two leafs, and these will unbalanced classes, say 40/10 and 10/40. The gini impurity of these two nodes is <span class="math inline">\(2 \times .2 \times .8 = .32\)</span>. When we make a prediction, every input will be assigned to one of these two leaf nodes. If it ends up in the left node, we will predict class 0 and be right 80% of the time. If it ends up in the right node, we will predict class 1 and still be right 80% of the time. Accuracy has improved from 50% to 80%. However, if instead of always choosing the most likely class, we instead made our predictions randomly, sampling from a Bernoulli distribution with parameter <span class="math inline">\(p = 0.2\)</span> for the left node and <span class="math inline">\(p = 0.8\)</span> for the right node, we would be right 68% of time. This is the converse of Gini impurity. It’s a trivial theorem that we can always minimize error and maximum accuracy by choosing the most likely class, so that’s what we’ll use for decision rule. But gini impurity does a better job of capturing / representing how much we’ve learned, so that’s what we’ll use to train.</p>
+<p>There’s a competing metric called information gain which is often used instead of Gini impurity. There’s a long derivation where entropy is defined as the log of the probability mass function of a multinomial distribution, information is defined as the opposite of entropy, and information gain is defined as the difference between the entropy of the parent node and the weighted sum of the entropies of all child nodes, but long story short, for the simple binary case the formula looks like this:</p>
+<p><span class="math display">\[
+    \begin{align}
+               H &amp; = -p \ln p - (1-p) \ln (1-p) \\
+        \Delta H &amp; = H_{parent} - p_{left} H_{left} - p_{right} H_{right}
+    \end{align}
+\]</span></p>
+<p>Modulo a scaling factor, entropy has almost the same shape as the Gini impurity:</p>
+<p><img src="/post/ml-from-scratch-part-4-decision-tree_files/figure-html/gini_info-1.png" /><!-- --></p>
+<p>These small differences in shape don’t usually result in different decisions about which feature to choose or where to make the split, so decision trees trained on one or the other will often be identical and usually have identical performance. We will use Gini impurity because it is slightly cheaper to calculate a square than a log.</p>
 </div>
 <div id="finding-the-best-cut-point" class="section level2">
 <h2>Finding The Best Cut Point</h2>
@@ -35,7 +49,7 @@ draft: true
 <p><span class="math display">\[
     X_i \leq C
 \]</span></p>
-<p>While it would be possible to simply brute force our way through all possible cut points, calculating gini impurity from scratch each and every time, this is hugely slower than a more efficient but slightly harder to understand vectorized algorithm.</p>
+<p>While it would be possible to simply brute force our way through all possible cut points, calculating Gini impurity from scratch each and every time, this is hugely slower than a more efficient but slightly harder to understand vectorized algorithm.</p>
 <pre><code>def best_split_point(X, y, column):
     # sorting y by the values of X makes
     # it almost trivial to count classes for
@@ -67,7 +81,7 @@ draft: true
     # above_total = class_0_above + class_1_above
     above_total = np.arange(len(y)-1, -1, -1)
 
-    # we can now calculate gini impurity in a single
+    # we can now calculate Gini impurity in a single
     # vectorized operation. The naive formula would be:
     #
     #     (class_1_below/below_total)*(class_0_below/below_total)
@@ -91,7 +105,7 @@ draft: true
 <div id="building-the-tree" class="section level2">
 <h2>Building the Tree</h2>
 <p>TODO: recursive partition algorithm</p>
-<p>Every node starts life as a leaf node, but when its <code>.split()</code> method is called, it mutates into a branch node with two leaf nodes underneath. The split is made by calculating the optimal split point for each feature, then choosing the feature and split point which minimizes gini impurity. This continues recursively for both children until a node is perfectly pure or the maximum <code>depth</code> parameter is reached.</p>
+<p>Every node starts life as a leaf node, but when its <code>.split()</code> method is called, it mutates into a branch node with two leaf nodes underneath. The split is made by calculating the optimal split point for each feature, then choosing the feature and split point which minimizes Gini impurity. This continues recursively for both children until a node is perfectly pure or the maximum <code>depth</code> parameter is reached.</p>
 <pre><code>class Node:
     def __init__(self, X, y):
         self.X = X
