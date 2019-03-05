@@ -180,7 +180,7 @@ It's obvious that $y^T y$ is constant with respect to $\Theta$ so the first
 term simply vanishes.  It's less obvious but also true that the next two terms
 are equal to each other - just remember that a J is a scalar, so those terms are
 each scalar, and the transpose of a scalar is itself. The final term is a
-quadratic form, and the [general rule][QFG] is $ q \nabla x^T A x =
+quadratic form, and the [general rule][QFG] is $ \nabla x^T A x =
 \frac{1}{2}A^T x + \frac{1}{2}A x $ but because the product of a matrix with
 itself is always symmetric ($X^T X = (X^T X)^T$) we can use the simpler form
 $\nabla x^T A x = 2 A x$.
@@ -191,9 +191,9 @@ Setting this equal to zero at $\hat{\Theta}$ we get:
 
 \[ (X^T X) \hat{\Theta} = X^T y \]
 
-The right hand side is a known vector, the left-hand side is a matrix times an
-unknown vector, so this is just the familiar equation for solving for a
-particular solution to a system of equations $Ax = b$.
+We know X and y, so the right hand side is a known vector, the left-hand side
+is a matrix times an unknown vector, so this is just the familiar equation for
+solving for a particular solution to a system of equations $Ax = b$.
 
 Because $X^T X$ is square and non-singular and therefore invertible,  we
 *could* just left-multiply both sides by its inverse to get an explicit closed
@@ -219,9 +219,9 @@ which is easy to compute.
 
 Why is $Q$ easy to invert? Recall that $Q$ is orthogonal which implies that
 $Q^{-1} = Q^T$. Most linear algebra libraries don't even have to explicitly
-copy a matrix to take a transpose but simply operate on it row-wise instead of
-column-wise or vice versa; taking a transpose is O(1) - free for all intents and
-purposes.
+copy a matrix to take a transpose but simply set a flag that indicates that
+from now on it will operate on it row-wise instead of column-wise or vice
+versa. That means taking a transpose is free for all intents and purposes.
 
 Why is $Rx = Q^T b$ easy to solve? Well, the right-hand side is just a vector. R
 is upper triangular, so we can solve this with a technique called
@@ -300,25 +300,23 @@ We want $a_1$ to be zero except for the first element. What does that *mean*?
 Let's call our basis vectors $e_1 = [1\, 0\, 0]^T$, $e_2 = [0\, 1\, 0]^T$, $e_3
 = [0\, 0\, 1]^T$. Every vector in our space is a linear combination of these
 basis vectors. So what it means for $a_1$ to be zero except for the first
-element is that $a_1$ is co-linear (in the same line) as $e_1$: \( H a_i =
-\alpha e_i \).
+element is that $a_1$ is co-linear (in the same line) as $e_1$: $ H a_i =
+\alpha e_i$.
 
 We're going to do this with an orthogonal transformation. But orthogonal
 transformations are *length preserving*.  That means $\alpha = ||a_1||$.
 Therefore we need to find an orthogonal matrix that sends the vector $a_1$ to
 the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We could
-either *rotate* by the angle between the vectors \(\cos^{-1} \frac{a_1 \dot
-e_1}{||a_1||} \), or we can *reflect* across the line which bisects the two
+either *rotate* by the angle between the vectors:
+
+\[
+\cos^{-1} \frac{a_1 \dot e_1}{||a_1||}
+\]
+
+or we can *reflect* across the line which bisects the two
 vectors in their plane. These two strategies are called the [Givens
 rotation][GOR] and the [Householder reflection][HOR] respectively. The rotation
 matrix is slightly less stable, so we will use the Householder reflection.
-
-This diagram from Wikipedia illustrates this beautifully. Stare at it until you
-can *see* that reflecting about the dotted plane sends $x$ to $||x||e_1$, and
-*believe* that $v$ is a unit vector orthogonal to the dotted plane of
-reflection.
-
-<a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
 
 Let's say that $v$ is the unit normal vector of a plane; how would I reflect an
 arbitrary vector $x$ across that plane?  Well, if we subtracted $\langle x, v
@@ -327,6 +325,13 @@ just keep going the same direction and for the same distance again, we'll end
 up a point on the other side of the plane $x'$.  Both $x$ and $x'$ project to
 the same point on the plane, and furthermore both are a distance $\langle x, v
 \rangle$ from the plane. In other words, this operation is a reflection. 
+
+This diagram from Wikipedia illustrates this beautifully. Stare at it until you
+can *see* that reflecting about the dotted plane sends $x$ to $||x||e_1$, and
+*believe* that $v$ is a unit vector orthogonal to the dotted plane of
+reflection.
+
+<a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
 
 Because a reflection is a linear transformation, we can express it as a matrix,
 which we will call $H$. Here is how we go from our geometric intuition to a
@@ -343,8 +348,8 @@ matrix:
 \]
 
 Here, note that $v v^T$ is the *outer* product of $v$ with itself so is a
-square matrix with elements $v_i v_j$. For example, if $v = (\frac{1}{\sqrt{2}}
-\frac{1}{\sqrt{2}} 0)^T$ (the 45&deg; line in the xy-plane) we get:
+square matrix with elements $v_i v_j$. For example, if $v = [\frac{1}{\sqrt{2}} \,
+\frac{1}{\sqrt{2}} \, 0]^T$ (the 45&deg; line in the xy-plane) we get:
 
 \[
  H = I - 2 v v^T =
@@ -364,6 +369,9 @@ square matrix with elements $v_i v_j$. For example, if $v = (\frac{1}{\sqrt{2}}
    0 & 0 & 1 \\
  \end{bmatrix} 
 \]
+
+We now know how to define reflections which zero out the subdiagonal of a target columns,
+and we know how to construct orthogonal matrices which perform that reflection.
 
 
 Implementing the Lemmas
@@ -720,7 +728,7 @@ cloud of points.
 	goodness_of_fit_report("Test Set", model, X_test, y_test)
 
 > Training Set     mse=21.30     r2=0.73
-
+>
 > Test Set         mse=25.12     r2=0.75
 
 And in point of fact this linear regression model does reasonably well on both
@@ -762,7 +770,7 @@ Conclusion
 That was linear regression from scratch. There's a lot more that could be said
 about linear regression even as a black box predictive model: polynomial and
 interaction terms, L1 and L2 regularization, and linear constraints on
-coefficients.
+coefficients come to mind.
 
 There's also a whole universe of techniques for doing statistical modeling and
 inference with linear regression: testing residuals for homoscedasticity,
