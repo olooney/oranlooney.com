@@ -8,37 +8,69 @@ tags:
   - From Scratch
   - Machine Learning
 image: /post/ml-from-scratch-part-4-decision-tree_files/lead.jpg
-draft: true
 ---
 
-So far we've followed one particular thread. Linear regression
-via OLS is the oldest and most well known model. By wrapping
-it in a non-linear function which clamped its output to the
-range $[0, 1]$ we made it suitable for classification problems
-as well. However this model, which we called logistic regression,
-was still linear in its parameters and therefore not able to
-represent arbitrary non-linear functions. We fixed that by
-stacking several logistic regression models on top of one
-another; the resulting model was expressive enough to represent
-arbitrary non-linear responses and interactions between variables
-but could still be trained by gradient descent.
+So far in this series we've followed one particular thread: linear regression
+-> logistic regression -> neural network. This is a very natural progression of
+ideas, but it really represents only one possible approach. Today we'll switch
+gears and look at a model with completely different pedigree: the [decision
+tree][DT], sometimes also referred to as [Classification and Regression
+Trees][CART], or simply CART models. In contrast to the earlier progression,
+decision trees are designed from the start to represent non-linear features and
+interactions.
 
-Today we sweep away that history and present a model that
-is explicitly designed to model non-linearities and interactions
-directly. 
+In this article, we will be looking at only one algorithm for fitting trees
+to data: the [greedy][G] [recursive partitioning][RP] algorithm. In future
+articles, we will also look at various algorithms that combine many decision
+trees to create state-of-the-art classifiers, but today let's just build
+a solid foundation.
 
-Greedy algorithm
+The recursive partitioning algorithm is very intuitive. We start by finding
+a single feature and a single split point which divides our data in two. This
+is a rule of the form:
 
-What happens if we're wrong? What if this isn't the best possible cut point
-after we consider future decisions as well? Is our final model worse?
-No, not at all. All that happens is that it will take a few extra cuts
-to fully classify the data and our tree will be a little deeper. 
+\[
+	X_i < C
+\]
+
+All of the training data for which this rule is true we place in the left
+subset; and everything else in the right subset. Dividing a set into 
+non-overlapping subsets so that the union of the sets is the original set
+is called a [partition][P]. We then [recursively][R] apply the same algorithm
+to both the left and right subset. Hence, *recursive partitioning.*
+
+We aren't choosing these features and split points randomly -- rather, we 
+choose them to maximize some condition, which can be informally understood as
+making both subsets *less* balanced than the original. (We will formalize this below.)
+If one side has only positive classes and the other only has negative,
+then that's perfect and we're done. Usually, though, a single rule can only
+increase the imbalance a small amount. That's OK, because it still helps improve our prediction
+a little. But if we want a good prediction, we'll have to use more than one rule.
+
+The way we do that is as follows. As we continue to apply the algorithm
+recursively, we grow a binary tree structure where each node contains a rule of
+the form $X_i < C$, although $i$ and $C$ will be different for each node. For a
+new data point, we can than start at the root node and trace a path down to a
+leaf node by taking the left fork when the condition is true, and the right
+fork when it is false. When we reach a leaf node, we can count how many
+training examples for that leaf node were in which class, and then predict the
+new data point has the most common class. In this way, we can reach a
+*decision* by following the logic of the *tree*. Hence *decision tree*.
+
+In the next few sections, we'll develop these ideas in detail. Note that
+unlike the previous articles in this series, this is not motivated by statistics
+but belongs to what [Leo Breiman][LB], inventor of the [random forest][RF] algorithm based
+on decision trees, calls the "[algorithmic culture][2C]" of statistical modeling. 
 
 
 Gini Impurity and Information Gain
 ----------------------------------
 
-Gini impurity is defined as the probability that a randomly chosen element
+The first thing we need to pin down is what we mean by "better" and "less
+balanced." There are two competing definitions; I'll describe both and then
+pick one to use for the implementation.
+
+The first, [Gini impurity][GI], is defined as the probability that a randomly chosen element
 will be misclassified if we randomly choose a prediction from the distribution
 of classes itself.
 
@@ -53,19 +85,19 @@ much simpler expression:
 \[
 	\begin{align}
     I_G(p)     & = p(1-p) + (1-p)p = 2p(1-p) \\
-	\Delta I_G & = I_{parent} - p_{left} I_{left} - p_{right} I_{right}
+	\Delta I_G & = I_{\text{parent}} - p_{\text{left}} I_{\text{left}} - p_{\text{right}} I_{\text{right}}
 	\end{align}
 \]
 
 Interestingly enough, this is *not* how we will actually make predictions --
-we will in fact always choose the most likely class.
+we will in fact always choose the most likely class. 
 
 An example can make this much more concrete. Suppose we have 100 observations
 with two balanced classes; exactly 50 each. If our decision tree consists of
 only a root, we have to make the constant prediction 0.5 for all possible
-inputs, so our gini impurity is 0.5. But once we split the root node, we'll
+inputs, so our Gini impurity is 0.5. But once we split the root node, we'll
 have two leafs, and these will unbalanced classes, say 40/10 and 10/40. The
-gini impurity of these two nodes is $2 \times .2 \times .8 = .32$. When we make
+Gini impurity of these two nodes is $2 \times .2 \times .8 = .32$. When we make
 a prediction, every input will be assigned to one of these two leaf nodes. If
 it ends up in the left node, we will predict class 0 and be right 80% of the
 time. If it ends up in the right node, we will predict class 1 and still be
@@ -75,24 +107,29 @@ predictions randomly, sampling from a Bernoulli distribution with parameter $p
 = 0.2$ for the left node and $p = 0.8$ for the right node, we would be right
 68% of time. This is the converse of Gini impurity. It's a trivial theorem that
 we can always minimize error and maximum accuracy by choosing the most likely
-class, so that's what we'll use for decision rule. But gini impurity does a
+class, so that's what we'll use for decision rule. But Gini impurity does a
 better job of capturing / representing how much we've learned, so that's what
 we'll use to train.
 
-There's a competing metric called information gain which is often used instead
-of Gini impurity. There's a long derivation where entropy is defined as the log
-of the probability mass function of a multinomial distribution, information is
-defined as the opposite of entropy, and information gain is defined as the
-difference between the entropy of the parent node and the weighted sum of the
-entropies of all child nodes, but long story short, for the simple binary case
-the formula looks like this:
+Second, there's a competing metric called [entropy][IG] which is often
+used instead of Gini impurity. There's a long derivation where entropy is
+defined as the log of the probability mass function of a multinomial
+distribution, information is defined as the opposite of entropy, and
+information gain is defined as the difference between the entropy of the parent
+node and the weighted sum of the entropies of all child nodes, but long story
+short, for the simple case with just two classes the formula looks like this:
 
 \[
 	\begin{align}
 		       H & = -p \ln p - (1-p) \ln (1-p) \\
-		\Delta H & = H_{parent} - p_{left} H_{left} - p_{right} H_{right}
+		\Delta H & = H_{\text{parent}} - p_{\text{left}} H_{\text{left}} - p_{\text{right}} H_{\text{right}}
 	\end{align}
 \]
+
+Both functions are symmetric about the line $x = 0.5$ and both are strongly
+concave. This turns out to be very important, because it means it's always possible
+to choose a good cut point. Other metrics, such as accuracy, don't have this property
+but instead give the exact same "goodness" score for many different candidate splits.
 
 Modulo a scaling factor, entropy has almost the same shape as the Gini impurity:
 
@@ -121,10 +158,11 @@ form
     X_i \leq C
 \]
 
-While it would be possible to simply brute force our way through
-all possible cut points, calculating Gini impurity from scratch
-each and every time, this is hugely slower than a more efficient
-but slightly harder to understand vectorized algorithm.
+While it would be possible to simply brute force our way through all possible
+cut points, calculating Gini impurity from scratch each and every time, this is
+hugely slower than a more efficient (but slightly harder to understand)
+vectorized algorithm. We, of course, will choose the path of most resistance
+and highest performance.
 
     def best_split_point(X, y, column):
         # sorting y by the values of X makes
@@ -182,13 +220,9 @@ but slightly harder to understand vectorized algorithm.
 Building the Tree
 -----------------
 
-TODO: recursive partition algorithm
-
-[RP]: https://en.wikipedia.org/wiki/Recursive_partitioning
-[DC]: https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm
-
-Every node starts life as a leaf node, but when its `.split()` method is
-called, it mutates into a branch node with two leaf nodes underneath.  The
+The fundamental building block of a tree is the "Node." In our implementation,
+every node starts life as a leaf node, but when it the `.split()` method is
+invoked, it mutates into a branch node with two new leaf nodes underneath.  The
 split is made by calculating the optimal split point for each feature, then
 choosing the feature and split point which minimizes Gini impurity.  This
 continues recursively for both children until a node is perfectly pure or the
@@ -232,9 +266,9 @@ maximum `depth` parameter is reached.
                         child.split(depth-1)
 
 
-To obtain predictions from our tree, we simply apply all the learned rules.
-Given a new vector of predictors $x$, we start at the root node and then move
-to either the left or right child based on the nodes decision rule. When we
+We will will also make our Node class responsible for predicting probabilities
+(but not classes.) To obtain predictions from a branch node, we simply use the
+learned rule to decide whether to descend to the left or right child.  When we
 reach a leaf, we can return a probability based on the proportion of classes in
 the leaf. 
 
@@ -264,7 +298,9 @@ Interface
 
 The above Node class can be used directly to fit models but as we've done
 elsewhere in the series we give our model a user-friendly, scikit-learn style
-interface:
+interface. The class keeps track of only a single "root" Node, and relies on
+that root node's recursive `.split()` and `.predict_proba()` methods to reach
+deeper nodes.
 
     class DecisionTreeClassifier:
         def __init__(self, max_depth=3):
@@ -288,8 +324,8 @@ interface:
 Testing
 -------
 
-The breast cancer dataset it good for testing decision trees because it is
-high dimensional and highly non-linear.
+The scikit-learn breast cancer dataset is a good choice for testing decision
+trees because it is high dimensional and highly non-linear.
 
     # a small classification data set with 30 to get with. 
     breast_cancer = load_breast_cancer()
@@ -301,8 +337,8 @@ high dimensional and highly non-linear.
     y_hat = model.predict(X)
     p_hat = model.predict_proba(X)[:,1]
 
-The models out-of-the-box (by which I mean, "without need for hyper-parameter selection via
-cross-validation") performance is quite good:
+The models out-of-the-box (by "out-of-the-box" I mean, "without need for
+hyper-parameter selection via cross-validation") performance is quite good:
 
     print(confusion_matrix(y, y_hat))
     print('Accuracy:', accuracy_score(y, y_hat))
@@ -324,7 +360,7 @@ An AUC of .96 is pretty respectable.
 
 We can also look at the results as a function of the predictor variable $X$. Since there are 30 separate
 features, we will just look at a representative sample. For each pair of predictor variables, we'll plot
-true positives in green, true negatives in blue, and misclassifications in red.
+true positives in green, true negatives in blue, and misses in red.
 
     plt.figure(figsize=(16,30))
     markers = ['o', 'x']
@@ -420,26 +456,38 @@ be negative.
 Conclusion
 ----------
 
-Today we saw an incredibly simple and obvious algorithm tackle a
-seriously difficult problem and achieve surprisingly good out-of-the-box 
-performance. Decision trees are somewhat data-hungry: to improve performance
-without overfitting we would need to add more nodes to our model, but each
-layer that we add more than doubles the amount of data we need before our
-leaves have too few data points to reliably split. On this small dataset,
+Today we saw a simple and intuitive algorithm tackle a difficult, highly
+non-linear problem and achieve surprisingly good out-of-the-box performance
+after only a few seconds of training time. 
+
+Unfortunately, decision trees are exponentially data-hungry: to further improve
+performance (without overfitting) we would need to add more nodes to our model,
+but each layer that we add more than doubles the amount of data we need before
+our leaves have too few data points to reliably split. On this small dataset,
 we can't go beyond three or four layers.
 
-While decision trees are occasionally used directly on datasets, their real
-importance is in their use as the main ingredient in two state-of-the-art ML
-algorithms, namely [random forest][RF] and [extreme gradient boosting][XGB].
+Another issue is that the decision boundary of a decision tree is a series of
+orthogonal, axis-aligned hyperplanes.  This is rarely a well-motivated boundary
+-- the real world contains diagonals and curves! -- and as such would not be
+expected to generalize well. With a very deep tree, a diagonal or curved
+boundary can be approximated, yet this can require a large amount of data close
+to the decision boundary. However, decision trees can do very well when given
+discrete features.
 
-There are some good arguments that suggest that any weak learner algorithm
-can be turned into a strong leaner when combined together. TODO: WL1-3
+The problems with decision trees stem from the fact they "believe" that the
+left hand should not know what the right hand is doing -- yet in many cases it
+would make sense to pick the same decision rule for both sides of a decision
+tree. In fact, while decision trees are occasionally used directly on datasets,
+their real importance is in their use as the main ingredient in two
+state-of-the-art ML algorithms that do exactly this!  Both [random forest][RF]
+and [extreme gradient boosting][XGB] are examples of *additive* models built by
+combining different trees together. This allows them to have many different
+partially overlapping regions. We will look at these models in a future
+article; for now, let me just mention that there are some [good arguments][WL1]
+that suggest that **any** [set of weak learners][WL2] can be turned into a
+strong leaner when [combined together][WL3] in the right way, and these
+practical algorithms appear to "work" because of these deeper theorems.
 
-The decision boundary of a decision tree is a series of axis-aligned straight
-line segments. This is rarely a well-motivated boundary that would be expected
-to generalize well. With a very deep tree, a diagonal or curved boundary can
-be approximated, yet this can require a large amount of data close to the decision
-boundary. However, decision trees do very well when given discrete features.
 
 
 [2C]: https://projecteuclid.org/euclid.ss/1009213726
@@ -451,5 +499,13 @@ boundary. However, decision trees do very well when given discrete features.
 [WL1]: http://rob.schapire.net/papers/strengthofweak.pdf
 [WL2]: https://www.cis.upenn.edu/~mkearns/papers/boostnote.pdf
 [WL3]: http://www.face-rec.org/algorithms/Boosting-Ensemble/decision-theoretic_generalization.pdf
-
-
+[DT]: https://en.wikipedia.org/wiki/Decision_tree
+[G]: https://en.wikipedia.org/wiki/Greedy_algorithm
+[RP]: https://en.wikipedia.org/wiki/Recursive_partitioning 
+[LB]: https://en.wikipedia.org/wiki/Leo_Breiman
+[2C]: https://projecteuclid.org/euclid.ss/1009213726
+[P]: https://en.wikipedia.org/wiki/Partition_of_a_set 
+[R]: https://en.wikipedia.org/wiki/Recursion_(computer_science)
+[GI]: https://stats.stackexchange.com/questions/308885/a-simple-clear-explanation-of-the-gini-impurity
+[IG]: https://medium.com/coinmonks/what-is-entropy-and-why-information-gain-is-matter-4e85d46d2f01
+[DC]: https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm

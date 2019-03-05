@@ -234,10 +234,10 @@ Here $``A \circ B"$ denotes the [Hadamard product][HP].  We will be seeing this 
 unusual operator quite a bit going forward, so make sure you get familiar with
 it if you aren't already.
 
-This is the same as the 
-summation over training examples above -- but has the advantage of being harder
-to read. No wait -- I mean it has the advantage of being naturally translated
-into vectorized numpy code. Sorry about that.
+This is the same as the summation over training examples above -- but has the
+advantage of being rather obscure and harder to read. No wait -- I mean it has
+the advantage of being naturally translated into vectorized numpy code. Sorry
+about that.
 
 
 [HP]: https://en.wikipedia.org/wiki/Hadamard_product_(matrices)

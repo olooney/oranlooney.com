@@ -83,7 +83,7 @@ def sigmoid(z):
 <p><span class="math display">\[ \nabla_{\Theta} \ell(\Theta; X, y) = \Bigg( \sum_{i=1}^{N} (X \circ  (y - \hat{y}))_{ij} \Bigg)^T \]</span></p>
 <p>The summation is over rows and across columns – afterwards, we have a single <span class="math inline">\(1 \times p\)</span> row vector containing the sum of each column, which we transpose to match the <span class="math inline">\(p \times 1\)</span> column vector <span class="math inline">\(\Theta\)</span>.</p>
 <p>Here <span class="math inline">\(``A \circ B&quot;\)</span> denotes the <a href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamard product</a>. We will be seeing this slightly unusual operator quite a bit going forward, so make sure you get familiar with it if you aren’t already.</p>
-<p>This is the same as the summation over training examples above – but has the advantage of being harder to read. No wait – I mean it has the advantage of being naturally translated into vectorized numpy code. Sorry about that.</p>
+<p>This is the same as the summation over training examples above – but has the advantage of being rather obscure and harder to read. No wait – I mean it has the advantage of being naturally translated into vectorized numpy code. Sorry about that.</p>
 </div>
 <div id="batch-gradient-descent" class="section level2">
 <h2>Batch Gradient Descent</h2>
