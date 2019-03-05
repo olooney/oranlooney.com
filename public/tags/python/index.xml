@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Tue, 19 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 01 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ML From Scratch, Part 4: Decision Trees</title>
+      <link>http://www.oranlooney.com/post/ml-from-scratch-part-4-decision-tree/</link>
+      <pubDate>Fri, 01 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/ml-from-scratch-part-4-decision-tree/</guid>
+      <description>So far in this series we’ve followed one particular thread: linear regression -&amp;gt; logistic regression -&amp;gt; neural network. This is a very natural progression of ideas, but it really represents only one possible approach. Today we’ll switch gears and look at a model with completely different pedigree: the decision tree, sometimes also referred to as Classification and Regression Trees, or simply CART models. In contrast to the earlier progression, decision trees are designed from the start to represent non-linear features and interactions.</description>
+    </item>
     
     <item>
       <title>A Fairly Fast Fibonacci Function</title>

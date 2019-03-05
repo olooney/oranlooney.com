@@ -153,7 +153,7 @@ plot(
   ylim=c(0,n),
   main=paste(&quot;Squared Gaussian Integers Up to&quot;, n)
 )</code></pre>
-<p><img src="/post/complex-r_files/figure-html/triples-1.png" width="672" /></p>
+<p><img src="/post/complex-r_files/figure-html/triples-1.png" /><!-- --></p>
 <p>Now it turns out that our algorithm does not, in fact, generate all possible triples. For example, multiples are missing: if <span class="math inline">\((3,4,5)\)</span> is a triple, then <span class="math inline">\((6,8,10)\)</span> should be a triple, and <span class="math inline">\((9,12,15)\)</span> should be a triple, and so on. So we have to expand our set to have all multiples.</p>
 <pre class="r"><code>multiples &lt;- lapply(1:(floor(n/3)), function(m) triples*m)
 triples &lt;- unique(do.call(c, multiples))</code></pre>
@@ -166,7 +166,7 @@ triples &lt;- c(triples, complex(real=Im(triples), imaginary=Re(triples)))</code
 <p>..and we’re finally ready to visualize the real solution.</p>
 <pre class="r"><code>plot(triples, col=argcolor(triples), pch=20)
 title(paste(&quot;All Pythagorean Triples Up to&quot;, n))</code></pre>
-<p><img src="/post/complex-r_files/figure-html/plotall-1.png" width="672" /></p>
+<p><img src="/post/complex-r_files/figure-html/plotall-1.png" /><!-- --></p>
 </div>
 <div id="a-closer-look" class="section level2">
 <h2>A Closer Look</h2>
@@ -215,7 +215,7 @@ text(
   )
 )
 title(paste(&quot;Pythagorean Triples Up to&quot;, small_n))</code></pre>
-<p><img src="/post/complex-r_files/figure-html/plotsmall-1.png" width="672" /></p>
+<p><img src="/post/complex-r_files/figure-html/plotsmall-1.png" /><!-- --></p>
 <p>On the zoomed in view we can see each Pythagorean triple represented as a right triangle; that the integer multiples of solutions form a series of similar triangles; and that there’s a strong symmetry with every triple <span class="math inline">\((a,b,c)\)</span> having a partner <span class="math inline">\((b,a,c)\)</span> which is its mirror reflection about the like <span class="math inline">\(y=x\)</span>.</p>
 <p>From the zoomed out view we can see that the region close to either the x-axis or the y-axis is essentially devoid of solutions and that it looks as if triples actually get less dense as we move away from the origin.</p>
 <p>By the way, this last observation about triples thinning out as we move away from the origin can be understood and quantified by once again using the complex plane. Triples are more or less the squares of Gaussian integers; we can say the number of triples with norm less than <span class="math inline">\(r\)</span> is roughly proportional to the number of Gaussian integers in the first quadrant and inside a circle with radius <span class="math inline">\(\sqrt{r}\)</span>, which is roughly proportional to the area of the quarter-circle of radius <span class="math inline">\(\sqrt{r}\)</span>, which is <span class="math inline">\(\frac{\pi r}{4}\)</span> or very roughly just <span class="math inline">\(r\)</span>.</p>
