@@ -490,7 +490,6 @@ practical algorithms appear to "work" because of these deeper theorems.
 
 
 
-[2C]: https://projecteuclid.org/euclid.ss/1009213726
 [CART]: https://www.amazon.com/Classification-Regression-Wadsworth-Statistics-Probability/dp/0412048418
 [RF]: https://www.stat.berkeley.edu/~breiman/randomforest2001.pdf
 [XGB]: https://blog.exploratory.io/introduction-to-extreme-gradient-boosting-in-exploratory-7bbec554ac7
