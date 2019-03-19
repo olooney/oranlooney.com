@@ -1,0 +1,272 @@
+---
+title: 'Adaptive Basis Functions'
+author: Oran Looney
+date: 2019-03-19
+tags:
+  - Python
+  - Statistics
+  - Machine Learning
+image: /post/adaptive-basis-functions_files/lead.jpg
+draft: true
+---
+
+
+
+<div id="the-function-approximation-point-of-view" class="section level2">
+<h2>The Function Approximation Point of View</h2>
+<p><span class="math display">\[
+    E[y|\vec{x}] = f(\vec{x})
+\]</span></p>
+<p>Note that is a real-valued function <span class="math inline">\(f : \mathbf{R}^p \mapsto \mathbf{R}\)</span>.</p>
+<p>What we know about <span class="math inline">\(f\)</span> is the samples in our training set.</p>
+<p>Suppose we have a finite set of <span class="math inline">\(N\)</span> basis functions <span class="math inline">\(\psi_1, ..., \psi_N\)</span> and let <span class="math inline">\(V = \text{span} \{ \psi_1, ..., \psi_N \}\)</span>. Then, for any function <span class="math inline">\(g \in V\)</span>, we can always write <span class="math inline">\(g\)</span> as a linear combination of basis functions:</p>
+<p><span class="math display">\[ g(x) = \sum_{i=j}^N \beta_j \psi_j(x) \]</span></p>
+<p>This is merely the definition of “span.” But what if <span class="math inline">\(f \notin V\)</span>? This is surely much more common, since the space of all possible functions is infinite-dimensional, while <span class="math inline">\(V\)</span> has finite dimension <span class="math inline">\(N\)</span>. We would want to find <span class="math inline">\(\hat{f} \in V\)</span> such that <span class="math inline">\(\hat{f}\)</span> is as close as possible to <span class="math inline">\(f\)</span>. This raises the question of what “close” means for functions; for today’s purposes, we’ll simply assume that we’re talking about the l2 norm:</p>
+<p><span class="math display">\[ \| f - \hat{f} \| = \int_{-\infty}^{\infty} (f(x) - g(x))^2 dx \]</span></p>
+<p>Furthermore, since we only know <span class="math inline">\(f(x)\)</span> for a sample of points, we have no choice to limit the evaluation to these points:</p>
+<p><span class="math display">\[ J = \| f - \hat(f) \| = \sum_{i=1}^n (f(x) - \hat{f}(x))^2 \]</span></p>
+<p>Expanding out the <span class="math inline">\(\hat{f}\)</span> into a linear combination of basis functions, we can see that <span class="math inline">\(J\)</span> is a function of the coefficients.</p>
+<p><span class="math display">\[ J(\mathbf{\beta}) = \sum_{i=1}^n (f(x) - \sum_{j=1}{N} \beta_j \psi_j(x) )^2 \]</span></p>
+<p>When <span class="math inline">\(J\)</span> is as small as possible, <span class="math inline">\(\hat{f}\)</span> is as close as possible to the target function <span class="math inline">\(f\)</span> as it is possible for any function in <span class="math inline">\(V\)</span> to be. We say that <span class="math inline">\(\hat{f}\)</span> is the best approximation of <span class="math inline">\(f\)</span> for the given choice of basis functions <span class="math inline">\(\psi_1, ..., \psi_N\)</span>.</p>
+<p><span class="math display">\[ 
+    \begin{align}
+        \hat{\beta} &amp; = \text{argmin}_\beta J \\
+        \hat{f}(x)  &amp; = \sum_{j=1}^N \hat{\beta} \psi_j(x)
+    \end{align}
+\]</span></p>
+<p>We won’t dwell too much today on the best way to actually solve this minimization problem but instead just use an off-the-shelf solver to quickly (in terms of programmer time) get a workable solution. Instead, we’ll focus on how the choice of basis functions affects our ability to approximate a function.</p>
+</div>
+<div id="target-function" class="section level2">
+<h2>Target Function</h2>
+<pre><code>import matplotlib
+import matplotlib.pyplot as plt
+%matplotlib inline
+import numpy as np
+import math
+np.warnings.filterwarnings(&#39;ignore&#39;)
+from scipy.optimize import minimize
+
+def target_function(x):
+    return x*(x-1) * (np.sin(13*x) + np.cos(23*x)*(1-x))
+x = np.linspace(start=0, stop=1, num=101)
+y = target_function(x) #+ np.random.normal(0, 0.1, size=x.shape)
+
+plt.figure(figsize=(16,10))
+plt.title(&quot;Arbitrary Smooth Function&quot;)
+plt.plot(x, y, label=&quot;target&quot;)
+plt.legend()</code></pre>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/target_function.png" alt="Target Function" />
+<p class="caption">Target Function</p>
+</div>
+</div>
+<div id="step-functions" class="section level2">
+<h2>Step Functions</h2>
+<p>To get warmed up, let’s use this framework to calculate the best possible step function approximation of a function. Since our target function is continuous this won’t be very good but it illustrates the method.</p>
+<pre><code>N_step = 20
+
+def step_function(i):
+    return lambda x: np.where(x &gt; i/N_step, 1, 0)
+
+def sum_of_step_functions(beta):
+    def f(x):
+        total = np.zeros(shape=x.shape)
+        for i, b in enumerate(beta):
+            total += step_function(i)(x) * b
+        return total
+    return f            
+
+def square_function_distance(f, g):
+    return np.sum( (f(x) - g(x))**2 )
+       
+def step_loss(beta):
+    g = sum_of_step_functions(beta)
+    return square_function_distance(target_function, g)
+    
+plt.figure(figsize=(16,10))
+plt.title(&quot;Step Function Basis&quot;)
+for i in range(N_step):
+    plt.plot(x, step_function(i)(x))</code></pre>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/step_basis.png" alt="Step Basis" />
+<p class="caption">Step Basis</p>
+</div>
+<pre><code>best = minimize(step_loss, x0=np.zeros(shape=N_step))
+beta_hat = best.x
+if best.status != 0:
+    print(best.message)
+
+plt.figure(figsize=(16,10))
+plt.title(&quot;Step Function Approximation&quot;)
+plt.plot(x, y, label=&#39;target&#39;)
+plt.step(x, sum_of_step_functions(beta_hat)(x), label=&#39;approx.&#39;)
+plt.legend()
+    
+print(&quot;best loss:&quot;, step_loss(beta_hat))</code></pre>
+<blockquote>
+<p>best loss: 0.1127449592291812</p>
+</blockquote>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/step_approx.png" alt="Step Approximation" />
+<p class="caption">Step Approximation</p>
+</div>
+</div>
+<div id="fixed-sigmoid-basis-functions" class="section level2">
+<h2>Fixed Sigmoid Basis Functions</h2>
+<pre><code>def sigmoid_basis_function(i):
+    return lambda x: 1/(1+np.exp((i- 10*x)/1.73))
+
+def sum_of_sigmoid_functions(beta):
+    def f(x):
+        total = np.zeros(shape=x.shape)
+        for i, b in enumerate(beta):
+            total += sigmoid_basis_function(i)(x) * b
+        return total
+    return f            
+
+def sigmoid_loss(beta):
+    g = sum_of_sigmoid_functions(beta)
+    return square_function_distance(target_function, g)
+   
+plt.figure(figsize=(16,10))
+plt.title(&quot;Fixed Sigmoid Basis&quot;)
+for i in range(10):
+    plt.plot(x, sigmoid_basis_function(i)(x))</code></pre>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/sigmoid_basis.png" alt="Sigmoid Basis" />
+<p class="caption">Sigmoid Basis</p>
+</div>
+<pre><code>best = minimize(sigmoid_loss, x0=np.zeros(shape=10))
+beta_hat = best.x
+if best.status != 0:
+    print(best.message)
+
+plt.figure(figsize=(16,10))
+plt.title(&quot;Fixed Sigmoid Approximation&quot;)
+plt.plot(x, y, label=&quot;target&quot;)
+plt.plot(x, sum_of_sigmoid_functions(beta_hat)(x), label=&quot;approx.&quot;)
+plt.legend()
+print(&quot;best loss:&quot;, sigmoid_loss(beta_hat))</code></pre>
+<blockquote>
+<p>best loss: 0.2857660082499814</p>
+</blockquote>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/sigmoid_approx.png" alt="Sigmoid Approximation" />
+<p class="caption">Sigmoid Approximation</p>
+</div>
+</div>
+<div id="orthogonal-basis-functions" class="section level2">
+<h2>Orthogonal Basis Functions</h2>
+<p>Families of orthogonal functions have two key properties that make them useful as basis functions for this kind of additive model.</p>
+<p>The Fourier series is one well-known example.</p>
+<pre><code>def fourier_basis_function(i):
+    if i == 0:
+        return lambda x: np.full_like(x, 0.5)
+    else:
+        n = (i+1)//2
+        if i % 2 == 1:
+            return lambda x: np.sin(n*x)
+        else:
+            return lambda x: np.cos(n*x)
+
+def sum_of_fourier_functions(beta):
+    def f(x):
+        total = np.zeros(shape=x.shape)
+        for i, b in enumerate(beta):
+            total += fourier_basis_function(i)(x) * b
+        return total
+    return f
+
+def fourier_loss(beta):
+    g = sum_of_fourier_functions(beta)
+    return square_function_distance(target_function, g)
+
+plt.figure(figsize=(16,10))
+plt.title(&quot;Fourier Basis&quot;)
+for i in range(5):
+    theta = x * 2 * math.pi
+    plt.plot(theta, fourier_basis_function(i)(theta))
+plt.axhline(y=0, color=&#39;k&#39;, linewidth=1)</code></pre>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/fourier_basis.png" alt="Fourier Basis" />
+<p class="caption">Fourier Basis</p>
+</div>
+<pre><code>best = minimize(fourier_loss, x0=np.zeros(shape=21))
+beta_hat = best.x
+if best.status != 0:
+    print(best.message)
+
+plt.figure(figsize=(16,10))
+plt.title(&quot;Fourier Approximation&quot;)
+plt.plot(x, y, label=&quot;target&quot;)
+plt.plot(x, sum_of_fourier_functions(beta_hat)(x), label=&quot;approx.&quot;)
+plt.legend()
+print(&quot;best loss:&quot;, fourier_loss(beta_hat))</code></pre>
+<blockquote>
+<p>best loss: 0.15528347938817644</p>
+</blockquote>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/fourier_approx.png" alt="Fourier Approximation" />
+<p class="caption">Fourier Approximation</p>
+</div>
+</div>
+<div id="adaptive-basis-functions" class="section level2">
+<h2>Adaptive Basis Functions</h2>
+<pre><code>def learned_basis_function(bias, width):
+    return lambda x: 1/(1+np.exp((bias - x)/width))
+
+def sum_of_learned_functions(beta):
+    beta = beta.reshape( (beta.size//3,3) )
+    def f(x):
+        total = np.zeros(shape=x.shape)
+        for i, b in enumerate(beta):
+            total += learned_basis_function(b[1], b[2])(x) * b[0]
+        return total
+    return f            
+
+def learned_basis_loss(beta):
+    g = sum_of_learned_functions(beta)
+    return square_function_distance(target_function, g)
+
+plt.figure(figsize=(16,10))
+plt.title(&quot;Learned Sigmoid Basis&quot;)
+for i in [1, 3, 5, 7, 9]:
+    bias = i/10
+    for width in [0.1, 0.2, 0.3]:
+        plt.plot(x, learned_basis_function(bias, width)(x))</code></pre>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/learned_basis.png" alt="Learned Sigmoid Basis" />
+<p class="caption">Learned Sigmoid Basis</p>
+</div>
+<p><code>k = 7</code> is not arbitrary - because we have 3 parameters per adapative basis function, this is roughly the same number of parameters as the above examples.</p>
+<pre><code>k = 7
+best_loss = float(&#39;inf&#39;)
+beta_hat = np.zeros( shape=(k, 3) )
+for iteration in range(10):
+    beta_zero = np.random.normal(0, 0.01, size=(k,3))
+    beta_zero[:, 1] = np.linspace(0, 1, k)
+    beta_zero[:, 2] = np.ones(shape=k) * 0.2
+    print(&#39;fitting attempt&#39;, iteration)
+    best = minimize(learned_basis_loss, x0=beta_zero)
+    candidate_beta = best.x.reshape( (k,3) )
+    candidate_loss = learned_basis_loss(candidate_beta)
+    if candidate_loss &lt; best_loss:
+        best_loss = candidate_loss
+        beta_hat = candidate_beta
+
+print(&#39;beta:&#39;, beta_hat)
+print(&quot;best loss:&quot;, learned_basis_loss(beta_hat))
+if best.status != 0:
+    print(best.message)</code></pre>
+<blockquote>
+<p>best loss: 0.00012518241681862751</p>
+</blockquote>
+<div class="figure">
+<img src="/post/adaptive-basis-functions_files/learned_approx.png" alt="Learned Sigmoid Approximation" />
+<p class="caption">Learned Sigmoid Approximation</p>
+</div>
+<p>For the same number of parameters, we’re now fitting the same function much more closely.</p>
+<p>Because the basis functions are in some sense interchangable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are <span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact is guarenteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not actually a problem, because any solution is equally good - they are all equal to the global minima. But there can also be lots of local minima which are not as good. In general, we just don’t know.</p>
+<p>Current best practice is to do randomized search. TODO</p>
+<p>This is the lesson and the curse of modern machine learning. Adaptive basis functions allow us to have very flexible representations with relatively few parameters. It’s easy to find examples were this pays off.</p>
+</div>
