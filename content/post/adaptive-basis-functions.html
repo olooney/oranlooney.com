@@ -12,11 +12,11 @@ draft: true
 
 
 
+<p>This is an article I’ve been wanting to write for a long time, but which I frequently had to defer because I wanted to make sure I fully understood <a href="/post/ml-from-scratch-part-3-backpropagation/">certain</a> <a href="/post/ml-from-scratch-part-4-decision-tree/">fundamentals</a> first. It addresses a fairly fundamental question in machine learning: why does these techniques work so well?</p>
+<p>It’s very handwavy, meant only to supply some basic intuition. And it’s not very original - everything I say here has been said before – and often much more clearly – by people with a lot more experience and expertise. But it marked an important milestone in my studies: the point at which I began to clearly see what made “modern” machine learning techniques so <em>different</em> from traditional statistical learning, so much more <em>powerful</em> but also more<em>fragile.</em></p>
 <div id="the-function-approximation-point-of-view" class="section level2">
 <h2>The Function Approximation Point of View</h2>
-<p><span class="math display">\[
-    E[y|\vec{x}] = f(\vec{x})
-\]</span></p>
+<p><span class="math display">\[ E[y|\vec{x}] = f(\vec{x}) \]</span></p>
 <p>Note that is a real-valued function <span class="math inline">\(f : \mathbf{R}^p \mapsto \mathbf{R}\)</span>.</p>
 <p>What we know about <span class="math inline">\(f\)</span> is the samples in our training set.</p>
 <p>Suppose we have a finite set of <span class="math inline">\(N\)</span> basis functions <span class="math inline">\(\psi_1, ..., \psi_N\)</span> and let <span class="math inline">\(V = \text{span} \{ \psi_1, ..., \psi_N \}\)</span>. Then, for any function <span class="math inline">\(g \in V\)</span>, we can always write <span class="math inline">\(g\)</span> as a linear combination of basis functions:</p>
@@ -38,6 +38,7 @@ draft: true
 </div>
 <div id="target-function" class="section level2">
 <h2>Target Function</h2>
+<p>For the examples below, we’re going to need some target function. It should be continuous, bounded on some closed interval, and it’s also convenient if it’s approximately zero on both edges. The unit interval <span class="math inline">\([0, 1]\)</span> is as good a choice as any. To make the function appropriately ugly, we’ll take some polynomial terms plus some sinusoidal terms: that will make it hard to approximate with either Fourier series or a splines, and also give us lots of nasty inflections.</p>
 <pre><code>import matplotlib
 import matplotlib.pyplot as plt
 %matplotlib inline
@@ -62,7 +63,8 @@ plt.legend()</code></pre>
 </div>
 <div id="step-functions" class="section level2">
 <h2>Step Functions</h2>
-<p>To get warmed up, let’s use this framework to calculate the best possible step function approximation of a function. Since our target function is continuous this won’t be very good but it illustrates the method.</p>
+<p>To get warmed up, let’s use this framework to calculate the best possible step function approximation of a function. Since our target function is continuous this approach if fundamentally flawed but it illustrates the method.</p>
+<p>First, we will define a finite set of fixed basis functions:</p>
 <pre><code>N_step = 20
 
 def step_function(i):
@@ -91,6 +93,8 @@ for i in range(N_step):
 <img src="/post/adaptive-basis-functions_files/step_basis.png" alt="Step Basis" />
 <p class="caption">Step Basis</p>
 </div>
+<p>In this case, each basis function is a step function and the only difference between them is the position at which the step occurs.</p>
+<p>To construct our approximation, we choose the best coefficient for each basis function:</p>
 <pre><code>best = minimize(step_loss, x0=np.zeros(shape=N_step))
 beta_hat = best.x
 if best.status != 0:
@@ -106,6 +110,7 @@ print(&quot;best loss:&quot;, step_loss(beta_hat))</code></pre>
 <blockquote>
 <p>best loss: 0.1127449592291812</p>
 </blockquote>
+<p>Unsurprisingly, this approximation is able to get reasonably close on each small interval but is ultimately hampered by its inability to represent slopes.</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/step_approx.png" alt="Step Approximation" />
 <p class="caption">Step Approximation</p>
@@ -113,6 +118,7 @@ print(&quot;best loss:&quot;, step_loss(beta_hat))</code></pre>
 </div>
 <div id="fixed-sigmoid-basis-functions" class="section level2">
 <h2>Fixed Sigmoid Basis Functions</h2>
+<p>Since we know our target function is continuous, it makes sense to likewise choose continuous basis functions. Since the step function otherwise seem to have worked reasonably well, we’ll simply use a smoothed version of the step function, the so-called sigmoid function.</p>
 <pre><code>def sigmoid_basis_function(i):
     return lambda x: 1/(1+np.exp((i- 10*x)/1.73))
 
@@ -136,6 +142,7 @@ for i in range(10):
 <img src="/post/adaptive-basis-functions_files/sigmoid_basis.png" alt="Sigmoid Basis" />
 <p class="caption">Sigmoid Basis</p>
 </div>
+<p>Again, these are only distinguished by their offset.</p>
 <pre><code>best = minimize(sigmoid_loss, x0=np.zeros(shape=10))
 beta_hat = best.x
 if best.status != 0:
@@ -154,11 +161,12 @@ print(&quot;best loss:&quot;, sigmoid_loss(beta_hat))</code></pre>
 <img src="/post/adaptive-basis-functions_files/sigmoid_approx.png" alt="Sigmoid Approximation" />
 <p class="caption">Sigmoid Approximation</p>
 </div>
+<p>While more visually appealing, this hasn’t really done better than the step function basis.</p>
 </div>
 <div id="orthogonal-basis-functions" class="section level2">
 <h2>Orthogonal Basis Functions</h2>
-<p>Families of orthogonal functions have two key properties that make them useful as basis functions for this kind of additive model.</p>
-<p>The Fourier series is one well-known example.</p>
+<p>Families of orthogonal functions have a key property that makes them especially useful as basis functions: you can determine the optimal coefficient <span class="math inline">\(\beta_j\)</span> without considering any of the other elements of <span class="math inline">\(\mathbf{\beta}\)</span>.</p>
+<p>The Fourier series is one well-known example. The basis functions are <span class="math inline">\(sin(nx)\)</span> and <span class="math inline">\(cos(nx)\)</span> for <span class="math inline">\(n&gt;0\)</span> plus the constant function.</p>
 <pre><code>def fourier_basis_function(i):
     if i == 0:
         return lambda x: np.full_like(x, 0.5)
@@ -187,6 +195,7 @@ for i in range(5):
     theta = x * 2 * math.pi
     plt.plot(theta, fourier_basis_function(i)(theta))
 plt.axhline(y=0, color=&#39;k&#39;, linewidth=1)</code></pre>
+<p>There are faster ways to compute the coefficients in the particular case of the Fourier series, but we’ll just brute force like always for consistencies sake.</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/fourier_basis.png" alt="Fourier Basis" />
 <p class="caption">Fourier Basis</p>
@@ -209,9 +218,18 @@ print(&quot;best loss:&quot;, fourier_loss(beta_hat))</code></pre>
 <img src="/post/adaptive-basis-functions_files/fourier_approx.png" alt="Fourier Approximation" />
 <p class="caption">Fourier Approximation</p>
 </div>
+<p>The fit isn’t particularly great, even using 21 parameters, which is equivalent to adding up ten sine waves each with different amplitudes and frequencies. That’s expected: Fourier series are pretty bad at approximating polynomials, and are <a href="https://en.wikipedia.org/wiki/Fourier_series">even worse</a> at approximating functions with discontinuities.</p>
+<p>An orthogonal family of basis functions can work really well when they are well suited to your problem – for example, when the target function is known to be solution to some differential equation, and each basis function is likewise a solution to that same differential equation. But they are often a very poor choice when we know little about the target function.</p>
+<p>While there might be a theoretical guarantee that we can approximate <em>any</em> function given an unlimited number of basis functions, this can require an unreasonably large number of basis functions (and therefore parameters) before a good fit is achieved. But every parameter we add to the model increases our chances of overfitting! We need to look for a way of approximating functions well with only a handful of parameters.</p>
 </div>
 <div id="adaptive-basis-functions" class="section level2">
 <h2>Adaptive Basis Functions</h2>
+<p>Finally, we come to our ringer.</p>
+<p>The way to ensure that each basis function added to the model is adding value and isn’t just dead weight is to give each basis function its own parameters, which we will learn in parallel with the coefficients. Note that this means we are leaving the additive assumption behind. While the model may still superficially <em>look</em> like an additive model:</p>
+<p><span class="math display">\[ g(x) = \sum_{i=j}^N \beta_j \psi_j(x;\theta_j) \]</span></p>
+<p>Each <span class="math inline">\(\psi_j\)</span> is now a parameterized function rather than a fixed basis function. This makes computing gradients much harder, and almost always means that the new optimization problem is no longer convex.</p>
+<p>There is also a trade-off in the number of parameters used: while we have fewer <span class="math inline">\(\beta_j\)</span> parameters, we also have new <span class="math inline">\(\theta_j\)</span> parameters. Hopefully there will be some sweet spot where each adaptive basis function is doing the work of many fixed basis functions!</p>
+<p>A good choice for adaptive basis functions is the sigmoid. We can add parameters that shift it left or right, make it wider or narrower:</p>
 <pre><code>def learned_basis_function(bias, width):
     return lambda x: 1/(1+np.exp((bias - x)/width))
 
@@ -234,11 +252,13 @@ for i in [1, 3, 5, 7, 9]:
     bias = i/10
     for width in [0.1, 0.2, 0.3]:
         plt.plot(x, learned_basis_function(bias, width)(x))</code></pre>
+<p>Here is only a small sample of what is possible with these basis functions. In fact, there are infinitely many <em>possible</em> adaptive sigmoid functions - although we will be forced to choose just a small number (<span class="math inline">\(k=7\)</span> below) to construct our approximation.</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/learned_basis.png" alt="Learned Sigmoid Basis" />
 <p class="caption">Learned Sigmoid Basis</p>
 </div>
-<p><code>k = 7</code> is not arbitrary - because we have 3 parameters per adapative basis function, this is roughly the same number of parameters as the above examples.</p>
+<p>Note that a very narrow sigmoid is basically a step function, while a very wide sigmoid is basically linear! It’s like we’re getting a two-for-one deal.</p>
+<p>Also note that <code>k = 7</code> is not quite arbitrary – because we have 3 parameters per adaptive basis function, this is roughly the same number of parameters as the above examples. At first it may seem like that’s not nearly enough. Certainly 7 fixed sigmoid functions would have done a very poor job. But remember, these are adaptive. During training, each of the seven can be shifted and scaled independently of the others. This allows the model to move each to the perfect place where it can do the most good.</p>
 <pre><code>k = 7
 best_loss = float(&#39;inf&#39;)
 beta_hat = np.zeros( shape=(k, 3) )
@@ -265,8 +285,17 @@ if best.status != 0:
 <img src="/post/adaptive-basis-functions_files/learned_approx.png" alt="Learned Sigmoid Approximation" />
 <p class="caption">Learned Sigmoid Approximation</p>
 </div>
-<p>For the same number of parameters, we’re now fitting the same function much more closely.</p>
-<p>Because the basis functions are in some sense interchangable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are <span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact is guarenteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not actually a problem, because any solution is equally good - they are all equal to the global minima. But there can also be lots of local minima which are not as good. In general, we just don’t know.</p>
-<p>Current best practice is to do randomized search. TODO</p>
-<p>This is the lesson and the curse of modern machine learning. Adaptive basis functions allow us to have very flexible representations with relatively few parameters. It’s easy to find examples were this pays off.</p>
+<p>OK, that went from zero to sixty pretty quickly. This is so absurdly good that you have to squint to even see, yes, the blue line for the target is still there, it’s just mostly covered by the orange line for the approximation. We’re using roughly the same number of parameters as before, <em>so why is this so much better?</em></p>
+<p>So here’s the punchline: this representation – a linear combination of adaptive sigmoid functions – is exactly the same as a <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">simple neural network</a> with one hidden layer and a linear function for the output activation. Go back and compare it to the model described in the <a href="/post/ml-from-scratch-part-3-backpropagation/">previous article on neural networks</a> if you don’t believe me!</p>
+<p>Moreover, there is a [universal approximation theorem][UAT] which states that this type of neural network can approximate <em>any</em> continuous function on <span class="math inline">\(\mathbb{R}^n\)</span>.</p>
+<p>This isn’t just some ivory tower theorem: it works quite well in practice too, as we’ve just seen. Not only can models on this form approximate an continuous function asymptotically as the number of hidden units becomes very large, they can often do an excellent job with a limited number of parameters.</p>
+<p>I should point out that we didn’t use backpropagation to solve this network, but for such a small model it hardly matters. In some sense, what we’ve done here is party like it’s 1970 and train a neural network using older methods.</p>
+<p>There’s another problem because the basis functions are in some sense interchangeable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are <span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact is guaranteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not actually a problem, because any solution is equally good - they are all equal to the global minima. However, in addition to the <span class="math inline">\(N!\)</span> distinct local optima introduced by the symmetry in our representation, there can also be lots of local minima which are not as good.</p>
+</div>
+<div id="the-lesson" class="section level2">
+<h2>The Lesson</h2>
+<p>This, then, is the lesson and the curse of modern machine learning: Adaptive basis functions work. They allow us to have very flexible representations that can approximate essentially arbitrary functions with relatively few parameters. This appears to be the shared secret ingredient behind deep learning and gradient boosted trees. There’s no question these models can do more with less compared to traditional models but it didn’t come for free. We gave up convexity, we gave up linearity, we gave up the ability to impose assumptions. And in giving up these things, we’ve also (temporarily, I hope) given up some of our ability to reason about our models.</p>
+<p>Hopefully, this will be a temporary state of affairs. These models are now attracting a huge amount of attention.</p>
+<p>We’re learning, for example, that non-convexity may be a non-issue in very high dimensions because local minima are in fact rather rare relative to saddle points. While saddle points can be a challenge for gradient descent optimizers, the algorithm as a whole doesn’t tend to get permanently stuck in them the same way they can get stuck in local minima. There is also some empirical evidence that the existence of lots of local minima is not really a practical problem if most local minima achieve performance equal to – or very close to – the global minima.</p>
+<p>It would be nice to see these somewhat scattered observations coalesce into some nice theorems. Today, we don’t yet have results as strong as the [universal approximation theorem][UAT] and much of the work so far as been highly empirical. But it’s also important to remember it’s only been in the last ten years that the importance of these classes of models has been recognized.</p>
 </div>
