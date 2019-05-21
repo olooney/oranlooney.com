@@ -465,24 +465,30 @@ much better?*
 
 So here's the punchline: this representation -- a linear combination of
 adaptive sigmoid functions -- is exactly the same as a [simple neural network][MLP]
-with one hidden layer and a linear function for the output activation. Go back
-and compare it to the model described in the [previous article on neural networks][MLFS3]
-if you don't believe me!
+with one input node, one hidden layer with a sigmoid activation function,
+and one output node with a linear activation function. In diagram form for $k = 7$, each
+of the 21 gray connection lines corresponds to exactly one of the parameters of the model:
 
-Moreover, there is a [universal approximation theorem][UAT] which states that
+![Neural Network Architecture](/post/adaptive-basis-functions_files/neural_network_architecture.png)
+
+Feel free to compare the above equations to the equations for a neural network described in the [previous article on neural networks][MLFS3] if you need further convincing.
+
+Moreover, there is a famous [universal approximation theorem][UAT] for this exact 
+network architecture which states that
 this type of neural network can approximate *any* continuous function on
-$\mathbb{R}^n$.
+$\mathbb{R}^n$. This is an asymptotic result, so it doesn't directly explain the
+increased power of this model relative to say, the step function basis, but
+it sort of wiggles it's eyebrows in that direction. 
 
-This isn't just some ivory tower theorem: it works quite well in practice too,
-as we've just seen.  Not only can models on this form approximate an continuous
+We've seen first-hand that not only can models on this form approximate an continuous
 function asymptotically as the number of hidden units becomes very large, they
 can often do an excellent job with a limited number of parameters.
 
-I should point out that we didn't use backpropagation to solve this network,
+I should point out that we didn't use backpropagation to fit this model,
 but for such a small model it hardly matters. In some sense, what we've done
 here is pretend like it's 1970 and train a neural network using obsolete methods.
 However, backprop can be viewed purely as a trick to make training faster - we
-don't need it to understand the expressive power of this model. 
+don't need it to understand or discuss the **expressive** power of this model. 
 
 Here's another problem: because the basis functions are in some sense
 interchangeable, there's nothing to stop us from swapping $i$ and $j$ and
@@ -502,10 +508,10 @@ Conclusion
 
 Did I convince you that adaptive basis functions - and by extension learned representations in general - 
 "just work?" I'm not
-even sure I convinced myself. I'm left with the feeling that if I had just
+even sure I convinced myself. I'm left with the nagging feeling that if I had just
 chosen a different set of basis functions, or spent more time thinking about
 the specifics of the problem, I could have gotten the same performance.  This
-is the trap of human-engineered features - while of course you *could* spend
+is the trap of hand-engineered features - while of course you *could* spend
 endless time dreaming up and trying out new features, it's not exactly a good
 use of your time. Meanwhile, an adaptive algorithm running on some Tesla K80
 GPU can try billions of possibilities overnight.
