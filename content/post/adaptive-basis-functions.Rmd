@@ -21,35 +21,45 @@ networks and boosting algorithms such as [XGBoost][XGB]) work so well, and
 insofar as there is a "why" question that can be answered at all, this seems to
 be it:
 
-> For any given problem, there exists learned featured representations -- also
-> known as adaptive basis functions -- which are better than any
-> fixed/human-engineered set of features, even once the cost of the added
-> parameters necessary to also learn the new features into account. 
+> For any given problem, there exists a learned featured representation
+> which is better than any human-engineered set of features, even once the added
+> parameters necessary to also learn the new features is taken into into account. 
 
 This is of course completely unoriginal: it is in in fact the standard just-so
 story for machine learning that you hear again and again in different contexts.
-The learned $k \times k$ kernels of a 2D CNN works better than Haar features or
-Sobel filters. A one dimensional CNN and a spectrogram works better than MFCC.
-An ensemble of weak learners works better than a single deep decision tree. And
-so on.
+The learned $k \times k$ kernels of a 2D CNN works better than [Haar features][HF] or
+[Sobel filters][SF]. A one dimensional CNN and a spectrogram works better than [MFCC][MFCC].
+An [ensemble][RF] of [decision stumps][DS] works better than a single large [decision tree][DT]. 
+And so on.
+
+[MFCC]: https://en.wikipedia.org/wiki/Mel-frequency_cepstrum
+[HF]: https://en.wikipedia.org/wiki/Haar-like_feature
+[SF]: https://en.wikipedia.org/wiki/Sobel_operator
+[DS]: https://en.wikipedia.org/wiki/Decision_stump
+[RF]: https://en.wikipedia.org/wiki/Random_forest
+[DT]: https://en.wikipedia.org/wiki/Decision_tree
+
 
 Even as mythology, there are already plenty of cracks in the story. The biggest
 and most well known caveat is of course, "given a sufficiently huge amount of
 training data." There are often other caveats too, such as "and you don't
-care how slow it is." For example, the Viola-Jones object detection framework
-uses Haar features, and is still widely used because it is so much faster than
+care how slow it is." For example, the [Viola-Jones object detection framework][VJ]
+uses [Haar features][HF] and is still widely used because it is so much faster than
 CNN-based approaches.  While cutting edge CNN-based object detectors are
-starting to achieve *acceptable* performance, they'll probably never be as fast
+starting to achieve *acceptable* runtime performance, they'll probably never be as fast
 as Haar features, simply because they'll never be able to take advantage of the
-integral image trick. 
+[integral image trick.][II]
+
+[VJ]: https://en.wikipedia.org/wiki/Viola%E2%80%93Jones_object_detection_framework
+[II]: https://en.wikipedia.org/wiki/Summed-area_table
 
 But let's zoom out at look at the big picture instead of shopping for
 counterexamples and limitations. At a high level, the story is clear. Again and
 again, on wildly different kinds problem and for wildly different algorithms,
 we've seen that taking carefully engineered representations, often with very
 attractive mathematical properties which make them tractable for computation
-and mathematical analysis, and just throwing them out and replacing them with a
-representation that the algorithm fits to the available data is a winning
+and mathematical analysis, and just *throwing them out* and replacing them with a
+learned representation is a winning
 strategy. It not only works, it often smashes straight through the glass
 ceiling of performance where the previous generation of techniques had
 plateaued. The history of the [ImageNet challenge][ICH] provides plenty of
@@ -58,52 +68,58 @@ concrete examples of that!
 But these successes are on very large and complicated problems. Is it possible
 to find a simpler example of the phenomenon, so that a student can actually
 wrap their head around it? Or does the phenomenon only manifest once the problem
-hits a certain threshold of complexity? I think we *can* see the phenomenon for
-ourselves in a context which is not too complex: learning to approximate a
-one-dimensional function.
+hits a certain threshold of complexity? It think it *is* possible to find
+such elementary problems that demonstrate the power of learned representations.
 
-The Function Approximation Point of View
-----------------------------------------
+A fairly simple example, which happily lends itself to easy visualization,
+is the problem of learning to approximate a one-dimensional function. To
+make the case in favor of learned representations we will first attempt
+the problem with several fixed representations and compare those attempts
+with a learned representation.
 
-\[ E[y|\vec{x}] = f(\vec{x}) \]
+The Function Approximation Problem
+----------------------------------
 
-Note that is a real-valued function $f : \mathbf{R}^p \mapsto \mathbf{R}$.
+Given a random sample ${(Y_i, X_i)\}_{i=1}^n$ from the joint probability
+distribution $D$, we wish to find a real-valued function $f : \mathbb{R} \mapsto \mathbb{R} $ such that:
 
-What we know about $f$ is the samples in our training set.
+\[ E[Y|X] = f(x) \]
 
-Suppose we have a finite set of $N$ basis functions $\psi_1, ..., \psi_N$ and
-let $V = \text{span} \{ \psi_1, ..., \psi_N \}$.  Then, for any function $g \in
-V$, we can always write $g$ as a linear combination of basis functions:
+Since we only have access to the random sample, we cannot hope to find
+an exact solution, but can find the best (in terms of MSE) function from some family of functions $\mathcal{F}$:
+
+\[ \hat{f} = \underset{f \in \mathcal{F} }{{\text{argmin}}} \sum_i^n (f(x) - E[Y|X])^2 \]
+
+The question then becomes how we choose the family of functions $\mathcal{F}$ 
+so that this optimization problem becomes tractable. The obvious answer is to
+parameterize $\mathcal{F}$ in terms of $k$ real-valued parameters; then
+the optimization problem is to find the minimum of the loss function $J : \mathbb{R}^k \mapsto \mathbb{R}$
+which can be solved with standard techniques. 
+
+One easy way to create such a parameterization is to assume that f is
+the weighted sum of $k$ fixed [basis functions.][BF].
+Suppose we have a finite set of $k$ basis functions $\psi_1, ..., \psi_N$ and
+let $V = \text{span} \{ \psi_1, ..., \psi_N \}$.  Then, for any function $g \in V$,
+we can always write $g$ as a linear combination of basis functions:
 
 \[ g(x) = \sum_{i=j}^N \beta_j \psi_j(x) \]
 
-This is merely the definition of "span." But what if $f \notin V$? This
-is surely much more common, since the space of all possible functions is
-infinite-dimensional, while $V$ has finite dimension $N$. We would want
-to find $\hat{f} \in V$ such that $\hat{f}$ is as close as possible to
-$f$. This raises the question of what "close" means for functions; for today's
-purposes, we'll simply assume that we're talking about the l2 norm:
+[BF]: https://en.wikipedia.org/wiki/Basis_function
 
-\[ \| f - \hat{f} \| = \int_{-\infty}^{\infty} (f(x) - g(x))^2 dx \]
+Substituting into (1) above, we have an explicit loss functiOn:
 
-Furthermore, since we only know $f(x)$ for a sample of points, we have no
-choice to limit the evaluation to these points:
-
-\[ J = \| f - \hat(f) \| = \sum_{i=1}^n (f(x) - \hat{f}(x))^2 \]
-
-Expanding out the $\hat{f}$ into a linear combination of basis functions,
-we can see that $J$ is a function of the coefficients.
-
-\[ J(\mathbf{\beta}) = \sum_{i=1}^n (f(x) - \sum_{j=1}{N} \beta_j \psi_j(x) )^2 \]
+\[ J(\mathbf{\beta}) = \sum_{i=1}^n (E[Y|X] - \sum_{j=1}{k} \beta_j \psi_j(x) )^2 \]
 
 When $J$ is as small as possible, $\hat{f}$ is as close as possible to the target
 function $f$ as it is possible for any function in $V$ to be. We say that $\hat{f}$
 is the best approximation of $f$ for the given choice of basis functions $\psi_1, ..., \psi_N$.
 
+We will call the choice of parameters that minimize loss $\hat{beta}$
+
 \[ 
     \begin{align}
-        \hat{\beta} & = \text{argmin}_\beta J \\
-        \hat{f}(x)  & = \sum_{j=1}^N \hat{\beta} \psi_j(x)
+        \hat{\vec{\beta}} & = \text{argmin}_\beta J(\mathbf{\vec{\beta}}) \\
+        \hat{f}(x)  & = \sum_{j=1}^k \hat{\beta}_j \psi_j(x)
     \end{align}
 \]
 
@@ -116,7 +132,8 @@ our ability to approximate a function.
 Target Function
 ---------------
 
-For the examples below, we're going to need some target function. It should be continuous,
+For the examples below, we're going to need some target function $t(x) = E[Y|X]$.
+It should be continuous,
 bounded on some closed interval, and it's also convenient if it's approximately zero on
 both edges. The unit interval $[0, 1]$ is as good a choice as any. To make the function
 appropriately ugly, we'll take some polynomial terms plus some sinusoidal terms: that
@@ -144,8 +161,8 @@ us lots of nasty inflections.
 ![Target Function](/post/adaptive-basis-functions_files/target_function.png)
 
 
-Step Functions
---------------
+Step Function Basis
+-------------------
 
 To get warmed up, let's use this framework to calculate the best possible step
 function approximation of a function. Since our target function is continuous
@@ -238,7 +255,7 @@ smoothed version of the step function, the so-called sigmoid function.
 
 ![Sigmoid Basis](/post/adaptive-basis-functions_files/sigmoid_basis.png)
 
-Again, these are only distinguished by their offset.
+Note that the functions in this basis are only distinguished by their offset.
 
     best = minimize(sigmoid_loss, x0=np.zeros(shape=10))
     beta_hat = best.x
@@ -323,7 +340,7 @@ for consistencies sake.
 
 The fit isn't particularly great, even using 21 parameters, which is equivalent
 to adding up ten sine waves each with different amplitudes and frequencies. 
-That's expected: Fourier series are pretty bad at approximating polynomials, and
+That's to be expected: Fourier series are pretty bad at approximating polynomials, and
 are [even worse][GP] at approximating functions with discontinuities. 
 
 An orthogonal family of basis functions can work really well when they are well
@@ -333,17 +350,24 @@ solution to that same differential equation. But they are often a very poor
 choice when we know little about the target function. 
 
 While there might be a theoretical guarantee that we can approximate *any*
-function given an unlimited number of basis functions, this can require an
-unreasonably large number of basis functions (and therefore parameters) before
+function given an unlimited number of Fourier basis functions, this can require an
+unreasonably large number of parameters before
 a good fit is achieved. But every parameter we add to the model increases our
 chances of overfitting! We need to look for a way of approximating functions
-well with only a handful of parameters.
+well while keeping the number of parameters under control.
 
 
 Adaptive Basis Functions
 ------------------------
 
-Finally, we come to our ringer.
+Finally, we come to our ringer: the [adaptive basis function.][ABF] Within the
+context of function approximation, adaptive basis functions are a clear example
+of a learned representation. [Kevin Murphy's book][KMB] has a good chapter on
+adaptive basis function models, but a very simple working definition is that
+they are models where the basis functions themselves are parameterized by
+some of the parameters of the model, and not just the weights out front.
+
+[KMB]: https://www.amazon.com/Machine-Learning-Probabilistic-Perspective-Computation/dp/0262018020
 
 The way to ensure that each basis function added to the model is
 adding value and isn't just dead weight is to give each basis function
@@ -395,7 +419,11 @@ construct our approximation.
 ![Learned Sigmoid Basis](/post/adaptive-basis-functions_files/learned_basis.png)
 
 Note that a very narrow sigmoid is basically a step function, while a very wide
-sigmoid is basically linear! It's like we're getting a two-for-one deal.
+sigmoid is basically linear! It's like we're getting a two-for-one deal - the
+space of possible functions $\mathcal{F}$ now includes the span of the sum
+of all possible step functions and all possible linear functions, as well as
+all the smooth sigmoid functions inbetween. This is a very robust representation
+that should be able to model very complex real-world relationships.
 
 Also note that `k = 7` is not quite arbitrary -- because we have 3 parameters
 per adaptive basis function, this is roughly the same number of parameters as
@@ -452,9 +480,11 @@ can often do an excellent job with a limited number of parameters.
 
 I should point out that we didn't use backpropagation to solve this network,
 but for such a small model it hardly matters. In some sense, what we've done
-here is party like it's 1970 and train a neural network using older methods.
+here is pretend like it's 1970 and train a neural network using obsolete methods.
+However, backprop can be viewed purely as a trick to make training faster - we
+don't need it to understand the expressive power of this model. 
 
-There's another problem because the basis functions are in some sense
+Here's another problem: because the basis functions are in some sense
 interchangeable, there's nothing to stop us from swapping $i$ and $j$ and
 getting an equivalent solution.  When we have $N$ basis functions, there are
 $N!$ equivalent points. So not only is our function not convex, but it in fact
@@ -462,13 +492,16 @@ is guaranteed to have at least $N!$ distinct minima! Of course, this is not
 actually a problem, because any solution is equally good - they are all equal
 to the global minima. However, in addition to the $N!$ distinct local optima
 introduced by the symmetry in our representation, there can also be lots of
-local minima which are not as good. 
+local minima which are not as good. The decision to use a learned representation
+almost always comes with a corresponding loss in convexity and consequently
+we can no longer guarentee convergence to a global minimia.
 
 
 Conclusion
 ----------
 
-Did I convince you that adaptive basis functions quote-unquote "work?" I'm not
+Did I convince you that adaptive basis functions - and by extension learned representations in general - 
+"just work?" I'm not
 even sure I convinced myself. I'm left with the feeling that if I had just
 chosen a different set of basis functions, or spent more time thinking about
 the specifics of the problem, I could have gotten the same performance.  This
@@ -477,17 +510,17 @@ endless time dreaming up and trying out new features, it's not exactly a good
 use of your time. Meanwhile, an adaptive algorithm running on some Tesla K80
 GPU can try billions of possibilities overnight.
 
-They allow us to have very flexible representations that
+Learned representations allow us to have very flexible models that
 can approximate essentially arbitrary functions with relatively few parameters.
-There's no question these models can do more with less compared to traditional
-models but it didn't come for free. We gave up convexity, we gave up linearity,
-we gave up the ability to impose assumptions.  And in giving up these things,
-we've also (temporarily, I hope) given up some of our ability to reason about
-our models.
+There's no question these models do "more with less" when compared to traditional
+models but this power didn't come for free: we gave up convexity, we gave up linearity,
+we gave up the ability to impose domain knowledge, we've given up some of our ability to 
+reason about our models.
 
 This, then, is the blessing and the curse of modern machine learning: adaptive
-basis functions work. A blessing because we can reap the benefits of using 
-them, and a curse because our lack of understanding hampers future progress.
+basis functions *work.* Learned representations *work.* This is a blessing because we 
+can reap the benefits of using them, and a curse because our lack of understanding hampers 
+future progress.
 
 Hopefully, this will be a temporary state of affairs. These models are now
 attracting a huge amount of attention. We're learning, for example, that
@@ -505,7 +538,9 @@ some nice theorems.  Today, we don't yet have results as strong as the
 highly empirical. But it's also important to remember it's only been in the
 last ten years that the importance of these kinds of models has been
 recognized. Hopefully someday a deep convolutional neural network will be
-as well understood as linear regression is today.
+as well understood as linear regression is today, but even if research
+proceeds at the same pace, this could easily take over a hundred years.
+
 
 [GP]: https://en.wikipedia.org/wiki/Fourier_series
 [MLP]: https://en.wikipedia.org/wiki/Multilayer_perceptron
