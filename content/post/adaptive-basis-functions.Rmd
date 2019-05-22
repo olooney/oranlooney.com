@@ -10,20 +10,17 @@ image: /post/adaptive-basis-functions_files/lead.jpg
 draft: true
 ---
 
-Today, let me be vague. We're going to go through a series of examples which
-culminate in a very suggestive graph, which sort of slyly implies a certain
-conclusion, without actually proving anything.
 
-It's going to very handwavy, meant only to supply some basic intuition. But
-what we sacrifice in rigour, we're going to make up for in generality; insofar
-as we understand *why* modern machine learning (and here I mean deep neural
-networks and boosting algorithms such as [XGBoost][XGB]) work so well, and
-insofar as there is a "why" question that can be answered at all, this seems to
-be it:
+Today, let me be vague. No statistics, no algorithms, no proofs. Instead, 
+we're going to go through a series of examples and eyeball a suggestive
+series of charts, which will imply a certain conclusion, without actually 
+proving anything; but which will, I hope, provide useful intuition.
 
-> For any given problem, there exists a learned featured representation
-> which is better than any human-engineered set of features, even once the added
-> parameters necessary to also learn the new features is taken into into account. 
+The premise is this:
+
+> For any given problem, there exists learned featured representations 
+> which are better than any fixed/human-engineered set of features, even once 
+> the cost of the added parameters necessary to also learn the new features into account. 
 
 This is of course completely unoriginal: it is in in fact the standard just-so
 story for machine learning that you hear again and again in different contexts.
@@ -40,12 +37,13 @@ And so on.
 [DT]: https://en.wikipedia.org/wiki/Decision_tree
 
 
-Even as mythology, there are already plenty of cracks in the story. The biggest
+Even as mythology, there are already plenty of cracks starting to show. The biggest
 and most well known caveat is of course, "given a sufficiently huge amount of
 training data." There are often other caveats too, such as "and you don't
 care how slow it is." For example, the [Viola-Jones object detection framework][VJ]
 uses [Haar features][HF] and is still widely used because it is so much faster than
-CNN-based approaches.  While cutting edge CNN-based object detectors are
+CNN-based approaches, although not as robust or accurate.
+While cutting edge CNN-based object detectors are
 starting to achieve *acceptable* runtime performance, they'll probably never be as fast
 as Haar features, simply because they'll never be able to take advantage of the
 [integral image trick.][II]
@@ -53,25 +51,25 @@ as Haar features, simply because they'll never be able to take advantage of the
 [VJ]: https://en.wikipedia.org/wiki/Viola%E2%80%93Jones_object_detection_framework
 [II]: https://en.wikipedia.org/wiki/Summed-area_table
 
-But let's zoom out at look at the big picture instead of shopping for
+But let's zoom out at look at the big picture instead of shopping around for
 counterexamples and limitations. At a high level, the story is clear. Again and
-again, on wildly different kinds problem and for wildly different algorithms,
+again, on various problems and algorithms,
 we've seen that taking carefully engineered representations, often with very
 attractive mathematical properties which make them tractable for computation
-and mathematical analysis, and just *throwing them out* and replacing them with a
+and mathematical analysis, and just **throwing them out** to start over from scratch with a
 learned representation is a winning
-strategy. It not only works, it often smashes straight through the glass
-ceiling of performance where the previous generation of techniques had
+strategy. It not only works, it often smashes straight through the performance 
+ceiling where the previous generation of models had
 plateaued. The history of the [ImageNet challenge][ICH] provides plenty of
-concrete examples of that!
+concrete examples of that.
 
-But these successes are on very large and complicated problems. Is it possible
+But these successes are on very large and complicated problems; is it possible
 to find a simpler example of the phenomenon, so that a student can actually
 wrap their head around it? Or does the phenomenon only manifest once the problem
-hits a certain threshold of complexity? It think it *is* possible to find
+hits a certain threshold of complexity? I think it *is* possible to find
 such elementary problems that demonstrate the power of learned representations.
 
-A fairly simple example, which happily lends itself to easy visualization,
+Once such example, which happily lends itself to easy visualization,
 is the problem of learning to approximate a one-dimensional function. To
 make the case in favor of learned representations we will first attempt
 the problem with several fixed representations and compare those attempts
@@ -80,46 +78,46 @@ with a learned representation.
 The Function Approximation Problem
 ----------------------------------
 
-Given a random sample ${(Y_i, X_i)\}_{i=1}^n$ from the joint probability
-distribution $D$, we wish to find a real-valued function $f : \mathbb{R} \mapsto \mathbb{R} $ such that:
+Given an i.i.d. random sample $\{(Y_i, X_i)\}_{i=1}^n$ where $X$ and $Y$ have joint probability
+distribution $F$, we wish to find a real-valued function $f : \mathbb{R} \mapsto \mathbb{R}$ such that:
 
 \[ E[Y|X] = f(x) \]
 
 Since we only have access to the random sample, we cannot hope to find
 an exact solution, but can find the best (in terms of MSE) function from some family of functions $\mathcal{F}$:
 
-\[ \hat{f} = \underset{f \in \mathcal{F} }{{\text{argmin}}} \sum_i^n (f(x) - E[Y|X])^2 \]
+\[ \hat{f} = \underset{f \in \mathcal{F} }{{\text{argmin}}} \sum_i^n (f(x) - E[Y|X])^2 \tag{1} \]
 
-The question then becomes how we choose the family of functions $\mathcal{F}$ 
-so that this optimization problem becomes tractable. The obvious answer is to
+The question then becomes how we choose a family $\mathcal{F}$ 
+that makes this optimization problem tractable. The obvious answer is to
 parameterize $\mathcal{F}$ in terms of $k$ real-valued parameters; then
 the optimization problem is to find the minimum of the loss function $J : \mathbb{R}^k \mapsto \mathbb{R}$
 which can be solved with standard techniques. 
 
-One easy way to create such a parameterization is to assume that f is
-the weighted sum of $k$ fixed [basis functions.][BF].
-Suppose we have a finite set of $k$ basis functions $\psi_1, ..., \psi_N$ and
-let $V = \text{span} \{ \psi_1, ..., \psi_N \}$.  Then, for any function $g \in V$,
-we can always write $g$ as a linear combination of basis functions:
+The standard way to define such a parameterization is to assume that $f$ is
+the weighted sum of $k$ fixed [basis functions][BF] $\psi_1, ..., \psi_k$ and
+let $\mathcal{F} = \text{span} \{ \psi_1, ..., \psi_k \}$.  Then, for any function $f \in \mathcal{F}$,
+we can always write $f$ as a linear combination of basis functions:
 
-\[ g(x) = \sum_{i=j}^N \beta_j \psi_j(x) \]
+\[ f(x) = \sum_{i=j}^k \beta_j \psi_j(x) \tag{2} \]
 
 [BF]: https://en.wikipedia.org/wiki/Basis_function
 
-Substituting into (1) above, we have an explicit loss functiOn:
+Substituting (2) into (1) above, we have an explicit loss function:
 
-\[ J(\mathbf{\beta}) = \sum_{i=1}^n (E[Y|X] - \sum_{j=1}{k} \beta_j \psi_j(x) )^2 \]
+\[ J(\beta) = \sum_{i=1}^n (E[Y|X] - \sum_{j=1}{k} \beta_j \psi_j(x) )^2 \tag{3} \]
 
 When $J$ is as small as possible, $\hat{f}$ is as close as possible to the target
 function $f$ as it is possible for any function in $V$ to be. We say that $\hat{f}$
 is the best approximation of $f$ for the given choice of basis functions $\psi_1, ..., \psi_N$.
 
-We will call the choice of parameters that minimize loss $\hat{beta}$
+We will call the choice of parameters that minimize loss $\hat{\beta}$ and the corresponding
+function $\hat{f}$:
 
 \[ 
     \begin{align}
-        \hat{\vec{\beta}} & = \text{argmin}_\beta J(\mathbf{\vec{\beta}}) \\
-        \hat{f}(x)  & = \sum_{j=1}^k \hat{\beta}_j \psi_j(x)
+        \hat{\beta} & = \text{argmin}_\beta J(\mathbf{\beta}) \tag{4} \\
+        \hat{f}(x)  & = \sum_{j=1}^k \hat{\beta}_j \psi_j(x) \tag{5}
     \end{align}
 \]
 
@@ -135,7 +133,7 @@ Target Function
 For the examples below, we're going to need some target function $t(x) = E[Y|X]$.
 It should be continuous,
 bounded on some closed interval, and it's also convenient if it's approximately zero on
-both edges. The unit interval $[0, 1]$ is as good a choice as any. To make the function
+both edges. The unit interval $[0, 1]$ is as good a choice for the domain as any. To make the function
 appropriately ugly, we'll take some polynomial terms plus some sinusoidal terms: that
 will make it hard to approximate with either Fourier series or a splines, and also give
 us lots of nasty inflections.
@@ -160,11 +158,12 @@ us lots of nasty inflections.
 
 ![Target Function](/post/adaptive-basis-functions_files/target_function.png)
 
+I wouldn't say this function is pathological, but it's *juuust* hard enough to be interesting.
 
 Step Function Basis
 -------------------
 
-To get warmed up, let's use this framework to calculate the best possible step
+To get warmed up, let's use the above basis function framework to calculate the best possible step
 function approximation of a function. Since our target function is continuous
 this approach if fundamentally flawed but it illustrates the method.
 
@@ -364,9 +363,10 @@ Finally, we come to our ringer: the [adaptive basis function.][ABF] Within the
 context of function approximation, adaptive basis functions are a clear example
 of a learned representation. [Kevin Murphy's book][KMB] has a good chapter on
 adaptive basis function models, but a very simple working definition is that
-they are models where the basis functions themselves are parameterized by
-some of the parameters of the model, and not just the weights out front.
+they are models where the basis functions themselves are parameterized,
+and not just the weights out front.
 
+[ABF]: https://www.quora.com/What-are-adaptive-basis-functions
 [KMB]: https://www.amazon.com/Machine-Learning-Probabilistic-Perspective-Computation/dp/0262018020
 
 The way to ensure that each basis function added to the model is
@@ -375,7 +375,7 @@ its own parameters, which we will learn in parallel with the coefficients.
 Note that this means we are leaving the additive assumption behind. While
 the model may still superficially *look* like an additive model:
 
-\[ g(x) = \sum_{i=j}^N \beta_j \psi_j(x;\theta_j) \]
+\[ f(x) = \sum_{i=j}^N \beta_j \psi_j(x;\theta_j) \]
 
 Each $\psi_j$ is now a parameterized function rather than a fixed basis function.
 This makes computing gradients much harder, and almost always means that the new
@@ -425,10 +425,10 @@ of all possible step functions and all possible linear functions, as well as
 all the smooth sigmoid functions inbetween. This is a very robust representation
 that should be able to model very complex real-world relationships.
 
-Also note that `k = 7` is not quite arbitrary -- because we have 3 parameters
+Also note that $k=7$ is not quite arbitrary -- because we have 3 parameters
 per adaptive basis function, this is roughly the same number of parameters as
 the above examples. At first it may seem like that's not nearly enough.
-Certainly 7 fixed sigmoid functions would have done a very poor job. But
+Recall that 7 *fixed* sigmoid functions did a very poor job! But
 remember, these are adaptive. During training, each of the seven can be shifted
 and scaled independently of the others. This allows the model to move each to
 the perfect place where it can do the most good.
@@ -463,17 +463,24 @@ there, it's just mostly covered by the orange line for the approximation.
 We're using roughly the same number of parameters as before, *so why is this so
 much better?*
 
-So here's the punchline: this representation -- a linear combination of
-adaptive sigmoid functions -- is exactly the same as a [simple neural network][MLP]
-with one input node, one hidden layer with a sigmoid activation function,
+The only answer that I can give you is that adaptive basis functions are an example
+of a learned representation, and that by picking (learning) 7 basis functions that were "perfect"
+for *this* specific problem, we can build a much better model with just a handful of them.
+
+But here's the punchline: this representation -- a linear combination of
+adaptive sigmoid functions -- is exactly the same as a [neural network][MLP] with one hidden layer.
+
+In particular, a neural network with one input node, one hidden layer with a sigmoid activation function,
 and one output node with a linear activation function. In diagram form for $k = 7$, each
 of the 21 gray connection lines corresponds to exactly one of the parameters of the model:
 
 ![Neural Network Architecture](/post/adaptive-basis-functions_files/neural_network_architecture.png)
 
-Feel free to compare the above equations to the equations for a neural network described in the [previous article on neural networks][MLFS3] if you need further convincing.
+(Astute readers may notice a missing bias node on the hidden layer; that is because the above implementation
+does **not** in fact have a corresponding parameter. But is is a completely inconsequential difference
+and could have been easily added to the above code if it was in any way important.)
 
-Moreover, there is a famous [universal approximation theorem][UAT] for this exact 
+There is a famous [universal approximation theorem][UAT] for this exact 
 network architecture which states that
 this type of neural network can approximate *any* continuous function on
 $\mathbb{R}^n$. This is an asymptotic result, so it doesn't directly explain the
@@ -486,7 +493,7 @@ can often do an excellent job with a limited number of parameters.
 
 I should point out that we didn't use backpropagation to fit this model,
 but for such a small model it hardly matters. In some sense, what we've done
-here is pretend like it's 1970 and train a neural network using obsolete methods.
+here is pretend like it's 1970 and train a neural network using older methods.
 However, backprop can be viewed purely as a trick to make training faster - we
 don't need it to understand or discuss the **expressive** power of this model. 
 
@@ -554,3 +561,4 @@ proceeds at the same pace, this could easily take over a hundred years.
 [MLFS4]: /post/ml-from-scratch-part-4-decision-tree/
 [ICH]: https://en.wikipedia.org/wiki/ImageNet#History_of_the_ImageNet_Challenge
 [XGB]: https://xgboost.readthedocs.io/en/latest/
+[UAT]: https://en.wikipedia.org/wiki/Universal_approximation_theorem
