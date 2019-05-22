@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Fri, 01 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 21 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Adaptive Basis Functions</title>
+      <link>http://www.oranlooney.com/post/adaptive-basis-functions/</link>
+      <pubDate>Tue, 21 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/adaptive-basis-functions/</guid>
+      <description>Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain conclusion, without actually proving anything; but which will, I hope, provide useful intuition.
+The premise is this:
+For any given problem, there exists learned featured representations which are better than any fixed/human-engineered set of features, even once the cost of the added parameters necessary to also learn the new features into account.</description>
+    </item>
     
     <item>
       <title>ML From Scratch, Part 4: Decision Trees</title>

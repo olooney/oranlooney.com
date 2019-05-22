@@ -1,13 +1,12 @@
 ---
 title: 'Adaptive Basis Functions'
 author: Oran Looney
-date: 2019-03-19
+date: 2019-05-21
 tags:
   - Python
   - Statistics
   - Machine Learning
 image: /post/adaptive-basis-functions_files/lead.jpg
-draft: true
 ---
 
 
@@ -422,7 +421,7 @@ Note that a very narrow sigmoid is basically a step function, while a very wide
 sigmoid is basically linear! It's like we're getting a two-for-one deal - the
 space of possible functions $\mathcal{F}$ now includes the span of the sum
 of all possible step functions and all possible linear functions, as well as
-all the smooth sigmoid functions inbetween. This is a very robust representation
+all the smooth sigmoid functions in between. This is a very robust representation
 that should be able to model very complex real-world relationships.
 
 Also note that $k=7$ is not quite arbitrary -- because we have 3 parameters
@@ -507,7 +506,7 @@ to the global minima. However, in addition to the $N!$ distinct local optima
 introduced by the symmetry in our representation, there can also be lots of
 local minima which are not as good. The decision to use a learned representation
 almost always comes with a corresponding loss in convexity and consequently
-we can no longer guarentee convergence to a global minimia.
+we can no longer guarantee convergence to a global minima.
 
 
 Conclusion

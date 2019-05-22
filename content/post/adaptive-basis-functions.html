@@ -1,13 +1,12 @@
 ---
 title: 'Adaptive Basis Functions'
 author: Oran Looney
-date: 2019-03-19
+date: 2019-05-21
 tags:
   - Python
   - Statistics
   - Machine Learning
 image: /post/adaptive-basis-functions_files/lead.jpg
-draft: true
 ---
 
 
@@ -265,7 +264,7 @@ for i in [1, 3, 5, 7, 9]:
 <img src="/post/adaptive-basis-functions_files/learned_basis.png" alt="Learned Sigmoid Basis" />
 <p class="caption">Learned Sigmoid Basis</p>
 </div>
-<p>Note that a very narrow sigmoid is basically a step function, while a very wide sigmoid is basically linear! It’s like we’re getting a two-for-one deal - the space of possible functions <span class="math inline">\(\mathcal{F}\)</span> now includes the span of the sum of all possible step functions and all possible linear functions, as well as all the smooth sigmoid functions inbetween. This is a very robust representation that should be able to model very complex real-world relationships.</p>
+<p>Note that a very narrow sigmoid is basically a step function, while a very wide sigmoid is basically linear! It’s like we’re getting a two-for-one deal - the space of possible functions <span class="math inline">\(\mathcal{F}\)</span> now includes the span of the sum of all possible step functions and all possible linear functions, as well as all the smooth sigmoid functions in between. This is a very robust representation that should be able to model very complex real-world relationships.</p>
 <p>Also note that <span class="math inline">\(k=7\)</span> is not quite arbitrary – because we have 3 parameters per adaptive basis function, this is roughly the same number of parameters as the above examples. At first it may seem like that’s not nearly enough. Recall that 7 <em>fixed</em> sigmoid functions did a very poor job! But remember, these are adaptive. During training, each of the seven can be shifted and scaled independently of the others. This allows the model to move each to the perfect place where it can do the most good.</p>
 <pre><code>k = 7
 best_loss = float(&#39;inf&#39;)
@@ -305,7 +304,7 @@ if best.status != 0:
 <p>There is a famous <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> for this exact network architecture which states that this type of neural network can approximate <em>any</em> continuous function on <span class="math inline">\(\mathbb{R}^n\)</span>. This is an asymptotic result, so it doesn’t directly explain the increased power of this model relative to say, the step function basis, but it sort of wiggles it’s eyebrows in that direction.</p>
 <p>We’ve seen first-hand that not only can models on this form approximate an continuous function asymptotically as the number of hidden units becomes very large, they can often do an excellent job with a limited number of parameters.</p>
 <p>I should point out that we didn’t use backpropagation to fit this model, but for such a small model it hardly matters. In some sense, what we’ve done here is pretend like it’s 1970 and train a neural network using older methods. However, backprop can be viewed purely as a trick to make training faster - we don’t need it to understand or discuss the <strong>expressive</strong> power of this model.</p>
-<p>Here’s another problem: because the basis functions are in some sense interchangeable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are <span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact is guaranteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not actually a problem, because any solution is equally good - they are all equal to the global minima. However, in addition to the <span class="math inline">\(N!\)</span> distinct local optima introduced by the symmetry in our representation, there can also be lots of local minima which are not as good. The decision to use a learned representation almost always comes with a corresponding loss in convexity and consequently we can no longer guarentee convergence to a global minimia.</p>
+<p>Here’s another problem: because the basis functions are in some sense interchangeable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are <span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact is guaranteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not actually a problem, because any solution is equally good - they are all equal to the global minima. However, in addition to the <span class="math inline">\(N!\)</span> distinct local optima introduced by the symmetry in our representation, there can also be lots of local minima which are not as good. The decision to use a learned representation almost always comes with a corresponding loss in convexity and consequently we can no longer guarantee convergence to a global minima.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
