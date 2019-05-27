@@ -1,7 +1,7 @@
 ---
 title: 'ML From Scratch, Part 5: Gaussian Mixture Models'
 author: Oran Looney
-date: 2019-05-21
+date: 2019-05-25
 tags:
   - Python
   - Statistics
@@ -11,18 +11,359 @@ image: /post/ml-from-scratch-part-5-gmm_files/lead.jpg
 draft: true
 ---
 
-This one is quite a bit different than early entries in the series
-because not only are we switching contexts from supervised to
-unsupervised learning, but we are also moving past gradient
-descent to one of the neatest and most versatile algorithms
-out there: the EM Algorithm. 
+Consider an dataset like the following:
 
-When I first understood the EM Algorithm and realized I could
-now understand and implement latent variable models, it was
-like that scene in Aladdin where they're singing "It's a whole new world..."
-Gradient descent may be the engine that powers deep learning,
-but the EM algorithm is what powers factor analysis, etc. TODO
+![Unlabled Data](/post/ml-from-scratch-part-5-gmm_files/unlabled.png)
 
-TODO: k-means
+On the one hand, it is visually apparent that these data have a certain
+structure. In particular, there is at least one cluster of data clearly
+separated from the rest. Surely there is some algorithm which can discover
+this structure! On the other hand, none of the techniques we have studied 
+in this series so far are even able to make a start: they all assume that
+we have a clear definition of the thing that we are trying to predict, and
+further more they assume that we know it for every example in the training set.
+A problem of the form, "find **any** interesting relationships or structure"
+is simply too vague. 
 
-[EM]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
+That is because all of the algorithms we've looked at so far have been "supervised"
+learning problems, where the training set consists of *labeled* pairs $(\mathbf{X}, \mathbf{Y})$
+and the tast was to predict $\mathbf{Y}$ from $\mathbf{X}$. The problem of discovering
+interesting structure or relationships from *unlabeled* examples $\mathbf{X}$ is
+called the "unsupervised" learning problem, and call for a different set of techniques
+and algorithms entirely.
+
+Remarks on Unsupervised Learning
+--------------------------------
+
+There are two broad approaches to unsupervised learning, which I'll call dimensional
+reduction and clustering for lack of standard terminolgy. 
+
+The first approach is dimensional reduction, broadly speaking. In dimensional reduction
+we seek a function $f : \mathbb{R}^n \mapsto \mathbb{R}^m$ where $n$ is the dimension
+of the original data $\mathbf{X}$ and $m$ is usually much smaller than $n$. The
+classic example of a dimensional reduction algorithm is [PCA][PCA] but there are many others,
+including non-linear techniques like [t-SNE][TSNE] and most examples of representation
+learning such as [Word2Vec][W2V]. The basic idea behind dimensional reduction is that
+by reducing to a lower dimensional space we somehow capture the essential characteristics
+of each data point while getting rid of noise, correlations, and other non-essential features.
+Furthermore, it should be possible to approximately reconstruct
+the original data point in the original $n$-dimensional space with minimal loss.
+Depending on the specific technique used, the lower dimensional space may also be designed to
+have desirable properties like an isotropic/spherical covariance matrix or a meaningful 
+distance function where data points that a human would agree are "similar" are close together.
+
+The second approach to unsupervised
+learning is generally called clustering and is charactering by seeking a function 
+$f : \mathbb{R}^n \mapsto \{1,2, ..., k\}$
+which maps onto exactly one of $k$ possible classes. The classic example of a clustering algorithm
+is [$k$-means][KM]. Reducing rich, multivariate data to a small finite number of possibilities
+seems extreme, but for that same reason it can be extremely clarifying as well. The specific
+algorithm we will implement in this article will be a clustering algorithm, and we will return
+to dimensional reduction at a later date.
+
+
+Gaussian Mixture Models
+-----------------------
+
+\[ \begin{align}
+    P(\vec{x}) = \sum^k_{i=1} \phi f_{\mathcal{N}(\mu_i, \Sigma_i)}(\vec{x}) \tag{1}
+   \end{align}
+\]
+
+subject to:
+
+\[
+  \sum_{i=1}^k \phi_i = 1 \tag{2}
+\]
+
+
+More completely:
+
+\[ \begin{align}
+    C_i & \sim \mathcal{N}(\mu_i, \Sigma_i) \tag{3} \\
+    f_{C_i}(\vec{x}) &= \frac{1}{\sqrt{ (2\pi)^k |\Sigma_i| }} e^{(\vec{x} - \mu_i)^T \Sigma_i^{-1} (\vec{x} - \mu_i)} \tag{4} \\
+    P(\vec{x}) & = \sum^k_{i=1} \phi f_{C_i}(\vec{x}) \tag{5}
+   \end{align}
+\]
+
+What the expectation-maximization algorithm 
+
+The EM Algorithm
+----------------
+
+Very broad and powerful algorithm. Also used for Factor Analysis and the [Fellegi-Sunter][FS] record linkage algorithm,
+and many other "latent variable" models. 
+
+[FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
+
+Coordinate descent, every iteration improves, we end with a ML estimate.
+
+One good resource on GMM and the EM algorithm I used was this [Stanford Lecture by Andrew Ng](https://youtu.be/ZZGTuAkF-Hw?t=2108). I've linked to the part of the lecture where he shows this update step in particular but the whole lecture is worth watching. Another
+is this deck: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf the highlight of which is a very simple
+example you can work by hand; this is a great way to build intuition. 
+
+Animation:
+
+<a title="Chire [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:EM_Clustering_of_Old_Faithful_data.gif"><img width="256" alt="EM Clustering of Old Faithful data" src="https://upload.wikimedia.org/wikipedia/commons/6/69/EM_Clustering_of_Old_Faithful_data.gif"></a>
+
+
+
+
+Understanding the E-step
+------------------------
+
+Given the that centroid $\mu$ and covariance matrix $\Sigma$ is known for each class we can update $w_{ij}$ by simply
+calculating the probability that $X_i$ came from each class and normalizing TODO:
+
+\[ w_{ij} = \frac{ P(X_i|K=j) }{ P(K_i) } = \frac{ P(X_i|K=j) }{ \sum_{l=1}^k P(X_i|K=l) }
+\]
+
+The conditional probablity $P(\mathbf{X}_i|K=j)$ is simply the multivariate normal distribution $\mathbf{X}_i ~ \mathcal{N}(\mu_i, \Sigma_i)$
+so we can use equation (4) above to calculate the probability density for each class, and then divide through by
+the total to normalize each row of $\mathbf{X}$ to 1. This gives us a concrete formula for the update to $w_ij$:
+
+\[ w_{ij} := \frac{ f_{\mathcal{N}(\mu_i, \Sigma_i)}(\mathbf{X}_i) }
+                 { \sum_{l=1}^k f_{\mathcal{N}(\mu_l, \Sigma_l)}(\mathbf{X}_i) }
+\]
+
+The probability of each class $\phi$ can then be estimated by averaging over all examples in the training set:
+
+\[ \phi_j = \sum_{i=1}^n w_{ij} \]
+
+
+Understanding the M-step
+------------------------
+
+Yes, and it's easy to see why if we look at it the right way.
+
+Forget about the M-step; in fact, forget the fact that we're inside an iterative algorithm at all. Forget about the past and that you ever had other estimates for $\vec{\mu}$ or $\mathbb{\Sigma}$. And forget that there are other classes, and just focus on one class. And forget that the weights can be interpreted as $p(m|\vec{x}_i;\theta)$ and just think of them as sample weights, origin unknown, called $w_i$. For convenience let's also assume that these weights are normalized, e.g. $\sum w_i = 1$. 
+
+What remains is a sample of $n$ (instead of $T$ so I can reserve $T$ for "transpose") observations $\vec{x}_i$ with weights $w_i$ which we believe came from a multivariate distribution $\mathcal{N}(\vec{\mu}, \mathbb{\Sigma})$. What is the [procedure for estimating][1] $\vec{\mu}$ and $\mathbb{\Sigma}$? Well, it's to first calculate the mean, subtract it off, then average over the outer products:
+
+$$ \vec{\mu}= {1 \over {n}}\sum_{i=1}^n w_i \vec{x}_i \tag{1} $$
+
+$$ \mathbb{\Sigma} = \frac{1}{n} \sum_{i=1}^n w_i ( \vec{x}_i - \vec{\mu} )(\vec{x}_i - \vec{\mu})^T \tag{2} $$
+
+This is the [ML estimate][2]. Note that the $\vec{\mu}$ in (2) is exactly the same as the $\vec{\mu}$ in (1) - this is a closed form solution, not an iterative algorithm! Any *other* estimate for $\vec{\mu}$ and $\mathbb{\Sigma}$ will have lower likelihood, by definition.
+
+Now we can lift our self imposed amnesia and recall that we are using E-M to numerically approximate the maximum likelihood of a GMM. For that one particular M step, we held all other parameters constant and maximized the likelihood with respect to just $\vec{\mu}$ and $\mathbb{\Sigma}$. Because we used the closed form solution of (1) and (2), we didn't take a "step" *towards* that maximum - we jumped straight to the maximum within that subspace. In particular we can guarantee that likelihood either increased or stayed the same. We need this property because it is necessary for the convergence of the E-M algorithm as a whole. Using the closed form ML estimate for the multivariate distribution is by easiest way to prove it, and any other procedure for updating $\vec{\mu}$ and $\mathbb{\Sigma}$ - such as using the $\mu$ left over from the previous step - would require a separate proof.
+
+
+
+
+
+Implementation
+---------------
+
+	import numpy as np
+	from scipy.stats import multivariate_normal
+
+	class GMM:
+		def __init__(self, k, max_iter=5):
+			self.k = k
+			self.max_iter = int(max_iter)
+
+		def initialize(self, X):
+			self.shape = X.shape
+			self.n, self.m = self.shape
+
+			self.phi = np.full(shape=self.k, fill_value=1/self.k)
+			self.weights = np.full( shape=self.shape, fill_value=1/self.k)
+			
+			random_row = np.random.randint(low=0, high=self.n, size=self.k)
+			self.mu = [  X[row_index,:] for row_index in random_row ]
+			self.sigma = [ np.cov(X.T) for _ in range(self.k) ]
+
+		def e_step(self, X):
+			# E-Step: update weights and phi holding mu and sigma constant
+			self.weights = self.predict_proba(X)
+			self.phi = self.weights.mean(axis=0)
+		
+		def m_step(self, X):
+			# M-Step: update mu and sigma holding phi and weights constant
+			for i in range(self.k):
+				weight = self.weights[:, [i]]
+				total_weight = weight.sum()
+				self.mu[i] = (X * weight).sum(axis=0) / total_weight
+				self.sigma[i] = np.cov(X.T, 
+				    aweights=(weight/total_weight).flatten(), 
+				    bias=True)
+
+		def fit(self, X):
+			self.initialize(X)
+			
+			for iteration in range(self.max_iter):
+				self.e_step(X)
+				self.m_step(X)
+				
+		def predict_proba(self, X):
+			likelihood = np.zeros( (self.n, self.k) )
+			for i in range(self.k):
+				distribution = multivariate_normal(
+				    mean=self.mu[i], 
+				    cov=self.sigma[i])
+				likelihood[:,i] = distribution.pdf(X)
+			
+			numerator = likelihood * self.phi
+			denominator = numerator.sum(axis=1)[:, np.newaxis]
+			weights = numerator / denominator
+			return weights
+		
+		def predict(self, X):
+			weights = self.predict_proba(X)
+			return np.argmax(weights, axis=1)
+
+
+Model Evaluation
+----------------
+
+We'll use the "iris" dataset. This dataset has labels, but we won't expose them to the model, but we will use them at the end 
+to discuss the question, "were we able to discover the class labels through unsupervised learning?"
+
+    from scipy.stats import mode
+    from sklearn.metrics import confusion_matrix
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    iris = load_iris()
+    X = iris.data
+
+Fit a model.
+
+    np.random.seed(42)
+    gmm = GMM(k=3, max_iter=10)
+    gmm.fit(X)
+
+
+
+Plot. Each color is a cluster found by GMM:
+
+    def jitter(x):
+        return x + np.random.uniform(low=-0.05, high=0.05, size=x.shape)
+
+    def plot_axis_pairs(X, axis_pairs, clusters, classes):
+        n_rows = len(axis_pairs) // 2
+        n_cols = 2
+        plt.figure(figsize=(16, 10))
+        for index, (x_axis, y_axis) in enumerate(axis_pairs):
+            plt.subplot(n_rows, n_cols, index+1)
+            plt.title('GMM Clusters')
+            plt.xlabel(iris.feature_names[x_axis])
+            plt.ylabel(iris.feature_names[y_axis])
+            plt.scatter(
+                jitter(X[:, x_axis]), 
+                jitter(X[:, y_axis]), 
+                #c=clusters, 
+                cmap=plt.cm.get_cmap('brg'),
+                marker='x')
+        plt.tight_layout()
+        
+    plot_axis_pairs(
+        X=X,
+        axis_pairs=[ 
+            (0,1), (2,3), 
+            (0,2), (1,3) ],
+        clusters=permuted_prediction,
+        classes=iris.target)
+
+![GMM Clusters](/post/ml-from-scratch-part-5-gmm_files/gmm_clusters.png)
+
+Well, the model certainly found *something.* 
+
+
+Comparing to True Class Labels
+------------------------------
+
+Are the clusters discovered by the GMM model *meaningful*? Are they *correct*? For a real-world unsupervised learning
+problem, these questions simply have no answers. However, it so happens that the iris dataset we used *is* actually labeled.
+True, we didn't make use of these labels when training the GMM model, but they are available. Futhermore, those classes
+*are* assocated with different distributions in the 4 observed variables in a way that closely matches the assumptions
+of the GMM. So even if we can't ask about "meaning" and "correctness", we can at least ask a closely related question:
+"did this unsupervised learning algorithm (re-)discover the known structure of the data set?"
+
+The cluster indexes found by the model are in random order. For convenience when comparing them to true class labels, we
+will permute them to be as similar as possible to true class labels. All this is doing is swapping 0 for 2 so that 0 means
+the same thing for both the clusters and for the original class labels.
+
+    permutation = np.array([
+        mode(iris.target[gmm.predict(X) == i]).mode.item() 
+        for i in range(gmm.k)])
+    permuted_prediction = permutation[gmm.predict(X)]
+    print(np.mean(iris.target == permuted_prediction))
+    confusion_matrix(iris.target, permuted_prediction)
+
+
+    0.96
+    array([[50,  0,  0],
+           [ 0, 44,  6],
+           [ 0,  0, 50]])
+    
+
+After 1,000 random trials, we can see that cluster-to-labels "accuracy" actually varies at random from 0.52 to 0.99
+with a mean of 0.74. 
+
+![Accuracy Histogram](/post/ml-from-scratch-part-5-gmm_files/accuracy_histogram.png)
+
+Limitations
+-----------
+
+All unsupervised learning methods known today share certain limitations. 
+
+First, they tend to
+rely on the research fixing certain arbitary complexity parameters such as the number of dimensions $m$
+or the number of clusters $k$. Worse still, while there are techniques for picking these complexity
+parameters, they are heuristic and often unsatisfying in practice. It can be very hard to tell if
+an unsupervised learning method is "overfitting", because "overfit" doesn't even have a precise definition
+for unsupervised learning problems. 
+
+Second, there are no hard metrics like accuracy or AUC that let you
+compare models from different families. While each unsupervised learning algorithm will have its own
+internal metrics which they try to optimize such as variance explained or perplexity, these usually
+can't be meaningful compare two models that use two different algorithms or with different complexity
+parameters. This makes model selection a fundamentally subjective task - to decide that t-SNE is doing
+a better job than k-means on a given data set, the modeler is often reduced to eyeballing the output.
+
+Third and finally, the factors and/or clusters discovered by unsupervised learning algorithms are often
+unsatisfying or counterintuitive and don't necessarily line up with human intuition. Another way
+of saying the same thing is that if a human goes through and creates labels $\mathbf{Y}$ for the training
+set $\mathbf{X}$ after the unsupervised learning algorithm has been applied to it, they are not very
+likely to come up with the same factors or clusters. In general, humans tend to come up with business rules
+that "make sense" but don't explain as much variance as possible, while algorithms tend to find "deep" features that
+do explain a lot of variance but have complicated definitions that are hard to wrap your head around.
+
+These seem like serious criticisms; does this mean we shouldn't use unsupervised learning? Well, I won't tell
+you that you categorically should not use it, but you should know what you're getting into. By default, it 
+tends to produce low-quality, hard-to-interpret models that cannot really be defended due to number of 
+subjective decisions needed to make them work at all. 
+
+On the other hand, unsupervised learning can be extremely helpful during exploratory research; also, in the
+form of representation learning, it can sometimes accelerate learning or improve performance, or allow models
+to generalize from an extremely limited labeled training set. For example, a sentiment analysis model trained
+on only a few hundred reviews may only see the word "sterling" once, but if it uses a word embedding model
+like word2vec, it will understand that "stupenduous" is broadly a synonym for "good" or "great", and will therefore
+by abling to correctly classify a future example with the word "stupenduous" - which did not appear even once in the 
+training set - as likely having positive sentiment. While success stories like this are possible, in general
+unsupervised learning requires more expertise, more manual tuning, and more input from domain experts in order to
+create value. Unfortunately, we do not always have the labels necessary for supervised learning, and the datasets
+available may be too large, too high dimensional, or too sparse to be ammenible to traditional techniques; it
+is in these situations where the benefits of unsupervised learning can outweigh the negatives.
+
+
+Conclusion
+----------
+
+In this article, we seen how unsupervised learning differs from supervised learning and the challenges that
+come along with that. We discussed a method for posing an unsupervised learning problem as an maximimum likelihood optimization,
+and described and implemented the [EM algorithm][EM] often used to solve these otherwise intractable problems. We've
+seen first hand that the clusters identified by such algorithms don't always line up perfectly with what we believe
+the true structure to be.
+
+TODO: my bias against them and other warnings.
+
+
+  [1]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Estimation_of_parameters
+  [2]: https://www.cs.cmu.edu/~epxing/Class/10701-08s/recitation/gaussian.pdf
+  [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+  [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
+  [W2V]: https://en.wikipedia.org/wiki/Word2vec
+  [KM]: https://en.wikipedia.org/wiki/K-means_clustering
+  [EM]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
