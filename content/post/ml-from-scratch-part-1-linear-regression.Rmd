@@ -16,12 +16,13 @@ linear regression via [ordinary least squares][OLS].
 
 While not exciting, linear regression finds widespread use both as a standalone
 learning algorithm and as a building block in more advanced learning
-algorithms. For example, the output layer of a deep neural network trained for regression
+algorithms. The output layer of a deep neural network trained for regression
 with MSE loss, simple AR time series models, and the "local regression" part of
-LOWESS smoothing are all (modified) examples of linear regression.
+LOWESS smoothing are all examples of linear regression being used as an
+ingredient in a more sophisticated model. 
 
 Linear regression is also the "simple harmonic oscillator" of machine learning;
-that is to say, a pedagogically-motivated example that allows us to present
+that is to say, a pedagogical example that allows us to present
 deep theoretical ideas about machine learning in a context that is not too
 mathematically taxing.
 
@@ -32,13 +33,13 @@ suppose depends on where you are on the "applied" to "theoretical" spectrum.
 However, since I can already feel your eyes glazing over from such an
 introductory topic, we can spice things up a little bit by doing something
 which isn't often done in introductory machine learning - we can present the
-algorithm that [insert your favorite statistical software here] uses to
-*actually* fit linear regression models: [QR decomposition][QRD]. This is
+algorithm that [your favorite statistical software here] *actually* uses to
+fit linear regression models: [QR decomposition][QRD]. It seems this is
 commonly glossed over because it involves more linear algebra than can be
-generally assumed, and because the clever exact solution we derive doesn't
-generalize well to other machine learning algorithms or to even close variants
-of linear regression such as [regularized regression][EN] or [robust
-regression][RR]. But what's a little linear algebra between friends?
+generally assumed, or perhaps because the exact solution we will derive doesn't
+generalize well to other machine learning algorithms, not even closely related variants
+such as [regularized regression][EN] or [robust regression][RR]. 
+
 
 [EN]: https://en.wikipedia.org/wiki/Elastic_net_regularization
 [RR]: https://en.wikipedia.org/wiki/Robust_regression
@@ -64,39 +65,50 @@ If we are interested in understanding machine learning from scratch we should
 be prepared to study specialized algorithms when and where they arise
 naturally.
 
+And after all, what's a little linear algebra between friends?
+
 [SGD]: https://en.wikipedia.org/wiki/Stochastic_gradient_descent 
 [SOC]: https://en.wikipedia.org/wiki/Separation_of_concerns
 [WTO]: https://en.wikipedia.org/wiki/Program_optimization#When_to_optimize
 [SMO]: https://en.wikipedia.org/wiki/Sequential_minimal_optimization 
 
 
-Statistics
-----------
+Statistical Motivation
+----------------------
 
 In this section we will use statistical considerations to motivate the
 definition of a particular mathematical optimization problem. Once we have
 posed this problem, we will afterwards ignore the statistics altogether and
 focus on numerical methods for solving the optimization problem.
 
-Let's start by deriving the so-called [normal equation.][NEQ] Let's say that
-$X_p$ is a random vector of length $M$ and $y_p$ is a scalar random variable.
-$X_p$ and $y_p$ are *not* independent, but have a joint probability
+Let's start by deriving the so-called [normal equation][NEQ] from a statistical model.
+Let's say that
+$X$ is a random vector of length $m$ and $Y$ is a scalar random variable.
+$X$ and $Y$ are *not* independent, but have a joint probability
 distribution $F(x, y; \Theta, \sigma)$ parameterized by a non-random parameter
-vector $\Theta_p$, a non-negative scalar $\sigma$, and a random error term
+vector $\Theta$, a non-negative scalar $\sigma$, and a random error term
 $\epsilon \sim \mathcal{N}(0, \sigma^2)$. The model is:
 
-\[ y_p = X_p \Theta_p + \epsilon \]
+\[ Y = X^T \Theta + \epsilon \]
 
-Then suppose we sample $N$ observations from this joint distribution. We place
-the $N$ observations into a real-valued $N\times k$ matrix $X$ and a
-real-valued vector $y$. Just to be absolutely clear, $X$ and $y$ are *not*
-random variables they are the  given data used to fit the model. We can then
-ask, what is the likelihood of obtaining the data $(X, y)$ from an arbitrary
-parameter vector $\Theta$? By rearranging our equation as $y_p - X_p\Theta =
+Now suppose we sample $n$ independent observations from $F$. We place
+these into a real-valued $n\times m$ matrix $\mathbf{X}$ and a
+real-valued vector $\mathbf{y}$. Just to be absolutely clear, $\mathbf{X}$ and $\mathbf{y}$ are *not*
+random variables; they are the [given data used to fit the model][R]. We can then
+ask, what is the likelihood of obtaining the data $(\mathbf{X}, \mathbf{y})$ given a
+parameter vector $\Theta$? By rearranging our equation as $Y - X\cdot\Theta =
 \epsilon \sim \mathcal{N}(0, \sigma^2)$ and using the p.d.f. of the normal
 distribution, we can see that:
 
-\[ L(\Theta;X,y) = \prod_{i=1}^{N} P(X,y;\Theta) = \prod_{i=1}^{N} \frac{1}{\sqrt{2\pi}\sigma} \text{exp}\Big(\frac{-(y_i - X_i\Theta)^2}{2\sigma^2} \Big) \]
+[R]: https://en.wikipedia.org/wiki/Realization_(probability)
+
+\[ \begin{align}
+L(\Theta;\mathbf{X},\mathbf{y})
+& = P(\mathbf{X},\mathbf{y};\Theta) \\
+& = \prod_{i=1}^{n} P(\mathbf{X}_i,\mathbf{y}_i;\Theta) \\
+& = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi}\sigma} \text{exp}\Big(\frac{-(\mathbf{y}_i - \mathbf{X}_i^T\Theta)^2}{2\sigma^2} \Big) \\
+\end{align}
+\]
 
 That looks pretty awful, but there are a couple easy things we can do to make
 it a look a lot simpler. First, that constant term out front doesn't matter at
@@ -106,27 +118,35 @@ stuff into the constant $C$ because we're only interested in $\Theta$ right now.
 Finally, we can take a log to get rid of the exponential and turn the product
 into a sum. All together, we get the log-likelihood expression:
 
-\[ \ell(\Theta;X,y) = \log L(\Theta;X,y) = C - \sum_{i=1}^N -(y_i - X_i\Theta)^2 = C - ||y - X\Theta||^2 \]
+\[ \begin{align}
+\ell(\Theta;\mathbf{X},\mathbf{y}) 
+& = \log L(\Theta;\mathbf{X},\mathbf{y}) \\
+& = C - \sum_{i=1}^N -(\mathbf{y}_i - \mathbf{X}^T_i\Theta)^2 \\
+& = C - \lVert\mathbf{y} - \mathbf{X}\Theta\rVert^2 \\
+\end{align}
+\]
 
 Now, because log is a monotonically increasing function, maximizing $\ell$ is the
-same as maximizing $L$. Any constant $C$ has no effect whatsoever
+same as maximizing $L$. Furthermore, the constant $C$ has no effect whatsoever
 on the location of the maximum. We can also remove the minus sign and consider
 the problem as a minimization problem instead. Therefore our [maximum
 likelihood estimate][MLE] of $\Theta$ for a given data set $(X, y)$ is simply:
 
-\[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} \, ||y - X\Theta||^2 \]
+\[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} \, \lVert\mathbf{y} - \mathbf{X}\Theta\rVert^2 \]
 
 If statistics isn't really your thing, I have some good news for you: we're
 quits with it. Everything in this final equation is now a real-valued vector or
-matrix; there's not a random variable or probability distribution in sight.
+matrix: there's not a random variable or probability distribution in sight.
 It's all over except for the linear algebra.
 
-What we did above was essentially a short sketch of parts of the [Gauss-Markov
-theorem][GMT] the OLS solution *is* the MLE for the particular statistical
-model we started with. The full Gauss-Markov theorem proves a bunch of other
-nice properties: it turns out this estimator is unbiased and we can even say
+What we did above was essentially a short sketch of the relevant parts of the [Gauss-Markov
+theorem][GMT]. In particular, we've shown that the OLS solution to $\mathbf{y} - \mathbf{X}\Theta$ *is* the 
+Maximum Likelihood Estimate for the parameters of the particular statistical
+model we started with. This isn't general true, but it is *exactly* true for linear regression
+with a normally distributed error term. The full Gauss-Markov theorem proves a bunch of other
+nice properties: for example, it turns out this estimator is unbiased and we can even say
 that it's optimal in the sense that it is the *best possible* linear unbiased
-estimator. 
+estimator. But we won't need these further theoretical results to implement a working model.
 
 If there's one thing you should remember, it's this: the fact that the p.d.f.
 of the Gaussian distribution has the quadratic term $(x -\mu)^2$ in the
@@ -153,30 +173,31 @@ notation or concepts aren't familiar.
 Let's call the right-hand side (the part we're trying to minimize) $J$. Then we
 have:
 
-\[ J = || y - X\Theta ||^2 \]
+\[ J(\Theta) = \lVert \mathbf{y} - \mathbf{X}\Theta \rVert^2 \]
 
-And the problem is to minimize J with respect to $\Theta$. As optimization
-problems go, this one is pretty easy: it's continuous, quadratic, convex,
-everywhere continuously differentiable, and unconstrained.  Because of these
-nice properties, we know that it has a unique global minimum, and that the
-gradient is zero at this minimum.  That's a fancy way of saying that it's
-shaped like a big, round bowl so it's obvious where the bottom is.
+And the problem is to minimize $J$ with respect to $\Theta$. As optimization
+problems go, this one is pretty well behaved: it's continuous, quadratic, convex,
+everywhere continuously differentiable, and unconstrained. That's a fancy way of saying that it's
+shaped like a big, round bowl.  Because of these
+nice properties and a very useful set of theorems called the [KKT conditions][KKT] 
+we know that these properties guarentee that $J$ has a unique global minimum and that
+we can find the minimum - the bottom of the bowl - by finding the one place where the gradient
+is zero in all directions. 
 
-We can find the minimum - the bottom of the bowl - by using the [KKT conditions][KKT].
-In this simple this case there is only one: the gradient must be zero. This is
-analogous to finding the critical points of a univariate function by looking
-for points where the derivative is zero. It's not at first obvious how to
+Now, it may not be obvious at first how to
 take the gradient of the squared norm of a vector, but recall that it is
 the inner product of that vector with its dual:
 
-\[ \nabla_\Theta J = \nabla_\Theta \; (y - X\Theta)^T(y - X\Theta) \]
+\[ \nabla_\Theta J = \nabla_\Theta \; (\mathbf{y} - \mathbf{X}\Theta)^T(\mathbf{y} - \mathbf{X}\Theta) \]
 
 Expanding it out with FOIL:
 
 
-\[ \nabla_\Theta J = \nabla_\Theta \; y^T y - (X\Theta)^T y - y^T X\Theta + \Theta^T (X^T X) \Theta \]
+\[ 
+\nabla_\Theta J = \nabla_\Theta \; 
+\mathbf{y}^T \mathbf{y} - (\mathbf{X}\Theta)^T \mathbf{y} - \mathbf{y}^T \mathbf{X}\Theta + \Theta^T (\mathbf{X}^T \mathbf{X}) \Theta \]
    
-It's obvious that $y^T y$ is constant with respect to $\Theta$ so the first
+It's obvious that $\mathbf{y}^T \mathbf{y}$ is constant with respect to $\Theta$ so the first
 term simply vanishes.  It's less obvious but also true that the next two terms
 are equal to each other - just remember that a J is a scalar, so those terms are
 each scalar, and the transpose of a scalar is itself. The final term is a
@@ -185,24 +206,27 @@ quadratic form, and the [general rule][QFG] is $ \nabla x^T A x =
 itself is always symmetric ($X^T X = (X^T X)^T$) we can use the simpler form
 $\nabla x^T A x = 2 A x$.
 
-\[ \nabla_\Theta J = - 2 X^T y + 2 X^T X \Theta \]
+\[ \nabla_\Theta J = - 2 \mathbf{X}^T \mathbf{y} + 2 \mathbf{X}^T \mathbf{X} \Theta \]
 
-Setting this equal to zero at $\hat{\Theta}$ we get:
+Setting this equal to zero at the minimum, which we will call $\hat{\Theta}$, and dividing both sides by two, we get:
 
-\[ (X^T X) \hat{\Theta} = X^T y \]
+\[ \mathbf{X}^T \mathbf{X} \hat{\Theta} = \mathbf{X}^T \mathbf{y} \tag{1} \]
 
-We know X and y, so the right hand side is a known vector, the left-hand side
+This is the so-called [normal equation][NEQ]. The importance of this step is that we've reduced
+the original optimization problem to a system of linear equations which may be solved purely
+by the methods of linear algegra. To see this, note that
+we know $\mathbf{X}$ and $\mathbf{y}$, so the right hand side is a known vector, the left-hand side
 is a matrix times an unknown vector, so this is just the familiar equation for
 solving for a particular solution to a system of equations $Ax = b$.
 
-Because $X^T X$ is square and non-singular and therefore invertible,  we
+Because $\mathbf{X}^T \mathbf{X}$ is square and non-singular and therefore invertible,  we
 *could* just left-multiply both sides by its inverse to get an explicit closed
 form for $\hat{\Theta}$:
 
-\[ \hat{\Theta} = (X^T X)^{-1} y^T X \]
+\[ \hat{\Theta} = (\mathbf{X}^T \mathbf{X})^{-1} X^T \mathbf{y} \]
 
-It turns out there is a faster and more numerically stable way of solving for
-$\hat{\Theta}$ which relies on the [QR Decomposition][QRD] of the matrix $X$.
+However, it turns out there is a faster and more numerically stable way of solving for
+$\hat{\Theta}$ which relies on the [QR Decomposition][QRD] of the matrix $\mathbf{X}$.
 
 QR Decomposition
 ----------------
@@ -212,10 +236,10 @@ decomposition in a minute, it's worth making sure we understand how it works in
 detail. A QR decomposition of a matrix square $A$ is a product of an orthogonal
 matrix $Q$ and an upper-triangular matrix $R$ such that $A = QR$. It always
 exists and there's a reasonably performant algorithm for calculating it. Why is
-it beneficial?  In short, because the QR decomposition makes it very easy to
+it beneficial to put a matrix in this form? In short, because it makes it very easy to
 compute solutions to systems of equations in matrix form $Ax = b$; all we
 have to do is compute $A = QR$ and write the problem as $R x = Q^{-1} b$
-which is easy to compute.
+which is easy to compute. Let's examine those two steps in more detail.
 
 Why is $Q$ easy to invert? Recall that $Q$ is orthogonal which implies that
 $Q^{-1} = Q^T$. Most linear algebra libraries don't even have to explicitly

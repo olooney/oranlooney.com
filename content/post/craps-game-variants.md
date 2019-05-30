@@ -259,7 +259,7 @@ We are going to be generating a *lot* of partitions so it behooves us to have a
 reasonable performant implementation. Knuth's [algorithm u][AU] is very fast
 and memory efficient but very far outside the scope of this article; so for now
 just note that its a generator expression yielding lists of lists to represent
-partitions and that it yields every valid partition exactly one before
+partitions and that it yields every valid partition exactly once before
 stopping.
 
 ```python
@@ -298,7 +298,7 @@ again get a game with the exact same probability of winning. So in some sense
 our quarter million is overcounting. However these symmetries are quite
 complex so we will leave that for some future article.
 
-In any case, a quarter million is no obstacle explicit enumeration. If you
+In any case, a quarter million is no obstacle to explicit enumeration. If you
 would like to see the full list, here it is in [compressed format][ACV]. And of
 course you could always generate them for yourself in a few minutes from the
 [notebook code][CNB].

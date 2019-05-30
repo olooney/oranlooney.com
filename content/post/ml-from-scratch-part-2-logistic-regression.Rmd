@@ -30,10 +30,15 @@ The binary classification problem is extremely central in machine learning and
 in this series we'll be looking at no fewer than four different "serious"
 classification algorithms. In an undergraduate machine learning class, you'd
 probably work through a few "non-serious" or "toy" algorithms that have only
-have historical or pedagogical value: the one-unit perceptron, linear
-discriminant analysis, the winnow algorithm. We will omit those and jump
-straight to the simplest classification that is in widespread use: logistic
-regression. 
+have historical or pedagogical value: the [one-unit perceptron][PA], [linear
+discriminant analysis][LDA], the [winnow algorithm][WA]. We will omit those and jump
+straight to the simplest classification that is in widespread use: [logistic
+regression.][LR]
+
+[WA]: https://en.wikipedia.org/wiki/Winnow_(algorithm)
+[LDA]: https://en.wikipedia.org/wiki/Linear_discriminant_analysis
+[PA]: https://en.wikipedia.org/wiki/Perceptron
+[LR]: https://en.wikipedia.org/wiki/Logistic_regression
 
 I say, "simplest," but most people don't think of LR as "simple." That's
 because they're thinking of it use within the context of statistical analysis
@@ -41,27 +46,30 @@ and the design and analysis of experiments. In those contexts, there's a ton of
 associated mathematical machinery that goes along with *validating* and
 *interpretting* logistic regression models, and that stuff *is* complicated. A
 good book on *that* side of logistic regression is [Applied Logistic Regression
-by Hosmer et al.][ALR]. But within the context of machine learning, logistic
-regression is an extremely simple predictive model: as we'll see, the heart of
+by Hosmer et al.][ALR]. But if you simply want to fit data and make predictions then
+logistic regression is indeed a very simple model: as we'll see, the heart of
 the algorithm is only a few lines of code.
 
-Nevertheless, it's important for three reasons. First, it can be surprisingly
+Despite it's simplicity, it's important for three reasons. First, it can be surprisingly
 effective. It's not uncommon for some state-of-the-art algorithm to
 significantly contribute to global warming by running a hyperparameter grid
 search over a cluster of GPU instances in the cloud, only to end up with a
-final model with only slightly higher test set performance than logistic
-regression.  This isn't always true: for example, LR tends to get only ~90%
+final model with only slightly lower [generalization error][GE] than logistic
+regression.  Obvious, this isn't *always* true, otherwise there would be
+no need to study more advanced models. For example, LR tends to get only ~90%
 accuracy on the MNIST handwritten digit classification problem, which is much
 lower than either humans or deep learning. But in the many cases for which it
 *is* true, it's worth asking if the problem is amenable to more advanced
 machine learning techniques at all.
 
+[GE]: https://en.wikipedia.org/wiki/Generalization_error
+
 The second reason logistic regression is important is that it provides a
 important conceptual foundation for neural networks and deep learning, which
 we'll visit later in this series.
 
-And the third and final reason is that it cannot be solved with linear algebra
-trickery so serves as a legitimate reason to introduce one of the most
+The third and final reason is that it cannot be solved with linear algebra
+so serves as a legitimate reason to introduce one of the most
 important tools in machine learning: gradient descent.  Just as in [part
 1][MLFS1], we'll take the hard path through the mud and develop (step-by-step)
 an algorithm which could actually be used in production without too much
@@ -103,7 +111,7 @@ then we have
 \[ \sigma^{-1}(e^p) = \frac{p}{1-p} \]
 
 Where the right hand side is an *odds ratio*. So one interpretation of the
-logistic function is that it maps *log odds ratios* to *probabilities*.
+logistic function is that it is the bijection between *log odds ratios* to *probabilities*.
 
 For example, if something has a probability of 0.2, then it has 4:1 odds,
 therefore the odds ratio is 4, therefore the log odds ratio of $\ln 4 = -1.39$.
@@ -116,7 +124,7 @@ and basic algebra.
 
 \[ 
 	\begin{split}
-    \frac{d \sigma(x)}{dx} & = \frac{d}{dx} \frac{1}{1 + e^{-x}} \\
+    \frac{d}{dx} \sigma(x) & = \frac{d}{dx} \frac{1}{1 + e^{-x}} \\
     & = \frac{-e^{-x}}{( 1+ e^{-x})^2}  \\
     & = \frac{1}{1 + e^{-x}} \frac{1 + e^{-x} - 1}{ 1+ e^{-x}} \\
     & = \frac{1}{1 + e^{-x}} \Big( \frac{1 + e^{-x}}{1+ e^{-x}} - \frac{1}{ 1+ e^{-x}} \Big) \\
@@ -129,8 +137,8 @@ So we can see that $\sigma'(x)$ can expressed as a simple quadratic function of
 $\sigma(x)$.  It's not often that a derivative can be most conveniently
 expressed in terms of the original function, but it turned out to be the case
 here.  This apparently useless fact is actually quite important numerically
-because it means we can calculate $\sigma'(x)$ with a single multiplication...
-assuming that we already know $\sigma(x)$ somehow. Which, as we'll see, we do!
+because it means we can calculate $\sigma'(x)$ with only a single multiplication
+assuming that we already know $\sigma(x)$.
 
 For our Python implementation, we will need a vectorized implementation of
 $\sigma()$.  This function applies the sigmoid function element-wise to every
@@ -144,57 +152,93 @@ element in a `numpy.ndarray` of any shape.
 Statistical Motivation
 ----------------------
 
-Let's say $Y_p$ is a discrete random variable with support $\{0, 1\}$ and $X_p$ is a
-random vector.  Let's assume that the joint probability distribution $F_{X_p,Y_p}$
-of $X_p$ and $Y_p$ has the following form for some unknown real-valued vector
-$\Theta$:
+Let $Y$ be a discrete random variable with support on $\{0, 1\}$ and let $X$ be a
+random $m$-vector.  Let's assume that the joint probability distribution $F_{X,Y}$
+of $X$ and $Y$ has the following sigmoid form for some real-valued vector $\Theta$:
 
 \[ E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]
 
-Let's say that $(y_i, X_i)$ are $N$ realizations sampled independently from
-$F_{X_p,Y_p}$; then we can write down the likelihood function:
+Now let's say $\mathbf{X}$ is an $n \times m$ matrix and $\mathbf{y}$ is an $n$-vector such that
+$(\mathbf{y}_i, \mathbf{X}_i)$ are $n$ realizations sampled independently from
+$F_{X,Y}$; then we can write down the likelihood function:
 
-\[ L(\Theta; X, y) = \prod_{i=1}^N P(Y=1|X_i)^{y_i} P(Y=0|X_i)^{(1 - y_i)} \]
+\[ L(\Theta; \mathbf{X}, \mathbf{y}) = \prod_{i=1}^n P(Y=1|X=\mathbf{X}_i)^{\mathbf{y}_i} P(Y=0|X=\mathbf{X}_i)^{(1 - \mathbf{y}_i)} \]
 
-I should probably explain the notational trick used to write this compactly: because $y \in
+I should probably explain the notational trick used here: because $y \in
 \{0, 1\}$, the first factor will be reduced to a constant $1$ if $y = 0$ and
 likewise the second term will be reduced to a constant $1$ if $y = 1$. So
-that's merely a compact way of writing the two mutually exclusive scenarios
+putting $y$ and $1-y$ in the exponent is merely a compact way of writing the two mutually exclusive scenarios
 without an explicit if/else.
 
 We can simplify this expression by taking the log of both sides and working
-with the *log-likelihood* $\ell$ from now on:
+with the log-likelihood $\ell$ from now on:
 
-\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln P(Y=1|X_i) + (1 - y_i) \ln (1 - P(Y=1|X_i) \]
-
-Substituting $\hat{y} = P(Y=1|X)$:
-
-\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln \hat{y}_i + (1 - y_i) \ln (1 - \hat{y}_i) \]
-
-Because $\ln()$ is monotonically increasing, it suffices to minimize
-$\ell(\Theta; X, y)$ with respect to $\Theta$ in order to find the maximum
-likelihood estimate.  Because $\ell$ convex and has a continuous derivative, we
-can find this maximum by solving $\nabla \ell = 0$. This time it is convenient
-to expand out the gradient in terms of partial derivatives to obtain a system
-of $m$ equations:
-
-\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N \frac{y_i}{\hat{y}_i} \frac{\partial \hat{y}_i}{\partial \Theta_j} + \frac{(1-y_i)}{(1-\hat{y}_i)} \frac{\partial \hat{y}_i}{\partial \Theta_j} = 0 \]
-
-We can use our earlier lemma $\sigma'(x) = \sigma(x)(1-\sigma(x))$ for the partial derivative of $\hat{y}$.  Note also that because $\hat{y} = \sigma(X \Theta) = \sigma( X_0 \Theta_0 + ... + X_j \Theta_j + ... + X_k \Theta_k )$, we will pick up an additional $X_j$ factor from the chain rule when differentiating by $\Theta_j$.
-
-\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N \frac{y_i}{\hat{y}_i} \hat{y}_i (1-\hat{y}_i) X_j - \frac{(1-y_i)}{(1-\hat{y}_i)} \hat{y}_i (1-\hat{y}_i) X_j \]
-
-Several cancellations occur and we are left with:
-
-\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N X_j ( y_i (1 - \hat{y}_i) - (1 - y_i) \hat{y}_i ) 
- = \sum_{i=1}^N X_j ( y_i  - y_i \hat{y}_i - \hat{y}_i + y_i \hat{y}_i)
- = \sum_{i=1}^N X_j ( y_i  - \hat{y}_i )
+\[ 
+  \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
+  = \sum_{i=1}^n \mathbf{y}_i \ln P(Y=1|X=\mathbf{X}_i) + 
+  (1 - \mathbf{y}_i) \ln (1 - P(Y=1|X=\mathbf{X}_i) 
 \]
 
-Unlike linear regression, this doesn't admit a closed form solution. However,
-it is amenable to numerical methods, which we will cover in great detail below.
+Substituting $\hat{\mathbf{y}} = P(Y=1|X)$:
 
-This is almost suspiciously neat, but it's not really an accident. The reason
+\[ 
+  \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
+  = \sum_{i=1}^n \mathbf{y}_i \ln \hat{\mathbf{y}}_i + 
+  (1 - \mathbf{\mathbf{y}}_i) \ln (1 - \hat{\mathbf{y}}_i) 
+\]
+
+Because $\ln()$ is monotonically increasing, it suffices to minimize
+$\ell(\Theta; \mathbf{X}, \mathbf{y})$ with respect to $\Theta$ in order to find the maximum
+likelihood estimate.  Because $\ell$ is convex and has a continuous derivative, we
+can find this maximum by solving $\nabla \ell = 0$.
+
+\[ \begin{align}
+  \frac{\partial \ell}{\partial \Theta} 
+  & = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta} -
+                   \frac{(1-\mathbf{y}_i)}{(1-\hat{\mathbf{y}}_i)} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta}
+  \end{align}
+\]
+
+We can use our earlier lemma $\sigma'(x) = \sigma(x)(1-\sigma(x))$ for the partial derivative of $\hat{y}$.  Note also that because $\hat{y}_i = \sigma(\mathbf{X}_i^T \Theta)$, we will pick up an additional $\mathbf{X}_i$ from the chain rule when differentiating by $\Theta$.
+
+\[ \begin{align}
+\frac{\partial \ell}{\partial \Theta} = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \hat{\mathbf{y}}_i (1-\hat{\mathbf{y}}_i) \mathbf{X}_i - \frac{(1-\mathbf{y}_i)}{(1-\hat{\mathbf{y}}_i)} \hat{\mathbf{y}}_i (1-\hat{\mathbf{y}}_i) \mathbf{X}_i 
+   \end{align}
+\]
+
+We can use simple algebra to simplify this a great deal, and in the end we are left with:
+
+\[ \begin{align}
+\frac{\partial \ell}{\partial \Theta} 
+ & = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i (1 - \hat{\mathbf{y}}_i) - (1 - \mathbf{y}_i) \hat{\mathbf{y}}_i )  \\
+ & = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i  - \mathbf{y}_i \hat{\mathbf{y}}_i - \hat{\mathbf{y}}_i + \mathbf{y}_i \hat{\mathbf{y}}_i) \\
+ & = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i  - \hat{\mathbf{y}}_i ) \\
+ & = \mathbf{X}^T ( \mathbf{y}  - \hat{\mathbf{y}} ) \tag{1} \\
+ \end{align}
+\]
+
+Equation (1) is the clearest way to express the gradient, but because $\hat{\mathbf{y}}$ is an implicit function of $\mathbf{X}$ and
+$\Theta$ is can appear a little magical. A fully explicit version is:
+
+\[
+ \frac{\partial \ell}{\partial \Theta} = \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \Theta) ) \tag{2}
+\]
+
+In plain english, this says: go through the rows of $\mathbf{X}$ one by one. For each row, figure out if the prediction $\hat{\mathbf{y}}$
+was too high or too low by computing the difference $\mathbf{y}_i  - \hat{\mathbf{y}}_i$. If it's too high, subtract the row $X_i$ from
+the gradient, and if it's too low, then add the row $X_i$ to the gradient, in each case weighting by the magnitude in the difference.
+
+In theory, we can now find the minimum $\hat{\Theta}$ by simply solving equation (3):
+
+\[
+ \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \hat{\Theta}) ) = 0 \tag{3}
+\]
+
+Unfortunately, unlike the normal equation of ordinary least squares, equation (3) cannot be solved by the
+methods of linear algebra due to the presence of the non-linear $\sigma$ function. 
+However, it *is* amenable to numerical methods, which we will cover in great detail below.
+
+You may remark that equation (3) is almost suspiciously neat, but it's not really an accident. The reason
 why we chose the logistic function in the first place was precisely so this
 result would drop out at the end. Indeed, there are other choices with an equally
 good theoretical basis, yet we chose logit because it's simple and fast to calculate.
@@ -215,55 +259,35 @@ It's worth bearing in mind that logistic regression is so popular, not because
 there's some theorem which proves it's *the* model to use, but because it is
 the simplest and easiest to work with out of a family of equally valid choices.
 
-Vectorization
--------------
+Gradient Descent
+----------------
 
-For our implementation below it will be convenient to have $\nabla \ell$ in
-vectorized form. Leaving behind the statistical context and no longer using
-random variables, let $X$ be a $N \times m$ real-valued matrix (not a random
-variable) such that each row of $X$ is $X_i$ from above, and let $y$ the
-corresponding non-random real-valued $N$-vector, the above equation becomes:
+The state-of-the-art algorithm that we will use to solve (3) has a large number of moving parts and is
+somewhat overwhelming to understand at once. Therefore, we will implement it in layers,
+adding sophistication at each layers as well as taking benchmarks that will
+concretely demonstrate the value of each added complication. The layers will be:
 
-\[ \nabla_{\Theta} \ell(\Theta; X, y) = \Bigg( \sum_{i=1}^{N} (X \circ  (y - \hat{y}))_{ij} \Bigg)^T \]
-
-The summation is over rows and across columns -- afterwards, we have a single
-$1 \times p$ row vector containing the sum of each column, which we transpose
-to match the $p \times 1$ column vector $\Theta$. 
-
-Here $``A \circ B"$ denotes the [Hadamard product][HP].  We will be seeing this slightly
-unusual operator quite a bit going forward, so make sure you get familiar with
-it if you aren't already.
-
-This is the same as the summation over training examples above -- but has the
-advantage of being rather obscure and harder to read. No wait -- I mean it has
-the advantage of being naturally translated into vectorized numpy code. Sorry
-about that.
-
-
-[HP]: https://en.wikipedia.org/wiki/Hadamard_product_(matrices)
-
+1. (Batch) Gradient Descent
+2. Minibatch Stochastic Gradient Descent
+3. Nesterov Accelerated Gradient
+4. Early Stopping
 
 Batch Gradient Descent
 ----------------------
 
-The final algorithm we will use actually a number of moving parts and is
-somewhat overwhelming to understand at once. We will implement it in stages,
-adding sophistication at each stage as well as taking benchmarks that will
-prove the value of each improvement we add.
-
-Since we have both the loss function we want to minimize and its gradient in
-closed form, the obvious numerical method is gradient descent, called "batch"
-gradient descent when the target function is the sum over a full set of
-training data.
+Since we have both the loss function $J$ we want to minimize and its gradient $\nabla J$
+we can use an algorithm called gradient descent to find a minimum. 
 
 Gradient descent is an iterative method that simply updates an approximation of
-$\hat{\Theta}$ by taking a smalls step in the direction of steepest descent.
+$\hat{\Theta}$ by taking a smalls step in the direction of steepest descent. Let us
+denote this sequence of approximations $\hat{\Theta}_t$. Initialize $\hat{\Theta}_0$
+arbitrarily and use the following update rule for $t>0$:
 
 \[ \hat{\Theta}_{i+1} := \hat{\Theta}_i - \alpha \nabla \ell (\hat{\Theta}_i) \]
 
 For some suitable learning rate $\alpha$ this will always converge, and because
-$\ell$ is convex it will in fact always converge to a number $\hat{\Theta}$ that
-represents the maximum likelihood estimate for $\Theta$.
+$\ell$ is convex it will in fact always converge to the unique global minimum $\hat{\Theta}$
+which is the maximum likelihood estimate for $\Theta$.
 
     class LogisticClassifier:
         def __init__(self, learning_rate=0.1, tolerance=1e-4, max_iter=1000):
@@ -927,7 +951,7 @@ Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with
 3 seconds and now you're telling me its 49 ms? As in, 60X faster? No, this
 is actually fairly typical. That's why it's so important to use a good
 optimizer instead of relying on naive methods. Luckily, with modern frameworks,
-[state-of-the-art optimizers][KO] are usually available off-the-rack.
+state-of-the-art optimizers are usually available off-the-rack.
 
 Test set performance (accuracy, AUC) has not suffered:
 

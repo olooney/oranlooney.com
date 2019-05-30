@@ -16,24 +16,23 @@ Consider an dataset like the following:
 ![Unlabled Data](/post/ml-from-scratch-part-5-gmm_files/unlabled.png)
 
 On the one hand, it is visually apparent that these data have a certain
-structure. In particular, there is at least one cluster of data clearly
-separated from the rest. Surely there is some algorithm which can discover
-this structure! On the other hand, none of the techniques we have studied 
+structure. In particular, there is at least one cluster of data in the lower right which is clearly
+separate from the rest. Unfortunately, it turns out that none of the techniques we have studied 
 in this series so far are even able to make a start: they all assume that
-we have a clear definition of the thing that we are trying to predict, and
-further more they assume that we know it for every example in the training set.
-A problem of the form, "find **any** interesting relationships or structure"
-is simply too vague. 
+we have a "labeled" traing set, which requires that we not only have clear definition of the thing that we are trying to predict, we
+must in fact already know the correct answer for every example in the training set.
+A problem of the form "just find me *some* kind interesting relationships or structure, any will do" does
+not fit into this framework because no "true" labels are known in advance.
 
-That is because all of the algorithms we've looked at so far have been "supervised"
+More formally, all of the algorithms we've looked at so far have been "supervised"
 learning problems, where the training set consists of *labeled* pairs $(\mathbf{X}, \mathbf{Y})$
 and the tast was to predict $\mathbf{Y}$ from $\mathbf{X}$. The problem of discovering
 interesting structure or relationships from *unlabeled* examples $\mathbf{X}$ is
-called the "unsupervised" learning problem, and call for a different set of techniques
+called the "unsupervised" learning problem, and calls for a different set of techniques
 and algorithms entirely.
 
-Remarks on Unsupervised Learning
---------------------------------
+Types of Unsupervised Learning
+------------------------------
 
 There are two broad approaches to unsupervised learning, which I'll call dimensional
 reduction and clustering for lack of standard terminolgy. 
@@ -42,7 +41,7 @@ The first approach is dimensional reduction, broadly speaking. In dimensional re
 we seek a function $f : \mathbb{R}^n \mapsto \mathbb{R}^m$ where $n$ is the dimension
 of the original data $\mathbf{X}$ and $m$ is usually much smaller than $n$. The
 classic example of a dimensional reduction algorithm is [PCA][PCA] but there are many others,
-including non-linear techniques like [t-SNE][TSNE] and most examples of representation
+including non-linear techniques like [t-SNE][TSNE], topic models like [LDA][LDA], and most examples of representation
 learning such as [Word2Vec][W2V]. The basic idea behind dimensional reduction is that
 by reducing to a lower dimensional space we somehow capture the essential characteristics
 of each data point while getting rid of noise, correlations, and other non-essential features.
@@ -51,22 +50,28 @@ the original data point in the original $n$-dimensional space with minimal loss.
 Depending on the specific technique used, the lower dimensional space may also be designed to
 have desirable properties like an isotropic/spherical covariance matrix or a meaningful 
 distance function where data points that a human would agree are "similar" are close together.
+We will return to dimensional reduction in some future article.
 
 The second approach to unsupervised
 learning is generally called clustering and is charactering by seeking a function 
 $f : \mathbb{R}^n \mapsto \{1,2, ..., k\}$
-which maps onto exactly one of $k$ possible classes. The classic example of a clustering algorithm
+which maps each example to exactly one of $k$ possible classes. The classic example of a clustering algorithm
 is [$k$-means][KM]. Reducing rich, multivariate data to a small finite number of possibilities
-seems extreme, but for that same reason it can be extremely clarifying as well. The specific
-algorithm we will implement in this article will be a clustering algorithm, and we will return
-to dimensional reduction at a later date.
+seems extreme, but for that same reason it can be extremely clarifying as well. In this
+article we will implement on particular clustering model called the [Gaussian mixture model][GMM], 
+or just GMM for short. 
 
 
 Gaussian Mixture Models
 -----------------------
 
+The Gaussian mixture model is simply a "mix" of Gaussian distributions. In this case, "Gaussian"
+means the [multivariate normal distribution][MND] $\mathcal{N}(\mathbf{\mu}, \Sigma)$ and "mixture"
+means that the several different gaussian distributions, all with different mean vectors $mu_i$ and different
+covariance matrices $\Sigma_i$, are combined by taking the weighted sum of the probability density functions:
+
 \[ \begin{align}
-    P(\vec{x}) = \sum^k_{i=1} \phi f_{\mathcal{N}(\mu_i, \Sigma_i)}(\vec{x}) \tag{1}
+    f_{GMM}(\mathbf{x}) = \sum^k_{i=1} \phi f_{\mathcal{N}(\mathbf{\mu}_i, \Sigma_i)}(\mathbf{x}) \tag{1}
    \end{align}
 \]
 
@@ -76,31 +81,55 @@ subject to:
   \sum_{i=1}^k \phi_i = 1 \tag{2}
 \]
 
+A single multivariate normal distribution has a single "hill" or "bump" located at $\mu_i$; in contrast,
+a GMM (in general) is a multimodal distribution with on distinct bump per class. (Sometimes you get fewer
+than $k$ distinct local maxima in the p.d.f., if the bumps are sufficiently close together or if the
+weight of one class is zero or nearly so, but usually you will get $k$ distinct bumps.) This makes it
+well suited to modeling data like that seen in our motivating example above, where there seems to be
+more than one region on high density. 
 
-More completely:
+[![GMM p.d.f.](/post/ml-from-scratch-part-5-gmm_files/gmm_pdf.png)][GP]
+
+We can make this fully explicit by expanding the definition of the p.d.f. of the multivariate normal distribution:
 
 \[ \begin{align}
-    C_i & \sim \mathcal{N}(\mu_i, \Sigma_i) \tag{3} \\
-    f_{C_i}(\vec{x}) &= \frac{1}{\sqrt{ (2\pi)^k |\Sigma_i| }} e^{(\vec{x} - \mu_i)^T \Sigma_i^{-1} (\vec{x} - \mu_i)} \tag{4} \\
-    P(\vec{x}) & = \sum^k_{i=1} \phi f_{C_i}(\vec{x}) \tag{5}
+    C_i & \sim \mathcal{N}(\mathbf{\mu}_i, \Sigma_i) \tag{3} \\
+    f_{C_i}(\mathbf{x}) &= \frac{1}{\sqrt{ (2\pi)^k |\Sigma_i| }} e^{(\mathbf{x} - \mathbf{\mu}_i)^T \Sigma_i^{-1} (\mathbf{x} - \mathbf{\mu}_i)} \tag{4} \\
+    P(\mathbf{x}) & = \sum^k_{i=1} \phi_i f_{C_i}(\mathbf{x}) \tag{5}
    \end{align}
 \]
 
-What the expectation-maximization algorithm 
+It is obvious that a model of this form could represent a distribution with multiple distinct clusters, but it
+is less clear how, given a dataset $\mathbf{X}$, we can choose parameters 
+
+\[\Theta = \{ \mathbf{\mu}_1, \Sigma_1, ..., \mathbf{\mu}_k, \Sigma_k \} \tag{6} \]
+
+The first step is decide that we will use the maximum likelihood estimate for the parameters. Because the $n \times m$ example matrix $\mathbf{X}$
+is assumed to be a realization of $n$ i.i.d. samples from $f_{GMM}(\mathbf{x})$, we can write down our likelihood function as
+
+\[
+  \mathcal{L}(\Theta; \mathbf{X}) = \prod_{j=1}^n \sum^k_{i=1} \phi_i f_{C_i}(\mathbf{X}_j) \tag{7}
+\]
+
+It is at this point we encounter an empass. In the [past][MLFS1], we've been able to simplify such likelihood functions by 
+first taking a log to turn the product into a sum and also get rid of the exponent, reducing the problem to ordinary least squares.
+Here, however, because of the inner sum over classes, there is no obvious way to simplify this to a tractable form where
+the gradient might be calculated analytically. We need a new approach.
+
 
 The EM Algorithm
 ----------------
 
-Very broad and powerful algorithm. Also used for Factor Analysis and the [Fellegi-Sunter][FS] record linkage algorithm,
+TODO. Very broad and powerful algorithm. Also used for Factor Analysis and the [Fellegi-Sunter][FS] record linkage algorithm,
 and many other "latent variable" models. 
 
 [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
 
 Coordinate descent, every iteration improves, we end with a ML estimate.
 
-One good resource on GMM and the EM algorithm I used was this [Stanford Lecture by Andrew Ng](https://youtu.be/ZZGTuAkF-Hw?t=2108). I've linked to the part of the lecture where he shows this update step in particular but the whole lecture is worth watching. Another
-is this deck: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf the highlight of which is a very simple
-example you can work by hand; this is a great way to build intuition. 
+One good resource on GMM and the EM algorithm I used was this [Stanford lecture by Andrew Ng](https://youtu.be/ZZGTuAkF-Hw?t=2108). I've linked to the part of the lecture where he shows this update step in particular but the whole lecture is worth watching. Another good resource
+is this [slide deck][SD]; I found that
+working through the simple, finite exercise by hand to be a great way to build intuition before tackling the much more complicated GMM case.
 
 Animation:
 
@@ -147,9 +176,6 @@ $$ \mathbb{\Sigma} = \frac{1}{n} \sum_{i=1}^n w_i ( \vec{x}_i - \vec{\mu} )(\vec
 This is the [ML estimate][2]. Note that the $\vec{\mu}$ in (2) is exactly the same as the $\vec{\mu}$ in (1) - this is a closed form solution, not an iterative algorithm! Any *other* estimate for $\vec{\mu}$ and $\mathbb{\Sigma}$ will have lower likelihood, by definition.
 
 Now we can lift our self imposed amnesia and recall that we are using E-M to numerically approximate the maximum likelihood of a GMM. For that one particular M step, we held all other parameters constant and maximized the likelihood with respect to just $\vec{\mu}$ and $\mathbb{\Sigma}$. Because we used the closed form solution of (1) and (2), we didn't take a "step" *towards* that maximum - we jumped straight to the maximum within that subspace. In particular we can guarantee that likelihood either increased or stayed the same. We need this property because it is necessary for the convergence of the E-M algorithm as a whole. Using the closed form ML estimate for the multivariate distribution is by easiest way to prove it, and any other procedure for updating $\vec{\mu}$ and $\mathbb{\Sigma}$ - such as using the $\mu$ left over from the previous step - would require a separate proof.
-
-
-
 
 
 Implementation
@@ -367,3 +393,9 @@ TODO: my bias against them and other warnings.
   [W2V]: https://en.wikipedia.org/wiki/Word2vec
   [KM]: https://en.wikipedia.org/wiki/K-means_clustering
   [EM]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
+  [LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
+  [GMM]: https://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model
+  [MND]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution
+  [GP]: https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution
+  [MLFS1]: http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
+  [SD]: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf

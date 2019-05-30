@@ -49,7 +49,7 @@ savings:
             previous, current = (current, previous + current)
         return current
 
-And that, oddly enough, is where often it stops. For example, this presentation
+And that, oddly enough, is often where it stops. For example, this presentation
 of solving the Fibonacci sequence as an [interview question][IQ] presents the
 above two solutions and then... nothing. Not so much as an off-hand mention
 that better solutions might exist. Googling around, I got the impression this
@@ -159,12 +159,12 @@ A brief word about where this matrix representation came from.  Wikipedia has a
 [good explanation][RRLA] for how any linear recurrence relation can be
 expressed in matrix form and I've described it myself in [a prior
 article][CR2]. Essentially, we use the first dimension to store the current
-value, and the rest of the vector as [shift registers][SR] to "remember" $k$
+value, and the rest of the vector as [shift registers][SR] to "remember"
 previous states. The recurrence relation is encoded along the first row and the
 ones along the [subdiagonal][SD] roll the history forward. It's actually easier
 to see in higher dimensions, so here's an example of encoding a linear
 recurrence relationship which uses the four most recent numbers instead of just
-two.
+two:
 
 \[
   y_{n+1} = c_0 y_n + c_1 y_{n-1} + c_2 y_{n-2} + c_3 y_{n-3} \\  
@@ -192,11 +192,11 @@ two.
   \end{bmatrix}
 \]
 
-If we squint at $\mathbf{F}_1$, we can see it has this form too.
-The first row is $[ 1 \,\, 1 ]$ because recurrence relation is a simple
-unweighted sum, while the second row $[ 1 \,\, 0 ]$ contains the $1$ on the
+If we squint at $\mathbf{F}_1$, we can see it has this form too:
+the first row is $[ 1 \,\, 1 ]$ because recurrence relation is simply the
+sum of the previous two, while the second row $[ 1 \,\, 0 ]$ contains the $1$ on the
 [subdiagonal][SD] which "remembers" the previous value. The effect is
-to advance the state of the algorithm is almost the exact same way as the
+to advance the state of the algorithm in almost the exact same way as the
 `interative_fib()` above:
 
 \[
@@ -277,7 +277,7 @@ or to raise it to an arbitrary power:
         \mathbf{Q}^T
 \]
 
-We can calculate the two eigenvalues numerically or analytically by solving the
+We can calculate the two eigenvalues analytically by solving the
 characteristic equation $(1-\lambda)\lambda - 1 = 0$. Since this is a quadratic
 polynomial, we can use the quadratic equation to obtain both solutions in closed form:
 
@@ -307,7 +307,7 @@ There's just one tiny little problem with it: $\phi$, being irrational, is not
 particularly convenient for numerical analysis. If we run the
 above Python program, it will use 64-bit floating point arithmetic and will
 never be able to precisely represent more than 15 decimal digits.  That only
-lets us calculate up to $F_{93}$ before we start having precision errors. Our
+lets us calculate up to $F_{93}$ before we no longer have enough precision to exactly represent it. Past $F_{93}$, our
 clever little "exact" eigenvalue algorithm is good for nothing but a rough
 approximation! 
 
@@ -328,7 +328,7 @@ addition, especially for large numbers, and computing the production of two $2
 \times 2$ matrices requires *eight* multiplications!
 
 Remain calm. There's a [trick][ES] to calculating large powers quickly. Imagine
-we want to calculate $x^n$ where $n$ is a power of two $n = 2^m$. If
+we want to calculate $x^n$ where $n$ is a power of two: $n = 2^m$. If
 we square $x$, then square it again, and keep doing that $m$ times, we get
 
 \[ ((x^2)^2...)^2 = x^{2^m} = x^n \]
@@ -367,7 +367,7 @@ on Python's `int()` type exceed the normal limits of a 64-bit integer, Python
 will transparently substitute a high precision type. This makes Python a
 convenient language for working with very large numbers.
 
-Now, we *could* implement matrix multiplication like so:
+Now, we *could* just rely on [NumPy][NP]'s matrix multiplication, like so:
 
     F1 = numpy.array([[1,1],[1,]], dtype='object') 
     numpy.linalg.matrix_power(F1, n)
@@ -378,7 +378,7 @@ I don't think we need to drag it in as a dependency just to multiply $2 \times
 2$ matrices when we're not even using native integer types.
 
 Plus, we'll see see in a second that there are some optimizations we can make
-that wouldn't be possible if we let numpy handle everything for us.  So for
+that wouldn't be possible if we let NumPy handle everything for us.  So for
 now, let's implement the naive matrix algorithm in native Python; we'll come
 back and refactor in the next section.
 
@@ -453,7 +453,7 @@ Here is a Fibonacci matrix described with just two numbers, $a$ and $b$:
 We can easily work out closed forms for multiplying and squaring matrices
 in this form. While the full expressions are a little complex - we never
 actually need to explicitly calculate the left-hand column, a fact I
-will indicate by graying those columns out.
+will indicate by graying those columns out:
 
 \[
 	\begin{align}
@@ -538,7 +538,7 @@ is to try converting our program to [Cython][CY].
 Unfortunately, the one type that we want to use, Python's native `int()` type, is
 represented by Cython as a C-style int - fixed precision signed integer. It
 doesn't have Python's ability to transparently handle large numbers. We can
-either use the native C `long` in which case we overflow around $F_{93}$,
+either use the native C `long` in which case we run into precision problems after $F_{93}$,
 or we can continue to use the Python `int()` type in which case we gain only a modest
 speed up.
 
@@ -820,6 +820,8 @@ whether a better constant or better asymptotic performance is more beneficial.
         else:
             return gmp_fib(n)
 
+And that, as they say, is my final answer.
+
 Benchmarking Results
 --------------------
 
@@ -850,8 +852,8 @@ We can make a few observations:
 Feynman Fuse Problem
 -------------------
 
-We've made a lot of progress, and we've hit what I call a "fuse problem" after
-this anecdote:
+We've made a lot of progress, and we've hit what I call a "fuse problem," after
+this anecdote from [Surely You're Joking, Mr. Feynman!][SYJ]:
 
 > The problem was to design a machine like the other one - what they called a
 > director - but this time I thought the problem was easier, because the
@@ -871,8 +873,6 @@ this anecdote:
 > shell explode at the right moment, when the fuse won't burn!
 > 
 > I decided that was too hard for me and went back to Princeton.
->
-> - [Richard Feynman][SYJ]
 
 Work on a problem long enough, and every problem is a fuse problem; that is to
 say, it becomes apparent that a fundamental shift in approach and a completely
@@ -891,7 +891,7 @@ Conclusion
 ----------
 
 When I started this project, I would not have believed that my laptop could
-calculate the millionth in a fraction of a second. Certainly the first few
+calculate the millionth Fibonacci number in a fraction of a second. Certainly the first few
 algorithms we looked at couldn't come close to that. But my surprise should
 come as no surprise.
 
@@ -915,7 +915,7 @@ work of four, decreasing the bound to $\mathcal{O}(n^{\log_2 3})$. So simple,
 yet until 1960 not one mathematician had ever thought of it. And yet it is this
 trick (and later more complicated versions in the same vein) that account for
 the almost magical speed of the GMP library. It's also closely related to the
-same divide-and-conquer strategy for matrix multiplication that makes linear
+same [divide-and-conquer strategy for matrix multiplication][SA] that makes linear
 algebra libraries like [OpenBLAS][OB] so fast.
 
 The lower bounds on good algorithms can often seem impossible. It doesn't sound
@@ -986,3 +986,5 @@ of performance to be found somewhere.
 [GFB]: https://gmplib.org/manual/Number-Theoretic-Functions.html#index-mpz_005ffib_005fui-396
 [GR]: https://en.wikipedia.org/wiki/Golden_ratio
 [AO]: https://en.wikipedia.org/wiki/Anything_You_Can_Do_(I_Can_Do_Better)
+[SA]: https://en.wikipedia.org/wiki/Strassen_algorithm
+[NP]: https://www.numpy.org/
