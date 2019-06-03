@@ -1,7 +1,7 @@
 ---
 title: 'ML From Scratch, Part 5: Gaussian Mixture Models'
 author: Oran Looney
-date: 2019-05-25
+date: 2019-06-02
 tags:
   - Python
   - Statistics
@@ -13,13 +13,14 @@ draft: true
 
 
 
-<p>Consider an dataset like the following:</p>
+<p>Consider the following motivating dataset:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-5-gmm_files/unlabled.png" alt="Unlabled Data" />
 <p class="caption">Unlabled Data</p>
 </div>
-<p>On the one hand, it is visually apparent that these data have a certain structure. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest. Unfortunately, it turns out that none of the techniques we have studied in this series so far are even able to make a start: they all assume that we have a “labeled” traing set, which requires that we not only have clear definition of the thing that we are trying to predict, we must in fact already know the correct answer for every example in the training set. A problem of the form “just find me <em>some</em> kind interesting relationships or structure, any will do” does not fit into this framework because no “true” labels are known in advance.</p>
-<p>More formally, all of the algorithms we’ve looked at so far have been “supervised” learning problems, where the training set consists of <em>labeled</em> pairs <span class="math inline">\((\mathbf{X}, \mathbf{Y})\)</span> and the tast was to predict <span class="math inline">\(\mathbf{Y}\)</span> from <span class="math inline">\(\mathbf{X}\)</span>. The problem of discovering interesting structure or relationships from <em>unlabeled</em> examples <span class="math inline">\(\mathbf{X}\)</span> is called the “unsupervised” learning problem, and calls for a different set of techniques and algorithms entirely.</p>
+<p>It is apparent that these data have some kind of structure; which is to say, they certainly are not drawn from a uniform or other simple distribution. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest. <strong>Is it possible for a machine learning algorithm to automatically discover and model these kinds of structures without human assistance?</strong></p>
+<p>It turns out that none of the techniques we have studied in this series can do this. Every model we’ve look at so far assumed that we have a clear definition of the thing that we are trying to predict **and* we already know the correct answer for every example in the training set. A problem of the form “just find me <em>some</em> kind interesting relationships or structure, any will do” does not fit into this framework because no “true” labels are known in advance.</p>
+<p>More formally, all of the algorithms we’ve looked at so far have been “supervised” learning problems, where the training set consists of <em>labeled</em> pairs <span class="math inline">\((X, Y)\)</span> and the tast was to predict <span class="math inline">\(Y\)</span> from <span class="math inline">\(X\)</span>. The problem of discovering interesting structure or relationships from <em>unlabeled</em> examples <span class="math inline">\(X\)</span> is called the “unsupervised” learning problem, and calls for a different set of techniques and algorithms entirely.</p>
 <div id="types-of-unsupervised-learning" class="section level2">
 <h2>Types of Unsupervised Learning</h2>
 <p>There are two broad approaches to unsupervised learning, which I’ll call dimensional reduction and clustering for lack of standard terminolgy.</p>
@@ -28,31 +29,58 @@ draft: true
 </div>
 <div id="gaussian-mixture-models" class="section level2">
 <h2>Gaussian Mixture Models</h2>
-<p>The Gaussian mixture model is simply a “mix” of Gaussian distributions. In this case, “Gaussian” means the <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">multivariate normal distribution</a> <span class="math inline">\(\mathcal{N}(\mathbf{\mu}, \Sigma)\)</span> and “mixture” means that the several different gaussian distributions, all with different mean vectors <span class="math inline">\(mu_i\)</span> and different covariance matrices <span class="math inline">\(\Sigma_i\)</span>, are combined by taking the weighted sum of the probability density functions:</p>
+<p>The Gaussian mixture model is simply a “mix” of Gaussian distributions. In this case, “Gaussian” means the <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">multivariate normal distribution</a> <span class="math inline">\(\mathcal{N}(\mathbf{\mu}, \Sigma)\)</span> and “mixture” means that the several different gaussian distributions, all with different mean vectors <span class="math inline">\(\boldsymbol{\mu}_j\)</span> and different covariance matrices <span class="math inline">\(\Sigma_j\)</span>, are combined by taking the weighted sum of the probability density functions:</p>
 <p><span class="math display">\[ \begin{align}
-    f_{GMM}(\mathbf{x}) = \sum^k_{i=1} \phi f_{\mathcal{N}(\mathbf{\mu}_i, \Sigma_i)}(\mathbf{x}) \tag{1}
+    f_{GMM}(\mathbf{x}) = \sum^k_{j=1} \phi_j f_{\mathcal{N}(\boldsymbol{\mu}_j, \Sigma_j)}(\mathbf{x}) \tag{1}
    \end{align}
 \]</span></p>
 <p>subject to:</p>
 <p><span class="math display">\[
-  \sum_{i=1}^k \phi_i = 1 \tag{2}
+  \sum_{j=1}^k \phi_j = 1 \tag{2}
 \]</span></p>
 <p>A single multivariate normal distribution has a single “hill” or “bump” located at <span class="math inline">\(\mu_i\)</span>; in contrast, a GMM (in general) is a multimodal distribution with on distinct bump per class. (Sometimes you get fewer than <span class="math inline">\(k\)</span> distinct local maxima in the p.d.f., if the bumps are sufficiently close together or if the weight of one class is zero or nearly so, but usually you will get <span class="math inline">\(k\)</span> distinct bumps.) This makes it well suited to modeling data like that seen in our motivating example above, where there seems to be more than one region on high density.</p>
 <p><a href="https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution"><img src="/post/ml-from-scratch-part-5-gmm_files/gmm_pdf.png" alt="GMM p.d.f." /></a></p>
-<p>We can make this fully explicit by expanding the definition of the p.d.f. of the multivariate normal distribution:</p>
+<p>We can view this is as a two-step generative process. To generate the <span class="math inline">\(i\)</span>-th example:</p>
+<ol style="list-style-type: decimal">
+<li>Sample a random class index <span class="math inline">\(C_i\)</span> from the categorical distribution parameterized by <span class="math inline">\(\boldsymbol{\phi} = (\phi_1, ... \phi_k)\)</span>.</li>
+<li>Sample a random vector <span class="math inline">\(\mathbf{X}_i\)</span> from the multivariate distribution associated to the <span class="math inline">\(C_i\)</span>-th class.</li>
+</ol>
+<p>The <span class="math inline">\(n\)</span> independent samples <span class="math inline">\(\mathbf{X}_i\)</span> are the row vectors of the matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>Symbolically, we write:</p>
 <p><span class="math display">\[ \begin{align}
-    C_i &amp; \sim \mathcal{N}(\mathbf{\mu}_i, \Sigma_i) \tag{3} \\
-    f_{C_i}(\mathbf{x}) &amp;= \frac{1}{\sqrt{ (2\pi)^k |\Sigma_i| }} e^{(\mathbf{x} - \mathbf{\mu}_i)^T \Sigma_i^{-1} (\mathbf{x} - \mathbf{\mu}_i)} \tag{4} \\
-    P(\mathbf{x}) &amp; = \sum^k_{i=1} \phi_i f_{C_i}(\mathbf{x}) \tag{5}
+    C_i &amp; \sim \text{Categorical}(k, \boldsymbol{\phi}) \tag{3} \\
+    \mathbf{X}_i &amp; \sim \mathcal{N}(\boldsymbol{\mu}_{C_i}, \Sigma_{C_i}) \tag{4} \\
    \end{align}
 \]</span></p>
-<p>It is obvious that a model of this form could represent a distribution with multiple distinct clusters, but it is less clear how, given a dataset <span class="math inline">\(\mathbf{X}\)</span>, we can choose parameters</p>
-<p><span class="math display">\[\Theta = \{ \mathbf{\mu}_1, \Sigma_1, ..., \mathbf{\mu}_k, \Sigma_k \} \tag{6} \]</span></p>
-<p>The first step is decide that we will use the maximum likelihood estimate for the parameters. Because the <span class="math inline">\(n \times m\)</span> example matrix <span class="math inline">\(\mathbf{X}\)</span> is assumed to be a realization of <span class="math inline">\(n\)</span> i.i.d. samples from <span class="math inline">\(f_{GMM}(\mathbf{x})\)</span>, we can write down our likelihood function as</p>
+<p>To fit a GMM model to a particular dataset, we attempt to find the <a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">maximum likelihood estimate</a> of the parameters:</p>
+<p><span class="math display">\[\Theta = \{ \mathbf{\mu}_1, \Sigma_1, ..., \mathbf{\mu}_k, \Sigma_k \} \tag{5} \]</span></p>
+<p>Because the <span class="math inline">\(n \times m\)</span> example matrix <span class="math inline">\(\mathbf{X}\)</span> is assumed to be a realization of <span class="math inline">\(n\)</span> i.i.d. samples from <span class="math inline">\(f_{GMM}(\mathbf{x})\)</span>, we can write down our likelihood function as</p>
 <p><span class="math display">\[
-  \mathcal{L}(\Theta; \mathbf{X}) = \prod_{j=1}^n \sum^k_{i=1} \phi_i f_{C_i}(\mathbf{X}_j) \tag{7}
+  \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X}_i;\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j|\mathbf{X}_i)P(\mathbf{X}_i|C_i=j) \tag{6}
 \]</span></p>
-<p>It is at this point we encounter an empass. In the <a href="http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/">past</a>, we’ve been able to simplify such likelihood functions by first taking a log to turn the product into a sum and also get rid of the exponent, reducing the problem to ordinary least squares. Here, however, because of the inner sum over classes, there is no obvious way to simplify this to a tractable form where the gradient might be calculated analytically. We need a new approach.</p>
+<p>We know that <span class="math inline">\(\mathbf{X}_i\)</span> has a multivariate normal distribution with parameters determined by the class, so the second condifitional probability can be written down pretty much immediately from the definition:</p>
+<p><span class="math display">\[
+  P(\mathbf{X}_i|C_i=j) = \frac{1}{\sqrt{(2\pi)^k |\Sigma_j|}} \text{exp}\Bigg( 
+    - \frac{(\mathbf{X}_i - \boldsymbol{\mu}_j)^T \Sigma_j^{-1} (\mathbf{X}_i - \boldsymbol{\mu}_j) }
+         {2} 
+  \Bigg) \tag{7}
+\]</span></p>
+<p>The second part needs a little more work. We know that the unconditional probability is given by the parameter <span class="math inline">\(\boldsymbol{\phi}\)</span>:</p>
+<p><span class="math display">\[
+P(C_i = j) = \phi_j \tag{8}
+\]</span></p>
+<p>So using Bayes’ theorem, we can write this in terms of equation (7):</p>
+<p><span class="math display">\[
+\begin{align}
+P(C_i=j|\mathbf{X}_i) 
+  &amp; = \frac{P(C_i=j) P(\mathbf{X}_i|C_i=j)}
+  {P(\mathbf{X}_i)} \\
+  &amp; = \frac{ \phi_j P(\mathbf{X}_i|C_i=j)}
+  {\sum_{l=1}^k P(\mathbf{X}_i|C_i=l)} \\
+\end{align} \tag{9}
+\]</span></p>
+<p>If we substituted equation (7) into (9) we could get a more explicit but very ugly formula, so I leave that to the reader’s imagination.</p>
+<p>Equations (6), (7), and (9), when taken together, constitute the complete likelihood function <span class="math inline">\(\mathcal{L}(\Theta;\mathbf{X})\)</span>, yet the problem of how to find the MLE estimate seems as far from a solution as ever because this equation seems rather intractable. Certainly I would not care to write it out in fully explicit form and then try to take partial derivatives with represent to <span class="math inline">\(\boldsymbol{\phi}\)</span>, <span class="math inline">\(\boldsymbol{\mu}_j\)</span>, and <span class="math inline">\(\Sigma_j\)</span>! Luckily, we don’t have to. The form we have it in now suffices to allow us to write down an iterative algorithm which will solve the MLE problem for us.</p>
 </div>
 <div id="the-em-algorithm" class="section level2">
 <h2>The EM Algorithm</h2>
