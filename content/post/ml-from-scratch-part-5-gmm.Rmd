@@ -142,30 +142,33 @@ So using Bayes' theorem, we can write this in terms of equation (7):
 \begin{align}
 P(C_i=j|\mathbf{X}_i) 
   & = \frac{P(C_i=j) P(\mathbf{X}_i|C_i=j)}
-  {P(\mathbf{X}_i)} \\
+           {P(\mathbf{X}_i)} \\
   & = \frac{ \phi_j P(\mathbf{X}_i|C_i=j)}
-  {\sum_{l=1}^k P(\mathbf{X}_i|C_i=l)} \\
+           {\sum_{l=1}^k P(\mathbf{X}_i|C_i=l)} \\
 \end{align} \tag{9}
 \]
 
 If we substituted equation (7) into (9) we could get a more explicit but very ugly formula, so I leave that to the reader's imagination.
 
-Equations (6), (7), and (9), when taken together, constitute the complete likelihood function $\mathcal{L}(\Theta;\mathbf{X})$, yet
-the problem of how to find the MLE estimate seems as far from a solution as ever because this equation seems rather intractable. Certainly
-I would not care to write it out in fully explicit form and then try to take partial derivatives with represent to $\boldsymbol{\phi}$,
-$\boldsymbol{\mu}_j$, and $\Sigma_j$! Luckily, we don't have to. The form we have it in now suffices to allow us to write down
-an iterative algorithm which will solve the MLE problem for us. 
+Equations (6), (7), and (9), when taken together, constitute the complete likelihood function $\mathcal{L}(\Theta;\mathbf{X})$.
+However, these equations have a problem - they depend on the unknown random variable $C_i$. This variable tells us which class
+each $\mathbf{X}_i$ was drawn from and makes it much easier to reason about the distribution, but we don't actually get to 
+know what $C_i$ is for any $i$. This is called a [latent random variable][LRV] and its presence in our model causes a kind
+of chicken-and-egg problem. If we knew $\boldsymbol{\mu}_j$ and $\Sigma_j$ for $j = (1, 2, ..., k)$ then we could make a guess
+about what $C_i$ is by looking at which $\boldsymbol{\mu}_j$ is closest to $\mathbf{X}_i$. If we knew $C_i$, we could estimate $\boldsymbol{\mu}_j$ and $\Sigma_j$ by simply taking the mean and covariance over all $X_i$ where $C_i = j$. How can we estimate
+these two sets of parameters together, if we don't know either when we start?
 
 
 The EM Algorithm
 ----------------
 
-TODO. Very broad and powerful algorithm. Also used for Factor Analysis and the [Fellegi-Sunter][FS] record linkage algorithm,
-and many other "latent variable" models. 
+The solution to our chicken-and-egg dilemma is an iterative algorithm called the [expectation-maximization algorithm][EM],
+usually refered to as the EM algorithm. The EM algorithm is a very general strategy that can be used to fit many different
+types of latent variable models, most famously [factor analysis][FA] but also the [Fellegi-Sunter][FS] record linkage algorithm, 
+[item response theory][IRT], and of course [Gaussian mixture models][GMM].
 
-[FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
-
-Coordinate descent, every iteration improves, we end with a ML estimate.
+TODO: intuition - replace hard assignment with probability distribution, estimate then maximize likelihood
+TODO: Coordinate descent, every iteration improves, we end with a ML estimate. Ratchet.
 
 One good resource on GMM and the EM algorithm I used was this [Stanford lecture by Andrew Ng](https://youtu.be/ZZGTuAkF-Hw?t=2108). I've linked to the part of the lecture where he shows this update step in particular but the whole lecture is worth watching. Another good resource
 is this [slide deck][SD]; I found that
@@ -175,7 +178,7 @@ Animation:
 
 <a title="Chire [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:EM_Clustering_of_Old_Faithful_data.gif"><img width="256" alt="EM Clustering of Old Faithful data" src="https://upload.wikimedia.org/wikipedia/commons/6/69/EM_Clustering_of_Old_Faithful_data.gif"></a>
 
-
+$w_{ij} = P(C_i = j|\mathbf{X}_i;\theta)$
 
 Understanding the E-step
 ------------------------
@@ -202,19 +205,18 @@ The probability of each class $\phi$ can then be estimated by averaging over all
 Understanding the M-step
 ------------------------
 
-Yes, and it's easy to see why if we look at it the right way.
+Forget about the past estimates we had for $\boldsymbol{\mu}_j$ or $\Sigma$. Unlike gradient descent, the EM
+algorithm does not proceed by making small changes to the previous iteration's parameter estimates - instead,
+in makes a bold leap all the way to the *exact* estimate - but only in certain dimensions. In the M-step,
+we will calculate the ML estimates for $\boldsymbol{\mu}_j$ or $\Sigma$ assuming that $w_{ij}$ is held constant.
 
-Forget about the M-step; in fact, forget the fact that we're inside an iterative algorithm at all. Forget about the past and that you ever had other estimates for $\vec{\mu}$ or $\mathbb{\Sigma}$. And forget that there are other classes, and just focus on one class. And forget that the weights can be interpreted as $p(m|\vec{x}_i;\theta)$ and just think of them as sample weights, origin unknown, called $w_i$. For convenience let's also assume that these weights are normalized, e.g. $\sum w_i = 1$. 
+How can we make such a leap? Well, we have a matrix of $n$ observations $\mathbf{X}_i$ with weights $w_i$ which we believe came from a multivariate distribution $\mathcal{N}(\vec{\mu}, \mathbb{\Sigma})$. That means we can use the familiar formulas:
 
-What remains is a sample of $n$ (instead of $T$ so I can reserve $T$ for "transpose") observations $\vec{x}_i$ with weights $w_i$ which we believe came from a multivariate distribution $\mathcal{N}(\vec{\mu}, \mathbb{\Sigma})$. What is the [procedure for estimating][1] $\vec{\mu}$ and $\mathbb{\Sigma}$? Well, it's to first calculate the mean, subtract it off, then average over the outer products:
+\[ \boldsymbol{\mu}_j = {1 \over {n}}\sum_{i=1}^n w_{ij} \mathbf{X}_i \tag{10} \]
 
-$$ \vec{\mu}= {1 \over {n}}\sum_{i=1}^n w_i \vec{x}_i \tag{1} $$
+\[ \Sigma_j = \frac{1}{n} \sum_{i=1}^n w_{ij} ( \mathbf{X}_i - \boldsymbol{\mu}_j )( \mathbf{X}_i - \boldsymbol{\mu}_j )^T \tag{11} \]
 
-$$ \mathbb{\Sigma} = \frac{1}{n} \sum_{i=1}^n w_i ( \vec{x}_i - \vec{\mu} )(\vec{x}_i - \vec{\mu})^T \tag{2} $$
-
-This is the [ML estimate][2]. Note that the $\vec{\mu}$ in (2) is exactly the same as the $\vec{\mu}$ in (1) - this is a closed form solution, not an iterative algorithm! Any *other* estimate for $\vec{\mu}$ and $\mathbb{\Sigma}$ will have lower likelihood, by definition.
-
-Now we can lift our self imposed amnesia and recall that we are using E-M to numerically approximate the maximum likelihood of a GMM. For that one particular M step, we held all other parameters constant and maximized the likelihood with respect to just $\vec{\mu}$ and $\mathbb{\Sigma}$. Because we used the closed form solution of (1) and (2), we didn't take a "step" *towards* that maximum - we jumped straight to the maximum within that subspace. In particular we can guarantee that likelihood either increased or stayed the same. We need this property because it is necessary for the convergence of the E-M algorithm as a whole. Using the closed form ML estimate for the multivariate distribution is by easiest way to prove it, and any other procedure for updating $\vec{\mu}$ and $\mathbb{\Sigma}$ - such as using the $\mu$ left over from the previous step - would require a separate proof.
+These are in fact the [ML estimate][2] for these parameters. 
 
 
 Implementation
@@ -299,7 +301,6 @@ Fit a model.
     gmm.fit(X)
 
 
-
 Plot. Each color is a cluster found by GMM:
 
     def jitter(x):
@@ -367,6 +368,15 @@ After 1,000 random trials, we can see that cluster-to-labels "accuracy" actually
 with a mean of 0.74. 
 
 ![Accuracy Histogram](/post/ml-from-scratch-part-5-gmm_files/accuracy_histogram.png)
+
+This is a little disappointing. We started from a dataset which really was the aggregation of three different
+classes, and while our unsupervised learning algorithm was discover three clusters, the aggreement between
+reality and our model is only around 3/4. That means we can't reliably reconstruct the true structure of
+this dataset using this technique. In contrast, a supervised learning algorithm could have easily found a class
+boundary with an accuracy of 99%. That suggests that if we run an unsupervised learning algorithm on a real-world
+data set and it finds some clusters for us, we should be suspicious that they represent "true" classes in the
+real world. In fact, unsupervised learning algorithms are subject to a large number of caveats and limitations
+and I'll digress briefly to elaborate.
 
 Limitations
 -----------
@@ -439,3 +449,7 @@ TODO: my bias against them and other warnings.
   [MLFS1]: http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
   [SD]: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf
   [MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
+  [LRV]: https://en.wikipedia.org/wiki/Latent_variable
+  [FA]: https://en.wikipedia.org/wiki/Factor_analysis
+  [IRT]: https://en.wikipedia.org/wiki/Item_response_theory
+  [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
