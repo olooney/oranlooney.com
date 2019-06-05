@@ -130,7 +130,7 @@ We know that $\mathbf{X}_i$ has a multivariate normal distribution with paramete
   \Bigg) \tag{7}
 \]
 
-The second part needs a little more work. We know that the unconditional probability is given by the parameter $\boldsymbol{\phi}$:
+Obtaining a formula for $P(\mathbf{X}_i|C_i=j)$ requires a little more work. We know that the unconditional probability is given by the parameter $\boldsymbol{\phi}$:
 
 \[
 P(C_i = j) = \phi_j \tag{8}
@@ -167,24 +167,46 @@ usually refered to as the EM algorithm. The EM algorithm is a very general strat
 types of latent variable models, most famously [factor analysis][FA] but also the [Fellegi-Sunter][FS] record linkage algorithm, 
 [item response theory][IRT], and of course [Gaussian mixture models][GMM].
 
-TODO: intuition - replace hard assignment with probability distribution, estimate then maximize likelihood
-TODO: Coordinate descent, every iteration improves, we end with a ML estimate. Ratchet.
+The first thing we need to do is introduce a parameter to model the unknown latent variables $C_i$. Because $C_i$ can take
+on $k$ discrete values, this new parameter will be a $n \times k$ matrix where each element $w_{ij}$ is an estimate of $P(C_i = j|\mathbf{X}_i;\theta)$. Each element of this matrix represents the probability that the $i$-th data point came from cluster $j$.
 
-One good resource on GMM and the EM algorithm I used was this [Stanford lecture by Andrew Ng](https://youtu.be/ZZGTuAkF-Hw?t=2108). I've linked to the part of the lecture where he shows this update step in particular but the whole lecture is worth watching. Another good resource
-is this [slide deck][SD]; I found that
-working through the simple, finite exercise by hand to be a great way to build intuition before tackling the much more complicated GMM case.
+The EM algorithm then proceeds by iterations, with each iteration being divided into two steps, the E-step and the M-step.
+I will describe these in broad strokes first, so you can get a feel for the overall intent of the algorithm, then we will
+examine each in later sections.
 
-Animation:
+In the E-step, we use our current best knowledge of the centers and shapes of each cluster to update our estimates
+of which data point came from which class. Concretely, we hold $\boldsymbol{\mu}_j$ and $\Sigma_j$ fixed and update $w_{ij}$
+and $\boldsymbol{\phi}$.
+
+In the M-step, we use our current best knowledge of which class each point belongs to to update and improve our estimates
+for the center and shape of each cluster. Concretely, we use $w_{ij}$ as *weights* and then update $\boldsymbol{\mu}_j$ and $\Sigma_j$ by taking weighted averages over $X$. For example, if $w_11 = 0.01$ and $w_11 = 0.99$ we know that the data point $X_1$ 
+is unlikely to be in class 1, but very likely to be in class 2. Therefore, when estimating the center of the first class 
+$\boldsymbol{\mu}_1$ we give $X_1$ almost negliglbe weight, but when estimating the center of the second class 
+$\boldsymbol{\mu}_2$ we give $X_1$ almost full weight. This "pulls" the center of each cluster towards those data points
+which are considered likely to be part of that cluster.
+
+Visually, it looks something like this:
 
 <a title="Chire [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:EM_Clustering_of_Old_Faithful_data.gif"><img width="256" alt="EM Clustering of Old Faithful data" src="https://upload.wikimedia.org/wikipedia/commons/6/69/EM_Clustering_of_Old_Faithful_data.gif"></a>
 
-$w_{ij} = P(C_i = j|\mathbf{X}_i;\theta)$
+With each iteration, the algorithm improves its estimate of where the clusters
+are, which in turn allows it to make better guesses about which points are from which clusters, which in turn allows it
+to further refine its estimate of the center and shape of each cluster, and so on *ad infinitum*.
+
+This process is guarenteed to converge a (local) maximum likelihood because of the ratchet principle: at each step,
+likelihood can only increase and never decrease. This can be viewed as an application of [coordinate ascent][CD].
+These maxima are not unique, and GMM will tend to converge to different final solutions depending on initial conditions. 
+
+One  resource on GMM and the EM algorithm I used was this [Stanford lecture by Andrew Ng](https://youtu.be/ZZGTuAkF-Hw?t=2108). I've linked to the part of the lecture where he shows this update step because that is most relevant to implementing the algorithm but the whole lecture is worth watching if you want to understand the concepts. Another good resource is this [slide deck][SD]; I found that
+working through the simple, finite exercise by hand to be a great way to build intuition before tackling the much more complicated GMM case.
+
+We will now treat the E-step and M-step for the particular case of the GMM in detail. 
 
 Understanding the E-step
 ------------------------
 
-Given the that centroid $\mu$ and covariance matrix $\Sigma$ is known for each class we can update $w_{ij}$ by simply
-calculating the probability that $X_i$ came from each class and normalizing TODO:
+Given the that centroid $\boldsymbol{\mu}_j$ and covariance matrix $\Sigma_j$ for class $j$ is fixed, we can update $w_{ij}$ by simply
+calculating the probability that $X_i$ came from each class and normalizing:
 
 \[ w_{ij} = \frac{ P(X_i|K=j) }{ P(K_i) } = \frac{ P(X_i|K=j) }{ \sum_{l=1}^k P(X_i|K=l) }
 \]
@@ -207,7 +229,7 @@ Understanding the M-step
 
 Forget about the past estimates we had for $\boldsymbol{\mu}_j$ or $\Sigma$. Unlike gradient descent, the EM
 algorithm does not proceed by making small changes to the previous iteration's parameter estimates - instead,
-in makes a bold leap all the way to the *exact* estimate - but only in certain dimensions. In the M-step,
+it makes a bold leap all the way to the *exact* estimate - but only in certain dimensions. In the M-step,
 we will calculate the ML estimates for $\boldsymbol{\mu}_j$ or $\Sigma$ assuming that $w_{ij}$ is held constant.
 
 How can we make such a leap? Well, we have a matrix of $n$ observations $\mathbf{X}_i$ with weights $w_i$ which we believe came from a multivariate distribution $\mathcal{N}(\vec{\mu}, \mathbb{\Sigma})$. That means we can use the familiar formulas:
@@ -216,11 +238,22 @@ How can we make such a leap? Well, we have a matrix of $n$ observations $\mathbf
 
 \[ \Sigma_j = \frac{1}{n} \sum_{i=1}^n w_{ij} ( \mathbf{X}_i - \boldsymbol{\mu}_j )( \mathbf{X}_i - \boldsymbol{\mu}_j )^T \tag{11} \]
 
-These are in fact the [ML estimate][2] for these parameters. 
+These are in fact the [ML estimate][2] for these parameters for the multivariate normal distribution. As such,
+we don't need to worry about learning rate or gradients as we would with gradient descent because these estimates
+are already maximal! This is one of the neatest things about this algorithm.
 
 
 Implementation
 ---------------
+
+Turning the above mathematics into a working implementation is straight forward. The below program
+corresponds almost one-to-one (one line of code for one equation) with the above mathematics.
+
+One detail I did not treat above is initialization - while $\boldsymbol{\phi}$ and $w_{ij}$
+can use simple uniform initialization, for $boldsymbol{\mu}$ it is better to choose a random
+index $i_j$ uniformly from $1$ to $n$ for each class and then initialize $boldsymbol{\mu}_j = X_i_j$. 
+This ensures that each cluster centroid is inside the support of the underlying distribution and
+that they are initially spread out randomly throughout the space.
 
 	import numpy as np
 	from scipy.stats import multivariate_normal
@@ -284,8 +317,9 @@ Implementation
 Model Evaluation
 ----------------
 
-We'll use the "iris" dataset. This dataset has labels, but we won't expose them to the model, but we will use them at the end 
-to discuss the question, "were we able to discover the class labels through unsupervised learning?"
+We'll use the famous [iris][ID] dataset as a test case. This actually is the same dataset used as a motivating example at the begining
+of the article, though I did not name it at that time. The iris dataset has labels, but we won't expose them to the GMM model.
+However, we will use these labels later to discuss the question, "were we able to discover the class labels through unsupervised learning?"
 
     from scipy.stats import mode
     from sklearn.metrics import confusion_matrix
@@ -294,14 +328,14 @@ to discuss the question, "were we able to discover the class labels through unsu
     iris = load_iris()
     X = iris.data
 
-Fit a model.
+Fit a model:
 
     np.random.seed(42)
     gmm = GMM(k=3, max_iter=10)
     gmm.fit(X)
 
 
-Plot. Each color is a cluster found by GMM:
+Plot the clusters. Each color is a cluster found by GMM:
 
     def jitter(x):
         return x + np.random.uniform(low=-0.05, high=0.05, size=x.shape)
@@ -334,6 +368,10 @@ Plot. Each color is a cluster found by GMM:
 ![GMM Clusters](/post/ml-from-scratch-part-5-gmm_files/gmm_clusters.png)
 
 Well, the model certainly found *something.* 
+
+One thing we can say for sure is that the GMM model does find clusters of related points. It does a particularly
+good job placing the visually separate points in the lower right into its own cluster, but the story with the
+two clusters in the upper right is less clear-cut.
 
 
 Comparing to True Class Labels
@@ -429,10 +467,12 @@ Conclusion
 In this article, we seen how unsupervised learning differs from supervised learning and the challenges that
 come along with that. We discussed a method for posing an unsupervised learning problem as an maximimum likelihood optimization,
 and described and implemented the [EM algorithm][EM] often used to solve these otherwise intractable problems. We've
-seen first hand that the clusters identified by such algorithms don't always line up perfectly with what we believe
-the true structure to be.
+seen first hand that the clusters identified by GMMs don't always line up with what we believe
+the true structure to be; this lead to a broader discussion of the limitations of unsupervised learning algorithms
+and the difficulty getting value out of them.
 
-TODO: my bias against them and other warnings.
+In the next article in this series, we'll continue our discussion of unsupervised learning algorithms by implementing
+the *other* kind of unsupervised learning algorithm besides clustering: a dimensional reduction algorithm. 
 
 
   [1]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Estimation_of_parameters
@@ -453,3 +493,5 @@ TODO: my bias against them and other warnings.
   [FA]: https://en.wikipedia.org/wiki/Factor_analysis
   [IRT]: https://en.wikipedia.org/wiki/Item_response_theory
   [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
+  [CD]: https://en.wikipedia.org/wiki/Coordinate_descent
+  [ID]: https://en.wikipedia.org/wiki/Iris_flower_data_set
