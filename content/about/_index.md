@@ -4,8 +4,8 @@ date = "2014-04-09"
 +++
 Hi, I'm Oran Looney. I do math. I write programs. I science... data? That doesn't sound right.
 I -tican stats? No, that's even worse. Maybe you should just think of me as a [nematode][N]
-trainer because many of the neural networks I train at work are roughly the same complexity as the [*C. elegans
-connectome*][CEC]. 
+wrangler because many of the neural networks I train at work are roughly the same complexity as the 
+[*C. elegans* connectome][CEC]. 
 
 [N]: https://en.wikipedia.org/wiki/Nematode
 [CEC]: http://wormwiring.org/
