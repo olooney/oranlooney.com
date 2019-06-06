@@ -54,7 +54,7 @@ image: /post/ml-from-scratch-part-5-gmm_files/lead.jpg
 <p><span class="math display">\[\Theta = \{ \mathbf{\mu}_1, \Sigma_1, ..., \mathbf{\mu}_k, \Sigma_k \} \tag{5} \]</span></p>
 <p>Because the <span class="math inline">\(n \times m\)</span> example matrix <span class="math inline">\(\mathbf{X}\)</span> is assumed to be a realization of <span class="math inline">\(n\)</span> i.i.d. samples from <span class="math inline">\(f_{GMM}(\mathbf{x})\)</span>, we can write down our likelihood function as</p>
 <p><span class="math display">\[
-  \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X};\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j|\mathbf{X}_i)P(\mathbf{X}_i|C_i=j) \tag{6}
+  \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X};\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j) P(\mathbf{X}_i|C_i=j) \tag{6}
 \]</span></p>
 <p>We know that <span class="math inline">\(\mathbf{X}_i\)</span> has a multivariate normal distribution with parameters determined by the class, so the condifitional probability P(_i|C_i=j) can be written down pretty much directly from the definition:</p>
 <p><span class="math display">\[
@@ -63,7 +63,7 @@ image: /post/ml-from-scratch-part-5-gmm_files/lead.jpg
          {2} 
   \Bigg) \tag{7}
 \]</span></p>
-<p>Obtaining a formula for <span class="math inline">\(P(\mathbf{X}_i|C_i=j)\)</span> requires a little more work. We know that the unconditional probability is given by the parameter vector <span class="math inline">\(\boldsymbol{\phi}\)</span>:</p>
+<p>Obtaining a formula for <span class="math inline">\(P(C_i=j|\mathbf{X}_i)\)</span> requires a little more work. We know that the unconditional probability is given by the parameter vector <span class="math inline">\(\boldsymbol{\phi}\)</span>:</p>
 <p><span class="math display">\[
 P(C_i = j) = \phi_j \tag{8}
 \]</span></p>

@@ -2,8 +2,13 @@
 title = "About"
 date = "2014-04-09"
 +++
-Hi, I'm Oran Looney. I do math. I write programs. I science... data? That
-doesn't sound right.
+Hi, I'm Oran Looney. I do math. I write programs. I science... data? That doesn't sound right.
+I -tican stats? No, that's even worse. Maybe you should just think of me as a [nematode][N]
+trainer because many of the neural networks I train at work are roughly the same complexity as the [*C. elegans
+connectome*][CEC]. 
+
+[N]: https://en.wikipedia.org/wiki/Nematode
+[CEC]: http://wormwiring.org/
 
 The best way to get in touch with me is through email: 
 <a href="mailto:olooney@gmail.com">olooney@gmail.com</a>.
@@ -19,12 +24,12 @@ Code][1] or [leetcode][2]; traditional puzzles like [the Moscow puzzles][3];
 puzzle games like [euclidea][4] or the [Professor Layton][5] games. I've also
 been thrilled by the recent wave of recreational mathematics and other
 educational content on Youtube and elsewhere: [3Blue1Brown][6], [Ben Eater][7],
-[Mathologer][10], [back-pen/red-pen][13], [Presh Talwakar][14] or [Dr.
-Peyam][12]. I think this new wave of math and science popularizers are doing a
-great job and I encourage you to check them out and support them on
-[Patreon][11] if you enjoy their videos.  Or if you're just feeling charitable
-in general, consider supporting [Wikipedia][8] or [helping hungry children in
-Wisconsin][9].
+[Mathologer][10], [back-pen/red-pen][13], [Presh Talwakar][14] or [Dr.Peyam][12].
+I think this new wave of math and science popularizers are doing a
+great job and I encourage you to check them out and support them if you can.
+Or if you're just feeling charitable
+in general, consider supporting [Wikipedia][8] or 
+[helping hungry children inWisconsin][9].
 
 
 [1]: https://adventofcode.com/
