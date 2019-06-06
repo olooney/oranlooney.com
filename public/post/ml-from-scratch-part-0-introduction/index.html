@@ -139,17 +139,19 @@
 <h2>Project Scope</h2>
 <p>While I want to touch on every aspect of machine learning, there’s little point in implementing minor variations of basically the same algorithms over and over. Instead, let’s pick one or two representative algorithms from each category and leave it at that. We want to make sure that we get reasonable coverage over the types of ML <em>problems</em> (supervised/unsupervised, regression/classification, etc.), as well as good coverage over the most important <em>algorithms</em> that crop up repeatedly in ML.</p>
 <p>Here’s a tentative list of algorithms I would like to tackle:</p>
-<table style="width:100%;">
+<table>
 <colgroup>
-<col width="31%" />
 <col width="29%" />
-<col width="38%" />
+<col width="27%" />
+<col width="35%" />
+<col width="7%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="center">Problem</th>
 <th align="center">Model</th>
 <th align="center">Algorithm</th>
+<th align="center">Article</th>
 </tr>
 </thead>
 <tbody>
@@ -157,63 +159,73 @@
 <td align="center">Regression</td>
 <td align="center">Linear Regression</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/QR_decomposition">QR Decomposition</a></td>
+<td align="center"><a href="/post/ml-from-scratch-part-1-linear-regression/">Part 1</a></td>
 </tr>
 <tr class="even">
 <td align="center">Classification</td>
 <td align="center">Logistic Regression</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a></td>
+<td align="center"><a href="/post/ml-from-scratch-part-2-logistic-regression/">Part 2</a></td>
 </tr>
 <tr class="odd">
 <td align="center">Classification</td>
 <td align="center">Neural Network</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Backpropagation">Backpropagation</a></td>
+<td align="center"><a href="/post/ml-from-scratch-part-3-backpropagation/">Part 3</a></td>
 </tr>
 <tr class="even">
 <td align="center">Classification</td>
 <td align="center">Decision Tree</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Recursive_partitioning">Recursive Partition</a></td>
+<td align="center"><a href="/post/ml-from-scratch-part-4-decision-tree/">Part 4</a></td>
 </tr>
 <tr class="odd">
 <td align="center">Clustering</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model">Gaussian Mixture Model</a></td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm">EM Algorithm</a></td>
+<td align="center"><a href="/post/ml-from-scratch-part-5-gmm/">Part 5</a></td>
 </tr>
 <tr class="even">
 <td align="center">Clustering</td>
 <td align="center">Hierarchical Clustering</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">Agglomerative Clustering</a></td>
+<td align="center">TBD</td>
 </tr>
 <tr class="odd">
 <td align="center">Dimension Reduction</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal Component Analysis</a></td>
-<td align="center"><a href="https://en.wikipedia.org/wiki/QR_algorithm">QR Algorithm</a></td>
+<td align="center"><a href="https://en.wikipedia.org/wiki/QR_algorithm">QR Eigenvalue Algorithm</a></td>
+<td align="center">TBD</td>
 </tr>
 <tr class="even">
 <td align="center">Recommendation</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation">Low-Rank Matrix Approximation</a></td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Low-rank_approximation#Alternating_projections_algorithm">Alternating Projections</a></td>
+<td align="center">TBD</td>
 </tr>
 <tr class="odd">
 <td align="center">Regression</td>
 <td align="center">General Additive Models</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Backfitting_algorithm">Backfitting</a></td>
+<td align="center">TBD</td>
 </tr>
 <tr class="even">
 <td align="center">Classification</td>
 <td align="center">Support Vector Machines</td>
 <td align="center"><a href="https://en.wikipedia.org/wiki/Sequential_minimal_optimization">SMO Algorithm</a></td>
+<td align="center">TBD</td>
 </tr>
 </tbody>
 </table>
 <p>Other candidates I considered but ultimately decided were out-of-scope:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Factor_analysis">Factor Analysis</a> - We already have PCA for dimensional reduction and GMM as an example of using the EM algorithm to solve for latent random variables.</li>
-<li>K-Means - We’ll do GMM instead.</li>
-<li><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">K-Nearest Neighbors</a> - A naive algorithm is trivial while a serious algorithm would mostly be implementing a spatial index (such as <a href="https://en.wikipedia.org/wiki/R-tree">R-Trees</a>) which takes us pretty far afield from learning algorithms.</li>
+<li>K-Means - We’ll do GMM instead, since k-means is just GMM with hard assignment.</li>
+<li><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">K-Nearest Neighbors</a> - A naive algorithm is trivial while a serious algorithm would mostly involve implementing a spatial index (such as <a href="https://en.wikipedia.org/wiki/R-tree">R-Trees</a>) which takes us pretty far afield from learning algorithms.</li>
 <li>Ensemble models - e.g. Random Forest or Boosted Trees. Not a good fit for the “from scratch” approach and can best be understood as “composing” two or more other mature models.</li>
 <li><a href="https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464">CNN, RNN, etc.</a> - We’ll do the vanilla deep neural network from scratch but more advanced topologies are best explored with a framework with automated differentiation.</li>
 <li><a href="https://en.wikipedia.org/wiki/Learning_to_rank">Learning-to-Rank</a> - e.g. <a href="https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model">Bradley-Terry-Luce</a>, etc. These can generally be reduced to logistic regression or viewed as latent variable models and solved with the EM algorithm.</li>
-<li>Felligi-Sunter Record Linkage - another take on the EM algorithm.</li>
+<li><a href="https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf">Felligi-Sunter Record Linkage</a> - another take on the EM algorithm, and requiring to many prerequisites like <a href="https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance">Jaro-Winkler distance</a>.</li>
 </ul>
 </div>
 <div id="bottom-up-approach-to-machine-learning" class="section level2">
@@ -233,9 +245,9 @@
 <li>Talking to another computer over a network</li>
 </ol>
 <p>This fairly standard set of costs actually leads directly to some important insights that guide research into practical machine learning.</p>
-<p>First, we want to restrict ourselves as much as possible to simple arithmetic. While we may occasionally allow ourselves a division or even, <em>gasp</em>, an exponentiation, we really want to stick to fast operations like addition, multiplication, <code>max(a,b)</code>, or <code>sign(a)</code>.</p>
-<p>Second, any “learning” we do will have to be in the form of updating a structured set of numbers. We call these the “parameters” to distinguished them from the “data.” The parameters may be shaped like a vector, a matrix, or a tree, but if we want to combine parameters and data with simple arithmetic, then both must ultimately be represented as structures of numbers.</p>
-<p>One thing we absolutely <em>don’t</em> want to do is to represent our learning as an arbitrary program. For example, the internal state of our learning algorithm could literally be a C program as a string:</p>
+<p>First, we want to restrict ourselves as much as possible to simple arithmetic. While we may occasionally allow ourselves a division or even, <em>gasp</em>, an exponentiation, we really want to stick to fast operations like addition, multiplication, taking the greater of two numbers with <code>max(a,b)</code>, or taking the sign of a number with <code>sign(a)</code>.</p>
+<p>Second, any “learning” we do should be in the form of updating a structured set of numbers. We call these the “parameters” to distinguished them from the “data.” The parameters may be shaped like a vector, a matrix, or a tree, but if we want to combine parameters and data with simple arithmetic, then both must ultimately be represented as data structures with numeric values.</p>
+<p>On the other hand, we want to avoid representing learning as a formatted string or program. For example, the internal state of our learning algorithm could literally be a a string describing a C program:</p>
 <pre><code>float f(float* x) { 
     float z = 42; 
     if ( x[0] &lt; 5 &amp;&amp; x[1] &gt; 2 ) z -= 10; 
@@ -246,7 +258,7 @@
     }
     return z;
 }</code></pre>
-<p>To apply this to data, we would compile this C program and pass our data into the function <code>f()</code>. To “learn”, the algorithm would add, remove, and modify individual lines, characters, or perhaps syntactic statements or expressions. This is sometimes called <a href="https://en.wikipedia.org/wiki/Genetic_programming">genetic programming</a>. To be 100% clear, this is only bad if we allow <em>arbitrary</em> programs involving <code>AND</code>, <code>OR</code>, <code>NOT</code>, <code>if/else</code>, <code>while</code>, <code>for</code>, intermediate variables, and the like. Genetic programming can work well if the “genes” of the program are very carefully designed. Indeed, it is sometimes used as the “top level” learning algorithm in so-called automated machine learning frameworks such as <a href="https://automl.info/tpot/">TPOT</a>. However, for the kind of fitting and optimization we’re discussing here, genetic algorithms are hopelessly inefficient.</p>
+<p>To apply this to data, we would compile this C program and pass our data into the function <code>f()</code>. To “learn”, the algorithm would add, remove, and modify individual lines, characters, or perhaps syntactic statements or expressions. This is sometimes called <a href="https://en.wikipedia.org/wiki/Genetic_programming">genetic programming</a>. To be 100% clear, this is only bad if we allow <em>arbitrary</em> programs involving <code>AND</code>, <code>OR</code>, <code>NOT</code>, <code>if/else</code>, <code>while</code>, <code>for</code>, intermediate variables, and the like. Genetic programming can work well if the “genes” of the program are very carefully designed. Indeed, it is sometimes used as the “top level” learning algorithm in so-called automated machine learning frameworks such as <a href="https://automl.info/tpot/">TPOT</a>. However, for the kind of fitting and optimization we’re mainly interested in, genetic algorithms are hopelessly inefficient.</p>
 <p>Why is learning an arbitrary program problematic? Does it simply not work? Surely any equation we write down could also be represented in a more general form as a program, and surely we could find that program by exhaustive breadth-first search if necessary. And isn’t it also true that every program has a <a href="https://en.wikipedia.org/wiki/G%C3%B6del_numbering">Gödel number</a>? So how is this fundamentally any different than learning a set of numbers?</p>
 <p>The problem isn’t that it doesn’t work, or that there’s anything wrong with that approach in theory. The problem is simply that the space of programs we would need to search is extremely large (the number of legal programs grows exponentially with the length of the program with very high fan-out), and it is exceedingly difficult to know if we’re getting “closer” to the right answer or not. That’s a bad combination and means that “sufficient time” is often a lot longer than we’re willing to wait.</p>
 <p>To illustrate that second point, consider this (correct) program which finds the greatest common divisor of a pair of numbers:</p>

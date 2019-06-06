@@ -166,18 +166,18 @@ important *algorithms* that crop up repeatedly in ML.
 
 Here's a tentative list of algorithms I would like to tackle:
 
-|Problem|Model|Algorithm|
-|:-------------------------:|:-----------------------:|:-------------------------------:|
-|Regression|Linear Regression| [QR Decomposition][QRD] |
-|Classification|Logistic Regression| [Gradient Descent][GD] |
-|Classification|Neural Network| [Backpropagation][BPA] |
-|Classification|Decision Tree| [Recursive Partition][RPA] |
-|Clustering| [Gaussian Mixture Model][GMM] | [EM Algorithm][EMA] |
-|Clustering|Hierarchical Clustering| [Agglomerative Clustering][ACA] |
-|Dimension Reduction| [Principal Component Analysis][PCA] | [QR Algorithm][QRA] |
-|Recommendation| [Low-Rank Matrix Approximation][LRA] | [Alternating Projections][APA] |
-|Regression|General Additive Models| [Backfitting][BFA] |
-|Classification|Support Vector Machines| [SMO Algorithm][SMO] |
+|Problem|Model|Algorithm|Article|
+|:-------------------------:|:-----------------------:|:-------------------------------:|:----:|
+|Regression|Linear Regression| [QR Decomposition][QRD] | [Part 1][MLFS1] |
+|Classification|Logistic Regression| [Gradient Descent][GD] | [Part 2][MLFS2] |
+|Classification|Neural Network| [Backpropagation][BPA] | [Part 3][MLFS3] |
+|Classification|Decision Tree| [Recursive Partition][RPA] | [Part 4][MLFS4] |
+|Clustering| [Gaussian Mixture Model][GMM] | [EM Algorithm][EMA] | [Part 5][MLFS5] |
+|Clustering|Hierarchical Clustering| [Agglomerative Clustering][ACA] | TBD |
+|Dimension Reduction| [Principal Component Analysis][PCA] | [QR Eigenvalue Algorithm][QRA] | TBD |
+|Recommendation| [Low-Rank Matrix Approximation][LRA] | [Alternating Projections][APA] | TBD |
+|Regression|General Additive Models| [Backfitting][BFA] | TBD |
+|Classification|Support Vector Machines| [SMO Algorithm][SMO] | TBD |
 
 [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
 [GMM]: https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model
@@ -198,9 +198,9 @@ Other candidates I considered but ultimately decided were out-of-scope:
 
 * [Factor Analysis][FA] - We already have PCA for dimensional reduction and GMM
   as an example of using the EM algorithm to solve for latent random variables.
-* K-Means - We'll do GMM instead.
+* K-Means - We'll do GMM instead, since k-means is just GMM with hard assignment.
 * [K-Nearest Neighbors][KNN] - A naive algorithm is trivial while a serious
-  algorithm would mostly be implementing a spatial index (such as
+  algorithm would mostly involve implementing a spatial index (such as
   [R-Trees][RT]) which takes us pretty far afield from learning algorithms.
 * Ensemble models - e.g. Random Forest or Boosted Trees. Not a good fit for the
   "from scratch" approach and can best be understood as "composing" two or more
@@ -211,8 +211,11 @@ Other candidates I considered but ultimately decided were out-of-scope:
 * [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], etc. These can
   generally be reduced to logistic regression or viewed as latent variable
   models and solved with the EM algorithm.
-* Felligi-Sunter Record Linkage - another take on the EM algorithm.
-
+* [Felligi-Sunter Record Linkage][FS] - another take on the EM algorithm, and requiring to many 
+  prerequisites like [Jaro-Winkler distance][JWD].
+  
+  [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
+  [JWD]: https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
 
 Bottom-Up Approach to Machine Learning
 --------------------------------------
@@ -247,17 +250,17 @@ important insights that guide research into practical machine learning.
 First, we want to restrict ourselves as much as possible to simple arithmetic.
 While we may occasionally allow ourselves a division or even, *gasp*, an
 exponentiation, we really want to stick to fast operations like addition,
-multiplication, `max(a,b)`, or `sign(a)`.
+multiplication, taking the greater of two numbers with `max(a,b)`, or taking the sign of a number with `sign(a)`.
 
-Second, any "learning" we do will have to be in the form of updating a
+Second, any "learning" we do should be in the form of updating a
 structured set of numbers. We call these the "parameters" to distinguished them
 from the "data." The parameters may be shaped like a vector, a matrix, or a
 tree, but if we want to combine parameters and data with simple arithmetic, then
-both must ultimately be represented as structures of numbers.
+both must ultimately be represented as data structures with numeric values.
 
-One thing we absolutely *don't* want to do is to represent our learning as an
-arbitrary program. For example, the internal state of our learning algorithm  could
-literally be a C program as a string:
+On the other hand, we want to avoid representing learning as a formatted string
+or program. For example, the internal state of our learning algorithm  could
+literally be a a string describing a C program:
 
 	float f(float* x) { 
 		float z = 42; 
@@ -280,7 +283,7 @@ variables, and the like. Genetic programming can work well if the "genes" of
 the program are very carefully designed. Indeed, it is sometimes used as
 the "top level" learning algorithm in so-called automated machine learning
 frameworks such as [TPOT][TPOT]. However, for the kind of fitting and optimization
-we're discussing here, genetic algorithms are hopelessly inefficient.
+we're mainly interested in, genetic algorithms are hopelessly inefficient.
 
 Why is learning an arbitrary program problematic? Does it simply not work?
 Surely any equation we write down could also be represented in a more general
@@ -363,6 +366,8 @@ are added, you can find them collected under the ["from scratch"][MLFS] tag.
 [MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS3]: /post/ml-from-scratch-part-3-backpropagation/
+[MLFS4]: /post/ml-from-scratch-part-4-decision-tree/
+[MLFS5]: /post/ml-from-scratch-part-5-gmm/
 
 [IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
 [GP]: https://en.wikipedia.org/wiki/Genetic_programming

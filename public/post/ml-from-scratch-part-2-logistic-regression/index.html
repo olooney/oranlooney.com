@@ -101,11 +101,11 @@ In practice, its extremely common to need to decide between \(k\) classes where 
 </aside>
       <p>In this second installment of the <a href="/tags/from-scratch/">machine learning from scratch</a> we switch the point of view from <em>regression</em> to <em>classification</em>: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a <a href="https://www.kaggle.com/c/dogs-vs-cats">cat or a dog</a>.</p>
 <p>In practice, its extremely common to need to decide between <span class="math inline">\(k\)</span> classes where <span class="math inline">\(k &gt; 2\)</span> but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward. In fact, even if the algorithm doesn’t naturally generalize beyond binary classification (looking at you, <a href="https://en.wikipedia.org/wiki/Support-vector_machine">SVM</a>) there’s a general strategy for turning any binary classification algorithm into a multiclass classification algorithm called <a href="http://mlwiki.org/index.php/One-vs-All_Classification">one-vs-all</a>. Let’s agree to set aside the complexities of the multiclass problem and focus on binary classification for now.</p>
-<p>The binary classification problem is extremely central in machine learning and in this series we’ll be looking at no fewer than four different “serious” classification algorithms. In an undergraduate machine learning class, you’d probably work through a few “non-serious” or “toy” algorithms that have only have historical or pedagogical value: the one-unit perceptron, linear discriminant analysis, the winnow algorithm. We will omit those and jump straight to the simplest classification that is in widespread use: logistic regression.</p>
-<p>I say, “simplest,” but most people don’t think of LR as “simple.” That’s because they’re thinking of it use within the context of statistical analysis and the design and analysis of experiments. In those contexts, there’s a ton of associated mathematical machinery that goes along with <em>validating</em> and <em>interpretting</em> logistic regression models, and that stuff <em>is</em> complicated. A good book on <em>that</em> side of logistic regression is <a href="https://www.amazon.com/Applied-Logistic-Regression-David-Hosmer/dp/0470582472/">Applied Logistic Regression by Hosmer et al.</a>. But within the context of machine learning, logistic regression is an extremely simple predictive model: as we’ll see, the heart of the algorithm is only a few lines of code.</p>
-<p>Nevertheless, it’s important for three reasons. First, it can be surprisingly effective. It’s not uncommon for some state-of-the-art algorithm to significantly contribute to global warming by running a hyperparameter grid search over a cluster of GPU instances in the cloud, only to end up with a final model with only slightly higher test set performance than logistic regression. This isn’t always true: for example, LR tends to get only ~90% accuracy on the MNIST handwritten digit classification problem, which is much lower than either humans or deep learning. But in the many cases for which it <em>is</em> true, it’s worth asking if the problem is amenable to more advanced machine learning techniques at all.</p>
+<p>The binary classification problem is extremely central in machine learning and in this series we’ll be looking at no fewer than four different “serious” classification algorithms. In an undergraduate machine learning class, you’d probably work through a few “non-serious” or “toy” algorithms that have only have historical or pedagogical value: the <a href="https://en.wikipedia.org/wiki/Perceptron">one-unit perceptron</a>, <a href="https://en.wikipedia.org/wiki/Linear_discriminant_analysis">linear discriminant analysis</a>, the <a href="https://en.wikipedia.org/wiki/Winnow_(algorithm)">winnow algorithm</a>. We will omit those and jump straight to the simplest classification that is in widespread use: <a href="https://en.wikipedia.org/wiki/Logistic_regression">logistic regression.</a></p>
+<p>I say, “simplest,” but most people don’t think of LR as “simple.” That’s because they’re thinking of it use within the context of statistical analysis and the design and analysis of experiments. In those contexts, there’s a ton of associated mathematical machinery that goes along with <em>validating</em> and <em>interpretting</em> logistic regression models, and that stuff <em>is</em> complicated. A good book on <em>that</em> side of logistic regression is <a href="https://www.amazon.com/Applied-Logistic-Regression-David-Hosmer/dp/0470582472/">Applied Logistic Regression by Hosmer et al.</a>. But if you simply want to fit data and make predictions then logistic regression is indeed a very simple model: as we’ll see, the heart of the algorithm is only a few lines of code.</p>
+<p>Despite it’s simplicity, it’s important for three reasons. First, it can be surprisingly effective. It’s not uncommon for some state-of-the-art algorithm to significantly contribute to global warming by running a hyperparameter grid search over a cluster of GPU instances in the cloud, only to end up with a final model with only slightly lower <a href="https://en.wikipedia.org/wiki/Generalization_error">generalization error</a> than logistic regression. Obvious, this isn’t <em>always</em> true, otherwise there would be no need to study more advanced models. For example, LR tends to get only ~90% accuracy on the MNIST handwritten digit classification problem, which is much lower than either humans or deep learning. But in the many cases for which it <em>is</em> true, it’s worth asking if the problem is amenable to more advanced machine learning techniques at all.</p>
 <p>The second reason logistic regression is important is that it provides a important conceptual foundation for neural networks and deep learning, which we’ll visit later in this series.</p>
-<p>And the third and final reason is that it cannot be solved with linear algebra trickery so serves as a legitimate reason to introduce one of the most important tools in machine learning: gradient descent. Just as in <a href="/post/ml-from-scratch-part-1-linear-regression/">part 1</a>, we’ll take the hard path through the mud and develop (step-by-step) an algorithm which could actually be used in production without too much embarrassment.</p>
+<p>The third and final reason is that it cannot be solved with linear algebra so serves as a legitimate reason to introduce one of the most important tools in machine learning: gradient descent. Just as in <a href="/post/ml-from-scratch-part-1-linear-regression/">part 1</a>, we’ll take the hard path through the mud and develop (step-by-step) an algorithm which could actually be used in production without too much embarrassment.</p>
 <div id="the-logistic-function" class="section level2">
 <h2>The Logistic Function</h2>
 <p>Before we get to the regression model, let’s take a minute to make sure we have a good understanding of the logistic function and some of its key properties.</p>
@@ -118,12 +118,12 @@ In practice, its extremely common to need to decide between \(k\) classes where 
 <p><span class="math display">\[ \sigma^{-1}(x) = \ln{\frac{x}{1-x}} \]</span></p>
 <p>Note that if <span class="math inline">\(x = e^p\)</span> where <span class="math inline">\(p\)</span> is a probability between 0 and 1, then we have</p>
 <p><span class="math display">\[ \sigma^{-1}(e^p) = \frac{p}{1-p} \]</span></p>
-<p>Where the right hand side is an <em>odds ratio</em>. So one interpretation of the logistic function is that it maps <em>log odds ratios</em> to <em>probabilities</em>.</p>
+<p>Where the right hand side is an <em>odds ratio</em>. So one interpretation of the logistic function is that it is the bijection between <em>log odds ratios</em> to <em>probabilities</em>.</p>
 <p>For example, if something has a probability of 0.2, then it has 4:1 odds, therefore the odds ratio is 4, therefore the log odds ratio of <span class="math inline">\(\ln 4 = -1.39\)</span>. So <span class="math inline">\(\sigma(0.2) = -1.39\)</span>.</p>
 <p>The logistic function also has a pretty interesting derivative. The slickest way to show the following result is to use implicit differentiation, but I’ll show a longer and less magical derivation which only uses the chain rule and basic algebra.</p>
 <p><span class="math display">\[ 
     \begin{split}
-    \frac{d \sigma(x)}{dx} &amp; = \frac{d}{dx} \frac{1}{1 + e^{-x}} \\
+    \frac{d}{dx} \sigma(x) &amp; = \frac{d}{dx} \frac{1}{1 + e^{-x}} \\
     &amp; = \frac{-e^{-x}}{( 1+ e^{-x})^2}  \\
     &amp; = \frac{1}{1 + e^{-x}} \frac{1 + e^{-x} - 1}{ 1+ e^{-x}} \\
     &amp; = \frac{1}{1 + e^{-x}} \Big( \frac{1 + e^{-x}}{1+ e^{-x}} - \frac{1}{ 1+ e^{-x}} \Big) \\
@@ -131,7 +131,7 @@ In practice, its extremely common to need to decide between \(k\) classes where 
     &amp; = \sigma(x) ( 1 - \sigma(x) ) 
     \end{split}
 \]</span></p>
-<p>So we can see that <span class="math inline">\(\sigma&#39;(x)\)</span> can expressed as a simple quadratic function of <span class="math inline">\(\sigma(x)\)</span>. It’s not often that a derivative can be most conveniently expressed in terms of the original function, but it turned out to be the case here. This apparently useless fact is actually quite important numerically because it means we can calculate <span class="math inline">\(\sigma&#39;(x)\)</span> with a single multiplication… assuming that we already know <span class="math inline">\(\sigma(x)\)</span> somehow. Which, as we’ll see, we do!</p>
+<p>So we can see that <span class="math inline">\(\sigma&#39;(x)\)</span> can expressed as a simple quadratic function of <span class="math inline">\(\sigma(x)\)</span>. It’s not often that a derivative can be most conveniently expressed in terms of the original function, but it turned out to be the case here. This apparently useless fact is actually quite important numerically because it means we can calculate <span class="math inline">\(\sigma&#39;(x)\)</span> with only a single multiplication assuming that we already know <span class="math inline">\(\sigma(x)\)</span>.</p>
 <p>For our Python implementation, we will need a vectorized implementation of <span class="math inline">\(\sigma()\)</span>. This function applies the sigmoid function element-wise to every element in a <code>numpy.ndarray</code> of any shape.</p>
 <pre><code>import numpy as np
 
@@ -140,45 +140,75 @@ def sigmoid(z):
 </div>
 <div id="statistical-motivation" class="section level2">
 <h2>Statistical Motivation</h2>
-<p>Let’s say <span class="math inline">\(Y_p\)</span> is a discrete random variable with support <span class="math inline">\(\{0, 1\}\)</span> and <span class="math inline">\(X_p\)</span> is a random vector. Let’s assume that the joint probability distribution <span class="math inline">\(F_{X_p,Y_p}\)</span> of <span class="math inline">\(X_p\)</span> and <span class="math inline">\(Y_p\)</span> has the following form for some unknown real-valued vector <span class="math inline">\(\Theta\)</span>:</p>
+<p>Let <span class="math inline">\(Y\)</span> be a discrete random variable with support on <span class="math inline">\(\{0, 1\}\)</span> and let <span class="math inline">\(X\)</span> be a random <span class="math inline">\(m\)</span>-vector. Let’s assume that the joint probability distribution <span class="math inline">\(F_{X,Y}\)</span> of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> has the following sigmoid form for some real-valued vector <span class="math inline">\(\Theta\)</span>:</p>
 <p><span class="math display">\[ E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]</span></p>
-<p>Let’s say that <span class="math inline">\((y_i, X_i)\)</span> are <span class="math inline">\(N\)</span> realizations sampled independently from <span class="math inline">\(F_{X_p,Y_p}\)</span>; then we can write down the likelihood function:</p>
-<p><span class="math display">\[ L(\Theta; X, y) = \prod_{i=1}^N P(Y=1|X_i)^{y_i} P(Y=0|X_i)^{(1 - y_i)} \]</span></p>
-<p>I should probably explain the notational trick used to write this compactly: because <span class="math inline">\(y \in \{0, 1\}\)</span>, the first factor will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 0\)</span> and likewise the second term will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 1\)</span>. So that’s merely a compact way of writing the two mutually exclusive scenarios without an explicit if/else.</p>
-<p>We can simplify this expression by taking the log of both sides and working with the <em>log-likelihood</em> <span class="math inline">\(\ell\)</span> from now on:</p>
-<p><span class="math display">\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln P(Y=1|X_i) + (1 - y_i) \ln (1 - P(Y=1|X_i) \]</span></p>
-<p>Substituting <span class="math inline">\(\hat{y} = P(Y=1|X)\)</span>:</p>
-<p><span class="math display">\[ \ell(\Theta; X,y) = \ln L = \sum_{i=1}^N y_i \ln \hat{y}_i + (1 - y_i) \ln (1 - \hat{y}_i) \]</span></p>
-<p>Because <span class="math inline">\(\ln()\)</span> is monotonically increasing, it suffices to minimize <span class="math inline">\(\ell(\Theta; X, y)\)</span> with respect to <span class="math inline">\(\Theta\)</span> in order to find the maximum likelihood estimate. Because <span class="math inline">\(\ell\)</span> convex and has a continuous derivative, we can find this maximum by solving <span class="math inline">\(\nabla \ell = 0\)</span>. This time it is convenient to expand out the gradient in terms of partial derivatives to obtain a system of <span class="math inline">\(m\)</span> equations:</p>
-<p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N \frac{y_i}{\hat{y}_i} \frac{\partial \hat{y}_i}{\partial \Theta_j} + \frac{(1-y_i)}{(1-\hat{y}_i)} \frac{\partial \hat{y}_i}{\partial \Theta_j} = 0 \]</span></p>
-<p>We can use our earlier lemma <span class="math inline">\(\sigma&#39;(x) = \sigma(x)(1-\sigma(x))\)</span> for the partial derivative of <span class="math inline">\(\hat{y}\)</span>. Note also that because <span class="math inline">\(\hat{y} = \sigma(X \Theta) = \sigma( X_0 \Theta_0 + ... + X_j \Theta_j + ... + X_k \Theta_k )\)</span>, we will pick up an additional <span class="math inline">\(X_j\)</span> factor from the chain rule when differentiating by <span class="math inline">\(\Theta_j\)</span>.</p>
-<p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N \frac{y_i}{\hat{y}_i} \hat{y}_i (1-\hat{y}_i) X_j - \frac{(1-y_i)}{(1-\hat{y}_i)} \hat{y}_i (1-\hat{y}_i) X_j \]</span></p>
-<p>Several cancellations occur and we are left with:</p>
-<p><span class="math display">\[ \frac{\partial \ell}{\partial \Theta_j} = \sum_{i=1}^N X_j ( y_i (1 - \hat{y}_i) - (1 - y_i) \hat{y}_i ) 
- = \sum_{i=1}^N X_j ( y_i  - y_i \hat{y}_i - \hat{y}_i + y_i \hat{y}_i)
- = \sum_{i=1}^N X_j ( y_i  - \hat{y}_i )
+<p>Now let’s say <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times m\)</span> matrix and <span class="math inline">\(\mathbf{y}\)</span> is an <span class="math inline">\(n\)</span>-vector such that <span class="math inline">\((\mathbf{y}_i, \mathbf{X}_i)\)</span> are <span class="math inline">\(n\)</span> realizations sampled independently from <span class="math inline">\(F_{X,Y}\)</span>; then we can write down the likelihood function:</p>
+<p><span class="math display">\[ L(\Theta; \mathbf{X}, \mathbf{y}) = \prod_{i=1}^n P(Y=1|X=\mathbf{X}_i)^{\mathbf{y}_i} P(Y=0|X=\mathbf{X}_i)^{(1 - \mathbf{y}_i)} \]</span></p>
+<p>I should probably explain the notational trick used here: because <span class="math inline">\(y \in \{0, 1\}\)</span>, the first factor will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 0\)</span> and likewise the second term will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 1\)</span>. So putting <span class="math inline">\(y\)</span> and <span class="math inline">\(1-y\)</span> in the exponent is merely a compact way of writing the two mutually exclusive scenarios without an explicit if/else.</p>
+<p>We can simplify this expression by taking the log of both sides and working with the log-likelihood <span class="math inline">\(\ell\)</span> from now on:</p>
+<p><span class="math display">\[ 
+  \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
+  = \sum_{i=1}^n \mathbf{y}_i \ln P(Y=1|X=\mathbf{X}_i) + 
+  (1 - \mathbf{y}_i) \ln (1 - P(Y=1|X=\mathbf{X}_i) 
 \]</span></p>
-<p>Unlike linear regression, this doesn’t admit a closed form solution. However, it is amenable to numerical methods, which we will cover in great detail below.</p>
-<p>This is almost suspiciously neat, but it’s not really an accident. The reason why we chose the logistic function in the first place was precisely so this result would drop out at the end. Indeed, there are other choices with an equally good theoretical basis, yet we chose logit because it’s simple and fast to calculate.</p>
+<p>Substituting <span class="math inline">\(\hat{\mathbf{y}} = P(Y=1|X)\)</span>:</p>
+<p><span class="math display">\[ 
+  \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
+  = \sum_{i=1}^n \mathbf{y}_i \ln \hat{\mathbf{y}}_i + 
+  (1 - \mathbf{\mathbf{y}}_i) \ln (1 - \hat{\mathbf{y}}_i) 
+\]</span></p>
+<p>Because <span class="math inline">\(\ln()\)</span> is monotonically increasing, it suffices to minimize <span class="math inline">\(\ell(\Theta; \mathbf{X}, \mathbf{y})\)</span> with respect to <span class="math inline">\(\Theta\)</span> in order to find the maximum likelihood estimate. Because <span class="math inline">\(\ell\)</span> is convex and has a continuous derivative, we can find this maximum by solving <span class="math inline">\(\nabla \ell = 0\)</span>.</p>
+<p><span class="math display">\[ \begin{align}
+  \frac{\partial \ell}{\partial \Theta} 
+  &amp; = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta} -
+                   \frac{(1-\mathbf{y}_i)}{(1-\hat{\mathbf{y}}_i)} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta}
+  \end{align}
+\]</span></p>
+<p>We can use our earlier lemma <span class="math inline">\(\sigma&#39;(x) = \sigma(x)(1-\sigma(x))\)</span> for the partial derivative of <span class="math inline">\(\hat{y}\)</span>. Note also that because <span class="math inline">\(\hat{y}_i = \sigma(\mathbf{X}_i^T \Theta)\)</span>, we will pick up an additional <span class="math inline">\(\mathbf{X}_i\)</span> from the chain rule when differentiating by <span class="math inline">\(\Theta\)</span>.</p>
+<p><span class="math display">\[ \begin{align}
+\frac{\partial \ell}{\partial \Theta} = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \hat{\mathbf{y}}_i (1-\hat{\mathbf{y}}_i) \mathbf{X}_i - \frac{(1-\mathbf{y}_i)}{(1-\hat{\mathbf{y}}_i)} \hat{\mathbf{y}}_i (1-\hat{\mathbf{y}}_i) \mathbf{X}_i 
+   \end{align}
+\]</span></p>
+<p>We can use simple algebra to simplify this a great deal, and in the end we are left with:</p>
+<p><span class="math display">\[ \begin{align}
+\frac{\partial \ell}{\partial \Theta} 
+ &amp; = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i (1 - \hat{\mathbf{y}}_i) - (1 - \mathbf{y}_i) \hat{\mathbf{y}}_i )  \\
+ &amp; = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i  - \mathbf{y}_i \hat{\mathbf{y}}_i - \hat{\mathbf{y}}_i + \mathbf{y}_i \hat{\mathbf{y}}_i) \\
+ &amp; = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i  - \hat{\mathbf{y}}_i ) \\
+ &amp; = \mathbf{X}^T ( \mathbf{y}  - \hat{\mathbf{y}} ) \tag{1} \\
+ \end{align}
+\]</span></p>
+<p>Equation (1) is the clearest way to express the gradient, but because <span class="math inline">\(\hat{\mathbf{y}}\)</span> is an implicit function of <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\Theta\)</span> is can appear a little magical. A fully explicit version is:</p>
+<p><span class="math display">\[
+ \frac{\partial \ell}{\partial \Theta} = \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \Theta) ) \tag{2}
+\]</span></p>
+<p>In plain english, this says: go through the rows of <span class="math inline">\(\mathbf{X}\)</span> one by one. For each row, figure out if the prediction <span class="math inline">\(\hat{\mathbf{y}}\)</span> was too high or too low by computing the difference <span class="math inline">\(\mathbf{y}_i - \hat{\mathbf{y}}_i\)</span>. If it’s too high, subtract the row <span class="math inline">\(X_i\)</span> from the gradient, and if it’s too low, then add the row <span class="math inline">\(X_i\)</span> to the gradient, in each case weighting by the magnitude in the difference.</p>
+<p>In theory, we can now find the minimum <span class="math inline">\(\hat{\Theta}\)</span> by simply solving equation (3):</p>
+<p><span class="math display">\[
+ \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \hat{\Theta}) ) = 0 \tag{3}
+\]</span></p>
+<p>Unfortunately, unlike the normal equation of ordinary least squares, equation (3) cannot be solved by the methods of linear algebra due to the presence of the non-linear <span class="math inline">\(\sigma\)</span> function. However, it <em>is</em> amenable to numerical methods, which we will cover in great detail below.</p>
+<p>You may remark that equation (3) is almost suspiciously neat, but it’s not really an accident. The reason why we chose the logistic function in the first place was precisely so this result would drop out at the end. Indeed, there are other choices with an equally good theoretical basis, yet we chose logit because it’s simple and fast to calculate.</p>
 <p>One such alternative, preferred by some statisticians and scientific specializations, is the <a href="https://en.wikipedia.org/wiki/Probit_model">probit link function</a>, which uses the CDF of the normal distribution instead of sigmoid. However, in practice these curves are extremely similar, and if you showed me an unlabeled plot with both of them I could not for the life of me tell you which is which:</p>
 <p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>It’s worth bearing in mind that logistic regression is so popular, not because there’s some theorem which proves it’s <em>the</em> model to use, but because it is the simplest and easiest to work with out of a family of equally valid choices.</p>
 </div>
-<div id="vectorization" class="section level2">
-<h2>Vectorization</h2>
-<p>For our implementation below it will be convenient to have <span class="math inline">\(\nabla \ell\)</span> in vectorized form. Leaving behind the statistical context and no longer using random variables, let <span class="math inline">\(X\)</span> be a <span class="math inline">\(N \times m\)</span> real-valued matrix (not a random variable) such that each row of <span class="math inline">\(X\)</span> is <span class="math inline">\(X_i\)</span> from above, and let <span class="math inline">\(y\)</span> the corresponding non-random real-valued <span class="math inline">\(N\)</span>-vector, the above equation becomes:</p>
-<p><span class="math display">\[ \nabla_{\Theta} \ell(\Theta; X, y) = \Bigg( \sum_{i=1}^{N} (X \circ  (y - \hat{y}))_{ij} \Bigg)^T \]</span></p>
-<p>The summation is over rows and across columns – afterwards, we have a single <span class="math inline">\(1 \times p\)</span> row vector containing the sum of each column, which we transpose to match the <span class="math inline">\(p \times 1\)</span> column vector <span class="math inline">\(\Theta\)</span>.</p>
-<p>Here <span class="math inline">\(``A \circ B&quot;\)</span> denotes the <a href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)">Hadamard product</a>. We will be seeing this slightly unusual operator quite a bit going forward, so make sure you get familiar with it if you aren’t already.</p>
-<p>This is the same as the summation over training examples above – but has the advantage of being rather obscure and harder to read. No wait – I mean it has the advantage of being naturally translated into vectorized numpy code. Sorry about that.</p>
+<div id="gradient-descent" class="section level2">
+<h2>Gradient Descent</h2>
+<p>The state-of-the-art algorithm that we will use to solve (3) has a large number of moving parts and is somewhat overwhelming to understand at once. Therefore, we will implement it in layers, adding sophistication at each layers as well as taking benchmarks that will concretely demonstrate the value of each added complication. The layers will be:</p>
+<ol style="list-style-type: decimal">
+<li>(Batch) Gradient Descent</li>
+<li>Minibatch Stochastic Gradient Descent</li>
+<li>Nesterov Accelerated Gradient</li>
+<li>Early Stopping</li>
+</ol>
 </div>
 <div id="batch-gradient-descent" class="section level2">
 <h2>Batch Gradient Descent</h2>
-<p>The final algorithm we will use actually a number of moving parts and is somewhat overwhelming to understand at once. We will implement it in stages, adding sophistication at each stage as well as taking benchmarks that will prove the value of each improvement we add.</p>
-<p>Since we have both the loss function we want to minimize and its gradient in closed form, the obvious numerical method is gradient descent, called “batch” gradient descent when the target function is the sum over a full set of training data.</p>
-<p>Gradient descent is an iterative method that simply updates an approximation of <span class="math inline">\(\hat{\Theta}\)</span> by taking a smalls step in the direction of steepest descent.</p>
+<p>Since we have both the loss function <span class="math inline">\(J\)</span> we want to minimize and its gradient <span class="math inline">\(\nabla J\)</span> we can use an algorithm called gradient descent to find a minimum.</p>
+<p>Gradient descent is an iterative method that simply updates an approximation of <span class="math inline">\(\hat{\Theta}\)</span> by taking a smalls step in the direction of steepest descent. Let us denote this sequence of approximations <span class="math inline">\(\hat{\Theta}_t\)</span>. Initialize <span class="math inline">\(\hat{\Theta}_0\)</span> arbitrarily and use the following update rule for <span class="math inline">\(t&gt;0\)</span>:</p>
 <p><span class="math display">\[ \hat{\Theta}_{i+1} := \hat{\Theta}_i - \alpha \nabla \ell (\hat{\Theta}_i) \]</span></p>
-<p>For some suitable learning rate <span class="math inline">\(\alpha\)</span> this will always converge, and because <span class="math inline">\(\ell\)</span> is convex it will in fact always converge to a number <span class="math inline">\(\hat{\Theta}\)</span> that represents the maximum likelihood estimate for <span class="math inline">\(\Theta\)</span>.</p>
+<p>For some suitable learning rate <span class="math inline">\(\alpha\)</span> this will always converge, and because <span class="math inline">\(\ell\)</span> is convex it will in fact always converge to the unique global minimum <span class="math inline">\(\hat{\Theta}\)</span> which is the maximum likelihood estimate for <span class="math inline">\(\Theta\)</span>.</p>
 <pre><code>class LogisticClassifier:
     def __init__(self, learning_rate=0.1, tolerance=1e-4, max_iter=1000):
         # gradient descent parameters
@@ -655,7 +685,7 @@ model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 <blockquote>
 <p>CPU times: user 40 ms, sys: 30 ms, total: 70 ms Wall time: 49.1 ms (False, True, 10, 0.053536116001088603)</p>
 </blockquote>
-<p>Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with 3 seconds and now you’re telling me its 49 ms? As in, 60X faster? No, this is actually fairly typical. That’s why it’s so important to use a good optimizer instead of relying on naive methods. Luckily, with modern frameworks, [state-of-the-art optimizers][KO] are usually available off-the-rack.</p>
+<p>Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with 3 seconds and now you’re telling me its 49 ms? As in, 60X faster? No, this is actually fairly typical. That’s why it’s so important to use a good optimizer instead of relying on naive methods. Luckily, with modern frameworks, state-of-the-art optimizers are usually available off-the-rack.</p>
 <p>Test set performance (accuracy, AUC) has not suffered:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/auc_roc_final.png" alt="AUC ROC Curve" />
