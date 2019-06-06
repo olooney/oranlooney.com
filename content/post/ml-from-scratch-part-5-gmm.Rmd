@@ -115,7 +115,7 @@ Because the $n \times m$ example matrix $\mathbf{X}$
 is assumed to be a realization of $n$ i.i.d. samples from $f_{GMM}(\mathbf{x})$, we can write down our likelihood function as
 
 \[
-  \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X};\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j|\mathbf{X}_i)P(\mathbf{X}_i|C_i=j) \tag{6}
+  \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X};\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j) P(\mathbf{X}_i|C_i=j) \tag{6}
 \]
 
 We know that $\mathbf{X}_i$ has a multivariate normal distribution with parameters determined by the class, so the condifitional probability P(\mathbf{X}_i|C_i=j) can be written down pretty much directly from the definition:
@@ -127,7 +127,7 @@ We know that $\mathbf{X}_i$ has a multivariate normal distribution with paramete
   \Bigg) \tag{7}
 \]
 
-Obtaining a formula for $P(\mathbf{X}_i|C_i=j)$ requires a little more work. We know that the unconditional probability is given by the 
+Obtaining a formula for $P(C_i=j|\mathbf{X}_i)$ requires a little more work. We know that the unconditional probability is given by the 
 parameter vector $\boldsymbol{\phi}$:
 
 \[
