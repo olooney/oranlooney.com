@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Tue, 21 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ML From Scratch, Part 5: Gaussian Mixture Models</title>
+      <link>http://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/</link>
+      <pubDate>Wed, 05 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/</guid>
+      <description>Consider the following motivating dataset:
+Unlabled Data
+It is apparent that these data have some kind of structure; which is to say, they certainly are not drawn from a uniform or other simple distribution. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest. The question is: is it possible for a machine learning algorithm to automatically discover and model these kinds of structures without human assistance?</description>
+    </item>
     
     <item>
       <title>Adaptive Basis Functions</title>
