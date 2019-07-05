@@ -142,7 +142,7 @@ It's all over except for the linear algebra.
 What we did above was essentially a short sketch of the relevant parts of the [Gauss-Markov
 theorem][GMT]. In particular, we've shown that the OLS solution to $\mathbf{y} - \mathbf{X}\Theta$ *is* the 
 Maximum Likelihood Estimate for the parameters of the particular statistical
-model we started with. This isn't general true, but it is *exactly* true for linear regression
+model we started with. This isn't true in general, but it is *exactly* true for linear regression
 with a normally distributed error term. The full Gauss-Markov theorem proves a bunch of other
 nice properties: for example, it turns out this estimator is unbiased and we can even say
 that it's optimal in the sense that it is the *best possible* linear unbiased
@@ -178,8 +178,11 @@ have:
 And the problem is to minimize $J$ with respect to $\Theta$. As optimization
 problems go, this one is pretty well behaved: it's continuous, quadratic, convex,
 everywhere continuously differentiable, and unconstrained. That's a fancy way of saying that it's
-shaped like a big, round bowl.  Because of these
-nice properties and a very useful set of theorems called the [KKT conditions][KKT] 
+shaped like a big, round bowl. A bowl has a unique lowest point and it can always be found simply
+by letting a marble roll down hill until it comes to rest exactly at the lowest point.
+
+Because of these
+nice properties (and a very useful set of theorems called the [KKT conditions][KKT])
 we know that these properties guarentee that $J$ has a unique global minimum and that
 we can find the minimum - the bottom of the bowl - by finding the one place where the gradient
 is zero in all directions. 
@@ -426,8 +429,8 @@ you will now be able to read and understand the following code:
 		# equadistant to both a and ||a|| e. This is our
 		# plane of reflection. We normalize u to v to 
 		# because a unit vector is required in the next step.
-		u = a - np.sign(a[0]) * norm(a) * e  
-		v = u / norm(u)
+		u = a - np.sign(a[0]) * np.linalg.norm(a) * e  
+		v = u / np.linalg.norm(u)
 		
 		# derivation of the matrix form of a reflection:
 		# x - 2<x, v>v ==
@@ -812,7 +815,7 @@ However, if we go too deeply into linear regression, we won't get a chance to
 explore the rest of machine learning. So for the next part of the series, we
 will switch our attention to [logistic regression][MLFS2] and use that as an
 excuse to explore [SGD][SGD] in some detail. That will then serve as a jumping
-off point for our first "true" machine learning algorithm in part 3: [neural
+off point for our first "real" (or at least in fashion) machine learning algorithm in part 3: [neural
 networks and backpropagation.][MLFS3] 
 
 
