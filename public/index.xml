@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Wed, 05 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 06 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://www.oranlooney.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A Seriously Slow Fibonacci Function</title>
+      <link>http://www.oranlooney.com/post/slow-fibonacci/</link>
+      <pubDate>Sat, 06 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.oranlooney.com/post/slow-fibonacci/</guid>
+      <description>I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?</description>
+    </item>
     
     <item>
       <title>ML From Scratch, Part 5: Gaussian Mixture Models</title>

@@ -1,16 +1,93 @@
----
-title: 'A Seriously Slow Fibonacci Function'
-author: Oran Looney
-date: 2019-07-06
-tags:
-  - Python
-  - Math
-image: /post/slow-fibonacci_files/lead.jpg
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Seriously Slow Fibonacci Function - OranLooney.com</title>
+  <meta property="og:title" content="A Seriously Slow Fibonacci Function - OranLooney.com" />
+  <meta name="twitter:title" content="A Seriously Slow Fibonacci Function - OranLooney.com" />
+  <meta name="description" content="I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?">
+  <meta property="og:description" content="I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?">
+  <meta name="twitter:description" content="I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-2535855-1');
+  </script>
+
+ 
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+    <li><a href="http://honeycode.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
+    
+  </ul>
+
+  </nav>
+</header>
 
 
 
-<p>I recently wrote <a href="http://www.oranlooney.com/post/fibonacci/">an article</a> which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as <em>slow</em> as possible.</p>
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/slow-fibonacci_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">A Seriously Slow Fibonacci Function</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>July 6, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/math/">
+            <i class="fas fa-tag"></i>
+            Math
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <p>I recently wrote <a href="http://www.oranlooney.com/post/fibonacci/">an article</a> which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as <em>slow</em> as possible.</p>
 <p>This is not as easy as it sounds: any program can <em>trivially</em> be made slower, but this is boring. How can we make it slow in a fair and interesting way? The answer is to use a <a href="https://en.wikipedia.org/wiki/Model_of_computation">model of computation</a> which was not <em>deliberately</em> designed to be slow but which in practice is quite slow because it was designed for simplicity. While there are <a href="https://en.wikipedia.org/wiki/Turing_machine">several</a> models of computation to <a href="https://en.wikipedia.org/wiki/%CE%9C-recursive_function">choose</a> from, I selected the <a href="https://en.wikipedia.org/wiki/Lambda_calculus"><span class="math inline">\(\lambda\)</span>-calculus</a> (read “lambda calculus”) as being particularly easy to write an spectacularly inefficient implementation in.</p>
 <p>Some of you no doubt will be having flashbacks at the mention of the name, while others have already started slowly edging their mouse towards the close tab icon. But don’t worry - if you done any programming before you’ve already seen all the “hard” ideas associated with it and what’s left is a “toy” language that can be learned in a few minutes. By the end of this article you will see clearly how you could write your own non-trivial programs directly in the <span class="math inline">\(\lambda\)</span>-calculus.</p>
 <p>In fact, it’s main problem is that it’s <em>too</em> simple: it is difficult at first to see how anyone could <em>do</em> anything with it. Luckily for us, there exists a set of macros which turn the <span class="math inline">\(\lambda\)</span>-calculus into a much higher level language. While <a href="https://en.wikipedia.org/wiki/Alonzo_Church">Alonzo Church</a> was inventing the <span class="math inline">\(\lambda\)</span>-calculus itself, he was also developing a this set of macros, presumably so he could convince himself and others that it was in fact useful. These macros provide a simple and concrete way of encoding numbers, mathematical operators, boolean logic, and even data structures like lists, maps, and trees. Today, this technique is called <a href="https://en.wikipedia.org/wiki/Church_encoding">Church encoding</a>. If <span class="math inline">\(\lambda\)</span>-calculus is machine code, then the <a href="https://en.wikipedia.org/wiki/Church_encoding">Church encoding</a> is more like C or LISP.</p>
@@ -529,3 +606,67 @@ fibonacci = (lambda f: (lambda x: x(x))(lambda y: f(lambda z: y(y)(z))))(lambda 
 Hey llama baby hey llama mama hey <br> Ma sleep sleep hey llama ba baby <br> Hey llama ta ba hey ba sleep hey <br> Ta sleep sleep sleep sleep hey <br> Llama baby llama na hey llama ga <br> Llama na hey llama ga llama na <br> Hey llama na na hey llama ma hey <br> Llama ma llama ba ba sleep sleep <br> Hey llama ma llama ba ma sleep <br> Sleep hey hey llama ga llama na <br> Na hey hey llama na llama baby <br> Llama ma na hey llama red pajama <br> Llama haha hey red pajama hey <br> Baby sleep sleep sleep hey llama <br> Drama sleep hey llama dra dra <br> Sleep sleep sleep hey ga sleep <br> Sleep hey ga sleep hey na sleep <br> Sleep sleep hey hey llama na <br> Llama baby llama ma baby hey na <br> Hey baby sleep hey ma sleep sleep <br> Sleep hey ga sleep sleep hey na <br> Sleep sleep hey na sleep hey hey <br> Llama na llama baby llama ma baby <br> Hey na hey baby sleep hey ma <br> Sleep sleep sleep hey llama baby <br> Llama ma baby hey ma sleep sleep <br> Sleep hey na sleep hey hey llama <br> Ga llama na llama baby llama ma <br> Ga hey baby sleep hey na hey baby <br> Sleep hey ma sleep sleep sleep <br> Hey baby hey hey llama ga llama <br> Na na hey hey llama na llama baby <br> Llama ma na hey llama red pajama <br> Llama haha hey red pajama hey <br> Baby sleep sleep sleep hey llama <br> Drama sleep hey llama dra dra <br> Sleep sleep sleep hey ga sleep <br> Sleep hey na sleep hey llama baby <br> Llama ma baby hey ma sleep sleep <br> Sleep sleep hey baby hey hey <br> Llama ga llama na na hey hey <br> Llama na llama baby llama ma na <br> Hey llama red pajama llama haha <br> Hey red pajama hey baby sleep <br> Sleep sleep hey llama drama sleep <br> Hey llama dra dra sleep sleep <br> Sleep hey ga sleep sleep hey na <br> Sleep hey hey llama na llama baby <br> Llama ma baby hey na hey baby <br> Sleep hey ma sleep sleep sleep <br> Hey llama baby llama ma baby hey ma <br> Sleep sleep sleep sleep sleep sleep sleep
 </blockquote>
 </div>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/ml-from-scratch-part-5-gmm/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 5: Gaussian Mixture Models">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">
+	  &copy; Copyright 2019 Oran Looney
+  </div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  },
+  TeX: { extensions: ["color.js"] }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>
