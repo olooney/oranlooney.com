@@ -23,7 +23,7 @@ draft: true
         return n
     else:
         return naive_fib(n-1) + naive_fib(n-2)</code></pre>
-<p>Let’s put together a grocery list of every type and operations needed in order to implement this function:</p>
+<p>Let’s put together a grocery list of things we need to implement this function:</p>
 <ol style="list-style-type: decimal">
 <li>natural numbers</li>
 <li>addition</li>
@@ -36,12 +36,12 @@ draft: true
 <p>Before any of that, though, we need an implementation of the lambda calculus itself. For the purposes of this article, we’re going to take a non-standard approach and not use the original notation. Instead, we’ll use a <em>subset</em> of Python which has a one-to-one correspondence with the lambda calculus but which is hopefully both more familiar and more accessible to readers: all of the code in this article will run in any Python 3 interpreter so readers can follow along and try their own experiments if they like. I shall call this the “Pythonic” lambda calculus when I want to specifically refer to the lambda calculus implemented as a subset of the Python grammar.</p>
 <p>In the next section I will describe this subset more formally and describe how it maps to the lambda calculus. In this section, I’ll do a quick high-level overview and give an example of where we are going.</p>
 <p>Python already has the two main operations we need anonymous lambda functions (<code>lambda x: x</code>) and function application (<code>f(x)</code>) so this is perfectly natural.</p>
-<p>In addition, we will implement features by introducing <em>definitions</em>, which are basically macros with a human readable name that expand out to lambda calculus expressions. Here is an example of a definition:</p>
+<p>In addition, we will implement features by introducing <em>definitions</em>, which are basically macros with a human readable name that expand out to lambda calculus expressions. Here is an example of a definition, the contents of which we will return to later:</p>
 <pre><code>plus = lambda m: lambda n: lambda f: lambda x: m(f)(n(f)(x))</code></pre>
-<p>Definitions get substituted into other expressions very much like running “Find and Replace All” in an IDE or</p>
+<p>Definitions get substituted into other expressions very much like running “Find and Replace All”:</p>
 <pre><code>s/plus/(lambda m: lambda n: lambda f: lambda x: m(f)(n(f)(x)))/g</code></pre>
-<p>in VI or sed. By introducing definitions, we will incrementally build up a surprisingly high-level and expressive language.</p>
-<p>This is good time to exhibit what the Fibonacci function will look like in the Pythonic lambda calculus when we’re done.</p>
+<p>By introducing definitions, we will incrementally build up a surprisingly high-level and expressive language on top of the lambda calculus. We can then return to the lambda calculus proper at any time by simply expanding out all the definitions like macros.</p>
+<p>With those preliminaries out of the way, here is our goal: the Fibonacci function implemented entirely in the Pythonic lambda calculus:</p>
 <pre><code>fibonacci = Y(lambda f: PIR(
     # define function f(n) as:
     lambda n: (
@@ -53,12 +53,13 @@ draft: true
             (plus
                 (f(minus(n)(one)))
                 (f(minus(n)(two))))))</code></pre>
-<p>As always in Python, <code>#</code> indicates an non-executable comment. It shouldn’t be to hard to see the basic shape of the familiar, friendly Fibonacci function in there. If you have any LISP, it will even look vaguely familiar, although the parentheses are in slightly different places. (In LISP, function application looks like <code>(minus n 2)</code> instead of <code>minus(n)(two)</code>.)</p>
-<p>In the next section, we will briefly describe the lambda calculus and the Pythonic variant we will be using.</p>
+<p>As always in Python, <code>#</code> indicates an non-executable comment. As we’ll soon see, lambda calculus doesn’t have explicit an <code>if/else/then</code> branch statements, so I’ve used comments to make the flow of control a little clearer.</p>
+<p>It shouldn’t be to hard to see the basic shape of the familiar, friendly Fibonacci function in there. If you have any LISP, it will even look vaguely familiar, although the parentheses are in slightly different places. (In LISP, function application looks like <code>(minus n 2)</code> instead of <code>minus(n)(two)</code>.)</p>
+<p>In the next section, we will describe in more detail the lambda calculus and the Pythonic variant we will be using.</p>
 </div>
 <div id="the-pythonic-lambda-calculus" class="section level2">
 <h2>The Pythonic Lambda Calculus</h2>
-<p>In the lambda calculus, there are only two operations, abstraction and application. These two can be composed to write any program (computable function) that has or ever will be written. (Since the lambda calculus is <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete</a>, this can be interpreted as implying that all computation can be reduced to abstraction and application; all else is vanity and grasping at wind.)</p>
+<p>In the lambda calculus there are only two operations: abstraction and application. These two can be composed to write any program (computable function) that has or ever will be written.</p>
 <p>What do we mean by the term “abstraction?” Let’s say we have a concrete calculation, such as the sums of squares of a vector like <code>(3, 4)</code>. We could type the following into a Python interpreter:</p>
 <pre><code>3*3 + 4*4</code></pre>
 <p>In an interactive programming session, this might suffice: you type something in and hit ENTER to see the answer. In most cases values <code>3</code> and <code>4</code> are too hard-coded to be useful. So we can <em>abstract</em> this by replacing <code>3</code> with a placeholder variable <code>x</code> and introducing a function of <code>x</code>:</p>
@@ -89,9 +90,13 @@ ss(3)(4)</code></pre>
 <pre><code>(lambda x: lambda y: x*x + y*y)(3)(4)</code></pre>
 <p>Which you can run and verify that it gives the answer 25.</p>
 <p>In the lambda calculus, application is the <em>only</em> way we can do <em>anything</em>, so we should re-write the binary expressions as more primitive functions:</p>
-<pre><code>(lambda x: lambda y: sqrt(plus(mult(x)(x))(mult(y)(y))))(3)(4)</code></pre>
-<p>Now, you may well complain that the operation I’ve called “application” shows the <em>syntax</em> that says a function should be called with a certain argument, but I haven’t said anything about how this function call should actually be carried out!</p>
-<p>TODO: this is the job of the computer (human, machine or otherwise)</p>
+<pre><code>(lambda x: lambda y: plus(mult(x)(x))(mult(y)(y)))(3)(4)</code></pre>
+<p>One specific trick deserves attention. We could define a constant function like so:</p>
+<pre><code>lambda x: c</code></pre>
+<p>When called, this function ignores the argument <code>x</code> and always returns the constant <code>c</code>. This expression however, has <code>c</code> as a free variable: there is no <code>lambda c:</code> above it. We can remedy that with another abstraction:</p>
+<pre><code>lambda c: lambda x: c</code></pre>
+<p>This gives us a way to construct constant functions out of any value. This kind of thing is called a <a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)">closure</a>. Closures have the property that they can “remember” values assigned to them at runtime. In fact, the function <code>ss</code> defined above also returned a closure, which “remembered” that <code>x</code> was supposed to equal <code>3</code> until the time came when a concrete calculation could be carried out. Closures are extremely important in the lambda calculus because they are really our only way of defining data structures and passing state around.</p>
+<p>Setting aside closures, let’s next discuss how computation is actually carried out. You may well have noticed that the operation I’ve called “application” shows the <em>syntax</em> that says a function <em>should</em> be called with a certain argument, but I haven’t said anything about how the calling of a function should actually be carried out!</p>
 <p>It turns out this is exactly the reverse of abstraction - we replace abstract variables with concrete values. This is called the <span class="math inline">\(\beta\)</span>-reduction rule (read “beta reduction”.) For example, we may call the function <code>lambda x: x(x)(x)</code> with concrete value <code>t</code> by writing <code>(lambda x: x(x)(x))(t)</code>. The <span class="math inline">\(\beta\)</span>-reduction rules allows us to remove the <code>lambda x</code> and go through and replace every <code>x</code> in the body of the function with <code>t</code>, which leaves us with <code>t(t)(t)</code>. Since <code>t</code> is a free variable, we cannot reduce this any further, so we stop. Let’s do the same thing to our sums-of-squares example:</p>
 <pre><code>(lambda x: lambda y: plus(mult(x)(x))(mult(y)(y)))(3)(4)
 
@@ -101,12 +106,12 @@ plus(mult(3)(3))(mult(4)(4))</code></pre>
 <p>Since <code>plus</code>, <code>mult</code>, and even <code>3</code> and <code>4</code> are just definitions, we could expand those definitions and continue the beta-reduction process until only a single concrete value remains. Below, we will study the Church encoding for natural numbers and learn exactly how to do this.</p>
 <p>So abstraction introduces lambda expressions, application tells us when we should call a function and which argument to pass in, and <span class="math inline">\(\beta\)</span>-reduction tells us how to carry out that function call.</p>
 <p>There is one other rule, called <span class="math inline">\(\alpha\)</span>-replacement (read “alpha replacement”), which tells us that we can change the variable names of functions whenever we want, as long as we are consistent and change it everywhere inside the body of the function too while also avoiding conflicts with other variable names. For example, these two lambda expressions are the same, and we can use the <span class="math inline">\(\alpha\)</span>-replacement rule to transform one into the other and vice versa:</p>
-<pre><code>lambda x: x
-lambda y: y</code></pre>
-<p>The lambda expression <code>lambda x: y</code> on the other hand, would not be the same the two above, because we cannot replace <code>x</code> with <code>y</code> without a conflict. We could change <code>lambda x: y</code> into <code>lambda z: y</code>, but that would be a different function. This rule should be intuitively obvious. It’s also not particularly important because we equally well could have <a href="https://en.wikipedia.org/wiki/De_Bruijn_index">used an infinite sequence of variable names</a> to avoid conflicts; this would completely eliminate the need for the <span class="math inline">\(\alpha\)</span>-replacement rule. The <span class="math inline">\(\beta\)</span>-reduction rule captures the very essence of what it means to carry out a computation; the <span class="math inline">\(\alpha\)</span>-replacement rule is book-keeping.</p>
-<p>The above gives the <em>flavor</em> of the lambda calculus: abstraction, application, <span class="math inline">\(\alpha\)</span>-replacement and <span class="math inline">\(\beta\)</span>-reduction.</p>
-<p>But the examples I’ve used have share the weakness that if you go far enough down, you are relying on operations other than these two. For example, <code>mult = lambda x: lambda y: x * y</code>. This is a serious defect, because the whole point of the lambda calculus is to prove that these two operations suffice to define <em>any</em> computable function.</p>
-<p>To correct this defect, we need to start from scratch and scrupulously avoid using any operation <em>except</em> for abstraction and application. This will lead us to types and data structures very different than the native python <code>int</code> and <code>bool</code> but we nevertheless will be able to compute with them.</p>
+<pre><code>lambda x: x === lambda y: y
+lambda x: x !== lambda x: y</code></pre>
+<p>The lambda expression <code>lambda x: y</code> on the other hand, would not be the same because we cannot replace <code>x</code> with <code>y</code> without a conflict. We could change <code>lambda x: y</code> into <code>lambda z: y</code>, but that would be a different function. This rule should be intuitively obvious. It’s also not particularly important because we equally well could have <a href="https://en.wikipedia.org/wiki/De_Bruijn_index">used an infinite sequence of variable names</a> to avoid conflicts; this would eliminate the need for the <span class="math inline">\(\alpha\)</span>-replacement rule. The <span class="math inline">\(\beta\)</span>-reduction rule captures the very essence of what it means to carry out a computation; the <span class="math inline">\(\alpha\)</span>-replacement rule is book-keeping.</p>
+<p>The above gives the <em>flavor</em> of the lambda calculus: abstraction, application, <span class="math inline">\(\alpha\)</span>-replacement and <span class="math inline">\(\beta\)</span>-reduction. Since the lambda calculus is <a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing complete</a>, this can be interpreted as implying that all programming can be reduced to abstraction and application, and all computation can be reduced to the <span class="math inline">\(\beta\)</span>-reduction rule; all else is vanity and grasping at wind.</p>
+<p>But the examples I’ve used have share the weakness that if you go far enough down, you are relying on operations other than these two. For example, <code>mult = lambda x: lambda y: x * y</code> is ultimately defined in terms of the built-in multiplication operation <code>*</code>, and <code>x</code> and <code>y</code> are are of type <code>int</code>. This won’t do; indeed, this is a serious defect, because the whole point of the lambda calculus is to prove that these two operations suffice to define <em>any</em> computable function. Copping out halfway through and relying on native operations proves nothing.</p>
+<p>To correct this defect, we need to start from scratch and scrupulously avoid using any operation <em>except</em> for abstraction and application. Happily, Church encoding provides a roadmap… It will however lead us to types and data structures very different than the native python <code>int</code> and <code>bool</code>!</p>
 </div>
 <div id="grammar" class="section level2">
 <h2>Grammar</h2>
@@ -114,13 +119,12 @@ lambda y: y</code></pre>
 <pre><code>&lt;lambda-expression&gt; ::= &lt;variable&gt;
                       | &quot;(&quot; lambda &lt;var&gt; &quot;:&quot; &lt;lambda-expression&gt; &quot;)&quot;
                       | &lt;lambda-expression&gt; &quot;(&quot; &lt;lambda-expression&gt; &quot;)&quot;</code></pre>
-<p>In some cases, where it causes no ambiguity, we will omit the parentheses around lambda functions. Note that the <em>placement</em> of parentheses is rather different than in the original lambda calculus syntax! Hopefully, this notation for function application will be familiar to those of you who have studied modern high level programming languages or pure mathematics. It should also be fairly obvious how to translate from one the other:</p>
-<pre><code>lambda x: lambda y: x(x(y))</code></pre>
-<p><span class="math display">\[ \lambda x . \lambda y . (x (x y)) \]</span></p>
+<p>In some cases, where it causes no ambiguity, we will omit the parentheses around lambda functions, or add parentheses around function application e.g. <code>(f(x))</code>. Note that the <em>placement</em> of parentheses is rather different than in the original lambda calculus syntax! Where we might have written <span class="math inline">\((f x y)\)</span> in the convential notation we will write <code>f(x)(y)</code>, and where we would have written <span class="math inline">\((f (x y))\)</span> we will write <code>f(x(y))</code>. Hopefully, the Pythonic notation for function application will actually be <em>more</em> familiar to those of you who have studied modern high level programming languages or pure mathematics.</p>
 <p>As a convenience, we will also allow ourselves <em>definitions</em>, although we will later show that these definitions are merely a convenience and can be done away with whenever we choose through the simple process of string substitution. (The development of the Church encoding proceeds mainly by means of such definitions.) A definition looks like this:</p>
 <pre><code>&lt;definition&gt; ::= &lt;definition-name&gt; &quot;=&quot; &lt;lambda-expression&gt;</code></pre>
 <p>Where the <lambda-expression> on the right is restrictions to have no free variables. That is to say, every variable used is in fact inside the body of a lambda function with that variable as a parameter. For example, <code>lambda x: x(x)(x(x))</code> has no free variables, but <code>lambda x: y(x)</code> has <code>y</code> as a free variable. Furthermore, while definitions can contain other definitions, they cannot ever contain themselves, not even implicitly hidden away in some other definition. Otherwise, the simple string substitution macro expansion of a definition would never terminate! (Later, when we need recursion to implement the Fibonacci function, we will need to find a way to do this!)</p>
 <p>These restrictions exist so that we can think of our extended grammar as nothing more than a set of lightweight macros on top of lambda calculus. In principle, for any given program written in the extended grammar, we can simply substitute in the body of the definition wherever we find the name of the definition. This takes only a finite number of steps and is guaranteed to terminate. At the end of this process, we are left with an equivalent program in the original lambda calculus, with no definitions or definition names. Furthermore, we can complete this “macro preprocessing” step entirely before beginning to run the program.</p>
+<p>BTW, these rules for what constitutes a valid <em>definition</em> (as opposed to an axiom) can be traced back to <a href="https://plato.stanford.edu/entries/frege/#ProDef">Frege</a>, who needed it because he was in the process of adding <a href="https://en.wikipedia.org/wiki/Quantifier_(logic)">quantifiers over bound variables</a> to logic. It turned out be a very fruitful principle; modern mathematics is 99% definitions, with only a handful of axioms holding up the foundation. It’s also very broad - even though the lambda calculus is not a logic, the concept of “definition” remains much the same.</p>
 <p>The full extended grammar looks like this:</p>
 <pre><code>&lt;definition&gt; ::= &lt;definition-name&gt; &quot;=&quot; &lt;lambda-expression&gt;
 
@@ -130,17 +134,17 @@ lambda y: y</code></pre>
                       | &quot;(&quot; &lt;definition-name&gt; &quot;)&quot;</code></pre>
 <p>Both the original grammar and the extended grammar are strict subsets of Python, and as such is runnable on a Python interpreter. This is, perhaps, the most extreme example of programming “into” a language instead of programming “in” a language, following <a href="https://codeblog.jonskeet.uk/2008/04/23/programming-quot-in-quot-a-language-vs-programming-quot-into-quot-a-language/">McConnell’s distinction.</a></p>
 <p>Note that if we run an expression in the extended grammar directly in Python, the interpreter does <em>not</em> do the macro expansions as described above… but the results of the calculations will always be identical if we’ve carefully followed the rules for introducing definitions! Later, we will show examples of running programs both ways.</p>
-<p>Incidentally, by exhibiting a model of the lambda calculus in Python, we’ve shown that Python is Turing complete, although to complete the proof we would need to show that Python’s execution of these lambda expressions is equivalent to the <span class="math inline">\(\beta\)</span>-reduction rule. However this would take us far afield of our main purpose, which is to exhibit a practical, runnable example of a non-trivial program written entirely in the lambda calculus.</p>
 </div>
 <div id="church-booleans" class="section level2">
 <h2>Church Booleans</h2>
+<p>We’ll start with the simplest item on our shopping list: Boolean logic. There are only two Boolean values:</p>
 <pre><code># Church Booleans
 true =  lambda x: lambda y: x
 false = lambda x: lambda y: y</code></pre>
-<p>Note that these are <strong>not</strong> the same as Python’s built-in <code>True</code> and <code>False</code> constants.</p>
-<p>Some may object that these are not <em>values</em>, these are <em>functions</em>. Of course they are; the lambda calculus is made out of nothing <em>but</em> functions! But that doesn’t prevent us from thinking of some functions as values when it is convenient for us. Consider the objects of object-oriented programming - an object is nothing but a collection of functions called “methods,” but we usually think of objects as values.</p>
-<p>More generally, it is often convenient to talk about the “type” of different lambda expressions. However, because we are technically working in the “untyped” lambda calculus, we will have to keep the concept of “type” high-level and informal for now. (There are also “typed” <a href="https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus">versions of the lambda calculus</a> but we don’t need to actually compute stuff.)</p>
-<p>Since we are keeping things informal, we can use an intuitive definition: the type of a lambda calculus expression is roughly the number and types of the parameter it would normally be called with. In high level languages this is often called the function signature. The two Church Booleans we defined both have the same type - they expect to be called with two arguments and will then return one or the other of those two arguments unchanged.</p>
+<p>Note that these are <strong>not</strong> the same as Python’s built-in <code>True</code> and <code>False</code> constants; lowercase <code>true</code> and <code>false</code> appear to Python as callable lambda objects, not objects of type <code>bool</code>.</p>
+<p>Some of you may object that these are not <em>values</em>, these are <em>functions</em>. Of course they are; the lambda calculus is made out of nothing <em>but</em> functions! But that doesn’t prevent us from thinking of some functions as values when it is convenient for us. Consider the objects of object-oriented programming - an object is nothing but a collection of functions called “methods,” but we usually think of objects as values.</p>
+<p>More generally, it is often convenient to talk about the “type” of different lambda expressions. However, because we are technically working in the “untyped” lambda calculus, we will have to keep the concept of “type” high-level and informal for now. (There are also “typed” <a href="https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus">versions of the lambda calculus</a> but we don’t need it to actually compute stuff.)</p>
+<p>Since we are keeping things informal, we can use an intuitive definition: the “type” of a lambda calculus expression is roughly the number and types of the parameter it would normally be called with. In high level languages this is often called the function signature. The two Church Booleans we defined both have the same type - they expect to be called with two arguments and will then return one or the other of those two arguments unchanged.</p>
 <p>Consider the following function, which takes a Boolean argument:</p>
 <pre><code>lambda p: p(ifvalue)(elsevalue)</code></pre>
 <p>It will “work” equally well if <code>p</code> is <code>true</code> or <code>false</code> - only the behavior will be different. If <code>p</code> is <code>true</code>, it will return the <code>ifvalue</code> and if <code>p</code> if <code>false</code> it will return the <code>elsevalue</code>… in other words, it has the exact same semantics as a typical if/else statement!</p>
@@ -155,8 +159,10 @@ OR  = lambda x: lambda y: x(true)(y)
 NOT = lambda x: x(false)(true)
 XOR = lambda x: lambda y: x(NOT(y))(y)</code></pre>
 <p>Each of these expects to be passed Boolean values and then returns a single Boolean value. We can unpack these using the above equivalence to <code>if/else</code>; for example, <code>AND</code> reads as “if x is true, then return y, else return false”. This will return true only if <code>x</code> and <code>y</code> are both <code>true</code>, so this function acts like “and”. You can read the other definitions in the same way.</p>
-<p>To more easily interface with these functions, let’s write a bridge:</p>
-<pre><code>def church_to_bool(b: Callable) -&gt; bool:
+<p>To more easily interface with these functions, let’s write some bridge code:</p>
+<pre><code>from typing import Callable, Any
+
+def church_to_bool(b: Callable) -&gt; bool:
     return b(True)(False)
 
 def bool_to_church(b: bool) -&gt; Callable:
@@ -168,31 +174,33 @@ def bool_to_church(b: bool) -&gt; Callable:
         y_c = bool_to_church(y)
         z_c = AND(x_c)(y_c)
         z = church_to_bool(z_c)
-        print(x, &quot;AND&quot;, y, &quot;=&quot;, z)
-
-True AND True = True
-True AND False = False
-False AND True = False
-False AND False = False</code></pre>
+        print(x, &quot;AND&quot;, y, &quot;=&quot;, z)</code></pre>
+<pre>
+    True AND True = True
+    True AND False = False
+    False AND True = False
+    False AND False = False
+</pre>
 <p>At this point I encourage you to try to test some of the other Boolean operators, and to write your own, such as <code>NAND</code> or the <code>SUM</code> and <code>CARRY</code> of a <a href="https://en.wikipedia.org/wiki/Adder_(electronics)#Full_adder">full adder</a> for more of a challenge.</p>
-<p>This has been our first taste of computing the lambda calculus. The pattern, which we’ll see much more of, is simple: use Church encoding to somehow translate your input values into lambda expressions. Pass those into a lambda expression which represent your program; then reverse the Church encoding to recover meaningful values.</p>
+<p>This has been our first taste of computing the lambda calculus. The pattern (which we’ll soon see more of) is simple: use Church encoding to somehow translate your input values into lambda expressions. Pass those into a lambda expression which represent your program. Finally, reverse the Church encoding to recover meaningful values.</p>
 </div>
 <div id="church-numerals" class="section level2">
 <h2>Church Numerals</h2>
-<p>The Church encoding of the natural numbers, called Church numerals, defines the number <span class="math inline">\(n\)</span> to be a binary (taking two arguments) function which takes a function <code>f</code> and an arbitrary value <code>x</code> and applies <code>f</code> to <code>x</code> exactly <span class="math inline">\(n\)</span> times:</p>
+<p>The Church encoding of the natural numbers, called Church numerals, defines the number <span class="math inline">\(n\)</span> to be a binary function (here, “binary” means taking two arguments) which takes a function <code>f</code> and an arbitrary value <code>x</code> and applies <code>f</code> to <code>x</code> exactly <span class="math inline">\(n\)</span> times:</p>
 <pre><code>zero = lambda f: lambda x: x
 one = lambda f: lambda x: f(x)
 two = lambda f: lambda x: f(f(x))
 three = lambda f: lambda x: f(f(f(x)))
 # ... and so on</code></pre>
 <p>How do you apply a function zero times? Well, you don’t; you just return the value <code>x</code> right away. To call it once is <code>f(x)</code>, twice is <code>f(f(x))</code>, and so on. This means that Church numbers are <strong>not</strong> an arbitrary sequence of symbols that only gain semantics because of the relations defined on them (as they are in <a href="https://en.wikipedia.org/wiki/Set-theoretic_definition_of_natural_numbers">other models</a>) but actually have behavior which is directly related to their meaning: the <span class="math inline">\(n\)</span>-th Church number has the behavior of repeating a computation <span class="math inline">\(n\)</span> times.</p>
-<p>For example, suppose we have a function called <code>print</code> and a message <code>&quot;Hello, Lambda Calculus!&quot;</code> and we want to print this message 3 times. How would we implement something like that in the lambda calculus? Just so:</p>
+<p>For example, suppose we have a function called <code>print</code> and a message <code>&quot;Hello, Lambda Calculus!&quot;</code> and we want to print this message 3 times. How would we implement the equivalent of a <code>for</code> or <code>while</code> loop in the Pythonic lambda calculus? Just so:</p>
 <pre><code>&gt; three(print)(&quot;Hello, Lambda Calculus!&quot;)
+
 Hello, Lambda Calculus!
 Hello, Lambda Calculus!
 Hello, Lambda Calculus!</code></pre>
-<p>Of all the high level programming languages I know, I think only Ruby <a href="https://ruby-doc.org/core-2.5.0/Integer.html#method-i-times">comes close</a> to the idea that numbers should literally be their own for loops. Even LISP and Haskell require recursion, a separate <a href="http://zvon.org/other/haskell/Outputprelude/map_f.html">map</a> function, or a <a href="http://cl-cookbook.sourceforge.net/loop.html">loop macro</a> to achieve this. (For code readability alone this is probably a good thing, though.)</p>
-<p>This one-to-one correspondence between Church numerals and behaviors makes it relatively easy to define mathematical operations on Church numbers. Following Peano, the first thing we need is a successor function which can increment a number by one:</p>
+<p>Of all the high level programming languages I know, I think only Ruby <a href="https://ruby-doc.org/core-2.5.0/Integer.html#method-i-times">comes close</a> to the idea that numbers should literally be their own <code>for</code> loops. Even LISP and Haskell require recursion, a separate <a href="http://zvon.org/other/haskell/Outputprelude/map_f.html">map</a> function, or a <a href="http://cl-cookbook.sourceforge.net/loop.html">loop macro</a> to achieve this. (For code readability alone this is probably a good thing, though. In writing this article I’ve found the lack of traditional signpost statements more confusing than elegant, and have had to use comments to indicate where such control flow statements were being used.)</p>
+<p>This one-to-one correspondence between Church numerals and behaviors makes it relatively easy to define mathematical operations on Church numerals. Following Peano, the first thing we need is a successor function which can increment a number by one:</p>
 <pre><code>succ = lambda n: lambda f: lambda x: f(n(f)(x))</code></pre>
 <p>Why does this work? Well, given an original number <code>n</code>, it first <em>uses</em> <code>n</code> to apply <code>f</code> to <code>x</code> <span class="math inline">\(n\)</span> times. It then applies <code>f</code> once more itself. Thus, the final value will be <code>f</code> applied to <code>x</code> <span class="math inline">\(n+1\)</span> times, which is <span class="math inline">\(n+1\)</span> by definition.</p>
 <p>This successor function allows us to easily construct new numbers <em>ad infinitum</em>:</p>
@@ -219,17 +227,17 @@ pred = (lambda n:
             lambda f: lambda x: 
                 n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u))
 minus = lambda m: lambda n: n(pred)(m)</code></pre>
-<p>Of these, <code>plus</code> and <code>mult</code> are the easiest to understand. <code>plus</code> applies <code>f</code> to <code>x</code> first <span class="math inline">\(m\)</span> times, then applies <code>f</code> to the result <span class="math inline">\(n\)</span> times, for a total of <span class="math inline">\(n+m\)</span>. The multiplication operator <code>mult</code> looks very similar, but does things in a slightly different order: it <em>first</em> defines a new function <code>g = n(f)</code> which applies <code>f</code> to some value n times, and <em>then</em> applies <code>g</code> to <code>x</code> m times. Since each call to <code>g</code> ends up calling <code>f</code> <span class="math inline">\(n\)</span> times, the result is that <code>f</code> is applied to <code>x</code> <span class="math inline">\(m \times n\)</span> times.</p>
+<p>Of these, <code>plus</code> and <code>mult</code> are the easiest to understand. <code>plus</code> first applies <code>f</code> to <code>x</code> <span class="math inline">\(m\)</span> times, then applies <code>f</code> to the result <span class="math inline">\(n\)</span> times, for a total of <span class="math inline">\(n+m\)</span> applications. The multiplication operator <code>mult</code> is similar, but does things in a slightly different order: it <em>first</em> defines a new function <code>g = n(f)</code> which applies <code>f</code> to some value n times, and <em>then</em> applies <code>g</code> to <code>x</code> m times. Since each call to <code>g</code> ends up calling <code>f</code> <span class="math inline">\(n\)</span> times, the result is that <code>f</code> is applied to <code>x</code> <span class="math inline">\(m \times n\)</span> times.</p>
 <p>Try to figure out <code>exp</code> for yourself. It’s equivalent to <span class="math inline">\(m^n\)</span>. It’s not on the main line of functionality we need for the Fibonacci function, and it’s very clever!</p>
 <p><code>pred</code> is the predecessor relation. It subtracts one from a number if possible. (Zero is just mapped to zero, as negative numbers are not defined.) It’s more complex than <code>succ</code> but studying it is extremely rewarding, because it leads to understanding how data structures can be represented in the lambda calculus. The basic idea is that we are going to but the value <code>x</code> in a box and replace <code>f</code> with a different function, which I’ll call <code>skip_first</code>. The first time <code>skip_first</code> is called, it sees that the box has not been opened, so it opens that. After that, it sees that the box is already open, so it takes the value out of the box, applies <code>f</code> to it once, and puts it back in the box. It does this <span class="math inline">\(n\)</span> times. At the end, it takes the value of the box. The ultimate result is that <code>f</code> is applied to <code>x</code> <span class="math inline">\(n-1\)</span> times, because nothing happened the first time. In this analogy, the initial closed “box” is <code>lambda u: x</code>, the new box that is created after each step is <code>lambda h: h(g(f))</code>, and the <code>lambda u: u</code> at the end is the final act of taking the value out of the box.</p>
-<p><code>pred</code> is not trivial to understand, especially in this elementary form. I’ve given it my best shot, and the Wikipedia article makes a <a href="https://en.wikipedia.org/wiki/Church_encoding#Derivation_of_predecessor_function">valiant effort</a> too. If it gives you trouble, I suggest you leave it aside and study the rest of theory until you learn how to encode the “pair” data structure. Then <code>pred</code> much may be defined in a much more natural way. The only reason I am not doing that here is because I introducing pairs or lists TODO just to implement the Fibonacci function so decided to take the straight path through the mud. Nevertheless, there is a switchback trail with a very gentle slope right <a href="https://en.wikipedia.org/wiki/Cons">over there</a>.</p>
-<p>Defining <code>pred</code> was the hard part. The definition of <code>minus</code> in terms of <code>pred</code> is much easier: <code>n</code> applies the function <code>pred</code> to <code>m</code> <span class="math inline">\(n\)</span> times, so we subtract one <span class="math inline">\(n\)</span> times, which is the same as subtracting <code>n</code> from <code>m</code>.</p>
+<p><code>pred</code> is not trivial to understand, especially in this elementary form. I’ve given it my best shot, and the Wikipedia article makes a <a href="https://en.wikipedia.org/wiki/Church_encoding#Derivation_of_predecessor_function">valiant effort</a> too. You can try manually working out the <span class="math inline">\(\beta\)</span>-reduction of <code>pred(two)</code> to get a feel for it. If it still gives you trouble, I suggest you leave it aside and study the rest of theory until you learn how to encode the “pair” data structure. Then <code>pred</code> much may be defined in a much more natural way. just to implement the Fibonacci function so decided to take the straight path through the mud. Nevertheless, there is a switchback trail with a very gentle slope right <a href="https://en.wikipedia.org/wiki/Cons">over there</a>.</p>
+<p>Defining <code>pred</code> was the hard part. The definition of <code>minus</code> in terms of <code>pred</code> is much easier: <code>n</code> applies the function <code>pred</code> to <code>m</code> <span class="math inline">\(n\)</span> times, so we subtract one <span class="math inline">\(n\)</span> times, which is the same as subtracting <code>n</code> from <code>m</code>. Easy, yes?</p>
 <p>Now that we have a reasonable set of mathematical operations, let’s do some practical examples. We can do basic operations like <span class="math inline">\(2+2\)</span> or <span class="math inline">\(6 \times 7\)</span>:</p>
 <pre><code>plus(two)(two)
 mult(six)(seven)</code></pre>
-<p>The problem with these is that what they return is a Church numeral, which is a Python <a href="https://stackoverflow.com/questions/111234/what-is-a-callable">Callable</a>. All I see on my screen when I run the above snippets is an opaque and ambiguous output like this:</p>
+<p>The problem with these is that what they return is a Church numeral, which is a Python <a href="https://stackoverflow.com/questions/111234/what-is-a-callable">Callable</a>. All I see on my screen when I run the above snippets is opaque and ambiguous output like this:</p>
 <pre><code>&lt;function __main__.&lt;lambda&gt;.&lt;locals&gt;.&lt;lambda&gt;.&lt;locals&gt;.&lt;lambda&gt;(x)&gt;</code></pre>
-<p>To translate this back into something we can understand, we need to write a bridge function. How can we “unpack” a Church number? Recall that the Church encoding of <span class="math inline">\(n\)</span> is a function taking two arguments, a function <span class="math inline">\(f\)</span> and a value <span class="math inline">\(x\)</span>, and it applies <span class="math inline">\(f\)</span> to <span class="math inline">\(x\)</span> <span class="math inline">\(n\)</span> times: <span class="math inline">\(f^n(x)\)</span>. In our Python environment, this works even if <span class="math inline">\(x\)</span> and <span class="math inline">\(f\)</span> are not written in the lambda calculus! This means we can write a very simple function to translate Church numbers into native Python <code>int</code>s:</p>
+<p>To translate this back into something we can understand, we need to write another bridge function. But how can we “unpack” a Church number? Recall that the Church encoding of <span class="math inline">\(n\)</span> is a function taking two arguments, a function <span class="math inline">\(f\)</span> and a value <span class="math inline">\(x\)</span>, and it applies <span class="math inline">\(f\)</span> to <span class="math inline">\(x\)</span> <span class="math inline">\(n\)</span> times: <span class="math inline">\(f^n(x)\)</span>. In our Python environment, this works even if <span class="math inline">\(x\)</span> and <span class="math inline">\(f\)</span> are not written in the lambda calculus. Therefore we can follow the <a href="http://xunitpatterns.com/Test%20Spy.html">spy pattern</a> often used in unit testing and pass in an function which will report how often it was called.</p>
 <pre><code>def church_to_int(n: Callable) -&gt; int:
     return n(lambda x: x+1)(0)</code></pre>
 <p>Going the other way requires no such tricks. If I want to encode the number 42 in the lambda calculus, I can use the first ten digits (defined above) and our mathematical operations to build up the Church number:</p>
@@ -259,7 +267,7 @@ mult(six)(seven)</code></pre>
 &gt; ss = plus(exp(a)(two))(exp(b)(two))
 &gt; print(&quot;3**2 + 4**2 =&quot;, church_to_int(ss))
 25</code></pre>
-<p>This isn’t all of number theory of course, but its enough to implement our little Fibonacci function (and it turns out that</p>
+<p>This isn’t all of number theory of course, but its enough to implement our little Fibonacci function!</p>
 </div>
 <div id="predicates-involving-numbers" class="section level2">
 <h2>Predicates Involving Numbers</h2>
@@ -286,7 +294,7 @@ false = lambda x: lambda y: y</code></pre>
     else:
         return n * factorial(n-1)</code></pre>
 <p>This only works because by the time the interpreter reaches the statement <code>factorial(n-1)</code> the global symbol table already contains an entry for <code>factorial</code>, so Python happily resolves <code>factorial</code> to that function and calls it. In other words, it works because Python is doing all the heavy lifting for us!</p>
-<p>In the lambda calculus, there is no global symbol table. Even if there were, lambda functions are all anonymous: they don’t have names, so what would you even query the symbol table for? The workaround is to pass the function into itself as an argument. This is totally legal; for example, <code>x(x)</code> is a perfectly cromulent expression in Pythonic lambda calculus. Continuing with our factorial example a little further, we have:</p>
+<p>In the lambda calculus, there is no global symbol table. Even if there were, lambda functions are all anonymous: they don’t have names, so what would you even query the symbol table for? The workaround is to pass the function into itself as an argument. This is totally legal; <code>x(x)</code> is a perfectly cromulent expression in Pythonic lambda calculus. Continuing with our factorial example a little further, we have:</p>
 <pre><code>def _factorial(f, n):
     if n &lt;= 1:
         return 1
@@ -307,9 +315,9 @@ def factorial(n):
     f = lambda m: _factorial(f, m)
     return f(n)</code></pre>
 <p>We can make this more generic and reduce reliance on the global namespace by passing <code>_factorial</code> in as an argument:</p>
-<pre><code>def call_recursively(g, n):
-    f = lambda m: g(g, m)
-    return f(n)
+<pre><code>def call_recursively(f, n):
+    g = lambda m: f(g, m)
+    return g(n)
 
 def _factorial(f, n):
     if n &lt;= 1:
@@ -318,11 +326,11 @@ def _factorial(f, n):
         return n * f(n-1)
 
 def factorial(n):
-    call_recursively(_factorial, n)</code></pre>
+    return call_recursively(_factorial, n)</code></pre>
 <p>Finally, the <code>call_recursively</code> function can be abstracted entirely as a Python decorator. (If you’re not familiar with the decorator syntax, <code>@decorator/f</code> is simply syntactic sugar for <code>f = decorator(f)</code> and is a convenient way to apply a functor to a function.)</p>
 <pre><code>def recursive(f):
     def recursive(n):
-        g = lambda m: f(f, m)
+        g = lambda m: f(g, m)
         return g(n)
     return recursive
 
@@ -333,34 +341,26 @@ def factorial(f, n):
     else:
         return n * f(n-1)
     </code></pre>
-<p>So, in vanilla Python, we’ve implemented a reusable utility which enables us to conveniently do recursion that allows us to avoid any reference to the global symbol table. We can translate this half-way into Pythonic lambda calculus simply by refactoring every named function into a lambda function:</p>
-<pre><code>recursive = lambda f: lambda n: (lambda m: f(f, m))(n)
-
-@recursive
-def factorial(f, n):
-    if n &lt;= 1:
-        return 1
-    else:
-        return n * f(n-1)</code></pre>
-<p>The above still uses a function of two arguments and the factorial function is still written in vanilla Python. As we make the jump to the final form purely in Pythonic lambda calculus, we will rename <code>recursive</code> to <code>Y</code> - it is indeed the famous Y-combinator, the higher-order function which makes recursion (and therefore also iteration) possible in the lambda calculus. As for <em>why</em> it is called <code>Y</code>, I have no idea - it’s just the <a href="https://en.wikipedia.org/wiki/Lambda_calculus#Standard_terms">standard symbol</a>.</p>
+<p>So, in vanilla Python, we’ve implemented a reusable utility which enables us to conveniently do recursion that allows us to avoid any reference to the global symbol table. As we make the jump to the final form purely in Pythonic lambda calculus, we will rename <code>recursive</code> to <code>Y</code> - it is indeed the famous Y-combinator, the higher-order function which makes recursion (and therefore also iteration) possible in the lambda calculus. As for <em>why</em> it is called <code>Y</code>, I have no idea - it’s just the <a href="https://en.wikipedia.org/wiki/Lambda_calculus#Standard_terms">standard symbol</a>.</p>
 <pre><code>Y = lambda f: (lambda x: x(x))(lambda y: f(lambda z: y(y)(z)))</code></pre>
 <p>We can also apply exactly one application of the <span class="math inline">\(\beta\)</span>-reduction rule to bring this into an equivalent symmetrical form:</p>
 <pre><code>Y = lambda f: (lambda y: f(lambda z: y(y)(z)))(lambda y: f(lambda z: y(y)(z)))</code></pre>
 <p>While the symmetrical form is more often seen, I prefer the first version because I think it more clearly expresses the idea of currying a function with itself. However, both do exactly the same thing. Furthermore, neither have any free variables and so meet our requirements for a proper definition.</p>
 <p>In an ideal world we could now define the recursive factorial function entirely in Pythonic lambda calculus like so:</p>
-<pre><code>factorial = Y(lambda f: PIR(
+<pre><code>factorial = Y(lambda f: 
     lambda n:
         ((leq)(n)(one)
             (one)
-            (mult(n)(f(pred(n)))))))</code></pre>
-<p>However, there is a problem: when we run the above function we get a stack overflow error. Why this so? Is the algorithm wrong? No: if you executed this lambda expression with true <span class="math inline">\(\beta\)</span>-reduction, it would work fine. The problem is that our Church Boolean pseudo-<code>if-else</code> statement is not quite the same as <code>if-else</code> other languages. If we use <code>if-else</code> in a language like C or Python, the code inside the selected branch will be executed, but code in the other branch will <em>not even be run.</em> However, in the Pythonic lambda calculus, if we write:</p>
+            (mult(n)(f(pred(n))))))</code></pre>
+<p>However, there is a problem: when we run the above function we get a stack overflow error. Why this so? Is the algorithm wrong? No: if you executed this lambda expression with true <span class="math inline">\(\beta\)</span>-reduction, it would work fine. The problem is that our Church Boolean pseudo-<code>if-else</code> statement is not quite a proper <code>if-else</code>! In a language like C or Python, the code inside the selected branch will be executed, but code in the other branch will <em>not even be run.</em> However, in the Pythonic lambda calculus, if we write:</p>
 <pre><code>((some-predicate)
     (if-branch)
     (else-branch))</code></pre>
-<p>Then <em>both</em> the <code>if-brach</code> and the <code>else-brach</code> will need to be evaluated completely regardless of the value of <code>some-predicate</code>. This is called “eager” evaluation and Python <em>always</em> eagerly evaluates all arguments of a function call. Therefore in Python, we will always compute <em>both</em> branches, and only at the very end will we discard one of the values. Normally, this wouldn’t cause serious problems because the answer would always be the same (it would just be a little slower) but it becomes a serious problem in the case of recursion because the <code>else</code> branch is <em>always</em> evaluated, which calls the function again, which calls the function again, and so for forever.</p>
-<p>One response would be to give up on Python and go abuse some other language which has lazy evaluation TODO. Alternatively, we could write an interpreter for the lambda calculus which implements <span class="math inline">\(\beta\)</span>-reduction rule, side-stepping Python entirely.</p>
-<p>TODO</p>
-<pre><code># cheap hack because I can&#39;t get true and false to short circuit.
+<p>Then <em>both</em> the <code>if-brach</code> and the <code>else-brach</code> will need to be evaluated completely <em>before</em> <code>some-predicate</code> can be called, regardless of the value of <code>some-predicate</code>!</p>
+<p>This is called “eager” evaluation and Python <em>always</em> eagerly evaluates <em>all</em> arguments of a function call <em>before</em> performing the function call. Therefore in Python, we will always compute <em>both</em> branches, and only at the very end will we discard one of the values. Normally, this wouldn’t cause serious problems because the answer would always be the same (it would just be a little slower as it takes time to the work which gets thrown away.) It becomes a serious problem in the case of recursion because the <code>else</code> branch is <em>always</em> evaluated, which calls the function again, which calls the function again, and so for forever.</p>
+<p>One response would be to give up on Python and go abuse some other language which has <a href="https://en.wikipedia.org/wiki/Lazy_evaluation">lazy evaluation</a>. (It’s not a coincidence that functional languages like <a href="https://wiki.haskell.org/Lazy_evaluation">Haskell</a> support lazy evaluation!) Alternatively, we could write an interpreter for the lambda calculus which implements <span class="math inline">\(\beta\)</span>-reduction rule, side-stepping Python entirely.</p>
+<p>These are good options, and for someone writing a very complete implementation of the lambda calculus they would be necessities. But today we’re only concerned to write one function, the Fibonacci function, so we can use a much simpler hack to prevent infinite recursion, which I will abbreviate <code>PIR</code>:</p>
+<pre><code># cheap hack because true and false don&#39;t short circuit.
 def PIR(f):
     def wrapper_function(n):
         if church_to_bool(is_zero(n)):
@@ -368,7 +368,7 @@ def PIR(f):
         else:
             return f(n)
     return wrapper_function</code></pre>
-<p>With our little hack in place, we can now implement a working version of the factorial function which does not cause a stack overflow:</p>
+<p>With our little hack in place, we can now implement a <em>working</em> version of the factorial function which does <em>not</em> cause a stack overflow:</p>
 <pre><code>factorial = Y(lambda f: PIR(
     lambda n:
         ((leq)(n)(one)
@@ -397,7 +397,7 @@ def PIR(f):
 8  40320
 9  362880
 10 3628800</code></pre>
-<p>However, it is <em>extremely</em> slow: it takes over a minute to calculate <span class="math inline">\(10!\)</span> on a fairly new laptop. That works out to <em>36 million times slower</em> than the vanilla Python implementation.</p>
+<p>What about our main design objective? I am pleased to report that the above function is indeed<em>extremely</em> slow: it takes over a minute to calculate <span class="math inline">\(10!\)</span> on a fairly new laptop. That works out to <em>36 million times slower</em> than the vanilla Python implementation.</p>
 <p>We can profile the code to figure out why. Here, I’ve edited the profiler output from <code>%prun slow_factorial(9)</code> to give names to the most common calls; in the original the function name was always just <code>(&lt;lambda&gt;)</code> distinguished only by line number.</p>
 <pre><code>   ncalls  tottime  percall  cumtime  percall function
   1564014    0.849    0.000    0.849    0.000 succ
@@ -410,7 +410,7 @@ def PIR(f):
 </div>
 <div id="final-fibonacci" class="section level2">
 <h2>Final Fibonacci</h2>
-<p>We now have all the necessary tools. All that remains is to implement the Fibonacci algorithm.</p>
+<p>Our shopping list is complete: we now have all the necessary tools to proceed to the endgame. All that remains is to implement the Fibonacci algorithm:</p>
 <pre><code>fibonacci = Y(lambda f: PIR(
     lambda n: 
         less_than(n)(two)
@@ -527,9 +527,6 @@ fibonacci = (lambda f: (lambda x: x(x))(lambda y: f(lambda z: y(y)(z))))(lambda 
 <p>If we carried on defining signed numbers, pairs, lists, associative maps, and so on, this parsimony would continue and after a few hundred definitions - rather smaller than the standard library of most languages - we would have a perfectly functional language.</p>
 <p>Some languages like <a href="https://en.wikipedia.org/wiki/Forth_(programming_language)">Forth</a> and <a href="https://iolanguage.org/">io</a> in fact take this exact approach: the language is absolutely minimal and almost everything is moved to the standard library, including the definition of standard constructs like <code>for</code> and <code>if/else</code>.</p>
 <p>If computation is so simple, why are modern languages so complicated? It mostly boils down to the <a href="https://devblogs.microsoft.com/oldnewthing/20180123-00/?p=97865">impedance mismatch</a> between the lambda calculus and the kinds of electronic computers we can actually build. We can’t actually just make an arbitrarily fast <span class="math inline">\(\beta\)</span>-reducer, but we <em>can</em> make a machine which can perform mathematical operations on two 64 bit numbers in a single cycle. For reasons that aren’t entirely clear, the lambda calculus has been a fruitful model for thinking about high-level, expressive ways of computing, while the Turing machine has been a fruitful model for how to design and actual computing machines. While in theory we can always switch from one model of computation to another, in practice this can involve a three or four order of magnitude reduction is performance. Practical programming languages have to walk the line between exposing the real capabilities of the machine while also providing useful high level abstractions.</p>
-<p>TODO:</p>
-<p><a href="https://en.wikipedia.org/wiki/Lambda_calculus#%CE%B7-conversion">https://en.wikipedia.org/wiki/Lambda_calculus#%CE%B7-conversion</a></p>
-<p><a href="https://stackoverflow.com/questions/10499514/y-combinator-discussion-in-the-little-schemer/11864862#11864862" class="uri">https://stackoverflow.com/questions/10499514/y-combinator-discussion-in-the-little-schemer/11864862#11864862</a></p>
 </div>
 <div id="postscript" class="section level2">
 <h2>Postscript</h2>
