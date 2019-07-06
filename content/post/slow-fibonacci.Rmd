@@ -127,8 +127,8 @@ In the next section, we will briefly describe the lambda calculus and the
 Pythonic variant we will be using.
 
 
-Lambda Calculus in Python
---------------------------
+The Pythonic Lambda Calculus
+----------------------------
 
 In the lambda calculus, there are only two operations, abstraction and
 application.  These two can be composed to write any program (computable
@@ -185,10 +185,10 @@ we can use a second application to pass the second argument:
 The two applications "cancel out" the two abstractions, and we are left with
 the concrete value `3*3 + 4*4`, more commonly known as 25.
 
-This works because we call norm with the first argument and instead of resolving
+This works because we call `ss` with the first argument and instead of resolving
 to a value, it instead returns a function that we can call with the second argument
 to get the result. We can repeat this operation as many times as necessary, but
-it get's inconvenient to make up a silly name like `half_norm` each time; instead
+it get's inconvenient to make up a silly name like `half_ss` each time; instead
 we'll use an *anonymous* lambda function:
 
     ss = lambda x: lambda y: x*x + y*y
@@ -226,7 +226,7 @@ For example, we may call the function `lambda x: x(x)(x)` with concrete value
 us to remove the `lambda x` and go through and replace every `x` in the body
 of the function with `t`, which leaves us with `t(t)(t)`. Since `t` is a free
 variable, we cannot reduce this any further, so we stop. Let's do the same
-thing to our norm example:
+thing to our sums-of-squares example:
 
 
     (lambda x: lambda y: plus(mult(x)(x))(mult(y)(y)))(3)(4)
@@ -246,12 +246,13 @@ So abstraction introduces lambda expressions, application tells us when we
 should call a function and which argument to pass in, and $\beta$-reduction
 tells us how to carry out that function call. 
 
-There is one other rule, called $\alpha$-replacement (read "alpha replacement"), which tells us that we
-can change the variable names of functions whenever we want, as long as we are
-consistent and change it everywhere inside the body of the function too while
-also avoiding conflicts with other variable names.  For example, these two
-lambda expressions are the same, and we can use the $\alpha$-replacement rule
-to transform one into the other and vice versa:
+There is one other rule, called $\alpha$-replacement (read "alpha
+replacement"), which tells us that we can change the variable names of
+functions whenever we want, as long as we are consistent and change it
+everywhere inside the body of the function too while also avoiding conflicts
+with other variable names.  For example, these two lambda expressions are the
+same, and we can use the $\alpha$-replacement rule to transform one into the
+other and vice versa:
 
     lambda x: x
     lambda y: y
@@ -377,8 +378,8 @@ usually think of objects as values.
 More generally, it is often convenient to talk about the "type" of different
 lambda expressions.  However, because we are technically working in the
 "untyped" lambda calculus, we will have to keep the concept of "type"
-high-level and informal for now. (I'll have more to say about types when we
-discuss recursion.)
+high-level and informal for now. (There are also "typed" [versions of the
+lambda calculus][TLC] but we don't need to actually compute stuff.)
 
 Since we are keeping things informal, we can use an intuitive definition: the
 type of a lambda calculus expression is roughly the number and types of the
@@ -725,7 +726,6 @@ example a little further, we have:
 
     def factorial(n):
         return _factorial(_factorial, n)
-
         
 Neat. But it's a little ugly that we have to make the recursive call as `f(f, n-1)`
 and explicitly pass `f` back into itself. Why not make `f` a closure which [Currys][C]
@@ -924,8 +924,6 @@ inefficient, especially as the numbers grow. A more efficient encoding could be
 defined by using the Boolean algebra we developed earlier to define operations
 on binary strings, but that is not what we are about today.
 
-TODO types 
-
 
 Final Fibonacci
 ---------------
@@ -1039,31 +1037,36 @@ no-ops and sleep statements throughout.
 One interesting approach would be to implement what is sometimes called a
 [meta-circular evaluator][MCE]: an interpreter for the lambda calculus written
 entirely within the lambda calculus itself. We could then stack interpreters
-indefinitely, with each layer costing us another factor of a thousand. It
-would be reminiscent of this art project where a long gear chain is used
-to build a machine which will take 13.7 billion years for the final gear
-to complete one rotation. The machine has a electric motor happily whirring 
-away at one end, and a solid block of concrete at the other; but because
-gear steps the revolution speed down by a factor of 20, the motion is infinitesimal
-after only a few steps.
+indefinitely, with each layer costing us another factor of a thousand. It would
+be reminiscent of this art project where a long gear chain is used to build a
+machine which will take 13.7 billion years for the final gear to complete one
+rotation:
 
 <a href="https://www.youtube.com/watch?v=Fqu4zm8v6aI">
 <img src="/post/slow-fibonacci_files/slow_gears.jpg">
 </a>
+
+The machine has a electric motor happily whirring away at one end (click the
+image for a video,) and a solid block of concrete at the other; but because
+gear steps the revolution speed down by a factor of 20, the motion is
+infinitesimal after only a few steps.
 
 We're not actually going to do that, of course. This article is already way too long. But we *could.*  
 
 Macro Expansion
 ---------------
 
-Perhaps you don't believe that this is really a lambda calculus program; after all, it has
-all those "definitions" which look suspiciously like named functions and in fact are being
-treated as named functions by the Python interpreter! Very suspicious. 
+Perhaps you don't believe that this is really a lambda calculus program; after
+all, it has all those "definitions" which look suspiciously like named
+functions and in fact are being treated as named functions by the Python
+interpreter! Very suspicious. 
 
-I can show this is not the case by doing a search-and-replace for each name and replacing
-it with its body, and repeating that until nothing is left. Below is the step-by-step working
-out, with one version per line; the last line contains no definitions (expect our `PIR` hack)
-and instead is composed entirely of `lambda` functions, function calls, and bound variable names.
+We can see this is not the case by doing a search for each definition's name
+and replacing it with its body, and repeating until no named definitions are
+left.  Below is the step-by-step expansion process, with one version per line;
+the last line contains no definitions (expect our `PIR` hack) and instead is
+composed entirely of `lambda` functions, function calls, and bound variable
+names.
 
     fibonacci = Y(lambda f: PIR(lambda n: (less_than(m)(two))(n)(two)(n)(plus(f(minus(n)(one)))(f(minus(n)(two))))))
     fibonacci = Y(lambda f: PIR(lambda n: (lambda m: lambda n: leq(succ(m))(n))(n)(two)(n)(plus(f(minus(n)(one)))(f(minus(n)(two))))))
@@ -1078,22 +1081,26 @@ and instead is composed entirely of `lambda` functions, function calls, and boun
     fibonacci = Y(lambda f: PIR(lambda n: (lambda m: lambda n: (lambda m: lambda n: (lambda n: n(lambda x: (lambda x: lambda y: y))(lambda x: lambda y: x))((lambda m: lambda n: n((lambda n: lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)))(m))(m)(n)))((lambda n: lambda f: lambda x: f(n(f)(x)))(m))(n))(n)((lambda n: lambda f: lambda x: f(n(f)(x)))(lambda f: lambda x: f(x)))(n)((lambda m: lambda n: lambda f: lambda x: m(f)(n(f)(x)))(f((lambda m: lambda n: n((lambda n: lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)))(m))(n)(lambda f: lambda x: f(x))))(f((lambda m: lambda n: n((lambda n: lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)))(m))(n)((lambda n: lambda f: lambda x: f(n(f)(x)))(lambda f: lambda x: f(x))))))))
     fibonacci = (lambda f: (lambda x: x(x))(lambda y: f(lambda z: y(y)(z))))(lambda f: PIR(lambda n:(lambda m: lambda n: (lambda m: lambda n: (lambda n: n(lambda x: (lambda x: lambda y: y))(lambda x: lambda y: x))((lambda m: lambda n: n((lambda n: lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)))(m))(m)(n)))((lambda n: lambda f: lambda x: f(n(f)(x)))(m))(n))(n)((lambda n: lambda f: lambda x: f(n(f)(x)))(lambda f: lambda x: f(x)))(n)((lambda m: lambda n: lambda f: lambda x: m(f)(n(f)(x)))(f((lambda m: lambda n: n((lambda n: lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)))(m))(n)(lambda f: lambda x: f(x))))(f((lambda m: lambda n: n((lambda n: lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)))(m))(n)((lambda n: lambda f: lambda x: f(n(f)(x)))(lambda f: lambda x: f(x))))))))
 
-The ultimate expanded version of this function works just as well and is just
+The ultimate expanded version of this function works just as well and runs just
 as fast. Although it does nothing but create closures and call functions,
 somehow in the end it carries out the computation of a mathematical function.
 True, it is a [little hard to read][US] in this form, but so is machine code.
 
-Here is a visualization of the full Fibonacci program (click for a larger image.)
-This shows every node (either a variable, function call, or lambda abstraction) as
-a binary tree.
+Here is a visualization of the full Fibonacci program (click for a larger
+image.) This shows every node (either a variable, function call, or lambda
+abstraction) as a binary tree.
 
 <a href="/post/slow-fibonacci_files/ast.png">
 ![Fibonacci AST](/post/slow-fibonacci_files/ast.png "Visualization of the Abstract Syntax Tree of the elementary Fibonacci function.")
 </a>
 
 It reminds me a lot of this [XKCD comic strip about LISP][X224] where
-[`cons`][CONS] is taken as primitive. Of course, the [pair data structure][LCP]
-can easily be defined in the lambda calculus as well.
+[`cons`][CONS] is taken as atomic. Of course, the [pair data structure][LCP]
+can easily be defined in the lambda calculus as well, making lambda
+abstractions even more than fundamental `cons`. The essential insight remains
+the same: all programs and data structures can be reduced to binary trees and
+all information about the program is somehow contained in the very structure of
+the tree itself.
 
 Conclusion
 ----------
@@ -1134,10 +1141,7 @@ machines. While in theory we can always switch from one model of computation to
 another, in practice this can involve a three or four order of magnitude
 reduction is performance. Practical programming languages have to walk the line
 between exposing the real capabilities of the machine while also providing 
-useful high level abstractions. This turns out to be much harder than simply
-getting something that works at all in a performance naive way, which is
-basically what we've been doing in this article.
-
+useful high level abstractions.
 
 [AC]: https://en.wikipedia.org/wiki/Alonzo_Church
 [ALGOL]: https://en.wikipedia.org/wiki/ALGOL_60
@@ -1173,6 +1177,9 @@ basically what we've been doing in this article.
 [X224]: https://xkcd.com/224/
 [X505]: https://xkcd.com/505/
 [ZFN]: https://en.wikipedia.org/wiki/Set-theoretic_definition_of_natural_numbers
+[AL]: https://en.wikipedia.org/wiki/Agglutinative_language
+[LLRP]: https://www.amazon.com/Llama-Red-Pajama-Anna-Dewdney/dp/0451474570
+[TLC]: https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus
 
 TODO:
 
@@ -1180,4 +1187,69 @@ https://en.wikipedia.org/wiki/Lambda_calculus#%CE%B7-conversion
 
 https://stackoverflow.com/questions/10499514/y-combinator-discussion-in-the-little-schemer/11864862#11864862
 
-TODO: norm -> sums-of-squares
+
+
+Postscript
+----------
+
+Reading the "macro expanded version" of the function out loud, the similarity
+between "lambda" and "llama" made me think of the children's book "[Llama llama
+red pajama][LLRP], a poem about a baby llama and his mama. I translated the above
+function declaration into a made up [agglutinative language][AL] to produce this
+nonsense bedtime rhyme... perhaps the only one in the world which is also a
+lambda calculus program.
+
+<blockquote>
+Hey llama baby hey llama mama hey <br>
+Ma sleep sleep hey llama ba baby <br>
+Hey llama ta ba hey ba sleep hey <br>
+Ta sleep sleep sleep sleep hey <br>
+Llama baby llama na hey llama ga <br>
+Llama na hey llama ga llama na <br>
+Hey llama na na hey llama ma hey <br>
+Llama ma llama ba ba sleep sleep <br>
+Hey llama ma llama ba ma sleep <br>
+Sleep hey hey llama ga llama na <br>
+Na hey hey llama na llama baby <br>
+Llama ma na hey llama red pajama <br>
+Llama haha hey red pajama hey <br>
+Baby sleep sleep sleep hey llama <br>
+Drama sleep hey llama dra dra <br>
+Sleep sleep sleep hey ga sleep <br>
+Sleep hey ga sleep hey na sleep <br>
+Sleep sleep hey hey llama na <br>
+Llama baby llama ma baby hey na <br>
+Hey baby sleep hey ma sleep sleep <br>
+Sleep hey ga sleep sleep hey na <br>
+Sleep sleep hey na sleep hey hey <br>
+Llama na llama baby llama ma baby <br>
+Hey na hey baby sleep hey ma <br>
+Sleep sleep sleep hey llama baby <br>
+Llama ma baby hey ma sleep sleep <br>
+Sleep hey na sleep hey hey llama <br>
+Ga llama na llama baby llama ma <br>
+Ga hey baby sleep hey na hey baby <br>
+Sleep hey ma sleep sleep sleep <br>
+Hey baby hey hey llama ga llama <br>
+Na na hey hey llama na llama baby <br>
+Llama ma na hey llama red pajama <br>
+Llama haha hey red pajama hey <br>
+Baby sleep sleep sleep hey llama <br>
+Drama sleep hey llama dra dra <br>
+Sleep sleep sleep hey ga sleep <br>
+Sleep hey na sleep hey llama baby <br>
+Llama ma baby hey ma sleep sleep <br>
+Sleep sleep hey baby hey hey <br>
+Llama ga llama na na hey hey <br>
+Llama na llama baby llama ma na <br>
+Hey llama red pajama llama haha <br>
+Hey red pajama hey baby sleep <br>
+Sleep sleep hey llama drama sleep <br>
+Hey llama dra dra sleep sleep <br>
+Sleep hey ga sleep sleep hey na <br>
+Sleep hey hey llama na llama baby <br>
+Llama ma baby hey na hey baby <br>
+Sleep hey ma sleep sleep sleep <br>
+Hey llama baby llama ma baby hey ma <br>
+Sleep sleep sleep sleep sleep sleep sleep 
+</blockquote>
