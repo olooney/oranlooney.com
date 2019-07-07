@@ -15,12 +15,13 @@ by writing a Fibonacci function which is as *slow* as possible.
 
 This is not as easy as it sounds: any program can *trivially* be made slower,
 but this is boring. How can we make it slow in a fair and interesting way? The
-answer is to use a [model of computation][MOC] which was not *deliberately*
-designed to be slow but which in practice is quite slow because it was designed
-for simplicity.  While there are [several][TM] models of computation to
-[choose][MRF] from, I selected the [$\lambda$-calculus][LC] (read "lambda
-calculus") as being particularly easy to write an spectacularly inefficient
-implementation in.
+answer is to use a [model of computation][MOC] which is not *deliberately*
+designed to be slow but which in practice is quite slow, usually because the
+designer had something quite different than performance in mind.
+
+While there are [several][TM] to [choose][MRF] from, I selected the
+[$\lambda$-calculus][LC] (read "lambda calculus") as being particularly easy to
+write an spectacularly inefficient implementation in.
 
 Some of you no doubt will be having flashbacks at the mention of the name,
 while others have already started slowly edging their mouse towards the close
@@ -33,21 +34,22 @@ the $\lambda$-calculus.
 In fact, it's main problem is that it's *too* simple: it is difficult at first
 to see how anyone could *do* anything with it. Luckily for us, there exists a
 set of macros which turn the $\lambda$-calculus into a much higher level
-language. While [Alonzo Church][AC] was inventing the $\lambda$-calculus
-itself, he was also developing a this set of macros, presumably so he could
-convince himself and others that it was in fact useful.  These macros provide a
-simple and concrete way of encoding numbers, mathematical operators, boolean
-logic, and even data structures like lists, maps, and trees. Today, this
-technique is called [Church encoding][CE].  If $\lambda$-calculus is machine
-code, then the [Church encoding][CE] is more like C or LISP.
+language. While [Alonzo Church][AC] was inventing the $\lambda$-calculus itself
+he also developed this set of macros in parallel so that he could convince
+himself and others that it really could compute. These macros provide a simple
+and concrete way of encoding numbers, mathematical operators, boolean logic,
+and even data structures like lists, maps, and trees. Today, this technique is
+called [Church encoding][CE].  If $\lambda$-calculus is machine code, then the
+[Church encoding][CE] is C.
 
 
 Goal
 ----
 
 David Allen says to begin with the goal in mind, so let's take a look at what
-we're shooting for. Here is a performance-naive implementation of a function
-which finds the $n$-th Fibonacci number, implemented in vanilla [Python][P]:
+we're shooting for. As a blueprint, let's first look at a performance-naive
+implementation of a function which finds the $n$-th Fibonacci number,
+implemented in vanilla [Python][P]:
 
     def fibonacci(n):
         if n <= 1:
@@ -55,7 +57,7 @@ which finds the $n$-th Fibonacci number, implemented in vanilla [Python][P]:
         else:
             return naive_fib(n-1) + naive_fib(n-2)
 
-Let's put together a grocery list of things we need to implement this function:
+Let's put together a shopping list of features we need to implement this function:
 
 1. natural numbers
 2. addition
@@ -82,9 +84,9 @@ In the next section I will describe this subset more formally. In this section,
 I'll just do a quick high-level overview so you have some idea of where we are
 heading.
 
-Basically, we'll be writing Python, but restricting ourselves to *only* using
-the anonymous function syntax (e.g., `lambda x: ...`) and function calls (e.g.,
-`f(x)`).
+Basically, we'll be writing Python code, but restricting ourselves to *only*
+using the anonymous function syntax (e.g., `lambda x: ...`) and function calls
+(e.g., `f(x)`).
 
 In addition, we will expand our language with *definitions*, which are
 basically macros with a human readable name that expand out to
@@ -100,8 +102,8 @@ and Replace All":
 
 By introducing definitions, we will gradually build up a surprisingly
 high-level and expressive language on top of the $\lambda$-calculus. We can
-then return to the $\lambda$-calculus proper at any time by simply expanding
-out all the definitions like macros.
+then revert to proper $\lambda$-calculus at any time by simply expanding out
+all the definitions like macros. 
 
 With those preliminaries out of the way, let me show you are goal.
 Although we will the rest of this article to understand in detail how it
@@ -118,7 +120,6 @@ works, we will end up with a Fibonacci function that looks something like this:
                 (plus
                     (f(minus(n)(one)))
                     (f(minus(n)(two))))))
-
 
 As always in Python, `#` indicates an non-executable comment. 
 
@@ -288,28 +289,31 @@ can be reduced to abstraction and application, and all computation can be
 reduced to the $\beta$-reduction rule; all else is vanity and grasping at wind. 
 
 But the examples I've used have share the weakness that if you go far enough
-down, you are relying on operations other than these two. For example, `mult =
-lambda x: lambda y: x * y` is ultimately defined in terms of the built-in
-multiplication operation `*`, and `x` and `y` are are of type `int`. This won't
-do; indeed, this is a serious defect, because the whole point of the lambda
-calculus is to prove that these two operations suffice to define *any*
-computable function. Copping out halfway through and relying on native
-operations proves nothing.
+down, you are relying on other operations. For example, `mult = lambda x:
+lambda y: x * y` is ultimately defined in terms of the built-in multiplication
+operation `*`, and `x` and `y` are are of type `int`. This won't do; indeed,
+this is a serious defect, because the whole point of the lambda calculus is to
+prove that these two operations suffice to define *any* computable function.
+Copping out halfway through and relying on native operations proves nothing.
 
 To correct this defect, we need to start from scratch and scrupulously avoid
 using any operation *except* for abstraction and application. Happily, Church
-encoding provides a roadmap... It  will however lead us to types and data
+encoding provides a roadmap... it  will however lead us to types and data
 structures very different than the native python `int` and `bool`!
 
 
 Formal Grammar
 --------------
 
-In Python, these rules are equivalent to:
+The subset of Python which constitutes the Pythonic $\lambda$-calculus
+can fully described by this [BNF][BNF] specification:
 
-    <lambda-expression> ::= <variable>
-                          | "(" lambda <var> ":" <lambda-expression> ")"
-                          | <lambda-expression> "(" <lambda-expression> ")"
+    <expression> ::= <variable>
+                          | "(" lambda <var> ":" <expression> ")"
+                          | <expression> "(" <expression> ")"
+
+In plain english, we build up expressions recursively out of variables, lambda
+functions, and function applications.
 
 In some cases, where it causes no ambiguity, we will omit the parentheses
 around lambda functions, or add parentheses around function application e.g.
@@ -326,9 +330,9 @@ with whenever we choose through the simple process of string substitution.
 (The development of the Church encoding proceeds mainly by means of such
 definitions.) A definition looks like this:
 
-    <definition> ::= <definition-name> "=" <lambda-expression>
+    <definition> ::= <definition-name> "=" <expression>
 
-Where the <lambda-expression> on the right is restrictions to have no free
+Where the `<expression>` on the right is restrictions to have no free
 variables. That is to say, every variable used is in fact inside the body of a
 lambda function with that variable as a parameter.  For example, `lambda x:
 x(x)(x(x))` has no free variables, but `lambda x: y(x)` has `y` as a free
@@ -358,11 +362,11 @@ much the same.
 
 To wrap up, the full extended grammar looks like this:
 
-    <definition> ::= <definition-name> "=" <lambda-expression>
+    <definition> ::= <definition-name> "=" <expression>
 
-    <lambda-expression> ::= <variable>
-                          | "(" lambda <var> ":" <lambda-expression> ")"
-                          | <lambda-expression> "(" <lambda-expression> ")"
+    <expression> ::= <variable>
+                          | "(" lambda <var> ":" <expression> ")"
+                          | <expression> "(" <expression> ")"
                           | "(" <definition-name> ")"
 
 Both the original grammar and the extended grammar are strict subsets of
@@ -394,9 +398,9 @@ objects of type `function`, not objects of type `bool`.
 Some of you may object that these are not *values*, these are *functions*. Of
 course they are; the $\lambda$-calculus is made out of nothing *but* functions!
 But that doesn't prevent us from thinking of some functions as values when it
-is convenient for us. Consider the objects of object-oriented programming - an
-object is nothing but a collection of functions called "methods," but we
-usually think of objects as values.  
+is convenient for us. Consider the "objects" of object-oriented programming -
+an object is nothing *but* a collection of functions, but we usually think of
+objects as values.  
 
 More generally, it is often convenient to talk about the "type" of different
 lambda expressions.  However, because we are technically working in the
@@ -417,8 +421,8 @@ Consider the following function, which takes a Boolean argument:
 
 This piece of code will work equally well if `p` is `true` or `false` - only
 the behavior will be different. If `p` is `true`, it will return `a` and if `p`
-if `false` it will return `b`. In other words, it has the exact same semantics
-as a typical if/else statement!
+if `false` it will return `b`. In other words, it has the same semantics
+as an if/else statement or the [`?:` ternary operator][TO].
 
 In general, if we have a predicate (an expression which evaluates to a Boolean),
 we can always write an if/else statement like:
@@ -517,13 +521,13 @@ calculus? Just so:
     Hello, Lambda Calculus!
     Hello, Lambda Calculus!
 
-Of all the high level programming languages I know, I think only Ruby [comes
-close][RT] to the idea that numbers should literally be their own `for` loops.
-Even LISP and Haskell require recursion, a separate [map][HM] function, or a
-[loop macro][LLM] to achieve this. (For code readability alone this is probably
-a good thing, though. In writing this article I've found the lack of
-traditional signpost statements more confusing than elegant, and have had to
-use comments to indicate where such control flow statements were being used.)
+Of all the high-level programming languages I am aware of, I think only Ruby
+[comes close][RT] to the idea that numbers should literally be their own `for`
+loops. Even LISP and Haskell require recursion, a separate [map][HM] function,
+or a [loop macro][LLM]. (For code readability alone this is probably a good
+thing, though. In writing this article I've found the lack of traditional
+signpost statements more confusing than elegant, and have had to use comments
+to indicate where such control flow statements were being used.)
 
 This one-to-one correspondence between Church numerals and behaviors makes it
 relatively easy to define mathematical operations on Church numerals.
@@ -791,12 +795,12 @@ a functor to a function.)
 			return n * f(n-1)
         
 So, in vanilla Python, we've implemented a reusable utility which enables us to
-conveniently do recursion that allows us to avoid any reference to the global
-symbol table. As we make the jump to the final form purely
-in Pythonic $\lambda$-calculus, we will rename `recursive` to `Y` - it is indeed
-the famous Y-combinator, the higher-order function which makes recursion (and
-therefore also iteration) possible in the $\lambda$-calculus. As for *why* it is
-called `Y`, I have no idea - it's just the [standard symbol][LCS].
+conveniently do recursion while avoiding any reference to the global symbol
+table. As we make the jump to the final form purely in Pythonic
+$\lambda$-calculus, we will rename `recursive` to `Y` - it is indeed the famous
+Y-combinator, the higher-order function which makes recursion (and therefore
+also iteration) possible in the $\lambda$-calculus. As for *why* it is called
+`Y`, I have no idea - it's just the [standard symbol][LCS].
 
     Y = lambda f: (lambda x: x(x))(lambda y: f(lambda z: y(y)(z)))
 
@@ -884,9 +888,8 @@ $\lambda$-calculus inspired languages.
 </a>
 
 In any case, the above function is a little inconvenient to call because it
-requires a Church numeral as input and returns an opaque Church numeral, so we
-will wrap it with bridge code:
-
+requires a Church numeral as input and returns an opaque Church numeral. Let's
+wrap it in bridge code:
 
     def slow_factorial(n):
         n = int_to_church(n)
@@ -914,7 +917,7 @@ function is indeed*extremely* slow: it takes over a minute to calculate $10!$
 on a fairly new laptop. That works out to *36 million times slower* than the
 vanilla Python implementation. 
 
-We can profile the code to figure out why.  Here, I've edited the profiler
+We can profile the code to figure out why. Here, I've edited the profiler
 output from `%prun slow_factorial(9)` to give names to the most common calls;
 in the original the function name was always just `(<lambda>)` distinguished
 only by line number.
@@ -947,6 +950,19 @@ to the endgame. All that remains is to implement the Fibonacci algorithm:
                 (plus
                     (f(minus(n)(one)))
                     (f(minus(n)(two))))))
+
+The `less_then(n)(two)` is a predicate that resolves to a Church Boolean.
+This Boolean is then used as an `if/else` statement returning `n` for the `if`
+branch or the recurance relation for the Fibonacci for the `else` branch. The
+`else` branch is simply the sum of $F_{n-1}$ and $F_{n-2}$. The `Y`-combinator
+ensures that `f` is in fact the same `fibonacci` function so we can call 
+`f(n-1)` and `f(n-2)` to calculuate $F_{n-1}$ and $F_{n-2}$. 
+
+Because we make two separate recursive calls and don't do any caching, the
+number of calls to `fibonacci()` will grow roughly as $\mathcal{O}(2^n)$.  This
+is of course a terrible algorithm; it's the same one I called `naive_fib()` in
+my [earlier article][FFFF] on optimizing the Fibonacci function. However, this
+is entirely in keeping with our goal of writing the slowest possible version!
 
 As before, we'll wrap this in bridge code to handle the translation between
 native Python integers and Church numerals:
@@ -1058,11 +1074,13 @@ rotation:
 </a>
 
 The machine has a electric motor happily whirring away at one end (click the
-image for a video,) and a solid block of concrete at the other; but because
-gear steps the revolution speed down by a factor of 20, the motion is
-infinitesimal after only a few steps.
+image for a video showing it action) and a solid block of concrete at the
+other. Normally that would be a recipe for disaster but because each gear steps
+the revolution speed down by a factor of 10, and because so many gears are
+chained together, the motion is infinitesimal by the end.
 
-We're not actually going to do that, of course. This article is already way too long. But we *could.*  
+We're not actually going to do that, of course. This article is already way too
+long. But we *could.*  
 
 Macro Expansion
 ---------------
@@ -1130,8 +1148,8 @@ language with recursion, for loops, if/else statements, and recursive function
 calls. Things like closures, Currying, functors/decorators, which are
 considered advanced features in other languages, we somehow got for free.
 
-If we carried on defining signed numbers, pairs, lists, associative maps, and
-so on, this parsimony would continue and after a few hundred definitions -
+If we had carried on defining signed numbers, pairs, lists, associative maps,
+and so on, this parsimony would continue and after a few hundred definitions -
 rather smaller than the standard library of most languages - we would have a
 perfectly functional language. (Pun *absolutely* intended.)
 
@@ -1142,18 +1160,39 @@ and `if/else`.
 
 If computation is so simple, why are modern languages so complicated? It mostly
 boils down to the [impedance mismatch][IM] between the $\lambda$-calculus and
-the kinds of electronic computers we can actually build. We can't actually just
-make an arbitrarily fast $\beta$-reducer, but we *can* make a machine which can
-perform mathematical operations on two 64 bit numbers in a single cycle.  For
-reasons that aren't entirely clear, the $\lambda$-calculus has been a good
-model for thinking about high-level, expressive ways of computing, while the
-Turing machine has been a good model for designing actual computing machines.
-While in theory we can always switch from one model of computation to another,
-in practice this can involve a three or four order of magnitude reduction is
-performance. Practical programming languages have to walk the line between
-exposing the real capabilities of the machine while also providing useful high
-level abstractions.
+the kinds of electronic computers we can actually build. We can't actually make
+Church numerals fast, but we *can* make a machine which can perform
+mathematical operations on two 64 bit numbers in a single cycle. We can't write
+a performant $\beta$-reducer, but we *can* write a block of machine code which
+calls functions by using a [calling convention][CC]: pops a certain number
+arguments off the stack when called and returns a value on the stack or in a
+particular register. And so on.
 
+For reasons that aren't entirely clear to me, the $\lambda$-calculus has been a
+good model for thinking about high-level, expressive ways of computing, while
+the Turing machine has been a good model for designing actual computing
+machines.  While in theory we can always switch from one model of computation
+to another, in practice this can involve a three or four order of magnitude
+reduction is performance. Practical programming languages have to walk the line
+between exposing the real capabilities of the machine while also providing
+useful high level abstractions.
+
+Which isn't to say there aren't practical languages very much inspired by and
+very close to the $\lambda$-calculus. LISP and Haskell come to mind. After
+watching some of the [SICP lectures][SL] on Youtube, I'm convinced the only
+reason Harold Abelson didn't just teach the whole course in pure
+$\lambda$-calculus is because computers back then were still slow enough that
+it would have been just a little too painful, and LISP was chosen as a
+compromise. (Unfortunately, as we've seen today, this is still true. But maybe
+someday...) Many JavaScript programs too, particularly those that create lots
+of closures to handle asynchronous callbacks, seem to me to be much closer in
+spirit to the $\lambda$-calculus (as opposed to something like C, which uses a
+[pointer machine][PM] model which is only slightly higher level than a Turing
+machine.) It's never been more important to expose CS students to the idea
+and modes of thinking inspired by the $\lambda$-calculus and I think it's
+importance will only grow as we can better afford the cost of abstractions.
+
+As always, all the [source code][SC] for this article is free and open source. 
 
 Postscript
 ----------
@@ -1227,6 +1266,7 @@ Sleep sleep sleep sleep sleep sleep sleep
 [BA]: https://en.wikipedia.org/wiki/Boolean_algebra
 [BNF]: https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form
 [CCS]: https://en.wikipedia.org/wiki/Closure_(computer_programming)
+[CC]: https://en.wikipedia.org/wiki/Calling_convention
 [CEP]: https://en.wikipedia.org/wiki/Church_encoding#Derivation_of_predecessor_function
 [CE]: https://en.wikipedia.org/wiki/Church_encoding
 [CONS]: https://en.wikipedia.org/wiki/Church_encoding#Church_pairs
@@ -1238,12 +1278,14 @@ Sleep sleep sleep sleep sleep sleep sleep
 [FL]: https://en.wikipedia.org/wiki/Forth_(programming_language)
 [FQ]: https://en.wikipedia.org/wiki/Quantifier_(logic)
 [GR]: https://www.google.com/search?q=recursion
+[HKL]: 	https://wiki.haskell.org/Lazy_evaluation
 [HM]: http://zvon.org/other/haskell/Outputprelude/map_f.html
 [IM]: https://devblogs.microsoft.com/oldnewthing/20180123-00/?p=97865
 [IO]: https://iolanguage.org/
 [LCP]: https://en.wikipedia.org/wiki/Church_encoding#Church_pairs
 [LCS]: https://en.wikipedia.org/wiki/Lambda_calculus#Standard_terms
 [LC]: https://en.wikipedia.org/wiki/Lambda_calculus
+[LE]: https://en.wikipedia.org/wiki/Lazy_evaluation
 [LLM]: http://cl-cookbook.sourceforge.net/loop.html
 [LLRP]: https://www.amazon.com/Llama-Red-Pajama-Anna-Dewdney/dp/0451474570
 [MCD]: https://codeblog.jonskeet.uk/2008/04/23/programming-quot-in-quot-a-language-vs-programming-quot-into-quot-a-language/
@@ -1252,18 +1294,18 @@ Sleep sleep sleep sleep sleep sleep sleep
 [MPA]: https://en.wikipedia.org/wiki/Peano_axioms#Models
 [MRF]: https://en.wikipedia.org/wiki/%CE%9C-recursive_function
 [PC]: https://stackoverflow.com/questions/111234/what-is-a-callable
+[PM]: https://en.wikipedia.org/wiki/Pointer_machine
 [P]: https://www.python.org/
 [RT]: https://ruby-doc.org/core-2.5.0/Integer.html#method-i-times
 [SE]: https://en.wiktionary.org/wiki/superexponential
+[SL]: https://www.youtube.com/watch?v=2Op3QLzMgSY
 [SUT]: http://xunitpatterns.com/Test%20Spy.html
 [TC]: https://en.wikipedia.org/wiki/Turing_completeness
 [TLC]: https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus
 [TM]: https://en.wikipedia.org/wiki/Turing_machine
+[TO]: https://en.wikipedia.org/wiki/%3F:
 [US]: https://en.wikipedia.org/wiki/Understatement
 [X224]: https://xkcd.com/224/
 [X505]: https://xkcd.com/505/
 [ZFN]: https://en.wikipedia.org/wiki/Set-theoretic_definition_of_natural_numbers
-[LE]: https://en.wikipedia.org/wiki/Lazy_evaluation
-[HKL]: 	https://wiki.haskell.org/Lazy_evaluation
-
-
+[SC]: /post/slow-fibonacci_files/slow_fibonacci.py
