@@ -1,0 +1,50 @@
+---
+title: 'ML From Scratch, Part 6: Principal Component Analysis'
+author: Oran Looney
+date: 2019-08-01
+tags:
+  - Python
+  - Statistics
+  - From Scratch
+  - Machine Learning
+image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
+draft: true
+---
+
+
+
+<p>In the <a href="/post/ml-from-scratch-part-5-gmm/">last article</a> in <a href="/tags/from-scratch/">this series</a>, we distinguished between two kinds of unsupervised learning: cluster analysis and dimensionality reduction. Only the first was discussed in detail at that time, so in this article we will turn our attention to the later.</p>
+<p>In dimensional reduction we seek a function <span class="math inline">\(f : \mathbb{R}^n \mapsto \mathbb{R}^m\)</span> where <span class="math inline">\(n\)</span> is the dimension of the original data <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(m\)</span> is smaller than <span class="math inline">\(n\)</span>. That is, want a map from some high dimensional space into some lower dimensional space. In this article, we will focus on the oldest and perhaps simplest of these methods: <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Primary Component Analysis</a>, usually seen abbreviated as PCA.</p>
+<p>In this article, we’ll derive PCA from first principles, implement a working version (writing all the linear algebra from scratch), discuss options for choosing how many dimensions to keep, and show an example of how PCA helps us visualize and gain insight into a 13-dimensional dataset.</p>
+<div id="what-is-pca" class="section level2">
+<h2>What is PCA?</h2>
+<p>First of all, PCA is a <em>linear</em> dimensionality reduction technique; some other dimensionality techniques, such as <a href="https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding">t-SNE</a>, allow this map to be non-linear, but we will restrict ourselves to linear maps for now. Just saying it’s linear, though, is not quite enough to fully specify the problem; <a href="https://en.wikipedia.org/wiki/Factor_analysis">Factor Analysis</a> also seeks a linear map, but takes quite a different theoretical approach and reaches a slightly different solution in practice.</p>
+<p>There are two ways we can further constrain the problem to arrive at PCA.</p>
+<ol style="list-style-type: decimal">
+<li>Require the covariance matrix of the transformed data to be diagonal. This is equivalent to saying that the transformed data has no <a href="https://en.wikipedia.org/wiki/Multicollinearity">multicollinearity</a>, or that all <span class="math inline">\(m\)</span> features of the transformed data are uncorrelated.</li>
+<li>Seek a new basis for the data such that the first basis vector points in the direction of maximum variation, or in other words is the “principle component” of our data. Then require that the second basis vector points also points in the direction of maximum variation in the plane orthogonal to the first, and so on until a new orthonormal basis is constructed.</li>
+</ol>
+<p>These two definitions turn out to be equivalent. Both construct a unique (*some terms and conditions apply) orthogonal matrix <span class="math inline">\(Q\)</span> which can be matrix multiplied by the original data matrix <span class="math inline">\(X\)</span> to obtain the transformed data <span class="math inline">\(X&#39; = XQ\)</span>. (Read “X prime”. I never use the prime mark for transpose, and will always use superscript “T” like <span class="math inline">\(X^T\)</span> for transpose.)</p>
+<p>Orthogonal matrices are the generalization of the 3-dimensional concept of a rotation or reflection: in particular, they always preserve both <em>distance</em> and <em>angles</em>. These are very properties for a transform to have! Merely rotating an object doesn’t really distort it, but simply gives us a different perspective on it. In this sense, PCA is the <em>least destructive</em> transformation that we could apply.</p>
+<p>Now, obviously we could rotate our data any which way to get a different picture, but we want to rotate it so that in some sense in becomes aligned to the axes - rather like straightening a picture hanging askew on the wall. Near the end, we’ll show examples demonstrating how this “straightening up” helps with analysis and interpretation.</p>
+<p>Now, orthogonal matrices are invertible, which in particular means they are square, so <span class="math inline">\(Q\)</span> is an <span class="math inline">\(m \times m\)</span> matrix… which means we haven’t <em>reduced</em> the dimensionality at all! Why is this considered a dimensionality <em>reduction</em> technique? Well, it turns out that once we’ve rotated our data so that it’s as <em>wide</em> as possible along the first basis vector, that also means that it ends up as <em>thin</em> as possible along the last few basis vectors. This only works if the original data really were all quite close to some line or hyperplane, but when it does it means we can safely drop the some dimensions and retain only our principle components, thus reducing dimensionality while still keeping most of the information (variance) of the data. Of course, deciding <em>how many</em> dimensions to drop and how many to keep is a bit tricky, but we’ll come to that later.</p>
+<p>For now, let’s explore the mathematics and show how PCA gives rise to a unique solution subject to the above constraints.</p>
+</div>
+<div id="the-direction-of-maximal-variation" class="section level2">
+<h2>The Direction of Maximal Variation</h2>
+</div>
+<div id="diagonalizing-the-covariance-matrix" class="section level2">
+<h2>Diagonalizing the Covariance Matrix</h2>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+</div>
+<div id="wine-quality-example" class="section level2">
+<h2>Wine Quality Example</h2>
+</div>
+<div id="strategies-for-choosing-the-number-of-dimensions" class="section level2">
+<h2>Strategies for Choosing The Number of Dimensions</h2>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+</div>

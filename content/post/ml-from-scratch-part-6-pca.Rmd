@@ -1,0 +1,119 @@
+---
+title: 'ML From Scratch, Part 6: Principal Component Analysis'
+author: Oran Looney
+date: 2019-08-01
+tags:
+  - Python
+  - Statistics
+  - From Scratch
+  - Machine Learning
+image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
+draft: true
+---
+
+In the [last article][MLFS5] in [this series][MLFS], we distinguished between two
+kinds of unsupervised learning: cluster analysis and dimensionality reduction. 
+Only the first was discussed in detail at that time, so in this article we will
+turn our attention to the later.
+
+In dimensional reduction we seek a function $f : \mathbb{R}^n \mapsto
+\mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and
+$m$ is smaller than $n$. That is, want a map from some high dimensional space
+into some lower dimensional space. In this article, we will focus on the oldest
+and perhaps simplest of these methods: [Primary Component Analysis][PCA], usually
+seen abbreviated as PCA.
+
+In this article, we'll derive PCA from first principles, implement a working
+version (writing all the linear algebra from scratch), discuss options for choosing how
+many dimensions to keep, and show an example of how PCA helps us visualize
+and gain insight into a 13-dimensional dataset.
+
+What is PCA?
+------------
+
+First of all, PCA is a *linear* dimensionality reduction technique; some other
+dimensionality techniques, such as [t-SNE][TSNE], allow this map to be
+non-linear, but we will restrict ourselves to linear maps for now. Just saying
+it's linear, though, is not quite enough to fully specify the problem; [Factor
+Analysis][FA] also seeks a linear map, but takes quite a different theoretical
+approach and reaches a slightly different solution in practice.
+
+There are two ways we can further constrain the problem to arrive at PCA.
+
+1. Require the covariance matrix of the transformed data to be diagonal. This
+   is equivalent to saying that the transformed data has no [multicollinearity][MC],
+   or that all $m$ features of the transformed data are uncorrelated.
+2. Seek a new basis for the data such that the first basis vector points
+   in the direction of maximum variation, or in other words is the "principle
+   component" of our data. Then require that the second basis vector points
+   also points in the direction of maximum variation in the plane orthogonal
+   to the first, and so on until a new orthonormal basis is constructed.
+
+These two definitions turn out to be equivalent. Both construct a unique
+(\*some terms and conditions apply) orthogonal matrix $Q$ which can be matrix
+multiplied by the original data matrix $X$ to obtain the transformed data $X' =
+XQ$.  (Read "X prime". I never use the prime mark for transpose, and will
+always use superscript "T" like $X^T$ for transpose.) 
+
+Orthogonal matrices are the generalization of the 3-dimensional concept of a
+rotation or reflection: in particular, they always preserve both *distance* and
+*angles*.  These are very properties for a transform to have! Merely rotating
+an object doesn't really distort it, but simply gives us a different
+perspective on it. In this sense, PCA is the *least destructive* transformation
+that we could apply. 
+
+Now, obviously we could rotate our data any which way to get a different
+picture, but we want to rotate it so that in some sense in becomes aligned to
+the axes - rather like straightening a picture hanging askew on the wall.  Near
+the end, we'll show examples demonstrating how this "straightening up" helps
+with analysis and interpretation.
+
+Now, orthogonal matrices are invertible, which in particular means they are
+square, so $Q$ is an $m \times m$ matrix... which means we haven't *reduced*
+the dimensionality at all! Why is this considered a dimensionality *reduction*
+technique? Well, it turns out that once we've rotated our data so that it's as
+*wide* as possible along the first basis vector, that also means that it ends
+up as *thin* as possible along the last few basis vectors. This only works if
+the original data really were all quite close to some line or hyperplane, but
+when it does it means we can safely drop the some dimensions and retain only
+our principle components, thus reducing dimensionality while still keeping most
+of the information (variance) of the data.  Of course, deciding *how many*
+dimensions to drop and how many to keep is a bit tricky, but we'll come to that
+later.
+
+For now, let's explore the mathematics and show how PCA gives rise to a unique
+solution subject to the above constraints.
+
+The Direction of Maximal Variation
+----------------------------------
+
+
+Diagonalizing the Covariance Matrix
+-----------------------------------
+
+
+Implementation
+--------------
+
+
+Wine Quality Example
+--------------------
+
+
+Strategies for Choosing The Number of Dimensions
+------------------------------------------------
+
+
+Conclusion
+----------
+
+
+
+[MLFS5]: /post/ml-from-scratch-part-5-gmm/
+[MLFS]: /tags/from-scratch/
+[PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+[TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
+[W2V]: https://en.wikipedia.org/wiki/Word2vec
+[LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
+[FA]: https://en.wikipedia.org/wiki/Factor_analysis
+[MC]: https://en.wikipedia.org/wiki/Multicollinearity
