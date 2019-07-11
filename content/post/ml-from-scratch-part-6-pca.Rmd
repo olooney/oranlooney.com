@@ -175,37 +175,645 @@ TODO: introduce a realization $X$.
 
 
 
-
-
-
-
-
 Diagonalizing the Covariance Matrix
 -----------------------------------
 
 
-Implementation
---------------
+Algorithm for Solving the Eigneproblem
+--------------------------------------
+
+The modern approach to implementing PCA is to find the [SVD][SVD] of $A$ which
+almost immediately gives us the eigenvalues of and eigenvectors of $A^T A$. The
+best known SVD algorithm is the [Golub-Reinsh Algorithm][GRA]. This is an
+iterative algorithm: For the $k$-th step, we first use Householder reflections
+to reduce the matrix to bidiagonal form $A_k$, Then the QR decomposition of
+$A_k^T A_k$ is used to set many of the off-diagonal elements to zero. The
+resulting matrix $A_{k+1}$ is tridiagonal, but at each step the off-diagonal
+elements get smaller and smaller. This is very much like trying to flatten all
+the air pockets out of wallpaper by rolling over them, but one keeps popping up
+just where we don't want it; however, the process can be proved to converge,
+and in practice converges very rapidly. 
+
+There is also a [randomized algorithm due to Halko, Martinsson, and Tropp][RA]
+which can be much faster, especially when we only want to retain a small number
+of components.
+
+Normally I would have tackled one of these "best practice" algorithms, but
+after studying them I found them to be larger in scope than what I would want
+to tackle for one of these articles so I decided to implement an older but
+still quite adequate eigenvalue algorithm: known as the [QR algorithm.][QRA].
+In addition to being easy to understand and implement, it has the advantage that 
+we can use the [QR decomposition][QRD] function that we implmenent from scratch
+earlier in the earlier [article on linear regression][MLFS1]. It's actually
+as fast or faster than Golub-Reinsh; the disadvantage is that it is not as
+numerically stable particularly for the smallest eigenvalues. Because in PCA
+we normally intend to discard these anyway, this is not such a bad deal!
+
+TODO: 
+
+    def householder_reflection(a, e):
+        '''
+        Given a vector a and a unit vector e,
+        (where a is non-zero and not collinear with e)
+        returns an orthogonal matrix which maps a
+        into the line of e.
+        '''
+        
+        assert a.ndim == 1
+        assert np.allclose(1, np.sum(e**2))
+        
+        u = a - np.sign(a[0]) * np.linalg.norm(a) * e  
+        v = u / np.linalg.norm(u)
+        H = np.eye(len(a)) - 2 * np.outer(v, v)
+        
+        return H
+
+    def qr_decomposition(A):
+        '''
+        Given an n x m invertable matrix A, returns the pair:
+            Q an orthogonal n x m matrix
+            R an upper triangular m x m matrix
+        such that QR = A.
+        '''
+        
+        n, m = A.shape
+        assert n >= m
+        
+        Q = np.eye(n)
+        R = A.copy()
+        
+        for i in range(m - int(n==m)):
+            r = R[i:, i]
+            
+            if np.allclose(r[1:], 0):
+                continue
+                
+            # e is the i-th basis vector of the minor matrix.
+            e = np.zeros(n-i)
+            e[0] = 1  
+            
+            H = np.eye(n)
+            H[i:, i:] = householder_reflection(r, e)
+
+            Q = Q @ H.T
+            R = H @ R
+        
+        return Q, R
+
+We can now implement the QR algorithm in just a few lines of code. It's
+also an iterative algorithm. At each step, we calculate $A_{k+1}$ by
+taking the QR decomposition of $A_{k}$, reversing the order of Q and R,
+and multiplying the matrices together. Each time we do this, the off-diagonals
+get smaller.
+
+    def eigen_decomposition(A, max_iter=100):
+        A_k = A
+        Q_k = np.eye( A.shape[1] )
+        
+        for k in range(max_iter):
+            Q, R = qr_decomposition(A_k)
+            Q_k = Q_k @ Q
+            A_k = R @ Q
+
+        eigenvalues = np.diag(A_k)
+        eigenvectors = Q_k
+        return eigenvalues, eigenvectors
+
+Implementing PCA
+----------------
+
+TODO
+
+    class PCA:
+        def __init__(self, n_components=None, whiten=False):
+            self.n_components = n_components
+            self.whiten = bool(whiten)
+        
+
+        def fit(self, X):
+            n, m = X.shape
+            
+            # subtract off the mean to center the data.
+            self.mu = X.mean(axis=0)
+            X = X - self.mu
+            
+            # whiten if necessary
+            if self.whiten:
+                self.std = X.std(axis=0)
+                X = X / self.std
+            
+            # Eigen Decomposition of the covariance matrix
+            C = X.T @ X / (n-1)
+            self.eigenvalues, self.eigenvectors = eigen_decomposition(C)
+            
+            # truncate the number of components if doing dimensionality reduction
+            if self.n_components is not None:
+                self.eigenvalues = self.eigenvalues[0:self.n_components]
+                self.eigenvectors = self.eigenvectors[:, 0:self.n_components]
+            
+            # the QR algorithm tends to puts eigenvalues in descending order 
+            # but is not guarenteed to. To make sure, we use argsort.
+            descending_order = np.flip(np.argsort(self.eigenvalues))
+            self.eigenvalues = self.eigenvalues[descending_order]
+            self.eigenvectors = self.eigenvectors[:, descending_order]
+
+            return self
+
+            
+        def transform(self, X):
+            X = X - self.mu
+            
+            if self.whiten:
+                X = X / self.std
+            
+            return X @ self.eigenvectors
+        
+        @property
+        def proportion_variance_explained(self):
+            return self.eigenvalues / np.sum(self.eigenvalues)
+        
 
 
 Wine Quality Example
 --------------------
 
+    import pandas as pd
+    import seaborn
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D
+
+    from sklearn.datasets import load_wine
+
+    wine = load_wine()
+    X = wine.data
+
+    df = pd.DataFrame(data=X, columns=wine.feature_names)
+    display(df.head())
+    display(df.describe().T)
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>alcohol</th>
+      <th>malic_acid</th>
+      <th>ash</th>
+      <th>alcalinity_of_ash</th>
+      <th>magnesium</th>
+      <th>total_phenols</th>
+      <th>flavanoids</th>
+      <th>nonflavanoid_phenols</th>
+      <th>proanthocyanins</th>
+      <th>color_intensity</th>
+      <th>hue</th>
+      <th>od280/od315_of_diluted_wines</th>
+      <th>proline</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>14.23</td>
+      <td>1.71</td>
+      <td>2.43</td>
+      <td>15.6</td>
+      <td>127.0</td>
+      <td>2.80</td>
+      <td>3.06</td>
+      <td>0.28</td>
+      <td>2.29</td>
+      <td>5.64</td>
+      <td>1.04</td>
+      <td>3.92</td>
+      <td>1065.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>13.20</td>
+      <td>1.78</td>
+      <td>2.14</td>
+      <td>11.2</td>
+      <td>100.0</td>
+      <td>2.65</td>
+      <td>2.76</td>
+      <td>0.26</td>
+      <td>1.28</td>
+      <td>4.38</td>
+      <td>1.05</td>
+      <td>3.40</td>
+      <td>1050.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>13.16</td>
+      <td>2.36</td>
+      <td>2.67</td>
+      <td>18.6</td>
+      <td>101.0</td>
+      <td>2.80</td>
+      <td>3.24</td>
+      <td>0.30</td>
+      <td>2.81</td>
+      <td>5.68</td>
+      <td>1.03</td>
+      <td>3.17</td>
+      <td>1185.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>14.37</td>
+      <td>1.95</td>
+      <td>2.50</td>
+      <td>16.8</td>
+      <td>113.0</td>
+      <td>3.85</td>
+      <td>3.49</td>
+      <td>0.24</td>
+      <td>2.18</td>
+      <td>7.80</td>
+      <td>0.86</td>
+      <td>3.45</td>
+      <td>1480.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>13.24</td>
+      <td>2.59</td>
+      <td>2.87</td>
+      <td>21.0</td>
+      <td>118.0</td>
+      <td>2.80</td>
+      <td>2.69</td>
+      <td>0.39</td>
+      <td>1.82</td>
+      <td>4.32</td>
+      <td>1.04</td>
+      <td>2.93</td>
+      <td>735.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+      <th>min</th>
+      <th>25%</th>
+      <th>50%</th>
+      <th>75%</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>alcohol</th>
+      <td>178.0</td>
+      <td>13.000618</td>
+      <td>0.811827</td>
+      <td>11.03</td>
+      <td>12.3625</td>
+      <td>13.050</td>
+      <td>13.6775</td>
+      <td>14.83</td>
+    </tr>
+    <tr>
+      <th>malic_acid</th>
+      <td>178.0</td>
+      <td>2.336348</td>
+      <td>1.117146</td>
+      <td>0.74</td>
+      <td>1.6025</td>
+      <td>1.865</td>
+      <td>3.0825</td>
+      <td>5.80</td>
+    </tr>
+    <tr>
+      <th>ash</th>
+      <td>178.0</td>
+      <td>2.366517</td>
+      <td>0.274344</td>
+      <td>1.36</td>
+      <td>2.2100</td>
+      <td>2.360</td>
+      <td>2.5575</td>
+      <td>3.23</td>
+    </tr>
+    <tr>
+      <th>alcalinity_of_ash</th>
+      <td>178.0</td>
+      <td>19.494944</td>
+      <td>3.339564</td>
+      <td>10.60</td>
+      <td>17.2000</td>
+      <td>19.500</td>
+      <td>21.5000</td>
+      <td>30.00</td>
+    </tr>
+    <tr>
+      <th>magnesium</th>
+      <td>178.0</td>
+      <td>99.741573</td>
+      <td>14.282484</td>
+      <td>70.00</td>
+      <td>88.0000</td>
+      <td>98.000</td>
+      <td>107.0000</td>
+      <td>162.00</td>
+    </tr>
+    <tr>
+      <th>total_phenols</th>
+      <td>178.0</td>
+      <td>2.295112</td>
+      <td>0.625851</td>
+      <td>0.98</td>
+      <td>1.7425</td>
+      <td>2.355</td>
+      <td>2.8000</td>
+      <td>3.88</td>
+    </tr>
+    <tr>
+      <th>flavanoids</th>
+      <td>178.0</td>
+      <td>2.029270</td>
+      <td>0.998859</td>
+      <td>0.34</td>
+      <td>1.2050</td>
+      <td>2.135</td>
+      <td>2.8750</td>
+      <td>5.08</td>
+    </tr>
+    <tr>
+      <th>nonflavanoid_phenols</th>
+      <td>178.0</td>
+      <td>0.361854</td>
+      <td>0.124453</td>
+      <td>0.13</td>
+      <td>0.2700</td>
+      <td>0.340</td>
+      <td>0.4375</td>
+      <td>0.66</td>
+    </tr>
+    <tr>
+      <th>proanthocyanins</th>
+      <td>178.0</td>
+      <td>1.590899</td>
+      <td>0.572359</td>
+      <td>0.41</td>
+      <td>1.2500</td>
+      <td>1.555</td>
+      <td>1.9500</td>
+      <td>3.58</td>
+    </tr>
+    <tr>
+      <th>color_intensity</th>
+      <td>178.0</td>
+      <td>5.058090</td>
+      <td>2.318286</td>
+      <td>1.28</td>
+      <td>3.2200</td>
+      <td>4.690</td>
+      <td>6.2000</td>
+      <td>13.00</td>
+    </tr>
+    <tr>
+      <th>hue</th>
+      <td>178.0</td>
+      <td>0.957449</td>
+      <td>0.228572</td>
+      <td>0.48</td>
+      <td>0.7825</td>
+      <td>0.965</td>
+      <td>1.1200</td>
+      <td>1.71</td>
+    </tr>
+    <tr>
+      <th>od280/od315_of_diluted_wines</th>
+      <td>178.0</td>
+      <td>2.611685</td>
+      <td>0.709990</td>
+      <td>1.27</td>
+      <td>1.9375</td>
+      <td>2.780</td>
+      <td>3.1700</td>
+      <td>4.00</td>
+    </tr>
+    <tr>
+      <th>proline</th>
+      <td>178.0</td>
+      <td>746.893258</td>
+      <td>314.907474</td>
+      <td>278.00</td>
+      <td>500.5000</td>
+      <td>673.500</td>
+      <td>985.0000</td>
+      <td>1680.00</td>
+    </tr>
+  </tbody>
+</table>
+
+We can see that the features of this dataset are not on a common scale which is a problem
+for PCA. TODO: Why?
+
+    X_white = (X - X.mean(axis=0))/X.std(axis=0)
+    C = X_white.T @ X_white / (X_white.shape[0] - 1)
+    plt.figure(figsize=(6,6))
+    plt.imshow(C, cmap='binary')
+    plt.title("Covariance Matrix of Wine Data")
+    plt.xticks(np.arange(0, 13, 1))
+    plt.yticks(np.arange(0, 13, 1))
+    plt.colorbar()
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_covariance.png">
+
+TODO: too much covariance, apply PCA
+
+    pca = PCA(whiten=True)
+    pca.fit(X)
+    X_prime = pca.transform(X)
+
+    pca.eigenvalues
+    array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 0.554, 0.35 , 0.291, 0.252, 0.227, 0.17 , 0.104])
+
+    pca.eigenvectors
+    array([[ 0.144, -0.484, -0.207,  0.018,  0.266,  0.214, -0.056,  0.396, -0.509, -0.212,  0.226,  0.266, -0.015],
+           [-0.245, -0.225,  0.089, -0.537, -0.035,  0.537,  0.421,  0.066,  0.075,  0.309, -0.076, -0.122, -0.026],
+           [-0.002, -0.316,  0.626,  0.214,  0.143,  0.154, -0.149, -0.17 ,  0.308,  0.027,  0.499,  0.05 ,  0.141],
+           [-0.239,  0.011,  0.612, -0.061, -0.066, -0.101, -0.287,  0.428, -0.2  , -0.053, -0.479,  0.056, -0.092],
+           [ 0.142, -0.3  ,  0.131,  0.352, -0.727,  0.038,  0.323, -0.156, -0.271, -0.068, -0.071, -0.062, -0.057],
+           [ 0.395, -0.065,  0.146, -0.198,  0.149, -0.084, -0.028, -0.406, -0.286,  0.32 , -0.304,  0.304,  0.464],
+           [ 0.423,  0.003,  0.151, -0.152,  0.109, -0.019, -0.061, -0.187, -0.05 ,  0.163,  0.026,  0.043, -0.832],
+           [-0.299, -0.029,  0.17 ,  0.203,  0.501, -0.259,  0.595, -0.233, -0.196, -0.216, -0.117, -0.042, -0.114],
+           [ 0.313, -0.039,  0.149, -0.399, -0.137, -0.534,  0.372,  0.368,  0.209, -0.134,  0.237,  0.096,  0.117],
+           [-0.089, -0.53 , -0.137, -0.066,  0.076, -0.419, -0.228, -0.034, -0.056,  0.291, -0.032, -0.604,  0.012],
+           [ 0.297,  0.279,  0.085,  0.428,  0.173,  0.106,  0.232,  0.437, -0.086,  0.522,  0.048, -0.259,  0.09 ],
+           [ 0.376,  0.164,  0.166, -0.184,  0.101,  0.266, -0.045, -0.078, -0.137, -0.524, -0.046, -0.601,  0.157],
+           [ 0.287, -0.365, -0.127,  0.232,  0.158,  0.12 ,  0.077,  0.12 ,  0.576, -0.162, -0.539,  0.079, -0.014]])
+
+
+TODO covariance after transformation:
+
+    plt.figure(figsize=(6,6))
+    plt.imshow(C_prime, cmap='binary')
+    plt.title("Covariance Matrix of Transformed Data")
+    plt.xticks(np.arange(0, 13, 1))
+    plt.yticks(np.arange(0, 13, 1))
+    plt.colorbar()
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_transformed_covariance.png">
+
+
 
 Strategies for Choosing The Number of Dimensions
 ------------------------------------------------
+
+TODO: Scree
+the Kaiser Rule is of course a trainwreck, but the alternatives aren't much better.
+
+https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr
+
+http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf
+
+Minka (2000) is one option.
+https://vismod.media.mit.edu/tech-reports/TR-514.pdf
+
+
+    fig = plt.figure(figsize=(10, 7))
+    plt.title("Scree Plot (Eigenvalues in Decreasing Order)")
+    plt.plot([1, 13], [1, 1], color='red', linestyle='--', label="Kaiser Rule")
+    plt.xticks(np.arange(1, 14, 1))
+    plt.xlim(1, 13)
+    plt.ylim(0, 5)
+    plt.ylabel("Eigenvalue")
+    plt.xlabel("Principle Component Index")
+    plt.grid(linestyle='--')
+    plt.plot(range(1, 14), pca.eigenvalues, label="Eigenvalues")
+    plt.legend()
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_scree_plot.png">
+
+TODO: proportion variance explained
+
+    fig = plt.figure(figsize=(10, 7))
+    plt.title("Variance Explained By Component")
+    plt.xticks(np.arange(1, 14, 1))
+    plt.yticks(np.arange(0, 1.0001, 0.1))
+    plt.xlim(1, 13)
+    plt.ylim(0, 1)
+    plt.ylabel("Proportion of Variance Explained")
+    plt.xlabel("Principle Component Index")
+    plt.grid(linestyle='--')
+    plt.fill_between(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color="lightblue", label="Cumulative")
+    plt.plot(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color="darkblue")
+    plt.plot(range(1, 14), pca.proportion_variance_explained, label="Incremental", color="orange", linestyle="--")
+    plt.legend(loc='upper left')
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png">
+
+Visualizing the Components
+--------------------------
+
+TODO: first principle component only
+
+    plt.figure(figsize=(10, 4))
+    for c in np.unique(wine.target):
+        color = ['red', 'green', 'blue'][c]
+        X_class = X_prime[wine.target == c]
+        plt.scatter(X_class[:, 0], X_class[:, 1]*0, color=color, alpha=0.3)
+    plt.title("Primary Components of Wine Quality")
+    plt.xlabel("PC1")
+
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_pc1.png">
+
+TODO: first two
+
+    plt.figure(figsize=(10, 8))
+    for c in np.unique(wine.target):
+        color = ['red', 'green', 'blue'][c]
+        X_class = X_prime[wine.target == c]
+        plt.scatter(X_class[:, 0], X_class[:, 1], color=color, alpha=0.6)
+    plt.title("Primary Components of Wine Quality")
+    plt.xlabel("PC1")
+    plt.ylabel("PC2")
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_pc2.png">
+
+TODO: first three
+
+    plt.figure(figsize=(16, 8))
+
+    plt.subplot(1, 2, 1)
+    for c in np.unique(wine.target):
+        color = ['red', 'green', 'blue'][c]
+        X_class = X_prime[wine.target == c]
+        plt.scatter(X_class[:, 0], X_class[:, 2], color=color, alpha=0.6)
+    plt.title("Primary Components of Wine Quality")
+    plt.xlabel("PC1")
+    plt.ylabel("PC3")
+
+    plt.subplot(1, 2, 2)
+    for c in np.unique(wine.target):
+        color = ['red', 'green', 'blue'][c]
+        X_class = X_prime[wine.target == c]
+        plt.scatter(X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
+    plt.title("Primary Components of Wine Quality")
+    plt.xlabel("PC2")
+    plt.ylabel("PC3")
+
+TODO: first three, 3D
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3.png">
+
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.view_init(15, -60)
+
+    for c in np.unique(wine.target):
+        color = ['red', 'green', 'blue'][c]
+        X_class = X_prime[wine.target == c]
+        ax.scatter(X_class[:, 0], X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
+        
+    # chart junk
+    plt.title("First 3 Primary Components of Wine Quality")
+    ax.set_xlabel('PC1')
+    ax.set_ylabel('PC2')
+    ax.set_zlabel('PC3')
+
+<img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3_3d.png">
 
 
 Conclusion
 ----------
 
+TODO: mention varimax rotations?
+
+https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca
+
+TODO: contrast with FA?
+
+https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374
+
+TODO: talk about "loadings?"
+
+https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another/143949#143949
+
+TODO: talk about left and right eigenvectors?
 
 
+[FA]: https://en.wikipedia.org/wiki/Factor_analysis
+[GRA]: http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf
+[LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
+[MC]: https://en.wikipedia.org/wiki/Multicollinearity
+[MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
 [MLFS5]: /post/ml-from-scratch-part-5-gmm/
 [MLFS]: /tags/from-scratch/
 [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+[QRA]: https://en.wikipedia.org/wiki/QR_algorithm
+[QRD]: https://en.wikipedia.org/wiki/QR_decomposition
+[SVD]: https://en.wikipedia.org/wiki/Singular_value_decomposition
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec
-[LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
-[FA]: https://en.wikipedia.org/wiki/Factor_analysis
-[MC]: https://en.wikipedia.org/wiki/Multicollinearity
