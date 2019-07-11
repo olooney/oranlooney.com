@@ -32,6 +32,32 @@ draft: true
 </div>
 <div id="the-direction-of-maximal-variation" class="section level2">
 <h2>The Direction of Maximal Variation</h2>
+<p>Before we can define the direction of maximal variance, we first have to be clear about what we mean by variance in a given direction. First, let’s say that <span class="math inline">\(\mathbf{x}\)</span> is an <span class="math inline">\(n\)</span>-dimensional random vector. This represents the population our data will be sampled from. Next, suppose you have some non-random vector <span class="math inline">\(\mathbf{q} \in \mathbb{R}^n\)</span>. Assuming this vector is non-zero, it defines a line. What do mean by the phrase, “the variance of <span class="math inline">\(\mathbf{x}\)</span> in the direction of <span class="math inline">\(\mathbf{q}\)</span>?”</p>
+<p>The natural thing to do is to <em>project</em> the <span class="math inline">\(n\)</span>-dimensional random variable <em>onto</em> the line defined by <span class="math inline">\(\mathbf{q}\)</span>. We can do this with a dot product, <span class="math inline">\(\mathbf{q}^T \mathbf{x}\)</span>. This new quantity is clearly a scalar random variable, so we can apply the variance operator to get a scalar measure of variance.</p>
+<p><span class="math display">\[ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} \]</span></p>
+<p>Does this suffice to allow us to define a direction of maximal variation? Not quite. If we try to pose the optimization problem:</p>
+<p><span class="math display">\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} \]</span></p>
+<p>To prove no such maximum exists assume that <span class="math inline">\(\mathbf{q}\)</span> is the maximum. There always exists another vector <span class="math inline">\(\mathbf{r} = 2 \mathbf{q}\)</span> which implies that:</p>
+<p><span class="math display">\[\operatorname{Var}[ \mathbf{r}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] &gt; \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{3}\]</span>.</p>
+<p>Which implies that <span class="math inline">\(\mathbf{q}\)</span> was not the maximum after all. So we cannot solve this optimization problem unless we impose some additional constraint.</p>
+<p>Now, a dot product is only a projection in a geometric sense if <span class="math inline">\(\mathbf{q}\)</span> is a <em>unit</em> vector. So why don’t we impose the condition</p>
+<p><span class="math display">\[ \mathbf{q}^T \mathbf{q} = 1 \tag{4} \]</span></p>
+<p>That gives us the constrained optimization problem</p>
+<p><span class="math display">\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} \]</span></p>
+<p>Well at least this <em>has</em> a solution, even if it isn’t immediately obvious how to solve it. We can’t simply set partial derivative with respect to <span class="math inline">\(\mathbf{q}\)</span> equal to zero; that KKT condition only applies in the <em>absence</em> of active constraints. Earlier in this series, we’ve used techniques such as stochastic gradient descent to solve unconstrained optimization problems, but how do we deal the constraint?</p>
+<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Langrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slipage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed!</p>
+<p>It’s easy to use too, at least in our simple case. We introduce the Lagrange multiplier <span class="math inline">\(\lambda\)</span> and rewrite our optimization as follows:</p>
+<p><span class="math display">\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (\mathbf{q}^T \mathbf{q} -1) \tag{6} \]</span></p>
+<p>Why is this the same as the above? Let’s call the above function <span class="math inline">\(f(\mathbf{q}, \lambda)\)</span> write down the KKT conditions:</p>
+<p><span class="math display">\[ 
+  \begin{align}
+    \nabla_\mathbf{q} f &amp; = 0 \tag{7} \\
+    \frac{\partial f}{\partial \lambda} &amp; = 0 \tag{8}
+  \end{align}
+\]</span></p>
+<p>But equation (8) is simply <span class="math inline">\(\mathbf{q}^T \mathbf{q} - 1 = 0\)</span> is simply our unit vector constraint… this guarantees that when we solve (7) and (8), the constraint will be exactly satisfied and we’ll will also have found a solution to (6). Such is the magic of Lagrange multipliers.</p>
+<p>But if (8) is just our constraint in a fancy new dress, how have we progressed at all? Because (7) is now unconstrained and therefore more tractable.</p>
+<p>TODO: introduce a realization <span class="math inline">\(X\)</span>.</p>
 </div>
 <div id="diagonalizing-the-covariance-matrix" class="section level2">
 <h2>Diagonalizing the Covariance Matrix</h2>

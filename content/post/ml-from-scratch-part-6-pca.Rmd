@@ -87,6 +87,98 @@ solution subject to the above constraints.
 The Direction of Maximal Variation
 ----------------------------------
 
+Before we can define the direction of maximal variance, we first have to be
+clear about what we mean by variance in a given direction. First, let's say
+that $\mathbf{x}$ is an $n$-dimensional random vector. This represents the
+population our data will be sampled from. Next, suppose you have some
+non-random vector $\mathbf{q} \in \mathbb{R}^n$. Assuming this vector is
+non-zero, it defines a line. What do mean by the phrase, "the variance of
+$\mathbf{x}$ in the direction of $\mathbf{q}$?" 
+
+The natural thing to do is to *project* the $n$-dimensional random variable
+*onto* the line defined by $\mathbf{q}$. We can do this with a dot product,
+$\mathbf{q}^T \mathbf{x}$. This new quantity is clearly a scalar random variable,
+so we can apply the variance operator to get a scalar measure of variance.
+
+$$ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} $$
+
+Does this suffice to allow us to define a direction of maximal variation? Not
+quite. If we try to pose the optimization problem:
+
+$$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} $$
+
+To prove no such maximum exists assume that $\mathbf{q}$ is the maximum. There
+always exists another vector $\mathbf{r} = 2 \mathbf{q}$ which implies that:
+
+$$\operatorname{Var}[ \mathbf{r}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] > \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{3}$$.
+
+Which implies that $\mathbf{q}$ was not the maximum after all.  So we cannot
+solve this optimization problem unless we impose some additional constraint.
+
+Now, a dot product is only a projection in a geometric sense if $\mathbf{q}$ is
+a *unit* vector. So why don't we impose the condition
+
+$$ \mathbf{q}^T \mathbf{q} = 1 \tag{4} $$
+
+That gives us the constrained optimization problem 
+
+$$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} $$
+
+Well at least this *has* a solution, even if it isn't immediately obvious how
+to solve it. We can't simply set partial derivative with respect to
+$\mathbf{q}$ equal to zero; that KKT condition only applies in the *absence* of
+active constraints.  Earlier in this series, we've used techniques such as
+stochastic gradient descent to solve unconstrained optimization problems, but
+how do we deal the constraint?
+
+A very general and powerful solution is the method of Lagrange multipliers.
+Lagrange was studying the motion of constrained physical systems such as a bead
+on a wire or several pendulums coupled together.  At the time, such problems
+were usually solved by finding a suitable set of generalized coordinates, but
+this required a great deal of ingenuity and (as we say today) didn't really
+scale. Langrange's solution was to imagine the system could "slip" just ever so
+slightly out of its constraints but that the true solution would be the one
+that *minimized* this virtual slipage. This could be elegantly handled by
+associating an energy cost called 'virtual work" that penalized the system
+proportional to the degree to which the constraints were violated. This
+reconceptualizes the hard constraint as just another parameter to optimize in
+an unconstrained system! And surprisingly enough, it does not result in an
+*approximate* solution that only sort of obeys the constraint but instead
+(assuming the constraint is physically possible and the resulting equations
+have a closed form solution) gives an *exact* solution where the constraint is
+*perfectly* obeyed! 
+
+It's easy to use too, at least in our simple case. We introduce the Lagrange
+multiplier $\lambda$ and rewrite our optimization as follows:
+
+$$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (\mathbf{q}^T \mathbf{q} -1) \tag{6} $$
+
+Why is this the same as the above? Let's call the above function $f(\mathbf{q}, \lambda)$ write down the KKT conditions:
+
+$$ 
+  \begin{align}
+	\nabla_\mathbf{q} f & = 0 \tag{7} \\
+	\frac{\partial f}{\partial \lambda} & = 0 \tag{8}
+  \end{align}
+$$
+
+But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ is simply our unit
+vector constraint... this guarantees that when we solve (7) and (8), the
+constraint will be exactly satisfied and we'll will also have found a solution
+to (6).  Such is the magic of Lagrange multipliers.
+
+But if (8) is just our constraint in a fancy new dress, how have we progressed at all?
+Because (7) is now unconstrained and therefore more tractable.
+
+TODO: introduce a realization $X$. 
+
+
+
+
+
+
+
+
 
 Diagonalizing the Covariance Matrix
 -----------------------------------
