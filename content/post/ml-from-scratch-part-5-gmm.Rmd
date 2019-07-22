@@ -37,7 +37,7 @@ Types of Unsupervised Learning
 ------------------------------
 
 There are two broad approaches to unsupervised learning, which I'll call dimensional
-reduction and clustering for lack of standard terminolgy. 
+reduction and clustering for lack of standard terminology. 
 
 In dimensional reduction
 we seek a function $f : \mathbb{R}^a \mapsto \mathbb{R}^b$ where $a$ is the dimension
@@ -118,7 +118,7 @@ is assumed to be a realization of $n$ i.i.d. samples from $f_{GMM}(\mathbf{x})$,
   \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X};\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j) P(\mathbf{X}_i|C_i=j) \tag{6}
 \]
 
-We know that $\mathbf{X}_i$ has a multivariate normal distribution with parameters determined by the class, so the condifitional probability P(\mathbf{X}_i|C_i=j) can be written down pretty much directly from the definition:
+We know that $\mathbf{X}_i$ has a multivariate normal distribution with parameters determined by the class, so the conditional probability P(\mathbf{X}_i|C_i=j) can be written down pretty much directly from the definition:
 
 \[
   P(\mathbf{X}_i|C_i=j) = \frac{1}{\sqrt{(2\pi)^k |\Sigma_j|}} \text{exp}\Bigg( 
@@ -165,7 +165,7 @@ or EM algorithm for short. The EM algorithm is actually a meta-algorithm: a very
 types of latent variable models, most famously [factor analysis][FA] but also the [Fellegi-Sunter][FS] record linkage algorithm, 
 [item response theory][IRT], and of course [Gaussian mixture models][GMM].
 
-The EM algorithm requires us to introduce a psuedo-parameter to model the unknown latent variables $C_i$. Because $C_i$ can take
+The EM algorithm requires us to introduce a pseudo-parameter to model the unknown latent variables $C_i$. Because $C_i$ can take
 on $k$ discrete values, this new parameter will be a $n \times k$ matrix where each element $w_{ij}$ is an estimate of $P(C_i = j|\mathbf{X}_i;\theta)$. Each element of this matrix represents the probability that the $i$-th data point came from cluster $j$.
 This pseudo-parameter is only used when fitting the model and will be discarded afterwards; in that sense it is not a true parameter
 of the model.
@@ -181,7 +181,7 @@ and $\boldsymbol{\phi}$.
 In the M-step, we use our current best knowledge of which class each point belongs to to update and improve our estimates
 for the center and shape of each cluster. Concretely, we use $w_{ij}$ as *sample weights* when updating $\boldsymbol{\mu}_j$ and $\Sigma_j$ by taking weighted averages over $X$. For example, if $w_11 = 0.01$ and $w_11 = 0.99$ we know that the data point $X_1$ 
 is unlikely to be in class 1, but very likely to be in class 2. Therefore, when estimating the center of the first class 
-$\boldsymbol{\mu}_1$ we give $X_1$ almost negliglbe weight, but when estimating the center of the second class 
+$\boldsymbol{\mu}_1$ we give $X_1$ almost negligible weight, but when estimating the center of the second class 
 $\boldsymbol{\mu}_2$ we give $X_1$ almost full weight. This "pulls" the center of each cluster towards those data points
 which are considered likely to be part of that cluster.
 
@@ -193,7 +193,7 @@ With each iteration, the algorithm improves its estimate of where the clusters
 are, which in turn allows it to make better guesses about which points are from which clusters, which in turn allows it
 to further refine its estimate of the center and shape of each cluster, and so on *ad infinitum*.
 
-This process is guarenteed to converge a (local) maximum likelihood because of the ratchet principle: at each step,
+This process is guaranteed to converge a (local) maximum likelihood because of the ratchet principle: at each step,
 likelihood can only increase and never decrease. This can be viewed as a type of [coordinate ascent][CD].
 These maxima are not unique, and GMM will tend to converge to different final solutions depending on initial conditions. 
 
@@ -320,7 +320,7 @@ that they are initially spread out randomly throughout the space.
 Model Evaluation
 ----------------
 
-We'll use the famous [iris][ID] dataset as a test case. This is the same dataset used as a motivating example at the begining
+We'll use the famous [iris][ID] dataset as a test case. This is the same dataset used as a motivating example at the beginning
 of the article, although I did not name it at that time. The iris dataset has labels, but we won't expose them to the GMM model.
 However, we will use these labels in the next section to discuss the question, "were we able to discover the class labels through unsupervised learning?"
 
@@ -384,8 +384,8 @@ Are the clusters discovered by the GMM model *meaningful*? Are they *correct*? F
 problem, these questions can be hard to answer.
 
 However, it so happens that the iris dataset we used *is* actually labeled.
-True, we didn't make use of these labels when training the GMM model. Futhermore, those classes
-*are* assocated with different distributions in the 4 observed variables in a way that closely matches the assumptions
+True, we didn't make use of these labels when training the GMM model. Furthermore, those classes
+*are* associated with different distributions in the 4 observed variables in a way that closely matches the assumptions
 of the GMM. So even if we can't ask about "meaning" and "correctness", we can at least ask a closely related question:
 "did this unsupervised learning algorithm (re-)discover the known structure of this (iris) data set?"
 
@@ -416,7 +416,7 @@ with a mean of 0.74.
 ![Accuracy Histogram](/post/ml-from-scratch-part-5-gmm_files/accuracy_histogram.png)
 
 This is a little disappointing. We started from a dataset which really was the aggregation of three different
-classes, and while our unsupervised learning algorithm was discover three clusters, the aggreement between
+classes, and while our unsupervised learning algorithm was discover three clusters, the agreement between
 reality and our model is only around 3/4. That means we can't reliably reconstruct the true structure of
 this dataset using this technique. In contrast, a supervised learning algorithm could have easily found a class
 boundary with an accuracy of 99%. That suggests that if we run an unsupervised learning algorithm on a real-world
@@ -430,7 +430,7 @@ Limitations
 All unsupervised learning methods known today share certain limitations. 
 
 First, they tend to
-rely on the researcher choosing certain arbitary complexity parameters such as the 
+rely on the researcher choosing certain arbitrary complexity parameters such as the 
 number of clusters $k$. Worse still, while there are techniques for picking these complexity
 parameters, they are heuristic and often unsatisfying in practice. It can be very hard to tell if
 an unsupervised learning method is "overfitting", because "overfit" doesn't even have a precise definition
@@ -444,7 +444,7 @@ parameters. This makes model selection a fundamentally subjective task - to deci
 a better job than $k$-means on a given data set, the modeler is often reduced to eyeballing the output.
 
 Third and finally, the factors and/or clusters discovered by unsupervised learning algorithms are often
-unsatisfying or counterintuitive and don't necessarily line up with human intuition. Another way
+unsatisfying or counter-intuitive and don't necessarily line up with human intuition. Another way
 of saying the same thing is that if a human goes through and creates labels $\mathbf{Y}$ for the training
 set $\mathbf{X}$ after the unsupervised learning algorithm has been applied to it, they are not very
 likely to come up with the same factors or clusters. In general, humans tend to come up with rules
@@ -460,13 +460,13 @@ On the other hand, unsupervised learning can be extremely helpful during explora
 form of representation learning, it can sometimes accelerate learning or improve performance, or allow models
 to generalize from an extremely limited labeled training set. For example, a sentiment analysis model trained
 on only a few hundred reviews may only see the word "sterling" once, but if it uses a word embedding model
-like [Word2Vec][W2V], it will understand that "stupenduous" is broadly a synonym for "good" or "great", and will therefore
-by abling to correctly classify a future example with the word "stupenduous" - which did not appear even once in the 
+like [Word2Vec][W2V], it will understand that "stupendous" is broadly a synonym for "good" or "great", and will therefore
+by abling to correctly classify a future example with the word "stupendous" - which did not appear even once in the 
 training set - as likely having positive sentiment. While success stories like this are possible, in general
 unsupervised learning requires more expertise, more manual tuning, and more input from domain experts in order to
 create value, when compared to supervised learning projects.
 Unfortunately, we do not always have the labels necessary for supervised learning, and the datasets
-available may be too large, too high dimensional, or too sparse to be ammenible to traditional techniques; it
+available may be too large, too high dimensional, or too sparse to be amenable to traditional techniques; it
 is in these situations where the benefits of unsupervised learning can outweigh the negatives.
 
 
@@ -474,7 +474,7 @@ Conclusion
 ----------
 
 In this article, we have seen how unsupervised learning differs from supervised learning and the challenges that
-come along with that. We discussed a method for posing an unsupervised learning problem as an maximimum likelihood optimization,
+come along with that. We discussed a method for posing an unsupervised learning problem as an maximum likelihood optimization,
 and described and implemented the [EM algorithm][EM] often used to solve these otherwise intractable problems. We made the 
 EM algorithm concrete by implementing one particular latent variable model, the [Gaussian mixture model][GMM], a powerful
 unsupervised clustering algorithm. We've
