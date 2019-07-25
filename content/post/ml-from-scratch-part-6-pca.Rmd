@@ -38,22 +38,27 @@ it's linear, though, is not quite enough to fully specify the problem; [Factor
 Analysis][FA] also seeks a linear map, but takes quite a different theoretical
 approach and reaches a slightly different solution in practice.
 
-There are two ways we can further constrain the problem to arrive at PCA.
+There are several ways we can further constrain the problem to arrive at PCA.
 
 1. Require the covariance matrix of the transformed data to be diagonal. This
    is equivalent to saying that the transformed data has no [multicollinearity][MC],
    or that all $m$ features of the transformed data are uncorrelated.
-2. Seek a new basis for the data such that the first basis vector points
-   in the direction of maximum variation, or in other words is the "principle
+2. Seek a new basis for the data such that the first basis vector points in the
+   direction of maximum variation, or in other words is the "principle
    component" of our data. Then require that the second basis vector points
-   also points in the direction of maximum variation in the plane orthogonal
-   to the first, and so on until a new orthonormal basis is constructed.
+   also points in the direction of maximum variation in the plane orthogonal to
+   the first, and so on until a new orthonormal basis is constructed.
+3. Seek a new basis for the data such that when we reconstruct the original
+   matrix from only the $m$ most significant components the [reconstruction
+   error][RE] is minimized.  Reconstruction error is usually defined as the
+   [Frobenius norm][FN] of the difference between the original and
+   reconstructed matrix, but [other definitions are possible.][IN]
 
-These two definitions turn out to be equivalent. Both construct a unique
+These three definitions turn out to be equivalent. All construct a unique
 (\*some terms and conditions apply) orthogonal matrix $Q$ which can be matrix
 multiplied by the original data matrix $X$ to obtain the transformed data $X' =
-XQ$.  (Read "X prime". I never use the prime mark for transpose, and will
-always use superscript "T" like $X^T$ for transpose.) 
+XQ$.  (Read "X prime", which is *not* the transpose of $X$. I will always use
+superscript "T" notation $X^T$ for transpose.) 
 
 Orthogonal matrices are the generalization of the 3-dimensional concept of a
 rotation or reflection: in particular, they always preserve both *distance* and
@@ -172,11 +177,16 @@ Because (7) is now unconstrained and therefore more tractable.
 
 TODO: introduce a realization $X$. 
 
-
-
-
 Diagonalizing the Covariance Matrix
 -----------------------------------
+
+
+Minimizing Reconstruction Error
+-------------------------------
+
+The third and final way to motivate the mathematical formalism of PCA is to view
+it as a form of *compression*. 
+
 
 
 Algorithm for Solving the Eigneproblem
@@ -351,268 +361,269 @@ Wine Quality Example
     display(df.head())
     display(df.describe().T)
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>alcohol</th>
-      <th>malic_acid</th>
-      <th>ash</th>
-      <th>alcalinity_of_ash</th>
-      <th>magnesium</th>
-      <th>total_phenols</th>
-      <th>flavanoids</th>
-      <th>nonflavanoid_phenols</th>
-      <th>proanthocyanins</th>
-      <th>color_intensity</th>
-      <th>hue</th>
-      <th>od280/od315_of_diluted_wines</th>
-      <th>proline</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>14.23</td>
-      <td>1.71</td>
-      <td>2.43</td>
-      <td>15.6</td>
-      <td>127.0</td>
-      <td>2.80</td>
-      <td>3.06</td>
-      <td>0.28</td>
-      <td>2.29</td>
-      <td>5.64</td>
-      <td>1.04</td>
-      <td>3.92</td>
-      <td>1065.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>13.20</td>
-      <td>1.78</td>
-      <td>2.14</td>
-      <td>11.2</td>
-      <td>100.0</td>
-      <td>2.65</td>
-      <td>2.76</td>
-      <td>0.26</td>
-      <td>1.28</td>
-      <td>4.38</td>
-      <td>1.05</td>
-      <td>3.40</td>
-      <td>1050.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>13.16</td>
-      <td>2.36</td>
-      <td>2.67</td>
-      <td>18.6</td>
-      <td>101.0</td>
-      <td>2.80</td>
-      <td>3.24</td>
-      <td>0.30</td>
-      <td>2.81</td>
-      <td>5.68</td>
-      <td>1.03</td>
-      <td>3.17</td>
-      <td>1185.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>14.37</td>
-      <td>1.95</td>
-      <td>2.50</td>
-      <td>16.8</td>
-      <td>113.0</td>
-      <td>3.85</td>
-      <td>3.49</td>
-      <td>0.24</td>
-      <td>2.18</td>
-      <td>7.80</td>
-      <td>0.86</td>
-      <td>3.45</td>
-      <td>1480.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>13.24</td>
-      <td>2.59</td>
-      <td>2.87</td>
-      <td>21.0</td>
-      <td>118.0</td>
-      <td>2.80</td>
-      <td>2.69</td>
-      <td>0.39</td>
-      <td>1.82</td>
-      <td>4.32</td>
-      <td>1.04</td>
-      <td>2.93</td>
-      <td>735.0</td>
-    </tr>
-  </tbody>
+
+<table>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>alcohol</th>
+<th>malic_acid</th>
+<th>ash</th>
+<th>alcalinity_of_ash</th>
+<th>magnesium</th>
+<th>total_phenols</th>
+<th>flavanoids</th>
+<th>nonflavanoid_phenols</th>
+<th>proanthocyanins</th>
+<th>color_intensity</th>
+<th>hue</th>
+<th>od280/od315_of_diluted_wines</th>
+<th>proline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>14.23</td>
+<td>1.71</td>
+<td>2.43</td>
+<td>15.6</td>
+<td>127.0</td>
+<td>2.80</td>
+<td>3.06</td>
+<td>0.28</td>
+<td>2.29</td>
+<td>5.64</td>
+<td>1.04</td>
+<td>3.92</td>
+<td>1065.0</td>
+</tr>
+<tr>
+<th>1</th>
+<td>13.20</td>
+<td>1.78</td>
+<td>2.14</td>
+<td>11.2</td>
+<td>100.0</td>
+<td>2.65</td>
+<td>2.76</td>
+<td>0.26</td>
+<td>1.28</td>
+<td>4.38</td>
+<td>1.05</td>
+<td>3.40</td>
+<td>1050.0</td>
+</tr>
+<tr>
+<th>2</th>
+<td>13.16</td>
+<td>2.36</td>
+<td>2.67</td>
+<td>18.6</td>
+<td>101.0</td>
+<td>2.80</td>
+<td>3.24</td>
+<td>0.30</td>
+<td>2.81</td>
+<td>5.68</td>
+<td>1.03</td>
+<td>3.17</td>
+<td>1185.0</td>
+</tr>
+<tr>
+<th>3</th>
+<td>14.37</td>
+<td>1.95</td>
+<td>2.50</td>
+<td>16.8</td>
+<td>113.0</td>
+<td>3.85</td>
+<td>3.49</td>
+<td>0.24</td>
+<td>2.18</td>
+<td>7.80</td>
+<td>0.86</td>
+<td>3.45</td>
+<td>1480.0</td>
+</tr>
+<tr>
+<th>4</th>
+<td>13.24</td>
+<td>2.59</td>
+<td>2.87</td>
+<td>21.0</td>
+<td>118.0</td>
+<td>2.80</td>
+<td>2.69</td>
+<td>0.39</td>
+<td>1.82</td>
+<td>4.32</td>
+<td>1.04</td>
+<td>2.93</td>
+<td>735.0</td>
+</tr>
+</tbody>
 </table>
 
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-      <th>min</th>
-      <th>25%</th>
-      <th>50%</th>
-      <th>75%</th>
-      <th>max</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>alcohol</th>
-      <td>178.0</td>
-      <td>13.000618</td>
-      <td>0.811827</td>
-      <td>11.03</td>
-      <td>12.3625</td>
-      <td>13.050</td>
-      <td>13.6775</td>
-      <td>14.83</td>
-    </tr>
-    <tr>
-      <th>malic_acid</th>
-      <td>178.0</td>
-      <td>2.336348</td>
-      <td>1.117146</td>
-      <td>0.74</td>
-      <td>1.6025</td>
-      <td>1.865</td>
-      <td>3.0825</td>
-      <td>5.80</td>
-    </tr>
-    <tr>
-      <th>ash</th>
-      <td>178.0</td>
-      <td>2.366517</td>
-      <td>0.274344</td>
-      <td>1.36</td>
-      <td>2.2100</td>
-      <td>2.360</td>
-      <td>2.5575</td>
-      <td>3.23</td>
-    </tr>
-    <tr>
-      <th>alcalinity_of_ash</th>
-      <td>178.0</td>
-      <td>19.494944</td>
-      <td>3.339564</td>
-      <td>10.60</td>
-      <td>17.2000</td>
-      <td>19.500</td>
-      <td>21.5000</td>
-      <td>30.00</td>
-    </tr>
-    <tr>
-      <th>magnesium</th>
-      <td>178.0</td>
-      <td>99.741573</td>
-      <td>14.282484</td>
-      <td>70.00</td>
-      <td>88.0000</td>
-      <td>98.000</td>
-      <td>107.0000</td>
-      <td>162.00</td>
-    </tr>
-    <tr>
-      <th>total_phenols</th>
-      <td>178.0</td>
-      <td>2.295112</td>
-      <td>0.625851</td>
-      <td>0.98</td>
-      <td>1.7425</td>
-      <td>2.355</td>
-      <td>2.8000</td>
-      <td>3.88</td>
-    </tr>
-    <tr>
-      <th>flavanoids</th>
-      <td>178.0</td>
-      <td>2.029270</td>
-      <td>0.998859</td>
-      <td>0.34</td>
-      <td>1.2050</td>
-      <td>2.135</td>
-      <td>2.8750</td>
-      <td>5.08</td>
-    </tr>
-    <tr>
-      <th>nonflavanoid_phenols</th>
-      <td>178.0</td>
-      <td>0.361854</td>
-      <td>0.124453</td>
-      <td>0.13</td>
-      <td>0.2700</td>
-      <td>0.340</td>
-      <td>0.4375</td>
-      <td>0.66</td>
-    </tr>
-    <tr>
-      <th>proanthocyanins</th>
-      <td>178.0</td>
-      <td>1.590899</td>
-      <td>0.572359</td>
-      <td>0.41</td>
-      <td>1.2500</td>
-      <td>1.555</td>
-      <td>1.9500</td>
-      <td>3.58</td>
-    </tr>
-    <tr>
-      <th>color_intensity</th>
-      <td>178.0</td>
-      <td>5.058090</td>
-      <td>2.318286</td>
-      <td>1.28</td>
-      <td>3.2200</td>
-      <td>4.690</td>
-      <td>6.2000</td>
-      <td>13.00</td>
-    </tr>
-    <tr>
-      <th>hue</th>
-      <td>178.0</td>
-      <td>0.957449</td>
-      <td>0.228572</td>
-      <td>0.48</td>
-      <td>0.7825</td>
-      <td>0.965</td>
-      <td>1.1200</td>
-      <td>1.71</td>
-    </tr>
-    <tr>
-      <th>od280/od315_of_diluted_wines</th>
-      <td>178.0</td>
-      <td>2.611685</td>
-      <td>0.709990</td>
-      <td>1.27</td>
-      <td>1.9375</td>
-      <td>2.780</td>
-      <td>3.1700</td>
-      <td>4.00</td>
-    </tr>
-    <tr>
-      <th>proline</th>
-      <td>178.0</td>
-      <td>746.893258</td>
-      <td>314.907474</td>
-      <td>278.00</td>
-      <td>500.5000</td>
-      <td>673.500</td>
-      <td>985.0000</td>
-      <td>1680.00</td>
-    </tr>
-  </tbody>
+<table>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>count</th>
+<th>mean</th>
+<th>std</th>
+<th>min</th>
+<th>25%</th>
+<th>50%</th>
+<th>75%</th>
+<th>max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>alcohol</th>
+<td>178.0</td>
+<td>13.000618</td>
+<td>0.811827</td>
+<td>11.03</td>
+<td>12.3625</td>
+<td>13.050</td>
+<td>13.6775</td>
+<td>14.83</td>
+</tr>
+<tr>
+<th>malic_acid</th>
+<td>178.0</td>
+<td>2.336348</td>
+<td>1.117146</td>
+<td>0.74</td>
+<td>1.6025</td>
+<td>1.865</td>
+<td>3.0825</td>
+<td>5.80</td>
+</tr>
+<tr>
+<th>ash</th>
+<td>178.0</td>
+<td>2.366517</td>
+<td>0.274344</td>
+<td>1.36</td>
+<td>2.2100</td>
+<td>2.360</td>
+<td>2.5575</td>
+<td>3.23</td>
+</tr>
+<tr>
+<th>alcalinity_of_ash</th>
+<td>178.0</td>
+<td>19.494944</td>
+<td>3.339564</td>
+<td>10.60</td>
+<td>17.2000</td>
+<td>19.500</td>
+<td>21.5000</td>
+<td>30.00</td>
+</tr>
+<tr>
+<th>magnesium</th>
+<td>178.0</td>
+<td>99.741573</td>
+<td>14.282484</td>
+<td>70.00</td>
+<td>88.0000</td>
+<td>98.000</td>
+<td>107.0000</td>
+<td>162.00</td>
+</tr>
+<tr>
+<th>total_phenols</th>
+<td>178.0</td>
+<td>2.295112</td>
+<td>0.625851</td>
+<td>0.98</td>
+<td>1.7425</td>
+<td>2.355</td>
+<td>2.8000</td>
+<td>3.88</td>
+</tr>
+<tr>
+<th>flavanoids</th>
+<td>178.0</td>
+<td>2.029270</td>
+<td>0.998859</td>
+<td>0.34</td>
+<td>1.2050</td>
+<td>2.135</td>
+<td>2.8750</td>
+<td>5.08</td>
+</tr>
+<tr>
+<th>nonflavanoid_phenols</th>
+<td>178.0</td>
+<td>0.361854</td>
+<td>0.124453</td>
+<td>0.13</td>
+<td>0.2700</td>
+<td>0.340</td>
+<td>0.4375</td>
+<td>0.66</td>
+</tr>
+<tr>
+<th>proanthocyanins</th>
+<td>178.0</td>
+<td>1.590899</td>
+<td>0.572359</td>
+<td>0.41</td>
+<td>1.2500</td>
+<td>1.555</td>
+<td>1.9500</td>
+<td>3.58</td>
+</tr>
+<tr>
+<th>color_intensity</th>
+<td>178.0</td>
+<td>5.058090</td>
+<td>2.318286</td>
+<td>1.28</td>
+<td>3.2200</td>
+<td>4.690</td>
+<td>6.2000</td>
+<td>13.00</td>
+</tr>
+<tr>
+<th>hue</th>
+<td>178.0</td>
+<td>0.957449</td>
+<td>0.228572</td>
+<td>0.48</td>
+<td>0.7825</td>
+<td>0.965</td>
+<td>1.1200</td>
+<td>1.71</td>
+</tr>
+<tr>
+<th>od280/od315_of_diluted_wines</th>
+<td>178.0</td>
+<td>2.611685</td>
+<td>0.709990</td>
+<td>1.27</td>
+<td>1.9375</td>
+<td>2.780</td>
+<td>3.1700</td>
+<td>4.00</td>
+</tr>
+<tr>
+<th>proline</th>
+<td>178.0</td>
+<td>746.893258</td>
+<td>314.907474</td>
+<td>278.00</td>
+<td>500.5000</td>
+<td>673.500</td>
+<td>985.0000</td>
+<td>1680.00</td>
+</tr>
+</tbody>
 </table>
 
 We can see that the features of this dataset are not on a common scale which is a problem
@@ -805,7 +816,9 @@ TODO: talk about left and right eigenvectors?
 
 
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
+[FN]: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
 [GRA]: http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf
+[IN]: https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation
 [LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
 [MC]: https://en.wikipedia.org/wiki/Multicollinearity
 [MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
@@ -814,6 +827,7 @@ TODO: talk about left and right eigenvectors?
 [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
 [QRA]: https://en.wikipedia.org/wiki/QR_algorithm
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
+[RE]: http://users.ics.aalto.fi/harri/dityo/node6.html
 [SVD]: https://en.wikipedia.org/wiki/Singular_value_decomposition
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec

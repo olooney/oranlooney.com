@@ -19,12 +19,13 @@ draft: true
 <div id="what-is-pca" class="section level2">
 <h2>What is PCA?</h2>
 <p>First of all, PCA is a <em>linear</em> dimensionality reduction technique; some other dimensionality techniques, such as <a href="https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding">t-SNE</a>, allow this map to be non-linear, but we will restrict ourselves to linear maps for now. Just saying it’s linear, though, is not quite enough to fully specify the problem; <a href="https://en.wikipedia.org/wiki/Factor_analysis">Factor Analysis</a> also seeks a linear map, but takes quite a different theoretical approach and reaches a slightly different solution in practice.</p>
-<p>There are two ways we can further constrain the problem to arrive at PCA.</p>
+<p>There are several ways we can further constrain the problem to arrive at PCA.</p>
 <ol style="list-style-type: decimal">
 <li>Require the covariance matrix of the transformed data to be diagonal. This is equivalent to saying that the transformed data has no <a href="https://en.wikipedia.org/wiki/Multicollinearity">multicollinearity</a>, or that all <span class="math inline">\(m\)</span> features of the transformed data are uncorrelated.</li>
 <li>Seek a new basis for the data such that the first basis vector points in the direction of maximum variation, or in other words is the “principle component” of our data. Then require that the second basis vector points also points in the direction of maximum variation in the plane orthogonal to the first, and so on until a new orthonormal basis is constructed.</li>
+<li>Seek a new basis for the data such that when we reconstruct the original matrix from only the <span class="math inline">\(m\)</span> most significant components the <a href="http://users.ics.aalto.fi/harri/dityo/node6.html">reconstruction error</a> is minimized. Reconstruction error is usually defined as the <a href="https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm">Frobenius norm</a> of the difference between the original and reconstructed matrix, but <a href="https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation">other definitions are possible.</a></li>
 </ol>
-<p>These two definitions turn out to be equivalent. Both construct a unique (*some terms and conditions apply) orthogonal matrix <span class="math inline">\(Q\)</span> which can be matrix multiplied by the original data matrix <span class="math inline">\(X\)</span> to obtain the transformed data <span class="math inline">\(X&#39; = XQ\)</span>. (Read “X prime”. I never use the prime mark for transpose, and will always use superscript “T” like <span class="math inline">\(X^T\)</span> for transpose.)</p>
+<p>These three definitions turn out to be equivalent. All construct a unique (*some terms and conditions apply) orthogonal matrix <span class="math inline">\(Q\)</span> which can be matrix multiplied by the original data matrix <span class="math inline">\(X\)</span> to obtain the transformed data <span class="math inline">\(X&#39; = XQ\)</span>. (Read “X prime”, which is <em>not</em> the transpose of <span class="math inline">\(X\)</span>. I will always use superscript “T” notation <span class="math inline">\(X^T\)</span> for transpose.)</p>
 <p>Orthogonal matrices are the generalization of the 3-dimensional concept of a rotation or reflection: in particular, they always preserve both <em>distance</em> and <em>angles</em>. These are very properties for a transform to have! Merely rotating an object doesn’t really distort it, but simply gives us a different perspective on it. In this sense, PCA is the <em>least destructive</em> transformation that we could apply.</p>
 <p>Now, obviously we could rotate our data any which way to get a different picture, but we want to rotate it so that in some sense in becomes aligned to the axes - rather like straightening a picture hanging askew on the wall. Near the end, we’ll show examples demonstrating how this “straightening up” helps with analysis and interpretation.</p>
 <p>Now, orthogonal matrices are invertible, which in particular means they are square, so <span class="math inline">\(Q\)</span> is an <span class="math inline">\(m \times m\)</span> matrix… which means we haven’t <em>reduced</em> the dimensionality at all! Why is this considered a dimensionality <em>reduction</em> technique? Well, it turns out that once we’ve rotated our data so that it’s as <em>wide</em> as possible along the first basis vector, that also means that it ends up as <em>thin</em> as possible along the last few basis vectors. This only works if the original data really were all quite close to some line or hyperplane, but when it does it means we can safely drop the some dimensions and retain only our principle components, thus reducing dimensionality while still keeping most of the information (variance) of the data. Of course, deciding <em>how many</em> dimensions to drop and how many to keep is a bit tricky, but we’ll come to that later.</p>
@@ -62,15 +63,966 @@ draft: true
 <div id="diagonalizing-the-covariance-matrix" class="section level2">
 <h2>Diagonalizing the Covariance Matrix</h2>
 </div>
-<div id="implementation" class="section level2">
-<h2>Implementation</h2>
+<div id="minimizing-reconstruction-error" class="section level2">
+<h2>Minimizing Reconstruction Error</h2>
+<p>The third and final way to motivate the mathematical formalism of PCA is to view it as a form of <em>compression</em>.</p>
+</div>
+<div id="algorithm-for-solving-the-eigneproblem" class="section level2">
+<h2>Algorithm for Solving the Eigneproblem</h2>
+<p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">SVD</a> of <span class="math inline">\(A\)</span> which almost immediately gives us the eigenvalues of and eigenvectors of <span class="math inline">\(A^T A\)</span>. The best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an iterative algorithm: For the <span class="math inline">\(k\)</span>-th step, we first use Householder reflections to reduce the matrix to bidiagonal form <span class="math inline">\(A_k\)</span>, Then the QR decomposition of <span class="math inline">\(A_k^T A_k\)</span> is used to set many of the off-diagonal elements to zero. The resulting matrix <span class="math inline">\(A_{k+1}\)</span> is tridiagonal, but at each step the off-diagonal elements get smaller and smaller. This is very much like trying to flatten all the air pockets out of wallpaper by rolling over them, but one keeps popping up just where we don’t want it; however, the process can be proved to converge, and in practice converges very rapidly.</p>
+<p>There is also a [randomized algorithm due to Halko, Martinsson, and Tropp][RA] which can be much faster, especially when we only want to retain a small number of components.</p>
+<p>Normally I would have tackled one of these “best practice” algorithms, but after studying them I found them to be larger in scope than what I would want to tackle for one of these articles so I decided to implement an older but still quite adequate eigenvalue algorithm: known as the <a href="https://en.wikipedia.org/wiki/QR_algorithm">QR algorithm.</a>. In addition to being easy to understand and implement, it has the advantage that we can use the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> function that we implmenent from scratch earlier in the earlier <a href="/post/ml-from-scratch-part-1-linear-regression/">article on linear regression</a>. It’s actually as fast or faster than Golub-Reinsh; the disadvantage is that it is not as numerically stable particularly for the smallest eigenvalues. Because in PCA we normally intend to discard these anyway, this is not such a bad deal!</p>
+<p>TODO:</p>
+<pre><code>def householder_reflection(a, e):
+    &#39;&#39;&#39;
+    Given a vector a and a unit vector e,
+    (where a is non-zero and not collinear with e)
+    returns an orthogonal matrix which maps a
+    into the line of e.
+    &#39;&#39;&#39;
+    
+    assert a.ndim == 1
+    assert np.allclose(1, np.sum(e**2))
+    
+    u = a - np.sign(a[0]) * np.linalg.norm(a) * e  
+    v = u / np.linalg.norm(u)
+    H = np.eye(len(a)) - 2 * np.outer(v, v)
+    
+    return H
+
+def qr_decomposition(A):
+    &#39;&#39;&#39;
+    Given an n x m invertable matrix A, returns the pair:
+        Q an orthogonal n x m matrix
+        R an upper triangular m x m matrix
+    such that QR = A.
+    &#39;&#39;&#39;
+    
+    n, m = A.shape
+    assert n &gt;= m
+    
+    Q = np.eye(n)
+    R = A.copy()
+    
+    for i in range(m - int(n==m)):
+        r = R[i:, i]
+        
+        if np.allclose(r[1:], 0):
+            continue
+            
+        # e is the i-th basis vector of the minor matrix.
+        e = np.zeros(n-i)
+        e[0] = 1  
+        
+        H = np.eye(n)
+        H[i:, i:] = householder_reflection(r, e)
+
+        Q = Q @ H.T
+        R = H @ R
+    
+    return Q, R</code></pre>
+<p>We can now implement the QR algorithm in just a few lines of code. It’s also an iterative algorithm. At each step, we calculate <span class="math inline">\(A_{k+1}\)</span> by taking the QR decomposition of <span class="math inline">\(A_{k}\)</span>, reversing the order of Q and R, and multiplying the matrices together. Each time we do this, the off-diagonals get smaller.</p>
+<pre><code>def eigen_decomposition(A, max_iter=100):
+    A_k = A
+    Q_k = np.eye( A.shape[1] )
+    
+    for k in range(max_iter):
+        Q, R = qr_decomposition(A_k)
+        Q_k = Q_k @ Q
+        A_k = R @ Q
+
+    eigenvalues = np.diag(A_k)
+    eigenvectors = Q_k
+    return eigenvalues, eigenvectors</code></pre>
+</div>
+<div id="implementing-pca" class="section level2">
+<h2>Implementing PCA</h2>
+<p>TODO</p>
+<pre><code>class PCA:
+    def __init__(self, n_components=None, whiten=False):
+        self.n_components = n_components
+        self.whiten = bool(whiten)
+    
+
+    def fit(self, X):
+        n, m = X.shape
+        
+        # subtract off the mean to center the data.
+        self.mu = X.mean(axis=0)
+        X = X - self.mu
+        
+        # whiten if necessary
+        if self.whiten:
+            self.std = X.std(axis=0)
+            X = X / self.std
+        
+        # Eigen Decomposition of the covariance matrix
+        C = X.T @ X / (n-1)
+        self.eigenvalues, self.eigenvectors = eigen_decomposition(C)
+        
+        # truncate the number of components if doing dimensionality reduction
+        if self.n_components is not None:
+            self.eigenvalues = self.eigenvalues[0:self.n_components]
+            self.eigenvectors = self.eigenvectors[:, 0:self.n_components]
+        
+        # the QR algorithm tends to puts eigenvalues in descending order 
+        # but is not guarenteed to. To make sure, we use argsort.
+        descending_order = np.flip(np.argsort(self.eigenvalues))
+        self.eigenvalues = self.eigenvalues[descending_order]
+        self.eigenvectors = self.eigenvectors[:, descending_order]
+
+        return self
+
+
+    def transform(self, X):
+        X = X - self.mu
+        
+        if self.whiten:
+            X = X / self.std
+        
+        return X @ self.eigenvectors
+    
+    @property
+    def proportion_variance_explained(self):
+        return self.eigenvalues / np.sum(self.eigenvalues)
+    </code></pre>
 </div>
 <div id="wine-quality-example" class="section level2">
 <h2>Wine Quality Example</h2>
+<pre><code>import pandas as pd
+import seaborn
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+from sklearn.datasets import load_wine
+
+wine = load_wine()
+X = wine.data
+
+df = pd.DataFrame(data=X, columns=wine.feature_names)
+display(df.head())
+display(df.describe().T)</code></pre>
+<table>
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+alcohol
+</th>
+<th>
+malic_acid
+</th>
+<th>
+ash
+</th>
+<th>
+alcalinity_of_ash
+</th>
+<th>
+magnesium
+</th>
+<th>
+total_phenols
+</th>
+<th>
+flavanoids
+</th>
+<th>
+nonflavanoid_phenols
+</th>
+<th>
+proanthocyanins
+</th>
+<th>
+color_intensity
+</th>
+<th>
+hue
+</th>
+<th>
+od280/od315_of_diluted_wines
+</th>
+<th>
+proline
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<td>
+14.23
+</td>
+<td>
+1.71
+</td>
+<td>
+2.43
+</td>
+<td>
+15.6
+</td>
+<td>
+127.0
+</td>
+<td>
+2.80
+</td>
+<td>
+3.06
+</td>
+<td>
+0.28
+</td>
+<td>
+2.29
+</td>
+<td>
+5.64
+</td>
+<td>
+1.04
+</td>
+<td>
+3.92
+</td>
+<td>
+1065.0
+</td>
+</tr>
+<tr>
+<th>
+1
+</th>
+<td>
+13.20
+</td>
+<td>
+1.78
+</td>
+<td>
+2.14
+</td>
+<td>
+11.2
+</td>
+<td>
+100.0
+</td>
+<td>
+2.65
+</td>
+<td>
+2.76
+</td>
+<td>
+0.26
+</td>
+<td>
+1.28
+</td>
+<td>
+4.38
+</td>
+<td>
+1.05
+</td>
+<td>
+3.40
+</td>
+<td>
+1050.0
+</td>
+</tr>
+<tr>
+<th>
+2
+</th>
+<td>
+13.16
+</td>
+<td>
+2.36
+</td>
+<td>
+2.67
+</td>
+<td>
+18.6
+</td>
+<td>
+101.0
+</td>
+<td>
+2.80
+</td>
+<td>
+3.24
+</td>
+<td>
+0.30
+</td>
+<td>
+2.81
+</td>
+<td>
+5.68
+</td>
+<td>
+1.03
+</td>
+<td>
+3.17
+</td>
+<td>
+1185.0
+</td>
+</tr>
+<tr>
+<th>
+3
+</th>
+<td>
+14.37
+</td>
+<td>
+1.95
+</td>
+<td>
+2.50
+</td>
+<td>
+16.8
+</td>
+<td>
+113.0
+</td>
+<td>
+3.85
+</td>
+<td>
+3.49
+</td>
+<td>
+0.24
+</td>
+<td>
+2.18
+</td>
+<td>
+7.80
+</td>
+<td>
+0.86
+</td>
+<td>
+3.45
+</td>
+<td>
+1480.0
+</td>
+</tr>
+<tr>
+<th>
+4
+</th>
+<td>
+13.24
+</td>
+<td>
+2.59
+</td>
+<td>
+2.87
+</td>
+<td>
+21.0
+</td>
+<td>
+118.0
+</td>
+<td>
+2.80
+</td>
+<td>
+2.69
+</td>
+<td>
+0.39
+</td>
+<td>
+1.82
+</td>
+<td>
+4.32
+</td>
+<td>
+1.04
+</td>
+<td>
+2.93
+</td>
+<td>
+735.0
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+count
+</th>
+<th>
+mean
+</th>
+<th>
+std
+</th>
+<th>
+min
+</th>
+<th>
+25%
+</th>
+<th>
+50%
+</th>
+<th>
+75%
+</th>
+<th>
+max
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+alcohol
+</th>
+<td>
+178.0
+</td>
+<td>
+13.000618
+</td>
+<td>
+0.811827
+</td>
+<td>
+11.03
+</td>
+<td>
+12.3625
+</td>
+<td>
+13.050
+</td>
+<td>
+13.6775
+</td>
+<td>
+14.83
+</td>
+</tr>
+<tr>
+<th>
+malic_acid
+</th>
+<td>
+178.0
+</td>
+<td>
+2.336348
+</td>
+<td>
+1.117146
+</td>
+<td>
+0.74
+</td>
+<td>
+1.6025
+</td>
+<td>
+1.865
+</td>
+<td>
+3.0825
+</td>
+<td>
+5.80
+</td>
+</tr>
+<tr>
+<th>
+ash
+</th>
+<td>
+178.0
+</td>
+<td>
+2.366517
+</td>
+<td>
+0.274344
+</td>
+<td>
+1.36
+</td>
+<td>
+2.2100
+</td>
+<td>
+2.360
+</td>
+<td>
+2.5575
+</td>
+<td>
+3.23
+</td>
+</tr>
+<tr>
+<th>
+alcalinity_of_ash
+</th>
+<td>
+178.0
+</td>
+<td>
+19.494944
+</td>
+<td>
+3.339564
+</td>
+<td>
+10.60
+</td>
+<td>
+17.2000
+</td>
+<td>
+19.500
+</td>
+<td>
+21.5000
+</td>
+<td>
+30.00
+</td>
+</tr>
+<tr>
+<th>
+magnesium
+</th>
+<td>
+178.0
+</td>
+<td>
+99.741573
+</td>
+<td>
+14.282484
+</td>
+<td>
+70.00
+</td>
+<td>
+88.0000
+</td>
+<td>
+98.000
+</td>
+<td>
+107.0000
+</td>
+<td>
+162.00
+</td>
+</tr>
+<tr>
+<th>
+total_phenols
+</th>
+<td>
+178.0
+</td>
+<td>
+2.295112
+</td>
+<td>
+0.625851
+</td>
+<td>
+0.98
+</td>
+<td>
+1.7425
+</td>
+<td>
+2.355
+</td>
+<td>
+2.8000
+</td>
+<td>
+3.88
+</td>
+</tr>
+<tr>
+<th>
+flavanoids
+</th>
+<td>
+178.0
+</td>
+<td>
+2.029270
+</td>
+<td>
+0.998859
+</td>
+<td>
+0.34
+</td>
+<td>
+1.2050
+</td>
+<td>
+2.135
+</td>
+<td>
+2.8750
+</td>
+<td>
+5.08
+</td>
+</tr>
+<tr>
+<th>
+nonflavanoid_phenols
+</th>
+<td>
+178.0
+</td>
+<td>
+0.361854
+</td>
+<td>
+0.124453
+</td>
+<td>
+0.13
+</td>
+<td>
+0.2700
+</td>
+<td>
+0.340
+</td>
+<td>
+0.4375
+</td>
+<td>
+0.66
+</td>
+</tr>
+<tr>
+<th>
+proanthocyanins
+</th>
+<td>
+178.0
+</td>
+<td>
+1.590899
+</td>
+<td>
+0.572359
+</td>
+<td>
+0.41
+</td>
+<td>
+1.2500
+</td>
+<td>
+1.555
+</td>
+<td>
+1.9500
+</td>
+<td>
+3.58
+</td>
+</tr>
+<tr>
+<th>
+color_intensity
+</th>
+<td>
+178.0
+</td>
+<td>
+5.058090
+</td>
+<td>
+2.318286
+</td>
+<td>
+1.28
+</td>
+<td>
+3.2200
+</td>
+<td>
+4.690
+</td>
+<td>
+6.2000
+</td>
+<td>
+13.00
+</td>
+</tr>
+<tr>
+<th>
+hue
+</th>
+<td>
+178.0
+</td>
+<td>
+0.957449
+</td>
+<td>
+0.228572
+</td>
+<td>
+0.48
+</td>
+<td>
+0.7825
+</td>
+<td>
+0.965
+</td>
+<td>
+1.1200
+</td>
+<td>
+1.71
+</td>
+</tr>
+<tr>
+<th>
+od280/od315_of_diluted_wines
+</th>
+<td>
+178.0
+</td>
+<td>
+2.611685
+</td>
+<td>
+0.709990
+</td>
+<td>
+1.27
+</td>
+<td>
+1.9375
+</td>
+<td>
+2.780
+</td>
+<td>
+3.1700
+</td>
+<td>
+4.00
+</td>
+</tr>
+<tr>
+<th>
+proline
+</th>
+<td>
+178.0
+</td>
+<td>
+746.893258
+</td>
+<td>
+314.907474
+</td>
+<td>
+278.00
+</td>
+<td>
+500.5000
+</td>
+<td>
+673.500
+</td>
+<td>
+985.0000
+</td>
+<td>
+1680.00
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can see that the features of this dataset are not on a common scale which is a problem for PCA. TODO: Why?</p>
+<pre><code>X_white = (X - X.mean(axis=0))/X.std(axis=0)
+C = X_white.T @ X_white / (X_white.shape[0] - 1)
+plt.figure(figsize=(6,6))
+plt.imshow(C, cmap=&#39;binary&#39;)
+plt.title(&quot;Covariance Matrix of Wine Data&quot;)
+plt.xticks(np.arange(0, 13, 1))
+plt.yticks(np.arange(0, 13, 1))
+plt.colorbar()</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_covariance.png"></p>
+<p>TODO: too much covariance, apply PCA</p>
+<pre><code>pca = PCA(whiten=True)
+pca.fit(X)
+X_prime = pca.transform(X)
+
+pca.eigenvalues
+array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 0.554, 0.35 , 0.291, 0.252, 0.227, 0.17 , 0.104])
+
+pca.eigenvectors
+array([[ 0.144, -0.484, -0.207,  0.018,  0.266,  0.214, -0.056,  0.396, -0.509, -0.212,  0.226,  0.266, -0.015],
+       [-0.245, -0.225,  0.089, -0.537, -0.035,  0.537,  0.421,  0.066,  0.075,  0.309, -0.076, -0.122, -0.026],
+       [-0.002, -0.316,  0.626,  0.214,  0.143,  0.154, -0.149, -0.17 ,  0.308,  0.027,  0.499,  0.05 ,  0.141],
+       [-0.239,  0.011,  0.612, -0.061, -0.066, -0.101, -0.287,  0.428, -0.2  , -0.053, -0.479,  0.056, -0.092],
+       [ 0.142, -0.3  ,  0.131,  0.352, -0.727,  0.038,  0.323, -0.156, -0.271, -0.068, -0.071, -0.062, -0.057],
+       [ 0.395, -0.065,  0.146, -0.198,  0.149, -0.084, -0.028, -0.406, -0.286,  0.32 , -0.304,  0.304,  0.464],
+       [ 0.423,  0.003,  0.151, -0.152,  0.109, -0.019, -0.061, -0.187, -0.05 ,  0.163,  0.026,  0.043, -0.832],
+       [-0.299, -0.029,  0.17 ,  0.203,  0.501, -0.259,  0.595, -0.233, -0.196, -0.216, -0.117, -0.042, -0.114],
+       [ 0.313, -0.039,  0.149, -0.399, -0.137, -0.534,  0.372,  0.368,  0.209, -0.134,  0.237,  0.096,  0.117],
+       [-0.089, -0.53 , -0.137, -0.066,  0.076, -0.419, -0.228, -0.034, -0.056,  0.291, -0.032, -0.604,  0.012],
+       [ 0.297,  0.279,  0.085,  0.428,  0.173,  0.106,  0.232,  0.437, -0.086,  0.522,  0.048, -0.259,  0.09 ],
+       [ 0.376,  0.164,  0.166, -0.184,  0.101,  0.266, -0.045, -0.078, -0.137, -0.524, -0.046, -0.601,  0.157],
+       [ 0.287, -0.365, -0.127,  0.232,  0.158,  0.12 ,  0.077,  0.12 ,  0.576, -0.162, -0.539,  0.079, -0.014]])</code></pre>
+<p>TODO covariance after transformation:</p>
+<pre><code>plt.figure(figsize=(6,6))
+plt.imshow(C_prime, cmap=&#39;binary&#39;)
+plt.title(&quot;Covariance Matrix of Transformed Data&quot;)
+plt.xticks(np.arange(0, 13, 1))
+plt.yticks(np.arange(0, 13, 1))
+plt.colorbar()</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_transformed_covariance.png"></p>
 </div>
 <div id="strategies-for-choosing-the-number-of-dimensions" class="section level2">
 <h2>Strategies for Choosing The Number of Dimensions</h2>
+<p>TODO: Scree the Kaiser Rule is of course a trainwreck, but the alternatives aren’t much better.</p>
+<p><a href="https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr" class="uri">https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr</a></p>
+<p><a href="http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf" class="uri">http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf</a></p>
+<p>Minka (2000) is one option. <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf" class="uri">https://vismod.media.mit.edu/tech-reports/TR-514.pdf</a></p>
+<pre><code>fig = plt.figure(figsize=(10, 7))
+plt.title(&quot;Scree Plot (Eigenvalues in Decreasing Order)&quot;)
+plt.plot([1, 13], [1, 1], color=&#39;red&#39;, linestyle=&#39;--&#39;, label=&quot;Kaiser Rule&quot;)
+plt.xticks(np.arange(1, 14, 1))
+plt.xlim(1, 13)
+plt.ylim(0, 5)
+plt.ylabel(&quot;Eigenvalue&quot;)
+plt.xlabel(&quot;Principle Component Index&quot;)
+plt.grid(linestyle=&#39;--&#39;)
+plt.plot(range(1, 14), pca.eigenvalues, label=&quot;Eigenvalues&quot;)
+plt.legend()</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_scree_plot.png"></p>
+<p>TODO: proportion variance explained</p>
+<pre><code>fig = plt.figure(figsize=(10, 7))
+plt.title(&quot;Variance Explained By Component&quot;)
+plt.xticks(np.arange(1, 14, 1))
+plt.yticks(np.arange(0, 1.0001, 0.1))
+plt.xlim(1, 13)
+plt.ylim(0, 1)
+plt.ylabel(&quot;Proportion of Variance Explained&quot;)
+plt.xlabel(&quot;Principle Component Index&quot;)
+plt.grid(linestyle=&#39;--&#39;)
+plt.fill_between(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color=&quot;lightblue&quot;, label=&quot;Cumulative&quot;)
+plt.plot(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color=&quot;darkblue&quot;)
+plt.plot(range(1, 14), pca.proportion_variance_explained, label=&quot;Incremental&quot;, color=&quot;orange&quot;, linestyle=&quot;--&quot;)
+plt.legend(loc=&#39;upper left&#39;)</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png"></p>
+</div>
+<div id="visualizing-the-components" class="section level2">
+<h2>Visualizing the Components</h2>
+<p>TODO: first principle component only</p>
+<pre><code>plt.figure(figsize=(10, 4))
+for c in np.unique(wine.target):
+    color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
+    X_class = X_prime[wine.target == c]
+    plt.scatter(X_class[:, 0], X_class[:, 1]*0, color=color, alpha=0.3)
+plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.xlabel(&quot;PC1&quot;)</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc1.png"></p>
+<p>TODO: first two</p>
+<pre><code>plt.figure(figsize=(10, 8))
+for c in np.unique(wine.target):
+    color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
+    X_class = X_prime[wine.target == c]
+    plt.scatter(X_class[:, 0], X_class[:, 1], color=color, alpha=0.6)
+plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.xlabel(&quot;PC1&quot;)
+plt.ylabel(&quot;PC2&quot;)</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc2.png"></p>
+<p>TODO: first three</p>
+<pre><code>plt.figure(figsize=(16, 8))
+
+plt.subplot(1, 2, 1)
+for c in np.unique(wine.target):
+    color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
+    X_class = X_prime[wine.target == c]
+    plt.scatter(X_class[:, 0], X_class[:, 2], color=color, alpha=0.6)
+plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.xlabel(&quot;PC1&quot;)
+plt.ylabel(&quot;PC3&quot;)
+
+plt.subplot(1, 2, 2)
+for c in np.unique(wine.target):
+    color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
+    X_class = X_prime[wine.target == c]
+    plt.scatter(X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
+plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.xlabel(&quot;PC2&quot;)
+plt.ylabel(&quot;PC3&quot;)</code></pre>
+<p>TODO: first three, 3D</p>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3.png"></p>
+<pre><code>fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+ax.view_init(15, -60)
+
+for c in np.unique(wine.target):
+    color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
+    X_class = X_prime[wine.target == c]
+    ax.scatter(X_class[:, 0], X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
+    
+# chart junk
+plt.title(&quot;First 3 Primary Components of Wine Quality&quot;)
+ax.set_xlabel(&#39;PC1&#39;)
+ax.set_ylabel(&#39;PC2&#39;)
+ax.set_zlabel(&#39;PC3&#39;)</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3_3d.png"></p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
+<p>TODO: mention varimax rotations?</p>
+<p><a href="https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca" class="uri">https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca</a></p>
+<p>TODO: contrast with FA?</p>
+<p><a href="https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374" class="uri">https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374</a></p>
+<p>TODO: talk about “loadings?”</p>
+<p><a href="https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another/143949#143949" class="uri">https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another/143949#143949</a></p>
+<p>TODO: talk about left and right eigenvectors?</p>
 </div>
