@@ -151,12 +151,12 @@ an unconstrained system! And surprisingly enough, it does not result in an
 *approximate* solution that only sort of obeys the constraint but instead
 (assuming the constraint is physically possible and the resulting equations
 have a closed form solution) gives an *exact* solution where the constraint is
-*perfectly* obeyed! 
+*perfectly* obeyed.
 
 It's easy to use too, at least in our simple case. We introduce the Lagrange
 multiplier $\lambda$ and rewrite our optimization as follows:
 
-$$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (\mathbf{q}^T \mathbf{q} -1) \tag{6} $$
+$$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} $$
 
 Why is this the same as the above? Let's call the above function $f(\mathbf{q}, \lambda)$ write down the KKT conditions:
 
@@ -175,30 +175,95 @@ to (6).  Such is the magic of Lagrange multipliers.
 But if (8) is just our constraint in a fancy new dress, how have we progressed at all?
 Because (7) is now unconstrained and therefore more tractable.
 
-TODO: introduce a realization $X$. 
+Suppose the matrix $\mathbf{X}$ is an $N \times n$ matrix with $N$ rows where each row vector is
+an independent realization of $\mathbf{x}$. Then we can estimate the covariance matrix as
+
+$$ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} $$
+
+$$ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) $$
+
+$$ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} $$
+
+Dividing by two and moving each term to opposite sides of the equation, we get the
+familiar equation for the eigenproblem:
+
+$$ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} $$
+
+This shows that every "direction of maximal variation" is in fact an eigenvector
+of the covariance matrix, and the variance in that direction is the corresponding
+eigenvalue. 
+
+$$ C = Q \Lambda Q^T $$
+
+Because the covariance matrix $\mathbf{C}$ is real-valued, symetric, and positive
+definite, we know that the eigenvalues will all be real-valued (as expected.)
+
+In the convention we've adopted, $\mathbf{Q}$ is the right eigenvalue matrix (meaning
+each *column* is an eigenvector) 
 
 Diagonalizing the Covariance Matrix
 -----------------------------------
+
+We could have skipped the entire "direction of maximal variation" and Lagrange
+multiplier argument if we had simply argued as follows: I want my features to
+be uncorrelated. Therefore I want the covariance matrix of my data to be diagonal.
+However, when I estimate the covariance matrix for my data in their original form,
+I see that the covariance matrix is **not** diagonal, which means my original
+features exhibit some multiple collinearity, which is bad. To fix this problem,
+I will transform my data in such a way as make the covariance matrix diagonal.
+The simplest and most structure preserving way to do this is with a rotation, e.g., an orthogonal matrix. To
+find such a transformation, I will diagonalize the covariance matrix $\mathbf{C}$. This can be done
+by finding the eigen-decomposition of $\mathbf{C}$.
+
+The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$. 
+
+$$ \mathbf{X}' = \mathbf{X} \mathbf{Q} $$
+
+TODO: prove that C' is diagonal.
+
+
+Loadings vs eigenvectors
+https://stats.stackexchange.com/a/92512/48250
+https://stats.stackexchange.com/a/143949/48250
+
 
 
 Minimizing Reconstruction Error
 -------------------------------
 
 The third and final way to motivate the mathematical formalism of PCA is to view
-it as a form of *compression*. 
+it as a form of *compression*. Specifically, of all possible linear linear
+projections from $n$ to $m$ dimensions, taking the first $k$ components
+of the PCA transformation of $X$ minimizes the reconstruction error. Reconstruction
+error is usually defined as the Frobenius distance between the original
+and reconstructed matrix, but interestingly enough the theorem holds for a few
+other metrics as well, suggesting it's a deep property of PCA and not some quirk
+of the Frobenius norm.
+
+http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
+
+This is an extremely powerful point of view which gets at the heart of the dimensional
+reduction strategy. 
+
+TODO: analogous to each component explaining a certain percentage of the variance.
+
+I find it extremely interesting that PCA can be motivated in so many different
+ways. These three are all completely valid viewpoints on what might define
+a "good" dimensional reduction algorithm, and all three come to the same conclusion:
+you need to find the eigenvectors of the covariance matrix.
 
 
 
 Algorithm for Solving the Eigneproblem
 --------------------------------------
 
-The modern approach to implementing PCA is to find the [SVD][SVD] of $A$ which
+The modern approach to implementing PCA is to find the [Singular Value Decomposition][SVD] of a matrix $A$ which
 almost immediately gives us the eigenvalues of and eigenvectors of $A^T A$. The
 best known SVD algorithm is the [Golub-Reinsh Algorithm][GRA]. This is an
-iterative algorithm: For the $k$-th step, we first use Householder reflections
-to reduce the matrix to bidiagonal form $A_k$, Then the QR decomposition of
-$A_k^T A_k$ is used to set many of the off-diagonal elements to zero. The
-resulting matrix $A_{k+1}$ is tridiagonal, but at each step the off-diagonal
+iterative algorithm: For the $k$-th step, we first use [Householder reflections][HR]
+to reduce the matrix to bidiagonal form $A_k$, Then the [QR decomposition][QRD] of
+$X_k^T X_k$ is used to set many of the off-diagonal elements to zero. The
+resulting matrix $A_{k+1}$ is [tridiagonal][TRI], but at each step the off-diagonal
 elements get smaller and smaller. This is very much like trying to flatten all
 the air pockets out of wallpaper by rolling over them, but one keeps popping up
 just where we don't want it; however, the process can be proved to converge,
@@ -208,18 +273,19 @@ There is also a [randomized algorithm due to Halko, Martinsson, and Tropp][RA]
 which can be much faster, especially when we only want to retain a small number
 of components.
 
-Normally I would have tackled one of these "best practice" algorithms, but
-after studying them I found them to be larger in scope than what I would want
-to tackle for one of these articles so I decided to implement an older but
+Normally I would tackle one of these "best practice" algorithms, but after
+studying them I found them to be larger in scope than what I would want to
+tackle for one of these articles.  Instead, I decided to implement an older but
 still quite adequate eigenvalue algorithm: known as the [QR algorithm.][QRA].
-In addition to being easy to understand and implement, it has the advantage that 
-we can use the [QR decomposition][QRD] function that we implmenent from scratch
-earlier in the earlier [article on linear regression][MLFS1]. It's actually
-as fast or faster than Golub-Reinsh; the disadvantage is that it is not as
-numerically stable particularly for the smallest eigenvalues. Because in PCA
-we normally intend to discard these anyway, this is not such a bad deal!
+In addition to being easy to understand and implement, it has the advantage
+that we can use the [QR decomposition][QRD] function that we implemented in the
+earlier [article on linear regression][MLFS1]. It's actually just as fast or
+faster than Golub-Reinsh; the disadvantage is that it is not as numerically
+stable particularly for the smallest eigenvalues. Because in PCA we normally
+intend to discard these anyway, this is not such a bad deal!
 
-TODO: 
+Recall from that [previous article][MLFS1] our implementations for Householder reflections
+and QR decompositions:
 
     def householder_reflection(a, e):
         '''
@@ -237,6 +303,7 @@ TODO:
         H = np.eye(len(a)) - 2 * np.outer(v, v)
         
         return H
+
 
     def qr_decomposition(A):
         '''
@@ -270,11 +337,12 @@ TODO:
         
         return Q, R
 
-We can now implement the QR algorithm in just a few lines of code. It's
-also an iterative algorithm. At each step, we calculate $A_{k+1}$ by
-taking the QR decomposition of $A_{k}$, reversing the order of Q and R,
-and multiplying the matrices together. Each time we do this, the off-diagonals
-get smaller.
+Using these we can implement the QR algorithm in just a few lines of code. 
+
+The QR algorithm is iterative: at each step, we calculate $A_{k+1}$ by
+taking the QR decomposition of $A_{k}$, reversing the order of Q and R, and
+multiplying the matrices together. Each time we do this, the off-diagonals get
+smaller.
 
     def eigen_decomposition(A, max_iter=100):
         A_k = A
@@ -289,10 +357,18 @@ get smaller.
         eigenvectors = Q_k
         return eigenvalues, eigenvectors
 
+
 Implementing PCA
 ----------------
 
-TODO
+We made a number of simplifying assumptions in the above theory
+and now we have to pay for that with the same amount of busywork
+and preprocessing to get our data into an idealized form before
+we can start calculating eigenvalues.
+
+1. We need to ensure than the data are centered (and perhaps scaled)
+2. put eigenvalues in descending order
+
 
     class PCA:
         def __init__(self, n_components=None, whiten=False):
@@ -717,9 +793,23 @@ TODO: proportion variance explained
     plt.ylabel("Proportion of Variance Explained")
     plt.xlabel("Principle Component Index")
     plt.grid(linestyle='--')
-    plt.fill_between(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color="lightblue", label="Cumulative")
-    plt.plot(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color="darkblue")
-    plt.plot(range(1, 14), pca.proportion_variance_explained, label="Incremental", color="orange", linestyle="--")
+    plt.fill_between(
+        range(1, 14), 
+        np.cumsum(pca.proportion_variance_explained), 
+        0, 
+        color="lightblue", 
+        label="Cumulative")
+    plt.plot(
+        range(1, 14), 
+        np.cumsum(pca.proportion_variance_explained), 
+        0, 
+        color="darkblue")
+    plt.plot(
+        range(1, 14), 
+        pca.proportion_variance_explained, 
+        label="Incremental", 
+        color="orange", 
+        linestyle="--")
     plt.legend(loc='upper left')
 
 <img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png">
@@ -808,12 +898,6 @@ TODO: contrast with FA?
 
 https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374
 
-TODO: talk about "loadings?"
-
-https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another/143949#143949
-
-TODO: talk about left and right eigenvectors?
-
 
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [FN]: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
@@ -831,3 +915,6 @@ TODO: talk about left and right eigenvectors?
 [SVD]: https://en.wikipedia.org/wiki/Singular_value_decomposition
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec
+[HR]: https://en.wikipedia.org/wiki/Householder_transformation
+[TRI]: https://en.wikipedia.org/wiki/Tridiagonal_matrix
+[RA]: https://arxiv.org/abs/0909.4061

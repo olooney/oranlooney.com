@@ -46,9 +46,9 @@ draft: true
 <p>That gives us the constrained optimization problem</p>
 <p><span class="math display">\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} \]</span></p>
 <p>Well at least this <em>has</em> a solution, even if it isn’t immediately obvious how to solve it. We can’t simply set partial derivative with respect to <span class="math inline">\(\mathbf{q}\)</span> equal to zero; that KKT condition only applies in the <em>absence</em> of active constraints. Earlier in this series, we’ve used techniques such as stochastic gradient descent to solve unconstrained optimization problems, but how do we deal the constraint?</p>
-<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Langrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slipage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed!</p>
+<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Langrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slipage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed.</p>
 <p>It’s easy to use too, at least in our simple case. We introduce the Lagrange multiplier <span class="math inline">\(\lambda\)</span> and rewrite our optimization as follows:</p>
-<p><span class="math display">\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (\mathbf{q}^T \mathbf{q} -1) \tag{6} \]</span></p>
+<p><span class="math display">\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} \]</span></p>
 <p>Why is this the same as the above? Let’s call the above function <span class="math inline">\(f(\mathbf{q}, \lambda)\)</span> write down the KKT conditions:</p>
 <p><span class="math display">\[ 
   \begin{align}
@@ -58,21 +58,39 @@ draft: true
 \]</span></p>
 <p>But equation (8) is simply <span class="math inline">\(\mathbf{q}^T \mathbf{q} - 1 = 0\)</span> is simply our unit vector constraint… this guarantees that when we solve (7) and (8), the constraint will be exactly satisfied and we’ll will also have found a solution to (6). Such is the magic of Lagrange multipliers.</p>
 <p>But if (8) is just our constraint in a fancy new dress, how have we progressed at all? Because (7) is now unconstrained and therefore more tractable.</p>
-<p>TODO: introduce a realization <span class="math inline">\(X\)</span>.</p>
+<p>Suppose the matrix <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(N \times n\)</span> matrix with <span class="math inline">\(N\)</span> rows where each row vector is an independent realization of <span class="math inline">\(\mathbf{x}\)</span>. Then we can estimate the covariance matrix as</p>
+<p><span class="math display">\[ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \]</span></p>
+<p><span class="math display">\[ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \]</span></p>
+<p><span class="math display">\[ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \]</span></p>
+<p>Dividing by two and moving each term to opposite sides of the equation, we get the familiar equation for the eigenproblem:</p>
+<p><span class="math display">\[ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \]</span></p>
+<p>This shows that every “direction of maximal variation” is in fact an eigenvector of the covariance matrix, and the variance in that direction is the corresponding eigenvalue.</p>
+<p><span class="math display">\[ C = Q \Lambda Q^T \]</span></p>
+<p>Because the covariance matrix <span class="math inline">\(\mathbf{C}\)</span> is real-valued, symetric, and positive definite, we know that the eigenvalues will all be real-valued (as expected.)</p>
+<p>In the convention we’ve adopted, <span class="math inline">\(\mathbf{Q}\)</span> is the right eigenvalue matrix (meaning each <em>column</em> is an eigenvector)</p>
 </div>
 <div id="diagonalizing-the-covariance-matrix" class="section level2">
 <h2>Diagonalizing the Covariance Matrix</h2>
+<p>We could have skipped the entire “direction of maximal variation” and Lagrange multiplier argument if we had simply argued as follows: I want my features to be uncorrelated. Therefore I want the covariance matrix of my data to be diagonal. However, when I estimate the covariance matrix for my data in their original form, I see that the covariance matrix is <strong>not</strong> diagonal, which means my original features exhibit some multiple collinearity, which is bad. To fix this problem, I will transform my data in such a way as make the covariance matrix diagonal. The simplest and most structure preserving way to do this is with a rotation, e.g., an orthogonal matrix. To find such a transformation, I will diagonalize the covariance matrix <span class="math inline">\(\mathbf{C}\)</span>. This can be done by finding the eigen-decomposition of <span class="math inline">\(\mathbf{C}\)</span>.</p>
+<p>The resulting right eigenvector matrix <span class="math inline">\(\mathbf{Q}\)</span> can be applied to <span class="math inline">\(X\)</span>.</p>
+<p><span class="math display">\[ \mathbf{X}&#39; = \mathbf{X} \mathbf{Q} \]</span></p>
+<p>TODO: prove that C’ is diagonal.</p>
+<p>Loadings vs eigenvectors <a href="https://stats.stackexchange.com/a/92512/48250" class="uri">https://stats.stackexchange.com/a/92512/48250</a> <a href="https://stats.stackexchange.com/a/143949/48250" class="uri">https://stats.stackexchange.com/a/143949/48250</a></p>
 </div>
 <div id="minimizing-reconstruction-error" class="section level2">
 <h2>Minimizing Reconstruction Error</h2>
-<p>The third and final way to motivate the mathematical formalism of PCA is to view it as a form of <em>compression</em>.</p>
+<p>The third and final way to motivate the mathematical formalism of PCA is to view it as a form of <em>compression</em>. Specifically, of all possible linear linear projections from <span class="math inline">\(n\)</span> to <span class="math inline">\(m\)</span> dimensions, taking the first <span class="math inline">\(k\)</span> components of the PCA transformation of <span class="math inline">\(X\)</span> minimizes the reconstruction error. Reconstruction error is usually defined as the Frobenius distance between the original and reconstructed matrix, but interestingly enough the theorem holds for a few other metrics as well, suggesting it’s a deep property of PCA and not some quirk of the Frobenius norm.</p>
+<p><a href="http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf" class="uri">http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf</a></p>
+<p>This is an extremely powerful point of view which gets at the heart of the dimensional reduction strategy.</p>
+<p>TODO: analogous to each component explaining a certain percentage of the variance.</p>
+<p>I find it extremely interesting that PCA can be motivated in so many different ways. These three are all completely valid viewpoints on what might define a “good” dimensional reduction algorithm, and all three come to the same conclusion: you need to find the eigenvectors of the covariance matrix.</p>
 </div>
 <div id="algorithm-for-solving-the-eigneproblem" class="section level2">
 <h2>Algorithm for Solving the Eigneproblem</h2>
-<p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">SVD</a> of <span class="math inline">\(A\)</span> which almost immediately gives us the eigenvalues of and eigenvectors of <span class="math inline">\(A^T A\)</span>. The best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an iterative algorithm: For the <span class="math inline">\(k\)</span>-th step, we first use Householder reflections to reduce the matrix to bidiagonal form <span class="math inline">\(A_k\)</span>, Then the QR decomposition of <span class="math inline">\(A_k^T A_k\)</span> is used to set many of the off-diagonal elements to zero. The resulting matrix <span class="math inline">\(A_{k+1}\)</span> is tridiagonal, but at each step the off-diagonal elements get smaller and smaller. This is very much like trying to flatten all the air pockets out of wallpaper by rolling over them, but one keeps popping up just where we don’t want it; however, the process can be proved to converge, and in practice converges very rapidly.</p>
-<p>There is also a [randomized algorithm due to Halko, Martinsson, and Tropp][RA] which can be much faster, especially when we only want to retain a small number of components.</p>
-<p>Normally I would have tackled one of these “best practice” algorithms, but after studying them I found them to be larger in scope than what I would want to tackle for one of these articles so I decided to implement an older but still quite adequate eigenvalue algorithm: known as the <a href="https://en.wikipedia.org/wiki/QR_algorithm">QR algorithm.</a>. In addition to being easy to understand and implement, it has the advantage that we can use the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> function that we implmenent from scratch earlier in the earlier <a href="/post/ml-from-scratch-part-1-linear-regression/">article on linear regression</a>. It’s actually as fast or faster than Golub-Reinsh; the disadvantage is that it is not as numerically stable particularly for the smallest eigenvalues. Because in PCA we normally intend to discard these anyway, this is not such a bad deal!</p>
-<p>TODO:</p>
+<p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> of a matrix <span class="math inline">\(A\)</span> which almost immediately gives us the eigenvalues of and eigenvectors of <span class="math inline">\(A^T A\)</span>. The best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an iterative algorithm: For the <span class="math inline">\(k\)</span>-th step, we first use <a href="https://en.wikipedia.org/wiki/Householder_transformation">Householder reflections</a> to reduce the matrix to bidiagonal form <span class="math inline">\(A_k\)</span>, Then the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> of <span class="math inline">\(X_k^T X_k\)</span> is used to set many of the off-diagonal elements to zero. The resulting matrix <span class="math inline">\(A_{k+1}\)</span> is <a href="https://en.wikipedia.org/wiki/Tridiagonal_matrix">tridiagonal</a>, but at each step the off-diagonal elements get smaller and smaller. This is very much like trying to flatten all the air pockets out of wallpaper by rolling over them, but one keeps popping up just where we don’t want it; however, the process can be proved to converge, and in practice converges very rapidly.</p>
+<p>There is also a <a href="https://arxiv.org/abs/0909.4061">randomized algorithm due to Halko, Martinsson, and Tropp</a> which can be much faster, especially when we only want to retain a small number of components.</p>
+<p>Normally I would tackle one of these “best practice” algorithms, but after studying them I found them to be larger in scope than what I would want to tackle for one of these articles. Instead, I decided to implement an older but still quite adequate eigenvalue algorithm: known as the <a href="https://en.wikipedia.org/wiki/QR_algorithm">QR algorithm.</a>. In addition to being easy to understand and implement, it has the advantage that we can use the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> function that we implemented in the earlier <a href="/post/ml-from-scratch-part-1-linear-regression/">article on linear regression</a>. It’s actually just as fast or faster than Golub-Reinsh; the disadvantage is that it is not as numerically stable particularly for the smallest eigenvalues. Because in PCA we normally intend to discard these anyway, this is not such a bad deal!</p>
+<p>Recall from that <a href="/post/ml-from-scratch-part-1-linear-regression/">previous article</a> our implementations for Householder reflections and QR decompositions:</p>
 <pre><code>def householder_reflection(a, e):
     &#39;&#39;&#39;
     Given a vector a and a unit vector e,
@@ -89,6 +107,7 @@ draft: true
     H = np.eye(len(a)) - 2 * np.outer(v, v)
     
     return H
+
 
 def qr_decomposition(A):
     &#39;&#39;&#39;
@@ -121,7 +140,8 @@ def qr_decomposition(A):
         R = H @ R
     
     return Q, R</code></pre>
-<p>We can now implement the QR algorithm in just a few lines of code. It’s also an iterative algorithm. At each step, we calculate <span class="math inline">\(A_{k+1}\)</span> by taking the QR decomposition of <span class="math inline">\(A_{k}\)</span>, reversing the order of Q and R, and multiplying the matrices together. Each time we do this, the off-diagonals get smaller.</p>
+<p>Using these we can implement the QR algorithm in just a few lines of code.</p>
+<p>The QR algorithm is iterative: at each step, we calculate <span class="math inline">\(A_{k+1}\)</span> by taking the QR decomposition of <span class="math inline">\(A_{k}\)</span>, reversing the order of Q and R, and multiplying the matrices together. Each time we do this, the off-diagonals get smaller.</p>
 <pre><code>def eigen_decomposition(A, max_iter=100):
     A_k = A
     Q_k = np.eye( A.shape[1] )
@@ -137,55 +157,53 @@ def qr_decomposition(A):
 </div>
 <div id="implementing-pca" class="section level2">
 <h2>Implementing PCA</h2>
-<p>TODO</p>
-<pre><code>class PCA:
-    def __init__(self, n_components=None, whiten=False):
-        self.n_components = n_components
-        self.whiten = bool(whiten)
-    
+<p>We made a number of simplifying assumptions in the above theory and now we have to pay for that with the same amount of busywork and preprocessing to get our data into an idealized form before we can start calculating eigenvalues.</p>
+<ol style="list-style-type: decimal">
+<li>We need to ensure than the data are centered (and perhaps scaled)</li>
+<li><p>put eigenvalues in descending order</p>
+<p>class PCA: def <strong>init</strong>(self, n_components=None, whiten=False): self.n_components = n_components self.whiten = bool(whiten)</p>
+<pre><code>def fit(self, X):
+    n, m = X.shape
 
-    def fit(self, X):
-        n, m = X.shape
-        
-        # subtract off the mean to center the data.
-        self.mu = X.mean(axis=0)
-        X = X - self.mu
-        
-        # whiten if necessary
-        if self.whiten:
-            self.std = X.std(axis=0)
-            X = X / self.std
-        
-        # Eigen Decomposition of the covariance matrix
-        C = X.T @ X / (n-1)
-        self.eigenvalues, self.eigenvectors = eigen_decomposition(C)
-        
-        # truncate the number of components if doing dimensionality reduction
-        if self.n_components is not None:
-            self.eigenvalues = self.eigenvalues[0:self.n_components]
-            self.eigenvectors = self.eigenvectors[:, 0:self.n_components]
-        
-        # the QR algorithm tends to puts eigenvalues in descending order 
-        # but is not guarenteed to. To make sure, we use argsort.
-        descending_order = np.flip(np.argsort(self.eigenvalues))
-        self.eigenvalues = self.eigenvalues[descending_order]
-        self.eigenvectors = self.eigenvectors[:, descending_order]
+    # subtract off the mean to center the data.
+    self.mu = X.mean(axis=0)
+    X = X - self.mu
 
-        return self
+    # whiten if necessary
+    if self.whiten:
+        self.std = X.std(axis=0)
+        X = X / self.std
+
+    # Eigen Decomposition of the covariance matrix
+    C = X.T @ X / (n-1)
+    self.eigenvalues, self.eigenvectors = eigen_decomposition(C)
+
+    # truncate the number of components if doing dimensionality reduction
+    if self.n_components is not None:
+        self.eigenvalues = self.eigenvalues[0:self.n_components]
+        self.eigenvectors = self.eigenvectors[:, 0:self.n_components]
+
+    # the QR algorithm tends to puts eigenvalues in descending order 
+    # but is not guarenteed to. To make sure, we use argsort.
+    descending_order = np.flip(np.argsort(self.eigenvalues))
+    self.eigenvalues = self.eigenvalues[descending_order]
+    self.eigenvectors = self.eigenvectors[:, descending_order]
+
+    return self
 
 
-    def transform(self, X):
-        X = X - self.mu
-        
-        if self.whiten:
-            X = X / self.std
-        
-        return X @ self.eigenvectors
-    
-    @property
-    def proportion_variance_explained(self):
-        return self.eigenvalues / np.sum(self.eigenvalues)
-    </code></pre>
+def transform(self, X):
+    X = X - self.mu
+
+    if self.whiten:
+        X = X / self.std
+
+    return X @ self.eigenvectors
+
+@property
+def proportion_variance_explained(self):
+    return self.eigenvalues / np.sum(self.eigenvalues)</code></pre></li>
+</ol>
 </div>
 <div id="wine-quality-example" class="section level2">
 <h2>Wine Quality Example</h2>
@@ -951,9 +969,23 @@ plt.ylim(0, 1)
 plt.ylabel(&quot;Proportion of Variance Explained&quot;)
 plt.xlabel(&quot;Principle Component Index&quot;)
 plt.grid(linestyle=&#39;--&#39;)
-plt.fill_between(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color=&quot;lightblue&quot;, label=&quot;Cumulative&quot;)
-plt.plot(range(1, 14), np.cumsum(pca.proportion_variance_explained), 0, color=&quot;darkblue&quot;)
-plt.plot(range(1, 14), pca.proportion_variance_explained, label=&quot;Incremental&quot;, color=&quot;orange&quot;, linestyle=&quot;--&quot;)
+plt.fill_between(
+    range(1, 14), 
+    np.cumsum(pca.proportion_variance_explained), 
+    0, 
+    color=&quot;lightblue&quot;, 
+    label=&quot;Cumulative&quot;)
+plt.plot(
+    range(1, 14), 
+    np.cumsum(pca.proportion_variance_explained), 
+    0, 
+    color=&quot;darkblue&quot;)
+plt.plot(
+    range(1, 14), 
+    pca.proportion_variance_explained, 
+    label=&quot;Incremental&quot;, 
+    color=&quot;orange&quot;, 
+    linestyle=&quot;--&quot;)
 plt.legend(loc=&#39;upper left&#39;)</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png"></p>
 </div>
@@ -1022,7 +1054,4 @@ ax.set_zlabel(&#39;PC3&#39;)</code></pre>
 <p><a href="https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca" class="uri">https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca</a></p>
 <p>TODO: contrast with FA?</p>
 <p><a href="https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374" class="uri">https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374</a></p>
-<p>TODO: talk about “loadings?”</p>
-<p><a href="https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another/143949#143949" class="uri">https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another/143949#143949</a></p>
-<p>TODO: talk about left and right eigenvectors?</p>
 </div>
