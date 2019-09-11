@@ -18,27 +18,37 @@ turn our attention to the later.
 
 In dimensional reduction we seek a function $f : \mathbb{R}^n \mapsto
 \mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and
-$m$ is smaller than $n$. That is, want a map from some high dimensional space
-into some lower dimensional space. In this article, we will focus on the oldest
-and perhaps simplest of these methods: [Primary Component Analysis][PCA], usually
-seen abbreviated as PCA.
+$m$ is less than or equal to $n$ - usually a lot less. That is, we want a map from some high dimensional space
+into some lower dimensional space. 
 
-In this article, we'll derive PCA from first principles, implement a working
-version (writing all the linear algebra from scratch), discuss options for choosing how
+In this article, we will focus on the oldest
+of these methods: [Primary Component Analysis][PCA], usually seen abbreviated as PCA.
+We'll derive PCA from first principles, implement a working
+version (writing all the linear algebra code from scratch), discuss options for choosing how
 many dimensions to keep, and show an example of how PCA helps us visualize
-and gain insight into a 13-dimensional dataset.
+and gain insight into a high dimensional data set.
 
 What is PCA?
 ------------
 
-First of all, PCA is a *linear* dimensionality reduction technique; some other
-dimensionality techniques, such as [t-SNE][TSNE], allow this map to be
-non-linear, but we will restrict ourselves to linear maps for now. Just saying
+PCA is a *linear* dimensionality reduction technique.  [Many][NLDR] non-linear
+[dimensionality][SOM] [reduction][AENN] [techniques][TSNE] exist,
+but we will restrict ourselves to linear maps for now. Just saying
 it's linear, though, is not quite enough to fully specify the problem; [Factor
-Analysis][FA] also seeks a linear map, but takes quite a different theoretical
-approach and reaches a slightly different solution in practice.
+Analysis][FA] also seeks a linear map, but takes a more statistical approach
+and reaches a slightly different solution in practice, while 
+[non-negative matrix factorization][NMF] seeks a linear map represented by
+a matrix with no negative elements. So, merely specifying that $f$ should
+be a linear map underspecifies the problem, and we need to be careful about
+what additional requirement we add if we're going to end up with PCA instead
+of some other method.
 
-There are several ways we can further constrain the problem to arrive at PCA.
+[SOM]: https://en.wikipedia.org/wiki/Self-organizing_map
+[NLDR]: https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction
+[AENN]: https://en.wikipedia.org/wiki/Autoencoder
+[NMF]: https://en.wikipedia.org/wiki/Non-negative_matrix_factorization
+
+Surprisingly, there are in fact several equivalent ways to do this:
 
 1. Require the covariance matrix of the transformed data to be diagonal. This
    is equivalent to saying that the transformed data has no [multicollinearity][MC],
@@ -54,7 +64,13 @@ There are several ways we can further constrain the problem to arrive at PCA.
    [Frobenius norm][FN] of the difference between the original and
    reconstructed matrix, but [other definitions are possible.][IN]
 
-These three definitions turn out to be equivalent. All construct a unique
+These three definitions all turn out to be equivalent. (The
+fact that the three models of computation proposed by Turing, Chuch, and Gödel
+turned out to all be equivalent suggests that the definition of "computation"
+was discovered rather than invented; the fact that PCA can be approached from
+multiple intuitively attactive directions likewise suggests that it is a discovery.)
+
+All three definitions lead to a unique
 (\*some terms and conditions apply) orthogonal matrix $Q$ which can be matrix
 multiplied by the original data matrix $X$ to obtain the transformed data $X' =
 XQ$.  (Read "X prime", which is *not* the transpose of $X$. I will always use
@@ -62,9 +78,9 @@ superscript "T" notation $X^T$ for transpose.)
 
 Orthogonal matrices are the generalization of the 3-dimensional concept of a
 rotation or reflection: in particular, they always preserve both *distance* and
-*angles*.  These are very properties for a transform to have! Merely rotating
+*angles*.  These are very nice properties for a transform to have! Merely rotating
 an object doesn't really distort it, but simply gives us a different
-perspective on it. In this sense, PCA is the *least destructive* transformation
+perspective on it. In this sense, PCA is the least distorting transformation
 that we could apply. 
 
 Now, obviously we could rotate our data any which way to get a different
@@ -80,11 +96,10 @@ technique? Well, it turns out that once we've rotated our data so that it's as
 *wide* as possible along the first basis vector, that also means that it ends
 up as *thin* as possible along the last few basis vectors. This only works if
 the original data really were all quite close to some line or hyperplane, but
-when it does it means we can safely drop the some dimensions and retain only
+with this assumption met we can safely drop the least significant dimensions and retain only
 our principle components, thus reducing dimensionality while still keeping most
-of the information (variance) of the data.  Of course, deciding *how many*
-dimensions to drop and how many to keep is a bit tricky, but we'll come to that
-later.
+of the information (variance) of the data.  Of course, deciding *exactly* how many
+dimensions to drop/retain is a bit tricky, but we'll come to that later.
 
 For now, let's explore the mathematics and show how PCA gives rise to a unique
 solution subject to the above constraints.
@@ -112,12 +127,12 @@ quite. If we try to pose the optimization problem:
 
 $$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} $$
 
-To prove no such maximum exists assume that $\mathbf{q}$ is the maximum. There
-always exists another vector $\mathbf{r} = 2 \mathbf{q}$ which implies that:
+To prove no such maximum exists, assume that $\mathbf{a}$ is the maximum. There
+always exists another vector $\mathbf{b} = 2 \mathbf{a}$ which implies that:
 
-$$\operatorname{Var}[ \mathbf{r}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] > \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{3}$$.
+$$\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] > \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] \tag{3}$$.
 
-Which implies that $\mathbf{q}$ was not the maximum after all.  So we cannot
+Which implies that $\mathbf{a}$ was not the maximum after all, which is absurd. So we cannot
 solve this optimization problem unless we impose some additional constraint.
 
 Now, a dot product is only a projection in a geometric sense if $\mathbf{q}$ is
@@ -131,10 +146,12 @@ $$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T
 
 Well at least this *has* a solution, even if it isn't immediately obvious how
 to solve it. We can't simply set partial derivative with respect to
-$\mathbf{q}$ equal to zero; that KKT condition only applies in the *absence* of
+$\mathbf{q}$ equal to zero; that [KKT condition][KKT] only applies in the *absence* of
 active constraints.  Earlier in this series, we've used techniques such as
 stochastic gradient descent to solve unconstrained optimization problems, but
 how do we deal the constraint?
+
+[KKT]: https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions
 
 A very general and powerful solution is the method of Lagrange multipliers.
 Lagrange was studying the motion of constrained physical systems such as a bead
@@ -158,7 +175,7 @@ multiplier $\lambda$ and rewrite our optimization as follows:
 
 $$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} $$
 
-Why is this the same as the above? Let's call the above function $f(\mathbf{q}, \lambda)$ write down the KKT conditions:
+Why is this the same as the above? Let's call the above function $f(\mathbf{q}, \lambda)$ write down the [KKT conditions][KKT]:
 
 $$ 
   \begin{align}
@@ -167,10 +184,10 @@ $$
   \end{align}
 $$
 
-But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ is simply our unit
+But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ which is simply our unit
 vector constraint... this guarantees that when we solve (7) and (8), the
 constraint will be exactly satisfied and we'll will also have found a solution
-to (6).  Such is the magic of Lagrange multipliers.
+to (6). Such is the magic of Lagrange multipliers.
 
 But if (8) is just our constraint in a fancy new dress, how have we progressed at all?
 Because (7) is now unconstrained and therefore more tractable.
@@ -193,34 +210,50 @@ This shows that every "direction of maximal variation" is in fact an eigenvector
 of the covariance matrix, and the variance in that direction is the corresponding
 eigenvalue. 
 
-$$ C = Q \Lambda Q^T $$
+$$ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T $$
 
 Because the covariance matrix $\mathbf{C}$ is real-valued, symetric, and positive
 definite, we know that the eigenvalues will all be real-valued (as expected.)
 
-In the convention we've adopted, $\mathbf{Q}$ is the right eigenvalue matrix (meaning
-each *column* is an eigenvector) 
+In the convention we've adopted, $\mathbf{Q}$ is the *right* eigenvalue matrix (meaning
+each *column* is an eigenvector.) 
 
 Diagonalizing the Covariance Matrix
 -----------------------------------
 
 We could have skipped the entire "direction of maximal variation" and Lagrange
 multiplier argument if we had simply argued as follows: I want my features to
-be uncorrelated. Therefore I want the covariance matrix of my data to be diagonal.
+be uncorrelated. Which is to say, I want the covariance matrix of my data to be diagonal.
 However, when I estimate the covariance matrix for my data in their original form,
-I see that the covariance matrix is **not** diagonal, which means my original
+I see that the covariance matrix is **not** diagonal.  That means my original
 features exhibit some multiple collinearity, which is bad. To fix this problem,
 I will transform my data in such a way as make the covariance matrix diagonal.
-The simplest and most structure preserving way to do this is with a rotation, e.g., an orthogonal matrix. To
-find such a transformation, I will diagonalize the covariance matrix $\mathbf{C}$. This can be done
-by finding the eigen-decomposition of $\mathbf{C}$.
+It is well-known that a matrix can be diagonalized
+by finding its eigen-decomposition. Therefore, I need to find the eigen-decomposition $\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T$.
 
-The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$. 
+The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$, yielding a new, transformed data set $\mathbf{X}'$.
 
 $$ \mathbf{X}' = \mathbf{X} \mathbf{Q} $$
 
-TODO: prove that C' is diagonal.
+When we then estimate the empirical covariance of $\mathbf{X}'$, we find
 
+$$ \begin{align}
+\mathbf{C}' & = \frac{\mathbf{X}'^T \mathbf{X}}{n} \\
+& = \frac{(\mathbf{X}\mathbf{Q})^T (\mathbf{X}\mathbf{Q})}{n} \\
+& = \frac{\mathbf{Q}^T \mathbf{X}^T \mathbf{X}\mathbf{Q}}{n} \\
+& = \mathbf{Q}^T \Bigg( \frac{\mathbf{X}^T \mathbf{X}}{n} \Bigg) \mathbf{Q} \\
+& = \mathbf{Q}^T \mathbf{C} \mathbf{Q} \\
+& = \mathbf{\Lambda}
+\end{align}
+$$
+
+Because $\mathbf{\Lambda}$ is a diagonal matrix, we've shown that the empirical covariance of our
+transformed data set is diagonal; which is to say, all of the features of $X'$ are independent.
+
+This argument is much more brutish and perhaps too on the nose: we wanted a diagonal covariance
+matrix, so we diagonalized it, anyone got a problem with that? However, it has the advantage of
+requiring nothing more than a basic understanding of linear algebra (no statistics, multivariate calculus,
+or optimization theory here!) and an engineer's common sense attitude toward working with data. 
 
 Loadings vs eigenvectors
 https://stats.stackexchange.com/a/92512/48250
@@ -234,25 +267,34 @@ Minimizing Reconstruction Error
 The third and final way to motivate the mathematical formalism of PCA is to view
 it as a form of *compression*. Specifically, of all possible linear linear
 projections from $n$ to $m$ dimensions, taking the first $k$ components
-of the PCA transformation of $X$ minimizes the reconstruction error. Reconstruction
+of the PCA transformation of $X$ minimizes the *reconstruction error*. Reconstruction
 error is usually defined as the Frobenius distance between the original
 and reconstructed matrix, but interestingly enough the theorem holds for a few
 other metrics as well, suggesting it's a deep property of PCA and not some quirk
 of the Frobenius norm.
 
-http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
 
-This is an extremely powerful point of view which gets at the heart of the dimensional
-reduction strategy. 
+I won't go through this derivation here - you can find [a presentation elsewhere][L25] if
+you're interested in the details - but it's an extremely powerful point of view which
+goes straight to the heart of the dimensional reduction strategy. If we can reconstruct
+our original data almost exactly from only a handful of components that lends strong 
+support to the notion that any interesting information about the image must have been
+contained in those few components. 
 
-TODO: analogous to each component explaining a certain percentage of the variance.
+Consider this series of images, taken from [this article][PTE]:
 
-I find it extremely interesting that PCA can be motivated in so many different
-ways. These three are all completely valid viewpoints on what might define
-a "good" dimensional reduction algorithm, and all three come to the same conclusion:
-you need to find the eigenvectors of the covariance matrix.
+<img src="/post/ml-from-scratch-part-6-pca_files/pca_image_example.png">
 
 
+[PTE]: https://www.projectrhea.org/rhea/index.php/PCA_Theory_Examples
+
+Here, 512 dimensions was reduced to just 29, but the reconstructed image is still perfectly recognizable.
+
+
+[L25]: http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
+
+With three separate theoretical justifications under our belt - which is two too many to be honest - 
+let's turn our attention to the concrete problem of implementing eigen-decomposition from scratch.
 
 Algorithm for Solving the Eigneproblem
 --------------------------------------
