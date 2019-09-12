@@ -482,7 +482,7 @@ seen first hand that the clusters identified by GMMs don't always line up with w
 the true structure to be; this lead to a broader discussion of the limitations of unsupervised learning algorithms
 and the difficulty getting value out of them.
 
-In the next article in this series, we'll continue our discussion of unsupervised learning algorithms by implementing
+In the [next article][MLFS6] in this series, we'll continue our discussion of unsupervised learning algorithms by implementing
 the *other* kind of unsupervised learning algorithm besides clustering: a dimensional reduction algorithm. 
 
 
@@ -498,6 +498,7 @@ the *other* kind of unsupervised learning algorithm besides clustering: a dimens
   [MND]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution
   [GP]: https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution
   [MLFS1]: http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
+  [MLFS6]: /post/ml-from-scratch-part-6-pca/
   [SD]: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf
   [MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
   [LRV]: https://en.wikipedia.org/wiki/Latent_variable
@@ -506,3 +507,5 @@ the *other* kind of unsupervised learning algorithm besides clustering: a dimens
   [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
   [CD]: https://en.wikipedia.org/wiki/Coordinate_descent
   [ID]: https://en.wikipedia.org/wiki/Iris_flower_data_set
+
+

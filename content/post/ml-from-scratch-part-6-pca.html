@@ -27,7 +27,10 @@ draft: true
 </ol>
 <p>These three definitions all turn out to be equivalent. (The fact that the three models of computation proposed by Turing, Church, and Gödel turned out to all be equivalent suggests that the definition of “computation” was discovered rather than invented; the fact that PCA can be approached from multiple intuitively attractive directions likewise suggests that it is a discovery.)</p>
 <p>All three definitions lead to a unique (*some terms and conditions apply) orthogonal matrix <span class="math inline">\(Q\)</span> which can be matrix multiplied by the original data matrix <span class="math inline">\(X\)</span> to obtain the transformed data <span class="math inline">\(X&#39; = XQ\)</span>. (Read “X prime”, which is <em>not</em> the transpose of <span class="math inline">\(X\)</span>. I will always use superscript “T” notation <span class="math inline">\(X^T\)</span> for transpose.)</p>
-<p>Orthogonal matrices are the generalization of the 3-dimensional concept of a rotation or reflection: in particular, they always preserve both <em>distance</em> and <em>angles</em>. These are very nice properties for a transform to have! Merely rotating an object doesn’t really distort it, but simply gives us a different perspective on it. In this sense, PCA is the least distorting transformation that we could apply.</p>
+<p>Orthogonal matrices are the generalization of the 3-dimensional concept of a rotation or reflection: in particular, they always preserve both <em>distance</em> and <em>angles</em>. These are very nice properties for a transform to have! Merely rotating an object doesn’t really distort it, but simply gives us a different perspective on it.</p>
+<p>Imagine, for illustration’s sake that you held in your hand an unfamiliar object made of easily deformable material like clay. You might turn it this way and that, peer at it from every angle. You might hold it up to the mirror. But these delicate operations do no harm to the object, nor alter its fundamental shape: they simply give you a different perspective. Not so if you had flattened or stretched or twisted it; after these more violent operations any shape or pattern you perceive may well be the product of your own manipulations and not a true insight into the nature of the original form.</p>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/shape.png"></p>
+<p>The rotations and reflects of PCA are the safest and least distorting transformation that we could apply, and by the same token the most conservative and cautious.</p>
 <p>Now, obviously we could rotate our data any which way to get a different picture, but we want to rotate it so that in some sense in becomes aligned to the axes - rather like straightening a picture hanging askew on the wall. Near the end, we’ll show examples demonstrating how this “straightening up” helps with analysis and interpretation.</p>
 <p>Now, orthogonal matrices are invertible, which in particular means they are square, so <span class="math inline">\(Q\)</span> is an <span class="math inline">\(m \times m\)</span> matrix… which means we haven’t <em>reduced</em> the dimensionality at all! Why is this considered a dimensionality <em>reduction</em> technique? Well, it turns out that once we’ve rotated our data so that it’s as <em>wide</em> as possible along the first basis vector, that also means that it ends up as <em>thin</em> as possible along the last few basis vectors. This only works if the original data really were all quite close to some line or hyperplane, but with this assumption met we can safely drop the least significant dimensions and retain only our principle components, thus reducing dimensionality while still keeping most of the information (variance) of the data. Of course, deciding <em>exactly</em> how many dimensions to drop/retain is a bit tricky, but we’ll come to that later.</p>
 <p>For now, let’s explore the mathematics and show how PCA gives rise to a unique solution subject to the above constraints.</p>
@@ -47,7 +50,7 @@ draft: true
 <p>That gives us the constrained optimization problem</p>
 <p><span class="math display">\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} \]</span></p>
 <p>Well at least this <em>has</em> a solution, even if it isn’t immediately obvious how to solve it. We can’t simply set partial derivative with respect to <span class="math inline">\(\mathbf{q}\)</span> equal to zero; that <a href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">KKT condition</a> only applies in the <em>absence</em> of active constraints. Earlier in this series, we’ve used techniques such as stochastic gradient descent to solve unconstrained optimization problems, but how do we deal the constraint?</p>
-<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Langrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slippage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed.</p>
+<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Lagrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slippage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed.</p>
 <p>It’s easy to use too, at least in our simple case. We introduce the Lagrange multiplier <span class="math inline">\(\lambda\)</span> and rewrite our optimization as follows:</p>
 <p><span class="math display">\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} \]</span></p>
 <p>Why is this the same as the above? Let’s call the above function <span class="math inline">\(f(\mathbf{q}, \lambda)\)</span> write down the <a href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">KKT conditions</a>:</p>
@@ -60,13 +63,13 @@ draft: true
 <p>But equation (8) is simply <span class="math inline">\(\mathbf{q}^T \mathbf{q} - 1 = 0\)</span> which is simply our unit vector constraint… this guarantees that when we solve (7) and (8), the constraint will be exactly satisfied and we’ll will also have found a solution to (6). Such is the magic of Lagrange multipliers.</p>
 <p>But if (8) is just our constraint in a fancy new dress, how have we progressed at all? Because (7) is now unconstrained and therefore more tractable.</p>
 <p>Suppose the matrix <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(N \times n\)</span> matrix with <span class="math inline">\(N\)</span> rows where each row vector is an independent realization of <span class="math inline">\(\mathbf{x}\)</span>. Then we can estimate the covariance matrix as</p>
-<p><span class="math display">\[ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \]</span></p>
-<p><span class="math display">\[ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \]</span></p>
-<p><span class="math display">\[ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \]</span></p>
+<p><span class="math display">\[ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} \]</span></p>
+<p><span class="math display">\[ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{10} \]</span></p>
+<p><span class="math display">\[ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \tag{11} \]</span></p>
 <p>Dividing by two and moving each term to opposite sides of the equation, we get the familiar equation for the eigenproblem:</p>
-<p><span class="math display">\[ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \]</span></p>
+<p><span class="math display">\[ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \tag{12} \]</span></p>
 <p>This shows that every “direction of maximal variation” is in fact an eigenvector of the covariance matrix, and the variance in that direction is the corresponding eigenvalue.</p>
-<p><span class="math display">\[ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \]</span></p>
+<p><span class="math display">\[ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} \]</span></p>
 <p>Because the covariance matrix <span class="math inline">\(\mathbf{C}\)</span> is real-valued, symmetric, and positive definite, we know that the eigenvalues will all be real-valued (as expected.)</p>
 <p>In the convention we’ve adopted, <span class="math inline">\(\mathbf{Q}\)</span> is the <em>right</em> eigenvalue matrix (meaning each <em>column</em> is an eigenvector.)</p>
 </div>
@@ -74,10 +77,10 @@ draft: true
 <h2>Diagonalizing the Covariance Matrix</h2>
 <p>We could have skipped the entire “direction of maximal variation” and Lagrange multiplier argument if we had simply argued as follows: I want my features to be uncorrelated. Which is to say, I want the covariance matrix of my data to be diagonal. However, when I estimate the covariance matrix for my data in their original form, I see that the covariance matrix is <strong>not</strong> diagonal. That means my original features exhibit some multiple collinearity, which is bad. To fix this problem, I will transform my data in such a way as make the covariance matrix diagonal. It is well-known that a matrix can be diagonalized by finding its eigendecomposition. Therefore, I need to find the eigendecomposition <span class="math inline">\(\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T\)</span>.</p>
 <p>The resulting right eigenvector matrix <span class="math inline">\(\mathbf{Q}\)</span> can be applied to <span class="math inline">\(X\)</span>, yielding a new, transformed data set <span class="math inline">\(\mathbf{X}&#39;\)</span>.</p>
-<p><span class="math display">\[ \mathbf{X}&#39; = \mathbf{X} \mathbf{Q} \]</span></p>
+<p><span class="math display">\[ \mathbf{X}&#39; = \mathbf{X} \mathbf{Q} \tag{14} \]</span></p>
 <p>When we then estimate the empirical covariance of <span class="math inline">\(\mathbf{X}&#39;\)</span>, we find</p>
 <p><span class="math display">\[ \begin{align}
-\mathbf{C}&#39; &amp; = \frac{\mathbf{X}&#39;^T \mathbf{X}}{n} \\
+\mathbf{C}&#39; &amp; = \frac{\mathbf{X}&#39;^T \mathbf{X}}{n} \tag{15} \\
 &amp; = \frac{(\mathbf{X}\mathbf{Q})^T (\mathbf{X}\mathbf{Q})}{n} \\
 &amp; = \frac{\mathbf{Q}^T \mathbf{X}^T \mathbf{X}\mathbf{Q}}{n} \\
 &amp; = \mathbf{Q}^T \Bigg( \frac{\mathbf{X}^T \mathbf{X}}{n} \Bigg) \mathbf{Q} \\
@@ -91,7 +94,7 @@ draft: true
 <div id="a-brief-aside-about-loadings" class="section level2">
 <h2>A Brief Aside About Loadings</h2>
 <p>At this point it may also be worth mentioning that multiplying by the left eigenvector matrix <span class="math inline">\(\mathbf{Q}\)</span> is only one of two common ways to define the transformed data <span class="math inline">\(\mathbf{X}&#39;\)</span>. Alternatively, we could have used the so-called “<a href="https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another">loadings</a>” matrix, defined like so:</p>
-<p><span class="math display">\[ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \]</span></p>
+<p><span class="math display">\[ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \tag{16} \]</span></p>
 <p>The square root of a matrix may seem strange to you, but recall that <span class="math inline">\(\mathbf{\Lambda}\)</span> is diagonal, so this just means the element-wise square root of each eigenvalue. Using <span class="math inline">\(\mathbf{L}^{-1}\)</span> instead of <span class="math inline">\(Q\)</span> to transform from <span class="math inline">\(\mathbf{X}\)</span> to <span class="math inline">\(\mathbf{X}&#39;\)</span> means the empirical covariance matrix of the transformed data will be the identity matrix. This can be more intuitive in some cases. Also, many software packages report the loading matrix instead of the eigenvectors on the basis that they are easier to interpret.</p>
 </div>
 <div id="minimizing-reconstruction-error" class="section level2">
@@ -225,8 +228,8 @@ def proportion_variance_explained(self):
 </div>
 <div id="wine-quality-example" class="section level2">
 <h2>Wine Quality Example</h2>
-<p>The <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html">wine quality data set</a> consists of 178 wines, each quantified in terms of 13 different objective chemical or optical properties, such of the concentration of alcohol or the hue and intensity of the color. Each has been assigned to one of three classes depending on a subjective judgement of quality.</p>
-<p>This is only a toy data set, and 13 is perhaps not yet totally unmanageable, but it certainly more than it is convenient to visualize or think about properly. We’d like to get that down to something manageable: one, two, or perhaps three dimensions.</p>
+<p>The <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html">wine quality data set</a> consists of 178 wines, each described in terms of 13 different objectively quantifiable chemical or optical properties such as the concentration of alcohol or the hue and intensity of the color. Each has been assigned to one of three possible classes depending on a subjective judgement of quality.</p>
+<p>Thirteen dimensions isn’t nearly as bad as the hundreds or thousands commonly encountered in machine learning, but still rather more than the handful we poor 3-dimensional creatures are comfortable thinking about. We’d like to get that down to something manageable, certainly no more than three. So some kind of dimensionality reduction is indicated.</p>
 <pre><code>import pandas as pd
 import seaborn
 import matplotlib.pyplot as plt
@@ -535,15 +538,17 @@ plt.xticks(np.arange(0, 13, 1))
 plt.yticks(np.arange(0, 13, 1))
 plt.colorbar()</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_covariance.png"></p>
-<p>It is clear that this dataset exhibits significant <a href="https://en.wikipedia.org/wiki/Multicollinearity">multicollinearity</a>, with every feature exhibiting high correlations with many others. While that would be a bad thing for say, linear regression, it means this data set is an ideal candidate for PCA.</p>
+<p>It is also clear that this dataset exhibits significant <a href="https://en.wikipedia.org/wiki/Multicollinearity">multicollinearity</a>, with every feature exhibiting high correlations with many others. While that would be a bad thing for say, linear regression, it means this data set is an ideal candidate for PCA.</p>
 <pre><code>pca = PCA(whiten=True)
 pca.fit(X)
 X_prime = pca.transform(X)</code></pre>
 <p>From the eigenvalues, we can see that the first few components explain most of the variance:</p>
 <pre><code>pca.eigenvalues
-array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 0.554, 0.35 , 0.291, 0.252, 0.227, 0.17 , 0.104])</code></pre>
+array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 
+       0.554, 0.350, 0.291, 0.252, 0.227, 0.170,  0.104])</code></pre>
 <p>The raw eigenvectors are hard to interpret directly, but if you like you can read the columns (starting with the leftmost) and see which features are being rolled up into each component; for example, it seems that “flavanoids” and “phenols” (whatever those are) are major contributors to the first principle component, among others, while “ash” contributes almost nothing to it.</p>
 <pre><code>pca.eigenvectors
+
 array([[ 0.144, -0.484, -0.207,  0.018,  0.266,  0.214, -0.056,  0.396, -0.509, -0.212,  0.226,  0.266, -0.015],
        [-0.245, -0.225,  0.089, -0.537, -0.035,  0.537,  0.421,  0.066,  0.075,  0.309, -0.076, -0.122, -0.026],
        [-0.002, -0.316,  0.626,  0.214,  0.143,  0.154, -0.149, -0.17 ,  0.308,  0.027,  0.499,  0.05 ,  0.141],
@@ -569,7 +574,8 @@ plt.colorbar()</code></pre>
 </div>
 <div id="visualizing-the-components" class="section level2">
 <h2>Visualizing the Components</h2>
-<p>TODO: first principle component only</p>
+<p>PCA was applied only to the 13 features; the partition into three quality classes was not included. Still, we would like to know if the primary components have something to say about these classes, so we will color code them with red, green, and blue.</p>
+<p>Let’s start by visualizing only the first component as points along a line:</p>
 <pre><code>plt.figure(figsize=(10, 4))
 for c in np.unique(wine.target):
     color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
@@ -578,7 +584,8 @@ for c in np.unique(wine.target):
 plt.title(&quot;Primary Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC1&quot;)</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc1.png"></p>
-<p>TODO: first two</p>
+<p>This may seem a little silly, but in fact boiling it down to only a single component is kind of a power move: if you can boil a phenomenon down to a single number in a way that captures the essence, that could be very useful and in some cases represents an important discovery. For example, the reason we can talk about “mass” without clarifying “inertial mass” vs. “gravitational mass” is because we strongly believe those quantities are identical in all cases. Is it possible that wine is neither complex nor multidimensional, but simply exists along a spectrum from poor to good quality?</p>
+<p>In this case, it seems like the first principle component does not fully capture the concept of quality; but what about two?</p>
 <pre><code>plt.figure(figsize=(10, 8))
 for c in np.unique(wine.target):
     color = [&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;][c]
@@ -588,7 +595,8 @@ plt.title(&quot;Primary Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC1&quot;)
 plt.ylabel(&quot;PC2&quot;)</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc2.png"></p>
-<p>TODO: first three</p>
+<p>Here the situation is much improved, and we can see that each class corresponds to a well-localized cluster with little overlap. In many cases, where PC1 is right on the boundary between two classes, it is PC2 that supplies the tiebreaker. Note that we could draw a single <em>curved</em> path that would connect these three regions in order or ascending quality; this suggests that a non-linear dimensionality reduction technique, say some kind of manifold learning like <a href="https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding">t-SNE</a>, <em>might</em> be able to reduce quality to a single dimension. But is that the representation it would discover on its own, when trained in an unsupervised manner?</p>
+<p>It may also be worth trying three dimensions, just in case PC3 has some non-ignorable contribution to quality. Three dimensions is always a little hard to visualize with standard plotting tools, but we can use pairwise 2D plots:</p>
 <pre><code>plt.figure(figsize=(16, 8))
 
 plt.subplot(1, 2, 1)
@@ -608,8 +616,8 @@ for c in np.unique(wine.target):
 plt.title(&quot;Primary Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC2&quot;)
 plt.ylabel(&quot;PC3&quot;)</code></pre>
-<p>TODO: first three, 3D</p>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3.png"></p>
+<p>Or the kind of plot which is called 3D, although it’s really just a slightly more sophisticated projection on 2D:</p>
 <pre><code>fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111, projection=&#39;3d&#39;)
 ax.view_init(15, -60)
@@ -625,13 +633,16 @@ ax.set_xlabel(&#39;PC1&#39;)
 ax.set_ylabel(&#39;PC2&#39;)
 ax.set_zlabel(&#39;PC3&#39;)</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3_3d.png"></p>
+<p>While these charts look attractive enough, they don’t seem to make a compelling case for including PC3. At least for the purposes of understanding wine quality it seems we can retain just two principle components and still get a complete picture.</p>
+<p>At this point in a real analysis, we would spend some time understanding what PC1 and PC2 really represent, looking at which of the 13 original features contribute to each, and whether positive or negative, and how this relates to quality. But there is an elephant in the room - the informal or seemingly <em>ad hoc</em> method I used for deciding to use two components instead of one or three. While “just look at the data and use the one that makes sense” has a certain pragmatic and commonsensical appeal, it’s also easy to see that it’s subjective enough to allow bias to creep in. As such, many people have asked themselves if there were not some rigorous decision rule that could be applied.</p>
 </div>
 <div id="strategies-for-choosing-the-number-of-dimensions" class="section level2">
 <h2>Strategies for Choosing The Number of Dimensions</h2>
-<p>TODO: Scree the Kaiser Rule is of course a train wreck, but the alternatives aren’t much better.</p>
-<p><a href="https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr" class="uri">https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr</a></p>
-<p><a href="http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf" class="uri">http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf</a></p>
-<p>Minka (2000) is one option. <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf" class="uri">https://vismod.media.mit.edu/tech-reports/TR-514.pdf</a></p>
+<p>The oldest and most venerable method involves plotting the eigenvalues in descending order as a function of dimension number: whimsically called a <a href="https://en.wikipedia.org/wiki/Scree_plot">scree plot</a> after a resemblance to to “elbow” that appears near the base of some mountain where loose stones are piled upon a slope:</p>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/scree.png"></p>
+<p>To determine the number of components to retain, it is suggested to look for a visual “elbow” point at which the chart noticeably flattens out and use that for the cut-off.</p>
+<p>Alternatively, if a deterministic rule is required, one might use so-called the <a href="https://en.wikipedia.org/wiki/Factor_analysis#Older_methods">Kaiser criterion</a> : drop all components with an eigenvalue less than 1 and retain all those with an eigenvalue greater than 1.</p>
+<p>Before discussing the merits or demerits of these approaches, let’s just create the scree plot for the wine quality data set:</p>
 <pre><code>fig = plt.figure(figsize=(10, 7))
 plt.title(&quot;Scree Plot (Eigenvalues in Decreasing Order)&quot;)
 plt.plot([1, 13], [1, 1], color=&#39;red&#39;, linestyle=&#39;--&#39;, label=&quot;Kaiser Rule&quot;)
@@ -644,7 +655,9 @@ plt.grid(linestyle=&#39;--&#39;)
 plt.plot(range(1, 14), pca.eigenvalues, label=&quot;Eigenvalues&quot;)
 plt.legend()</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_scree_plot.png"></p>
-<p>TODO: proportion variance explained</p>
+<p>In this case, no prominent elbow is apparent, at least to my eyes. This is disappointing but not surprising: whenever I’ve tried to use this rule in my work I’ve found it to be at least somewhat ambiguous - and liable to influenced by irrelevant things such as the aspect ratio of the chart!</p>
+<p>The Kaiser criterion, on the other hand, is a <a href="https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr">complete train wreck</a> and ultimately is no more likely to protect you from criticism than simply asserting that you used your best judgement.</p>
+<p>Another approach is to decide before hand that you want to retain some fraction of the total variance, say 80% or 99%, and choose a number of components which give you the desired fidelity. (This approach is particularly attractive if you have the “compression” point-of-view in mind.) Although the proportion of variance explained is calculated from the same eigenvalues used for the scree plot, the difference here is that we are now looking at the cumulative sum of eigenvalues.</p>
 <pre><code>fig = plt.figure(figsize=(10, 7))
 plt.title(&quot;Variance Explained By Component&quot;)
 plt.xticks(np.arange(1, 14, 1))
@@ -673,11 +686,11 @@ plt.plot(
     linestyle=&quot;--&quot;)
 plt.legend(loc=&#39;upper left&#39;)</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png"></p>
+<p>One benefit of this approach is that it is much easier to explain; one does not need to use term “eigen” at all! People familiar with ANOVA will be comfortable with the concept of “proportion of variance explained” and this can even be glossed as “information” for audiences where even the word “variance” might be a little scary. “We used PCA to compress the data from 512 to 29 dimensions while retaining 95% of the information” may be criticized for not using the information theoretic definition of “information” but is clear enough to a broad audience.</p>
+<p>Still, we haven’t really solved the issue of having to choose an arbitrary threshold, have we? All we’ve done is couch the choice in terms of a more intuitive metric. I’m not sure any definitive and universally accepted answer exists - indeed, if the bar is set at “universally accepted” then I’m am sure that one does not - but the wonderfully named paper <em><a href="http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf">Repairing Tom Swift’s Electric Factor Analysis Machine</a></em> suggests one method, and I’ve seen several references to this <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf">paper by Minka</a> which may represent the current state-of-the-art.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>TODO: mention varimax rotations?</p>
-<p><a href="https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca" class="uri">https://stats.stackexchange.com/questions/612/is-pca-followed-by-a-rotation-such-as-varimax-still-pca</a></p>
-<p>TODO: contrast with FA?</p>
-<p><a href="https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374" class="uri">https://stats.stackexchange.com/questions/1576/what-are-the-differences-between-factor-analysis-and-principal-component-analysi/3374#3374</a></p>
+<p>PCA is the archetypical dimensionality reduction method; just as <a href="https://en.wikipedia.org/wiki/K-means_clustering"><span class="math inline">\(k\)</span>-means</a> is the archetypical clustering method. Now that we’ve implemented both a dimensional reduction and a clustering method (in the <a href="/post/ml-from-scratch-part-5-gmm/">last article</a>) <a href="/tags/from-scratch/">from scratch</a>, we should have a pretty good handle on the basics of unsupervised learning. In particular, we’ve seen many of the frustration and limitations inherent in unsupervised methods, which boil down to the impossibility of objectively deciding in a given model is doing a good job or a bad job. This in turn makes it next to impossible to decide between similar models, which tends to come down to a question of subjective judgement. Unfortunately, these models <em>do</em> have hyperparameters, so there are choices that need to be made… but can any choice be defended to the satisfaction of a hostile (or who simply have extremely high standards) third-party?</p>
+<p>More rewarding then wrestling with the ill-defined problems of unsupervised learning was the implementation of a eigendecomposition algorithm in a way that met the fairly stringent rules of the “from scratch” challenge.</p>
 </div>
