@@ -25,7 +25,7 @@ draft: true
 <li>Seek a new basis for the data such that the first basis vector points in the direction of maximum variation, or in other words is the “principle component” of our data. Then require that the second basis vector points also points in the direction of maximum variation in the plane orthogonal to the first, and so on until a new orthonormal basis is constructed.</li>
 <li>Seek a new basis for the data such that when we reconstruct the original matrix from only the <span class="math inline">\(m\)</span> most significant components the <a href="http://users.ics.aalto.fi/harri/dityo/node6.html">reconstruction error</a> is minimized. Reconstruction error is usually defined as the <a href="https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm">Frobenius norm</a> of the difference between the original and reconstructed matrix, but <a href="https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation">other definitions are possible.</a></li>
 </ol>
-<p>These three definitions all turn out to be equivalent. (The fact that the three models of computation proposed by Turing, Chuch, and Gödel turned out to all be equivalent suggests that the definition of “computation” was discovered rather than invented; the fact that PCA can be approached from multiple intuitively attactive directions likewise suggests that it is a discovery.)</p>
+<p>These three definitions all turn out to be equivalent. (The fact that the three models of computation proposed by Turing, Church, and Gödel turned out to all be equivalent suggests that the definition of “computation” was discovered rather than invented; the fact that PCA can be approached from multiple intuitively attractive directions likewise suggests that it is a discovery.)</p>
 <p>All three definitions lead to a unique (*some terms and conditions apply) orthogonal matrix <span class="math inline">\(Q\)</span> which can be matrix multiplied by the original data matrix <span class="math inline">\(X\)</span> to obtain the transformed data <span class="math inline">\(X&#39; = XQ\)</span>. (Read “X prime”, which is <em>not</em> the transpose of <span class="math inline">\(X\)</span>. I will always use superscript “T” notation <span class="math inline">\(X^T\)</span> for transpose.)</p>
 <p>Orthogonal matrices are the generalization of the 3-dimensional concept of a rotation or reflection: in particular, they always preserve both <em>distance</em> and <em>angles</em>. These are very nice properties for a transform to have! Merely rotating an object doesn’t really distort it, but simply gives us a different perspective on it. In this sense, PCA is the least distorting transformation that we could apply.</p>
 <p>Now, obviously we could rotate our data any which way to get a different picture, but we want to rotate it so that in some sense in becomes aligned to the axes - rather like straightening a picture hanging askew on the wall. Near the end, we’ll show examples demonstrating how this “straightening up” helps with analysis and interpretation.</p>
@@ -47,7 +47,7 @@ draft: true
 <p>That gives us the constrained optimization problem</p>
 <p><span class="math display">\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} \]</span></p>
 <p>Well at least this <em>has</em> a solution, even if it isn’t immediately obvious how to solve it. We can’t simply set partial derivative with respect to <span class="math inline">\(\mathbf{q}\)</span> equal to zero; that <a href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">KKT condition</a> only applies in the <em>absence</em> of active constraints. Earlier in this series, we’ve used techniques such as stochastic gradient descent to solve unconstrained optimization problems, but how do we deal the constraint?</p>
-<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Langrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slipage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed.</p>
+<p>A very general and powerful solution is the method of Lagrange multipliers. Lagrange was studying the motion of constrained physical systems such as a bead on a wire or several pendulums coupled together. At the time, such problems were usually solved by finding a suitable set of generalized coordinates, but this required a great deal of ingenuity and (as we say today) didn’t really scale. Langrange’s solution was to imagine the system could “slip” just ever so slightly out of its constraints but that the true solution would be the one that <em>minimized</em> this virtual slippage. This could be elegantly handled by associating an energy cost called ’virtual work&quot; that penalized the system proportional to the degree to which the constraints were violated. This reconceptualizes the hard constraint as just another parameter to optimize in an unconstrained system! And surprisingly enough, it does not result in an <em>approximate</em> solution that only sort of obeys the constraint but instead (assuming the constraint is physically possible and the resulting equations have a closed form solution) gives an <em>exact</em> solution where the constraint is <em>perfectly</em> obeyed.</p>
 <p>It’s easy to use too, at least in our simple case. We introduce the Lagrange multiplier <span class="math inline">\(\lambda\)</span> and rewrite our optimization as follows:</p>
 <p><span class="math display">\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} \]</span></p>
 <p>Why is this the same as the above? Let’s call the above function <span class="math inline">\(f(\mathbf{q}, \lambda)\)</span> write down the <a href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">KKT conditions</a>:</p>
@@ -67,12 +67,12 @@ draft: true
 <p><span class="math display">\[ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \]</span></p>
 <p>This shows that every “direction of maximal variation” is in fact an eigenvector of the covariance matrix, and the variance in that direction is the corresponding eigenvalue.</p>
 <p><span class="math display">\[ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \]</span></p>
-<p>Because the covariance matrix <span class="math inline">\(\mathbf{C}\)</span> is real-valued, symetric, and positive definite, we know that the eigenvalues will all be real-valued (as expected.)</p>
+<p>Because the covariance matrix <span class="math inline">\(\mathbf{C}\)</span> is real-valued, symmetric, and positive definite, we know that the eigenvalues will all be real-valued (as expected.)</p>
 <p>In the convention we’ve adopted, <span class="math inline">\(\mathbf{Q}\)</span> is the <em>right</em> eigenvalue matrix (meaning each <em>column</em> is an eigenvector.)</p>
 </div>
 <div id="diagonalizing-the-covariance-matrix" class="section level2">
 <h2>Diagonalizing the Covariance Matrix</h2>
-<p>We could have skipped the entire “direction of maximal variation” and Lagrange multiplier argument if we had simply argued as follows: I want my features to be uncorrelated. Which is to say, I want the covariance matrix of my data to be diagonal. However, when I estimate the covariance matrix for my data in their original form, I see that the covariance matrix is <strong>not</strong> diagonal. That means my original features exhibit some multiple collinearity, which is bad. To fix this problem, I will transform my data in such a way as make the covariance matrix diagonal. It is well-known that a matrix can be diagonalized by finding its eigen-decomposition. Therefore, I need to find the eigen-decomposition <span class="math inline">\(\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T\)</span>.</p>
+<p>We could have skipped the entire “direction of maximal variation” and Lagrange multiplier argument if we had simply argued as follows: I want my features to be uncorrelated. Which is to say, I want the covariance matrix of my data to be diagonal. However, when I estimate the covariance matrix for my data in their original form, I see that the covariance matrix is <strong>not</strong> diagonal. That means my original features exhibit some multiple collinearity, which is bad. To fix this problem, I will transform my data in such a way as make the covariance matrix diagonal. It is well-known that a matrix can be diagonalized by finding its eigendecomposition. Therefore, I need to find the eigendecomposition <span class="math inline">\(\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T\)</span>.</p>
 <p>The resulting right eigenvector matrix <span class="math inline">\(\mathbf{Q}\)</span> can be applied to <span class="math inline">\(X\)</span>, yielding a new, transformed data set <span class="math inline">\(\mathbf{X}&#39;\)</span>.</p>
 <p><span class="math display">\[ \mathbf{X}&#39; = \mathbf{X} \mathbf{Q} \]</span></p>
 <p>When we then estimate the empirical covariance of <span class="math inline">\(\mathbf{X}&#39;\)</span>, we find</p>
@@ -87,7 +87,12 @@ draft: true
 \]</span></p>
 <p>Because <span class="math inline">\(\mathbf{\Lambda}\)</span> is a diagonal matrix, we’ve shown that the empirical covariance of our transformed data set is diagonal; which is to say, all of the features of <span class="math inline">\(X&#39;\)</span> are independent.</p>
 <p>This argument is much more brutish and perhaps too on the nose: we wanted a diagonal covariance matrix, so we diagonalized it, anyone got a problem with that? However, it has the advantage of requiring nothing more than a basic understanding of linear algebra (no statistics, multivariate calculus, or optimization theory here!) and an engineer’s common sense attitude toward working with data.</p>
-<p>Loadings vs eigenvectors <a href="https://stats.stackexchange.com/a/92512/48250" class="uri">https://stats.stackexchange.com/a/92512/48250</a> <a href="https://stats.stackexchange.com/a/143949/48250" class="uri">https://stats.stackexchange.com/a/143949/48250</a></p>
+</div>
+<div id="a-brief-aside-about-loadings" class="section level2">
+<h2>A Brief Aside About Loadings</h2>
+<p>At this point it may also be worth mentioning that multiplying by the left eigenvector matrix <span class="math inline">\(\mathbf{Q}\)</span> is only one of two common ways to define the transformed data <span class="math inline">\(\mathbf{X}&#39;\)</span>. Alternatively, we could have used the so-called “<a href="https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another">loadings</a>” matrix, defined like so:</p>
+<p><span class="math display">\[ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \]</span></p>
+<p>The square root of a matrix may seem strange to you, but recall that <span class="math inline">\(\mathbf{\Lambda}\)</span> is diagonal, so this just means the element-wise square root of each eigenvalue. Using <span class="math inline">\(\mathbf{L}^{-1}\)</span> instead of <span class="math inline">\(Q\)</span> to transform from <span class="math inline">\(\mathbf{X}\)</span> to <span class="math inline">\(\mathbf{X}&#39;\)</span> means the empirical covariance matrix of the transformed data will be the identity matrix. This can be more intuitive in some cases. Also, many software packages report the loading matrix instead of the eigenvectors on the basis that they are easier to interpret.</p>
 </div>
 <div id="minimizing-reconstruction-error" class="section level2">
 <h2>Minimizing Reconstruction Error</h2>
@@ -96,10 +101,10 @@ draft: true
 <p>Consider this series of images, taken from <a href="https://www.projectrhea.org/rhea/index.php/PCA_Theory_Examples">this article</a>:</p>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/pca_image_example.png"></p>
 <p>Here, 512 dimensions was reduced to just 29, but the reconstructed image is still perfectly recognizable.</p>
-<p>With three separate theoretical justifications under our belt - which is two too many to be honest - let’s turn our attention to the concrete problem of implementing eigen-decomposition from scratch.</p>
+<p>With three separate theoretical justifications under our belt - which is two too many to be honest - let’s turn our attention to the concrete problem of implementing eigendecomposition from scratch.</p>
 </div>
-<div id="algorithm-for-solving-the-eigneproblem" class="section level2">
-<h2>Algorithm for Solving the Eigneproblem</h2>
+<div id="algorithm-for-solving-the-eigenproblem" class="section level2">
+<h2>Algorithm for Solving the Eigenproblem</h2>
 <p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> of a matrix <span class="math inline">\(A\)</span> which almost immediately gives us the eigenvalues of and eigenvectors of <span class="math inline">\(A^T A\)</span>. The best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an iterative algorithm: For the <span class="math inline">\(k\)</span>-th step, we first use <a href="https://en.wikipedia.org/wiki/Householder_transformation">Householder reflections</a> to reduce the matrix to bidiagonal form <span class="math inline">\(A_k\)</span>, Then the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> of <span class="math inline">\(X_k^T X_k\)</span> is used to set many of the off-diagonal elements to zero. The resulting matrix <span class="math inline">\(A_{k+1}\)</span> is <a href="https://en.wikipedia.org/wiki/Tridiagonal_matrix">tridiagonal</a>, but at each step the off-diagonal elements get smaller and smaller. This is very much like trying to flatten all the air pockets out of wallpaper by rolling over them, but one keeps popping up just where we don’t want it; however, the process can be proved to converge, and in practice converges very rapidly.</p>
 <p>There is also a <a href="https://arxiv.org/abs/0909.4061">randomized algorithm due to Halko, Martinsson, and Tropp</a> which can be much faster, especially when we only want to retain a small number of components.</p>
 <p>Normally I would tackle one of these “best practice” algorithms, but after studying them I found them to be larger in scope than what I would want to tackle for one of these articles. Instead, I decided to implement an older but still quite adequate eigenvalue algorithm: known as the <a href="https://en.wikipedia.org/wiki/QR_algorithm">QR algorithm.</a>. In addition to being easy to understand and implement, it has the advantage that we can use the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> function that we implemented in the earlier <a href="/post/ml-from-scratch-part-1-linear-regression/">article on linear regression</a>. It’s actually just as fast or faster than Golub-Reinsh; the disadvantage is that it is not as numerically stable particularly for the smallest eigenvalues. Because in PCA we normally intend to discard these anyway, this is not such a bad deal!</p>
@@ -220,6 +225,8 @@ def proportion_variance_explained(self):
 </div>
 <div id="wine-quality-example" class="section level2">
 <h2>Wine Quality Example</h2>
+<p>The <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html">wine quality data set</a> consists of 178 wines, each quantified in terms of 13 different objective chemical or optical properties, such of the concentration of alcohol or the hue and intensity of the color. Each has been assigned to one of three classes depending on a subjective judgement of quality.</p>
+<p>This is only a toy data set, and 13 is perhaps not yet totally unmanageable, but it certainly more than it is convenient to visualize or think about properly. We’d like to get that down to something manageable: one, two, or perhaps three dimensions.</p>
 <pre><code>import pandas as pd
 import seaborn
 import matplotlib.pyplot as plt
@@ -231,689 +238,294 @@ wine = load_wine()
 X = wine.data
 
 df = pd.DataFrame(data=X, columns=wine.feature_names)
-display(df.head())
-display(df.describe().T)</code></pre>
-<table>
+display(df.head().T)</code></pre>
+<p>A sample of the first five wines in the dataset:</p>
+<table style="width:80%">
 <thead>
-<tr style="text-align: right;">
+<tr class="header">
 <th>
 </th>
-<th>
-alcohol
+<th align="right">
+#1
 </th>
-<th>
-malic_acid
+<th align="right">
+#2
 </th>
-<th>
-ash
+<th align="right">
+#3
 </th>
-<th>
-alcalinity_of_ash
+<th align="right">
+#4
 </th>
-<th>
-magnesium
-</th>
-<th>
-total_phenols
-</th>
-<th>
-flavanoids
-</th>
-<th>
-nonflavanoid_phenols
-</th>
-<th>
-proanthocyanins
-</th>
-<th>
-color_intensity
-</th>
-<th>
-hue
-</th>
-<th>
-od280/od315_of_diluted_wines
-</th>
-<th>
-proline
+<th align="right">
+#5
 </th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<th>
-0
-</th>
+<tr class="odd">
 <td>
+alcohol
+</td>
+<td align="right">
 14.23
 </td>
-<td>
-1.71
+<td align="right">
+13.2
 </td>
-<td>
-2.43
-</td>
-<td>
-15.6
-</td>
-<td>
-127.0
-</td>
-<td>
-2.80
-</td>
-<td>
-3.06
-</td>
-<td>
-0.28
-</td>
-<td>
-2.29
-</td>
-<td>
-5.64
-</td>
-<td>
-1.04
-</td>
-<td>
-3.92
-</td>
-<td>
-1065.0
-</td>
-</tr>
-<tr>
-<th>
-1
-</th>
-<td>
-13.20
-</td>
-<td>
-1.78
-</td>
-<td>
-2.14
-</td>
-<td>
-11.2
-</td>
-<td>
-100.0
-</td>
-<td>
-2.65
-</td>
-<td>
-2.76
-</td>
-<td>
-0.26
-</td>
-<td>
-1.28
-</td>
-<td>
-4.38
-</td>
-<td>
-1.05
-</td>
-<td>
-3.40
-</td>
-<td>
-1050.0
-</td>
-</tr>
-<tr>
-<th>
-2
-</th>
-<td>
+<td align="right">
 13.16
 </td>
-<td>
-2.36
-</td>
-<td>
-2.67
-</td>
-<td>
-18.6
-</td>
-<td>
-101.0
-</td>
-<td>
-2.80
-</td>
-<td>
-3.24
-</td>
-<td>
-0.30
-</td>
-<td>
-2.81
-</td>
-<td>
-5.68
-</td>
-<td>
-1.03
-</td>
-<td>
-3.17
-</td>
-<td>
-1185.0
-</td>
-</tr>
-<tr>
-<th>
-3
-</th>
-<td>
+<td align="right">
 14.37
 </td>
-<td>
-1.95
-</td>
-<td>
-2.50
-</td>
-<td>
-16.8
-</td>
-<td>
-113.0
-</td>
-<td>
-3.85
-</td>
-<td>
-3.49
-</td>
-<td>
-0.24
-</td>
-<td>
-2.18
-</td>
-<td>
-7.80
-</td>
-<td>
-0.86
-</td>
-<td>
-3.45
-</td>
-<td>
-1480.0
-</td>
-</tr>
-<tr>
-<th>
-4
-</th>
-<td>
+<td align="right">
 13.24
 </td>
-<td>
-2.59
-</td>
-<td>
-2.87
-</td>
-<td>
-21.0
-</td>
-<td>
-118.0
-</td>
-<td>
-2.80
-</td>
-<td>
-2.69
-</td>
-<td>
-0.39
-</td>
-<td>
-1.82
-</td>
-<td>
-4.32
-</td>
-<td>
-1.04
-</td>
-<td>
-2.93
-</td>
-<td>
-735.0
-</td>
 </tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr style="text-align: right;">
-<th>
-</th>
-<th>
-count
-</th>
-<th>
-mean
-</th>
-<th>
-std
-</th>
-<th>
-min
-</th>
-<th>
-25%
-</th>
-<th>
-50%
-</th>
-<th>
-75%
-</th>
-<th>
-max
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>
-alcohol
-</th>
+<tr class="even">
 <td>
-178.0
-</td>
-<td>
-13.000618
-</td>
-<td>
-0.811827
-</td>
-<td>
-11.03
-</td>
-<td>
-12.3625
-</td>
-<td>
-13.050
-</td>
-<td>
-13.6775
-</td>
-<td>
-14.83
-</td>
-</tr>
-<tr>
-<th>
 malic_acid
-</th>
-<td>
-178.0
 </td>
-<td>
-2.336348
-</td>
-<td>
-1.117146
-</td>
-<td>
-0.74
-</td>
-<td>
-1.6025
-</td>
-<td>
-1.865
-</td>
-<td>
-3.0825
-</td>
-<td>
-5.80
-</td>
-</tr>
-<tr>
-<th>
-ash
-</th>
-<td>
-178.0
-</td>
-<td>
-2.366517
-</td>
-<td>
-0.274344
-</td>
-<td>
-1.36
-</td>
-<td>
-2.2100
-</td>
-<td>
-2.360
-</td>
-<td>
-2.5575
-</td>
-<td>
-3.23
-</td>
-</tr>
-<tr>
-<th>
-alcalinity_of_ash
-</th>
-<td>
-178.0
-</td>
-<td>
-19.494944
-</td>
-<td>
-3.339564
-</td>
-<td>
-10.60
-</td>
-<td>
-17.2000
-</td>
-<td>
-19.500
-</td>
-<td>
-21.5000
-</td>
-<td>
-30.00
-</td>
-</tr>
-<tr>
-<th>
-magnesium
-</th>
-<td>
-178.0
-</td>
-<td>
-99.741573
-</td>
-<td>
-14.282484
-</td>
-<td>
-70.00
-</td>
-<td>
-88.0000
-</td>
-<td>
-98.000
-</td>
-<td>
-107.0000
-</td>
-<td>
-162.00
-</td>
-</tr>
-<tr>
-<th>
-total_phenols
-</th>
-<td>
-178.0
-</td>
-<td>
-2.295112
-</td>
-<td>
-0.625851
-</td>
-<td>
-0.98
-</td>
-<td>
-1.7425
-</td>
-<td>
-2.355
-</td>
-<td>
-2.8000
-</td>
-<td>
-3.88
-</td>
-</tr>
-<tr>
-<th>
-flavanoids
-</th>
-<td>
-178.0
-</td>
-<td>
-2.029270
-</td>
-<td>
-0.998859
-</td>
-<td>
-0.34
-</td>
-<td>
-1.2050
-</td>
-<td>
-2.135
-</td>
-<td>
-2.8750
-</td>
-<td>
-5.08
-</td>
-</tr>
-<tr>
-<th>
-nonflavanoid_phenols
-</th>
-<td>
-178.0
-</td>
-<td>
-0.361854
-</td>
-<td>
-0.124453
-</td>
-<td>
-0.13
-</td>
-<td>
-0.2700
-</td>
-<td>
-0.340
-</td>
-<td>
-0.4375
-</td>
-<td>
-0.66
-</td>
-</tr>
-<tr>
-<th>
-proanthocyanins
-</th>
-<td>
-178.0
-</td>
-<td>
-1.590899
-</td>
-<td>
-0.572359
-</td>
-<td>
-0.41
-</td>
-<td>
-1.2500
-</td>
-<td>
-1.555
-</td>
-<td>
-1.9500
-</td>
-<td>
-3.58
-</td>
-</tr>
-<tr>
-<th>
-color_intensity
-</th>
-<td>
-178.0
-</td>
-<td>
-5.058090
-</td>
-<td>
-2.318286
-</td>
-<td>
-1.28
-</td>
-<td>
-3.2200
-</td>
-<td>
-4.690
-</td>
-<td>
-6.2000
-</td>
-<td>
-13.00
-</td>
-</tr>
-<tr>
-<th>
-hue
-</th>
-<td>
-178.0
-</td>
-<td>
-0.957449
-</td>
-<td>
-0.228572
-</td>
-<td>
-0.48
-</td>
-<td>
-0.7825
-</td>
-<td>
-0.965
-</td>
-<td>
-1.1200
-</td>
-<td>
+<td align="right">
 1.71
 </td>
+<td align="right">
+1.78
+</td>
+<td align="right">
+2.36
+</td>
+<td align="right">
+1.95
+</td>
+<td align="right">
+2.59
+</td>
 </tr>
-<tr>
-<th>
+<tr class="odd">
+<td>
+ash
+</td>
+<td align="right">
+2.43
+</td>
+<td align="right">
+2.14
+</td>
+<td align="right">
+2.67
+</td>
+<td align="right">
+2.5
+</td>
+<td align="right">
+2.87
+</td>
+</tr>
+<tr class="even">
+<td>
+alcalinity_of_ash
+</td>
+<td align="right">
+15.6
+</td>
+<td align="right">
+11.2
+</td>
+<td align="right">
+18.6
+</td>
+<td align="right">
+16.8
+</td>
+<td align="right">
+21
+</td>
+</tr>
+<tr class="odd">
+<td>
+magnesium
+</td>
+<td align="right">
+127
+</td>
+<td align="right">
+100
+</td>
+<td align="right">
+101
+</td>
+<td align="right">
+113
+</td>
+<td align="right">
+118
+</td>
+</tr>
+<tr class="even">
+<td>
+total_phenols
+</td>
+<td align="right">
+2.8
+</td>
+<td align="right">
+2.65
+</td>
+<td align="right">
+2.8
+</td>
+<td align="right">
+3.85
+</td>
+<td align="right">
+2.8
+</td>
+</tr>
+<tr class="odd">
+<td>
+flavanoids
+</td>
+<td align="right">
+3.06
+</td>
+<td align="right">
+2.76
+</td>
+<td align="right">
+3.24
+</td>
+<td align="right">
+3.49
+</td>
+<td align="right">
+2.69
+</td>
+</tr>
+<tr class="even">
+<td>
+nonflavanoid_phenols
+</td>
+<td align="right">
+0.28
+</td>
+<td align="right">
+0.26
+</td>
+<td align="right">
+0.3
+</td>
+<td align="right">
+0.24
+</td>
+<td align="right">
+0.39
+</td>
+</tr>
+<tr class="odd">
+<td>
+proanthocyanins
+</td>
+<td align="right">
+2.29
+</td>
+<td align="right">
+1.28
+</td>
+<td align="right">
+2.81
+</td>
+<td align="right">
+2.18
+</td>
+<td align="right">
+1.82
+</td>
+</tr>
+<tr class="even">
+<td>
+color_intensity
+</td>
+<td align="right">
+5.64
+</td>
+<td align="right">
+4.38
+</td>
+<td align="right">
+5.68
+</td>
+<td align="right">
+7.8
+</td>
+<td align="right">
+4.32
+</td>
+</tr>
+<tr class="odd">
+<td>
+hue
+</td>
+<td align="right">
+1.04
+</td>
+<td align="right">
+1.05
+</td>
+<td align="right">
+1.03
+</td>
+<td align="right">
+0.86
+</td>
+<td align="right">
+1.04
+</td>
+</tr>
+<tr class="even">
+<td>
 od280/od315_of_diluted_wines
-</th>
-<td>
-178.0
 </td>
-<td>
-2.611685
+<td align="right">
+3.92
 </td>
-<td>
-0.709990
+<td align="right">
+3.4
 </td>
-<td>
-1.27
+<td align="right">
+3.17
 </td>
-<td>
-1.9375
+<td align="right">
+3.45
 </td>
-<td>
-2.780
-</td>
-<td>
-3.1700
-</td>
-<td>
-4.00
+<td align="right">
+2.93
 </td>
 </tr>
-<tr>
-<th>
+<tr class="odd">
+<td>
 proline
-</th>
-<td>
-178.0
 </td>
-<td>
-746.893258
+<td align="right">
+1065
 </td>
-<td>
-314.907474
+<td align="right">
+1050
 </td>
-<td>
-278.00
+<td align="right">
+1185
 </td>
-<td>
-500.5000
+<td align="right">
+1480
 </td>
-<td>
-673.500
-</td>
-<td>
-985.0000
-</td>
-<td>
-1680.00
+<td align="right">
+735
 </td>
 </tr>
 </tbody>
 </table>
-<p>We can see that the features of this dataset are not on a common scale which is a problem for PCA. TODO: Why?</p>
+<p>We can see that the features of this dataset are not on a common scale; proline in particular is a thousand times greater than the others. We added a “whiten” option to our PCA class, which we will use later; for now, just so we can visualize the data, we will whiten it manually and plot the covariance matrix.</p>
 <pre><code>X_white = (X - X.mean(axis=0))/X.std(axis=0)
 C = X_white.T @ X_white / (X_white.shape[0] - 1)
 plt.figure(figsize=(6,6))
@@ -923,15 +535,15 @@ plt.xticks(np.arange(0, 13, 1))
 plt.yticks(np.arange(0, 13, 1))
 plt.colorbar()</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_covariance.png"></p>
-<p>TODO: too much covariance, apply PCA</p>
+<p>It is clear that this dataset exhibits significant <a href="https://en.wikipedia.org/wiki/Multicollinearity">multicollinearity</a>, with every feature exhibiting high correlations with many others. While that would be a bad thing for say, linear regression, it means this data set is an ideal candidate for PCA.</p>
 <pre><code>pca = PCA(whiten=True)
 pca.fit(X)
-X_prime = pca.transform(X)
-
-pca.eigenvalues
-array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 0.554, 0.35 , 0.291, 0.252, 0.227, 0.17 , 0.104])
-
-pca.eigenvectors
+X_prime = pca.transform(X)</code></pre>
+<p>From the eigenvalues, we can see that the first few components explain most of the variance:</p>
+<pre><code>pca.eigenvalues
+array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 0.554, 0.35 , 0.291, 0.252, 0.227, 0.17 , 0.104])</code></pre>
+<p>The raw eigenvectors are hard to interpret directly, but if you like you can read the columns (starting with the leftmost) and see which features are being rolled up into each component; for example, it seems that “flavanoids” and “phenols” (whatever those are) are major contributors to the first principle component, among others, while “ash” contributes almost nothing to it.</p>
+<pre><code>pca.eigenvectors
 array([[ 0.144, -0.484, -0.207,  0.018,  0.266,  0.214, -0.056,  0.396, -0.509, -0.212,  0.226,  0.266, -0.015],
        [-0.245, -0.225,  0.089, -0.537, -0.035,  0.537,  0.421,  0.066,  0.075,  0.309, -0.076, -0.122, -0.026],
        [-0.002, -0.316,  0.626,  0.214,  0.143,  0.154, -0.149, -0.17 ,  0.308,  0.027,  0.499,  0.05 ,  0.141],
@@ -945,7 +557,7 @@ array([[ 0.144, -0.484, -0.207,  0.018,  0.266,  0.214, -0.056,  0.396, -0.509, 
        [ 0.297,  0.279,  0.085,  0.428,  0.173,  0.106,  0.232,  0.437, -0.086,  0.522,  0.048, -0.259,  0.09 ],
        [ 0.376,  0.164,  0.166, -0.184,  0.101,  0.266, -0.045, -0.078, -0.137, -0.524, -0.046, -0.601,  0.157],
        [ 0.287, -0.365, -0.127,  0.232,  0.158,  0.12 ,  0.077,  0.12 ,  0.576, -0.162, -0.539,  0.079, -0.014]])</code></pre>
-<p>TODO covariance after transformation:</p>
+<p>Just as a cross check, we can plot the covariance matrix of the transformed data the same way we did the raw data above:</p>
 <pre><code>plt.figure(figsize=(6,6))
 plt.imshow(C_prime, cmap=&#39;binary&#39;)
 plt.title(&quot;Covariance Matrix of Transformed Data&quot;)
@@ -953,54 +565,7 @@ plt.xticks(np.arange(0, 13, 1))
 plt.yticks(np.arange(0, 13, 1))
 plt.colorbar()</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_transformed_covariance.png"></p>
-</div>
-<div id="strategies-for-choosing-the-number-of-dimensions" class="section level2">
-<h2>Strategies for Choosing The Number of Dimensions</h2>
-<p>TODO: Scree the Kaiser Rule is of course a trainwreck, but the alternatives aren’t much better.</p>
-<p><a href="https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr" class="uri">https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr</a></p>
-<p><a href="http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf" class="uri">http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf</a></p>
-<p>Minka (2000) is one option. <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf" class="uri">https://vismod.media.mit.edu/tech-reports/TR-514.pdf</a></p>
-<pre><code>fig = plt.figure(figsize=(10, 7))
-plt.title(&quot;Scree Plot (Eigenvalues in Decreasing Order)&quot;)
-plt.plot([1, 13], [1, 1], color=&#39;red&#39;, linestyle=&#39;--&#39;, label=&quot;Kaiser Rule&quot;)
-plt.xticks(np.arange(1, 14, 1))
-plt.xlim(1, 13)
-plt.ylim(0, 5)
-plt.ylabel(&quot;Eigenvalue&quot;)
-plt.xlabel(&quot;Principle Component Index&quot;)
-plt.grid(linestyle=&#39;--&#39;)
-plt.plot(range(1, 14), pca.eigenvalues, label=&quot;Eigenvalues&quot;)
-plt.legend()</code></pre>
-<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_scree_plot.png"></p>
-<p>TODO: proportion variance explained</p>
-<pre><code>fig = plt.figure(figsize=(10, 7))
-plt.title(&quot;Variance Explained By Component&quot;)
-plt.xticks(np.arange(1, 14, 1))
-plt.yticks(np.arange(0, 1.0001, 0.1))
-plt.xlim(1, 13)
-plt.ylim(0, 1)
-plt.ylabel(&quot;Proportion of Variance Explained&quot;)
-plt.xlabel(&quot;Principle Component Index&quot;)
-plt.grid(linestyle=&#39;--&#39;)
-plt.fill_between(
-    range(1, 14), 
-    np.cumsum(pca.proportion_variance_explained), 
-    0, 
-    color=&quot;lightblue&quot;, 
-    label=&quot;Cumulative&quot;)
-plt.plot(
-    range(1, 14), 
-    np.cumsum(pca.proportion_variance_explained), 
-    0, 
-    color=&quot;darkblue&quot;)
-plt.plot(
-    range(1, 14), 
-    pca.proportion_variance_explained, 
-    label=&quot;Incremental&quot;, 
-    color=&quot;orange&quot;, 
-    linestyle=&quot;--&quot;)
-plt.legend(loc=&#39;upper left&#39;)</code></pre>
-<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png"></p>
+<p>And we can see the expected structure: eigenvalues descending from 4.7 to 0.1 along the diagonal, and exactly 0 away from the diagonal.</p>
 </div>
 <div id="visualizing-the-components" class="section level2">
 <h2>Visualizing the Components</h2>
@@ -1060,6 +625,54 @@ ax.set_xlabel(&#39;PC1&#39;)
 ax.set_ylabel(&#39;PC2&#39;)
 ax.set_zlabel(&#39;PC3&#39;)</code></pre>
 <p><img src="/post/ml-from-scratch-part-6-pca_files/wine_pc3_3d.png"></p>
+</div>
+<div id="strategies-for-choosing-the-number-of-dimensions" class="section level2">
+<h2>Strategies for Choosing The Number of Dimensions</h2>
+<p>TODO: Scree the Kaiser Rule is of course a train wreck, but the alternatives aren’t much better.</p>
+<p><a href="https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr" class="uri">https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr</a></p>
+<p><a href="http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf" class="uri">http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf</a></p>
+<p>Minka (2000) is one option. <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf" class="uri">https://vismod.media.mit.edu/tech-reports/TR-514.pdf</a></p>
+<pre><code>fig = plt.figure(figsize=(10, 7))
+plt.title(&quot;Scree Plot (Eigenvalues in Decreasing Order)&quot;)
+plt.plot([1, 13], [1, 1], color=&#39;red&#39;, linestyle=&#39;--&#39;, label=&quot;Kaiser Rule&quot;)
+plt.xticks(np.arange(1, 14, 1))
+plt.xlim(1, 13)
+plt.ylim(0, 5)
+plt.ylabel(&quot;Eigenvalue&quot;)
+plt.xlabel(&quot;Principle Component Index&quot;)
+plt.grid(linestyle=&#39;--&#39;)
+plt.plot(range(1, 14), pca.eigenvalues, label=&quot;Eigenvalues&quot;)
+plt.legend()</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_scree_plot.png"></p>
+<p>TODO: proportion variance explained</p>
+<pre><code>fig = plt.figure(figsize=(10, 7))
+plt.title(&quot;Variance Explained By Component&quot;)
+plt.xticks(np.arange(1, 14, 1))
+plt.yticks(np.arange(0, 1.0001, 0.1))
+plt.xlim(1, 13)
+plt.ylim(0, 1)
+plt.ylabel(&quot;Proportion of Variance Explained&quot;)
+plt.xlabel(&quot;Principle Component Index&quot;)
+plt.grid(linestyle=&#39;--&#39;)
+plt.fill_between(
+    range(1, 14), 
+    np.cumsum(pca.proportion_variance_explained), 
+    0, 
+    color=&quot;lightblue&quot;, 
+    label=&quot;Cumulative&quot;)
+plt.plot(
+    range(1, 14), 
+    np.cumsum(pca.proportion_variance_explained), 
+    0, 
+    color=&quot;darkblue&quot;)
+plt.plot(
+    range(1, 14), 
+    pca.proportion_variance_explained, 
+    label=&quot;Incremental&quot;, 
+    color=&quot;orange&quot;, 
+    linestyle=&quot;--&quot;)
+plt.legend(loc=&#39;upper left&#39;)</code></pre>
+<p><img src="/post/ml-from-scratch-part-6-pca_files/wine_variance_explained.png"></p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
