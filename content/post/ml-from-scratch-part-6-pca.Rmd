@@ -11,39 +11,41 @@ image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
 draft: true
 ---
 
-In the [last article][MLFS5] in [this series][MLFS], we distinguished between two
-kinds of unsupervised learning: cluster analysis and dimensionality reduction. 
-Only the first was discussed in detail at that time, so in this article we will
-turn our attention to the later.
+In the [previous article][MLFS5] in [this series][MLFS] we distinguished
+between two kinds of unsupervised learning: cluster analysis and dimensionality
+reduction.  In this article we turn our attention to the later.
 
-In dimensional reduction we seek a function $f : \mathbb{R}^n \mapsto
+In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto
 \mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and
-$m$ is less than or equal to $n$ - usually a lot less. That is, we want a map from some high dimensional space
-into some lower dimensional space. 
+$m$ is less than or equal to $n$. That is, we want to map some high dimensional
+space into some lower dimensional space. 
 
-In this article, we will focus on the oldest
-of these methods: [Primary Component Analysis][PCA], usually seen abbreviated as PCA.
-We'll derive PCA from first principles, implement a working
-version (writing all the linear algebra code from scratch), discuss options for choosing how
-many dimensions to keep, and show an example of how PCA helps us visualize
-and gain insight into a high dimensional data set.
+We will focus on one technique in particular: [Primary Component
+Analysis][PCA], usually abbreviated PCA.  We'll derive PCA from first
+principles, implement a working version (writing all the linear algebra code
+from scratch), show an example of how PCA helps us visualize and gain insight
+into a high dimensional data set, and end with a discussion a few more-or-less
+principled ways to choose how many dimensions to keep.
 
 What is PCA?
 ------------
 
-PCA is a *linear* dimensionality reduction technique.  [Many][NLDR] non-linear
-[dimensionality][SOM] [reduction][AENN] [techniques][TSNE] exist,
-but we will restrict ourselves to linear maps for now. Just saying
-it's linear, though, is not quite enough to fully specify the problem; [Factor
-Analysis][FA] also seeks a linear map, but takes a more statistical approach
-and reaches a slightly different solution in practice, while 
-[non-negative matrix factorization][NMF] seeks a linear map represented by
-a matrix with no negative elements. So, merely specifying that $f$ should
-be a linear map underspecifies the problem, and we need to be careful about
-what additional requirement we add if we're going to end up with PCA instead
-of some other method.
+PCA is a *linear* dimensionality reduction technique. [Many][NLDR] non-linear
+[dimensionality][SOM] [reduction][AENN] [techniques][TSNE] exist, but linear
+methods are more mature. Just saying it's linear, though, is not quite enough
+to fully specify the problem. [Factor Analysis][FA] also seeks a linear map,
+but takes a more statistical approach and reaches a slightly different solution
+in practice. [Non-negative matrix factorization][NMF] seeks a linear map
+represented by a matrix with no negative elements - a restriction which PCA
+does not have.
 
-Surprisingly, there are in fact several equivalent ways to do this:
+I mention these other techniques to make the point that merely specifying that
+$f$ should be a linear map underspecifies the problem, and we need to be
+careful about what additional requirement we add if we're going to end up with
+PCA instead of some other method.
+
+Surprisingly, there are actually at least three different ways of fully specifying
+PCA, all of which seem very different at first but can be shown to be mathematically equivalent.
 
 1. Require the covariance matrix of the transformed data to be diagonal. This
    is equivalent to saying that the transformed data has no [multicollinearity][MC],
@@ -59,62 +61,64 @@ Surprisingly, there are in fact several equivalent ways to do this:
    [Frobenius norm][FN] of the difference between the original and
    reconstructed matrix, but [other definitions are possible.][IN]
 
-These three definitions all turn out to be equivalent. (The
-fact that the three models of computation proposed by Turing, Church, and Gödel
-turned out to all be equivalent suggests that the definition of "computation"
-was discovered rather than invented; the fact that PCA can be approached from
-multiple intuitively attractive directions likewise suggests that it is a discovery.)
+That these very different motivations all lead to the same formal solution is
+reminiscent of the fact that the [models of computation][MOC] proposed independently
+by Turing, Church, and Gödel turned out to all be equivalent. Just as this
+triple convergence led some to believe that the definition of computation was
+discovered rather than merely invented, the fact that PCA keeps popping up
+suggests that it is in some fundamental way the "right" way to think about
+dimensionality reduction. Or maybe it just means mathematicians like to
+use linear algebra whenever they can, because non-linear equations are so
+difficult to solve. But I digress.
 
-All three definitions lead to a unique
-(\*some terms and conditions apply) orthogonal matrix $Q$ which can be matrix
-multiplied by the original data matrix $X$ to obtain the transformed data $X' =
-XQ$.  (Read "X prime", which is *not* the transpose of $X$. I will always use
-superscript "T" notation $X^T$ for transpose.) 
+Under any of these three definitions, the linear map $f$ that we seek will turn
+out to be represented by a unique unique (\*some terms and conditions apply)
+orthogonal matrix $Q$.
 
 Orthogonal matrices are the generalization of the 3-dimensional concept of a
 rotation or reflection: in particular, they always preserve both *distance* and
 *angles*.  These are very nice properties for a transform to have! Merely
-rotating an object doesn't really distort it, but simply gives us a different
-perspective on it.  
+rotating an object or holding it up to a mirror doesn't really distort it, but
+simply gives us a different perspective on it.  
 
 Imagine, for illustration's sake that you held in your hand an unfamiliar object
-made of easily deformable material like clay. You might turn it this way and
-that, peer at it from every angle. You might hold it up to the mirror. But
-these delicate operations do no harm to the object, nor alter its fundamental
-shape: they simply give you a different perspective. Not so if you had
-flattened or stretched or twisted it; after these more violent operations
-any shape or pattern you perceive may well be the product of your own
-manipulations and not a true insight into the nature of the original form.
+made of some easily deformable material like clay. You might turn it gently this way and
+that, peer at it from every angle, or hold it up to the mirror. But
+these delicate operations do no harm to the object - indeed, you don't really
+need to touch the object at all! You're merely changing your own point of view.
+Not so if you had flattened or stretched or twisted it; after these more
+violent operations any shape or pattern you perceive may well be the product of
+your own manipulations and not a true insight into the nature of the original
+form.
 
 <img src="/post/ml-from-scratch-part-6-pca_files/shape.png">
 
-The rotations and reflects of PCA are the safest and least distorting
-transformation that we could apply, and by the same token the most conservative
-and cautious. 
+Orthogonal matrices are the safest and least distorting transformation that we
+could apply, and by the same token the most conservative and cautious. I think
+these are virtues in a technique intended to help understand and explore data.
 
 Now, obviously we could rotate our data any which way to get a different
-picture, but we want to rotate it so that in some sense in becomes aligned to
-the axes - rather like straightening a picture hanging askew on the wall.  Near
-the end, we'll show examples demonstrating how this "straightening up" helps
-with analysis and interpretation.
+picture, but PCA does more: it rotates it so that in some sense in becomes
+aligned to the axes - rather like straightening a picture hanging askew on the
+wall. This is the property 
 
-Now, orthogonal matrices are invertible, which in particular means they are
-square, so $Q$ is an $m \times m$ matrix... which means we haven't *reduced*
-the dimensionality at all! Why is this considered a dimensionality *reduction*
-technique? Well, it turns out that once we've rotated our data so that it's as
-*wide* as possible along the first basis vector, that also means that it ends
-up as *thin* as possible along the last few basis vectors. This only works if
-the original data really were all quite close to some line or hyperplane, but
-with this assumption met we can safely drop the least significant dimensions and retain only
-our principle components, thus reducing dimensionality while still keeping most
-of the information (variance) of the data.  Of course, deciding *exactly* how many
+Orthogonal matrices are always square, so $Q$ is an $m \times m$ matrix...
+But multiplying by a square matrix doesn't reduce the dimensionality at all!
+Why is this considered a dimensionality *reduction* technique? Well, it turns
+out that once we've rotated our data so that it's as *wide* as possible along
+the first basis vector, that also means that it ends up as *thin* as possible
+along the last few basis vectors. This only works if the original data really
+were all quite close to some line or hyperplane, but with this assumption met
+we can safely drop the least significant dimensions and retain only our
+principle components, thus reducing dimensionality while still keeping most of
+the information (variance) of the data.  Of course, deciding *exactly* how many
 dimensions to drop/retain is a bit tricky, but we'll come to that later.
 
-For now, let's explore the mathematics and show how PCA gives rise to a unique
-solution subject to the above constraints.
+For now, let's explore the mathematics and show how PCA gives rise to a
+unique solution subject to the above constraints.
 
-The Direction of Maximal Variation
-----------------------------------
+Approach #1: The Direction of Maximal Variation
+-----------------------------------------------
 
 Before we can define the direction of maximal variance, we first have to be
 clear about what we mean by variance in a given direction. First, let's say
@@ -144,7 +148,7 @@ $$\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{
 Which implies that $\mathbf{a}$ was not the maximum after all, which is absurd. So we cannot
 solve this optimization problem unless we impose some additional constraint.
 
-Now, a dot product is only a projection in a geometric sense if $\mathbf{q}$ is
+A dot product is only a projection in a geometric sense if $\mathbf{q}$ is
 a *unit* vector. So why don't we impose the condition
 
 $$ \mathbf{q}^T \mathbf{q} = 1 \tag{4} $$
@@ -225,8 +229,8 @@ definite, we know that the eigenvalues will all be real-valued (as expected.)
 In the convention we've adopted, $\mathbf{Q}$ is the *right* eigenvalue matrix (meaning
 each *column* is an eigenvector.) 
 
-Diagonalizing the Covariance Matrix
------------------------------------
+Approach #2: Diagonalizing the Covariance Matrix
+------------------------------------------------
 
 We could have skipped the entire "direction of maximal variation" and Lagrange
 multiplier argument if we had simply argued as follows: I want my features to
@@ -278,8 +282,8 @@ data will be the identity matrix. This can be more intuitive in some cases. Also
 report the loading matrix instead of the eigenvectors on the basis that they are easier to interpret. 
 
 
-Minimizing Reconstruction Error
--------------------------------
+Approach #3: Minimizing Reconstruction Error
+--------------------------------------------
 
 The third and final way to motivate the mathematical formalism of PCA is to view
 it as a form of *compression*. Specifically, of all possible linear linear
@@ -807,7 +811,7 @@ Strategies for Choosing The Number of Dimensions
 
 The oldest and most venerable method involves plotting the eigenvalues in
 descending order as a function of dimension number: whimsically called a [scree
-plot][SP] after a resemblance to to "elbow" that appears near the base of some
+plot][SP] after a resemblance to the "elbow" that appears near the base of some
 mountain where loose stones are piled upon a slope:
 
 <img src="/post/ml-from-scratch-part-6-pca_files/scree.png">
@@ -921,16 +925,17 @@ learning was the implementation of a eigendecomposition algorithm in a way that
 met the fairly stringent rules of the "from scratch" challenge.
 
 
-
-
-[KM]: https://en.wikipedia.org/wiki/K-means_clustering
+[ACD]: https://vismod.media.mit.edu/tech-reports/TR-514.pdf
 [AENN]: https://en.wikipedia.org/wiki/Autoencoder
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [FN]: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
 [GRA]: http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf
 [HR]: https://en.wikipedia.org/wiki/Householder_transformation
 [IN]: https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation
+[KCTW]: https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr
+[KC]: https://en.wikipedia.org/wiki/Factor_analysis#Older_methods
 [KKT]: https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions
+[KM]: https://en.wikipedia.org/wiki/K-means_clustering
 [L25]: http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
 [LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
 [L]: https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another
@@ -938,6 +943,7 @@ met the fairly stringent rules of the "from scratch" challenge.
 [MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
 [MLFS5]: /post/ml-from-scratch-part-5-gmm/
 [MLFS]: /tags/from-scratch/
+[MOC]: https://en.wikipedia.org/wiki/Model_of_computation
 [NLDR]: https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction
 [NMF]: https://en.wikipedia.org/wiki/Non-negative_matrix_factorization
 [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
@@ -946,14 +952,12 @@ met the fairly stringent rules of the "from scratch" challenge.
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
 [RA]: https://arxiv.org/abs/0909.4061
 [RE]: http://users.ics.aalto.fi/harri/dityo/node6.html
+[RTS]: http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf
 [SOM]: https://en.wikipedia.org/wiki/Self-organizing_map
+[SP]: https://en.wikipedia.org/wiki/Scree_plot
 [SVD]: https://en.wikipedia.org/wiki/Singular_value_decomposition
 [TRI]: https://en.wikipedia.org/wiki/Tridiagonal_matrix
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec
 [WQD]: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html
-[SP]: https://en.wikipedia.org/wiki/Scree_plot
-[KCTW]: https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr
-[KC]: https://en.wikipedia.org/wiki/Factor_analysis#Older_methods
-[RTS]: http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf
-[ACD]: https://vismod.media.mit.edu/tech-reports/TR-514.pdf
+
