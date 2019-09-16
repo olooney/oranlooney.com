@@ -44,8 +44,9 @@ $f$ should be a linear map underspecifies the problem, and we need to be
 careful about what additional requirement we add if we're going to end up with
 PCA instead of some other method.
 
-Surprisingly, there are actually at least three different ways of fully specifying
-PCA, all of which seem very different at first but can be shown to be mathematically equivalent.
+Surprisingly, there are actually at least three different ways of fully
+specifying PCA, all of which seem very different at first but can be shown to
+be mathematically equivalent:
 
 1. Require the covariance matrix of the transformed data to be diagonal. This
    is equivalent to saying that the transformed data has no [multicollinearity][MC],
@@ -129,57 +130,58 @@ non-zero, it defines a line. What do mean by the phrase, "the variance of
 $\mathbf{x}$ in the direction of $\mathbf{q}$?" 
 
 The natural thing to do is to *project* the $n$-dimensional random variable
-*onto* the line defined by $\mathbf{q}$. We can do this with a dot product,
-$\mathbf{q}^T \mathbf{x}$. This new quantity is clearly a scalar random variable,
-so we can apply the variance operator to get a scalar measure of variance.
+*onto* the line defined by $\mathbf{q}$. We can do this with a dot product
+which we will write as the matrix product $\mathbf{q}^T \mathbf{x}$. This new
+quantity is clearly a scalar random variable, so we can apply the variance
+operator to get a scalar measure of variance.
 
 $$ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} $$
 
 Does this suffice to allow us to define a direction of maximal variation? Not
-quite. If we try to pose the optimization problem:
+quite. If we try to pose the naive optimization problem:
 
 $$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} $$
 
-To prove no such maximum exists, assume that $\mathbf{a}$ is the maximum. There
+We can easily prove no solution exists. Proof: Assume that $\mathbf{a}$ is the maximum. There
 always exists another vector $\mathbf{b} = 2 \mathbf{a}$ which implies that:
 
 $$\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] > \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] \tag{3}$$.
 
-Which implies that $\mathbf{a}$ was not the maximum after all, which is absurd. So we cannot
-solve this optimization problem unless we impose some additional constraint.
+Which implies that $\mathbf{a}$ was not the maximum after all, which is absurd.
+Q.E.D.  The upshot is that we must impose some additional constraint.
 
-A dot product is only a projection in a geometric sense if $\mathbf{q}$ is
-a *unit* vector. So why don't we impose the condition
+Recall that a dot product is only a projection in a geometric sense if $\mathbf{q}$ is a
+*unit* vector. Why don't we impose the condition
 
 $$ \mathbf{q}^T \mathbf{q} = 1 \tag{4} $$
 
-That gives us the constrained optimization problem 
+To obtain the *constrained* optimization problem 
 
 $$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} $$
 
 Well at least this *has* a solution, even if it isn't immediately obvious how
 to solve it. We can't simply set partial derivative with respect to
 $\mathbf{q}$ equal to zero; that [KKT condition][KKT] only applies in the *absence* of
-active constraints.  Earlier in this series, we've used techniques such as
-stochastic gradient descent to solve unconstrained optimization problems, but
+active constraints. Earlier in this series, we've used techniques such as
+stochastic gradient descent to solve *unconstrained* optimization problems, but
 how do we deal the constraint?
 
-A very general and powerful solution is the method of Lagrange multipliers.
-Lagrange was studying the motion of constrained physical systems such as a bead
-on a wire or several pendulums coupled together.  At the time, such problems
-were usually solved by finding a suitable set of generalized coordinates, but
-this required a great deal of ingenuity and (as we say today) didn't really
-scale. Lagrange's solution was to imagine the system could "slip" just ever so
-slightly out of its constraints but that the true solution would be the one
-that *minimized* this virtual slippage. This could be elegantly handled by
-associating an energy cost called 'virtual work" that penalized the system
-proportional to the degree to which the constraints were violated. This
-reconceptualizes the hard constraint as just another parameter to optimize in
-an unconstrained system! And surprisingly enough, it does not result in an
-*approximate* solution that only sort of obeys the constraint but instead
-(assuming the constraint is physically possible and the resulting equations
-have a closed form solution) gives an *exact* solution where the constraint is
-*perfectly* obeyed.
+Happily, a very general and powerful trick exists for translating constrained
+optimization problems into unconstrained ones: [the method of Lagrange
+multipliers][LM]. In 1780, [Lagrange][JLL] was studying the motion of constrained
+physical systems such as a bead on a wire. At the time, such problems were
+usually solved by finding a suitable set of [generalized coordinates][GC] but
+this required a great deal of human ingenuity. Lagrange's idea was to imagine
+the system could "slip" just ever so slightly out of its constraints and that
+the true solution would be the one that *minimized* this virtual slippage. This
+could be elegantly handled by associating an energy cost called 'virtual work"
+that penalized the system proportional to the degree to which the constraints
+were violated. This trick reconceptualizes a hard constraint as just another
+parameter to optimize in an unconstrained system! And surprisingly enough, it
+does not result in an *approximate* solution that only sort of obeys the
+constraint but instead (assuming the constraint is physically possible and the
+resulting equations have a closed form solution) gives an *exact* solution
+where the constraint is *perfectly* obeyed.
 
 It's easy to use too, at least in our simple case. We introduce the Lagrange
 multiplier $\lambda$ and rewrite our optimization as follows:
@@ -195,16 +197,17 @@ $$
   \end{align}
 $$
 
-But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ which is simply our unit
-vector constraint... this guarantees that when we solve (7) and (8), the
-constraint will be exactly satisfied and we'll will also have found a solution
-to (6). Such is the magic of Lagrange multipliers.
+But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ which is simply
+our unit vector constraint... this guarantees that when we solve (7) and (8),
+the constraint will be exactly satisfied and we'll will also have found a
+solution to (6). Such is the magic of Lagrange multipliers.
 
-But if (8) is just our constraint in a fancy new dress, how have we progressed at all?
-Because (7) is now unconstrained and therefore more tractable.
+But if (8) is just our constraint in a fancy new dress, how have we progressed
+at all?  Because (7) is now unconstrained (and therefore more tractable!)
 
-Suppose the matrix $\mathbf{X}$ is an $N \times n$ matrix with $N$ rows where each row vector is
-an independent realization of $\mathbf{x}$. Then we can estimate the covariance matrix as
+Suppose the matrix $\mathbf{X}$ is an $N \times n$ matrix with $N$ rows where
+each row vector is an independent realization of $\mathbf{x}$. Then we can
+estimate the covariance matrix as
 
 $$ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} $$
 
@@ -221,28 +224,38 @@ This shows that every "direction of maximal variation" is in fact an eigenvector
 of the covariance matrix, and the variance in that direction is the corresponding
 eigenvalue. 
 
-$$ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} $$
-
 Because the covariance matrix $\mathbf{C}$ is real-valued, symmetric, and positive
 definite, we know that the eigenvalues will all be real-valued (as expected.)
 
-In the convention we've adopted, $\mathbf{Q}$ is the *right* eigenvalue matrix (meaning
-each *column* is an eigenvector.) 
+Thus to find the axes of maximal variation, it suffices to find the eigendecomposition
+of $\mathbf{C}$.
+
+Define $\mathbf{Q}$ to be the $n \times n$ *right* eigenvalue matrix (meaning
+each *column* is an eigenvector) and $\mathbf{\Lambda}$ is the diagonal $n \times n$
+matrix containing eigenvalues along the diagonal. 
+
+$$ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} $$
+
+We will discuss the algorithm necessary to actually compute $\mathbf{Q}$ and $\mathbf{\Lambda}$
+below, but first let's discuss the other ways of motivating PCA.
+
 
 Approach #2: Diagonalizing the Covariance Matrix
 ------------------------------------------------
 
 We could have skipped the entire "direction of maximal variation" and Lagrange
 multiplier argument if we had simply argued as follows: I want my features to
-be uncorrelated. Which is to say, I want the covariance matrix of my data to be diagonal.
-However, when I estimate the covariance matrix for my data in their original form,
-I see that the covariance matrix is **not** diagonal.  That means my original
-features exhibit some multiple collinearity, which is bad. To fix this problem,
-I will transform my data in such a way as make the covariance matrix diagonal.
-It is well-known that a matrix can be diagonalized
-by finding its eigendecomposition. Therefore, I need to find the eigendecomposition $\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T$.
+be uncorrelated. Which is to say, I want the covariance matrix of my data to be
+diagonal.  However, when I estimate the covariance matrix for my data in their
+original form, I see that the covariance matrix is **not** diagonal.  That
+means my original features exhibit some multiple collinearity, which is bad. To
+fix this problem, I will transform my data in such a way as make the covariance
+matrix diagonal.  It is well-known that a matrix can be diagonalized by finding
+its eigendecomposition. Therefore, I need to find the eigendecomposition
+$\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T$.
 
-The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$, yielding a new, transformed data set $\mathbf{X}'$.
+The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$,
+yielding a new, transformed data set $\mathbf{X}'$.
 
 $$ \mathbf{X}' = \mathbf{X} \mathbf{Q} \tag{14} $$
 
@@ -258,49 +271,54 @@ $$ \begin{align}
 \end{align}
 $$
 
-Because $\mathbf{\Lambda}$ is a diagonal matrix, we've shown that the empirical covariance of our
-transformed data set is diagonal; which is to say, all of the features of $X'$ are independent.
+Because $\mathbf{\Lambda}$ is a diagonal matrix, we've shown that the empirical
+covariance of our transformed data set is diagonal; which is to say, all of the
+features of $X'$ are independent.
 
-This argument is much more brutish and perhaps too on the nose: we wanted a diagonal covariance
-matrix, so we diagonalized it, anyone got a problem with that? However, it has the advantage of
-requiring nothing more than a basic understanding of linear algebra (no statistics, multivariate calculus,
-or optimization theory here!) and an engineer's common sense attitude toward working with data. 
+This argument is much more brutish and perhaps too on the nose: we wanted a
+diagonal covariance matrix, so we diagonalized it, anyone got a problem with
+that? However, it has the advantage of requiring nothing more than a basic
+understanding of linear algebra (no statistics, multivariate calculus, or
+optimization theory here!) and an engineer's common sense attitude toward
+working with data. 
 
-A Brief Aside About Loadings 
-----------------------------
+### A Brief Aside About Loadings 
 
-At this point it may also be worth mentioning that multiplying by the left eigenvector matrix $\mathbf{Q}$ 
-is only one of two common ways to define the transformed data $\mathbf{X}'$. Alternatively, we
-could have used the so-called "[loadings][L]" matrix, defined like so:
+At this point it may also be worth mentioning that multiplying by the left
+eigenvector matrix $\mathbf{Q}$ is only one of two common ways to define the
+transformed data $\mathbf{X}'$. Alternatively, we could have used the so-called
+"[loadings][L]" matrix, defined like so:
 
 $$ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \tag{16} $$
 
-The square root of a matrix may seem strange to you, but recall that $\mathbf{\Lambda}$ is diagonal,
-so this just means the element-wise square root of each eigenvalue. Using $\mathbf{L}^{-1}$ instead of $Q$
-to transform from $\mathbf{X}$ to $\mathbf{X}'$ means the empirical covariance matrix of the transformed
-data will be the identity matrix. This can be more intuitive in some cases. Also, many software packages
-report the loading matrix instead of the eigenvectors on the basis that they are easier to interpret. 
+The square root of a matrix may seem strange to you, but recall that
+$\mathbf{\Lambda}$ is diagonal, so this just means the element-wise square root
+of each eigenvalue. Using $\mathbf{L}^{-1}$ instead of $\mathbf{Q}$ to
+transform from $\mathbf{X}$ to $\mathbf{X}'$ means the empirical covariance
+matrix of the transformed data will be the identity matrix. This can be more
+intuitive in some cases. Also, many software packages report the loading matrix
+instead of the eigenvectors on the basis that they are easier to interpret. 
 
 
 Approach #3: Minimizing Reconstruction Error
 --------------------------------------------
 
-The third and final way to motivate the mathematical formalism of PCA is to view
-it as a form of *compression*. Specifically, of all possible linear linear
-projections from $n$ to $m$ dimensions, taking the first $k$ components
-of the PCA transformation of $X$ minimizes the *reconstruction error*. Reconstruction
-error is usually defined as the Frobenius distance between the original
-and reconstructed matrix, but interestingly enough the theorem holds for a few
-other metrics as well, suggesting it's a deep property of PCA and not some quirk
-of the Frobenius norm.
+The third and final way to motivate the mathematical formalism of PCA is to
+view it as a form of *compression*. Specifically, of all possible linear linear
+projections from $n$ to $m$ dimensions, taking the first $k$ components of the
+PCA transformation of $X$ minimizes the *reconstruction error*. Reconstruction
+error is usually defined as the Frobenius distance between the original and
+reconstructed matrix, but interestingly enough the theorem holds for a few
+other metrics as well, suggesting it's a deep property of PCA and not some
+quirk of the Frobenius norm.
 
-
-I won't go through this derivation here - you can find [a presentation elsewhere][L25] if
-you're interested in the details - but it's an extremely powerful point of view which
-goes straight to the heart of the dimensional reduction strategy. If we can reconstruct
-our original data almost exactly from only a handful of components that lends strong 
-support to the notion that any interesting information about the image must have been
-contained in those few components. 
+I won't go through this derivation here - you can find [a presentation
+elsewhere][L25] if you're interested in the details - but it's an extremely
+powerful point of view which goes straight to the heart of the dimensional
+reduction strategy. If we can reconstruct our original data almost exactly from
+only a handful of components that lends strong support to the notion that any
+interesting information about the image must have been contained in those few
+components. 
 
 Consider this series of images, taken from [this article][PTE]:
 
@@ -321,28 +339,29 @@ iterative algorithm: For the $k$-th step, we first use [Householder reflections]
 to reduce the matrix to bidiagonal form $A_k$, Then the [QR decomposition][QRD] of
 $X_k^T X_k$ is used to set many of the off-diagonal elements to zero. The
 resulting matrix $A_{k+1}$ is [tridiagonal][TRI], but at each step the off-diagonal
-elements get smaller and smaller. This is very much like trying to flatten all
-the air pockets out of wallpaper by rolling over them, but one keeps popping up
-just where we don't want it; however, the process can be proved to converge,
-and in practice converges very rapidly. 
+elements get smaller and smaller. This is very much like trying to get rid of all
+the air bubbles in wallpaper by flattening them with a stick, only to have new bubbles pop up.
+However, the off-diagonal elements introduced by the process are smaller on average than the
+original and it can be proved to converge to zero even if they will never be exactly zero.
+In practice this converge is extremely rapid for well-conditioned matrices.
 
 There is also a [randomized algorithm due to Halko, Martinsson, and Tropp][RA]
 which can be much faster, especially when we only want to retain a small number
-of components.
+of components. This is commonly used with very large sparse matrices.
 
 Normally I would tackle one of these "best practice" algorithms, but after
 studying them I found them to be larger in scope than what I would want to
 tackle for one of these articles.  Instead, I decided to implement an older but
-still quite adequate eigenvalue algorithm: known as the [QR algorithm.][QRA].
+still quite adequate eigenvalue algorithm: known as the [QR algorithm][QRA].
 In addition to being easy to understand and implement, it has the advantage
 that we can use the [QR decomposition][QRD] function that we implemented in the
-earlier [article on linear regression][MLFS1]. It's actually just as fast or
-faster than Golub-Reinsh; the disadvantage is that it is not as numerically
-stable particularly for the smallest eigenvalues. Because in PCA we normally
-intend to discard these anyway, this is not such a bad deal!
+earlier [article on linear regression][MLFS1]. It's just as fast or faster than
+Golub-Reinsh; the disadvantage is that it is not as numerically stable
+particularly for the smallest eigenvalues. Because in PCA we normally intend to
+discard these anyway, this is not such a bad deal!
 
-Recall from that [previous article][MLFS1] our implementations for Householder reflections
-and QR decompositions:
+Recall from that [previous article][MLFS1] our implementations for Householder
+reflections and QR decompositions:
 
     def householder_reflection(a, e):
         '''
@@ -396,8 +415,8 @@ and QR decompositions:
 
 Using these we can implement the QR algorithm in just a few lines of code. 
 
-The QR algorithm is iterative: at each step, we calculate $A_{k+1}$ by
-taking the QR decomposition of $A_{k}$, reversing the order of Q and R, and
+The QR algorithm is iterative: at each step, we calculate $A_{k+1}$ by taking
+the QR decomposition of $A_{k}$, reversing the order of Q and R, and
 multiplying the matrices together. Each time we do this, the off-diagonals get
 smaller.
 
@@ -418,14 +437,18 @@ smaller.
 Implementing PCA
 ----------------
 
-We made a number of simplifying assumptions in the above theory
-and now we have to pay for that with the same amount of busywork
-and preprocessing to get our data into an idealized form before
-we can start calculating eigenvalues.
+We made a number of simplifying assumptions in the above theory and now we have
+to pay for that with a corresponding amount of busywork to get our data into an
+idealized form before we can start calculating eigenvalues. There are really
+two pieces of book-keeping to implement:
 
-1. We need to ensure than the data are centered (and perhaps scaled)
-2. put eigenvalues in descending order
+1. We need to ensure than the data are centered 
+2. Optionally "whiten" the data so that each feature has unit variance
+3. put eigenvalues in descending order
 
+Aside from these considerations, the entire `fit()` function is little more
+than the handful of lines necessary to diagonalize the empirical covariance
+matrix. All of the hard work is done inside `eigen_decomposition()`.
 
     class PCA:
         def __init__(self, n_components=None, whiten=False):
@@ -626,9 +649,13 @@ A sample of the first five wines in the dataset:
 </tbody>
 </table>
 
-We can see that the features of this dataset are not on a common scale; proline in particular is a thousand
-times greater than the others. We added a "whiten" option to our PCA class, which we will use later; for now,
-just so we can visualize the data, we will whiten it manually and plot the covariance matrix.
+These data have two characteristics that we should consider carefully.
+
+First, we can see that the features of this dataset are not on the same scale;
+proline in particular is a thousand times greater than the others. That
+strongly suggests that we should "whiten" the data (scale everything so that
+each feature has unit variance before applying PCA.) Here, just for the
+purposes of this visualization, we will manually whiten the data.
 
     X_white = (X - X.mean(axis=0))/X.std(axis=0)
     C = X_white.T @ X_white / (X_white.shape[0] - 1)
@@ -641,23 +668,27 @@ just so we can visualize the data, we will whiten it manually and plot the covar
 
 <img src="/post/ml-from-scratch-part-6-pca_files/wine_covariance.png">
 
-It is also clear that this dataset exhibits significant [multicollinearity][MC], with every feature exhibiting high
-correlations with many others. While that would be a bad thing for say, linear regression, it means this
-data set is an ideal candidate for PCA.
+Second, it is clear that this dataset exhibits significant
+[multicollinearity][MC], with every feature exhibiting high correlations with
+many others. While that would be a bad thing for say, linear regression, it
+means these data are an ideal candidate for PCA.
 
     pca = PCA(whiten=True)
     pca.fit(X)
     X_prime = pca.transform(X)
 
-From the eigenvalues, we can see that the first few components explain most of the variance:
+From the eigenvalues, we can see that the first few components explain most of
+the variance:
 
     pca.eigenvalues
     array([4.732, 2.511, 1.454, 0.924, 0.858, 0.645, 
            0.554, 0.350, 0.291, 0.252, 0.227, 0.170,  0.104])
 
-The raw eigenvectors are hard to interpret directly, but if you like you can read the columns (starting with the leftmost)
-and see which features are being rolled up into each component; for example, it seems that "flavanoids" and "phenols" (whatever those are)
-are major contributors to the first principle component, among others, while "ash" contributes almost nothing to it.
+The raw eigenvectors are hard to interpret directly, but if you like you can
+read the columns (starting with the leftmost) and see which features are being
+rolled up into each component; for example, it seems that "flavanoids" and
+"phenols" (whatever those are) are major contributors to the first principle
+component, among others, while "ash" contributes almost nothing to it.
 
     pca.eigenvectors
 
@@ -676,7 +707,8 @@ are major contributors to the first principle component, among others, while "as
            [ 0.287, -0.365, -0.127,  0.232,  0.158,  0.12 ,  0.077,  0.12 ,  0.576, -0.162, -0.539,  0.079, -0.014]])
 
 
-Just as a cross check, we can plot the covariance matrix of the transformed data the same way we did the raw data above:
+Just as a cross check, we can plot the covariance matrix of the transformed
+data the same way we did the raw data above:
 
     plt.figure(figsize=(6,6))
     plt.imshow(C_prime, cmap='binary')
@@ -687,16 +719,17 @@ Just as a cross check, we can plot the covariance matrix of the transformed data
 
 <img src="/post/ml-from-scratch-part-6-pca_files/wine_transformed_covariance.png">
 
-And we can see the expected structure: eigenvalues descending from 4.7 to 0.1 along the diagonal, and exactly 0 away from the diagonal.
+And we can see the expected structure: eigenvalues descending from 4.7 to 0.1
+along the diagonal, and exactly 0 away from the diagonal.
 
 
 Visualizing the Components
 --------------------------
 
-PCA was applied only to the 13 features; the partition into three quality classes
-was not included. Still, we would like to know if the primary components have
-something to say about these classes, so we will color code them with red, green, 
-and blue.
+PCA was applied only to the 13 features; the partition into three quality
+classes was not included. Still, we would like to know if the primary
+components have something to say about these classes, so we will color code
+them with red, green, and blue.
 
 Let's start by visualizing only the first component as points along a line:
 
@@ -711,17 +744,18 @@ Let's start by visualizing only the first component as points along a line:
 
 <img src="/post/ml-from-scratch-part-6-pca_files/wine_pc1.png">
 
-This may seem a little silly, but in fact boiling it down to only a single component
-is kind of a power move: if you can boil a phenomenon down to a single number
-in a way that captures the essence, that could be very useful and in some
-cases represents an important discovery. For example, the reason we can talk about
-"mass" without clarifying "inertial mass" vs. "gravitational mass" is because
-we strongly believe those quantities are identical in all cases. Is it possible
-that wine is neither complex nor multidimensional, but simply exists along
-a spectrum from poor to good quality? 
+This may seem a little silly, but in fact boiling it down to only a single
+component is often the best option: if you can boil a phenomenon down to a
+single number in a way that captures the essence, that could be very useful and
+in some cases represents an important discovery. For example, the reason we can
+talk about "mass" without clarifying "inertial mass" vs. "gravitational mass"
+is because we strongly believe those quantities are identical in all cases. Is
+it possible that wine is neither complex nor multidimensional, but simply
+exists along a spectrum from poor to good quality? 
 
-In this case, it seems like the first principle component does not fully capture
-the concept of quality; but what about two?
+However, in this case, it seems like the first principle component does *not*
+fully capture the concept of quality. Let's try plotting the first two
+components.
 
     plt.figure(figsize=(10, 8))
     for c in np.unique(wine.target):
@@ -734,20 +768,18 @@ the concept of quality; but what about two?
 
 <img src="/post/ml-from-scratch-part-6-pca_files/wine_pc2.png">
 
-Here the situation is much improved, and we can see that each class
-corresponds to a well-localized cluster with little overlap. In many
-cases, where PC1 is right on the boundary between two classes, it is PC2
-that supplies the tiebreaker. Note that we could draw a single *curved*
-path that would connect these three regions in order or ascending quality;
-this suggests that a non-linear dimensionality reduction technique, say
-some kind of manifold learning like [t-SNE][TSNE], *might* be able to
-reduce quality to a single dimension. But is that the representation
-it would discover on its own, when trained in an unsupervised manner?
+Now we can see that each class corresponds to a well-localized cluster with
+little overlap. In many cases, where PC1 is right on the boundary between two
+classes, it is PC2 that supplies the tiebreaker. Note that we could draw a
+single *curved* path that would connect these three regions in order or
+ascending quality; this suggests that a non-linear dimensionality reduction
+technique, say some kind of manifold learning like [t-SNE][TSNE], *might* be
+able to reduce quality to a single dimension. But is that the representation it
+would discover on its own, when trained in an unsupervised manner?
 
 It may also be worth trying three dimensions, just in case PC3 has some
-non-ignorable contribution to quality. Three dimensions is always a little
-hard to visualize with standard plotting tools, but we can use pairwise
-2D plots:
+non-ignorable contribution to quality. Three dimensions is always a little hard
+to visualize with standard plotting tools, but we can use pairwise 2D plots:
 
     plt.figure(figsize=(16, 8))
 
@@ -793,17 +825,18 @@ a slightly more sophisticated projection on 2D:
 
 While these charts look attractive enough, they don't seem to make a compelling
 case for including PC3. At least for the purposes of understanding wine quality
-it seems we can retain just two principle components and still get a complete picture.
+it seems we can retain just two principle components and still get a complete
+picture.
 
-At this point in a real analysis, we would spend some time understanding what PC1
-and PC2 really represent, looking at which of the 13 original features contribute
-to each, and whether positive or negative, and how this relates to quality. But
-there is an elephant in the room - the informal or seemingly *ad hoc* method
-I used for deciding to use two components instead of one or three. While "just 
-look at the data and use the one that makes sense" has a certain pragmatic
-and commonsensical appeal, it's also easy to see that it's subjective enough
-to allow bias to creep in. As such, many people have asked themselves if there
-were not some rigorous decision rule that could be applied.
+At this point in a real analysis, we would spend some time understanding what
+PC1 and PC2 really represent, looking at which of the 13 original features
+contribute to each, and whether positive or negative, and how this relates to
+quality. But there is an elephant in the room - the informal or seemingly *ad
+hoc* method I used for deciding to use two components instead of one or three.
+While "just look at the data and use the one that makes sense" has a certain
+pragmatic and commonsensical appeal, it's also easy to see that it's subjective
+enough to allow bias to creep in. As such, many people have asked themselves if
+there were not some rigorous decision rule that could be applied.
 
 
 Strategies for Choosing The Number of Dimensions
@@ -851,11 +884,12 @@ and ultimately is no more likely to protect you from criticism than simply
 asserting that you used your best judgement. 
 
 Another approach is to decide before hand that you want to retain some fraction
-of the total variance, say 80% or 99%, and choose a number of components which give
-you the desired fidelity. (This approach is particularly attractive if you have
-the "compression" point-of-view in mind.) Although the proportion of variance explained
-is calculated from the same eigenvalues used for the scree plot, the difference here
-is that we are now looking at the cumulative sum of eigenvalues.
+of the total variance, say 80% or 99%, and choose a number of components which
+give you the desired fidelity. (This approach is particularly attractive if you
+have the "compression" point-of-view in mind.) Although the proportion of
+variance explained is calculated from the same eigenvalues used for the scree
+plot, the difference here is that we are now looking at the cumulative sum of
+eigenvalues.
 
     fig = plt.figure(figsize=(10, 7))
     plt.title("Variance Explained By Component")
@@ -897,12 +931,13 @@ information theoretic definition of "information" but is clear enough to a
 broad audience.
 
 Still, we haven't really solved the issue of having to choose an arbitrary
-threshold, have we? All we've done is couch the choice in terms of a more intuitive metric.
-I'm not sure any definitive and universally accepted answer exists - indeed,
-if the bar is set at "universally accepted" then I'm am sure that one does not - but the 
-wonderfully named paper *[Repairing Tom Swift’s Electric Factor Analysis Machine][RTS]*
-suggests one method, and I've seen several references to this [paper by Minka][ACD]
-which may represent the current state-of-the-art.
+threshold, have we? All we've done is couch the choice in terms of a more
+intuitive metric.  I'm not sure any definitive and universally accepted answer
+exists - indeed, if the bar is set at "universally accepted" then I'm am sure
+that one does not - but the wonderfully named paper *[Repairing Tom Swift’s
+Electric Factor Analysis Machine][RTS]* suggests one method, and I've seen
+several references to this [paper by Minka][ACD] which may represent the
+current state-of-the-art.
 
 Conclusion
 ----------
@@ -910,8 +945,8 @@ Conclusion
 PCA is the archetypical dimensionality reduction method; just as
 [$k$-means][KM] is the archetypical clustering method. Now that we've
 implemented both a dimensional reduction and a clustering method (in the [last
-article][MLFS5]) [from scratch][MLFS], we should have a pretty good handle
-on the basics of unsupervised learning. In particular, we've seen many of the
+article][MLFS5]) [from scratch][MLFS], we should have a pretty good handle on
+the basics of unsupervised learning. In particular, we've seen many of the
 frustration and limitations inherent in unsupervised methods, which boil down
 to the impossibility of objectively deciding in a given model is doing a good
 job or a bad job. This in turn makes it next to impossible to decide between
@@ -929,15 +964,18 @@ met the fairly stringent rules of the "from scratch" challenge.
 [AENN]: https://en.wikipedia.org/wiki/Autoencoder
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [FN]: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
+[GC]: https://en.wikipedia.org/wiki/Generalized_coordinates
 [GRA]: http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf
 [HR]: https://en.wikipedia.org/wiki/Householder_transformation
 [IN]: https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation
+[JLL]: https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange
 [KCTW]: https://stats.stackexchange.com/questions/253535/the-advantages-and-disadvantages-of-using-kaiser-rule-to-select-the-number-of-pr
 [KC]: https://en.wikipedia.org/wiki/Factor_analysis#Older_methods
 [KKT]: https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions
 [KM]: https://en.wikipedia.org/wiki/K-means_clustering
 [L25]: http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
 [LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
+[LM]: https://en.wikipedia.org/wiki/Lagrange_multiplier
 [L]: https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another
 [MC]: https://en.wikipedia.org/wiki/Multicollinearity
 [MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
@@ -960,4 +998,3 @@ met the fairly stringent rules of the "from scratch" challenge.
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec
 [WQD]: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html
-
