@@ -12,13 +12,15 @@ draft: true
 ---
 
 In the [previous article][MLFS5] in [this series][MLFS] we distinguished
-between two kinds of unsupervised learning: cluster analysis and dimensionality
-reduction.  In this article we turn our attention to the later.
+between two kinds of unsupervised learning (cluster analysis and dimensionality
+reduction) and discussed the former in some detail. In this installment we turn
+our attention to the later.
 
 In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto
 \mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and
 $m$ is less than or equal to $n$. That is, we want to map some high dimensional
-space into some lower dimensional space. 
+space into some lower dimensional space. (Contrast this with the map into a
+finite set sought by cluster analysis.)
 
 We will focus on one technique in particular: [Primary Component
 Analysis][PCA], usually abbreviated PCA.  We'll derive PCA from first
@@ -32,12 +34,13 @@ What is PCA?
 
 PCA is a *linear* dimensionality reduction technique. [Many][NLDR] non-linear
 [dimensionality][SOM] [reduction][AENN] [techniques][TSNE] exist, but linear
-methods are more mature. Just saying it's linear, though, is not quite enough
-to fully specify the problem. [Factor Analysis][FA] also seeks a linear map,
-but takes a more statistical approach and reaches a slightly different solution
-in practice. [Non-negative matrix factorization][NMF] seeks a linear map
-represented by a matrix with no negative elements - a restriction which PCA
-does not have.
+methods are more mature, if more limited. 
+
+Linearity does not suffice to fully specify the problem, however. [Factor
+Analysis][FA] also seeks a linear map, but takes a more statistical approach
+and reaches a slightly different solution in practice. [Non-negative matrix
+factorization][NMF] seeks a linear map represented by a matrix with no negative
+elements - a restriction which PCA does not have.
 
 I mention these other techniques to make the point that merely specifying that
 $f$ should be a linear map underspecifies the problem, and we need to be
@@ -73,37 +76,39 @@ use linear algebra whenever they can, because non-linear equations are so
 difficult to solve. But I digress.
 
 Under any of these three definitions, the linear map $f$ that we seek will turn
-out to be represented by a unique unique (\*some terms and conditions apply)
+out to be represented by a unique<sup>\*</sup> (\*some terms and conditions apply)
 orthogonal matrix $Q$.
 
 Orthogonal matrices are the generalization of the 3-dimensional concept of a
-rotation or reflection: in particular, they always preserve both *distance* and
-*angles*.  These are very nice properties for a transform to have! Merely
-rotating an object or holding it up to a mirror doesn't really distort it, but
+rotation or reflection: in particular they always preserve both *distance* and
+*angles*.  These are ideal properties for a transform to have because merely
+rotating an object or holding it up to a mirror never *distorts* it, but
 simply gives us a different perspective on it.  
 
-Imagine, for illustration's sake that you held in your hand an unfamiliar object
-made of some easily deformable material like clay. You might turn it gently this way and
-that, peer at it from every angle, or hold it up to the mirror. But
-these delicate operations do no harm to the object - indeed, you don't really
-need to touch the object at all! You're merely changing your own point of view.
-Not so if you had flattened or stretched or twisted it; after these more
-violent operations any shape or pattern you perceive may well be the product of
-your own manipulations and not a true insight into the nature of the original
-form.
+Imagine, for illustration's sake that you held in your hand an unfamiliar
+object made of some easily deformable material like clay or soft plastic. You
+might turn it gently this way and that, peer at it from every angle, or hold it
+up to the mirror. But these delicate operations do no harm to the object -
+indeed, you don't really need to touch the object at all! You're merely
+changing your own point of view.  Not so if you had flattened or stretched or
+twisted it; after these more violent operations any shape or pattern you
+perceive may well be the product of your own manipulations and not a true
+insight into the nature of the original form.
 
 <img src="/post/ml-from-scratch-part-6-pca_files/shape.png">
 
 Orthogonal matrices are the safest and least distorting transformation that we
-could apply, and by the same token the most conservative and cautious. I think
-these are virtues in a technique intended to help understand and explore data.
+could apply, and by the same token the most conservative and cautious. These
+are powerful virtues in a technique intended to help understand and explore
+data without misrepresenting it.
 
 Now, obviously we could rotate our data any which way to get a different
 picture, but PCA does more: it rotates it so that in some sense in becomes
 aligned to the axes - rather like straightening a picture hanging askew on the
-wall. This is the property 
+wall. This is the property of PCA that is makes it so desirable for exploratory
+analysis.
 
-Orthogonal matrices are always square, so $Q$ is an $m \times m$ matrix...
+Orthogonal matrices are always square, so $Q$ is an $m \times m$ matrix.
 But multiplying by a square matrix doesn't reduce the dimensionality at all!
 Why is this considered a dimensionality *reduction* technique? Well, it turns
 out that once we've rotated our data so that it's as *wide* as possible along
@@ -111,7 +116,7 @@ the first basis vector, that also means that it ends up as *thin* as possible
 along the last few basis vectors. This only works if the original data really
 were all quite close to some line or hyperplane, but with this assumption met
 we can safely drop the least significant dimensions and retain only our
-principle components, thus reducing dimensionality while still keeping most of
+principle components, thus reducing dimensionality while keeping most of
 the information (variance) of the data.  Of course, deciding *exactly* how many
 dimensions to drop/retain is a bit tricky, but we'll come to that later.
 
@@ -121,13 +126,15 @@ unique solution subject to the above constraints.
 Approach #1: The Direction of Maximal Variation
 -----------------------------------------------
 
-Before we can define the direction of maximal variance, we first have to be
+Before we can define the direction of maximal variance, we must be
 clear about what we mean by variance in a given direction. First, let's say
 that $\mathbf{x}$ is an $n$-dimensional random vector. This represents the
 population our data will be sampled from. Next, suppose you have some
 non-random vector $\mathbf{q} \in \mathbb{R}^n$. Assuming this vector is
 non-zero, it defines a line. What do mean by the phrase, "the variance of
 $\mathbf{x}$ in the direction of $\mathbf{q}$?" 
+
+<img src="/post/ml-from-scratch-part-6-pca_files/variance_along_q.png">
 
 The natural thing to do is to *project* the $n$-dimensional random variable
 *onto* the line defined by $\mathbf{q}$. We can do this with a dot product
@@ -166,22 +173,45 @@ active constraints. Earlier in this series, we've used techniques such as
 stochastic gradient descent to solve *unconstrained* optimization problems, but
 how do we deal the constraint?
 
+### An Ode to Lagrange Multipliers
+
 Happily, a very general and powerful trick exists for translating constrained
 optimization problems into unconstrained ones: [the method of Lagrange
-multipliers][LM]. In 1780, [Lagrange][JLL] was studying the motion of constrained
-physical systems such as a bead on a wire. At the time, such problems were
-usually solved by finding a suitable set of [generalized coordinates][GC] but
-this required a great deal of human ingenuity. Lagrange's idea was to imagine
-the system could "slip" just ever so slightly out of its constraints and that
-the true solution would be the one that *minimized* this virtual slippage. This
-could be elegantly handled by associating an energy cost called 'virtual work"
-that penalized the system proportional to the degree to which the constraints
-were violated. This trick reconceptualizes a hard constraint as just another
-parameter to optimize in an unconstrained system! And surprisingly enough, it
-does not result in an *approximate* solution that only sort of obeys the
-constraint but instead (assuming the constraint is physically possible and the
-resulting equations have a closed form solution) gives an *exact* solution
-where the constraint is *perfectly* obeyed.
+multipliers][LM]. In 1780, [Lagrange][JLL] was studying the motion of
+constrained physical systems.  At the time, such problems were usually solved
+by finding a suitable set of [generalized coordinates][GC] but this required a
+great deal of human ingenuity. 
+
+As a concrete illustration, consider a bead on a stiff, bent wire.  
+
+<img src="/post/ml-from-scratch-part-6-pca_files/bead_on_wire.png">
+
+The bead moves in all three dimensions and therefore requires three coordinates
+$x$, $y$, and $z$ to describe its position. However, it is also constrained to
+the one dimensional path imposed by the shape of the wire so in theory its
+position could be described by a single parameter $t$ describing its position
+along the bent path. However, for a very complex path this might be hard to do,
+and even harder to work with when calculating the momentum and energy necessary
+to describe the dynamics of the system. 
+
+Lagrange developed a method by which this could always be done in an
+essentially mechanical way, requiring no human insight. As just one example,
+the technique is used in modern [physics engines][PE] - as new contact points
+are added or removed as objects touch in different ways, the physics engine can
+dynamically add or remove constraints to model them without ever having to
+worry about finding an appropriate set of generalized coordinates. 
+
+Lagrange's genius was to imagine the system could "slip" just ever so
+slightly out of its constraints and that the true solution would be the one
+that *minimized* this virtual slippage. This could be elegantly handled by
+associating an energy cost called 'virtual work" that penalized the system
+proportional to the degree to which the constraints were violated. This trick
+reconceptualizes a hard constraint as just another parameter to optimize in an
+unconstrained system!  And surprisingly enough, it does not result in an
+*approximate* solution that only sort of obeys the constraint but instead
+(assuming the constraint is physically possible and the resulting equations
+have a closed form solution) gives an *exact* solution where the constraint is
+*perfectly* obeyed.
 
 It's easy to use too, at least in our simple case. We introduce the Lagrange
 multiplier $\lambda$ and rewrite our optimization as follows:
@@ -205,6 +235,8 @@ solution to (6). Such is the magic of Lagrange multipliers.
 But if (8) is just our constraint in a fancy new dress, how have we progressed
 at all?  Because (7) is now unconstrained (and therefore more tractable!)
 
+### Finding the Direction of Maximal Variation
+
 Suppose the matrix $\mathbf{X}$ is an $N \times n$ matrix with $N$ rows where
 each row vector is an independent realization of $\mathbf{x}$. Then we can
 estimate the covariance matrix as
@@ -227,7 +259,7 @@ eigenvalue.
 Because the covariance matrix $\mathbf{C}$ is real-valued, symmetric, and positive
 definite, we know that the eigenvalues will all be real-valued (as expected.)
 
-Thus to find the axes of maximal variation, it suffices to find the eigendecomposition
+Thus, to find the axes of maximal variation, it suffices to find the eigendecomposition
 of $\mathbf{C}$.
 
 Define $\mathbf{Q}$ to be the $n \times n$ *right* eigenvalue matrix (meaning
@@ -236,8 +268,8 @@ matrix containing eigenvalues along the diagonal.
 
 $$ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} $$
 
-We will discuss the algorithm necessary to actually compute $\mathbf{Q}$ and $\mathbf{\Lambda}$
-below, but first let's discuss the other ways of motivating PCA.
+We will discuss the algorithm necessary to compute $\mathbf{Q}$ and $\mathbf{\Lambda}$
+below, but first let's discuss some alternative ways to motivate PCA.
 
 
 Approach #2: Diagonalizing the Covariance Matrix
@@ -279,8 +311,8 @@ This argument is much more brutish and perhaps too on the nose: we wanted a
 diagonal covariance matrix, so we diagonalized it, anyone got a problem with
 that? However, it has the advantage of requiring nothing more than a basic
 understanding of linear algebra (no statistics, multivariate calculus, or
-optimization theory here!) and an engineer's common sense attitude toward
-working with data. 
+optimization theory here! All we need is a common-sense attitude toward working
+with data, or what my boss sometimes calls, "street statistics."
 
 ### A Brief Aside About Loadings 
 
@@ -304,11 +336,11 @@ Approach #3: Minimizing Reconstruction Error
 --------------------------------------------
 
 The third and final way to motivate the mathematical formalism of PCA is to
-view it as a form of *compression*. Specifically, of all possible linear linear
+view it as a form of *compression*. Specifically, of all possible linear
 projections from $n$ to $m$ dimensions, taking the first $k$ components of the
 PCA transformation of $X$ minimizes the *reconstruction error*. Reconstruction
 error is usually defined as the Frobenius distance between the original and
-reconstructed matrix, but interestingly enough the theorem holds for a few
+reconstructed matrix but interestingly enough the theorem holds for a few
 other metrics as well, suggesting it's a deep property of PCA and not some
 quirk of the Frobenius norm.
 
@@ -438,9 +470,8 @@ Implementing PCA
 ----------------
 
 We made a number of simplifying assumptions in the above theory and now we have
-to pay for that with a corresponding amount of busywork to get our data into an
-idealized form before we can start calculating eigenvalues. There are really
-two pieces of book-keeping to implement:
+to pay with a corresponding amount of busywork to get our data into an
+idealized form. There are really two pieces of book-keeping to implement:
 
 1. We need to ensure than the data are centered 
 2. Optionally "whiten" the data so that each feature has unit variance
@@ -668,10 +699,11 @@ purposes of this visualization, we will manually whiten the data.
 
 <img src="/post/ml-from-scratch-part-6-pca_files/wine_covariance.png">
 
-Second, it is clear that this dataset exhibits significant
-[multicollinearity][MC], with every feature exhibiting high correlations with
-many others. While that would be a bad thing for say, linear regression, it
-means these data are an ideal candidate for PCA.
+Second, it is clear from this plot that this dataset exhibits significant
+[multicollinearity][MC]. Every feature exhibiting high correlations with
+several others; no feature is truly independent. While that would be a bad
+thing for say, linear regression, it means these data are an ideal candidate
+for PCA.
 
     pca = PCA(whiten=True)
     pca.fit(X)
@@ -985,6 +1017,7 @@ met the fairly stringent rules of the "from scratch" challenge.
 [NLDR]: https://en.wikipedia.org/wiki/Nonlinear_dimensionality_reduction
 [NMF]: https://en.wikipedia.org/wiki/Non-negative_matrix_factorization
 [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+[PE]: https://gamedev.stackexchange.com/questions/117284/when-are-lagrangian-mechanics-useful-in-a-game
 [PTE]: https://www.projectrhea.org/rhea/index.php/PCA_Theory_Examples
 [QRA]: https://en.wikipedia.org/wiki/QR_algorithm
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
@@ -998,3 +1031,4 @@ met the fairly stringent rules of the "from scratch" challenge.
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec
 [WQD]: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html
+
