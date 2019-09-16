@@ -510,16 +510,25 @@ in [other models][ZFN]) but actually have behavior which is directly related to
 their meaning: the $n$-th Church number has the behavior of repeating a
 computation $n$ times. 
 
-For example, suppose we have a function called `print` and a message `"Hello,
-Lambda Calculus!"` and we want to print this message 3 times. How would we
-implement the equivalent of a `for` or `while` loop in the Pythonic lambda
-calculus? Just so:
+For example, suppose we have a function called `greet` and we want to call it 3
+times. How would we implement the equivalent of a `for` or `while` loop in the
+Pythonic lambda calculus? Just so:
 
-    > three(print)("Hello, Lambda Calculus!")
+    def hello_world(n):
+        print(f"Iteration #{n}: Hello, Lambda Calculus!")
+        return n+1
 
-    Hello, Lambda Calculus!
-    Hello, Lambda Calculus!
-    Hello, Lambda Calculus!
+    three(hello_world)(1)
+
+    Iteration #1: Hello, Lambda Calculus!
+    Iteration #2: Hello, Lambda Calculus!
+    Iteration #3: Hello, Lambda Calculus!
+    4
+
+The first time `greet()` is called, it is called with the `1` we passed in. Each
+subsequent call is passed the return value from the previous call. The function `greet()`
+will be called 3 times in total, printing a message each time. Finally, it returns
+a value of `4`.
 
 Of all the high-level programming languages I am aware of, I think only Ruby
 [comes close][RT] to the idea that numbers should literally be their own `for`
@@ -531,7 +540,7 @@ to indicate where such control flow statements were being used.)
 
 This one-to-one correspondence between Church numerals and behaviors makes it
 relatively easy to define mathematical operations on Church numerals.
-Following Peano, the first thing we need is a successor function which can
+Following [Peano][PA], the first thing we need is a successor function which can
 increment a number by one:
 
     succ = lambda n: lambda f: lambda x: f(n(f)(x))
@@ -1003,17 +1012,17 @@ We can test that it is correct by exhibiting the first 20 Fibonacci numbers:
 How Slow is Slow?
 -----------------
 
-As expected, this is rather slow, over 6 seconds to calculate $F_20$:
+As expected, this is rather slow, over 6 seconds to calculate $F_{20}$:
 
     %time slow_fibonacci(20)
 
     CPU times: user 6.59 s, sys: 20 ms, total: 6.61 s
     Wall time: 6.6 s
 
-This is one thousand times as slow as the same naive algorithm in vanilla
-Python, and about a million times slower than a good algorithm.  Note however
-that this is still faster than a human could work it out on paper!  As recently
-as 80 years ago this would have been state-of-the-art.
+This is one thousand times slower than the same naive algorithm in implemented
+vanilla Python, and about a million times slower than a good algorithm.  Note
+however that this is still faster than a human could work it out on paper!  As
+recently as 80 years ago this would have been state-of-the-art.
 
 A straight line on a log-scale plot shows that the algorithm scales as
 $\mathcal{O}(2^n)$.
@@ -1202,7 +1211,7 @@ between "lambda" and "llama" made me think of the children's book "[Llama llama
 red pajama][LLRP], a poem about a baby llama and his mama. I translated the above
 function declaration into a made up [agglutinative language][AL] to produce this
 nonsense bedtime rhyme... perhaps the only one in the world which is also a
-$\lambda$-calculus program.
+executable program.
 
 
 <blockquote>
@@ -1296,6 +1305,7 @@ Sleep sleep sleep sleep sleep sleep sleep
 [PC]: https://stackoverflow.com/questions/111234/what-is-a-callable
 [PM]: https://en.wikipedia.org/wiki/Pointer_machine
 [P]: https://www.python.org/
+[PA]: https://en.wikipedia.org/wiki/Peano_axioms
 [RT]: https://ruby-doc.org/core-2.5.0/Integer.html#method-i-times
 [SE]: https://en.wiktionary.org/wiki/superexponential
 [SL]: https://www.youtube.com/watch?v=2Op3QLzMgSY

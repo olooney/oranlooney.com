@@ -193,14 +193,20 @@ two = lambda f: lambda x: f(f(x))
 three = lambda f: lambda x: f(f(f(x)))
 # ... and so on</code></pre>
 <p>How do you apply a function zero times? Well, you don’t; you just return the value <code>x</code> right away. To call it once is <code>f(x)</code>, twice is <code>f(f(x))</code>, and so on. This means that Church numbers are <strong>not</strong> an arbitrary sequence of symbols that only gain semantics because of the relations defined on them (as they are in <a href="https://en.wikipedia.org/wiki/Set-theoretic_definition_of_natural_numbers">other models</a>) but actually have behavior which is directly related to their meaning: the <span class="math inline">\(n\)</span>-th Church number has the behavior of repeating a computation <span class="math inline">\(n\)</span> times.</p>
-<p>For example, suppose we have a function called <code>print</code> and a message <code>&quot;Hello, Lambda Calculus!&quot;</code> and we want to print this message 3 times. How would we implement the equivalent of a <code>for</code> or <code>while</code> loop in the Pythonic lambda calculus? Just so:</p>
-<pre><code>&gt; three(print)(&quot;Hello, Lambda Calculus!&quot;)
+<p>For example, suppose we have a function called <code>greet</code> and we want to call it 3 times. How would we implement the equivalent of a <code>for</code> or <code>while</code> loop in the Pythonic lambda calculus? Just so:</p>
+<pre><code>def hello_world(n):
+    print(f&quot;Iteration #{n}: Hello, Lambda Calculus!&quot;)
+    return n+1
 
-Hello, Lambda Calculus!
-Hello, Lambda Calculus!
-Hello, Lambda Calculus!</code></pre>
+three(hello_world)(1)
+
+Iteration #1: Hello, Lambda Calculus!
+Iteration #2: Hello, Lambda Calculus!
+Iteration #3: Hello, Lambda Calculus!
+4</code></pre>
+<p>The first time <code>greet()</code> is called, it is called with the <code>1</code> we passed in. Each subsequent call is passed the return value from the previous call. The function <code>greet()</code> will be called 3 times in total, printing a message each time. Finally, it returns a value of <code>4</code>.</p>
 <p>Of all the high-level programming languages I am aware of, I think only Ruby <a href="https://ruby-doc.org/core-2.5.0/Integer.html#method-i-times">comes close</a> to the idea that numbers should literally be their own <code>for</code> loops. Even LISP and Haskell require recursion, a separate <a href="http://zvon.org/other/haskell/Outputprelude/map_f.html">map</a> function, or a <a href="http://cl-cookbook.sourceforge.net/loop.html">loop macro</a>. (For code readability alone this is probably a good thing, though. In writing this article I’ve found the lack of traditional signpost statements more confusing than elegant, and have had to use comments to indicate where such control flow statements were being used.)</p>
-<p>This one-to-one correspondence between Church numerals and behaviors makes it relatively easy to define mathematical operations on Church numerals. Following Peano, the first thing we need is a successor function which can increment a number by one:</p>
+<p>This one-to-one correspondence between Church numerals and behaviors makes it relatively easy to define mathematical operations on Church numerals. Following <a href="https://en.wikipedia.org/wiki/Peano_axioms">Peano</a>, the first thing we need is a successor function which can increment a number by one:</p>
 <pre><code>succ = lambda n: lambda f: lambda x: f(n(f)(x))</code></pre>
 <p>Why does this work? Well, given an original number <code>n</code>, it first <em>uses</em> <code>n</code> to apply <code>f</code> to <code>x</code> <span class="math inline">\(n\)</span> times. It then applies <code>f</code> once more itself. Thus, the final value will be <code>f</code> applied to <code>x</code> <span class="math inline">\(n+1\)</span> times, which is <span class="math inline">\(n+1\)</span> by definition.</p>
 <p>This successor function allows us to easily construct new numbers <em>ad infinitum</em>:</p>
@@ -449,12 +455,12 @@ def PIR(f):
 </div>
 <div id="how-slow-is-slow" class="section level2">
 <h2>How Slow is Slow?</h2>
-<p>As expected, this is rather slow, over 6 seconds to calculate <span class="math inline">\(F_20\)</span>:</p>
+<p>As expected, this is rather slow, over 6 seconds to calculate <span class="math inline">\(F_{20}\)</span>:</p>
 <pre><code>%time slow_fibonacci(20)
 
 CPU times: user 6.59 s, sys: 20 ms, total: 6.61 s
 Wall time: 6.6 s</code></pre>
-<p>This is one thousand times as slow as the same naive algorithm in vanilla Python, and about a million times slower than a good algorithm. Note however that this is still faster than a human could work it out on paper! As recently as 80 years ago this would have been state-of-the-art.</p>
+<p>This is one thousand times slower than the same naive algorithm in implemented vanilla Python, and about a million times slower than a good algorithm. Note however that this is still faster than a human could work it out on paper! As recently as 80 years ago this would have been state-of-the-art.</p>
 <p>A straight line on a log-scale plot shows that the algorithm scales as <span class="math inline">\(\mathcal{O}(2^n)\)</span>.</p>
 <div class="figure">
 <img src="/post/slow-fibonacci_files/timing_slow_fib.png" title="A log-scale plot of time to compute then n-th Fibonacci function with the slow_fibonacci function." alt="Timing Slow Fibonacci" />
@@ -531,7 +537,7 @@ fibonacci = (lambda f: (lambda x: x(x))(lambda y: f(lambda z: y(y)(z))))(lambda 
 </div>
 <div id="postscript" class="section level2">
 <h2>Postscript</h2>
-<p>Reading the “macro expanded version” of the function out loud, the similarity between “lambda” and “llama” made me think of the children’s book “<a href="https://www.amazon.com/Llama-Red-Pajama-Anna-Dewdney/dp/0451474570">Llama llama red pajama</a>, a poem about a baby llama and his mama. I translated the above function declaration into a made up <a href="https://en.wikipedia.org/wiki/Agglutinative_language">agglutinative language</a> to produce this nonsense bedtime rhyme… perhaps the only one in the world which is also a <span class="math inline">\(\lambda\)</span>-calculus program.</p>
+<p>Reading the “macro expanded version” of the function out loud, the similarity between “lambda” and “llama” made me think of the children’s book “<a href="https://www.amazon.com/Llama-Red-Pajama-Anna-Dewdney/dp/0451474570">Llama llama red pajama</a>, a poem about a baby llama and his mama. I translated the above function declaration into a made up <a href="https://en.wikipedia.org/wiki/Agglutinative_language">agglutinative language</a> to produce this nonsense bedtime rhyme… perhaps the only one in the world which is also a executable program.</p>
 <blockquote>
 Hey llama baby hey llama mama hey <br> Ma sleep sleep hey llama ba baby <br> Hey llama ta ba hey ba sleep hey <br> Ta sleep sleep sleep sleep hey <br> Llama baby llama na hey llama ga <br> Llama na hey llama ga llama na <br> Hey llama na na hey llama ma hey <br> Llama ma llama ba ba sleep sleep <br> Hey llama ma llama ba ma sleep <br> Sleep hey hey llama ga llama na <br> Na hey hey llama na llama baby <br> Llama ma na hey llama red pajama <br> Llama haha hey red pajama hey <br> Baby sleep sleep sleep hey llama <br> Drama sleep hey llama dra dra <br> Sleep sleep sleep hey ga sleep <br> Sleep hey ga sleep hey na sleep <br> Sleep sleep hey hey llama na <br> Llama baby llama ma baby hey na <br> Hey baby sleep hey ma sleep sleep <br> Sleep hey ga sleep sleep hey na <br> Sleep sleep hey na sleep hey hey <br> Llama na llama baby llama ma baby <br> Hey na hey baby sleep hey ma <br> Sleep sleep sleep hey llama baby <br> Llama ma baby hey ma sleep sleep <br> Sleep hey na sleep hey hey llama <br> Ga llama na llama baby llama ma <br> Ga hey baby sleep hey na hey baby <br> Sleep hey ma sleep sleep sleep <br> Hey baby hey hey llama ga llama <br> Na na hey hey llama na llama baby <br> Llama ma na hey llama red pajama <br> Llama haha hey red pajama hey <br> Baby sleep sleep sleep hey llama <br> Drama sleep hey llama dra dra <br> Sleep sleep sleep hey ga sleep <br> Sleep hey na sleep hey llama baby <br> Llama ma baby hey ma sleep sleep <br> Sleep sleep hey baby hey hey <br> Llama ga llama na na hey hey <br> Llama na llama baby llama ma na <br> Hey llama red pajama llama haha <br> Hey red pajama hey baby sleep <br> Sleep sleep hey llama drama sleep <br> Hey llama dra dra sleep sleep <br> Sleep hey ga sleep sleep hey na <br> Sleep hey hey llama na llama baby <br> Llama ma baby hey na hey baby <br> Sleep hey ma sleep sleep sleep <br> Hey llama baby llama ma baby hey ma <br> Sleep sleep sleep sleep sleep sleep sleep
 </blockquote>
