@@ -1,14 +1,13 @@
 ---
 title: 'ML From Scratch, Part 6: Principal Component Analysis'
 author: Oran Looney
-date: 2019-08-01
+date: 2019-09-16
 tags:
   - Python
   - Statistics
   - From Scratch
   - Machine Learning
 image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
-draft: true
 ---
 
 In the [previous article][MLFS5] in [this series][MLFS] we distinguished
