@@ -43,7 +43,6 @@ anecdote:
 > in the crystal and you have to shake it out." Nothing made him angrier than
 > making something simple sound complicated. - [Danny Hillis][RFCM]
 
-[RFCM]: http://longnow.org/essays/richard-feynman-and-connection-machine/
 
 As has often been remarked, explaining things well is often just as beneficial
 to the teacher as to the student; it helps reinforce ideas and builds intuition.
@@ -122,9 +121,6 @@ matrix calculus) or SVMs (which basically requires the entire theory of
 derivations is bottlenecked by the necessity of typesetting the equations
 in $\LaTeX$, so these will typically be little more than sketches of the proofs.
 
-[MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
-[QP]: https://en.wikipedia.org/wiki/Quadratic_programming
-
 Second, the algorithms used will be state-of-the-art, or at least reasonably
 so.  For example, while we *could* solve linear regression with gradient
 descent, it would be a bit of a cop-out. Instead, we'll implement what modern
@@ -173,26 +169,11 @@ Here's a tentative list of algorithms I would like to tackle:
 |Classification|Neural Network| [Backpropagation][BPA] | [Part 3][MLFS3] |
 |Classification|Decision Tree| [Recursive Partition][RPA] | [Part 4][MLFS4] |
 |Clustering| [Gaussian Mixture Model][GMM] | [EM Algorithm][EMA] | [Part 5][MLFS5] |
-|Clustering|Hierarchical Clustering| [Agglomerative Clustering][ACA] | TBD |
-|Dimension Reduction| [Principal Component Analysis][PCA] | [QR Eigenvalue Algorithm][QRA] | TBD |
+|Dimension Reduction| [Principal Component Analysis][PCA] | [QR Eigenvalue Algorithm][QRA] | [Part 6][MLFS6] |
 |Recommendation| [Low-Rank Matrix Approximation][LRA] | [Alternating Projections][APA] | TBD |
 |Regression|General Additive Models| [Backfitting][BFA] | TBD |
 |Classification|Support Vector Machines| [SMO Algorithm][SMO] | TBD |
 
-[PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
-[GMM]: https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model
-
-[GD]: https://en.wikipedia.org/wiki/Gradient_descent
-[SMO]: https://en.wikipedia.org/wiki/Sequential_minimal_optimization
-[QRA]: https://en.wikipedia.org/wiki/QR_algorithm
-[ACA]: https://en.wikipedia.org/wiki/Hierarchical_clustering
-[BFA]: https://en.wikipedia.org/wiki/Backfitting_algorithm
-[EMA]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
-[RPA]: https://en.wikipedia.org/wiki/Recursive_partitioning
-[BPA]: https://en.wikipedia.org/wiki/Backpropagation
-[QRD]: https://en.wikipedia.org/wiki/QR_decomposition
-[LRA]: https://en.wikipedia.org/wiki/Low-rank_approximation
-[APA]: https://en.wikipedia.org/wiki/Low-rank_approximation#Alternating_projections_algorithm
 
 Other candidates I considered but ultimately decided were out-of-scope:
 
@@ -346,30 +327,47 @@ Next time, we'll start with [linear regression][MLFS1], followed by [logistic
 regression][MLFS2] and some simple [neural networks][MLFS3]. As new articles
 are added, you can find them collected under the ["from scratch"][MLFS] tag.
 
-[FA]: https://en.wikipedia.org/wiki/Factor_analysis
-[LTR]: https://en.wikipedia.org/wiki/Learning_to_rank
-[NNZ]: https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464
-[BTL]: https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model
-[IRT]: https://en.wikipedia.org/wiki/Item_response_theory
-[RM]: https://en.wikipedia.org/wiki/Rasch_model
-[KNN]: https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm
-[RT]: https://en.wikipedia.org/wiki/R-tree
-[DK]: https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect
-[LP]: https://en.wikipedia.org/wiki/Lagrange_multiplier
-[SVM]: https://en.wikipedia.org/wiki/Support-vector_machine
-[VC]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory
-[SL]: https://en.wikipedia.org/wiki/Supervised_learning
-[USL]: https://en.wikipedia.org/wiki/Unsupervised_learning
-[RL]: https://en.wikipedia.org/wiki/Reinforcement_learning
 
-[MLFS]: /tags/from-scratch/
+[ACA]: https://en.wikipedia.org/wiki/Hierarchical_clustering
+[APA]: https://en.wikipedia.org/wiki/Low-rank_approximation#Alternating_projections_algorithm
+[BFA]: https://en.wikipedia.org/wiki/Backfitting_algorithm
+[BPA]: https://en.wikipedia.org/wiki/Backpropagation
+[BTL]: https://en.wikipedia.org/wiki/Bradley%E2%80%93Terry_model
+[DK]: https://en.wikipedia.org/wiki/Dunning%E2%80%93Kruger_effect
+[EMA]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
+[FA]: https://en.wikipedia.org/wiki/Factor_analysis
+[GD]: https://en.wikipedia.org/wiki/Gradient_descent
+[GMM]: https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model
+[GN]: https://en.wikipedia.org/wiki/G%C3%B6del_numbering
+[GP]: https://en.wikipedia.org/wiki/Genetic_programming
+[IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
+[IRT]: https://en.wikipedia.org/wiki/Item_response_theory
+[KNN]: https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm
+[LP]: https://en.wikipedia.org/wiki/Lagrange_multiplier
+[LRA]: https://en.wikipedia.org/wiki/Low-rank_approximation
+[LTR]: https://en.wikipedia.org/wiki/Learning_to_rank
+[MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
 [MLFS1]: /post/ml-from-scratch-part-1-linear-regression/
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS3]: /post/ml-from-scratch-part-3-backpropagation/
 [MLFS4]: /post/ml-from-scratch-part-4-decision-tree/
 [MLFS5]: /post/ml-from-scratch-part-5-gmm/
-
-[IBL]: https://en.wikipedia.org/wiki/Instance-based_learning
-[GP]: https://en.wikipedia.org/wiki/Genetic_programming
-[GN]: https://en.wikipedia.org/wiki/G%C3%B6del_numbering
+[MLFS6]: /post/ml-from-scratch-part-6-pca/
+[MLFS]: /tags/from-scratch/
+[NNZ]: https://towardsdatascience.com/the-mostly-complete-chart-of-neural-networks-explained-3fb6f2367464
+[PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+[QP]: https://en.wikipedia.org/wiki/Quadratic_programming
+[QRA]: https://en.wikipedia.org/wiki/QR_algorithm
+[QRD]: https://en.wikipedia.org/wiki/QR_decomposition
+[RFCM]: http://longnow.org/essays/richard-feynman-and-connection-machine/
+[RL]: https://en.wikipedia.org/wiki/Reinforcement_learning
+[RM]: https://en.wikipedia.org/wiki/Rasch_model
+[RPA]: https://en.wikipedia.org/wiki/Recursive_partitioning
+[RT]: https://en.wikipedia.org/wiki/R-tree
+[SL]: https://en.wikipedia.org/wiki/Supervised_learning
+[SMO]: https://en.wikipedia.org/wiki/Sequential_minimal_optimization
+[SVM]: https://en.wikipedia.org/wiki/Support-vector_machine
 [TPOT]: https://automl.info/tpot/
+[USL]: https://en.wikipedia.org/wiki/Unsupervised_learning
+[VC]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory
+
