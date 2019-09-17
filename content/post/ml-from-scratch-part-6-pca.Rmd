@@ -964,8 +964,7 @@ broad audience.
 Still, we haven't really solved the issue of having to choose an arbitrary
 threshold, have we? All we've done is couch the choice in terms of a more
 intuitive metric.  I'm not sure any definitive and universally accepted answer
-exists - indeed, if the bar is set at "universally accepted" then I'm am sure
-that one does not - but the wonderfully named paper *[Repairing Tom Swift’s
+exists - but the wonderfully named paper *[Repairing Tom Swift’s
 Electric Factor Analysis Machine][RTS]* suggests one method, and I've seen
 several references to this [paper by Minka][ACD] which may represent the
 current state-of-the-art.
