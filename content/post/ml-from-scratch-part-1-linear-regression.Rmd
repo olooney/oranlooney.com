@@ -337,7 +337,7 @@ the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We could
 either *rotate* by the angle between the vectors:
 
 \[
-\cos^{-1} \frac{a_1 \sdot e_1}{||a_1||}
+\cos^{-1} \frac{a_1 \cdot e_1}{||a_1||}
 \]
 
 or we can *reflect* across the line which bisects the two

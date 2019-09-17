@@ -1,18 +1,105 @@
----
-title: 'ML From Scratch, Part 6: Principal Component Analysis'
-author: Oran Looney
-date: 2019-09-16
-tags:
-  - Python
-  - Statistics
-  - From Scratch
-  - Machine Learning
-image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML From Scratch, Part 6: Principal Component Analysis - OranLooney.com</title>
+  <meta property="og:title" content="ML From Scratch, Part 6: Principal Component Analysis - OranLooney.com" />
+  <meta name="twitter:title" content="ML From Scratch, Part 6: Principal Component Analysis - OranLooney.com" />
+  <meta name="description" content="In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
+In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathbb{R}^m\) where \(n\) is the dimension of the original data \(\mathbf{X}\) and \(m\) is less than or equal to \(n\). That is, we want to map some high dimensional space into some lower dimensional space.">
+  <meta property="og:description" content="In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
+In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathbb{R}^m\) where \(n\) is the dimension of the original data \(\mathbf{X}\) and \(m\) is less than or equal to \(n\). That is, we want to map some high dimensional space into some lower dimensional space.">
+  <meta name="twitter:description" content="In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-2535855-1');
+  </script>
+
+ 
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="site-navi">
+    
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
+      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
+      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+    <li><a href="http://honeycode.tumblr.com" target="_blank"  title="HoneyCode"><i class="fab fa-tumblr"></i></a></li>
+    <li><a href="https://www.librarything.com/catalog.php?view=olooney&offset=0&shelf_rows=10&previousOffset=0&shelf=shelf" target="_blank" title="LibraryThing"><i class="far fa-bookmark"></i></a></li>
+    
+  </ul>
+
+  </nav>
+</header>
 
 
 
-<p>In the <a href="/post/ml-from-scratch-part-5-gmm/">previous article</a> in <a href="/tags/from-scratch/">this series</a> we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.</p>
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/ml-from-scratch-part-6-pca_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">ML From Scratch, Part 6: Principal Component Analysis</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-date"><time>September 16, 2019</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/statistics/">
+            <i class="fas fa-tag"></i>
+            Statistics
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/from-scratch/">
+            <i class="fas fa-tag"></i>
+            From Scratch
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/machine-learning/">
+            <i class="fas fa-tag"></i>
+            Machine Learning
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  
+</aside>
+      <p>In the <a href="/post/ml-from-scratch-part-5-gmm/">previous article</a> in <a href="/tags/from-scratch/">this series</a> we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.</p>
 <p>In dimensionality reduction we seek a function <span class="math inline">\(f : \mathbb{R}^n \mapsto \mathbb{R}^m\)</span> where <span class="math inline">\(n\)</span> is the dimension of the original data <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(m\)</span> is less than or equal to <span class="math inline">\(n\)</span>. That is, we want to map some high dimensional space into some lower dimensional space. (Contrast this with the map into a finite set sought by cluster analysis.)</p>
 <p>We will focus on one technique in particular: <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Primary Component Analysis</a>, usually abbreviated PCA. We’ll derive PCA from first principles, implement a working version (writing all the linear algebra code from scratch), show an example of how PCA helps us visualize and gain insight into a high dimensional data set, and end with a discussion a few more-or-less principled ways to choose how many dimensions to keep.</p>
 <div id="what-is-pca" class="section level2">
@@ -718,3 +805,67 @@ plt.legend(loc=&#39;upper left&#39;)</code></pre>
 <p>PCA is the archetypical dimensionality reduction method; just as <a href="https://en.wikipedia.org/wiki/K-means_clustering"><span class="math inline">\(k\)</span>-means</a> is the archetypical clustering method. Now that we’ve implemented both a dimensional reduction and a clustering method (in the <a href="/post/ml-from-scratch-part-5-gmm/">last article</a>) <a href="/tags/from-scratch/">from scratch</a>, we should have a pretty good handle on the basics of unsupervised learning. In particular, we’ve seen many of the frustration and limitations inherent in unsupervised methods, which boil down to the impossibility of objectively deciding in a given model is doing a good job or a bad job. This in turn makes it next to impossible to decide between similar models, which tends to come down to a question of subjective judgement. Unfortunately, these models <em>do</em> have hyperparameters, so there are choices that need to be made… but can any choice be defended to the satisfaction of a hostile (or who simply have extremely high standards) third-party?</p>
 <p>More rewarding then wrestling with the ill-defined problems of unsupervised learning was the implementation of a eigendecomposition algorithm in a way that met the fairly stringent rules of the “from scratch” challenge.</p>
 </div>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/slow-fibonacci/" data-toggle="tooltip" data-placement="top" title="A Seriously Slow Fibonacci Function">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">
+	  &copy; Copyright 2019 Oran Looney
+  </div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  },
+  TeX: { extensions: ["color.js"] }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>
