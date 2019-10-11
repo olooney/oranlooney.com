@@ -74,7 +74,8 @@ image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
 </div>
 <div id="finding-the-direction-of-maximal-variation" class="section level3">
 <h3>Finding the Direction of Maximal Variation</h3>
-<p>Suppose the matrix <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(N \times n\)</span> matrix with <span class="math inline">\(N\)</span> rows where each row vector is an independent realization of <span class="math inline">\(\mathbf{x}\)</span>. Then we can estimate the covariance matrix as</p>
+<p>Suppose the matrix <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(N \times n\)</span> matrix with <span class="math inline">\(N\)</span> rows where each row vector is an independent realization of <span class="math inline">\(\mathbf{x}\)</span>. Also assume (without loss of generality) that the mean of each column of <span class="math inline">\(\mathbf{X}\)</span> is zero. (This can always be accomplished by simply subtracting off a mean vector <span class="math inline">\(\mathbf{\mu}\)</span> before applying PCA.)</p>
+<p>We can estimate the covariance matrix of <span class="math inline">\(\mathbf{X}\)</span> as</p>
 <p><span class="math display">\[ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} \]</span></p>
 <p><span class="math display">\[ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{10} \]</span></p>
 <p><span class="math display">\[ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \tag{11} \]</span></p>
@@ -95,7 +96,7 @@ image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
 <p><span class="math display">\[ \mathbf{X}&#39; = \mathbf{X} \mathbf{Q} \tag{14} \]</span></p>
 <p>When we then estimate the empirical covariance of <span class="math inline">\(\mathbf{X}&#39;\)</span>, we find</p>
 <p><span class="math display">\[ \begin{align}
-\mathbf{C}&#39; &amp; = \frac{\mathbf{X}&#39;^T \mathbf{X}}{n} \tag{15} \\
+\mathbf{C}&#39; &amp; = \frac{\mathbf{X}&#39;^T \mathbf{X}&#39;}{n} \tag{15} \\
 &amp; = \frac{(\mathbf{X}\mathbf{Q})^T (\mathbf{X}\mathbf{Q})}{n} \\
 &amp; = \frac{\mathbf{Q}^T \mathbf{X}^T \mathbf{X}\mathbf{Q}}{n} \\
 &amp; = \mathbf{Q}^T \Bigg( \frac{\mathbf{X}^T \mathbf{X}}{n} \Bigg) \mathbf{Q} \\
@@ -104,7 +105,7 @@ image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
 \end{align}
 \]</span></p>
 <p>Because <span class="math inline">\(\mathbf{\Lambda}\)</span> is a diagonal matrix, we’ve shown that the empirical covariance of our transformed data set is diagonal; which is to say, all of the features of <span class="math inline">\(X&#39;\)</span> are independent.</p>
-<p>This argument is much more brutish and perhaps too on the nose: we wanted a diagonal covariance matrix, so we diagonalized it, anyone got a problem with that? However, it has the advantage of requiring nothing more than a basic understanding of linear algebra (no statistics, multivariate calculus, or optimization theory here! All we need is a common-sense attitude toward working with data, or what my boss sometimes calls, “street statistics.”</p>
+<p>This argument is much more brutish and perhaps too on the nose: we wanted a diagonal covariance matrix, so we diagonalized it, anyone got a problem with that? However, it has the advantage of requiring nothing more than linear algebra: no statistics, multivariate calculus, or optimization theory here! All we need is a common-sense attitude toward working with data, or what my boss sometimes calls “street statistics.”</p>
 <div id="a-brief-aside-about-loadings" class="section level3">
 <h3>A Brief Aside About Loadings</h3>
 <p>At this point it may also be worth mentioning that multiplying by the left eigenvector matrix <span class="math inline">\(\mathbf{Q}\)</span> is only one of two common ways to define the transformed data <span class="math inline">\(\mathbf{X}&#39;\)</span>. Alternatively, we could have used the so-called “<a href="https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another">loadings</a>” matrix, defined like so:</p>
@@ -123,7 +124,8 @@ image: /post/ml-from-scratch-part-6-pca_files/lead.jpg
 </div>
 <div id="algorithm-for-solving-the-eigenproblem" class="section level2">
 <h2>Algorithm for Solving the Eigenproblem</h2>
-<p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> of a matrix <span class="math inline">\(A\)</span> which almost immediately gives us the eigenvalues of and eigenvectors of <span class="math inline">\(A^T A\)</span>. The best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an iterative algorithm: For the <span class="math inline">\(k\)</span>-th step, we first use <a href="https://en.wikipedia.org/wiki/Householder_transformation">Householder reflections</a> to reduce the matrix to bidiagonal form <span class="math inline">\(A_k\)</span>, Then the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> of <span class="math inline">\(X_k^T X_k\)</span> is used to set many of the off-diagonal elements to zero. The resulting matrix <span class="math inline">\(A_{k+1}\)</span> is <a href="https://en.wikipedia.org/wiki/Tridiagonal_matrix">tridiagonal</a>, but at each step the off-diagonal elements get smaller and smaller. This is very much like trying to get rid of all the air bubbles in wallpaper by flattening them with a stick, only to have new bubbles pop up. However, the off-diagonal elements introduced by the process are smaller on average than the original and it can be proved to converge to zero even if they will never be exactly zero. In practice this converge is extremely rapid for well-conditioned matrices.</p>
+<p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> of a matrix <span class="math inline">\(A\)</span> which almost immediately gives us the eigenvalues of and eigenvectors of <span class="math inline">\(A^T A\)</span>. The best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an iterative algorithm. Starting with <span class="math inline">\(A_1 = A\)</span> we calculate <span class="math inline">\(A_{k+1}\)</span> from <span class="math inline">\(A_k\)</span> until we achieve convergence.</p>
+<p>For each step we first use <a href="https://en.wikipedia.org/wiki/Householder_transformation">Householder reflections</a> to reduce the matrix to bidiagonal form <span class="math inline">\(A_k\)</span>, then use a <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> of <span class="math inline">\(X_k^T X_k\)</span> to set many of the off-diagonal elements to zero. The resulting matrix <span class="math inline">\(A_{k+1}\)</span> is <a href="https://en.wikipedia.org/wiki/Tridiagonal_matrix">tridiagonal</a>, but at each step the off-diagonal elements get smaller and smaller. This is very much like trying to get rid of all the air bubbles in wallpaper by flattening them with a stick, only to have new bubbles pop up. However, the off-diagonal elements introduced by the process are smaller on average than the original and it can be proved to converge to zero even if they will never be exactly zero. In practice this converge is extremely rapid for well-conditioned matrices.</p>
 <p>There is also a <a href="https://arxiv.org/abs/0909.4061">randomized algorithm due to Halko, Martinsson, and Tropp</a> which can be much faster, especially when we only want to retain a small number of components. This is commonly used with very large sparse matrices.</p>
 <p>Normally I would tackle one of these “best practice” algorithms, but after studying them I found them to be larger in scope than what I would want to tackle for one of these articles. Instead, I decided to implement an older but still quite adequate eigenvalue algorithm: known as the <a href="https://en.wikipedia.org/wiki/QR_algorithm">QR algorithm</a>. In addition to being easy to understand and implement, it has the advantage that we can use the <a href="https://en.wikipedia.org/wiki/QR_decomposition">QR decomposition</a> function that we implemented in the earlier <a href="/post/ml-from-scratch-part-1-linear-regression/">article on linear regression</a>. It’s just as fast or faster than Golub-Reinsh; the disadvantage is that it is not as numerically stable particularly for the smallest eigenvalues. Because in PCA we normally intend to discard these anyway, this is not such a bad deal!</p>
 <p>Recall from that <a href="/post/ml-from-scratch-part-1-linear-regression/">previous article</a> our implementations for Householder reflections and QR decompositions:</p>
@@ -205,7 +207,6 @@ def qr_decomposition(A):
         self.n_components = n_components
         self.whiten = bool(whiten)
     
-
     def fit(self, X):
         n, m = X.shape
         
@@ -234,7 +235,6 @@ def qr_decomposition(A):
         self.eigenvectors = self.eigenvectors[:, descending_order]
 
         return self
-
 
     def transform(self, X):
         X = X - self.mu

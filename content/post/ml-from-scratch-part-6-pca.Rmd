@@ -28,6 +28,7 @@ from scratch), show an example of how PCA helps us visualize and gain insight
 into a high dimensional data set, and end with a discussion a few more-or-less
 principled ways to choose how many dimensions to keep.
 
+
 What is PCA?
 ------------
 
@@ -122,6 +123,7 @@ dimensions to drop/retain is a bit tricky, but we'll come to that later.
 For now, let's explore the mathematics and show how PCA gives rise to a
 unique solution subject to the above constraints.
 
+
 Approach #1: The Direction of Maximal Variation
 -----------------------------------------------
 
@@ -171,6 +173,7 @@ $\mathbf{q}$ equal to zero; that [KKT condition][KKT] only applies in the *absen
 active constraints. Earlier in this series, we've used techniques such as
 stochastic gradient descent to solve *unconstrained* optimization problems, but
 how do we deal the constraint?
+
 
 ### An Ode to Lagrange Multipliers
 
@@ -234,11 +237,16 @@ solution to (6). Such is the magic of Lagrange multipliers.
 But if (8) is just our constraint in a fancy new dress, how have we progressed
 at all?  Because (7) is now unconstrained (and therefore more tractable!)
 
+
 ### Finding the Direction of Maximal Variation
 
 Suppose the matrix $\mathbf{X}$ is an $N \times n$ matrix with $N$ rows where
-each row vector is an independent realization of $\mathbf{x}$. Then we can
-estimate the covariance matrix as
+each row vector is an independent realization of $\mathbf{x}$. Also assume
+(without loss of generality) that the mean of each column of $\mathbf{X}$ is
+zero. (This can always be accomplished by simply subtracting off a mean vector
+$\mathbf{\mu}$ before applying PCA.) 
+
+We can estimate the covariance matrix of $\mathbf{X}$ as
 
 $$ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} $$
 
@@ -293,7 +301,7 @@ $$ \mathbf{X}' = \mathbf{X} \mathbf{Q} \tag{14} $$
 When we then estimate the empirical covariance of $\mathbf{X}'$, we find
 
 $$ \begin{align}
-\mathbf{C}' & = \frac{\mathbf{X}'^T \mathbf{X}}{n} \tag{15} \\
+\mathbf{C}' & = \frac{\mathbf{X}'^T \mathbf{X}'}{n} \tag{15} \\
 & = \frac{(\mathbf{X}\mathbf{Q})^T (\mathbf{X}\mathbf{Q})}{n} \\
 & = \frac{\mathbf{Q}^T \mathbf{X}^T \mathbf{X}\mathbf{Q}}{n} \\
 & = \mathbf{Q}^T \Bigg( \frac{\mathbf{X}^T \mathbf{X}}{n} \Bigg) \mathbf{Q} \\
@@ -308,10 +316,11 @@ features of $X'$ are independent.
 
 This argument is much more brutish and perhaps too on the nose: we wanted a
 diagonal covariance matrix, so we diagonalized it, anyone got a problem with
-that? However, it has the advantage of requiring nothing more than a basic
-understanding of linear algebra (no statistics, multivariate calculus, or
-optimization theory here! All we need is a common-sense attitude toward working
-with data, or what my boss sometimes calls, "street statistics."
+that? However, it has the advantage of requiring nothing more than linear
+algebra: no statistics, multivariate calculus, or optimization theory here! All
+we need is a common-sense attitude toward working with data, or what my boss
+sometimes calls "street statistics."
+
 
 ### A Brief Aside About Loadings 
 
@@ -360,21 +369,26 @@ Here, 512 dimensions was reduced to just 29, but the reconstructed image is stil
 With three separate theoretical justifications under our belt - which is two too many to be honest - 
 let's turn our attention to the concrete problem of implementing eigendecomposition from scratch.
 
+
 Algorithm for Solving the Eigenproblem
 --------------------------------------
 
 The modern approach to implementing PCA is to find the [Singular Value Decomposition][SVD] of a matrix $A$ which
 almost immediately gives us the eigenvalues of and eigenvectors of $A^T A$. The
 best known SVD algorithm is the [Golub-Reinsh Algorithm][GRA]. This is an
-iterative algorithm: For the $k$-th step, we first use [Householder reflections][HR]
-to reduce the matrix to bidiagonal form $A_k$, Then the [QR decomposition][QRD] of
-$X_k^T X_k$ is used to set many of the off-diagonal elements to zero. The
-resulting matrix $A_{k+1}$ is [tridiagonal][TRI], but at each step the off-diagonal
-elements get smaller and smaller. This is very much like trying to get rid of all
-the air bubbles in wallpaper by flattening them with a stick, only to have new bubbles pop up.
-However, the off-diagonal elements introduced by the process are smaller on average than the
-original and it can be proved to converge to zero even if they will never be exactly zero.
-In practice this converge is extremely rapid for well-conditioned matrices.
+iterative algorithm. Starting with $A_1 = A$ we calculate $A_{k+1}$ from $A_k$
+until we achieve convergence.
+
+For each step we first use [Householder reflections][HR] to reduce the matrix
+to bidiagonal form $A_k$, then use a [QR decomposition][QRD] of $X_k^T X_k$ to
+set many of the off-diagonal elements to zero. The resulting matrix $A_{k+1}$
+is [tridiagonal][TRI], but at each step the off-diagonal elements get smaller
+and smaller. This is very much like trying to get rid of all the air bubbles in
+wallpaper by flattening them with a stick, only to have new bubbles pop up.
+However, the off-diagonal elements introduced by the process are smaller on
+average than the original and it can be proved to converge to zero even if they
+will never be exactly zero.  In practice this converge is extremely rapid for
+well-conditioned matrices.
 
 There is also a [randomized algorithm due to Halko, Martinsson, and Tropp][RA]
 which can be much faster, especially when we only want to retain a small number
@@ -485,7 +499,6 @@ matrix. All of the hard work is done inside `eigen_decomposition()`.
             self.n_components = n_components
             self.whiten = bool(whiten)
         
-
         def fit(self, X):
             n, m = X.shape
             
@@ -515,7 +528,6 @@ matrix. All of the hard work is done inside `eigen_decomposition()`.
 
             return self
 
-            
         def transform(self, X):
             X = X - self.mu
             
@@ -1029,4 +1041,3 @@ met the fairly stringent rules of the "from scratch" challenge.
 [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
 [W2V]: https://en.wikipedia.org/wiki/Word2vec
 [WQD]: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html
-
