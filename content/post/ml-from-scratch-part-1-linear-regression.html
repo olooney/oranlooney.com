@@ -59,8 +59,13 @@ L(\Theta;\mathbf{X},\mathbf{y})
 <p><span class="math display">\[ \nabla_\Theta J = \nabla_\Theta \; (\mathbf{y} - \mathbf{X}\Theta)^T(\mathbf{y} - \mathbf{X}\Theta) \]</span></p>
 <p>Expanding it out with FOIL:</p>
 <p><span class="math display">\[ 
-\nabla_\Theta J = \nabla_\Theta \; 
-\mathbf{y}^T \mathbf{y} - (\mathbf{X}\Theta)^T \mathbf{y} - \mathbf{y}^T \mathbf{X}\Theta + \Theta^T (\mathbf{X}^T \mathbf{X}) \Theta \]</span></p>
+\nabla_\Theta J = \nabla_\Theta \; (
+    \mathbf{y}^T \mathbf{y} 
+    - (\mathbf{X}\Theta)^T \mathbf{y} 
+    - \mathbf{y}^T \mathbf{X}\Theta 
+    + \Theta^T (\mathbf{X}^T \mathbf{X}) \Theta 
+)
+\]</span></p>
 <p>It’s obvious that <span class="math inline">\(\mathbf{y}^T \mathbf{y}\)</span> is constant with respect to <span class="math inline">\(\Theta\)</span> so the first term simply vanishes. It’s less obvious but also true that the next two terms are equal to each other - just remember that a J is a scalar, so those terms are each scalar, and the transpose of a scalar is itself. The final term is a quadratic form, and the <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F16/linearQuadraticGradients.pdf">general rule</a> is $ x^T A x = A^T x + A x $ but because the product of a matrix with itself is always symmetric (<span class="math inline">\(X^T X = (X^T X)^T\)</span>) we can use the simpler form <span class="math inline">\(\nabla x^T A x = 2 A x\)</span>.</p>
 <p><span class="math display">\[ \nabla_\Theta J = - 2 \mathbf{X}^T \mathbf{y} + 2 \mathbf{X}^T \mathbf{X} \Theta \]</span></p>
 <p>Setting this equal to zero at the minimum, which we will call <span class="math inline">\(\hat{\Theta}\)</span>, and dividing both sides by two, we get:</p>

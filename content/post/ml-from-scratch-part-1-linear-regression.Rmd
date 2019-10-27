@@ -197,8 +197,13 @@ Expanding it out with FOIL:
 
 
 \[ 
-\nabla_\Theta J = \nabla_\Theta \; 
-\mathbf{y}^T \mathbf{y} - (\mathbf{X}\Theta)^T \mathbf{y} - \mathbf{y}^T \mathbf{X}\Theta + \Theta^T (\mathbf{X}^T \mathbf{X}) \Theta \]
+\nabla_\Theta J = \nabla_\Theta \; (
+	\mathbf{y}^T \mathbf{y} 
+	- (\mathbf{X}\Theta)^T \mathbf{y} 
+	- \mathbf{y}^T \mathbf{X}\Theta 
+	+ \Theta^T (\mathbf{X}^T \mathbf{X}) \Theta 
+)
+\]
    
 It's obvious that $\mathbf{y}^T \mathbf{y}$ is constant with respect to $\Theta$ so the first
 term simply vanishes.  It's less obvious but also true that the next two terms
