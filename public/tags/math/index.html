@@ -96,8 +96,8 @@
         </ul>
         <a href="/post/slow-fibonacci/"><img src="/post/slow-fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
-This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?
+          I recently wrote an article which was ostensibly about the Fibonacciseries but was really about optimization techniques. I wanted to follow up onits (extremely moderate) success by going in the exact opposite direction:by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower,but this is boring. How can we make it slow in a fair and interesting way?
         </div>
         <div class="article-readmore"><a href="/post/slow-fibonacci/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -131,7 +131,7 @@ This is not as easy as it sounds: any program can trivially be made slower, but 
         <a href="/post/fibonacci/"><img src="/post/fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
           A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
-def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance is terrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamic programming. Specifically, either the memoization:
+def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance isterrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamicprogramming. Specifically, either the memoization:
 from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:
         </div>
         <div class="article-readmore"><a href="/post/fibonacci/">Read more...</a></div>
@@ -193,9 +193,9 @@ from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2
         </ul>
         <a href="/post/complex-r-part-2/"><img src="/post/complex-r-part-2_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
-In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.
-In this second part, we’ll take a more in-depth look at some scenarios where complex numbers arise naturally – where they are less of a choice an more of a necessity.
+          This post is part of a series on complex number functionality in theR programming language. You may want to read Part I before continuing ifyou are not already comfortable with the basics.
+In Part I of this series, we dipped our toes in the water by explicitlycreating some complex numbers and showing how they worked with the most basicmathematical operators, functions, and plots.
+In this second part, we’ll take a more in-depth look at some scenarios wherecomplex numbers arise naturally – where they are less of a choice an moreof a necessity.
         </div>
         <div class="article-readmore"><a href="/post/complex-r-part-2/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -222,8 +222,8 @@ In this second part, we’ll take a more in-depth look at some scenarios where c
         </ul>
         <a href="/post/complex-r/"><img src="/post/complex-r_files/lead.192x128.png" class="article-image" /></a>
         <div class="article-content">
-          R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
-Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.
+          R, like many scientific programming languages, has first-class support forcomplex numbers. And, just as in most other programming languages, thisfunctionality is ignored by the vast majority of users.
+Yet complex numbers can often offer surprisingly elegant formulations andsolutions to problems. I want to convince you that familiarizing yourself withR’s excellent complex number functionality is well worth the effort and willpay off in two different ways: first by showing you how they are soamazingly useful you’ll want to go out of your way to use them, and then byshowing you how they are so common and fundamental to modern analysis that youcouldn’t avoid them if you wanted to.
         </div>
         <div class="article-readmore"><a href="/post/complex-r/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -237,7 +237,7 @@ Yet complex numbers can often offer surprisingly elegant formulations and soluti
 
 <div class="site-footer">
   <div class="copyright">
-	  &copy; Copyright 2019 Oran Looney
+	  &copy; Copyright 2022 Oran Looney
   </div>
   <ul class="site-footer-items">
     <li class="site-footer-item-rsslink">

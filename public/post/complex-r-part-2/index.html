@@ -6,13 +6,13 @@
   <title>Complex Numbers in R, Part II - OranLooney.com</title>
   <meta property="og:title" content="Complex Numbers in R, Part II - OranLooney.com" />
   <meta name="twitter:title" content="Complex Numbers in R, Part II - OranLooney.com" />
-  <meta name="description" content="This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
-In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.
-In this second part, we’ll take a more in-depth look at some scenarios where complex numbers arise naturally – where they are less of a choice an more of a necessity.">
-  <meta property="og:description" content="This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
-In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.
-In this second part, we’ll take a more in-depth look at some scenarios where complex numbers arise naturally – where they are less of a choice an more of a necessity.">
-  <meta name="twitter:description" content="This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
+  <meta name="description" content="This post is part of a series on complex number functionality in theR programming language. You may want to read Part I before continuing ifyou are not already comfortable with the basics.
+In Part I of this series, we dipped our toes in the water by explicitlycreating some complex numbers and showing how they worked with the most basicmathematical operators, functions, and plots.
+In this second part, we’ll take a more in-depth look at some scenarios wherecomplex numbers arise naturally – where they are less of a choice an moreof a necessity.">
+  <meta property="og:description" content="This post is part of a series on complex number functionality in theR programming language. You may want to read Part I before continuing ifyou are not already comfortable with the basics.
+In Part I of this series, we dipped our toes in the water by explicitlycreating some complex numbers and showing how they worked with the most basicmathematical operators, functions, and plots.
+In this second part, we’ll take a more in-depth look at some scenarios wherecomplex numbers arise naturally – where they are less of a choice an moreof a necessity.">
+  <meta name="twitter:description" content="This post is part of a series on complex number functionality in theR programming language. You may want to read Part I before continuing ifyou are not already comfortable with the basics.
 In Part I …">
   <meta name="author" content="Oran Looney"/>
 
@@ -101,19 +101,43 @@ In Part I …">
 <aside class="toc">
   
 </aside>
-      <p><small><em>This post is part of a series on complex number functionality in the R programming language. You may want to read <a href="/post/complex-r/">Part I</a> before continuing if you are not already comfortable with the basics.</em></small></p>
-<p>In <a href="/post/complex-r/">Part I</a> of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.</p>
-<p>In this second part, we’ll take a more in-depth look at some scenarios where complex numbers arise naturally – where they are less of a <em>choice</em> an more of a <em>necessity</em>. R doesn’t hesitate to return complex numbers from standard functions when they are the most natural and idiomatic representation, so you should be prepared to deal with that.</p>
+      <p><small><em>This post is part of a series on complex number functionality in the
+R programming language. You may want to read <a href="/post/complex-r/">Part I</a> before continuing if
+you are not already comfortable with the basics.</em></small></p>
+<p>In <a href="/post/complex-r/">Part I</a> of this series, we dipped our toes in the water by explicitly
+creating some complex numbers and showing how they worked with the most basic
+mathematical operators, functions, and plots.</p>
+<p>In this second part, we’ll take a more in-depth look at some scenarios where
+complex numbers arise naturally – where they are less of a <em>choice</em> an more
+of a <em>necessity</em>. R doesn’t hesitate to return complex numbers from standard
+functions when they are the most natural and idiomatic representation, so you
+should be prepared to deal with that.</p>
 <div id="complex-roots-and-eigenvalues" class="section level2">
 <h2>Complex Roots and Eigenvalues</h2>
 <blockquote>
-<p>Some problems are specific to complex numbers, some problems can be made easier by a complex representation, and some problems have complex numbers thrust upon them.</p>
+<p>Some problems are specific to complex numbers, some problems can be made
+easier by a complex representation, and some problems have complex numbers
+thrust upon them.</p>
 <p>– <cite>William Shakespeare, 12 + 5i Night</cite></p>
 </blockquote>
-<p>One such case that is of interest to statisticians and scientists (I’m assuming you’re not using R for embedded systems or game development) is solving the <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">eignproblem</a> for a non-symmetric matrix.</p>
-<p>Now, if your only exposure to eigenvalues is through <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a>, you might not even be aware that eigenvalues are usually complex numbers… even when the original matrix is comprised only of real numbers! However PCA is actually a very special case: a covariance matrix is <em>always</em> a symmetric, positive-definite, real-valued matrix, therefore its eigenvalues are always positive real numbers.</p>
-<p>However, there are plenty of situations in statistics where a non-symmetric matrix arises naturally and the eigenvalues can give us deep insight into the problem. Two such are <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov Chains</a> and <a href="https://en.wikipedia.org/wiki/Autoregressive_model">AR models</a>. Let’s only look at a simple example of an AR model - that will suffice to demonstrate R’s complex number functionality in this domain.</p>
-<p>Let’s start by constructing a small time series that exhibits very strong autocorrelation. To get some interesting behavior, I will give it a strongly positive one day correlation, but then reverse it the next day. This should give us both decay and oscillations.</p>
+<p>One such case that is of interest to statisticians and scientists (I’m
+assuming you’re not using R for embedded systems or game development) is
+solving the <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">eignproblem</a> for a non-symmetric matrix.</p>
+<p>Now, if your only exposure to eigenvalues is through <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a>, you might not
+even be aware that eigenvalues are usually complex numbers… even when
+the original matrix is comprised only of real numbers! However
+PCA is actually a very special case: a covariance matrix is <em>always</em>
+a symmetric, positive-definite, real-valued matrix, therefore its
+eigenvalues are always positive real numbers.</p>
+<p>However, there are plenty of situations in statistics where a non-symmetric
+matrix arises naturally and the eigenvalues can give us deep insight into
+the problem. Two such are <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov Chains</a> and <a href="https://en.wikipedia.org/wiki/Autoregressive_model">AR models</a>. Let’s
+only look at a simple example of an AR model - that will suffice to
+demonstrate R’s complex number functionality in this domain.</p>
+<p>Let’s start by constructing a small time series that exhibits very strong
+autocorrelation. To get some interesting behavior, I will give it a strongly
+positive one day correlation, but then reverse it the next day. This should
+give us both decay and oscillations.</p>
 <pre class="r"><code>set.seed(43)
 t_0 &lt;- zoo(rnorm(n=100))
 t_1 &lt;- lag(t_0, k=1, na.pad=TRUE)
@@ -125,7 +149,8 @@ title(&#39;Time Series With Autocorrelation&#39;)</code></pre>
 <p><img src="/post/complex-r-part-2_files/figure-html/ts-1.png" /><!-- --></p>
 <pre class="r"><code>pacf(t) # Partial Autocorrelation Plot</code></pre>
 <p><img src="/post/complex-r-part-2_files/figure-html/ts-2.png" /><!-- --></p>
-<p>Next we construct the model. While I normally recommend the <a href="https://cran.r-project.org/web/packages/forecast/index.html">forecast</a> package, we’ll just use the built-in <code>ar()</code> function today.</p>
+<p>Next we construct the model. While I normally recommend the <a href="https://cran.r-project.org/web/packages/forecast/index.html">forecast</a>
+package, we’ll just use the built-in <code>ar()</code> function today.</p>
 <pre class="r"><code>ar_model &lt;- ar(t)
 ar_model</code></pre>
 <pre><code># 
@@ -137,7 +162,10 @@ ar_model</code></pre>
 #  0.5078  -0.4062   0.3481  -0.3960   0.2462  
 # 
 # Order selected 5  sigma^2 estimated as  1.19</code></pre>
-<p>That’s roughly what we’d expect based on how we constructed the time series and what we saw on the partial autocorrelation plot: A strong positive autocorrelation at lag one, a slightly less strong negative autocorrelation at lag 2, then some harmonics.</p>
+<p>That’s roughly what we’d expect based on how we constructed the time series and
+what we saw on the partial autocorrelation plot: A strong positive
+autocorrelation at lag one, a slightly less strong negative autocorrelation at
+lag 2, then some harmonics.</p>
 <pre class="r"><code>ar_coefs &lt;- ar_model$ar  # coefficients(ar_model) doesn&#39;t work, IDK why
 roots &lt;- polyroot( c(1,-ar_coefs) )
 roots</code></pre>
@@ -155,11 +183,26 @@ roots</code></pre>
   )
 )</code></pre>
 <p><img src="/post/complex-r-part-2_files/figure-html/roots-1.png" /><!-- --></p>
-<p>Just to be clear, we’re plotting the <em>inverse</em> roots, so we’d expect them to be <em>inside</em> the unit circle if the process is stationary.</p>
-<p>(Just as an Easter egg, we also used complex numbers to plot the unit circle. If you’re not sure how that worked, just remember that multiplying complex numbers adds their arguments – their angle with the x-axis – together.)</p>
-<p>Just from looking at the roots and observing that some are far from the real axis, we can also say that this time series will experience a back-and-forth oscillations as each day tries to “correct” for the previous day. If the influence of history merely decayed away smoothly and exponentially, all the roots would have been close to the real axis. (It’s a common misconception that how long effects last is related to the <em>order</em> of the model; when in fact even an AR(1) model can have a very long memory if it has its root close to 1.)</p>
-<p>Plotting the inverse roots of ARIMA models is standard practice because it can help you diagnose <a href="https://en.wikipedia.org/wiki/Stationary_process">non-stationary series</a> and near <a href="https://en.wikipedia.org/wiki/Unit_root">unit roots</a>, both of which can ruin the predictive power and interpretability of a model. There’s no getting away from the fact that a polynomial of degree two or higher might have complex roots.</p>
-<p>But there’s another way of looking at an AR model - as a <a href="https://en.wikipedia.org/wiki/Linear_dynamical_system">discrete linear dynamical system.</a> Let’s call the value of our at the <span class="math inline">\(n\)</span>-th step <span class="math inline">\(t_n\)</span>. Then we can define our state vectors to be</p>
+<p>Just to be clear, we’re plotting the <em>inverse</em> roots, so we’d expect them to be
+<em>inside</em> the unit circle if the process is stationary.</p>
+<p>(Just as an Easter egg, we also used complex numbers to plot the unit circle.
+If you’re not sure how that worked, just remember that multiplying complex
+numbers adds their arguments – their angle with the x-axis – together.)</p>
+<p>Just from looking at the roots and observing that some are far from the real
+axis, we can also say that this time series will experience a back-and-forth
+oscillations as each day tries to “correct” for the previous day. If the
+influence of history merely decayed away smoothly and exponentially, all the
+roots would have been close to the real axis. (It’s a common misconception that
+how long effects last is related to the <em>order</em> of the model; when in fact even
+an AR(1) model can have a very long memory if it has its root close to 1.)</p>
+<p>Plotting the inverse roots of ARIMA models is standard practice because it can
+help you diagnose <a href="https://en.wikipedia.org/wiki/Stationary_process">non-stationary series</a> and near <a href="https://en.wikipedia.org/wiki/Unit_root">unit roots</a>, both
+of which can ruin the predictive power and interpretability of a model. There’s
+no getting away from the fact that a polynomial of degree two or higher might
+have complex roots.</p>
+<p>But there’s another way of looking at an AR model - as a <a href="https://en.wikipedia.org/wiki/Linear_dynamical_system">discrete linear
+dynamical system.</a> Let’s call the value of our at the <span class="math inline">\(n\)</span>-th step <span class="math inline">\(t_n\)</span>.
+Then we can define our state vectors to be</p>
 <p><span class="math display">\[
 \boldsymbol{t}_n = \begin{bmatrix}
   t_n \\
@@ -169,7 +212,8 @@ roots</code></pre>
   t_{n-4} \\
   \end{bmatrix}
 \]</span></p>
-<p>In other words, we just stack <span class="math inline">\(t_n\)</span> with it’s first four lags. That may not seem like an improvement, but now we can write</p>
+<p>In other words, we just stack <span class="math inline">\(t_n\)</span> with it’s first four lags. That may not
+seem like an improvement, but now we can write</p>
 <p><span class="math display">\[
 \boldsymbol{t}_{n+1} =\boldsymbol{F} \boldsymbol{t}_n
 \]</span></p>
@@ -190,7 +234,12 @@ roots</code></pre>
   t_{n-4} \\
   \end{bmatrix}
 \]</span></p>
-<p>where <span class="math inline">\(\boldsymbol{F}\)</span> is the “forward time evolution” matrix. This basically says we can always compute the state of our time series at the next time step by applying a <em>linear</em> operator to the previous state. And in fact, we already have a good idea what the matrix <span class="math inline">\(\boldsymbol{F}\)</span> should look like. For one thing, it’s clear that the four lagged components can simply be grabbed from the old state by shifting down by one:</p>
+<p>where <span class="math inline">\(\boldsymbol{F}\)</span> is the “forward time evolution” matrix. This basically
+says we can always compute the state of our time series at the next time step
+by applying a <em>linear</em> operator to the previous state. And in fact, we already
+have a good idea what the matrix <span class="math inline">\(\boldsymbol{F}\)</span> should look like. For one
+thing, it’s clear that the four lagged components can simply be grabbed from
+the old state by shifting down by one:</p>
 <p><span class="math display">\[
   \begin{bmatrix}
   t_{n+1} \\
@@ -214,7 +263,8 @@ roots</code></pre>
   t_{n-4} \\
   \end{bmatrix}
 \]</span></p>
-<p>And from the coefficients of the AR(1) model we built before, we know that <span class="math inline">\(t_n\)</span> can be expressed as a linear sum of <span class="math inline">\(t_{n-1}\)</span> through <span class="math inline">\(t_{n-4}\)</span>:</p>
+<p>And from the coefficients of the AR(1) model we built before, we know that
+<span class="math inline">\(t_n\)</span> can be expressed as a linear sum of <span class="math inline">\(t_{n-1}\)</span> through <span class="math inline">\(t_{n-4}\)</span>:</p>
 <p><span class="math display">\[
   \begin{bmatrix}
   t_{n+1} \\
@@ -238,18 +288,27 @@ roots</code></pre>
   t_{n-4} \\
   \end{bmatrix}
 \]</span></p>
-<p>So now that, we’ve determined the linear operator <span class="math inline">\(\boldsymbol{F}\)</span> for our dynamic system, we can ask what happens to the system 2 time-steps into the future, then 3, and so on. It should be clear that we can simply apply <span class="math inline">\(\boldsymbol{F}\)</span> again and again to determine <em>any</em> future state, so that in general the state at time <span class="math inline">\(n\)</span> is</p>
+<p>So now that, we’ve determined the linear operator <span class="math inline">\(\boldsymbol{F}\)</span> for our
+dynamic system, we can ask what happens to the system 2 time-steps into the
+future, then 3, and so on. It should be clear that we can simply apply
+<span class="math inline">\(\boldsymbol{F}\)</span> again and again to determine <em>any</em> future state, so that in
+general the state at time <span class="math inline">\(n\)</span> is</p>
 <p><span class="math display">\[
 \boldsymbol{t}_n = \boldsymbol{F}^n \boldsymbol{t}_0
 \]</span></p>
-<p>But raising a matrix to a power is particularly easy if we know its eigenvalues. Let’s say <span class="math inline">\(\boldsymbol{F} = \boldsymbol{Q} \boldsymbol{\Lambda} \boldsymbol{Q}^{-1}\)</span> is the eigen-decomposition, where <span class="math inline">\(\boldsymbol{Q}\)</span> is an orthogonal matrix and <span class="math inline">\(\boldsymbol{\Lambda}\)</span> is the diagonal matrix of eigenvalues. Then</p>
+<p>But raising a matrix to a power is particularly easy if we know its
+eigenvalues. Let’s say <span class="math inline">\(\boldsymbol{F} = \boldsymbol{Q} \boldsymbol{\Lambda} \boldsymbol{Q}^{-1}\)</span> is the eigen-decomposition, where <span class="math inline">\(\boldsymbol{Q}\)</span> is an
+orthogonal matrix and <span class="math inline">\(\boldsymbol{\Lambda}\)</span> is the diagonal matrix of
+eigenvalues. Then</p>
 <p><span class="math display">\[
   \boldsymbol{F}^2 = \boldsymbol{F} \boldsymbol{F} =
   \boldsymbol{Q} \boldsymbol{\Lambda} \boldsymbol{Q}^{-1}
   \boldsymbol{Q} \boldsymbol{\Lambda} \boldsymbol{Q}^{-1}
   = \boldsymbol{Q} \boldsymbol{\Lambda}^2 \boldsymbol{Q}^{-1}
 \]</span></p>
-<p>This clearly generalizes to any power by induction. Also, raising a diagonal matrix to a power is completely trivial: you simply raise each independent element to its power.</p>
+<p>This clearly generalizes to any power by induction. Also, raising a diagonal
+matrix to a power is completely trivial: you simply raise each independent
+element to its power.</p>
 <p><span class="math display">\[
 \boldsymbol{\Lambda}^n = \begin{bmatrix}
   \lambda_1^n &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
@@ -259,8 +318,18 @@ roots</code></pre>
   0 &amp; 0 &amp; 0 &amp; 0 &amp; \lambda_5^n
 \end{bmatrix}
 \]</span></p>
-<p>A few things are immediately obvious. Each eigenvalue is a complex number; so if its norm is less than 1 it will tend to 0 as <span class="math inline">\(n\)</span> increases, or if its norm is greater than 1 it will tend to <span class="math inline">\(\infty\)</span>, or if its norm is exactly 1 it will always be exactly 1. Furthermore, if the eigenvalue is real, it will always be real, but if it is not real then it will rotate about the origin by a fixed angle with every time step. Thus, it will exhibit some kind of oscillation with a frequency determined by its argument. Each eigenvalue will behave independently, but if <em>every</em> eigenvalue has norm less than 1, then the system as a whole will converge to a steady state at 0.</p>
-<p>So now that I’ve hopefully impressed upon you the importance of eigenvalues is understanding the dynamics of our system, let’s actually compute them. And, just for fun let’s compare them to the roots of the lag polynomial from above.</p>
+<p>A few things are immediately obvious. Each eigenvalue is a complex number; so
+if its norm is less than 1 it will tend to 0 as <span class="math inline">\(n\)</span> increases, or if its norm
+is greater than 1 it will tend to <span class="math inline">\(\infty\)</span>, or if its norm is exactly 1 it will
+always be exactly 1. Furthermore, if the eigenvalue is real, it will always be
+real, but if it is not real then it will rotate about the origin by a fixed
+angle with every time step. Thus, it will exhibit some kind of oscillation with
+a frequency determined by its argument. Each eigenvalue will behave
+independently, but if <em>every</em> eigenvalue has norm less than 1, then the system
+as a whole will converge to a steady state at 0.</p>
+<p>So now that I’ve hopefully impressed upon you the importance of eigenvalues is
+understanding the dynamics of our system, let’s actually compute them. And,
+just for fun let’s compare them to the roots of the lag polynomial from above.</p>
 <pre class="r"><code>ar_matrix &lt;- matrix( nrow=5, ncol=5, byrow=TRUE, c(
   0.5078, -0.4062,   0.3481,  -0.3960,   0.2462, 
        1,       0,        0,        0,        0,
@@ -303,7 +372,8 @@ colnames(df) &lt;- c(&quot;Inverse AR(5) Roots&quot;, &quot;Time Evolution Eigen
 </tr>
 </tbody>
 </table>
-<p>Hey, wait just a minute here! What are you trying to pull here, buddy? Those are (to within numerical precision) exactly the same as the inverse roots!</p>
+<p>Hey, wait just a minute here! What are you trying to pull here, buddy? Those
+are (to within numerical precision) exactly the same as the inverse roots!</p>
 <p>Yes, it’s true. This is very obvious if we plot them together:</p>
 <pre class="r"><code>plot(
   ar_eigen$values, 
@@ -326,12 +396,30 @@ points(
   col=&#39;red&#39;
 )</code></pre>
 <p><img src="/post/complex-r-part-2_files/figure-html/eigenplot-1.png" /><!-- --></p>
-<p>They are exactly the same. You’re welcome to prove this for yourself by writing down the characteristic polynomial for a matrix in this form and verifying it’s the exact same polynomial we found the roots for in the AR formulation of the problem.</p>
-<p>In fact, you can see the many parallels in the two approaches: in one analysis, we said that an AR model would only be stationary if all its inverse roots were inside the unit circle, in the other we said the dynamic system would converge to a steady state at the origin. Different language, indeed two historically different mathematical treatments, but the same conclusions. In both cases we found that the system was characterized by a sequence of 5 complex numbers, and that both the norm and the argument of each number meaningfully impacted the behavior of the system. And so on.</p>
-<p>There’s no escaping it: those 5 complex numbers <em>are</em> the best way to understand this system, and any sufficiently sophisticated approach will lead us to this same conclusion.</p>
-<p>Let’s just take a moment to realize what happened to us here: we started from a data set entirely comprised of real numbers, built a model with real number values for all parameters but in the end we still had to understand our model in terms of complex numbers.</p>
-<p>The hard truth is that the real numbers are not closed under many interesting and natural operations… if you work with real numbers long enough, you’ll eventually find yourself in the complex plane.</p>
-<p>Luckily, R really does have excellent support for complex numbers – if nothing else, I hope I’ve familiarized you with some of that functionality.</p>
+<p>They are exactly the same. You’re welcome to prove this for yourself by writing
+down the characteristic polynomial for a matrix in this form and verifying it’s
+the exact same polynomial we found the roots for in the AR formulation of the
+problem.</p>
+<p>In fact, you can see the many parallels in the two approaches: in one analysis,
+we said that an AR model would only be stationary if all its inverse roots were
+inside the unit circle, in the other we said the dynamic system would converge
+to a steady state at the origin. Different language, indeed two historically
+different mathematical treatments, but the same conclusions. In both cases we
+found that the system was characterized by a sequence of 5 complex numbers, and
+that both the norm and the argument of each number meaningfully impacted the
+behavior of the system. And so on.</p>
+<p>There’s no escaping it: those 5 complex numbers <em>are</em> the best way to
+understand this system, and any sufficiently sophisticated approach will lead
+us to this same conclusion.</p>
+<p>Let’s just take a moment to realize what happened to us here: we started from a
+data set entirely comprised of real numbers, built a model with real number
+values for all parameters but in the end we still had to understand our model
+in terms of complex numbers.</p>
+<p>The hard truth is that the real numbers are not closed under many interesting
+and natural operations… if you work with real numbers long enough, you’ll
+eventually find yourself in the complex plane.</p>
+<p>Luckily, R really does have excellent support for complex numbers – if nothing
+else, I hope I’ve familiarized you with some of that functionality.</p>
 </div>
 
     </article>
@@ -352,7 +440,7 @@ points(
 
 <div class="site-footer">
   <div class="copyright">
-	  &copy; Copyright 2019 Oran Looney
+	  &copy; Copyright 2022 Oran Looney
   </div>
   <ul class="site-footer-items">
   </ul>

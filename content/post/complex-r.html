@@ -8,44 +8,77 @@ image: /post/complex-r_files/lead.png
 
 
 
-<p>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.</p>
-<p>Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R’s excellent complex number functionality is well worth the effort and will pay off in two different ways: first by showing you how they are so amazingly useful you’ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn’t avoid them if you wanted to.</p>
+<p>R, like many scientific programming languages, has first-class support for
+complex numbers. And, just as in most other programming languages, this
+functionality is ignored by the vast majority of users.</p>
+<p>Yet complex numbers can often offer surprisingly elegant formulations and
+solutions to problems. I want to convince you that familiarizing yourself with
+R’s excellent complex number functionality is well worth the effort and will
+pay off in two different ways: first by showing you how they are so
+amazingly useful you’ll want to go out of your way to use them, and then by
+showing you how they are so common and fundamental to modern analysis that you
+couldn’t avoid them if you wanted to.</p>
 <div id="pythagorean-triples" class="section level2">
 <h2>Pythagorean Triples</h2>
-<p>Let’s start with a problem which <em>could</em> be solved in other ways, but is greatly simplified by the introduction of complex numbers that it almost seems magical.</p>
+<p>Let’s start with a problem which <em>could</em> be solved in other ways, but is
+greatly simplified by the introduction of complex numbers that it almost seems
+magical.</p>
 <p>A Pythagorean triple is an integer solution to the Pythagorean equation:</p>
 <p><span class="math display">\[
 a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}
 \]</span></p>
-<p>You probably learned at least one of these in school – the famous 3, 4, 5 triangle:</p>
+<p>You probably learned at least one of these in school – the famous 3, 4, 5
+triangle:</p>
 <p><img src="/post/complex-r_files/345.gif" alt="3-4-5 triangle"></p>
-<p>In general <a href="https://en.wikipedia.org/wiki/Diophantine_equation">Diophantine equations</a> – which require <em>integer</em> solutions – can be quite hard to solve, so it might surprise you to hear that it’s almost trivially easy to write down an infinite of Pythagorean triples. Well, it’s easy if we use complex numbers, anyway.</p>
-<p>A Gaussian integer is a complex number where both the real and imaginary parts are integers. The set of Gaussian integers is denoted by <span class="math inline">\(\mathbb{Z}[i]\)</span> and is defined as:</p>
+<p>In general <a href="https://en.wikipedia.org/wiki/Diophantine_equation">Diophantine equations</a> – which require <em>integer</em> solutions –
+can be quite hard to solve, so it might surprise you to hear that it’s almost
+trivially easy to write down an infinite of Pythagorean triples. Well, it’s
+easy if we use complex numbers, anyway.</p>
+<p>A Gaussian integer is a complex number where both the real and imaginary parts
+are integers. The set of Gaussian integers is denoted by <span class="math inline">\(\mathbb{Z}[i]\)</span> and
+is defined as:</p>
 <p><span class="math display">\[
   \mathbb{Z}[i] = \{ x + iy \mid x,y \in \mathbb{Z} \} \tag{2}
 \]</span></p>
-<p>So one way of stating the problem of finding all Pythagorean triples is to find all Gaussian integers which are an integer distance away from the origin. The distance of a complex number from the origin is called its “norm” and denoted <span class="math inline">\(\lVert z \rVert\)</span>. We will call the set of Pythagorean triples <span class="math inline">\(T\)</span> and define it as:</p>
+<p>So one way of stating the problem of finding all Pythagorean triples is to find
+all Gaussian integers which are an integer distance away from the origin. The
+distance of a complex number from the origin is called its “norm” and denoted
+<span class="math inline">\(\lVert z \rVert\)</span>. We will call the set of Pythagorean triples <span class="math inline">\(T\)</span> and define
+it as:</p>
 <p><span class="math display">\[
   T = \{ z \in \mathbb{Z}[i] \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
 \]</span></p>
-<p>Now, in general the norm of Gaussian integer will be the square root of an integer (the integer <span class="math inline">\(x^2 + y^2\)</span> to be precise.) Therefore if we square a Gaussian integer, it will have an integer norm and therefore represent a Pythagorean triple!</p>
+<p>Now, in general the norm of Gaussian integer will be the square root of an
+integer (the integer <span class="math inline">\(x^2 + y^2\)</span> to be precise.) Therefore if we square a
+Gaussian integer, it will have an integer norm and therefore represent a
+Pythagorean triple!</p>
 <p><span class="math display">\[
 \forall z \in \mathbb{C}, z \in \mathbb{Z}[i] \implies z^2 \in T \tag{4}
 \]</span></p>
-<p>So that’s a pretty good start: just a few minutes work, and we’ve already found an <em>infinite number</em> of Pythagorean triples, and we have a computationally trivial way of constructing new triples: we simply pick any two positive integers <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> and then square the complex number <span class="math inline">\(x + iy\)</span>.</p>
-<p>Before address the more difficult question of whether or not we’ve found all <em>possible</em> Pythagorean triples using this construction, let’s switch over to R and write some code to capture our solution so far.</p>
+<p>So that’s a pretty good start: just a few minutes work, and we’ve already found
+an <em>infinite number</em> of Pythagorean triples, and we have a computationally
+trivial way of constructing new triples: we simply pick any two positive
+integers <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> and then square the complex number <span class="math inline">\(x + iy\)</span>.</p>
+<p>Before address the more difficult question of whether or not we’ve found all
+<em>possible</em> Pythagorean triples using this construction, let’s switch over to R
+and write some code to capture our solution so far.</p>
 </div>
 <div id="gaussian-integers-in-r" class="section level2">
 <h2>Gaussian Integers in R</h2>
-<p>Our algorithm first requires us to pick pairs of positive integers. Just to be thorough, we’ll take all such pairs up to an arbitrary threshold.</p>
+<p>Our algorithm first requires us to pick pairs of positive integers. Just to be
+thorough, we’ll take all such pairs up to an arbitrary threshold.</p>
 <p>Now, if we wanted just one or two complex numbers, we could use the literal syntax:</p>
 <pre class="r"><code>triples &lt;- c( 3+4i, 5+12i, 9+12i )</code></pre>
-<p>But since want to construct them in bulk, we’ll use the <code>complex()</code> constructor. This constructor is <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Vectorize.html">vectorized</a>: by passing in two vectors of equal length we can construct a one-dimensional vector of complex numbers.</p>
+<p>But since want to construct them in bulk, we’ll use the <code>complex()</code> constructor. This
+constructor is <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Vectorize.html">vectorized</a>: by passing in two vectors of equal length we can
+construct a one-dimensional vector of complex numbers.</p>
 <pre class="r"><code>n = 400
 grid &lt;- expand.grid(u=1:(2*n), v=1:(2*n))
 grid &lt;- grid[ grid$u &gt; grid$v, ]
 gaussian_integers &lt;- complex(real=grid$u, imaginary=grid$v)</code></pre>
-<p>Per the theoretical discussion above, we can generate Pythagorean triples by simply squaring these. All primitive math functions in R work just as well on complex numbers: <code>exp</code>, <code>log</code>, <code>sin</code>, <code>cos</code>and of course the power operator <code>^</code>:</p>
+<p>Per the theoretical discussion above, we can generate Pythagorean triples by
+simply squaring these. All primitive math functions in R work just as well on
+complex numbers: <code>exp</code>, <code>log</code>, <code>sin</code>, <code>cos</code>and of course the power operator <code>^</code>:</p>
 <pre class="r"><code>triples &lt;- gaussian_integers^2
 
 # display the 10 with the smallest norm
@@ -60,7 +93,10 @@ cat( triples[order(Mod(triples))][1:10], sep=&quot;\n&quot;)</code></pre>
 # 21+20i
 # 16+30i
 # 35+12i</code></pre>
-<p>Did it work? We’re certainly seeing some familiar pairings there, like <span class="math inline">\(5+12i\)</span> which maps to well-known triple <span class="math inline">\((5,12,13)\)</span>. To visualize them, we can simply pass our complex vector to R’s <code>plot()</code> function – it will conveniently plot them in the complex plane for us!</p>
+<p>Did it work? We’re certainly seeing some familiar pairings there, like <span class="math inline">\(5+12i\)</span>
+which maps to well-known triple <span class="math inline">\((5,12,13)\)</span>. To visualize them, we can simply
+pass our complex vector to R’s <code>plot()</code> function – it will conveniently plot
+them in the complex plane for us!</p>
 <pre class="r"><code>triples &lt;- triples[ Re(triples) &lt;= n &amp; Im(triples) &lt;= n ]
 
 # helper function to colorize complex points by their angle.
@@ -75,13 +111,20 @@ plot(
   main=paste(&quot;Squared Gaussian Integers Up to&quot;, n)
 )</code></pre>
 <p><img src="/post/complex-r_files/figure-html/triples-1.png" /><!-- --></p>
-<p>Now it turns out that our algorithm does not, in fact, generate all possible triples. For example, multiples are missing: if <span class="math inline">\((3,4,5)\)</span> is a triple, then <span class="math inline">\((6,8,10)\)</span> should be a triple, and <span class="math inline">\((9,12,15)\)</span> should be a triple, and so on. So we have to expand our set to have all multiples.</p>
+<p>Now it turns out that our algorithm does not, in fact, generate all possible
+triples. For example, multiples are missing: if <span class="math inline">\((3,4,5)\)</span> is a triple, then
+<span class="math inline">\((6,8,10)\)</span> should be a triple, and <span class="math inline">\((9,12,15)\)</span> should be a triple, and so on.
+So we have to expand our set to have all multiples.</p>
 <pre class="r"><code>multiples &lt;- lapply(1:(floor(n/3)), function(m) triples*m)
 triples &lt;- unique(do.call(c, multiples))</code></pre>
-<p>It also turns out that in the special case where both integers are even we can divide by two and get a new triple that was missed by the initial net we cast. But that’s the end of the special cases – with this final rule in place, we’re now guaranteed to hit <em>every</em> Pythagorean triple.</p>
+<p>It also turns out that in the special case where both integers are even we can
+divide by two and get a new triple that was missed by the initial net we cast.
+But that’s the end of the special cases – with this final rule in place, we’re
+now guaranteed to hit <em>every</em> Pythagorean triple.</p>
 <pre class="r"><code>halves &lt;- triples[ Re(triples) %% 2 == 0 &amp; Im(triples) %% 2 == 0 ] / 2
 triples &lt;- unique(c(triples, halves))</code></pre>
-<p>Now all we need to is clean up duplicates and duplicate along the mirror line of symmetry…</p>
+<p>Now all we need to is clean up duplicates and duplicate along the mirror line
+of symmetry…</p>
 <pre class="r"><code>triples &lt;- triples[ Re(triples) &lt;= n &amp; Im(triples) &lt;= n]
 triples &lt;- c(triples, complex(real=Im(triples), imaginary=Re(triples)))</code></pre>
 <p>..and we’re finally ready to visualize the real solution.</p>
@@ -91,7 +134,9 @@ title(paste(&quot;All Pythagorean Triples Up to&quot;, n))</code></pre>
 </div>
 <div id="a-closer-look" class="section level2">
 <h2>A Closer Look</h2>
-<p>That’s too many to really understand, although there are definitely patterns emerging. Let’s zoom in and just plot a small region,but with more detail.</p>
+<p>That’s too many to really understand, although there are definitely
+patterns emerging. Let’s zoom in and just plot a small region,but with more
+detail.</p>
 <pre class="r"><code>small_n = 25
 small_triples &lt;- triples[ Re(triples) &lt; small_n &amp; Im(triples) &lt; small_n ]
 small_triples &lt;- small_triples[ order(Mod(small_triples), decreasing=TRUE) ]
@@ -137,12 +182,34 @@ text(
 )
 title(paste(&quot;Pythagorean Triples Up to&quot;, small_n))</code></pre>
 <p><img src="/post/complex-r_files/figure-html/plotsmall-1.png" /><!-- --></p>
-<p>On the zoomed in view we can see each Pythagorean triple represented as a right triangle; that the integer multiples of solutions form a series of similar triangles; and that there’s a strong symmetry with every triple <span class="math inline">\((a,b,c)\)</span> having a partner <span class="math inline">\((b,a,c)\)</span> which is its mirror reflection about the like <span class="math inline">\(y=x\)</span>.</p>
-<p>From the zoomed out view we can see that the region close to either the x-axis or the y-axis is essentially devoid of solutions and that it looks as if triples actually get less dense as we move away from the origin.</p>
-<p>By the way, this last observation about triples thinning out as we move away from the origin can be understood and quantified by once again using the complex plane. Triples are more or less the squares of Gaussian integers; we can say the number of triples with norm less than <span class="math inline">\(r\)</span> is roughly proportional to the number of Gaussian integers in the first quadrant and inside a circle with radius <span class="math inline">\(\sqrt{r}\)</span>, which is roughly proportional to the area of the quarter-circle of radius <span class="math inline">\(\sqrt{r}\)</span>, which is <span class="math inline">\(\frac{\pi r}{4}\)</span> or very roughly just <span class="math inline">\(r\)</span>.</p>
+<p>On the zoomed in view we can see each Pythagorean triple represented as a right
+triangle; that the integer multiples of solutions form a series of
+similar triangles; and that there’s a strong symmetry with every triple
+<span class="math inline">\((a,b,c)\)</span> having a partner <span class="math inline">\((b,a,c)\)</span> which is its mirror reflection about the
+like <span class="math inline">\(y=x\)</span>.</p>
+<p>From the zoomed out view we can see that the region close to either the
+x-axis or the y-axis is essentially devoid of solutions and that it looks
+as if triples actually get less dense as we move away from the origin.</p>
+<p>By the way, this last observation about triples thinning out as we move away from the
+origin can be understood and quantified by once again using the complex plane.
+Triples are more or less the squares of Gaussian integers; we can say the
+number of triples with norm less than <span class="math inline">\(r\)</span> is roughly proportional to the number
+of Gaussian integers in the first quadrant and inside a circle with radius
+<span class="math inline">\(\sqrt{r}\)</span>, which is roughly proportional to the area of the quarter-circle of
+radius <span class="math inline">\(\sqrt{r}\)</span>, which is <span class="math inline">\(\frac{\pi r}{4}\)</span> or very roughly just <span class="math inline">\(r\)</span>.</p>
 </div>
 <div id="next-time" class="section level2">
 <h2>Next Time</h2>
-<p>In this first part of a planned series on complex numbers in R, we dipped our toes in the water by explicitly creating some complex numbers and manipulating them. We demonstrated the most important functions for working specificly with complex numbers such as <code>Re()</code>, <code>Im()</code>, <code>Mod()</code>, <code>Arg()</code>, and <code>complex()</code> but we emphasized that most built-in functions such as <code>exp()</code> and operators such as <code>*</code> and <code>^</code> work correctly with complex numbers and implement the natural analytic continuation of their equivalents on the real numbers. Finally, we showcased R’s ability to plot on the complex plane.</p>
-<p>Next time in <a href="/post/complex-r-part-2/">Part II</a>, we will discuss in more depth some scenarios where complex numbers arise naturally from the problem itself and cannot be reasonably avoided, while continuing to demostrate more advanced aspects of R’s complex number functionalty.</p>
+<p>In this first part of a planned series on complex numbers in R, we dipped our
+toes in the water by explicitly creating some complex numbers and manipulating them.
+We demonstrated the most important functions for working specificly with
+complex numbers such as <code>Re()</code>, <code>Im()</code>, <code>Mod()</code>, <code>Arg()</code>, and <code>complex()</code> but
+we emphasized that most built-in functions such as <code>exp()</code> and operators such
+as <code>*</code> and <code>^</code> work correctly with complex numbers and implement the natural
+analytic continuation of their equivalents on the real numbers. Finally, we
+showcased R’s ability to plot on the complex plane.</p>
+<p>Next time in <a href="/post/complex-r-part-2/">Part II</a>, we will discuss in more depth some scenarios
+where complex numbers arise naturally from the problem itself and cannot
+be reasonably avoided, while continuing to demostrate more advanced
+aspects of R’s complex number functionalty.</p>
 </div>

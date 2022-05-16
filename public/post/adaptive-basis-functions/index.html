@@ -6,13 +6,13 @@
   <title>Adaptive Basis Functions - OranLooney.com</title>
   <meta property="og:title" content="Adaptive Basis Functions - OranLooney.com" />
   <meta name="twitter:title" content="Adaptive Basis Functions - OranLooney.com" />
-  <meta name="description" content="Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain conclusion, without actually proving anything; but which will, I hope, provide useful intuition.
+  <meta name="description" content="Today, let me be vague. No statistics, no algorithms, no proofs. Instead,we’re going to go through a series of examples and eyeball a suggestiveseries of charts, which will imply a certain conclusion, without actuallyproving anything; but which will, I hope, provide useful intuition.
 The premise is this:
-For any given problem, there exists learned featured representations which are better than any fixed/human-engineered set of features, even once the cost of the added parameters necessary to also learn the new features into account.">
-  <meta property="og:description" content="Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain conclusion, without actually proving anything; but which will, I hope, provide useful intuition.
+For any given problem, there exists learned featured representationswhich are better than any fixed/human-engineered set of features, even oncethe cost of the added parameters necessary to also learn the new features into account.">
+  <meta property="og:description" content="Today, let me be vague. No statistics, no algorithms, no proofs. Instead,we’re going to go through a series of examples and eyeball a suggestiveseries of charts, which will imply a certain conclusion, without actuallyproving anything; but which will, I hope, provide useful intuition.
 The premise is this:
-For any given problem, there exists learned featured representations which are better than any fixed/human-engineered set of features, even once the cost of the added parameters necessary to also learn the new features into account.">
-  <meta name="twitter:description" content="Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain …">
+For any given problem, there exists learned featured representationswhich are better than any fixed/human-engineered set of features, even oncethe cost of the added parameters necessary to also learn the new features into account.">
+  <meta name="twitter:description" content="Today, let me be vague. No statistics, no algorithms, no proofs. Instead,we’re going to go through a series of examples and eyeball a suggestiveseries of charts, which will imply a certain …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -106,40 +106,98 @@ The premise is this:
 <aside class="toc">
   
 </aside>
-      <p>Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain conclusion, without actually proving anything; but which will, I hope, provide useful intuition.</p>
+      <p>Today, let me be vague. No statistics, no algorithms, no proofs. Instead,
+we’re going to go through a series of examples and eyeball a suggestive
+series of charts, which will imply a certain conclusion, without actually
+proving anything; but which will, I hope, provide useful intuition.</p>
 <p>The premise is this:</p>
 <blockquote>
-<p>For any given problem, there exists learned featured representations which are better than any fixed/human-engineered set of features, even once the cost of the added parameters necessary to also learn the new features into account.</p>
+<p>For any given problem, there exists learned featured representations
+which are better than any fixed/human-engineered set of features, even once
+the cost of the added parameters necessary to also learn the new features into account.</p>
 </blockquote>
-<p>This is of course completely unoriginal: it is in in fact the standard just-so story for machine learning that you hear again and again in different contexts. The learned <span class="math inline">\(k \times k\)</span> kernels of a 2D CNN works better than <a href="https://en.wikipedia.org/wiki/Haar-like_feature">Haar features</a> or <a href="https://en.wikipedia.org/wiki/Sobel_operator">Sobel filters</a>. A one dimensional CNN and a spectrogram works better than <a href="https://en.wikipedia.org/wiki/Mel-frequency_cepstrum">MFCC</a>. An <a href="https://en.wikipedia.org/wiki/Random_forest">ensemble</a> of <a href="https://en.wikipedia.org/wiki/Decision_stump">decision stumps</a> works better than a single large <a href="https://en.wikipedia.org/wiki/Decision_tree">decision tree</a>. And so on.</p>
-<p>Even as mythology, there are already plenty of cracks starting to show. The biggest and most well known caveat is of course, “given a sufficiently huge amount of training data.” There are often other caveats too, such as “and you don’t care how slow it is.” For example, the <a href="https://en.wikipedia.org/wiki/Viola%E2%80%93Jones_object_detection_framework">Viola-Jones object detection framework</a> uses <a href="https://en.wikipedia.org/wiki/Haar-like_feature">Haar features</a> and is still widely used because it is so much faster than CNN-based approaches, although not as robust or accurate. While cutting edge CNN-based object detectors are starting to achieve <em>acceptable</em> runtime performance, they’ll probably never be as fast as Haar features, simply because they’ll never be able to take advantage of the <a href="https://en.wikipedia.org/wiki/Summed-area_table">integral image trick.</a></p>
-<p>But let’s zoom out at look at the big picture instead of shopping around for counterexamples and limitations. At a high level, the story is clear. Again and again, on various problems and algorithms, we’ve seen that taking carefully engineered representations, often with very attractive mathematical properties which make them tractable for computation and mathematical analysis, and just <strong>throwing them out</strong> to start over from scratch with a learned representation is a winning strategy. It not only works, it often smashes straight through the performance ceiling where the previous generation of models had plateaued. The history of the <a href="https://en.wikipedia.org/wiki/ImageNet#History_of_the_ImageNet_Challenge">ImageNet challenge</a> provides plenty of concrete examples of that.</p>
-<p>But these successes are on very large and complicated problems; is it possible to find a simpler example of the phenomenon, so that a student can actually wrap their head around it? Or does the phenomenon only manifest once the problem hits a certain threshold of complexity? I think it <em>is</em> possible to find such elementary problems that demonstrate the power of learned representations.</p>
-<p>Once such example, which happily lends itself to easy visualization, is the problem of learning to approximate a one-dimensional function. To make the case in favor of learned representations we will first attempt the problem with several fixed representations and compare those attempts with a learned representation.</p>
+<p>This is of course completely unoriginal: it is in in fact the standard just-so
+story for machine learning that you hear again and again in different contexts.
+The learned <span class="math inline">\(k \times k\)</span> kernels of a 2D CNN works better than <a href="https://en.wikipedia.org/wiki/Haar-like_feature">Haar features</a> or
+<a href="https://en.wikipedia.org/wiki/Sobel_operator">Sobel filters</a>. A one dimensional CNN and a spectrogram works better than <a href="https://en.wikipedia.org/wiki/Mel-frequency_cepstrum">MFCC</a>.
+An <a href="https://en.wikipedia.org/wiki/Random_forest">ensemble</a> of <a href="https://en.wikipedia.org/wiki/Decision_stump">decision stumps</a> works better than a single large <a href="https://en.wikipedia.org/wiki/Decision_tree">decision tree</a>.
+And so on.</p>
+<p>Even as mythology, there are already plenty of cracks starting to show. The biggest
+and most well known caveat is of course, “given a sufficiently huge amount of
+training data.” There are often other caveats too, such as “and you don’t
+care how slow it is.” For example, the <a href="https://en.wikipedia.org/wiki/Viola%E2%80%93Jones_object_detection_framework">Viola-Jones object detection framework</a>
+uses <a href="https://en.wikipedia.org/wiki/Haar-like_feature">Haar features</a> and is still widely used because it is so much faster than
+CNN-based approaches, although not as robust or accurate.
+While cutting edge CNN-based object detectors are
+starting to achieve <em>acceptable</em> runtime performance, they’ll probably never be as fast
+as Haar features, simply because they’ll never be able to take advantage of the
+<a href="https://en.wikipedia.org/wiki/Summed-area_table">integral image trick.</a></p>
+<p>But let’s zoom out at look at the big picture instead of shopping around for
+counterexamples and limitations. At a high level, the story is clear. Again and
+again, on various problems and algorithms,
+we’ve seen that taking carefully engineered representations, often with very
+attractive mathematical properties which make them tractable for computation
+and mathematical analysis, and just <strong>throwing them out</strong> to start over from scratch with a
+learned representation is a winning
+strategy. It not only works, it often smashes straight through the performance
+ceiling where the previous generation of models had
+plateaued. The history of the <a href="https://en.wikipedia.org/wiki/ImageNet#History_of_the_ImageNet_Challenge">ImageNet challenge</a> provides plenty of
+concrete examples of that.</p>
+<p>But these successes are on very large and complicated problems; is it possible
+to find a simpler example of the phenomenon, so that a student can actually
+wrap their head around it? Or does the phenomenon only manifest once the problem
+hits a certain threshold of complexity? I think it <em>is</em> possible to find
+such elementary problems that demonstrate the power of learned representations.</p>
+<p>Once such example, which happily lends itself to easy visualization,
+is the problem of learning to approximate a one-dimensional function. To
+make the case in favor of learned representations we will first attempt
+the problem with several fixed representations and compare those attempts
+with a learned representation.</p>
 <div id="the-function-approximation-problem" class="section level2">
 <h2>The Function Approximation Problem</h2>
-<p>Given an i.i.d. random sample <span class="math inline">\(\{(Y_i, X_i)\}_{i=1}^n\)</span> where <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have joint probability distribution <span class="math inline">\(F\)</span>, we wish to find a real-valued function <span class="math inline">\(f : \mathbb{R} \mapsto \mathbb{R}\)</span> such that:</p>
+<p>Given an i.i.d. random sample <span class="math inline">\(\{(Y_i, X_i)\}_{i=1}^n\)</span> where <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have joint probability
+distribution <span class="math inline">\(F\)</span>, we wish to find a real-valued function <span class="math inline">\(f : \mathbb{R} \mapsto \mathbb{R}\)</span> such that:</p>
 <p><span class="math display">\[ E[Y|X] = f(x) \]</span></p>
-<p>Since we only have access to the random sample, we cannot hope to find an exact solution, but can find the best (in terms of MSE) function from some family of functions <span class="math inline">\(\mathcal{F}\)</span>:</p>
+<p>Since we only have access to the random sample, we cannot hope to find
+an exact solution, but can find the best (in terms of MSE) function from some family of functions <span class="math inline">\(\mathcal{F}\)</span>:</p>
 <p><span class="math display">\[ \hat{f} = \underset{f \in \mathcal{F} }{{\text{argmin}}} \sum_i^n (f(x) - E[Y|X])^2 \tag{1} \]</span></p>
-<p>The question then becomes how we choose a family <span class="math inline">\(\mathcal{F}\)</span> that makes this optimization problem tractable. The obvious answer is to parameterize <span class="math inline">\(\mathcal{F}\)</span> in terms of <span class="math inline">\(k\)</span> real-valued parameters; then the optimization problem is to find the minimum of the loss function <span class="math inline">\(J : \mathbb{R}^k \mapsto \mathbb{R}\)</span> which can be solved with standard techniques.</p>
-<p>The standard way to define such a parameterization is to assume that <span class="math inline">\(f\)</span> is the weighted sum of <span class="math inline">\(k\)</span> fixed <a href="https://en.wikipedia.org/wiki/Basis_function">basis functions</a> <span class="math inline">\(\psi_1, ..., \psi_k\)</span> and let <span class="math inline">\(\mathcal{F} = \text{span} \{ \psi_1, ..., \psi_k \}\)</span>. Then, for any function <span class="math inline">\(f \in \mathcal{F}\)</span>, we can always write <span class="math inline">\(f\)</span> as a linear combination of basis functions:</p>
+<p>The question then becomes how we choose a family <span class="math inline">\(\mathcal{F}\)</span>
+that makes this optimization problem tractable. The obvious answer is to
+parameterize <span class="math inline">\(\mathcal{F}\)</span> in terms of <span class="math inline">\(k\)</span> real-valued parameters; then
+the optimization problem is to find the minimum of the loss function <span class="math inline">\(J : \mathbb{R}^k \mapsto \mathbb{R}\)</span>
+which can be solved with standard techniques.</p>
+<p>The standard way to define such a parameterization is to assume that <span class="math inline">\(f\)</span> is
+the weighted sum of <span class="math inline">\(k\)</span> fixed <a href="https://en.wikipedia.org/wiki/Basis_function">basis functions</a> <span class="math inline">\(\psi_1, ..., \psi_k\)</span> and
+let <span class="math inline">\(\mathcal{F} = \text{span} \{ \psi_1, ..., \psi_k \}\)</span>. Then, for any function <span class="math inline">\(f \in \mathcal{F}\)</span>,
+we can always write <span class="math inline">\(f\)</span> as a linear combination of basis functions:</p>
 <p><span class="math display">\[ f(x) = \sum_{i=j}^k \beta_j \psi_j(x) \tag{2} \]</span></p>
 <p>Substituting (2) into (1) above, we have an explicit loss function:</p>
 <p><span class="math display">\[ J(\beta) = \sum_{i=1}^n (E[Y|X] - \sum_{j=1}{k} \beta_j \psi_j(x) )^2 \tag{3} \]</span></p>
-<p>When <span class="math inline">\(J\)</span> is as small as possible, <span class="math inline">\(\hat{f}\)</span> is as close as possible to the target function <span class="math inline">\(f\)</span> as it is possible for any function in <span class="math inline">\(V\)</span> to be. We say that <span class="math inline">\(\hat{f}\)</span> is the best approximation of <span class="math inline">\(f\)</span> for the given choice of basis functions <span class="math inline">\(\psi_1, ..., \psi_N\)</span>.</p>
-<p>We will call the choice of parameters that minimize loss <span class="math inline">\(\hat{\beta}\)</span> and the corresponding function <span class="math inline">\(\hat{f}\)</span>:</p>
+<p>When <span class="math inline">\(J\)</span> is as small as possible, <span class="math inline">\(\hat{f}\)</span> is as close as possible to the target
+function <span class="math inline">\(f\)</span> as it is possible for any function in <span class="math inline">\(V\)</span> to be. We say that <span class="math inline">\(\hat{f}\)</span>
+is the best approximation of <span class="math inline">\(f\)</span> for the given choice of basis functions <span class="math inline">\(\psi_1, ..., \psi_N\)</span>.</p>
+<p>We will call the choice of parameters that minimize loss <span class="math inline">\(\hat{\beta}\)</span> and the corresponding
+function <span class="math inline">\(\hat{f}\)</span>:</p>
 <p><span class="math display">\[ 
     \begin{align}
         \hat{\beta} &amp; = \text{argmin}_\beta J(\mathbf{\beta}) \tag{4} \\
         \hat{f}(x)  &amp; = \sum_{j=1}^k \hat{\beta}_j \psi_j(x) \tag{5}
     \end{align}
 \]</span></p>
-<p>We won’t dwell too much today on the best way to actually solve this minimization problem but instead just use an off-the-shelf solver to quickly (in terms of programmer time) get a workable solution. Instead, we’ll focus on how the choice of basis functions affects our ability to approximate a function.</p>
+<p>We won’t dwell too much today on the best way to actually solve this minimization problem
+but instead just use an off-the-shelf solver to quickly (in terms of programmer time)
+get a workable solution. Instead, we’ll focus on how the choice of basis functions affects
+our ability to approximate a function.</p>
 </div>
 <div id="target-function" class="section level2">
 <h2>Target Function</h2>
-<p>For the examples below, we’re going to need some target function <span class="math inline">\(t(x) = E[Y|X]\)</span>. It should be continuous, bounded on some closed interval, and it’s also convenient if it’s approximately zero on both edges. The unit interval <span class="math inline">\([0, 1]\)</span> is as good a choice for the domain as any. To make the function appropriately ugly, we’ll take some polynomial terms plus some sinusoidal terms: that will make it hard to approximate with either Fourier series or a splines, and also give us lots of nasty inflections.</p>
+<p>For the examples below, we’re going to need some target function <span class="math inline">\(t(x) = E[Y|X]\)</span>.
+It should be continuous,
+bounded on some closed interval, and it’s also convenient if it’s approximately zero on
+both edges. The unit interval <span class="math inline">\([0, 1]\)</span> is as good a choice for the domain as any. To make the function
+appropriately ugly, we’ll take some polynomial terms plus some sinusoidal terms: that
+will make it hard to approximate with either Fourier series or a splines, and also give
+us lots of nasty inflections.</p>
 <pre><code>import matplotlib
 import matplotlib.pyplot as plt
 %matplotlib inline
@@ -165,7 +223,9 @@ plt.legend()</code></pre>
 </div>
 <div id="step-function-basis" class="section level2">
 <h2>Step Function Basis</h2>
-<p>To get warmed up, let’s use the above basis function framework to calculate the best possible step function approximation of a function. Since our target function is continuous this approach if fundamentally flawed but it illustrates the method.</p>
+<p>To get warmed up, let’s use the above basis function framework to calculate the best possible step
+function approximation of a function. Since our target function is continuous
+this approach if fundamentally flawed but it illustrates the method.</p>
 <p>First, we will define a finite set of fixed basis functions:</p>
 <pre><code>N_step = 20
 
@@ -195,8 +255,10 @@ for i in range(N_step):
 <img src="/post/adaptive-basis-functions_files/step_basis.png" alt="Step Basis" />
 <p class="caption">Step Basis</p>
 </div>
-<p>In this case, each basis function is a step function and the only difference between them is the position at which the step occurs.</p>
-<p>To construct our approximation, we choose the best coefficient for each basis function:</p>
+<p>In this case, each basis function is a step function and the only
+difference between them is the position at which the step occurs.</p>
+<p>To construct our approximation, we choose the best coefficient for
+each basis function:</p>
 <pre><code>best = minimize(step_loss, x0=np.zeros(shape=N_step))
 beta_hat = best.x
 if best.status != 0:
@@ -212,7 +274,9 @@ print(&quot;best loss:&quot;, step_loss(beta_hat))</code></pre>
 <blockquote>
 <p>best loss: 0.1127449592291812</p>
 </blockquote>
-<p>Unsurprisingly, this approximation is able to get reasonably close on each small interval but is ultimately hampered by its inability to represent slopes.</p>
+<p>Unsurprisingly, this approximation is able to get reasonably close on
+each small interval but is ultimately hampered by its inability to
+represent slopes.</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/step_approx.png" alt="Step Approximation" />
 <p class="caption">Step Approximation</p>
@@ -220,7 +284,10 @@ print(&quot;best loss:&quot;, step_loss(beta_hat))</code></pre>
 </div>
 <div id="fixed-sigmoid-basis-functions" class="section level2">
 <h2>Fixed Sigmoid Basis Functions</h2>
-<p>Since we know our target function is continuous, it makes sense to likewise choose continuous basis functions. Since the step function otherwise seem to have worked reasonably well, we’ll simply use a smoothed version of the step function, the so-called sigmoid function.</p>
+<p>Since we know our target function is continuous, it makes sense
+to likewise choose continuous basis functions. Since the step function
+otherwise seem to have worked reasonably well, we’ll simply use a
+smoothed version of the step function, the so-called sigmoid function.</p>
 <pre><code>def sigmoid_basis_function(i):
     return lambda x: 1/(1+np.exp((i- 10*x)/1.73))
 
@@ -267,8 +334,12 @@ print(&quot;best loss:&quot;, sigmoid_loss(beta_hat))</code></pre>
 </div>
 <div id="orthogonal-basis-functions" class="section level2">
 <h2>Orthogonal Basis Functions</h2>
-<p>Families of orthogonal functions have a key property that makes them especially useful as basis functions: you can determine the optimal coefficient <span class="math inline">\(\beta_j\)</span> without considering any of the other elements of <span class="math inline">\(\mathbf{\beta}\)</span>.</p>
-<p>The Fourier series is one well-known example. The basis functions are <span class="math inline">\(sin(nx)\)</span> and <span class="math inline">\(cos(nx)\)</span> for <span class="math inline">\(n&gt;0\)</span> plus the constant function.</p>
+<p>Families of orthogonal functions have a key property that
+makes them especially useful as basis functions: you can determine
+the optimal coefficient <span class="math inline">\(\beta_j\)</span> without considering any of
+the other elements of <span class="math inline">\(\mathbf{\beta}\)</span>.</p>
+<p>The Fourier series is one well-known example. The basis functions
+are <span class="math inline">\(sin(nx)\)</span> and <span class="math inline">\(cos(nx)\)</span> for <span class="math inline">\(n&gt;0\)</span> plus the constant function.</p>
 <pre><code>def fourier_basis_function(i):
     if i == 0:
         return lambda x: np.full_like(x, 0.5)
@@ -297,7 +368,9 @@ for i in range(5):
     theta = x * 2 * math.pi
     plt.plot(theta, fourier_basis_function(i)(theta))
 plt.axhline(y=0, color=&#39;k&#39;, linewidth=1)</code></pre>
-<p>There are faster ways to compute the coefficients in the particular case of the Fourier series, but we’ll just brute force like always for consistencies sake.</p>
+<p>There are faster ways to compute the coefficients in the particular
+case of the Fourier series, but we’ll just brute force like always
+for consistencies sake.</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/fourier_basis.png" alt="Fourier Basis" />
 <p class="caption">Fourier Basis</p>
@@ -320,18 +393,44 @@ print(&quot;best loss:&quot;, fourier_loss(beta_hat))</code></pre>
 <img src="/post/adaptive-basis-functions_files/fourier_approx.png" alt="Fourier Approximation" />
 <p class="caption">Fourier Approximation</p>
 </div>
-<p>The fit isn’t particularly great, even using 21 parameters, which is equivalent to adding up ten sine waves each with different amplitudes and frequencies. That’s to be expected: Fourier series are pretty bad at approximating polynomials, and are <a href="https://en.wikipedia.org/wiki/Fourier_series">even worse</a> at approximating functions with discontinuities.</p>
-<p>An orthogonal family of basis functions can work really well when they are well suited to your problem – for example, when the target function is known to be solution to some differential equation, and each basis function is likewise a solution to that same differential equation. But they are often a very poor choice when we know little about the target function.</p>
-<p>While there might be a theoretical guarantee that we can approximate <em>any</em> function given an unlimited number of Fourier basis functions, this can require an unreasonably large number of parameters before a good fit is achieved. But every parameter we add to the model increases our chances of overfitting! We need to look for a way of approximating functions well while keeping the number of parameters under control.</p>
+<p>The fit isn’t particularly great, even using 21 parameters, which is equivalent
+to adding up ten sine waves each with different amplitudes and frequencies.
+That’s to be expected: Fourier series are pretty bad at approximating polynomials, and
+are <a href="https://en.wikipedia.org/wiki/Fourier_series">even worse</a> at approximating functions with discontinuities.</p>
+<p>An orthogonal family of basis functions can work really well when they are well
+suited to your problem – for example, when the target function is known to be
+solution to some differential equation, and each basis function is likewise a
+solution to that same differential equation. But they are often a very poor
+choice when we know little about the target function.</p>
+<p>While there might be a theoretical guarantee that we can approximate <em>any</em>
+function given an unlimited number of Fourier basis functions, this can require an
+unreasonably large number of parameters before
+a good fit is achieved. But every parameter we add to the model increases our
+chances of overfitting! We need to look for a way of approximating functions
+well while keeping the number of parameters under control.</p>
 </div>
 <div id="adaptive-basis-functions" class="section level2">
 <h2>Adaptive Basis Functions</h2>
-<p>Finally, we come to our ringer: the <a href="https://www.quora.com/What-are-adaptive-basis-functions">adaptive basis function.</a> Within the context of function approximation, adaptive basis functions are a clear example of a learned representation. <a href="https://www.amazon.com/Machine-Learning-Probabilistic-Perspective-Computation/dp/0262018020">Kevin Murphy’s book</a> has a good chapter on adaptive basis function models, but a very simple working definition is that they are models where the basis functions themselves are parameterized, and not just the weights out front.</p>
-<p>The way to ensure that each basis function added to the model is adding value and isn’t just dead weight is to give each basis function its own parameters, which we will learn in parallel with the coefficients. Note that this means we are leaving the additive assumption behind. While the model may still superficially <em>look</em> like an additive model:</p>
+<p>Finally, we come to our ringer: the <a href="https://www.quora.com/What-are-adaptive-basis-functions">adaptive basis function.</a> Within the
+context of function approximation, adaptive basis functions are a clear example
+of a learned representation. <a href="https://www.amazon.com/Machine-Learning-Probabilistic-Perspective-Computation/dp/0262018020">Kevin Murphy’s book</a> has a good chapter on
+adaptive basis function models, but a very simple working definition is that
+they are models where the basis functions themselves are parameterized,
+and not just the weights out front.</p>
+<p>The way to ensure that each basis function added to the model is
+adding value and isn’t just dead weight is to give each basis function
+its own parameters, which we will learn in parallel with the coefficients.
+Note that this means we are leaving the additive assumption behind. While
+the model may still superficially <em>look</em> like an additive model:</p>
 <p><span class="math display">\[ f(x) = \sum_{i=j}^N \beta_j \psi_j(x;\theta_j) \]</span></p>
-<p>Each <span class="math inline">\(\psi_j\)</span> is now a parameterized function rather than a fixed basis function. This makes computing gradients much harder, and almost always means that the new optimization problem is no longer convex.</p>
-<p>There is also a trade-off in the number of parameters used: while we have fewer <span class="math inline">\(\beta_j\)</span> parameters, we also have new <span class="math inline">\(\theta_j\)</span> parameters. Hopefully there will be some sweet spot where each adaptive basis function is doing the work of many fixed basis functions!</p>
-<p>A good choice for adaptive basis functions is the sigmoid. We can add parameters that shift it left or right, make it wider or narrower:</p>
+<p>Each <span class="math inline">\(\psi_j\)</span> is now a parameterized function rather than a fixed basis function.
+This makes computing gradients much harder, and almost always means that the new
+optimization problem is no longer convex.</p>
+<p>There is also a trade-off in the number of parameters used: while we have fewer <span class="math inline">\(\beta_j\)</span>
+parameters, we also have new <span class="math inline">\(\theta_j\)</span> parameters. Hopefully there will be some
+sweet spot where each adaptive basis function is doing the work of many fixed basis functions!</p>
+<p>A good choice for adaptive basis functions is the sigmoid. We can add parameters that shift
+it left or right, make it wider or narrower:</p>
 <pre><code>def learned_basis_function(bias, width):
     return lambda x: 1/(1+np.exp((bias - x)/width))
 
@@ -354,13 +453,27 @@ for i in [1, 3, 5, 7, 9]:
     bias = i/10
     for width in [0.1, 0.2, 0.3]:
         plt.plot(x, learned_basis_function(bias, width)(x))</code></pre>
-<p>Here is only a small sample of what is possible with these basis functions. In fact, there are infinitely many <em>possible</em> adaptive sigmoid functions - although we will be forced to choose just a small number (<span class="math inline">\(k=7\)</span> below) to construct our approximation.</p>
+<p>Here is only a small sample of what is possible with these basis functions. In
+fact, there are infinitely many <em>possible</em> adaptive sigmoid functions -
+although we will be forced to choose just a small number (<span class="math inline">\(k=7\)</span> below) to
+construct our approximation.</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/learned_basis.png" alt="Learned Sigmoid Basis" />
 <p class="caption">Learned Sigmoid Basis</p>
 </div>
-<p>Note that a very narrow sigmoid is basically a step function, while a very wide sigmoid is basically linear! It’s like we’re getting a two-for-one deal - the space of possible functions <span class="math inline">\(\mathcal{F}\)</span> now includes the span of the sum of all possible step functions and all possible linear functions, as well as all the smooth sigmoid functions in between. This is a very robust representation that should be able to model very complex real-world relationships.</p>
-<p>Also note that <span class="math inline">\(k=7\)</span> is not quite arbitrary – because we have 3 parameters per adaptive basis function, this is roughly the same number of parameters as the above examples. At first it may seem like that’s not nearly enough. Recall that 7 <em>fixed</em> sigmoid functions did a very poor job! But remember, these are adaptive. During training, each of the seven can be shifted and scaled independently of the others. This allows the model to move each to the perfect place where it can do the most good.</p>
+<p>Note that a very narrow sigmoid is basically a step function, while a very wide
+sigmoid is basically linear! It’s like we’re getting a two-for-one deal - the
+space of possible functions <span class="math inline">\(\mathcal{F}\)</span> now includes the span of the sum
+of all possible step functions and all possible linear functions, as well as
+all the smooth sigmoid functions in between. This is a very robust representation
+that should be able to model very complex real-world relationships.</p>
+<p>Also note that <span class="math inline">\(k=7\)</span> is not quite arbitrary – because we have 3 parameters
+per adaptive basis function, this is roughly the same number of parameters as
+the above examples. At first it may seem like that’s not nearly enough.
+Recall that 7 <em>fixed</em> sigmoid functions did a very poor job! But
+remember, these are adaptive. During training, each of the seven can be shifted
+and scaled independently of the others. This allows the model to move each to
+the perfect place where it can do the most good.</p>
 <pre><code>k = 7
 best_loss = float(&#39;inf&#39;)
 beta_hat = np.zeros( shape=(k, 3) )
@@ -387,27 +500,90 @@ if best.status != 0:
 <img src="/post/adaptive-basis-functions_files/learned_approx.png" alt="Learned Sigmoid Approximation" />
 <p class="caption">Learned Sigmoid Approximation</p>
 </div>
-<p>OK, that went from zero to sixty pretty quickly. This is so absurdly good that you have to squint to even see, yes, the blue line for the target is still there, it’s just mostly covered by the orange line for the approximation. We’re using roughly the same number of parameters as before, <em>so why is this so much better?</em></p>
-<p>The only answer that I can give you is that adaptive basis functions are an example of a learned representation, and that by picking (learning) 7 basis functions that were “perfect” for <em>this</em> specific problem, we can build a much better model with just a handful of them.</p>
-<p>But here’s the punchline: this representation – a linear combination of adaptive sigmoid functions – is exactly the same as a <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">neural network</a> with one hidden layer.</p>
-<p>In particular, a neural network with one input node, one hidden layer with a sigmoid activation function, and one output node with a linear activation function. In diagram form for <span class="math inline">\(k = 7\)</span>, each of the 21 gray connection lines corresponds to exactly one of the parameters of the model:</p>
+<p>OK, that went from zero to sixty pretty quickly. This is so absurdly good that
+you have to squint to even see, yes, the blue line for the target is still
+there, it’s just mostly covered by the orange line for the approximation.
+We’re using roughly the same number of parameters as before, <em>so why is this so
+much better?</em></p>
+<p>The only answer that I can give you is that adaptive basis functions are an example
+of a learned representation, and that by picking (learning) 7 basis functions that were “perfect”
+for <em>this</em> specific problem, we can build a much better model with just a handful of them.</p>
+<p>But here’s the punchline: this representation – a linear combination of
+adaptive sigmoid functions – is exactly the same as a <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">neural network</a> with one hidden layer.</p>
+<p>In particular, a neural network with one input node, one hidden layer with a sigmoid activation function,
+and one output node with a linear activation function. In diagram form for <span class="math inline">\(k = 7\)</span>, each
+of the 21 gray connection lines corresponds to exactly one of the parameters of the model:</p>
 <div class="figure">
 <img src="/post/adaptive-basis-functions_files/neural_network_architecture.png" alt="Neural Network Architecture" />
 <p class="caption">Neural Network Architecture</p>
 </div>
-<p>(Astute readers may notice a missing bias node on the hidden layer; that is because the above implementation does <strong>not</strong> in fact have a corresponding parameter. But is is a completely inconsequential difference and could have been easily added to the above code if it was in any way important.)</p>
-<p>There is a famous <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> for this exact network architecture which states that this type of neural network can approximate <em>any</em> continuous function on <span class="math inline">\(\mathbb{R}^n\)</span>. This is an asymptotic result, so it doesn’t directly explain the increased power of this model relative to say, the step function basis, but it sort of wiggles it’s eyebrows in that direction.</p>
-<p>We’ve seen first-hand that not only can models on this form approximate an continuous function asymptotically as the number of hidden units becomes very large, they can often do an excellent job with a limited number of parameters.</p>
-<p>I should point out that we didn’t use backpropagation to fit this model, but for such a small model it hardly matters. In some sense, what we’ve done here is pretend like it’s 1970 and train a neural network using older methods. However, backprop can be viewed purely as a trick to make training faster - we don’t need it to understand or discuss the <strong>expressive</strong> power of this model.</p>
-<p>Here’s another problem: because the basis functions are in some sense interchangeable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are <span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact is guaranteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not actually a problem, because any solution is equally good - they are all equal to the global minima. However, in addition to the <span class="math inline">\(N!\)</span> distinct local optima introduced by the symmetry in our representation, there can also be lots of local minima which are not as good. The decision to use a learned representation almost always comes with a corresponding loss in convexity and consequently we can no longer guarantee convergence to a global minima.</p>
+<p>(Astute readers may notice a missing bias node on the hidden layer; that is because the above implementation
+does <strong>not</strong> in fact have a corresponding parameter. But is is a completely inconsequential difference
+and could have been easily added to the above code if it was in any way important.)</p>
+<p>There is a famous <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> for this exact
+network architecture which states that
+this type of neural network can approximate <em>any</em> continuous function on
+<span class="math inline">\(\mathbb{R}^n\)</span>. This is an asymptotic result, so it doesn’t directly explain the
+increased power of this model relative to say, the step function basis, but
+it sort of wiggles it’s eyebrows in that direction.</p>
+<p>We’ve seen first-hand that not only can models on this form approximate an continuous
+function asymptotically as the number of hidden units becomes very large, they
+can often do an excellent job with a limited number of parameters.</p>
+<p>I should point out that we didn’t use backpropagation to fit this model,
+but for such a small model it hardly matters. In some sense, what we’ve done
+here is pretend like it’s 1970 and train a neural network using older methods.
+However, backprop can be viewed purely as a trick to make training faster - we
+don’t need it to understand or discuss the <strong>expressive</strong> power of this model.</p>
+<p>Here’s another problem: because the basis functions are in some sense
+interchangeable, there’s nothing to stop us from swapping <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> and
+getting an equivalent solution. When we have <span class="math inline">\(N\)</span> basis functions, there are
+<span class="math inline">\(N!\)</span> equivalent points. So not only is our function not convex, but it in fact
+is guaranteed to have at least <span class="math inline">\(N!\)</span> distinct minima! Of course, this is not
+actually a problem, because any solution is equally good - they are all equal
+to the global minima. However, in addition to the <span class="math inline">\(N!\)</span> distinct local optima
+introduced by the symmetry in our representation, there can also be lots of
+local minima which are not as good. The decision to use a learned representation
+almost always comes with a corresponding loss in convexity and consequently
+we can no longer guarantee convergence to a global minima.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>Did I convince you that adaptive basis functions - and by extension learned representations in general - “just work?” I’m not even sure I convinced myself. I’m left with the nagging feeling that if I had just chosen a different set of basis functions, or spent more time thinking about the specifics of the problem, I could have gotten the same performance. This is the trap of hand-engineered features - while of course you <em>could</em> spend endless time dreaming up and trying out new features, it’s not exactly a good use of your time. Meanwhile, an adaptive algorithm running on some Tesla K80 GPU can try billions of possibilities overnight.</p>
-<p>Learned representations allow us to have very flexible models that can approximate essentially arbitrary functions with relatively few parameters. There’s no question these models do “more with less” when compared to traditional models but this power didn’t come for free: we gave up convexity, we gave up linearity, we gave up the ability to impose domain knowledge, we’ve given up some of our ability to reason about our models.</p>
-<p>This, then, is the blessing and the curse of modern machine learning: adaptive basis functions <em>work.</em> Learned representations <em>work.</em> This is a blessing because we can reap the benefits of using them, and a curse because our lack of understanding hampers future progress.</p>
-<p>Hopefully, this will be a temporary state of affairs. These models are now attracting a huge amount of attention. We’re learning, for example, that non-convexity may be a non-issue in very high dimensions because local minima are in fact rather rare relative to saddle points. While saddle points can be a challenge for gradient descent optimizers, the algorithm as a whole doesn’t tend to get permanently stuck in them the same way they can get stuck in local minima. There is also some empirical evidence that the existence of lots of local minima is not really a practical problem if most local minima achieve performance equal to – or very close to – the global minima.</p>
-<p>It would be nice to see these somewhat scattered observations coalesce into some nice theorems. Today, we don’t yet have results as strong as the <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> and much of the work so far as been highly empirical. But it’s also important to remember it’s only been in the last ten years that the importance of these kinds of models has been recognized. Hopefully someday a deep convolutional neural network will be as well understood as linear regression is today, but even if research proceeds at the same pace, this could easily take over a hundred years.</p>
+<p>Did I convince you that adaptive basis functions - and by extension learned representations in general -
+“just work?” I’m not
+even sure I convinced myself. I’m left with the nagging feeling that if I had just
+chosen a different set of basis functions, or spent more time thinking about
+the specifics of the problem, I could have gotten the same performance. This
+is the trap of hand-engineered features - while of course you <em>could</em> spend
+endless time dreaming up and trying out new features, it’s not exactly a good
+use of your time. Meanwhile, an adaptive algorithm running on some Tesla K80
+GPU can try billions of possibilities overnight.</p>
+<p>Learned representations allow us to have very flexible models that
+can approximate essentially arbitrary functions with relatively few parameters.
+There’s no question these models do “more with less” when compared to traditional
+models but this power didn’t come for free: we gave up convexity, we gave up linearity,
+we gave up the ability to impose domain knowledge, we’ve given up some of our ability to
+reason about our models.</p>
+<p>This, then, is the blessing and the curse of modern machine learning: adaptive
+basis functions <em>work.</em> Learned representations <em>work.</em> This is a blessing because we
+can reap the benefits of using them, and a curse because our lack of understanding hampers
+future progress.</p>
+<p>Hopefully, this will be a temporary state of affairs. These models are now
+attracting a huge amount of attention. We’re learning, for example, that
+non-convexity may be a non-issue in very high dimensions because local minima
+are in fact rather rare relative to saddle points. While saddle points can be a
+challenge for gradient descent optimizers, the algorithm as a whole doesn’t
+tend to get permanently stuck in them the same way they can get stuck in local
+minima. There is also some empirical evidence that the existence of lots of
+local minima is not really a practical problem if most local minima achieve
+performance equal to – or very close to – the global minima.</p>
+<p>It would be nice to see these somewhat scattered observations coalesce into
+some nice theorems. Today, we don’t yet have results as strong as the
+<a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> and much of the work so far as been
+highly empirical. But it’s also important to remember it’s only been in the
+last ten years that the importance of these kinds of models has been
+recognized. Hopefully someday a deep convolutional neural network will be
+as well understood as linear regression is today, but even if research
+proceeds at the same pace, this could easily take over a hundred years.</p>
 </div>
 
     </article>
@@ -428,7 +604,7 @@ if best.status != 0:
 
 <div class="site-footer">
   <div class="copyright">
-	  &copy; Copyright 2019 Oran Looney
+	  &copy; Copyright 2022 Oran Looney
   </div>
   <ul class="site-footer-items">
   </ul>

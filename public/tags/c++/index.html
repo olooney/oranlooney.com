@@ -103,7 +103,7 @@
         <a href="/post/fibonacci/"><img src="/post/fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
           A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
-def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance is terrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamic programming. Specifically, either the memoization:
+def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance isterrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamicprogramming. Specifically, either the memoization:
 from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:
         </div>
         <div class="article-readmore"><a href="/post/fibonacci/">Read more...</a></div>
@@ -118,7 +118,7 @@ from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2
 
 <div class="site-footer">
   <div class="copyright">
-	  &copy; Copyright 2019 Oran Looney
+	  &copy; Copyright 2022 Oran Looney
   </div>
   <ul class="site-footer-items">
     <li class="site-footer-item-rsslink">

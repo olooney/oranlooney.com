@@ -6,11 +6,11 @@
   <title>ML From Scratch, Part 2: Logistic Regression - OranLooney.com</title>
   <meta property="og:title" content="ML From Scratch, Part 2: Logistic Regression - OranLooney.com" />
   <meta name="twitter:title" content="ML From Scratch, Part 2: Logistic Regression - OranLooney.com" />
-  <meta name="description" content="In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a cat or a dog.
-In practice, its extremely common to need to decide between \(k\) classes where \(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward.">
-  <meta property="og:description" content="In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a cat or a dog.
-In practice, its extremely common to need to decide between \(k\) classes where \(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward.">
-  <meta name="twitter:description" content="In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 …">
+  <meta name="description" content="In this second installment of the machine learning from scratchwe switch the point of view from regression to classification: instead ofestimating a number, we will be trying to guess which of 2 possible classes agiven input belongs to. A modern example is looking at a photo and deciding ifits a cat or a dog.
+In practice, its extremely common to need to decide between \(k\) classes where\(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - theso-called binary classification problem - because generalizations to manyclasses are usually both tedious and straight-forward.">
+  <meta property="og:description" content="In this second installment of the machine learning from scratchwe switch the point of view from regression to classification: instead ofestimating a number, we will be trying to guess which of 2 possible classes agiven input belongs to. A modern example is looking at a photo and deciding ifits a cat or a dog.
+In practice, its extremely common to need to decide between \(k\) classes where\(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - theso-called binary classification problem - because generalizations to manyclasses are usually both tedious and straight-forward.">
+  <meta name="twitter:description" content="In this second installment of the machine learning from scratchwe switch the point of view from regression to classification: instead ofestimating a number, we will be trying to guess which of 2 …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -110,28 +110,87 @@ In practice, its extremely common to need to decide between \(k\) classes where 
 <aside class="toc">
   
 </aside>
-      <p>In this second installment of the <a href="/tags/from-scratch/">machine learning from scratch</a> we switch the point of view from <em>regression</em> to <em>classification</em>: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a <a href="https://www.kaggle.com/c/dogs-vs-cats">cat or a dog</a>.</p>
-<p>In practice, its extremely common to need to decide between <span class="math inline">\(k\)</span> classes where <span class="math inline">\(k &gt; 2\)</span> but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward. In fact, even if the algorithm doesn’t naturally generalize beyond binary classification (looking at you, <a href="https://en.wikipedia.org/wiki/Support-vector_machine">SVM</a>) there’s a general strategy for turning any binary classification algorithm into a multiclass classification algorithm called <a href="http://mlwiki.org/index.php/One-vs-All_Classification">one-vs-all</a>. Let’s agree to set aside the complexities of the multiclass problem and focus on binary classification for now.</p>
-<p>The binary classification problem is extremely central in machine learning and in this series we’ll be looking at no fewer than four different “serious” classification algorithms. In an undergraduate machine learning class, you’d probably work through a few “non-serious” or “toy” algorithms that have only have historical or pedagogical value: the <a href="https://en.wikipedia.org/wiki/Perceptron">one-unit perceptron</a>, <a href="https://en.wikipedia.org/wiki/Linear_discriminant_analysis">linear discriminant analysis</a>, the <a href="https://en.wikipedia.org/wiki/Winnow_(algorithm)">winnow algorithm</a>. We will omit those and jump straight to the simplest classification that is in widespread use: <a href="https://en.wikipedia.org/wiki/Logistic_regression">logistic regression.</a></p>
-<p>I say, “simplest,” but most people don’t think of LR as “simple.” That’s because they’re thinking of it use within the context of statistical analysis and the design and analysis of experiments. In those contexts, there’s a ton of associated mathematical machinery that goes along with <em>validating</em> and <em>interpretting</em> logistic regression models, and that stuff <em>is</em> complicated. A good book on <em>that</em> side of logistic regression is <a href="https://www.amazon.com/Applied-Logistic-Regression-David-Hosmer/dp/0470582472/">Applied Logistic Regression by Hosmer et al.</a>. But if you simply want to fit data and make predictions then logistic regression is indeed a very simple model: as we’ll see, the heart of the algorithm is only a few lines of code.</p>
-<p>Despite it’s simplicity, it’s important for three reasons. First, it can be surprisingly effective. It’s not uncommon for some state-of-the-art algorithm to significantly contribute to global warming by running a hyperparameter grid search over a cluster of GPU instances in the cloud, only to end up with a final model with only slightly lower <a href="https://en.wikipedia.org/wiki/Generalization_error">generalization error</a> than logistic regression. Obvious, this isn’t <em>always</em> true, otherwise there would be no need to study more advanced models. For example, LR tends to get only ~90% accuracy on the MNIST handwritten digit classification problem, which is much lower than either humans or deep learning. But in the many cases for which it <em>is</em> true, it’s worth asking if the problem is amenable to more advanced machine learning techniques at all.</p>
-<p>The second reason logistic regression is important is that it provides a important conceptual foundation for neural networks and deep learning, which we’ll visit later in this series.</p>
-<p>The third and final reason is that it cannot be solved with linear algebra so serves as a legitimate reason to introduce one of the most important tools in machine learning: gradient descent. Just as in <a href="/post/ml-from-scratch-part-1-linear-regression/">part 1</a>, we’ll take the hard path through the mud and develop (step-by-step) an algorithm which could actually be used in production without too much embarrassment.</p>
+      <p>In this second installment of the <a href="/tags/from-scratch/">machine learning from scratch</a>
+we switch the point of view from <em>regression</em> to <em>classification</em>: instead of
+estimating a number, we will be trying to guess which of 2 possible classes a
+given input belongs to. A modern example is looking at a photo and deciding if
+its a <a href="https://www.kaggle.com/c/dogs-vs-cats">cat or a dog</a>.</p>
+<p>In practice, its extremely common to need to decide between <span class="math inline">\(k\)</span> classes where
+<span class="math inline">\(k &gt; 2\)</span> but in this article we’ll limit ourselves to just two classes - the
+so-called binary classification problem - because generalizations to many
+classes are usually both tedious and straight-forward. In fact, even if the
+algorithm doesn’t naturally generalize beyond binary classification (looking at
+you, <a href="https://en.wikipedia.org/wiki/Support-vector_machine">SVM</a>) there’s a general strategy for turning any binary
+classification algorithm into a multiclass classification algorithm called
+<a href="http://mlwiki.org/index.php/One-vs-All_Classification">one-vs-all</a>. Let’s agree to set aside the complexities of the multiclass
+problem and focus on binary classification for now.</p>
+<p>The binary classification problem is extremely central in machine learning and
+in this series we’ll be looking at no fewer than four different “serious”
+classification algorithms. In an undergraduate machine learning class, you’d
+probably work through a few “non-serious” or “toy” algorithms that have only
+have historical or pedagogical value: the <a href="https://en.wikipedia.org/wiki/Perceptron">one-unit perceptron</a>, <a href="https://en.wikipedia.org/wiki/Linear_discriminant_analysis">linear
+discriminant analysis</a>, the <a href="https://en.wikipedia.org/wiki/Winnow_(algorithm)">winnow algorithm</a>. We will omit those and jump
+straight to the simplest classification that is in widespread use: <a href="https://en.wikipedia.org/wiki/Logistic_regression">logistic
+regression.</a></p>
+<p>I say, “simplest,” but most people don’t think of LR as “simple.” That’s
+because they’re thinking of it use within the context of statistical analysis
+and the design and analysis of experiments. In those contexts, there’s a ton of
+associated mathematical machinery that goes along with <em>validating</em> and
+<em>interpretting</em> logistic regression models, and that stuff <em>is</em> complicated. A
+good book on <em>that</em> side of logistic regression is <a href="https://www.amazon.com/Applied-Logistic-Regression-David-Hosmer/dp/0470582472/">Applied Logistic Regression
+by Hosmer et al.</a>. But if you simply want to fit data and make predictions then
+logistic regression is indeed a very simple model: as we’ll see, the heart of
+the algorithm is only a few lines of code.</p>
+<p>Despite it’s simplicity, it’s important for three reasons. First, it can be surprisingly
+effective. It’s not uncommon for some state-of-the-art algorithm to
+significantly contribute to global warming by running a hyperparameter grid
+search over a cluster of GPU instances in the cloud, only to end up with a
+final model with only slightly lower <a href="https://en.wikipedia.org/wiki/Generalization_error">generalization error</a> than logistic
+regression. Obvious, this isn’t <em>always</em> true, otherwise there would be
+no need to study more advanced models. For example, LR tends to get only ~90%
+accuracy on the MNIST handwritten digit classification problem, which is much
+lower than either humans or deep learning. But in the many cases for which it
+<em>is</em> true, it’s worth asking if the problem is amenable to more advanced
+machine learning techniques at all.</p>
+<p>The second reason logistic regression is important is that it provides a
+important conceptual foundation for neural networks and deep learning, which
+we’ll visit later in this series.</p>
+<p>The third and final reason is that it cannot be solved with linear algebra
+so serves as a legitimate reason to introduce one of the most
+important tools in machine learning: gradient descent. Just as in <a href="/post/ml-from-scratch-part-1-linear-regression/">part
+1</a>, we’ll take the hard path through the mud and develop (step-by-step)
+an algorithm which could actually be used in production without too much
+embarrassment.</p>
 <div id="the-logistic-function" class="section level2">
 <h2>The Logistic Function</h2>
-<p>Before we get to the regression model, let’s take a minute to make sure we have a good understanding of the logistic function and some of its key properties.</p>
+<p>Before we get to the regression model, let’s take a minute to make
+sure we have a good understanding of the logistic function and some
+of its key properties.</p>
 <p>The logistic function (also called the sigmoid function) is given by:</p>
 <p><span class="math display">\[ \sigma(x) = \frac{1}{1 + e^{-x}} \]</span></p>
 <p>It looks like this:</p>
 <p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>First, we note that its domain is <span class="math inline">\((-\infty, +\infty)\)</span> and its range is <span class="math inline">\((0, 1)\)</span>. Therefore its output will always be a valid probability. Note also that <span class="math inline">\(\sigma(0) = 0.5\)</span> so if we interpret the output as a probability, all negative numbers map to probabilities that are unlikely, while all positive numbers map to probabilities that are likely, while zero maps to exactly even odds.</p>
-<p>A few lines of simple algebra will show that its inverse function (also called the “logit” function) is given by</p>
+<p>First, we note that its domain is <span class="math inline">\((-\infty, +\infty)\)</span> and its
+range is <span class="math inline">\((0, 1)\)</span>. Therefore its output will always be a valid
+probability. Note also that <span class="math inline">\(\sigma(0) = 0.5\)</span> so if we interpret
+the output as a probability, all negative numbers map to probabilities
+that are unlikely, while all positive numbers map to probabilities that
+are likely, while zero maps to exactly even odds.</p>
+<p>A few lines of simple algebra will show that its inverse function (also called
+the “logit” function) is given by</p>
 <p><span class="math display">\[ \sigma^{-1}(x) = \ln{\frac{x}{1-x}} \]</span></p>
-<p>Note that if <span class="math inline">\(x = e^p\)</span> where <span class="math inline">\(p\)</span> is a probability between 0 and 1, then we have</p>
+<p>Note that if <span class="math inline">\(x = e^p\)</span> where <span class="math inline">\(p\)</span> is a probability between 0 and 1,
+then we have</p>
 <p><span class="math display">\[ \sigma^{-1}(e^p) = \frac{p}{1-p} \]</span></p>
-<p>Where the right hand side is an <em>odds ratio</em>. So one interpretation of the logistic function is that it is the bijection between <em>log odds ratios</em> to <em>probabilities</em>.</p>
-<p>For example, if something has a probability of 0.2, then it has 4:1 odds, therefore the odds ratio is 4, therefore the log odds ratio of <span class="math inline">\(\ln 4 = -1.39\)</span>. So <span class="math inline">\(\sigma(0.2) = -1.39\)</span>.</p>
-<p>The logistic function also has a pretty interesting derivative. The slickest way to show the following result is to use implicit differentiation, but I’ll show a longer and less magical derivation which only uses the chain rule and basic algebra.</p>
+<p>Where the right hand side is an <em>odds ratio</em>. So one interpretation of the
+logistic function is that it is the bijection between <em>log odds ratios</em> to <em>probabilities</em>.</p>
+<p>For example, if something has a probability of 0.2, then it has 4:1 odds,
+therefore the odds ratio is 4, therefore the log odds ratio of <span class="math inline">\(\ln 4 = -1.39\)</span>.
+So <span class="math inline">\(\sigma(0.2) = -1.39\)</span>.</p>
+<p>The logistic function also has a pretty interesting derivative. The slickest
+way to show the following result is to use implicit differentiation, but
+I’ll show a longer and less magical derivation which only uses the chain rule
+and basic algebra.</p>
 <p><span class="math display">\[ 
     \begin{split}
     \frac{d}{dx} \sigma(x) &amp; = \frac{d}{dx} \frac{1}{1 + e^{-x}} \\
@@ -142,8 +201,15 @@ In practice, its extremely common to need to decide between \(k\) classes where 
     &amp; = \sigma(x) ( 1 - \sigma(x) ) 
     \end{split}
 \]</span></p>
-<p>So we can see that <span class="math inline">\(\sigma&#39;(x)\)</span> can expressed as a simple quadratic function of <span class="math inline">\(\sigma(x)\)</span>. It’s not often that a derivative can be most conveniently expressed in terms of the original function, but it turned out to be the case here. This apparently useless fact is actually quite important numerically because it means we can calculate <span class="math inline">\(\sigma&#39;(x)\)</span> with only a single multiplication assuming that we already know <span class="math inline">\(\sigma(x)\)</span>.</p>
-<p>For our Python implementation, we will need a vectorized implementation of <span class="math inline">\(\sigma()\)</span>. This function applies the sigmoid function element-wise to every element in a <code>numpy.ndarray</code> of any shape.</p>
+<p>So we can see that <span class="math inline">\(\sigma&#39;(x)\)</span> can expressed as a simple quadratic function of
+<span class="math inline">\(\sigma(x)\)</span>. It’s not often that a derivative can be most conveniently
+expressed in terms of the original function, but it turned out to be the case
+here. This apparently useless fact is actually quite important numerically
+because it means we can calculate <span class="math inline">\(\sigma&#39;(x)\)</span> with only a single multiplication
+assuming that we already know <span class="math inline">\(\sigma(x)\)</span>.</p>
+<p>For our Python implementation, we will need a vectorized implementation of
+<span class="math inline">\(\sigma()\)</span>. This function applies the sigmoid function element-wise to every
+element in a <code>numpy.ndarray</code> of any shape.</p>
 <pre><code>import numpy as np
 
 def sigmoid(z):
@@ -151,12 +217,20 @@ def sigmoid(z):
 </div>
 <div id="statistical-motivation" class="section level2">
 <h2>Statistical Motivation</h2>
-<p>Let <span class="math inline">\(Y\)</span> be a discrete random variable with support on <span class="math inline">\(\{0, 1\}\)</span> and let <span class="math inline">\(X\)</span> be a random <span class="math inline">\(m\)</span>-vector. Let’s assume that the joint probability distribution <span class="math inline">\(F_{X,Y}\)</span> of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> has the following sigmoid form for some real-valued vector <span class="math inline">\(\Theta\)</span>:</p>
+<p>Let <span class="math inline">\(Y\)</span> be a discrete random variable with support on <span class="math inline">\(\{0, 1\}\)</span> and let <span class="math inline">\(X\)</span> be a
+random <span class="math inline">\(m\)</span>-vector. Let’s assume that the joint probability distribution <span class="math inline">\(F_{X,Y}\)</span>
+of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> has the following sigmoid form for some real-valued vector <span class="math inline">\(\Theta\)</span>:</p>
 <p><span class="math display">\[ E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]</span></p>
-<p>Now let’s say <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times m\)</span> matrix and <span class="math inline">\(\mathbf{y}\)</span> is an <span class="math inline">\(n\)</span>-vector such that <span class="math inline">\((\mathbf{y}_i, \mathbf{X}_i)\)</span> are <span class="math inline">\(n\)</span> realizations sampled independently from <span class="math inline">\(F_{X,Y}\)</span>; then we can write down the likelihood function:</p>
+<p>Now let’s say <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times m\)</span> matrix and <span class="math inline">\(\mathbf{y}\)</span> is an <span class="math inline">\(n\)</span>-vector such that
+<span class="math inline">\((\mathbf{y}_i, \mathbf{X}_i)\)</span> are <span class="math inline">\(n\)</span> realizations sampled independently from
+<span class="math inline">\(F_{X,Y}\)</span>; then we can write down the likelihood function:</p>
 <p><span class="math display">\[ L(\Theta; \mathbf{X}, \mathbf{y}) = \prod_{i=1}^n P(Y=1|X=\mathbf{X}_i)^{\mathbf{y}_i} P(Y=0|X=\mathbf{X}_i)^{(1 - \mathbf{y}_i)} \]</span></p>
-<p>I should probably explain the notational trick used here: because <span class="math inline">\(y \in \{0, 1\}\)</span>, the first factor will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 0\)</span> and likewise the second term will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 1\)</span>. So putting <span class="math inline">\(y\)</span> and <span class="math inline">\(1-y\)</span> in the exponent is merely a compact way of writing the two mutually exclusive scenarios without an explicit if/else.</p>
-<p>We can simplify this expression by taking the log of both sides and working with the log-likelihood <span class="math inline">\(\ell\)</span> from now on:</p>
+<p>I should probably explain the notational trick used here: because <span class="math inline">\(y \in \{0, 1\}\)</span>, the first factor will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 0\)</span> and
+likewise the second term will be reduced to a constant <span class="math inline">\(1\)</span> if <span class="math inline">\(y = 1\)</span>. So
+putting <span class="math inline">\(y\)</span> and <span class="math inline">\(1-y\)</span> in the exponent is merely a compact way of writing the two mutually exclusive scenarios
+without an explicit if/else.</p>
+<p>We can simplify this expression by taking the log of both sides and working
+with the log-likelihood <span class="math inline">\(\ell\)</span> from now on:</p>
 <p><span class="math display">\[ 
   \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
   = \sum_{i=1}^n \mathbf{y}_i \ln P(Y=1|X=\mathbf{X}_i) + 
@@ -168,7 +242,10 @@ def sigmoid(z):
   = \sum_{i=1}^n \mathbf{y}_i \ln \hat{\mathbf{y}}_i + 
   (1 - \mathbf{\mathbf{y}}_i) \ln (1 - \hat{\mathbf{y}}_i) 
 \]</span></p>
-<p>Because <span class="math inline">\(\ln()\)</span> is monotonically increasing, it suffices to minimize <span class="math inline">\(\ell(\Theta; \mathbf{X}, \mathbf{y})\)</span> with respect to <span class="math inline">\(\Theta\)</span> in order to find the maximum likelihood estimate. Because <span class="math inline">\(\ell\)</span> is convex and has a continuous derivative, we can find this maximum by solving <span class="math inline">\(\nabla \ell = 0\)</span>.</p>
+<p>Because <span class="math inline">\(\ln()\)</span> is monotonically increasing, it suffices to minimize
+<span class="math inline">\(\ell(\Theta; \mathbf{X}, \mathbf{y})\)</span> with respect to <span class="math inline">\(\Theta\)</span> in order to find the maximum
+likelihood estimate. Because <span class="math inline">\(\ell\)</span> is convex and has a continuous derivative, we
+can find this maximum by solving <span class="math inline">\(\nabla \ell = 0\)</span>.</p>
 <p><span class="math display">\[ \begin{align}
   \frac{\partial \ell}{\partial \Theta} 
   &amp; = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta} -
@@ -189,24 +266,41 @@ def sigmoid(z):
  &amp; = \mathbf{X}^T ( \mathbf{y}  - \hat{\mathbf{y}} ) \tag{1} \\
  \end{align}
 \]</span></p>
-<p>Equation (1) is the clearest way to express the gradient, but because <span class="math inline">\(\hat{\mathbf{y}}\)</span> is an implicit function of <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\Theta\)</span> is can appear a little magical. A fully explicit version is:</p>
+<p>Equation (1) is the clearest way to express the gradient, but because <span class="math inline">\(\hat{\mathbf{y}}\)</span> is an implicit function of <span class="math inline">\(\mathbf{X}\)</span> and
+<span class="math inline">\(\Theta\)</span> is can appear a little magical. A fully explicit version is:</p>
 <p><span class="math display">\[
  \frac{\partial \ell}{\partial \Theta} = \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \Theta) ) \tag{2}
 \]</span></p>
-<p>In plain english, this says: go through the rows of <span class="math inline">\(\mathbf{X}\)</span> one by one. For each row, figure out if the prediction <span class="math inline">\(\hat{\mathbf{y}}\)</span> was too high or too low by computing the difference <span class="math inline">\(\mathbf{y}_i - \hat{\mathbf{y}}_i\)</span>. If it’s too high, subtract the row <span class="math inline">\(X_i\)</span> from the gradient, and if it’s too low, then add the row <span class="math inline">\(X_i\)</span> to the gradient, in each case weighting by the magnitude in the difference.</p>
+<p>In plain english, this says: go through the rows of <span class="math inline">\(\mathbf{X}\)</span> one by one. For each row, figure out if the prediction <span class="math inline">\(\hat{\mathbf{y}}\)</span>
+was too high or too low by computing the difference <span class="math inline">\(\mathbf{y}_i - \hat{\mathbf{y}}_i\)</span>. If it’s too high, subtract the row <span class="math inline">\(X_i\)</span> from
+the gradient, and if it’s too low, then add the row <span class="math inline">\(X_i\)</span> to the gradient, in each case weighting by the magnitude in the difference.</p>
 <p>In theory, we can now find the minimum <span class="math inline">\(\hat{\Theta}\)</span> by simply solving equation (3):</p>
 <p><span class="math display">\[
  \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \hat{\Theta}) ) = 0 \tag{3}
 \]</span></p>
-<p>Unfortunately, unlike the normal equation of ordinary least squares, equation (3) cannot be solved by the methods of linear algebra due to the presence of the non-linear <span class="math inline">\(\sigma\)</span> function. However, it <em>is</em> amenable to numerical methods, which we will cover in great detail below.</p>
-<p>You may remark that equation (3) is almost suspiciously neat, but it’s not really an accident. The reason why we chose the logistic function in the first place was precisely so this result would drop out at the end. Indeed, there are other choices with an equally good theoretical basis, yet we chose logit because it’s simple and fast to calculate.</p>
-<p>One such alternative, preferred by some statisticians and scientific specializations, is the <a href="https://en.wikipedia.org/wiki/Probit_model">probit link function</a>, which uses the CDF of the normal distribution instead of sigmoid. However, in practice these curves are extremely similar, and if you showed me an unlabeled plot with both of them I could not for the life of me tell you which is which:</p>
+<p>Unfortunately, unlike the normal equation of ordinary least squares, equation (3) cannot be solved by the
+methods of linear algebra due to the presence of the non-linear <span class="math inline">\(\sigma\)</span> function.
+However, it <em>is</em> amenable to numerical methods, which we will cover in great detail below.</p>
+<p>You may remark that equation (3) is almost suspiciously neat, but it’s not really an accident. The reason
+why we chose the logistic function in the first place was precisely so this
+result would drop out at the end. Indeed, there are other choices with an equally
+good theoretical basis, yet we chose logit because it’s simple and fast to calculate.</p>
+<p>One such alternative, preferred by some statisticians and scientific
+specializations, is the <a href="https://en.wikipedia.org/wiki/Probit_model">probit link function</a>, which uses the CDF of the
+normal distribution instead of sigmoid. However, in practice these curves are
+extremely similar, and if you showed me an unlabeled plot with both of them I
+could not for the life of me tell you which is which:</p>
 <p><img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<p>It’s worth bearing in mind that logistic regression is so popular, not because there’s some theorem which proves it’s <em>the</em> model to use, but because it is the simplest and easiest to work with out of a family of equally valid choices.</p>
+<p>It’s worth bearing in mind that logistic regression is so popular, not because
+there’s some theorem which proves it’s <em>the</em> model to use, but because it is
+the simplest and easiest to work with out of a family of equally valid choices.</p>
 </div>
 <div id="gradient-descent" class="section level2">
 <h2>Gradient Descent</h2>
-<p>The state-of-the-art algorithm that we will use to solve (3) has a large number of moving parts and is somewhat overwhelming to understand at once. Therefore, we will implement it in layers, adding sophistication at each layers as well as taking benchmarks that will concretely demonstrate the value of each added complication. The layers will be:</p>
+<p>The state-of-the-art algorithm that we will use to solve (3) has a large number of moving parts and is
+somewhat overwhelming to understand at once. Therefore, we will implement it in layers,
+adding sophistication at each layers as well as taking benchmarks that will
+concretely demonstrate the value of each added complication. The layers will be:</p>
 <ol style="list-style-type: decimal">
 <li>(Batch) Gradient Descent</li>
 <li>Minibatch Stochastic Gradient Descent</li>
@@ -216,10 +310,16 @@ def sigmoid(z):
 </div>
 <div id="batch-gradient-descent" class="section level2">
 <h2>Batch Gradient Descent</h2>
-<p>Since we have both the loss function <span class="math inline">\(J\)</span> we want to minimize and its gradient <span class="math inline">\(\nabla J\)</span> we can use an algorithm called gradient descent to find a minimum.</p>
-<p>Gradient descent is an iterative method that simply updates an approximation of <span class="math inline">\(\hat{\Theta}\)</span> by taking a smalls step in the direction of steepest descent. Let us denote this sequence of approximations <span class="math inline">\(\hat{\Theta}_t\)</span>. Initialize <span class="math inline">\(\hat{\Theta}_0\)</span> arbitrarily and use the following update rule for <span class="math inline">\(t&gt;0\)</span>:</p>
+<p>Since we have both the loss function <span class="math inline">\(J\)</span> we want to minimize and its gradient <span class="math inline">\(\nabla J\)</span>
+we can use an algorithm called gradient descent to find a minimum.</p>
+<p>Gradient descent is an iterative method that simply updates an approximation of
+<span class="math inline">\(\hat{\Theta}\)</span> by taking a smalls step in the direction of steepest descent. Let us
+denote this sequence of approximations <span class="math inline">\(\hat{\Theta}_t\)</span>. Initialize <span class="math inline">\(\hat{\Theta}_0\)</span>
+arbitrarily and use the following update rule for <span class="math inline">\(t&gt;0\)</span>:</p>
 <p><span class="math display">\[ \hat{\Theta}_{i+1} := \hat{\Theta}_i - \alpha \nabla \ell (\hat{\Theta}_i) \]</span></p>
-<p>For some suitable learning rate <span class="math inline">\(\alpha\)</span> this will always converge, and because <span class="math inline">\(\ell\)</span> is convex it will in fact always converge to the unique global minimum <span class="math inline">\(\hat{\Theta}\)</span> which is the maximum likelihood estimate for <span class="math inline">\(\Theta\)</span>.</p>
+<p>For some suitable learning rate <span class="math inline">\(\alpha\)</span> this will always converge, and because
+<span class="math inline">\(\ell\)</span> is convex it will in fact always converge to the unique global minimum <span class="math inline">\(\hat{\Theta}\)</span>
+which is the maximum likelihood estimate for <span class="math inline">\(\Theta\)</span>.</p>
 <pre><code>class LogisticClassifier:
     def __init__(self, learning_rate=0.1, tolerance=1e-4, max_iter=1000):
         # gradient descent parameters
@@ -302,17 +402,21 @@ import matplotlib.pyplot as plt
 %time model.fit(X_train, y_train)
 model.converged, model.iterations, model.loss</code></pre>
 <blockquote>
-<p>CPU times: user 2.78 s, sys: 3.31 s, total: 6.09 s Wall time: 3.07 s</p>
+<p>CPU times: user 2.78 s, sys: 3.31 s, total: 6.09 s
+Wall time: 3.07 s</p>
 <p>(True, 1094, 0.063013434109990218)</p>
 </blockquote>
-<p>So it took 1000 iterations and 3 seconds to converge. That’s not great, and we’ll see how to improve it in just a minute. First, though, let’s take a look at how the model performs on the test set:</p>
+<p>So it took 1000 iterations and 3 seconds to converge. That’s not great, and we’ll see how
+to improve it in just a minute. First, though, let’s take a look at how the model performs
+on the test set:</p>
 <pre><code>p_hat = model.predict_proba(X_test)
 y_hat = model.predict(X_test)
 accuracy_score(y_test, y_hat)</code></pre>
 <blockquote>
 <p>0.9707602339181286</p>
 </blockquote>
-<p>97% accuracy is quite good. We can get a slightly deeper look at this result by looking at the confusion matrix for the <span class="math inline">\(p&lt;0.5\)</span> decision rule:</p>
+<p>97% accuracy is quite good. We can get a slightly deeper look at this result by looking
+at the confusion matrix for the <span class="math inline">\(p&lt;0.5\)</span> decision rule:</p>
 <table>
 <thead>
 <tr class="header">
@@ -334,7 +438,10 @@ accuracy_score(y_test, y_hat)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>This tells us we’re doing roughly equally well at classifying negatives and positives so our high accuracy is not due simply to unbalanced class prevalence - the model has real insight. Nevertheless, we can try out different breakpoints to see if that makes any difference.</p>
+<p>This tells us we’re doing roughly equally well at classifying negatives and positives
+so our high accuracy is not due simply to unbalanced class prevalence - the model has
+real insight. Nevertheless, we can try out different breakpoints to see if that makes
+any difference.</p>
 <pre><code>fpr, tpr, threshold = roc_curve(y_test, p_hat)
 fpr = np.concatenate([[0], fpr])
 tpr = np.concatenate([[0], tpr])
@@ -350,7 +457,15 @@ plt.text(0.4, 0.6, &#39;AUC: {:.4f}&#39;.format(roc_auc_score(y_test, p_hat)))</
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/auc_roc.png" alt="AUC ROC Curve" />
 <p class="caption">AUC ROC Curve</p>
 </div>
-<p>The models final performance seems quite good, but it’s not really possible to tell from the above graphs if it’s as good as we can do or not. In particular, we could be overfitting or underfitting. It also seems to take a long time for the algorithm to converge (1000 epochs and 3 seconds to converge on just 400 data points in a low-dimensional space? Really?) One powerful diagnostic tool for evaluating these kinds of problems is to plot both training and validation loss as a function of iteration. (To do this, it is necessary to instrument the above code to record these two measurements at the end of every iteration in the <code>fit()</code> function, but I’ve omitted such details in the code above.)</p>
+<p>The models final performance seems quite good, but it’s not really possible to
+tell from the above graphs if it’s as good as we can do or not. In particular,
+we could be overfitting or underfitting. It also seems to take a long time for
+the algorithm to converge (1000 epochs and 3 seconds to converge on just 400
+data points in a low-dimensional space? Really?) One powerful diagnostic tool
+for evaluating these kinds of problems is to plot both training and validation
+loss as a function of iteration. (To do this, it is necessary to instrument
+the above code to record these two measurements at the end of every iteration
+in the <code>fit()</code> function, but I’ve omitted such details in the code above.)</p>
 <pre><code>plt.figure(figsize=(16,6))
 plt.ylim(0, 1)
 plt.xscale(&#39;log&#39;)
@@ -379,22 +494,83 @@ plt.plot(
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss.png" alt="Training/Validation Loss Curve" />
 <p class="caption">Training/Validation Loss Curve</p>
 </div>
-<p>Note the logarithmic scale used for the x-axis. While we get most of our performance in the first 100 iterations, we continue to make incremental progress up past 1000, at which point we reach our <span class="math inline">\(10^{-5}\)</span> tolerance for convergence. Because the validation curve also decreases monotonically we at least know we are not overfitting.</p>
-<p>So, the batch gradient descent algorithm is finding parameters which minimize training loss to 5 decimal places, which in turn allow it to achieve 97% accuracy on the validation set. There’s no evidence of overfitting. The only real concern is the slow convergence and poor runtime performance. If it takes us 3 seconds to fit 400 data points, how are we going to deal with 400,000 or 40 million? Why is this algorithm so slow, and is there anything we can do about it?</p>
+<p>Note the logarithmic scale used for the x-axis. While we get most of our
+performance in the first 100 iterations, we continue to make incremental
+progress up past 1000, at which point we reach our <span class="math inline">\(10^{-5}\)</span> tolerance for
+convergence. Because the validation curve also decreases monotonically we at
+least know we are not overfitting.</p>
+<p>So, the batch gradient descent algorithm is finding parameters which minimize
+training loss to 5 decimal places, which in turn allow it to achieve 97% accuracy on
+the validation set. There’s no evidence of overfitting. The only real concern
+is the slow convergence and poor runtime performance. If it takes us 3 seconds
+to fit 400 data points, how are we going to deal with 400,000 or 40 million?
+Why is this algorithm so slow, and is there anything we can do about it?</p>
 </div>
 <div id="mini-batch-stochastic-gradient-descent" class="section level2">
 <h2>Mini-batch Stochastic Gradient Descent</h2>
-<p>Stochastic gradient descent may also have properties conceptually similar to simulated annealing which possibly allows it to “jump” out of shallow local minima giving it a better chance of finding a true global minimum. (The concept of a “shallow” vs. “deep” local minimum of a log-likelihood is related to the <a href="https://en.wikipedia.org/wiki/Cram%C3%A9r%E2%80%93Rao_bound">Cramer-Rao bound</a> which implies that our estimate of parameters <span class="math inline">\(\hat{\Theta}\)</span> will have less variance under a hypothetical resampling of the training set from the true population if we are at the bottom of a “deep” local minimum with high curvature than if we merely in a “shallow” local minimum with low curvature. This in turn relates to the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias-variance tradeoff</a> in the context of <a href="https://en.wikipedia.org/wiki/Statistical_learning_theory">statistical learning theory</a>. Therefore “shallow” minima are bad because if we refit we get very different parameters which increases <a href="https://en.wikipedia.org/wiki/Generalization_error">expected generalization error</a> which is probably the single most meaningful measure of a models performance in real-world scenarios.) Whether or not SGD really has this property or not isn’t something I feel qualified to weigh in on, but it’s a good story, isn’t it?</p>
-<p>The reason batch gradient descent is slow is that we evaluate the gradient over the entire training set each time we update the parameters. Not only is this fairly expensive, but it violates a basic principle for making gradient descent algorithm converge rapidly:</p>
+<p>Stochastic gradient descent may also have properties conceptually similar to
+simulated annealing which possibly allows it to “jump” out of shallow local
+minima giving it a better chance of finding a true global minimum. (The concept
+of a “shallow” vs. “deep” local minimum of a log-likelihood is related to the
+<a href="https://en.wikipedia.org/wiki/Cram%C3%A9r%E2%80%93Rao_bound">Cramer-Rao bound</a> which implies that our estimate of parameters <span class="math inline">\(\hat{\Theta}\)</span>
+will have less variance under a hypothetical resampling of the training set
+from the true population if we are at the bottom of a “deep” local minimum
+with high curvature than if we merely in a “shallow” local minimum with low
+curvature. This in turn relates to the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias-variance tradeoff</a> in the
+context of <a href="https://en.wikipedia.org/wiki/Statistical_learning_theory">statistical learning theory</a>. Therefore “shallow” minima
+are bad because if we refit we get very different parameters which increases
+<a href="https://en.wikipedia.org/wiki/Generalization_error">expected generalization error</a> which is probably the single most meaningful
+measure of a models performance in real-world scenarios.) Whether or
+not SGD really has this property or not isn’t something I feel qualified
+to weigh in on, but it’s a good story, isn’t it?</p>
+<p>The reason batch gradient descent is slow is that we evaluate the gradient
+over the entire training set each time we update the parameters. Not only
+is this fairly expensive, but it violates a basic principle for making gradient
+descent algorithm converge rapidly:</p>
 <blockquote>
-<p>Gradients evaluated at a point <strong>close</strong> to a minima provide <strong>more</strong> information about the true location of the minima than gradients evaluated <strong>far</strong> from a minima.</p>
+<p>Gradients evaluated at a point <strong>close</strong> to a minima provide <strong>more</strong> information
+about the true location of the minima than gradients evaluated <strong>far</strong> from a
+minima.</p>
 </blockquote>
-<p>(This principle actually leads to <em>two</em> important optimizations; we’ll see the other shortly.)</p>
-<p>A consequence is that if we have the opportunity to take lots of cheap steps instead one expensive step, we should take it. The first step will get us somewhat closer to a minima which makes the later gradient evaluations more valuable.</p>
-<p>Because our loss and gradient functions are written as a sum over the rows of some training set, we have a natural way to divide up the work. One approach is to go as far as possible and treat every individual row in the training set as a separate step. This is called stochastic gradient descent. While stochastic gradient descent is fairly stellar early on and can get close to a true minima in just a few minutes, it struggles to converge to an exact value later on when it is close to the final solution. Instead, it can oscillate back and forth around a minima as every row moves it in a contradictory direction. Another issue with SGD is that we can’t really take advantage of vectorization. 10 single row updates can easily take 5 times as long as a single vectorized operation on 10-row matrices.</p>
-<p>A good compromise is something called mini-batch gradient descent. We pick a batch size, say between 5 and 100 records each, and partition our training set into as many batches as necessary. It’s OK if some batches are bigger or smaller than the chosen batch size. We do want to ensure that each example is included in one and only one batch, though. It’s also recommended to randomize which examples are placed in which batch every time we pass through the data. The benefits are two-fold: not only are batch steps more likely to in roughly the right direction towards the minima without the back-and-forth pathology of SGD, but we will also get to exploit whatever vectorization primitives our hardware offers. If we’re doing 64-bit floating point arithmetic on an Intel CPU chip with the <a href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX instruction set</a>, we may see a 4X speed up, for example. The exact benefit, if any should be determined experimentally.</p>
-<p>A single pass through all of the batches means that each example in the training set has contributed to the gradient exactly once. We call that one <em>epoch</em>. It should be clear that one epoch requires roughly the equivalent amount of processing as a single iteration of batch gradient descent. Therefore, some of the things we did at the end of each iteration for batch gradient descent, like convergence checking, we will instead do only at the end of each epoch when doing mini-batch stochastic gradient descent.</p>
-<p>Leaving all the surrounding code more or less the same, we can implement mini-batch SGD by adding an inner loop inside our fit function.</p>
+<p>(This principle actually leads to <em>two</em> important optimizations; we’ll see the
+other shortly.)</p>
+<p>A consequence is that if we have the opportunity to take lots of cheap steps
+instead one expensive step, we should take it. The first step will get us
+somewhat closer to a minima which makes the later gradient evaluations more
+valuable.</p>
+<p>Because our loss and gradient functions are written as a sum over the rows of
+some training set, we have a natural way to divide up the work. One approach is
+to go as far as possible and treat every individual row in the training set as
+a separate step. This is called stochastic gradient descent. While stochastic
+gradient descent is fairly stellar early on and can get close to a true minima
+in just a few minutes, it struggles to converge to an exact value later on when
+it is close to the final solution. Instead, it can oscillate back and forth
+around a minima as every row moves it in a contradictory direction. Another
+issue with SGD is that we can’t really take advantage of vectorization. 10
+single row updates can easily take 5 times as long as a single vectorized
+operation on 10-row matrices.</p>
+<p>A good compromise is something called mini-batch gradient descent. We pick a
+batch size, say between 5 and 100 records each, and partition our training set
+into as many batches as necessary. It’s OK if some batches are bigger or
+smaller than the chosen batch size. We do want to ensure that each example is
+included in one and only one batch, though. It’s also recommended to randomize
+which examples are placed in which batch every time we pass through the data.
+The benefits are two-fold: not only are batch steps more likely to in roughly
+the right direction towards the minima without the back-and-forth pathology of
+SGD, but we will also get to exploit whatever vectorization primitives our
+hardware offers. If we’re doing 64-bit floating point arithmetic on an Intel
+CPU chip with the <a href="https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX instruction set</a>, we may see a 4X speed up, for
+example. The exact benefit, if any should be determined experimentally.</p>
+<p>A single pass through all of the batches means that each example in the
+training set has contributed to the gradient exactly once. We call that
+one <em>epoch</em>. It should be clear that one epoch requires roughly the
+equivalent amount of processing as a single iteration of batch gradient
+descent. Therefore, some of the things we did at the end of each iteration
+for batch gradient descent, like convergence checking, we will instead
+do only at the end of each epoch when doing mini-batch stochastic gradient
+descent.</p>
+<p>Leaving all the surrounding code more or less the same, we can implement
+mini-batch SGD by adding an inner loop inside our fit function.</p>
 <pre><code>def fit(self, X, y):
     self.fit_center_scale(X)
     
@@ -449,10 +625,13 @@ plt.plot(
 %time model.fit(X_train, y_train)
 model.converged, model.iterations, model.loss</code></pre>
 <blockquote>
-<p>CPU times: user 1.36 s, sys: 1.23 s, total: 2.59 s Wall time: 1.31 s</p>
+<p>CPU times: user 1.36 s, sys: 1.23 s, total: 2.59 s
+Wall time: 1.31 s</p>
 <p>(True, 373, 0.049284666911268454)</p>
 </blockquote>
-<p>It now takes 1.4 seconds to converge instead of 4 seconds: a 2X wall-clock speed up. It only takes 373 epochs (full passes through the data) instead of the 1,000 for batch gradient descent. And the final result has achieved similar test performance:</p>
+<p>It now takes 1.4 seconds to converge instead of 4 seconds: a 2X wall-clock
+speed up. It only takes 373 epochs (full passes through the data) instead of the 1,000 for batch gradient
+descent. And the final result has achieved similar test performance:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_minibatch.png" alt="Training/Validation Loss Curve Minibatch" />
 <p class="caption">Training/Validation Loss Curve Minibatch</p>
@@ -460,8 +639,23 @@ model.converged, model.iterations, model.loss</code></pre>
 </div>
 <div id="nesterov-accelerated-gradient" class="section level2">
 <h2>Nesterov Accelerated Gradient</h2>
-<p>But we aren’t even close to done. The next bell-and-whistle on our “Making SGD Awesome” whistle-stop tour is a clever idea called momentum. While there are several competing approaches to implementing momentum, we’ll implement a version called Nesterov Accelerated Gradient.</p>
-<p>The basic idea behind momentum is very simple. We want to take the gradient contribution of a given batch and spread it over a number of updates. This is similar to nudging a golf ball in a given direction and allowing it to roll to a stop, hence the name, momentum. How can we achieve this is in a fair way and give the same weight to all batches? By relying on the convergence property of the geometric series. Let’s say we checked the gradient and decided that we wanted to update our parameter <span class="math inline">\(\Theta\)</span> by a vector <span class="math inline">\(v = (+2,-2)\)</span>. Instead of applying that all in one update, we could apply <span class="math inline">\(v_0 = (+1,-1)\)</span> the first step, <span class="math inline">\(v_1 = (+\frac{1}{2}, -\frac{1}{2})\)</span> the second step, <span class="math inline">\(v_2 = (+\frac{1}{4}, -\frac{1}{4})\)</span> and so on out to infinity. Then by the limit of the geometric series, we know that the total contribution after a long time converges to <span class="math inline">\((+2,-2)\)</span>. More generally, we can choose any decay rate less than one and still enjoy convergence.</p>
+<p>But we aren’t even close to done. The next bell-and-whistle on our “Making SGD
+Awesome” whistle-stop tour is a clever idea called momentum. While there are
+several competing approaches to implementing momentum, we’ll implement a version
+called Nesterov Accelerated Gradient.</p>
+<p>The basic idea behind momentum is very simple. We want to take the gradient
+contribution of a given batch and spread it over a number of updates. This
+is similar to nudging a golf ball in a given direction and allowing it to
+roll to a stop, hence the name, momentum. How can we achieve this is in a fair
+way and give the same weight to all batches? By relying on the convergence
+property of the geometric series. Let’s say we checked the gradient and decided
+that we wanted to update our parameter <span class="math inline">\(\Theta\)</span> by a vector <span class="math inline">\(v = (+2,-2)\)</span>.
+Instead of applying that all in one update, we could apply <span class="math inline">\(v_0 = (+1,-1)\)</span>
+the first step, <span class="math inline">\(v_1 = (+\frac{1}{2}, -\frac{1}{2})\)</span> the second step, <span class="math inline">\(v_2 = (+\frac{1}{4}, -\frac{1}{4})\)</span>
+and so on out to infinity. Then by the limit of the geometric series, we
+know that the total contribution after a long time converges to <span class="math inline">\((+2,-2)\)</span>.
+More generally, we can choose any decay rate less than one and still enjoy
+convergence.</p>
 <p><span class="math display">\[
 \sum_{n=0}^\infty a^n = 1 + a + a^2 + a^3 + ... = \frac{1}{1-a} \,\, \forall a \in \mathbb{R}, 0 \leq a \le 1
 \]</span></p>
@@ -472,12 +666,39 @@ for epoch in range(1000):
     for batch in partition_data(X, 8):
         momentum = momentum * decay_rate - learning_rate * gradient(beta, batch)
         beta += momentum</code></pre>
-<p>Which is fine, but it turns out we can do strictly better for no extra work if we remember our principle from earlier: gradients taken near a minima are more valuable than those taken further away. In the above pseudocode, we evaluation the gradient at the beta from the previous step, even though we <em>know</em> that part of the update will be to add in the old momentum. So why don’t we do that <em>first</em> and then take the gradient at that point instead? It’s a little bit like peaking ahead.</p>
+<p>Which is fine, but it turns out we can do strictly better for no extra work if
+we remember our principle from earlier: gradients taken near a minima are more
+valuable than those taken further away. In the above pseudocode, we evaluation
+the gradient at the beta from the previous step, even though we <em>know</em> that
+part of the update will be to add in the old momentum. So why don’t we do that
+<em>first</em> and then take the gradient at that point instead? It’s a little bit
+like peaking ahead.</p>
 <p>To help you remember, some mnemonic imagery:</p>
 <blockquote>
-<p>Captain Nesterov stands on the bridge of his submarine. The situation is tense. In the waters above, a Canadian sub-hunter is searching for them. The captain knows that if he can gently land his sub exactly at the lowest point of a nearby indentation in the sea floor, the sub-hunters scan will read them as a natural formation. But if the submarine isn’t at the bottom of the indentation, then they stick out like a sore thumb when the Canadians compare them to their previous topographical survey maps. The captain also knows that he can use at most one ping to measure the depth and angle of the sea floor below them. After that, the sub-hunter will be on high alert and be able to triangulate them on the second ping. Life and death for himself and his entire crew is on the line. The ship glides in silent mode through the inky depths. Nervous, the inexperienced sonar operator cracks. “Do you want me to ping, sir?” “No”, Captain Nesterov replies, “not <em>yet</em>.” the submarine glides on momentum for another tense minute, gradually slowing. Only when the helmsman reports that their speed as dropped another 10% to just 4 knots does he order the ping. By now, the ship has glided to almost the exact center of the depression, and one final course correction sees the ship safely nestled on the sandy ocean floor less than a meter from the lowest point of the depression.</p>
+<p>Captain Nesterov stands on the bridge of his submarine. The situation is tense.
+In the waters above, a Canadian sub-hunter is searching for them. The captain
+knows that if he can gently land his sub exactly at the lowest point of a
+nearby indentation in the sea floor, the sub-hunters scan will read them as a
+natural formation. But if the submarine isn’t at the bottom of the indentation,
+then they stick out like a sore thumb when the Canadians compare them to their
+previous topographical survey maps. The captain also knows that he can use at
+most one ping to measure the depth and angle of the sea floor below them.
+After that, the sub-hunter will be on high alert and be able to triangulate
+them on the second ping. Life and death for himself and his entire crew is on
+the line. The ship glides in silent mode through the inky depths. Nervous, the
+inexperienced sonar operator cracks. “Do you want me to ping, sir?” “No”, Captain
+Nesterov replies, “not <em>yet</em>.” the submarine glides on momentum for another
+tense minute, gradually slowing. Only when the helmsman reports that their
+speed as dropped another 10% to just 4 knots does he order the ping. By now,
+the ship has glided to almost the exact center of the depression, and one
+final course correction sees the ship safely nestled on the sandy ocean floor
+less than a meter from the lowest point of the depression.</p>
 </blockquote>
-<p>The code for this is straight-forward. Occasionally you’ll see versions of this where the author has bent over backwards to ensure that the prior momentum term is incorporated just once, but this is best left as an exercise for the reader. It has no impact on performance unless a terribly large number of parameters are in play.</p>
+<p>The code for this is straight-forward. Occasionally you’ll see versions
+of this where the author has bent over backwards to ensure that the prior momentum
+term is incorporated just once, but this is best left as an exercise for the reader.
+It has no impact on performance unless a terribly large number of parameters are
+in play.</p>
 <pre><code>def fit(self, X, y):
     self.fit_center_scale(X)
     
@@ -537,23 +758,59 @@ for epoch in range(1000):
 %time model.fit(X_train, y_train)
 model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 <blockquote>
-<p>CPU times: user 100 ms, sys: 140 ms, total: 240 ms Wall time: 123 ms</p>
+<p>CPU times: user 100 ms, sys: 140 ms, total: 240 ms
+Wall time: 123 ms</p>
 <p>(True, False, 30, 0.046659741686488669)</p>
 </blockquote>
-<p>Another simple change to our algorithm, another impressive speed-up. We’re now converging <em>ten times</em> faster than the version without Nesterov Accelerated Momentum, and <em>25 times</em> faster than the naive batch gradient descent.</p>
-<p>In fact, we’re now converging so fast and efficiently on the training set that a new problem has emerged. Take a look at these loss curves:</p>
+<p>Another simple change to our algorithm, another impressive speed-up. We’re now converging
+<em>ten times</em> faster than the version without Nesterov Accelerated Momentum, and <em>25 times</em>
+faster than the naive batch gradient descent.</p>
+<p>In fact, we’re now converging so fast and efficiently on the training set that a new problem
+has emerged. Take a look at these loss curves:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_nesterov.png" alt="Training/Validation Loss Curve" />
 <p class="caption">Training/Validation Loss Curve</p>
 </div>
-<p>A new phenomenon is occurring: after just a few iterations test set performance first levels off and then actually begins to <em>get worse</em> even as training performance continues to improve. This is actually a classic illustration of the well-known bias-variance trade-off. In fact, the reason we’ve been obsessively recording and plotting training and validation loss for every experiment is because we were on the lookout for the exact phenomenon. And now our caution has paid dividends, because we’ve caught a example of <a href="https://en.wikipedia.org/wiki/Overfitting">overfitting</a>.</p>
-<p>One solution to this kind of overfitting - I mean the kind that gets worse and worse as the number of iterations increases - is to treat <code>max_iterations</code> as a hyperparameter and to use a grid search to find the optimal number of iterations. Or to add regularization, to to play around with batch size, etc. But there’s a rather clever solution which is as close to a free lunch as anything I know in machine learning, in the sense that it saves computation time, minimizes generalization error, and basically costs nothing and has no downside except for a loss in theoretical rigor. This piece of (black?) magic is called <a href="https://en.wikipedia.org/wiki/Early_stopping">early stopping.</a></p>
+<p>A new phenomenon is occurring: after just a few iterations test set performance
+first levels off and then actually begins to <em>get worse</em> even as training
+performance continues to improve. This is actually a classic illustration of
+the well-known bias-variance trade-off. In fact, the reason we’ve been obsessively
+recording and plotting training and validation loss for every experiment
+is because we were on the lookout for the exact phenomenon. And now our caution
+has paid dividends, because we’ve caught a example of <a href="https://en.wikipedia.org/wiki/Overfitting">overfitting</a>.</p>
+<p>One solution to this kind of overfitting - I mean the kind that gets worse and
+worse as the number of iterations increases - is to treat <code>max_iterations</code> as a
+hyperparameter and to use a grid search to find the optimal number of
+iterations. Or to add regularization, to to play around with batch size, etc.
+But there’s a rather clever solution which is as close to a free lunch as
+anything I know in machine learning, in the sense that it saves computation
+time, minimizes generalization error, and basically costs nothing and has no
+downside except for a loss in theoretical rigor. This piece of (black?) magic
+is called <a href="https://en.wikipedia.org/wiki/Early_stopping">early stopping.</a></p>
 </div>
 <div id="early-stopping" class="section level2">
 <h2>Early Stopping</h2>
-<p>The basic idea behind early stopping is taken from looking at the shape of the above validation loss curve. If we want to minimize validation loss, and we know that it goes down for a while then starts to rise, why don’t we just <em>stop</em> once it starts to go back up? Really the only wrinkle is that because the validation loss curve is a little noisy we don’t want to stop the first time we see validation loss rise even a little bit but rather wait to make sure it’s the start of an upward trend before we pull the rip-cord. We can do that simply by waiting for a certain number of epochs with no improvement in validation loss.</p>
-<p>One theoretical problem with early stopping is that the parameters estimated in this way are <em>not</em> the maximum likelihood estimates! This makes it harder to reason about them from a statistical point of view. One justification is that although we haven’t found an MLE, we are performing <a href="https://en.wikipedia.org/wiki/Empirical_risk_minimization">empirical risk minimization</a> and have found a step of parameters that generalize optimally to the validation set. That in turn raises more questions because we haven’t actually minimized empirical risk <em>globally</em> but only along the path of steepest of descent traced out by gradient descent. Ultimately this is a pragmatic technique recommended mainly by its simplicity, improved validation and test set performance, and decreased training times.</p>
-<p>Here is the “final” version of the code for the <code>LogisticClassifier</code>, including implementation details omitted above:</p>
+<p>The basic idea behind early stopping is taken from looking at the shape of the
+above validation loss curve. If we want to minimize validation loss, and we
+know that it goes down for a while then starts to rise, why don’t we just
+<em>stop</em> once it starts to go back up? Really the only wrinkle is that because
+the validation loss curve is a little noisy we don’t want to stop the first
+time we see validation loss rise even a little bit but rather wait to make sure
+it’s the start of an upward trend before we pull the rip-cord. We can do that
+simply by waiting for a certain number of epochs with no improvement in
+validation loss.</p>
+<p>One theoretical problem with early stopping is that the parameters estimated in
+this way are <em>not</em> the maximum likelihood estimates! This makes it harder to
+reason about them from a statistical point of view. One justification is that
+although we haven’t found an MLE, we are performing <a href="https://en.wikipedia.org/wiki/Empirical_risk_minimization">empirical risk
+minimization</a> and have found a step of parameters that generalize
+optimally to the validation set. That in turn raises more questions because we
+haven’t actually minimized empirical risk <em>globally</em> but only along the path of
+steepest of descent traced out by gradient descent. Ultimately this is a
+pragmatic technique recommended mainly by its simplicity, improved validation
+and test set performance, and decreased training times.</p>
+<p>Here is the “final” version of the code for the <code>LogisticClassifier</code>, including
+implementation details omitted above:</p>
 <pre><code>class LogisticClassifier:
     def __init__(self, 
             learning_rate=0.1, 
@@ -694,15 +951,24 @@ model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 %time model.fit(X_train, y_train)
 model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 <blockquote>
-<p>CPU times: user 40 ms, sys: 30 ms, total: 70 ms Wall time: 49.1 ms (False, True, 10, 0.053536116001088603)</p>
+<p>CPU times: user 40 ms, sys: 30 ms, total: 70 ms
+Wall time: 49.1 ms
+(False, True, 10, 0.053536116001088603)</p>
 </blockquote>
-<p>Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with 3 seconds and now you’re telling me its 49 ms? As in, 60X faster? No, this is actually fairly typical. That’s why it’s so important to use a good optimizer instead of relying on naive methods. Luckily, with modern frameworks, state-of-the-art optimizers are usually available off-the-rack.</p>
+<p>Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with
+3 seconds and now you’re telling me its 49 ms? As in, 60X faster? No, this
+is actually fairly typical. That’s why it’s so important to use a good
+optimizer instead of relying on naive methods. Luckily, with modern frameworks,
+state-of-the-art optimizers are usually available off-the-rack.</p>
 <p>Test set performance (accuracy, AUC) has not suffered:</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/auc_roc_final.png" alt="AUC ROC Curve" />
 <p class="caption">AUC ROC Curve</p>
 </div>
-<p>The loss curves are exactly the same as before… until the curve starts climbing upward for a few iterations, at which point we pull the plug. In this case, we stopped after just 10 iterations, compared to the 1000 needed for the batch gradient descent.</p>
+<p>The loss curves are exactly the same as before… until the curve starts climbing
+upward for a few iterations, at which point we pull the plug. In this case,
+we stopped after just 10 iterations, compared to the 1000 needed for the batch
+gradient descent.</p>
 <div class="figure">
 <img src="/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_final.png" alt="Training/Validation Loss Curve" />
 <p class="caption">Training/Validation Loss Curve</p>
@@ -710,10 +976,29 @@ model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>That was logistic regression from scratch. In this article, we’ve learned about a simple but powerful classifier called logistic regression. We derived the equations for MLE and, in our attempts to solve these equations numerically, developed an incredibly powerful piece of technology: Mini-batch SGD with early stopping and NAG. This optimizer is actually more important than logistic regression because it turns out it can be re-used for a wide variety of models.</p>
-<p>There are variations on SGD that we haven’t talked about, in particular adaptive variations which don’t need a <code>learning_rate</code> hyperparameter or have schedules for changing <code>learning_rate</code>or <code>momentum_decay</code> over time. But there’s no general, one-size-fits-all solution which is strictly better than the technique presented here. You will of course find endless papers and benchmarks suggesting that one technique or another is better; but they’re are generally talking about differences less that 2X, not the 60X gained by these more fundamental techniques.</p>
-<p>I myself often use <a href="https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/">Adam</a> as my go-to optimizer on new datasets, simply because it works even when the data isn’t centered and scaled and I don’t have to fiddle around with learning rate. The idea isn’t to argue that this particular algorithm is the best choice for all possible scenarios - no such algorithm exists. But hopefully we’ve covered the key ingredients which go into a state-of-the-art optimizer.</p>
-<p>In the <a href="/post/ml-from-scratch-part-3-backpropagation/">next installment</a> of <a href="/tags/from-scratch/">Machine Learning From Scratch</a>, we’ll explore neural networks and the <a href="/post/ml-from-scratch-part-3-backpropagation/">backpropagation algorithm</a> in particular.</p>
+<p>That was logistic regression from scratch. In this article, we’ve learned about
+a simple but powerful classifier called logistic regression. We derived the
+equations for MLE and, in our attempts to solve these equations numerically,
+developed an incredibly powerful piece of technology: Mini-batch SGD with
+early stopping and NAG. This optimizer is actually more important than logistic
+regression because it turns out it can be re-used for a wide variety of models.</p>
+<p>There are variations on SGD that we haven’t talked about, in particular
+adaptive variations which don’t need a <code>learning_rate</code> hyperparameter or have
+schedules for changing <code>learning_rate</code>or <code>momentum_decay</code> over time. But
+there’s no general, one-size-fits-all solution which is strictly better than
+the technique presented here. You will of course find endless papers and
+benchmarks suggesting that one technique or another is better; but they’re
+are generally talking about differences less that 2X, not the 60X gained
+by these more fundamental techniques.</p>
+<p>I myself often use <a href="https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/">Adam</a> as my go-to optimizer on new datasets, simply
+because it works even when the data isn’t centered and scaled and I don’t have
+to fiddle around with learning rate. The idea isn’t to argue that this
+particular algorithm is the best choice for all possible scenarios - no such
+algorithm exists. But hopefully we’ve covered the key ingredients which go into
+a state-of-the-art optimizer.</p>
+<p>In the <a href="/post/ml-from-scratch-part-3-backpropagation/">next installment</a> of <a href="/tags/from-scratch/">Machine Learning From Scratch</a>,
+we’ll explore neural networks and the <a href="/post/ml-from-scratch-part-3-backpropagation/">backpropagation algorithm</a> in
+particular.</p>
 </div>
 
     </article>
@@ -734,7 +1019,7 @@ model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
 
 <div class="site-footer">
   <div class="copyright">
-	  &copy; Copyright 2019 Oran Looney
+	  &copy; Copyright 2022 Oran Looney
   </div>
   <ul class="site-footer-items">
   </ul>
