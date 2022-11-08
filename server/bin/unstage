@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# must be root or use sudo
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 1
+fi
+
+rm -rf /var/www/staging.oranlooney.com/
+mv /tmp/staging.oranlooney.com /var/www/
