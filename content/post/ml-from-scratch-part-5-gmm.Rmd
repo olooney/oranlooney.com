@@ -12,11 +12,11 @@ image: /post/ml-from-scratch-part-5-gmm_files/lead.jpg
 
 Consider the following motivating dataset:
 
-![Unlabled Data](/post/ml-from-scratch-part-5-gmm_files/unlabled.png)
+![Unlabeled Data](/post/ml-from-scratch-part-5-gmm_files/unlabled.png)\ 
 
 It is apparent that these data have some kind of structure; which is to say,
 they certainly are not drawn from a uniform or other simple distribution. In
-particular, there is at least one cluster of data in the lower right which is
+particular, there is at least one cluster of data in the lower left which is
 clearly separate from the rest. The question is: is it possible for a machine
 learning algorithm to automatically discover and model these kinds of
 structures without human assistance?
@@ -424,7 +424,7 @@ Plot the clusters. Each color is a cluster found by GMM:
         clusters=permuted_prediction,
         classes=iris.target)
 
-![GMM Clusters](/post/ml-from-scratch-part-5-gmm_files/gmm_clusters.png)
+![GMM Clusters](/post/ml-from-scratch-part-5-gmm_files/gmm_clusters.png)\
 
 Well, the model certainly found *something.* 
 
@@ -474,7 +474,7 @@ in the very promising 96% agreement!  However, if we 1,000 random trials,
 varying the seed each time, we can see that cluster-to-labels agreement
 actually varies at random from 0.52 to 0.99 with a mean of 0.74. 
 
-![Accuracy Histogram](/post/ml-from-scratch-part-5-gmm_files/accuracy_histogram.png)
+![Accuracy Histogram](/post/ml-from-scratch-part-5-gmm_files/accuracy_histogram.png)\
 
 This is a little disappointing. We started from a dataset which really was the
 aggregation of three different classes, and while our unsupervised learning
