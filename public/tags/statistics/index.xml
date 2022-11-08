@@ -30,7 +30,7 @@ In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathb
       <guid>http://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/</guid>
       <description>Consider the following motivating dataset:
 Unlabled Data
-It is apparent that these data have some kind of structure; which is to say,they certainly are not drawn from a uniform or other simple distribution. Inparticular, there is at least one cluster of data in the lower right which isclearly separate from the rest. The question is: is it possible for a machinelearning algorithm to automatically discover and model these kinds ofstructures without human assistance?</description>
+ It is apparent that these data have some kind of structure; which is to say, they certainly are not drawn from a uniform or other simple distribution. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest. The question is: is it possible for a machine learning algorithm to automatically discover and model these kinds of structures without human assistance?</description>
     </item>
     
     <item>
