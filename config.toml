@@ -18,8 +18,9 @@ copyright = "&copy; Copyright {year} Oran Looney"
 
   # Gravatar or Abatar image
   gravatar = "4fd33509c8963cefcdb6bf03af9c34cc"
-  tumblr = "honeycode"
   github = "olooney"
+  linkedin = "oran-looney"
+  twitter = "oranlooney"
   stackoverflow = "273231/olooney"
   crossvalidated = "48250/olooney"
   # email = "olooney@gmail.com"
