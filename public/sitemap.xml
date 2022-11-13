@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://www.oranlooney.com/about/</loc>
+    <lastmod>2022-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.oranlooney.com/quotes/</loc>
+    <lastmod>2022-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.oranlooney.com/post/ml-from-scratch-part-6-pca/</loc>
     <lastmod>2019-09-16T00:00:00+00:00</lastmod>
   </url>
@@ -70,11 +80,6 @@
   <url>
     <loc>http://www.oranlooney.com/post/complex-r/</loc>
     <lastmod>2018-06-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.oranlooney.com/about/</loc>
-    <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>

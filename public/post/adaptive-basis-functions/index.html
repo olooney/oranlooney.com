@@ -22,7 +22,7 @@ The premise is this:
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
 
-  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous" async></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
 
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
@@ -38,27 +38,38 @@ The premise is this:
 </head>
 
 <body>
-
 <header class="site-header">
   <nav class="site-navi">
-    
     <a href="/" class="site-title">OWL</a>
     <ul class="site-navi-items">
-      <li class="site-navi-item-"><a href="/tags/" title="Tags">Tags</a></li>
-      <li class="site-navi-item-"><a href="/archives/" title="Archives">Archives</a></li>
-      <li class="site-navi-item-about"><a href="/about/" title="About">About</a></li>
+      <li class="site-navi-item">
+        <a href="/tags/" title="Article Tags"><i class="fa fa-tag"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/archives/" title="Article Archives"><i class="fa fa-archive"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/quotes/" title="Favorite Quotes"><i class="fas fa-quote-right"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/about/" title="About Me"><i class="fa fa-info-circle"></i></a>
+      </li>
     </ul>
     
   <ul class="author-social">
-    <li><a href="//twitter.com/oranlooney" target="_blank"><i class="fab fa-twitter"></i></a></li>
-    <li><a href="//linkedin.com/in/oran-looney" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+    <li><a href="//honeycode.tumblr.com/" target="_blank" title="Honeycode Microblog">
+      <svg class="svg-inline--fa fa-w-12" aria-hidden="true" data-prefix="fab" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="20 50 350 450" data-fa-i2svg="">
+<path fill="currentColor" d="M193 97l86.6 50v100l-86.6 50l-86.6 -50v-100zM285 255l86.6 50v100l-86.6 50l-86.6 -50v-100zM100 255l86.6 50v100l-86.6 50l-86.6 -50v-100z"></path>
+</svg>
+    </a></li>
+    <li><a href="//linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
     <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
     <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
     <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
 
     <li>
       <a href="https://www.librarything.com/catalog.php?view=olooney&amp;offset=0&amp;shelf_rows=10&amp;previousOffset=0&amp;shelf=shelf" target="_blank" title="LibraryThing">
-	    <i class="far fa-bookmark"></i>
+	    <i class="fas fa-book-reader"></i>
 	  </a>
 	</li>
     
@@ -66,7 +77,6 @@ The premise is this:
 
   </nav>
 </header>
-
 
 
   <div class="main" role="main">
