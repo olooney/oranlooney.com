@@ -4,6 +4,13 @@
     {{- with .twitter }}
     <li><a href="//twitter.com/{{ . }}" target="_blank"><i class="fab fa-twitter"></i></a></li>
     {{- end }}
+    {{- with .tumblr }}
+    <li><a href="//{{ . }}.tumblr.com/" target="_blank" title="Honeycode Microblog">
+      <svg class="svg-inline--fa fa-w-12" aria-hidden="true" data-prefix="fab" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="20 50 350 450" data-fa-i2svg="">
+<path fill="currentColor" d="M193 97l86.6 50v100l-86.6 50l-86.6 -50v-100zM285 255l86.6 50v100l-86.6 50l-86.6 -50v-100zM100 255l86.6 50v100l-86.6 50l-86.6 -50v-100z"></path>
+</svg>
+    </a></li>
+    {{- end }}
     {{- with .facebook }}
     <li><a href="//facebook.com/{{ . }}" target="_blank"><i class="fab fa-facebook"></i></a></li>
     {{- end }}
@@ -20,7 +27,7 @@
     <li><a href="//reddit.com/user/{{ . }}" target="_blank"><i class="fab fa-reddit"></i></a></li>
     {{- end }}
     {{- with .linkedin }}
-    <li><a href="//linkedin.com/in/{{ . }}" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+    <li><a href="//linkedin.com/in/{{ . }}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
     {{- end }}
     {{- with .slideshare }}
     <li><a href="//slideshare.com/{{ . }}" target="_blank"><i class="fab fa-slideshare"></i></a></li>
@@ -95,12 +102,12 @@
     <li><a href="//vine.co/{{ . }}" target="_blank"><i class="fab fa-vine"></i></a></li>
     {{- end }}
     {{- with .email }}
-    <li><a href="mailto:{{ . }}" target="_blank"><i class="fas fa-envelope"></i></a></li>
+    <li><a href="mailto:{{ . }}" target="_blank"><i class="far fa-envelope"></i></a></li>
     {{- end }}
 
     <li>
       <a href="https://www.librarything.com/catalog.php?view=olooney&amp;offset=0&amp;shelf_rows=10&amp;previousOffset=0&amp;shelf=shelf" target="_blank" title="LibraryThing">
-	    <i class="far fa-bookmark"></i>
+	    <i class="fas fa-book-reader"></i>
 	  </a>
 	</li>
     

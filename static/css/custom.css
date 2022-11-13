@@ -95,6 +95,14 @@ html .site-navi a:active
 {
 	color: #ddd;
 }
+
+@media screen and (min-width: 510px) {
+    html .site-navi .site-navi-items {
+        padding-right: 15px;
+        border-right: 1px solid rgb(255, 255, 255, 0.3);
+    }
+}
+
 html .site-footer {
 	padding: 0 1em;
 }
@@ -129,7 +137,7 @@ html .author .author-avatar {
 
 .site-header .author-social {
   font-size: 13px;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 .site-header ul.author-social li {
   margin: 0 8px 0 8px;
@@ -194,4 +202,109 @@ html .archives .archives-item > a:visited {
   text-overflow: ellipsis;
   max-height: 130px;
 }
+
+
+/* About */
+.about {
+  text-align: left;
+}
+.author {
+}
+.author-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.author-avatar-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  width:158px;
+  height:158px;
+  border-radius: 50%;
+  border: solid 1px lightgray;
+}
+.author-avatar {
+  width:150px;
+  height:150px;
+  margin: 4px;
+  border-radius: 50%;
+  background-color: lightgray;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+.author-social {
+  list-style-type: none;
+  padding: 0;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.author-social li {
+  font-size: 1.5em;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+.author-social a {
+  color: inherit;
+}
+.author-social a:hover, .author-social a:active {
+  color: gray;
+}
+.about ul:not(.author-social)  {
+  margin-left: auto;
+  margin-right: auto;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 0;
+}
+
+.author .author-name {
+    text-align: center;
+}
+
+.article.quotes #TableOfContents > ul {
+    list-style-type: none;
+}
+.article.quotes #TableOfContents > ul > li ul {
+    color: #800000;
+    list-style-type: decimal;
+}
+
+.article.quotes .MathJax_Display {
+    text-align: left !important;
+    margin: 0.5em;
+}
+
+
+/* correctly format the LaTex logo */
+.tex sub, .latex sub, .latex sup {
+  text-transform: uppercase;
+}
+
+.tex sub, .latex sub {
+  vertical-align: -0.5ex;
+  margin-left: -0.1667em;
+  margin-right: -0.125em;
+}
+
+.tex, .latex, .tex sub, .latex sub {
+  font-size: 1em;
+}
+
+.latex sup {
+  font-size: 0.85em;
+  vertical-align: 0.15em;
+  margin-left: -0.36em;
+  margin-right: -0.15em;
+}
+
 

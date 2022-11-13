@@ -3,7 +3,7 @@ title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"
-paginate = 25
+paginate = 100
 
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright {year} Oran Looney"
@@ -20,9 +20,10 @@ copyright = "&copy; Copyright {year} Oran Looney"
   gravatar = "4fd33509c8963cefcdb6bf03af9c34cc"
   github = "olooney"
   linkedin = "oran-looney"
-  twitter = "oranlooney"
+  # twitter = "oranlooney"
   stackoverflow = "273231/olooney"
   crossvalidated = "48250/olooney"
+  tumblr = "honeycode"
   # email = "olooney@gmail.com"
 
 [taxonomies]
@@ -40,4 +41,8 @@ copyright = "&copy; Copyright {year} Oran Looney"
   name = "About"
   identifier = "about"
   url = "/about/"
+[[menu.main]]
+  name = "Quotes"
+  identifier = "quotes"
+  url = "/quotes/"
 
