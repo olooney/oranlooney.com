@@ -1,0 +1,92 @@
+/* Font Wars Styling
+Copyright 2011, Oran Looney
+MIT License, see README
+*/
+
+html, body {
+	overflow: hidden;
+}
+.sprite {
+	position: absolute;
+	font-size: 32px;
+	line-height: 32px;
+	height: 1em;
+	width: 2em;
+	overflow: visible;
+	text-align: center;
+}
+
+.spaceship {
+	width: 64px;
+	height: 64px;
+	font-size: 64px;
+	line-height: 64px;
+	font-family: sans-serif;
+	-webkit-transition: all 0.2s ease;
+}
+
+.target {
+	text-decoration: underline;
+}
+.score {
+	text-align: right;
+	right: 10px;
+	bottom: 10px;
+	font-size: 20px;
+	line-height: 25px;
+	height: 6em;
+	width: 10em;
+}
+.spark-score {
+	font-family: 'Bentham', serif;
+}
+.mute {
+	text-align: center;
+	border: 1px solid black;
+	right: 10px;
+	top: 10px;
+	font-size: 16px;
+	line-height: 16px;
+	height: 16px;
+	width: 5em;
+}
+
+.instructions {
+	font-size: 20px;
+	line-height: 30px;
+	height: 15em;
+	width: 20em;
+	background-color: white;
+	font-family: 'Bentham', serif;
+}
+
+.off-white {
+    background-color: #FEFEFE;
+}
+.instructions h1 {
+	font-size: 72px;
+	font-family: 'Arimo', sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+
+.reticle {
+    height: 300px;
+    width: 300px;
+}
+.reticle svg {
+    height: 300px;
+    width: 300px;
+    transform: scale(1.5);
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+    opacity: 50%;
+}
+.reticle.zoom-in svg {
+    transform: scale(0.5) rotate(180deg);
+    opacity: 0;
+    transition: transform, opacity;
+    transition-duration: 0.5s;
+    animation-timing-function: linear;
+}

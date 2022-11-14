@@ -3,12 +3,12 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://www.oranlooney.com/about/</loc>
-    <lastmod>2022-11-11T00:00:00+00:00</lastmod>
+    <loc>http://www.oranlooney.com/post/eight-billion/</loc>
+    <lastmod>2022-11-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.oranlooney.com/post/eight-billion/</loc>
+    <loc>http://www.oranlooney.com/about/</loc>
     <lastmod>2022-11-11T00:00:00+00:00</lastmod>
   </url>
   
@@ -119,6 +119,12 @@
   </url>
   
   <url>
+    <loc>http://www.oranlooney.com/tags/future/</loc>
+    <lastmod>2022-11-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://www.oranlooney.com/tags/javascript/</loc>
     <lastmod>2010-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -138,13 +144,13 @@
   
   <url>
     <loc>http://www.oranlooney.com/</loc>
-    <lastmod>2022-11-11T00:00:00+00:00</lastmod>
+    <lastmod>2022-11-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://www.oranlooney.com/post/</loc>
-    <lastmod>2022-11-11T00:00:00+00:00</lastmod>
+    <lastmod>2022-11-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
