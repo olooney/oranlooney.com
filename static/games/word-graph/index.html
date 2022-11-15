@@ -1,0 +1,22 @@
+<head>
+  <script src="//unpkg.com/3d-force-graph"></script>
+</head>
+
+<body style="margin: 0">
+  <div id="3d-graph"></div>
+
+  <script>
+    const graph = ForceGraph3D()(document.getElementById('3d-graph'))
+      .jsonUrl('data.json')
+      .nodeAutoColorBy('pos')
+      .nodeLabel(node => `${node.word}`)
+      .linkOpacity(0.5);
+
+    graph
+      .d3Force('link')
+      .distance(link => (Math.pow(link.distance, 2)) * 50);
+
+    graph
+      .nodeLabel(d => `<span style="color: ${d.color}">${d.word}</span>`)
+  </script>
+</body>
