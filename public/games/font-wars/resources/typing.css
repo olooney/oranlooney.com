@@ -40,7 +40,7 @@ html, body {
 .spark-score {
 	font-family: 'Bentham', serif;
 }
-.mute {
+.mute-fx {
 	text-align: center;
 	border: 1px solid black;
 	right: 10px;
@@ -48,13 +48,24 @@ html, body {
 	font-size: 16px;
 	line-height: 16px;
 	height: 16px;
-	width: 5em;
+	width: 7em;
+}
+
+.mute-music {
+	text-align: center;
+	border: 1px solid black;
+	right: 10px;
+	top: 36px;
+	font-size: 16px;
+	line-height: 16px;
+	height: 16px;
+	width: 7em;
 }
 
 .instructions {
 	font-size: 24px;
 	line-height: 30px;
-	height: 15em;
+	height: 6em;
 	width: 22em;
 	background-color: white;
 	font-family: 'Bentham', serif;
