@@ -1,5 +1,5 @@
 /* Font Wars Sound Library
-Copyright 2011, Oran Looney
+Copyright 2022, Oran Looney
 MIT License, see README
 */
 

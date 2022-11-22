@@ -52,10 +52,10 @@ html, body {
 }
 
 .instructions {
-	font-size: 20px;
+	font-size: 24px;
 	line-height: 30px;
 	height: 15em;
-	width: 20em;
+	width: 22em;
 	background-color: white;
 	font-family: 'Bentham', serif;
 }

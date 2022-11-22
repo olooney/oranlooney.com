@@ -7,23 +7,22 @@ $(function() {
 
 var reticleSvg = '<svg id="color-fill" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="300" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon class="hex" points="300,150 225,280 75,280 0,150 75,20 225,20"></polygon></svg>';
 
-var words = $('#word-data').html().split(/\s+/g).filter(function(w) { return w.length; });
+var words = ['still', 'loading', 'words'];
+
+$.get('resources/words.txt', function(data) {
+    words = data.split('\n')
+        .map(word => word.toLowerCase().trim())
+        .filter(word => word);
+});
 
 var alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
-// DRY: figure out available fonts from the HTML
-var fonts = (function() {
-	var fonts = [];
-	var fontUrlPattern = /^http:\/\/fonts.*=([a-zA-Z0-9+]+)/
-	$('link[rel=stylesheet]').each(function() {
-		var url = $(this).attr('href');
-		var match = fontUrlPattern.exec(url);
-		if ( match ) {
-			fonts.push( match[1].replace(/\+/g, ' ') );
-		}
-	});
-	return fonts;
-})();
+
+var fonts = [
+    'Arimo', 'PT Serif', 'Dancing Script', 'Kreon', 'IM Fell DW Pica', 'Goudy Bookletter 1911',
+    'Buda', 'Bentham', 'Tangerine', 'Copse', 'Orbitron', 'Geo', 'Calligraffitti', 'Philosopher', 
+    'Crimson Text', 'Molengo', 'Veteran Typewritter', 'Bandriya', 'Manifestor', 'TheGoodMonolith'
+];
 
 var loadingScreen = true;
 var gameOver = false;
@@ -33,22 +32,24 @@ var hits = 0;
 var misses = 0;
 var startTime = new Date();
 
-var bullets = ['.', '!', '*', '! !', '* *', '!!!', '***'];
+var bullets = ['.', ':', '|', '!', '$', '| |', '! !', '$ $'];
+bullet = bullets[0];
+
 function setMultiplier(newMultipier) {
 	var oldMultiplier = multiplier || 1;
 	multiplier = newMultipier || 1;
 	if ( multiplier > 50 ) multiplier = 50;
 
-	if ( multiplier >= 10 ) bullet = bullets[ Math.floor(multiplier/10) + 1 ];
-	else if ( multiplier >= 5 ) bullet = bullets[1];
-	else bullet = bullets[0];
+    // change ammunition type
+    var bulletIndex = Math.min(Math.floor(multiplier/5), bullets.length-1);
+    bullet = bullets[bulletIndex];
 
 	if ( multiplier <= 1 ) {
 		return '';
 	} else if ( multiplier === 5 || (multiplier % 10 === 0) ) {
 		return 'level up!';
 	} else if ( multiplier > oldMultiplier ) {
-		return '+' + (multiplier - oldMultiplier);
+		return multiplier + 'X';
 	} else {
 		return '';
 	}
@@ -56,19 +57,19 @@ function setMultiplier(newMultipier) {
 setMultiplier(1);
 
 sound.fx.load('hit.', 'resources/sounds/39459__THE_bizniss__laser.ogg', 0.6, 7);
-sound.fx.load('hit!', 'resources/sounds/39456__THE_bizniss__laser_2.ogg', 0.8, 7);
-sound.fx.load('hit*', 'resources/sounds/39458__THE_bizniss__laser_4.ogg', 0.8, 7);
+sound.fx.load('hit:', 'resources/sounds/39456__THE_bizniss__laser_2.ogg', 0.8, 7);
+sound.fx.load('hit|', 'resources/sounds/191594__leszek-szary__laser.wav', 0.8, 7);
+sound.fx.load('hit!', 'resources/sounds/39458__THE_bizniss__laser_4.ogg', 0.8, 7);
+sound.fx.load('hit$', 'resources/sounds/151022__bubaproducer__laser-shot-silenced.wav', 0.8, 7);
+
+
 sound.fx.load('miss','resources/sounds/2225__Andrew_Duke__garp.ogg', 0.4);
+sound.fx.load('miss','resources/sounds/476177__unadamlar__wrong-choice.wav', 1.0);
 sound.fx.load('kill', 'resources/sounds/91924__Benboncan__Till_With_Bell.ogg');
 sound.fx.load('die', 'resources/sounds/33245__ljudman__grenade.ogg');
 
 sound.music.load('fast', 'resources/sounds/Speed_Kills_1.ogg');
 sound.music.load('ending', 'resources/sounds/erase-it.ogg');
-
-function log(message) {
-	$('body').append( message + '<br>');
-}
-
 
 // shared logic to calculate the incoming speed of enemies
 function getAttackSpeed() {
@@ -229,11 +230,11 @@ function alignCenters(target, mover) {
 var instructions = newSprite('instructions', [
 	'<h1>Font Wars</h1><br>',
     'Rules:<br>',
-	'<ol><li>Type the words as they appear</li>',
+	'<ol><li>Type words as they appear</li>',
 	'<li>The currently targeted word is underlined</li>',
-	'<li>Hit ESC key to cancel targeting</li>',
-	'<li>Every correct letter earns you one point</li>',
-	'<li>Complete successive words without mistakes to increase score multiplier</li>',
+	'<li>Hit Space, Backspace, or Esc to cancel targeting</li>',
+	'<li>Complete words to increase score multiplier</li>',
+	'<li>The multiplier resets after every mistake</li>',
 	'<li>The game ends when any word reaches you</li>',
     '</ol>',
 	'Press Enter to begin'
@@ -342,11 +343,19 @@ function spawn() {
 	}
 	
 	var enemy = newSprite('enemy', word);
+    
+    var fast = (word.length <= 8) && (points > 1000) && (Math.random() < 0.15);
+    var speed = fast ? 2 : 1.0;
 
 	// use a random font for each enemy.
 	var font = fonts.random();
 	$(enemy).css({ 'font-family': "'" + font + "', serif" });
-	if ( font === 'Tangerine' ) $(enemy).css({ 'font-size': '48px' });
+	if ( font === 'Tangerine' ) {
+        $(enemy).css({ 'font-size': '48px' });
+    }
+    if ( fast ) {
+        $(enemy).css({ 'color': 'red' });
+    }
 
 	var side = Math.floor(Math.random() * 4);
 	if ( side == 0 ) { // top
@@ -361,7 +370,7 @@ function spawn() {
 
 	// auto-balancing logic
     var danger = attackingWordCount();
-	$(enemy).animate( alignCenters(spaceship, enemy), getAttackSpeed(), 'linear', function() {
+	$(enemy).animate( alignCenters(spaceship, enemy), getAttackSpeed() / speed , 'linear', function() {
 		// the player dies when an enemy reaches the spaceship.
 		// the timeout is because we can't start the fade animation on this enemy from inside this callback.
 		if ( $.contains(document.body, this) ) setTimeout(function() { die(); }, 1);
@@ -447,10 +456,10 @@ function miss(letter) {
 	sound.fx.play('miss');
 }
 
-$(document).keypress(function(e) {
-	if ( gameOver ) return;
-
-	if ( loadingScreen ) {
+$(document).keydown(function(e) {
+	if ( gameOver ) {
+        return;
+    } else if ( loadingScreen ) {
 		if ( e.which === 13 ) {
 			startTime = new Date();
 			loadingScreen = false;
@@ -462,46 +471,43 @@ $(document).keypress(function(e) {
             // without this, Chrome leaves trails behind some fonts
             // as they move. This forces Chrome to redraw the background
             // 50 times a second and therefore work around this issue.
+            /*
             setInterval(function() {
                 $('body').toggleClass('off-white');
             }, 50);
+            */
 		}
-	}
-
-	// ignore all shortcuts
-	if ( e.altKey || e.ctrlKey ) return;
-
-    // normal typing
-	var key = e.which;
-	var letter = '';
-	if ( key > 96 && key < 123 ) letter = String.fromCharCode(key);
-	else if ( key > 64 && key < 91 ) letter = String.fromCharCode(key + 32);
-	else if ( key === 39 || key === 34 ) letter = "'"; // apostrophes are used in some words...
-	else letter = String.fromCharCode(key);
-
-    // shoot a letter off the targeted word, or start a new word
-	var target = $('.enemy.target').first();
-	if ( target.length ) {
-		if ( target.startsWith(letter).length ) target.hit();
-		else miss(letter);
-	} else {
-		var target = $('.enemy').startsWith(letter).nearest(spaceship);
-		if ( target.length ) target.hit();
-		else miss(letter);
-	}
-	updateScore();
-	return false;
-});
-
-// special ESC key handling
-$(document).keyup(function(e) { 
-    if ( e.keyCode === 27 ) { 
+        return;
+	} else if ( e.keyCode === 8 || e.keyCode === 32 || e.keyCode === 27 ) { 
+        // space, backspace, or escape: reset the target reticle
         var targets = $('.enemy.target');
         if ( targets.length ) {
             targets.removeClass('target'); 
             setMultiplier(multiplier - 1);
             updateScore();
         }
+    } else if ( e.altKey || e.ctrlKey ) {
+    } else {
+        // normal typing
+        var key = e.which;
+        var letter = '';
+        if ( key > 96 && key < 123 ) letter = String.fromCharCode(key);
+        else if ( key > 64 && key < 91 ) letter = String.fromCharCode(key + 32);
+        else if ( key === 222 ) letter = "'"; // apostrophes are used in some words...
+        else letter = String.fromCharCode(key);
+
+        // shoot a letter off the targeted word, or start a new word
+        var target = $('.enemy.target').first();
+        if ( target.length ) {
+            if ( target.startsWith(letter).length ) target.hit();
+            else miss(letter);
+        } else {
+            var target = $('.enemy').startsWith(letter).nearest(spaceship);
+            if ( target.length ) target.hit();
+            else miss(letter);
+        }
+        updateScore();
+        return;
     }
 });
 
