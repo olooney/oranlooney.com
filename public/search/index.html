@@ -3,23 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Future - OranLooney.com</title>
-  <meta property="og:title" content="Future - OranLooney.com" />
-  <meta name="twitter:title" content="Future - OranLooney.com" />
+  <title>Search - OranLooney.com</title>
+  <meta property="og:title" content="Search - OranLooney.com" />
+  <meta name="twitter:title" content="Search - OranLooney.com" />
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
-  <link href="/tags/future/index.xml" rel="alternate" type="application/rss+xml" title="OranLooney.com" />
-  <link href="/tags/future/index.xml" rel="feed" type="application/rss+xml" title="OranLooney.com" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
-
   <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
-
-  
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -28,8 +22,6 @@
   
     gtag('config', 'UA-2535855-1');
   </script>
-
- 
 </head>
 
 <body>
@@ -76,38 +68,22 @@
   </nav>
 </header>
 
+<body>
 
-  <div class="breadcrumb">
-    <a href="/tags/">Tags</a> / Future
-  </div>
-  <div class="main" role="main">
-    <section class="list taxonomy-list">
-      <article class="article">
-        <a href="/post/eight-billion/" class="article-titles">
-          <h2 class="article-title">Eight Billion People</h2>
-          
-        </a>
-        <ul class="article-meta">
-          <li class="article-meta-date"><time>November 14, 2022</time></li>
-          <li class="article-meta-tags">
-            <a href="/tags/future/">
-              <i class="fas fa-tag"></i>
-              Future
-            </a>&nbsp;
-          </li>
-        </ul>
-        <a href="/post/eight-billion/"><img src="/post/eight-billion_files/lead.192x128.jpg" class="article-image" /></a>
-        <div class="article-content">
-          Today is the last day when the number of people alive will start with a seven. Sometime late Tuesday afternoon, or perhaps early Wednesday morning, the population will cross the eight billion mark. When I was a kid, the number they taught us in school was five billion. By the time I was in college, it was up to six, and a decade ago it hit seven.
-Now it&rsquo;s eight.
-        </div>
-        <div class="article-readmore"><a href="/post/eight-billion/">Read more...</a></div>
-        <div class="article-floatclear"></div>
-      </article>
-    </section>
-    
+    <div class="main" role="main">
+        <article class="article" style="margin-bottom: 1em">
+            <h1 class="article-title">Search</h1>
+            <hr class="article-title-bottom">
+            <div>
+                <label for="search-field">Search:</label>
+                <input id="search-field" name="search-field" type="text" style="width: 50%">
+            </div>
+        </article>
+    <div>
+    <div id="output">
+        <div class="search-status">No Search Results to Display</div>
+    </div>
 
-  </div>
 
 
 
@@ -116,20 +92,18 @@ Now it&rsquo;s eight.
 	  &copy; Copyright 2022 Oran Looney
   </div>
   <ul class="site-footer-items">
-    <li class="site-footer-item-rsslink">
-      <a href="/tags/future/index.xml" type="application/rss+xml" target="_blank" title="RSS">
-        <i class="fas fa-rss"></i>
-      </a>
-    </li>
   </ul>
   <div class="powerdby">
     Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
   </div>
 </div>
-<script src="/js/script.js"></script>
-<script src="/js/custom.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.3/browser/nunjucks.min.js" integrity="sha256-+CJElYLgP9RjEvMt/VTU1+qF8CuntjliUUBKp26fPck=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="/js/search.js"></script>
 
 
+<!--
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -160,7 +134,7 @@ MathJax.Hub.Config({
   })
   hljs.initHighlightingOnLoad()
 </script>
-
+-->
 
 
 </body>

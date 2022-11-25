@@ -2,32 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Math on OranLooney.com</title>
-    <link>http://www.oranlooney.com/tags/math/</link>
+    <link>https://www.oranlooney.com/tags/math/</link>
     <description>Recent content in Math on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
     <lastBuildDate>Sat, 06 Jul 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.oranlooney.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.oranlooney.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>A Seriously Slow Fibonacci Function</title>
-      <link>http://www.oranlooney.com/post/slow-fibonacci/</link>
+      <link>https://www.oranlooney.com/post/slow-fibonacci/</link>
       <pubDate>Sat, 06 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/slow-fibonacci/</guid>
+      <guid>https://www.oranlooney.com/post/slow-fibonacci/</guid>
       <description>I recently wrote an article which was ostensibly about the Fibonacciseries but was really about optimization techniques. I wanted to follow up onits (extremely moderate) success by going in the exact opposite direction:by writing a Fibonacci function which is as slow as possible.
 This is not as easy as it sounds: any program can trivially be made slower,but this is boring. How can we make it slow in a fair and interesting way?</description>
     </item>
     
     <item>
       <title>A Fairly Fast Fibonacci Function</title>
-      <link>http://www.oranlooney.com/post/fibonacci/</link>
+      <link>https://www.oranlooney.com/post/fibonacci/</link>
       <pubDate>Tue, 19 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/fibonacci/</guid>
+      <guid>https://www.oranlooney.com/post/fibonacci/</guid>
       <description>A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
 def naive_fib(n):if n &amp;lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance isterrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamicprogramming. Specifically, either the memoization:
 from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &amp;lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:</description>
@@ -35,20 +35,20 @@ from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &amp;l
     
     <item>
       <title>Craps Variants</title>
-      <link>http://www.oranlooney.com/post/craps-game-variants/</link>
+      <link>https://www.oranlooney.com/post/craps-game-variants/</link>
       <pubDate>Wed, 11 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/craps-game-variants/</guid>
+      <guid>https://www.oranlooney.com/post/craps-game-variants/</guid>
       <description>Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, certain there was a mistake somewhere. How could it be closer than $\frac{1}{36}$?
 (Spoiler Warning If you haven&amp;rsquo;t calculated these odds for yourself then you may want to do so before reading further. I&amp;rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case.</description>
     </item>
     
     <item>
       <title>Complex Numbers in R, Part II</title>
-      <link>http://www.oranlooney.com/post/complex-r-part-2/</link>
+      <link>https://www.oranlooney.com/post/complex-r-part-2/</link>
       <pubDate>Sat, 30 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/complex-r-part-2/</guid>
+      <guid>https://www.oranlooney.com/post/complex-r-part-2/</guid>
       <description>This post is part of a series on complex number functionality in theR programming language. You may want to read Part I before continuing ifyou are not already comfortable with the basics.
 In Part I of this series, we dipped our toes in the water by explicitlycreating some complex numbers and showing how they worked with the most basicmathematical operators, functions, and plots.
 In this second part, we’ll take a more in-depth look at some scenarios wherecomplex numbers arise naturally – where they are less of a choice an moreof a necessity.</description>
@@ -56,10 +56,10 @@ In this second part, we’ll take a more in-depth look at some scenarios wherec
     
     <item>
       <title>Complex Numbers in R, Part I</title>
-      <link>http://www.oranlooney.com/post/complex-r/</link>
+      <link>https://www.oranlooney.com/post/complex-r/</link>
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/post/complex-r/</guid>
+      <guid>https://www.oranlooney.com/post/complex-r/</guid>
       <description>R, like many scientific programming languages, has first-class support forcomplex numbers. And, just as in most other programming languages, thisfunctionality is ignored by the vast majority of users.
 Yet complex numbers can often offer surprisingly elegant formulations andsolutions to problems. I want to convince you that familiarizing yourself withR’s excellent complex number functionality is well worth the effort and willpay off in two different ways: first by showing you how they are soamazingly useful you’ll want to go out of your way to use them, and then byshowing you how they are so common and fundamental to modern analysis that youcouldn’t avoid them if you wanted to.</description>
     </item>

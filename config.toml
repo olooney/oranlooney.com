@@ -1,4 +1,4 @@
-baseurl = "http://www.oranlooney.com/"
+baseurl = "https://www.oranlooney.com/"
 title = "OranLooney.com"
 theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
@@ -8,9 +8,8 @@ paginate = 100
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright {year} Oran Looney"
 
-[params]
-  # Date format
-  #dateFormat = "January 2, 2006"
+[outputs]
+	home = ["HTML","RSS","JSON"]
 
 # This is displayer in About page.
 [params.author]
@@ -29,6 +28,9 @@ copyright = "&copy; Copyright {year} Oran Looney"
 [taxonomies]
   tag = "tags"
 
+[[menu.main]]
+  name = "Search"
+  url = "/search/"
 [[menu.main]]
   name = "Tags"
   weight = 2

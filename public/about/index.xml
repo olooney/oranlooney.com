@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>About Me on OranLooney.com</title>
-    <link>http://www.oranlooney.com/about/</link>
+    <link>https://www.oranlooney.com/about/</link>
     <description>Recent content in About Me on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
     <lastBuildDate>Fri, 11 Nov 2022 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.oranlooney.com/about/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.oranlooney.com/about/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

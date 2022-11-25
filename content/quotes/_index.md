@@ -217,8 +217,8 @@ level in which one can be absolutely precise."
 
 "\[...\] but there is one quality that cannot be purchased that way - and that is
 reliability. The price of reliability is the pursuit of the utmost simplicity.
-<br>&mdash;It is a price which the very rich find most hard to pay."
-C.A.R. Hoare
+It is a price which the very rich find most hard to pay."
+<br>&mdash;C.A.R. Hoare
 
 
 "Inside every large program is a small program trying to get out."
@@ -303,7 +303,9 @@ maintenance are considered."
 those that aren't there."
 <br>&mdash;Gordon Bell
 
-"You know that algorithm that all the papers make fun of in their intro? Implement that and forget the rest of the paper."
+
+"You know that algorithm that all the papers make fun of in their intro?
+Implement that and forget the rest of the paper."
 <br>&mdash;Ian Wong
 
 
@@ -323,9 +325,18 @@ those that aren't there."
 <br>&mdash;Galileo Galilei
 
 
+"Science is simply common sense at its best, that is, rigidly accurate in
+observation, and merciless to fallacy in logic."
+<br>&mdash;Thomas Henry Huxley 
+
+
 "The only relevant test of the validity of a hypothesis is comparison of its
 predictions with experience."
 <br>&mdash;Milton Friedman
+
+
+"We try things. Occasionally they even work."
+<br>&mdash;Rob Balder
 
 
 "Some people will never learn anything, for this reason, because they
@@ -624,7 +635,7 @@ solve the problem well."
 <br>&mdash;Paul Erdos
 
 
-"Corollary: A co-mathematician is a device for turning fee into co-theorems."
+"Corollary: A co-mathematician is a device for turning ffee into co-theorems."
 <br>&mdash;Unknown
 
 
@@ -719,11 +730,12 @@ Is sixteen, case closed, shut the door.
 <br><b>A Complete Circle</b><br>
 \\[ e^{2 \pi i} = 1 \\]
 We start with the constant called "pi"<br>
-And then multiply by 2i<br>
+And then multiply by two i<br>
 Apply exponential<br>
 (This step is essential)<br>
 And one's the result - who knows why!
 <br>&mdash;Dan Shved
+
 
 <br><b>Bertrand's Postulate</b><br>
 Chebyshev said it, but I'll say it again:<br>

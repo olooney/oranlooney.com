@@ -2,112 +2,112 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on OranLooney.com</title>
-    <link>http://www.oranlooney.com/tags/</link>
+    <link>https://www.oranlooney.com/tags/</link>
     <description>Recent content in Tags on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
     <lastBuildDate>Tue, 19 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://www.oranlooney.com/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.oranlooney.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>C&#43;&#43;</title>
-      <link>http://www.oranlooney.com/tags/c&#43;&#43;/</link>
+      <link>https://www.oranlooney.com/tags/c&#43;&#43;/</link>
       <pubDate>Tue, 19 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/c&#43;&#43;/</guid>
+      <guid>https://www.oranlooney.com/tags/c&#43;&#43;/</guid>
       <description></description>
     </item>
     
     <item>
       <title>From Scratch</title>
-      <link>http://www.oranlooney.com/tags/from-scratch/</link>
+      <link>https://www.oranlooney.com/tags/from-scratch/</link>
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/from-scratch/</guid>
+      <guid>https://www.oranlooney.com/tags/from-scratch/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Future</title>
-      <link>http://www.oranlooney.com/tags/future/</link>
+      <link>https://www.oranlooney.com/tags/future/</link>
       <pubDate>Mon, 14 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/future/</guid>
+      <guid>https://www.oranlooney.com/tags/future/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Javascript</title>
-      <link>http://www.oranlooney.com/tags/javascript/</link>
+      <link>https://www.oranlooney.com/tags/javascript/</link>
       <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/javascript/</guid>
+      <guid>https://www.oranlooney.com/tags/javascript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Machine Learning</title>
-      <link>http://www.oranlooney.com/tags/machine-learning/</link>
+      <link>https://www.oranlooney.com/tags/machine-learning/</link>
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/machine-learning/</guid>
+      <guid>https://www.oranlooney.com/tags/machine-learning/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Math</title>
-      <link>http://www.oranlooney.com/tags/math/</link>
+      <link>https://www.oranlooney.com/tags/math/</link>
       <pubDate>Sat, 06 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/math/</guid>
+      <guid>https://www.oranlooney.com/tags/math/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Python</title>
-      <link>http://www.oranlooney.com/tags/python/</link>
+      <link>https://www.oranlooney.com/tags/python/</link>
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/python/</guid>
+      <guid>https://www.oranlooney.com/tags/python/</guid>
       <description></description>
     </item>
     
     <item>
       <title>R</title>
-      <link>http://www.oranlooney.com/tags/r/</link>
+      <link>https://www.oranlooney.com/tags/r/</link>
       <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/r/</guid>
+      <guid>https://www.oranlooney.com/tags/r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Statistics</title>
-      <link>http://www.oranlooney.com/tags/statistics/</link>
+      <link>https://www.oranlooney.com/tags/statistics/</link>
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/statistics/</guid>
+      <guid>https://www.oranlooney.com/tags/statistics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Visualization</title>
-      <link>http://www.oranlooney.com/tags/visualization/</link>
+      <link>https://www.oranlooney.com/tags/visualization/</link>
       <pubDate>Thu, 23 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/visualization/</guid>
+      <guid>https://www.oranlooney.com/tags/visualization/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Web</title>
-      <link>http://www.oranlooney.com/tags/web/</link>
+      <link>https://www.oranlooney.com/tags/web/</link>
       <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
       
-      <guid>http://www.oranlooney.com/tags/web/</guid>
+      <guid>https://www.oranlooney.com/tags/web/</guid>
       <description></description>
     </item>
     
