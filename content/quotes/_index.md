@@ -41,7 +41,7 @@ small and to see something in the large."
 
 
 "The whole point of getting things done is knowing what to leave undone."
-<br>&mdash;Oswalf Chambers
+<br>&mdash;Oswald Chambers
 
 
 "Be careful that victories do not carry the seeds of future defeats."
