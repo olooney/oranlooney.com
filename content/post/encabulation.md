@@ -10,7 +10,7 @@ image: /post/encabulation_files/lead.png
 
 To celebrate the 100<sup>th</sup> anniversary of the birth of encabulation - 
 dated from Dr. Wolfgang Albrecht Klossner's first successful run in that
-historic barn on the outskirts of Eisenhüttenstadt - this article<sup><a href="#footnote">\*</a></sup> a
+historic barn on the outskirts of Eisenhüttenstadt - this article<sup><a href="#footnote">\*</a></sup> collects in one place a
 number of resources that provide, if not a comprehensive history, at least
 a catalogue of the major milestones and concepts.
 
