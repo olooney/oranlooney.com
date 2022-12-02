@@ -42,7 +42,7 @@ html .article h1 {
 	font-size: 1.8em;
 	font-weight: normal;
 }
-html .article h2 {
+html .article h2, html .article h3, html .article h4 {
 	color: #800000;
 	font-weight: normal;
 	text-decoration: none;

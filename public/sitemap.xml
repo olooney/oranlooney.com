@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.oranlooney.com/post/encabulation/</loc>
+    <lastmod>2022-12-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/post/eight-billion/</loc>
     <lastmod>2022-11-14T00:00:00+00:00</lastmod>
   </url>
@@ -132,7 +137,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/tags/machine-learning/</loc>
-    <lastmod>2019-09-16T00:00:00+00:00</lastmod>
+    <lastmod>2022-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -143,14 +148,20 @@
   </url>
   
   <url>
+    <loc>https://www.oranlooney.com/tags/nonsense/</loc>
+    <lastmod>2022-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/</loc>
-    <lastmod>2022-11-14T00:00:00+00:00</lastmod>
+    <lastmod>2022-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.oranlooney.com/post/</loc>
-    <lastmod>2022-11-14T00:00:00+00:00</lastmod>
+    <lastmod>2022-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
