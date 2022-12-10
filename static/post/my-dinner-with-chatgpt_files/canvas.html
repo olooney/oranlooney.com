@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Canvas Example</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="400"></canvas>
+    <script>
+function drawHeart(ctx, x, y, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.bezierCurveTo(x - size / 2, y - size / 2, x - size, y + size / 3, x, y + size);
+    ctx.bezierCurveTo(x + size, y + size / 3, x + size / 2, y - size / 2, x, y);
+    ctx.closePath();
+    ctx.fillStyle = "red";
+    ctx.fill();
+}
+
+function drawSmiley(ctx, x, y, size) {
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, 2 * Math.PI);  // Draw the face circle
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(x - size / 4, y - size / 4, size / 8, 0, 2 * Math.PI);  // Draw the left eye
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x + size / 4, y - size / 4, size / 8, 0, 2 * Math.PI);  // Draw the right eye
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(x, y, size / 2, 0, Math.PI, false);  // Draw the smile
+    ctx.stroke();
+}
+
+function drawBananaMonster(ctx, x, y, size) {
+    ctx.fillStyle = "yellow";
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + size / 2, y - size / 2);
+    ctx.lineTo(x + size, y);
+    ctx.lineTo(x + size / 2, y + size / 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "green";
+    ctx.beginPath();
+    ctx.moveTo(x + size / 2, y - size / 2);
+    ctx.lineTo(x + size, y);
+    ctx.lineTo(x + size / 2, y + size / 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.arc(x + size / 2, y - size / 4, size / 8, 0, 2 * Math.PI);  // Draw the left eye
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x + size / 2, y + size / 4, size / 8, 0, 2 * Math.PI);  // Draw the right eye
+    ctx.fill();
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x + size / 2, y - size / 4);
+    ctx.lineTo(x + size / 2, y + size / 4);  // Draw the mouth
+    ctx.stroke();
+}
+
+function drawCat(ctx, x, y, size) {
+    ctx.fillStyle = "grey";
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + size / 2, y - size / 2);
+    ctx.lineTo(x + size, y);
+    ctx.lineTo(x + size / 2, y + size / 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.arc(x + size / 4, y - size / 4, size / 8, 0, 2 * Math.PI);  // Draw the left eye
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x + size / 4 * 3, y - size / 4, size / 8, 0, 2 * Math.PI);  // Draw the right eye
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(x + size / 2, y, size / 4, 0, Math.PI, true);  // Draw the mouth
+    ctx.stroke();
+}
+
+function drawIsometricCube(ctx, x, y, size) {
+    const top = y - size / 2;
+    const bottom = y + size / 2;
+    const left = x - size / 2;
+    const right = x + size / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(left, top);
+    ctx.lineTo(right, top);
+    ctx.lineTo(right + size / 2, y);
+    ctx.lineTo(right, bottom);
+    ctx.lineTo(left, bottom);
+    ctx.lineTo(left - size / 2, y);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(right, top);
+    ctx.lineTo(right + size / 2, y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(right, bottom);
+    ctx.lineTo(right + size / 2, y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(left, bottom);
+    ctx.lineTo(left - size / 2, y);
+    ctx.stroke();
+}
+
+        /*
+function drawSineWave(ctx, x, y, amplitude, frequency, phase, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    for (let i = 0; i < 2 * Math.PI; i += 0.01) {
+        const xPos = x + i * frequency;
+        const yPos = y + amplitude * Math.sin(i + phase);
+        ctx.lineTo(xPos, yPos);
+    }
+    ctx.stroke();
+}
+       */
+function drawSineWave(ctx, x, y, amplitude, frequency, phase, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    for (let i = 0; i < 2 * Math.PI; i += 0.01) {
+        const xPos = x + i * frequency;
+        const yPos = y + amplitude * Math.sin(i + phase);
+        ctx.lineTo(xPos, yPos);
+    }
+    ctx.stroke();
+}
+
+
+document.addEventListener("DOMContentLoaded", function() { 
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    drawHeart(ctx, 100, 100, 50);
+    drawSmiley(ctx, 200, 100, 50);
+    drawBananaMonster(ctx, 300, 100, 50);
+    drawCat(ctx, 400, 100, 50);
+    drawIsometricCube(ctx, 600, 100, 50);
+    drawSineWave(ctx, 100, 200, 50, 100, 0, "red");
+});
+
+    </script>
+</body>
+</html>
