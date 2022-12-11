@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blue Heart</title>
+</head>
+<body>
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+// Get the canvas element
+var canvas = document.getElementById("canvas");
+
+// Get the 2D drawing context
+var ctx = canvas.getContext("2d");
+
+// Set the fill color to blue
+ctx.fillStyle = "blue";
+
+// Draw the heart shape
+ctx.beginPath();
+ctx.moveTo(75, 40);
+ctx.bezierCurveTo(75, 37, 70, 25, 50, 25);
+ctx.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5);
+ctx.bezierCurveTo(20, 80, 40, 102, 75, 120);
+ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
+ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
+ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
+ctx.fill();
+</script>
+</body>
+</html>

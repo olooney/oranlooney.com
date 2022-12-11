@@ -18,7 +18,7 @@
       <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/my-dinner-with-chatgpt/</guid>
-      <description>One of the biggest problems with the dialogue around ChatGPT is cherry-picking. It&#39;s too easy to try a dozen different prompts, refreshing each a handful of times, and report the most interesting or impressive thing it said across those 60 trials. This is is particularly problematic for ChatGPT because it&#39;s using a significant ammount of chat history as context. When someone cherry picks one response to one prompt after a long conversation, that context is lost, even though it might very well have contained clues that ChatGPT picked up on in order to give the &#34;</description>
+      <description>It&#39;s hard to talk about ChatGPT without cherry-picking. It&#39;s too easy to try a dozen different prompts, refresh each a handful of times, and report the most interesting or impressive thing from those sixty trials. While this problem plagues a lot of the public discourse around generative models, cherry-picking is particularly problematic for ChatGPT because it&#39;s actively using the chat history as context. (It might be using a $\mathcal{O}(n \log{} n)$ attention model like reformer or it might just be brute forcing it, but it has an impressively long memory.</description>
     </item>
     
     <item>

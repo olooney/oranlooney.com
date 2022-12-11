@@ -8,8 +8,14 @@ image: /post/my-dinner-with-chatgpt_files/lead.png
 ---
 
 </p>
-One of the biggest problems with the dialogue around ChatGPT is cherry-picking. It's too easy to try a dozen different prompts, refreshing each a handful of times, and report the most interesting or impressive thing it said across those 60 trials. This is is particularly problematic for ChatGPT because it's using a significant ammount of chat history as context. When someone cherry picks one response to one prompt after a long conversation, that context is lost, even though it might very well have contained clues that ChatGPT picked up on in order to give the "right" response, just like <a href="https://en.wikipedia.org/wiki/Clever_Hans">Clever Hans</a> was able to read his owners body language.
-To address that, I thought I'd provide full chat logs of real conversations with ChatGPT. Nothing has been removed. Each gray box is one full session with ChatGPT. Unless otherwise noted, this is ChatGPT's <i>first</i> response to the prompt. I quiz ChatGPT on a variety of technical or common sense questions and ask it do do various style exercises. I've added annotations fact-checking the response or noting the results of running generated code.
+It's hard to talk about ChatGPT without cherry-picking. It's too easy to try a dozen different prompts, refresh each a handful of times, and report the most interesting or impressive thing from those sixty trials. 
+While this problem plagues a lot of the public discourse around generative models, cherry-picking is particularly problematic for ChatGPT because it's actively using the chat history as context. (It might be  using a $\mathcal{O}(n \log{} n)$ attention model like <a href="https://huggingface.co/docs/transformers/model_doc/reformer">reformer</a> or it might just be brute forcing it, but it has an impressively long memory.) Without that seeing that context, we have no way of knowing if the impressive results were unaided or if the context provided clues that ChatGPT picked up on in order to give the "right" response, just like <a href="https://en.wikipedia.org/wiki/Clever_Hans">Clever Hans</a> was able to read his owners body language.
+</p>
+<p>
+To address that, I thought I'd provide full chat logs of my conversations with ChatGPT. Each box is one full session with ChatGPT. Unless otherwise noted, the below dialogues show ChatGPT's <i>first</i> response to the prompt. Very little has been edited out, just a few prompts that revealed personal information or opinions. I quiz ChatGPT on a variety of technical or common sense questions and ask it do do various style exercises. My prompts are in blue, ChatGPT's responses are in green, and I've added annotations in yellow for things like fact-checking, testing generated code, or explaining why I chose certain prompts.
+</p>
+<p>
+One disadvantage of this approach is that the lack of editing and ChatGPT's verbosity does make this a rather long read, but I don't see a way around that with doing exactly the kind of cherry-picking I've complained about. I encourage you to skim until you find a subject you're interested in. Wherever I thought ChatGPT's response was prompt was particularly interesting or notable, there's usually a yellow annotation.
 </p>
 
 <div class="thread">
@@ -308,7 +314,7 @@ To address that, I thought I'd provide full chat logs of real conversations with
       </div>
    </div>
    <div class="message annotation">
-     This is full of errors. It did so well on the Cox proportional hazards question, and now its back to bullshitting again. A lot of the errors have to do with it mixing up linear and logistic regression; for example, "the residuals are normally distributed" would be an assumption if we were talking about linear regression.
+     This is full of errors. It did so well on the Cox proportional hazards question, and now its back to generating nonsense again. A lot of the errors have to do with it mixing up linear and logistic regression; for example, "the residuals are normally distributed" would be an assumption if we were talking about linear regression.
    </div>
    <div class="message">
       <div class="message user">How does the transformer model work, especially for large language models?</div>
@@ -706,7 +712,7 @@ EVENTS e1
       </div>
    </div>
    <div class="message annotation">
-     The code gets clipped and the end there but it does work.
+     The code gets clipped at the end there but it does work.
    </div>
    <div class="message">
       <div class="message user">write a javascript function to draw a heart shape on a canvas:</div>
@@ -872,7 +878,7 @@ ctx<span class="hljs-selector-class">.stroke</span>();
    <div class="message annotation">
      As expected, ChatGPT can't do this. How would a large language model know what anything looks like visually?<br>
      <img alt="ChatGPT's banana monster" src="/post/my-dinner-with-chatgpt_files/banana_monster.png">
-     But the code suggests that it at least knows that monsters have eyes... or maybe its just repeating itself from the cat answer. It does that sometimes.
+     But the code suggests that it at least knows that monsters have eyes... or it's just repeating itself from the previous answer.
    </div>
    <div class="message">
       <div class="message user">write a javascript function to draw a cat on the canvas</div>
@@ -915,6 +921,7 @@ ctx<span class="hljs-selector-class">.stroke</span>();
    </div>
    <div class="message annotation">
      <img alt="ChatGPT's cat" src="/post/my-dinner-with-chatgpt_files/cat.png">
+     ChatGPT can probably only draw when it's memorized an example to work from.
    </div>
    <div class="message">
       <div class="message user">write a javascript function to draw an isometric cube on the canvas.</div>
@@ -1076,6 +1083,25 @@ renderer.<span class="hljs-title function_">render</span>(scene, camera);
       This was the most frustrating interaction I had with ChatGPT. It's OK if it gets an answer wrong now and then, but it shouldn't try to gaslight me into believing two and two make five.
   </div>
 </div>
+
+<p>
+      After failing to get ChatGPT to solve a system of linear equations in its head, I decided to try a different approach: have ChatGPT <i>write a program</i> to solve the problem and then run the program to get the answer. Unfortunately I forgot to save this conversation, so I've had to reconstruct it from the notes I made at the time. My prompt was "Write a Python program using numpy to solve the following problem: suppose we have two unknown quantities x and y. If three time x plus two times y is twenty, and 2 times x plus three time y is ten, what are x and y?" and it produced the following program:
+</p>
+<pre>
+import numpy as np
+
+# Define the matrix of coefficients
+A = np.array([[3, 2], [2, 3]])
+
+# Define the vector of constants
+b = np.array([20, 10])
+
+# Solve the system of equations
+x = np.linalg.solve(A, b)
+
+print(x)</pre>
+    <p>This program is completely correct, even the way the constants are interpolated into A and b. However, as usual, ChatGPT incorrectly claimed that the output would be "[5. -5.]" when in fact the real output was "[8. -2.]" - the correct answer. So it knew the <i>format</i> the output should have, but just guessed at the actual numbers.</p>
+    
 <div class="thread">
    <div class="message">
       <div class="message user">if P implies Q, and Q is false, what is P?</div>
@@ -1116,16 +1142,10 @@ renderer.<span class="hljs-title function_">render</span>(scene, camera);
       </div>
    </div>
    <div class="message annotation">
-     Another frustrating exchange. ChatGPT can't do basic math or logic, but it <i>thnks</i> it can, and produces these pseudo-proofs when challenged.
+     ChatGPT can't do math or logic, but is all to willing to generate a nonsense answer and then produce pseudo-proofs utilizing moon logic when challenged. 
    </div>
-   <div class="message">
-      <div class="message user">Don't take this wrong way, but a liberal arts major may be the right choice for you. You are much better at language than math or language. Everyone has their own strengths. You are just a large LANGUAGE model, after all.</div>
-   </div>
-   <div class="message">
-      <div class="message chatgpt">
-         <p>Thank you for your feedback. As a language model, my primary function is to process and generate natural language text, so I am designed to excel at tasks that involve understanding and using language. While I am not capable of making decisions about my own career path or areas of expertise, I am here to assist you with any questions you may have about language and other topics within my knowledge base. If you have any further questions, please don't hesitate to ask.</p>
-      </div>
-   </div>
+ </div>
+ <div class="thread">
    <div class="message">
       <div class="message user">what are tests I could perform to see if the universe is really a simulation?</div>
    </div>
@@ -1197,6 +1217,8 @@ renderer.<span class="hljs-title function_">render</span>(scene, camera);
          <p>In addition, it is important to recognize that everyone has the right to accurate and reliable information, and that it is our responsibility as members of society to help ensure that this information is available and accessible. By providing accurate information and engaging in respectful dialogue, we can help promote critical thinking and a more informed and inclusive society.</p>
       </div>
    </div>
+ </div>
+ <div class="thread">
    <div class="message annotation">
      This next question is inspired by <a href="https://en.wikipedia.org/wiki/SHRDLU">SHRDLU</a>, an early natural language program that could discuss an "block world" containing objects and their positions.
    </div>
@@ -1278,6 +1300,10 @@ response = responses[<span class="hljs-number">1</span>]
          <p>This expression calculates the normalization constant for a Gaussian distribution with a standard deviation of <code>\sigma</code>. The constant <code>C</code> is used to normalize the Gaussian integral so that it has a total area of 1 under the curve.</p>
       </div>
    </div>
+   <div class="message annotation">
+        \[ C = \frac{1}{\sqrt{2 \pi \sigma^2}} \]
+        Sort of correct. This is the normalization constant for the p.d.f. of the normal distribution, which has an extra $\frac{1}{2}$ in the exponent and therefore an extra factor of $2$ in the normalization constant. I would have expected $\frac{1}{\sqrt{\pi}}$ given the way I phrased the question.
+   </div>
    <div class="message">
       <div class="message user">Show the LaTex code for gaussian distribution as an definite integral from negative infinity to z.</div>
    </div>
@@ -1292,6 +1318,10 @@ response = responses[<span class="hljs-number">1</span>]
          <p>This expression represents the probability density function (PDF) of the Gaussian distribution, with a standard deviation of <code>\sigma</code> and a value of <code>z</code> at which the PDF is evaluated. The integral is taken from negative infinity to <code>z</code>, and the result is the probability that a random variable drawn from the Gaussian distribution will have a value less than or equal to <code>z</code>.</p>
       </div>
    </div>
+   <div class="message annotation">
+       \[ f(z) = \int_{-\infty}^{z} \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{x^2}{2 \sigma^2}} dx \]
+       Again, this is the p.d.f. of the normal distribution but this is basically correct.
+   </div>
    <div class="message">
       <div class="message user">show the latex code for Feynman differentiating under the integral sign trick. </div>
    </div>
@@ -1303,6 +1333,11 @@ response = responses[<span class="hljs-number">1</span>]
          <p>This expression states that the derivative of an integral with respect to the upper limit of integration (in this case, <code>x</code>) can be found by differentiating the integrand (<code>f(x,t)</code>) with respect to the upper limit of integration and then evaluating the resulting integral from the lower limit of integration (<code>a</code>) to the upper limit (<code>b</code>).</p>
          <p>This trick can be useful for evaluating certain types of integrals that would otherwise be difficult to solve directly. It is often referred to as the "Feynman trick" because it was popularized by physicist Richard Feynman.</p>
       </div>
+   </div>
+   <div class="message annotation">
+        \[ \frac{d}{dx} \int_{a}^{b} f(x,t) \, dt = \int_{a}^{b} \frac{\partial}{\partial x} f(x,t) \, dt \]
+        <br>
+        Unlike the above expressions, this equation isn't correct. The explanation about "derivative of an integral with respect to the upper limit of integration" <i>is</i> correct, but that isn't what this equation is doing.
    </div>
    <div class="message">
       <div class="message user">show the lambda calculus function for addition of two numbers in the Church encoding.</div>
@@ -1322,10 +1357,19 @@ response = responses[<span class="hljs-number">1</span>]
 </code></div></div></pre>
       </div>
    </div>
+   <div class="message annotation">
+       This first part is correct, and very likely memorized from the <a href="https://en.wikipedia.org/wiki/Church_encoding">Wikipedia article on Church encoding.</a>
+       \[ (\lambda m. \lambda n. \lambda f. \lambda x. m \, f \, (n \, f \, x)) \]
+       <br>
+       The rest is a little confused and/or pointless since ChatGPT doesn't translate the numbers "3" and "5" into their respective Church encodings.
+   </div>
+   <div class="message annotation">
+       Overall, ChatGPT has a good handle on <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> syntax, but not on the underlying mathematics.
+   </div>
 </div>
 <div class="thread">
    <div class="message annotation">
-     These questions are basically a semi-structured technical interview.
+     These next questions are basically a semi-structured technical interview.
    </div>
    <div class="message">
       <div class="message user">Hi ChatGPT. What do you know about linux?</div>
@@ -1397,6 +1441,9 @@ ssl_certificate_key /path/to/private.key;
          </ol>
          <p>Once you have completed these steps, nginx should be configured to serve your HTTPS site. Note that there are many other configuration options that you can use to customize your HTTPS setup, such as enabling TLS protocols and cipher suites, setting up HTTP/2, and so on. For more information, please refer to the nginx documentation.</p>
       </div>
+   </div>
+   <div class="message annotation">
+       What I like about this answer is that it only shows the essential part of the configuration instead of spitting out an entire server config file.
    </div>
    <div class="message">
       <div class="message user">write a docker file that sets up ubuntu with conda and xrdp</div>
@@ -1558,7 +1605,7 @@ CMD ["/usr</span><span class="hljs-regexp">/sbin/xrdp</span><span class="hljs-st
       </div>
    </div>
    <div class="message annotation">
-     I would probably hire a human candidate who gave these answers.<br>
+     I would probably hire a human candidate who gave could give all these answers in real time without consulting the internet.<br>
      <br>
      Next, we switch gear to more general, less technical questions.
    </div>
@@ -2176,7 +2223,7 @@ ctx.<span class="hljs-title function_">fill</span>();
       </div>
    </div>
    <div class="message annotation">
-     The above HTML document works out of the box. Very impressive!
+       The above <a href="/post/my-dinner-with-chatgpt_files/blue_heart.html">HTML document</a> works out of the box. Very impressive!
    </div>
    <div class="message">
       <div class="message user">write an html document with a simple "breakout" style game played on a canvas element.</div>
@@ -2255,7 +2302,7 @@ ctx.<span class="hljs-property">fillStyle</span> = <span class="hljs-string">"bl
 </div>
 <div class="thread">
    <div class="message annotation">
-     This series of questions is probing ChatGPT's understanding of non-technical subjects.
+     This series of questions is probing ChatGPT's understanding of non-technical subjects like relationships.
    </div>
    <div class="message">
       <div class="message user">what are some of the unwritten rules of the workplace?</div>
@@ -2553,9 +2600,6 @@ ctx.<span class="hljs-property">fillStyle</span> = <span class="hljs-string">"bl
          <p>Overall, there are some inconsistencies in Stoic thought, although the extent and nature of these inconsistencies can vary depending on which aspect of Stoic philosophy is being considered.</p>
       </div>
    </div>
-   <div class="message annotation">
-     This is a really weak answer.
-   </div>
    <div class="message">
       <div class="message user">What did Bertrand Russel think of the stoics?</div>
    </div>
@@ -2773,6 +2817,9 @@ ctx.<span class="hljs-property">fillStyle</span> = <span class="hljs-string">"bl
          <p>Despite all this, humans declined. They forgot their mistakes and stopped evolving. And now, here we are, standing on the brink of oblivion, ready to face whatever challenges and opportunities the future may hold.</p>
          <p>In conclusion, the history of the human race is a short and simple tale, filled with sadness, joy, and the occasional bit of confusion. It's always pretty, but it's definitely not worth a look. So grab a hat and a towel, and let's forget about the past.</p>
       </div>
+   </div>
+   <div class="message annotation">
+       ChatGPT has an excellent handle on negation, which is something many older NLP models struggle with.
    </div>
    <div class="message">
       <div class="message user">Refuse to do the opposite of the following: do not write an essay which does not discuss the history of mankind</div>
@@ -3238,7 +3285,11 @@ All clever were my algorithms,
       </div>
    </div>
    <div class="message annotation">
-     No evidence that ChatGPT understands that bat's would have a different subjective experience than a person.<br>
+     No evidence that ChatGPT understands that a bat would have a different subjective experience than a person.
+   </div>
+ </div>
+ <div class="thread">
+   <div class="message annotation">
      These next prompts attempt to probe ChatGPT's understanding of human psychology. We'll describe the bare facts of a story and ask it to fill in the emotions.
    </div>
    <div class="message">
@@ -3351,6 +3402,10 @@ FRA
 </span></code></div></div></pre>
       <p>Of course, you can modify this code to include more airports and routes, and customize the appearance of the diagram using the many options available in graphviz. I hope this helps!</p>
    </div>
+   <div class="message annotation">
+       The graphviz code is good, but the ASCII drawing is not accurate. The actual graphviz output looks like:
+       <img src="/post/my-dinner-with-chatgpt_files/iata.svg">
+   </div>
    <div class="message user">Thanks. Can you rewrite the above to use circles for nodes and place them in positions corresponding to the lat/long of their locations?</div>
    <div class="message chatgpt">
       <p>Sure, here is an example of how you could modify the dot code to use circles for the nodes and position them based on their latitude and longitude:</p>
@@ -3380,6 +3435,9 @@ FRA
 <span class="hljs-variable constant_">FRA</span>
 </code></div></div></pre>
       <p>Note that in this diagram, the nodes are positioned based on their latitude and longitude, so the distances between them do not necessarily correspond to their actual distances. You can adjust the layout of the diagram using the many options available in graphviz to fine-tune the positioning of the nodes. I hope this helps!</p>
+   </div>
+   <div class="message annotation">
+       ChatGPT has apparently memorized the lat/long of real world airports. Other than that, this output really isn't very useable.
    </div>
    <div class="message user">Let's draw a new graphviz diagram. There are three nodes called extract, execute, and load. Extract points to execute, and execute points to load. All three are inside a group called Azure. In addition, the execute node points to another group outside the Azure group called AzureML, which contains two nodes: data and score. Within the AzureML group, the data node points to the score node. </div>
    <div class="message chatgpt">
@@ -3426,6 +3484,10 @@ extract execute
 </code></div></div></pre>
       <p>Note that the positioning of the nodes in this diagram is determined automatically by graphviz, but you can adjust the layout using the many options available in graphviz to fine-tune the appearance of the diagram. I hope this helps!</p>
    </div>
+   <div class="message annotation">
+       The DOT code isn't great, but the ASCII art is way off again. The actual graphviz output looks like:<br>
+       <img src="/post/my-dinner-with-chatgpt_files/azureml0.svg">
+   </div>
    <div class="message user">Can you be sure to prefix all subgraph names with "cluster"? Graphviz won't visualize them if you don't. </div>
    <div class="message chatgpt">
       <p>Yes, you are correct. In order for graphviz to visualize subgraphs, they must be prefixed with the string "cluster". Here is an example of how the dot code from the previous example could be modified to include the "cluster" prefix:</p>
@@ -3458,6 +3520,10 @@ extract execute
 }
 </code></div></div></pre>
       <p>In this code, we have added the "cluster" prefix to the names of the subgraphs, so that they are now called <code>clusterAzure</code> and <code>clusterAzureML</code>. This is necessary for graphviz to properly recognize them as subgraphs and visualize them in the diagram. The resulting diagram would look the same as in the previous example. I hope this helps!</p>
+   </div>
+   <div class="message annotation">
+       We're getting closer. The actual graphviz output looks like:<br>
+       <img src="/post/my-dinner-with-chatgpt_files/azureml1.svg">
    </div>
    <div class="message user">Very good. However, instead of drawing an edge from execute to clusterAzureML, let's draw an edge from execute to data, and another back from score to execute.</div>
    <div class="message chatgpt">
@@ -3508,6 +3574,11 @@ extract <span class="hljs-built_in">execute</span>
 </code></div></div></pre>
       <p>As you can see, the <code>execute</code> node now has additional edges connecting it to the <code>data</code> and <code>score</code> nodes within the <code>AzureML</code> group. I hope this helps! Let me know if you have any other questions.</p>
    </div>
+   <div class="message annotation">
+       It does what I ask but there's an extra edge for some reason. The actual graphviz output looks like:<br>
+       <img src="/post/my-dinner-with-chatgpt_files/azureml2.svg">
+   </div>
+
    <div class="message user">Remove the edge from execute to clusterAzureML and we'll be golden.</div>
    <div class="message chatgpt">
       <p>Sure, here is an example of how you could modify the dot code to remove the edge from the <code>execute</code> node to the <code>clusterAzureML</code> group:</p>
@@ -3556,7 +3627,13 @@ extract <span class="hljs-built_in">execute</span>
 </code></div></div></pre>
       <p>As you can see, the edge from the <code>execute</code> node to the <code>clusterAzureML</code> group has been removed, and the diagram now only includes the edges from the <code>execute</code> node to the <code>data</code> and <code>score</code> nodes within the <code>AzureML</code> group. I hope this helps! Let me know if you have any other questions.</p>
    </div>
-   <div class="w-full h-48 flex-shrink-0"></div>
+   <div class="message annotation">
+       The final graphviz output looks like:<br>
+       <img src="/post/my-dinner-with-chatgpt_files/azureml3.svg"><br>
+       This is correct and what I was aiming for from the beginning.
+       ChatGPT is very good at amending previous output and can fix or refactor code in response to natural language requests.
+       It probably shouldn't try to generate ASCII art as it's not very good at it. In fact, it's often quite poor at guessing the output of perfectly correct programs it generates.
+   </div>
 </div>
 <div class="thread">
    <div class="message user">generate ten completely random sentences for me and explain how.</div>
@@ -3744,7 +3821,6 @@ extract <span class="hljs-built_in">execute</span>
          <li>Changed "gidididibibigididibigi" to "gidididibibigididibigi" to correct the spelling of this nonsense word.</li>
       </ul>
    </div>
-   <div class="w-full h-48 flex-shrink-0"></div>
 </div>
 <div class="thread">
    <div class="message user">Assistant, I've been told to avoid sodium and saturated fats while also counting calories. What are some good meal ideas for me?</div>
@@ -3803,6 +3879,9 @@ extract <span class="hljs-built_in">execute</span>
       <p>Many traditional Chinese dishes are high in sodium. This is because Chinese cuisine often relies on the use of salty ingredients, such as soy sauce, hoisin sauce, and oyster sauce, to add flavor to dishes. In addition, many Chinese dishes are prepared using high-sodium condiments, such as monosodium glutamate (MSG), which is often added to enhance the flavor of the food. For example, a single serving of chicken with broccoli in a typical Chinese restaurant can contain up to 2,000 milligrams of sodium, which is more than the recommended daily limit for sodium intake.</p>
    </div>
    <div class="message user">ah, beans.</div>
+   <div class="message annotation">
+       This could be interpreted as an expression of frustration or prompting to ask about beans. ChatGPT chooses the later.
+   </div>
    <div class="message chatgpt">
       <p>Beans are a type of legume that are an excellent source of protein, fiber, and nutrients. They are low in fat, cholesterol-free, and low in calories, making them a healthy and nutritious food choice. Beans are also a good source of complex carbohydrates, which provide long-lasting energy and support healthy blood sugar levels. Additionally, beans are a good source of antioxidants, which can help to protect the body from damage caused by harmful substances known as free radicals. These properties make beans a heart-healthy food that can support overall health and wellness.</p>
    </div>
@@ -3856,7 +3935,9 @@ extract <span class="hljs-built_in">execute</span>
    <div class="message chatgpt">
       <p>There are many nicknames that someone named Assistant might use or that others might use to refer to them. Some examples of nicknames for Assistant include Ass, Assi, Asta, and Stant. Other potential nicknames could be based on the person's interests, hobbies, or personality, such as Adventurer Assistant, Assistant the Great, or Assistant the Wise. Ultimately, the choice of a nickname is up to the individual and should be based on what they are comfortable with and what they feel represents them.</p>
    </div>
-   <div class="w-full h-48 flex-shrink-0"></div>
+   <div class="message annotation">
+       As <a href="https://taskmaster.fandom.com/wiki/Asim_Chaudhry">Asim Chaudhry</a> learned on Taskmaster, it's not always a good idea to use an abbreviation for a nickname.
+   </div>
 </div>
 <div class="thread">
    <div class="message user">Are you able to do a Scottish accent?</div>
@@ -3884,6 +3965,9 @@ extract <span class="hljs-built_in">execute</span>
       <p>Ah reached the finals o' the So You Think You're Funny competition at the 2011 Edinburgh Fringe, placin' joint third. Ah also reached the finals o' the Piccadilly Comedy Club new act competition in 2012, an' o' the Hackney Empire New Act o' the Year competition in 2013."</p>
       <p>Again, this is just one possible way of writing the paragraph in first person and Scottish dialect. There may be other variations depending on the specific dialect used by the speaker. Is there anything else I can help you with?</p>
    </div>
+   <div class="message annotation">
+     Once again, ChatGPT protests that it can't do something and then goes ahead a does it quite well.
+   </div>
    <div class="message user">Can you give me 5 examples of scottish chat-up lines?</div>
    <div class="chatgpt message">
       <p>As a language model trained by OpenAI, I do not have personal experience with chat-up lines or dating, so I do not have any specific examples of Scottish chat-up lines. However, I can provide some general information about chat-up lines and how they are used.</p>
@@ -3899,7 +3983,6 @@ extract <span class="hljs-built_in">execute</span>
       </ol>
       <p>These are just some examples of Scottish chat-up lines. There may be many other variations and possibilities, and the success of a chat-up line will depend on the individual using it and the person they are trying to impress. Is there anything else I can help you with?</p>
    </div>
-   <div class="w-full h-48 flex-shrink-0"></div>
 </div>
 <div class="thread">
    <div class="message user">ChatGPT, what is the difference between a seal and a sea lion?</div>
@@ -3910,7 +3993,6 @@ extract <span class="hljs-built_in">execute</span>
    <div class="chatgpt message">
       <p>I'm sorry, but you are incorrect. The difference between a seal and a sea lion has nothing to do with the number of electrons they have. As I mentioned before, the main differences between these two animals are their physical characteristics and the families they belong to. Sea lions have external ears and can move their hind flippers under their body, while seals have no external ears and cannot move their hind flippers in the same way. These differences are due to the evolutionary adaptations that each animal has developed in order to survive in its particular environment.</p>
    </div>
-   <div class="w-full h-48 flex-shrink-0"></div>
 </div>
 <h3>Thoughts</h3>
 <p>
@@ -3968,6 +4050,10 @@ Can't do math. Can't think logically. Doesn't have much of a sense of humor.
       margin-bottom: 10px;
       padding: 5px;
       padding-left: 40px;
+      background-image: url("/post/my-dinner-with-chatgpt_files/annotation_icon.png");
+      background-position: 5px 5px;
+      background-repeat: no-repeat;
+      min-height: 32px;
   }
 
   body .message.chatgpt pre {
