@@ -500,6 +500,12 @@ trees are added\]. You can’t have too many trees: it just stabilizes."
 
 ### Truth
 
+"If any man is able to convince me and show me that I do not think or act
+right, I will gladly change; for I seek the truth by which no man was ever
+injured. But he is injured who abides in his error and ignorance."
+<br>&mdash;Marcus Aurelius
+
+
 "One should respect public opinion insofar as is necessary to avoid starvation
 and keep out of prison, but anything that goes beyond this is voluntary
 submission to an unnecessary tyranny."
@@ -520,6 +526,10 @@ give a charlatan power over you, you almost never get it back."
 
 "Humankind cannot bear very much reality."
 <br>&mdash;T. S. Eliot
+
+
+"A wise man proportions his belief to the evidence."
+<br>&mdash;David Hume
 
 
 "Certain mystes aver that the real world has been constructed by the human
