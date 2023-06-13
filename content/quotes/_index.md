@@ -385,7 +385,7 @@ be content to begin with doubts he shall end in certainties."
 
 
 "If your experiment needs statistics, you ought to have done a better experiment."
-<br>&mdash;Lord Ernest Rutherford
+<br>&mdash;Ernest Rutherford
 
 
 "To consult the statistician after an experiment is finished is often merely to
@@ -677,6 +677,12 @@ the hardware learns about lambda calculus by osmosis."
 "Math is all about nuance. For example, there's a fine line between a numerator
 and a denominator."
 <br>&mdash;Unknown
+
+
+"Every time I fire a linguist, the performance of the speech recognizer goes
+up."
+<br>&mdash;Frederick Jelinek
+
 
 ### Poems 
 
