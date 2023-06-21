@@ -753,6 +753,18 @@ And one's the result - who knows why!
 <br>&mdash;Dan Shved
 
 
+<br><b>Mandelbrot Set</b><br>
+Just take a point called Z in the complex plane
+Let Z1 be Z squared plus C
+And Z2 is Z1 squared plus C
+And Z3 is Z2 squared plus C
+And so on
+If the series of Z's should always stay
+Close to Z and never trend away
+That point is in the Mandelbrot Set
+<br>&mdash;Jonathan Coulton
+
+
 <br><b>Bertrand's Postulate</b><br>
 Chebyshev said it, but I'll say it again:<br>
 there's always a prime between $n$ and $2n$.
