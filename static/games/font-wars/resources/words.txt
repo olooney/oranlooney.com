@@ -829,7 +829,6 @@ esteem
 estimator
 estrange
 ethics
-eugenic
 eulogy
 euphony
 evanescence
@@ -2593,7 +2592,6 @@ whorl
 whose
 why
 wide
-wife
 wild
 will
 willful

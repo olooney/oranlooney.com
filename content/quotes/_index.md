@@ -67,7 +67,7 @@ horses.'"
 
 
 "No one has ever found a bug in a piece of vaporware."
-<br>&mdash;Unknown
+<br>&mdash;Anonymous
 
 
 "A program is a poem: you cannot write a poem without writing it. Yet people
@@ -426,6 +426,11 @@ and original manner possible."
 <br>&mdash;Richard Feynman
 
 
+"You think you know when you can learn, are more sure when you can write, even
+more when you can teach, but certain when you can program."
+<br>&mdash;Alan J. Perlis
+
+
 "If you find that you're spending almost all your time on theory, start turning
 some attention to practical things; it will improve your theories. If you find
 that you're spending almost all your time on practice, start turning some
@@ -616,6 +621,11 @@ unwarranted assumption to a foregone conclusion."
 <br>&mdash;Marshall Mcluhan
 
 
+"A Bayesian is one who, vaguely expecting a horse, and catching a glimpse of a
+donkey, strongly believes he has seen a mule."
+<br>&mdash;Anonymous
+
+
 "Beware of bugs in the above code; I have only proved it correct, not tried it."
 <br>&mdash;Donald Knuth
 
@@ -646,12 +656,12 @@ solve the problem well."
 
 
 "Corollary: A co-mathematician is a device for turning ffee into co-theorems."
-<br>&mdash;Unknown
+<br>&mdash;Anonymous
 
 
 "A statistician is someone who is good with numbers but lacks the personality
 to be an accountant."
-<br>&mdash;Unknown
+<br>&mdash;Anonymous
 
 
 "Anyone who considers arithmetical methods of producing random numbers is, of
@@ -676,12 +686,18 @@ the hardware learns about lambda calculus by osmosis."
 
 "Math is all about nuance. For example, there's a fine line between a numerator
 and a denominator."
-<br>&mdash;Unknown
+<br>&mdash;Anonymous
 
 
 "Every time I fire a linguist, the performance of the speech recognizer goes
 up."
 <br>&mdash;Frederick Jelinek
+
+
+"Some people, when confronted with a problem, think 'I know, I'll use
+multithreading.' Nothhw tpe yawrve o oblems."
+<br>&mdash;Eiríkr Åsheim
+
 
 
 ### Poems 
@@ -730,7 +746,7 @@ From one to the cube root of three <br>
 Times the cosine <br>
 Of three $\pi$ over nine<br>
 Equals log of the cube root of "e".
-<br>&mdash;Unknown
+<br>&mdash;Anonymous
 
 
 <br><b>Mnemonic For Calculating Sixteen</b><br>
@@ -740,7 +756,7 @@ Times the square root of one thousand twenty four<br>
 Adding six dozens please<br>
 Minus eight twenty-threes<br>
 Is sixteen, case closed, shut the door.
-<br>&mdash;Unknown
+<br>&mdash;Anonymous
 
 
 <br><b>A Complete Circle</b><br>
@@ -753,7 +769,7 @@ And one's the result - who knows why!
 <br>&mdash;Dan Shved
 
 
-<br><b>Mandelbrot Set</b><br>
+<br><b>Mandelbrot Set (Lyrics)</b><br>
 Just take a point called Z in the complex plane
 Let Z1 be Z squared plus C
 And Z2 is Z1 squared plus C
