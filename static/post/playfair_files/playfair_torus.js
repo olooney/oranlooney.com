@@ -60,6 +60,7 @@ function generatePlayfairTexture(cipher) {
 function renderPlayfairTorus(cipher, elementId) { 
     // boilerplate setup
     var container = document.getElementById(elementId);
+    while (container.firstChild) { container.removeChild(container.firstChild); }
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(container.innerWidth, container.innerHeight);
     container.appendChild(renderer.domElement);
@@ -138,6 +139,7 @@ function renderPlayfairTorus(cipher, elementId) {
 
 function renderPlayfairCanvas(cipher, elementId) {
     var container = document.getElementById(elementId);
+    while (container.firstChild) { container.removeChild(container.firstChild); }
     var canvas = makePlayfairCanvas(cipher, 512);
     container.appendChild(canvas);
 }

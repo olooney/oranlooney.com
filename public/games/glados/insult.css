@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+.main {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-image: url('glados.jpg');
+    background-position: center center;
+    background-color: #000000;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.input-group {
+    text-align: right;
+}
+
+.hide {
+	display:none;
+}
+textarea {
+	width: 500px;
+	min-height: 100px;
+}

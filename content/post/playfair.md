@@ -1,5 +1,5 @@
 ---
-title: "Playfair"
+title: "Cracking Playfair Ciphers"
 author: "Oran Looney"
 date: 2023-06-28
 publishdate: 2023-06-28
@@ -54,17 +54,16 @@ As I pondered, weak and weary
 As I pondered, weak and weary
 As I pondered, weak and weary
 
-<div id="playfairCanvas"></div>
+<div id="playfairCanvas"><img src="/post/playfair_files/texture.png"></div>
 
 Suddenly there came a tapping.
 
-<div id="playfairTorus"></div>
+<div id="playfairTorus"><img src="/post/playfair_files/torus.png"></div>
 
 <link rel="stylesheet" href="/post/playfair_files/playfair.css">
 
 <script type="module">
     import { renderPlayfairCanvas, renderPlayfairTorus } from '/post/playfair_files/playfair_torus.js';
-    renderPlayfairCanvas('MYNAEISORWLBCDFGHKPQTUVXZ', 'playfairCanvas');
     renderPlayfairTorus('MYNAEISORWLBCDFGHKPQTUVXZ', 'playfairTorus');
 </script>
 
@@ -131,6 +130,9 @@ so we'll make it easy to describe such constraints.
     def next_col(*indices):
         return row_col_constraint(*indices, spacing=1, orientation=1)
 
+
+<img src="/post/playfair_files/rectangle_constraint.png">
+
 Now we have to consider the various special cases. For example, if we see that the plaintext "XY" maps
 to ciphertext "AB", and we also see that "AB" maps to "XY", then we know that X, Y, A, B must form a rectangle
 in the key grid.
@@ -152,6 +154,12 @@ in the key grid.
         )
 
 There are several other such special cases to consider:
+
+Chain constraints three in a row, either in a column or row:
+
+<img src="/post/playfair_files/chain_constraint.png">
+
+In code:
 
     # XY -> PQ, PQ -> YA => row/col of XPYQA
     def chain_constraint(plain_digraph: str, cipher_digraph: str, next_digraph) -> list:
@@ -185,7 +193,12 @@ However, even if we don't see any special pattern, we do actually glean a small
 amount of information from every digraph we see. Remember, there are only three
 cases for encoding a pair: the rectangle case, the same row case, and the same column case.
 In all three, the ciphertext letter is *always* in the same row or the same column as 
-the plaintext letter. 
+the plaintext letter. If it's the same column, then the ciphertext letter is immediately
+below the plaintext character:
+
+<img src="/post/playfair_files/simple_constraint.png">
+
+This is true for both the first and second characte of each digraph.  In code:
 
     # XY -> AB (no other information)
     def simple_constraint(plain_digraph: str, cipher_digraph: str) -> list:
@@ -193,8 +206,8 @@ the plaintext letter.
         c1, c2 = (playfair_ord(c) for c in cipher_digraph)
         
         return And(
-            Or(same_row(c1, p1), same_col(c1, p1)),
-            Or(same_row(c2, p2), same_col(c2, p2)),
+            Or(same_row(p1, c1), And(same_col(p1, c1), next_row(p1, c1))),
+            Or(same_row(p2, c2), And(same_col(p2, c2), next_row(p2, c2)))
         )
 
 It's easy to scan through the known text and quickly build up a map of digraphs. This is also

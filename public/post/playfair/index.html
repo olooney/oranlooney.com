@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Playfair - OranLooney.com</title>
-  <meta property="og:title" content="Playfair - OranLooney.com" />
-  <meta name="twitter:title" content="Playfair - OranLooney.com" />
+  <title>Cracking Playfair Ciphers - OranLooney.com</title>
+  <meta property="og:title" content="Cracking Playfair Ciphers - OranLooney.com" />
+  <meta name="twitter:title" content="Cracking Playfair Ciphers - OranLooney.com" />
   <meta name="description" content="Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary
 Recently the Zodiac 340 was finally cracked after more than 50 years. While the effort to crack it was extremely impressive and you should watch David Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately disappointing. A homophonic substituion cipher with one minor twist that was difficult to crack primarily because several errors were made when encoding it.">
   <meta property="og:description" content="Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary
@@ -85,7 +85,7 @@ Recently the Zodiac 340 was …">
     <article class="article">
       <img src="/post/playfair_files/lead.jpg" class="article-image" />
       
-      <h1 class="article-title">Playfair</h1>
+      <h1 class="article-title">Cracking Playfair Ciphers</h1>
       
       <hr class="article-title-bottom">
       <ul class="article-meta">
@@ -165,17 +165,16 @@ As I pondered, weak and weary
 As I pondered, weak and weary
 As I pondered, weak and weary</p>
 
-<div id="playfairCanvas"></div>
+<div id="playfairCanvas"><img src="/post/playfair_files/texture.png"></div>
 
 <p>Suddenly there came a tapping.</p>
 
-<div id="playfairTorus"></div>
+<div id="playfairTorus"><img src="/post/playfair_files/torus.png"></div>
 
 <p><link rel="stylesheet" href="/post/playfair_files/playfair.css"></p>
 
 <script type="module">
     import { renderPlayfairCanvas, renderPlayfairTorus } from '/post/playfair_files/playfair_torus.js';
-    renderPlayfairCanvas('MYNAEISORWLBCDFGHKPQTUVXZ', 'playfairCanvas');
     renderPlayfairTorus('MYNAEISORWLBCDFGHKPQTUVXZ', 'playfairTorus');
 </script>
 
@@ -241,6 +240,8 @@ def next_col(*indices):
     return row_col_constraint(*indices, spacing=1, orientation=1)
 </code></pre>
 
+<p><img src="/post/playfair_files/rectangle_constraint.png"></p>
+
 <p>Now we have to consider the various special cases. For example, if we see that the plaintext &ldquo;XY&rdquo; maps
 to ciphertext &ldquo;AB&rdquo;, and we also see that &ldquo;AB&rdquo; maps to &ldquo;XY&rdquo;, then we know that X, Y, A, B must form a rectangle
 in the key grid.</p>
@@ -263,6 +264,12 @@ def rectangle_constraint(plain_digraph: str, cipher_digraph: str) -&gt; list:
 </code></pre>
 
 <p>There are several other such special cases to consider:</p>
+
+<p>Chain constraints three in a row, either in a column or row:</p>
+
+<p><img src="/post/playfair_files/chain_constraint.png"></p>
+
+<p>In code:</p>
 
 <pre><code># XY -&gt; PQ, PQ -&gt; YA =&gt; row/col of XPYQA
 def chain_constraint(plain_digraph: str, cipher_digraph: str, next_digraph) -&gt; list:
@@ -297,7 +304,12 @@ def adjacent_constraint(plain_digraph: str, cipher_digraph: str) -&gt; list:
 amount of information from every digraph we see. Remember, there are only three
 cases for encoding a pair: the rectangle case, the same row case, and the same column case.
 In all three, the ciphertext letter is <em>always</em> in the same row or the same column as
-the plaintext letter.</p>
+the plaintext letter. If it&rsquo;s the same column, then the ciphertext letter is immediately
+below the plaintext character:</p>
+
+<p><img src="/post/playfair_files/simple_constraint.png"></p>
+
+<p>This is true for both the first and second characte of each digraph.  In code:</p>
 
 <pre><code># XY -&gt; AB (no other information)
 def simple_constraint(plain_digraph: str, cipher_digraph: str) -&gt; list:
@@ -305,8 +317,8 @@ def simple_constraint(plain_digraph: str, cipher_digraph: str) -&gt; list:
     c1, c2 = (playfair_ord(c) for c in cipher_digraph)
 
     return And(
-        Or(same_row(c1, p1), same_col(c1, p1)),
-        Or(same_row(c2, p2), same_col(c2, p2)),
+        Or(same_row(p1, c1), And(same_col(p1, c1), next_row(p1, c1))),
+        Or(same_row(p2, c2), And(same_col(p2, c2), next_row(p2, c2)))
     )
 </code></pre>
 
