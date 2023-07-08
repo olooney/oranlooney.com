@@ -141,7 +141,16 @@ characters or more to have any hope of cracking the cipher, so that's 200
 nanoseconds per candidate key that we check. That means we have to find a
 solution while checking fewer than 5,000 keys.
 
-There are $24! = 6.2 \times 10^{23}$ possible key
+Just how weak is the Playfair cipher?
+
+<img src="/post/playfair_files/substitution_heatmaps.png">
+
+In constract, playfair is achieving reasonable levels of mixing:
+
+<img src="/post/playfair_files/playfair_heatmaps.png">
+
+
+There are $24! = 6.2 \times 10^{23}$ possible keys.
 
 If we interpret "microseconds"
 to mean less than one millisecond, and assume

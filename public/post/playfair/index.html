@@ -165,7 +165,7 @@ in the search process, it&rsquo;s a promising signal if any pair of letters deco
 really well; ChatGPT can segment and punctuate text that&rsquo;s been run together, and even tell if a message is messy/malformed English or complete gibberish.</p>
 
 <p>TODO I found a good compromise was to apply word segmentation, and then to check the resulting works against an English dictionary, with partial credit for typos or misspellings (which may
-be decryption errors, or intentional mistakes designed to make the message harder to crack.) For this purpose used an off-the-shelf <a href="https://pypi.org/project/wordsegment/">Python package for word segmentation</a>,
+be decryption errors, or intentional mistakes designed to make the message harder to crack.) For this purpose we use an off-the-shelf <a href="https://pypi.org/project/wordsegment/">Python package for word segmentation</a>,
 implemented a <a href="https://en.wikipedia.org/wiki/BK-tree">BK-tree</a> to find English words and near words, and wrote a heuristic function to guage the &ldquo;Englishness&rdquo; of a text:</p>
 
 <p>This approach is still a little slow (still less than a second) but seemingly quite reliable. Nonsense gets scores under 10%, which even very bad/malformed English usually gets over 80%.
@@ -239,9 +239,17 @@ lookup up 1 lookup operation, all of which hit the L1 cache. That&rsquo;s roughl
 nanoseconds per bigraph, or 2 nanoseconds per character. We&rsquo;ll need 100
 characters or more to have any hope of cracking the cipher, so that&rsquo;s 200
 nanoseconds per candidate key that we check. That means we have to find a
-solution before checking 5,000 keys.</p>
+solution while checking fewer than 5,000 keys.</p>
 
-<p>There are $24! = 6.2 \times 10^{23}$ possible key</p>
+<p>Just how weak is the Playfair cipher?</p>
+
+<p><img src="/post/playfair_files/substitution_heatmaps.png"></p>
+
+<p>In constract, playfair is achieving reasonable levels of mixing:</p>
+
+<p><img src="/post/playfair_files/playfair_heatmaps.png"></p>
+
+<p>There are $24! = 6.2 \times 10^{23}$ possible keys.</p>
 
 <p>If we interpret &ldquo;microseconds&rdquo;
 to mean less than one millisecond, and assume</p>
@@ -504,7 +512,7 @@ a key meeting all of the above constraints:</p>
 </code></pre>
 
 <p>We can also get Z3 to keep generating different unique solutions through the simply trick of
-adding a constraint specificly eliminating the previously found solution and re-solving:</p>
+adding a constraint to block the previous solution and re-solving:</p>
 
 <pre><code>def iter_playfair_constraints(dynamic_constraints):
     solver = Solver()
