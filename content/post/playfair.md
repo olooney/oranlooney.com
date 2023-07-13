@@ -29,6 +29,9 @@ Sense of Rightness
 The FBI, in a report on Graysmith's 1979 attempt to crack the Zodiac 340 cipher, made this rather damning statement:
 
 > When a cryptogram has been decrypted properly there is an unmistakable sense of rightness about the solution. This sense of rightness is completely absent in the proposed solution.
+> <br>&mdash; [FBI][FBI]
+
+[FBI]: http://zodiackillerfacts.com/main/the-340-cipher-dead-ends/
 
 If we are to automate the search, we need to quantify this "sense of rightness."
 
@@ -103,14 +106,14 @@ Known plaintext attacks sound rather pointless at first glance. "You're
 telling me you can crack this cipher for me, but only if I give you the
 original message? I think I'll take my business to a different cryptographer."
 
-> "It rather involved being on the other side of this airtight hatchway."
-> &mdash;[Raymond Chen][RC], quoting Douglas Adams
+> It rather involved being on the other side of this airtight hatchway.
+> <br>&mdash;[Raymond Chen][RC], quoting Douglas Adams
 
 [RC]: https://devblogs.microsoft.com/oldnewthing/20060508-22/?p=31283
 
 However, there are several ways to obtain probable plaintext. For example,
 you might guess it says "Keine besonderen Ereignisse," German for "Nothing to Report,"
-a stock phrase often used in WWII and used to [crack the Enigma machine][CAE]. 
+a stock phrase often used in WWII which was used to [crack the Enigma machine][CAE]. 
 As we'll see later, Playfair even has a weakness which allow us to automatically identify
 candidate plaintext words. Nor is the exercise pointless - once you've cracked the 
 cipher you'll be able to decrypt and read other messages that you don't yet know,
@@ -127,11 +130,12 @@ as well as encrypt fake messages.
 Testing
 
 
-> "Playfair is no longer used by military forces because of the advent of
+> Playfair is no longer used by military forces because of the advent of
 > digital encryption devices. This cipher is now regarded as insecure for any
-> purpose, because modern computers could easily break it within microseconds."
+> purpose, because modern computers could easily break it within microseconds.
+> <br>&mdash;[Wikipedia][WPC]
 
-https://en.wikipedia.org/wiki/Playfair_cipher
+[WPC]: https://en.wikipedia.org/wiki/Playfair_cipher
 
 Really, microseconds? That's a little surprising. Let's be generous and say we
 can implement the Playfair decryption in 3 lookup operations, and the bigraph
