@@ -576,6 +576,10 @@ post factum, they appear so obvious."
 <br>&mdash;Russian Proverb
 
 
+"When I do good I feel good, when I do bad I feel bad, and that's my religion."
+<br>&mdash;Abraham Lincoln
+
+
 "When you believe in things that you don't understand, then you suffer:
 superstition ain't the way."
 <br>&mdash;Stevie Wonder
