@@ -10,16 +10,9 @@ tags:
 image: /post/playfair_files/lead.jpg
 ---
 
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-
-Recently the Zodiac 340 was finally cracked after more than 50 years.
-While the effort to crack it was extremely impressive and you should watch
-David Oranchak's series on how it was done, the cipher itself was ultimately
+Recently the Zodiac 340 was finally cracked after more than 50 years.  While
+the effort to crack it was extremely impressive and you should watch David
+Oranchak's series on how it was done, the cipher itself was ultimately
 disappointing. A homophonic substituion cipher with one minor twist that was
 difficult to crack primarily because several errors were made when encoding it.
 
@@ -62,10 +55,6 @@ My idea was to use a three-fold hybrid approach:
 3. Finally, use a slower method to verify that we've found a real English sentence.
 
 
-
-
-
-
 The Playfair Cipher
 -------------------
 
@@ -86,14 +75,12 @@ the [homophonic substitution ciphers][HSC] that were popular at the time.
 
 [HSC]: https://en.wikipedia.org/wiki/Substitution_cipher#Homophonic
 
-The reason has to do with the permutation. Modern block ciphers like AES still
+The reason has to do with the mixing. Modern block ciphers like AES still
 use a [substitution-permutation network][SNP] which work in a very similar
-way and are difficult to crack for exactly the same reason. The only real reason
-why AES is more secure than Playfair is that uses much more computational power.
+way and are difficult to crack for exactly the same reason.
 
 [AES]: https://en.wikipedia.org/wiki/Advanced_Encryption_Standard
 [SPN]: https://en.wikipedia.org/wiki/Substitution%E2%80%93permutation_network
-
 
 We're going to try two approaches. We'll start with a known plaintext attack,
 and then try a more randomized approach.
@@ -113,14 +100,13 @@ original message? I think I'll take my business to a different cryptographer."
 
 However, there are several ways to obtain probable plaintext. For example,
 you might guess it says "Keine besonderen Ereignisse," German for "Nothing to Report,"
-a stock phrase often used in WWII which was used to [crack the Enigma machine][CAE]. 
+a stock phrase often used by Germans in WWII and which was used to [crack the Enigma machine][CAE]. 
 As we'll see later, Playfair even has a weakness which allow us to automatically identify
 candidate plaintext words. Nor is the exercise pointless - once you've cracked the 
 cipher you'll be able to decrypt and read other messages that you don't yet know,
 as well as encrypt fake messages.
 
 [CAE]: https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma
-
 
 
 <div style="width: 560px; margin: auto">
@@ -137,7 +123,7 @@ Testing
 
 [WPC]: https://en.wikipedia.org/wiki/Playfair_cipher
 
-Really, microseconds? That's a little surprising. Let's be generous and say we
+Really, microseconds? That has to be hyperbole, right? Let's be generous and say we
 can implement the Playfair decryption in 3 lookup operations, and the bigraph
 lookup up 1 lookup operation, all of which hit the L1 cache. That's roughly 4
 nanoseconds per bigraph, or 2 nanoseconds per character. We'll need 100
@@ -154,26 +140,31 @@ In constract, playfair is achieving reasonable levels of mixing:
 <img src="/post/playfair_files/playfair_heatmaps.png">
 
 
-There are $24! = 6.2 \times 10^{23}$ possible keys.
-
 If we interpret "microseconds"
 to mean less than one millisecond, and assume
 
 Torus
 -----
 
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
+A Playfair key is a 5x5 grid of unique letters. At first glance that
+suggests there are $25! = 1.5 \times 10^{25}$ possible keys. But because of the way 
+the encryption/decryption algorithm works, the effective number of keys
+is reduced. All of the operations wrap around the edges - that is, if the algorithm
+tells you to move one column to the right and you're already at the 5th column,
+you wrap around back to the first column. 
+
 
 <div id="playfairCanvas"><img src="/post/playfair_files/texture.png"></div>
 
-Suddenly there came a tapping.
+The same is true for rows. That means Playfair keys can be visualized as being on a torus:
 
 <div id="playfairTorus"><img src="/post/playfair_files/torus.png"></div>
+
+
+That means we can effectively rotate all the rows or columns of a key an obtain an
+equivalent key - they both will map to the exact same cipher text. This means there
+there are effectively only $24! = 6.2 \times 10^{23}$ possible keys.
+
 
 <link rel="stylesheet" href="/post/playfair_files/playfair.css">
 
@@ -697,7 +688,42 @@ When using the best parameters, we can crack messages in about 30 seconds.
 
 <img src="/post/playfair_files/hyperopt_cooling_rate.png">
 
+Guessing Plaintext
+------------------
+
+TODO
+
+ER/RE pairs. This gets us a rather long list of possible plaintext
+words to try. Having Multiple snippets of probable plaintext is much less
+useful than known plain text, because we'd have to feed every combination into
+our constraint solver. If we're going to be searching blindly, we might
+as well use the simulated annealling technique.
+
 Conclusion
 ----------
 
-Microseconds is hyperbole.
+It's clear that the "microseconds" used in the Wikipedia article is hyperbole.
+Microseconds is only enough to try a handful of keys, and playfair is not
+so weak that you can zero in on the solution that quickly. Nor is the problem
+"embarassingly parallel" - you can run lots of parallel attacks across a large
+server farm, but you can't run $24!$ separate processes, or even make a dent
+in it with brute force. You have to use something clever like simulated annealing
+or constraint solving, and those are fundamentally sequential.
+
+Still, the algorithm is indeed quite weak - an amateur cryptographer with a
+desktop and a couple of free weekends can write a program which will crack
+pretty much any Playfair cipher in well  under a minute.
+
+One suprising thing I learned is that ChatGPT can solve the word segmentation
+problem quite well, and even add punctuation and capitalization back into
+the message. That's suprising because its a classic example of a problem
+which requires dynamic programming and exhaustive search for an optimal
+solution, which ChatGPT can't do. It can only take the tokens one at a time
+and try to make the best decision for each one. Yet, because it understands
+English grammar, that is enough.
+
+I think LLMs have a role to play in cryptography, because while they are far
+too slow to participate in the performance intensive crack (we can use
+simpler heuristics like trigrams for that) they have a useful role to
+play in automating the "sense of rightness" check which hitherto has been
+left to human cryptographers.
