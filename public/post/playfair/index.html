@@ -6,12 +6,11 @@
   <title>Cracking Playfair Ciphers - OranLooney.com</title>
   <meta property="og:title" content="Cracking Playfair Ciphers - OranLooney.com" />
   <meta name="twitter:title" content="Cracking Playfair Ciphers - OranLooney.com" />
-  <meta name="description" content="Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary
-Recently the Zodiac 340 was finally cracked after more than 50 years. While the effort to crack it was extremely impressive and you should watch David Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately disappointing. A homophonic substituion cipher with one minor twist that was difficult to crack primarily because several errors were made when encoding it.">
-  <meta property="og:description" content="Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary
-Recently the Zodiac 340 was finally cracked after more than 50 years. While the effort to crack it was extremely impressive and you should watch David Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately disappointing. A homophonic substituion cipher with one minor twist that was difficult to crack primarily because several errors were made when encoding it.">
-  <meta name="twitter:description" content="Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary Once upon a midnight dreary
-Recently the Zodiac 340 was …">
+  <meta name="description" content="Recently the Zodiac 340 was finally cracked after more than 50 years. While the effort to crack it was extremely impressive and you should watch David Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately disappointing. A homophonic substituion cipher with one minor twist that was difficult to crack primarily because several errors were made when encoding it.
+Sense of Rightness The FBI, in a report on Graysmith&rsquo;s 1979 attempt to crack the Zodiac 340 cipher, made this rather damning statement:">
+  <meta property="og:description" content="Recently the Zodiac 340 was finally cracked after more than 50 years. While the effort to crack it was extremely impressive and you should watch David Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately disappointing. A homophonic substituion cipher with one minor twist that was difficult to crack primarily because several errors were made when encoding it.
+Sense of Rightness The FBI, in a report on Graysmith&rsquo;s 1979 attempt to crack the Zodiac 340 cipher, made this rather damning statement:">
+  <meta name="twitter:description" content="Recently the Zodiac 340 was finally cracked after more than 50 years. While the effort to crack it was extremely impressive and you should watch David Oranchak&rsquo;s series on how it was done, the …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -22,17 +21,6 @@ Recently the Zodiac 340 was …">
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
 
   <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
-
-  
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2535855-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'UA-2535855-1');
-  </script>
-
  
 </head>
 
@@ -124,6 +112,7 @@ Recently the Zodiac 340 was …">
 <li><a href="#parallel">Parallel</a></li>
 <li><a href="#cython">Cython</a></li>
 <li><a href="#hyperparameter-optimization">Hyperparameter Optimization</a></li>
+<li><a href="#guessing-plaintext">Guessing Plaintext</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
 </ul>
@@ -131,16 +120,9 @@ Recently the Zodiac 340 was …">
 </aside>
       
 
-<p>Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary
-Once upon a midnight dreary</p>
-
-<p>Recently the Zodiac 340 was finally cracked after more than 50 years.
-While the effort to crack it was extremely impressive and you should watch
-David Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately
+<p>Recently the Zodiac 340 was finally cracked after more than 50 years.  While
+the effort to crack it was extremely impressive and you should watch David
+Oranchak&rsquo;s series on how it was done, the cipher itself was ultimately
 disappointing. A homophonic substituion cipher with one minor twist that was
 difficult to crack primarily because several errors were made when encoding it.</p>
 
@@ -193,10 +175,9 @@ deal of emphasis on ease of use over security. No addition module 256 here!</p>
 <p>Despite its simplicity, it is a considerable advance over substitution ciphers, even
 the <a href="https://en.wikipedia.org/wiki/Substitution_cipher#Homophonic">homophonic substitution ciphers</a> that were popular at the time.</p>
 
-<p>The reason has to do with the permutation. Modern block ciphers like AES still
+<p>The reason has to do with the mixing. Modern block ciphers like AES still
 use a [substitution-permutation network][SNP] which work in a very similar
-way and are difficult to crack for exactly the same reason. The only real reason
-why AES is more secure than Playfair is that uses much more computational power.</p>
+way and are difficult to crack for exactly the same reason.</p>
 
 <p>We&rsquo;re going to try two approaches. We&rsquo;ll start with a known plaintext attack,
 and then try a more randomized approach.</p>
@@ -214,7 +195,7 @@ original message? I think I&rsquo;ll take my business to a different cryptograph
 
 <p>However, there are several ways to obtain probable plaintext. For example,
 you might guess it says &ldquo;Keine besonderen Ereignisse,&rdquo; German for &ldquo;Nothing to Report,&rdquo;
-a stock phrase often used in WWII which was used to <a href="https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma">crack the Enigma machine</a>.
+a stock phrase often used by Germans in WWII and which was used to <a href="https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma">crack the Enigma machine</a>.
 As we&rsquo;ll see later, Playfair even has a weakness which allow us to automatically identify
 candidate plaintext words. Nor is the exercise pointless - once you&rsquo;ve cracked the
 cipher you&rsquo;ll be able to decrypt and read other messages that you don&rsquo;t yet know,
@@ -233,7 +214,7 @@ purpose, because modern computers could easily break it within microseconds.
 <br>&mdash;<a href="https://en.wikipedia.org/wiki/Playfair_cipher">Wikipedia</a></p>
 </blockquote>
 
-<p>Really, microseconds? That&rsquo;s a little surprising. Let&rsquo;s be generous and say we
+<p>Really, microseconds? That has to be hyperbole, right? Let&rsquo;s be generous and say we
 can implement the Playfair decryption in 3 lookup operations, and the bigraph
 lookup up 1 lookup operation, all of which hit the L1 cache. That&rsquo;s roughly 4
 nanoseconds per bigraph, or 2 nanoseconds per character. We&rsquo;ll need 100
@@ -249,25 +230,27 @@ solution while checking fewer than 5,000 keys.</p>
 
 <p><img src="/post/playfair_files/playfair_heatmaps.png"></p>
 
-<p>There are $24! = 6.2 \times 10^{23}$ possible keys.</p>
-
 <p>If we interpret &ldquo;microseconds&rdquo;
 to mean less than one millisecond, and assume</p>
 
 <h2 id="torus">Torus</h2>
 
-<p>As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary
-As I pondered, weak and weary</p>
+<p>A Playfair key is a 5x5 grid of unique letters. At first glance that
+suggests there are $25! = 1.5 \times 10^{25}$ possible keys. But because of the way
+the encryption/decryption algorithm works, the effective number of keys
+is reduced. All of the operations wrap around the edges - that is, if the algorithm
+tells you to move one column to the right and you&rsquo;re already at the 5th column,
+you wrap around back to the first column.</p>
 
 <div id="playfairCanvas"><img src="/post/playfair_files/texture.png"></div>
 
-<p>Suddenly there came a tapping.</p>
+<p>The same is true for rows. That means Playfair keys can be visualized as being on a torus:</p>
 
 <div id="playfairTorus"><img src="/post/playfair_files/torus.png"></div>
+
+<p>That means we can effectively rotate all the rows or columns of a key an obtain an
+equivalent key - they both will map to the exact same cipher text. This means there
+there are effectively only $24! = 6.2 \times 10^{23}$ possible keys.</p>
 
 <p><link rel="stylesheet" href="/post/playfair_files/playfair.css"></p>
 
@@ -793,9 +776,43 @@ cpdef str playfair_decrypt(str cipher_text, str key):
 
 <p><img src="/post/playfair_files/hyperopt_cooling_rate.png"></p>
 
+<h2 id="guessing-plaintext">Guessing Plaintext</h2>
+
+<p>TODO</p>
+
+<p>ER/RE pairs. This gets us a rather long list of possible plaintext
+words to try. Having Multiple snippets of probable plaintext is much less
+useful than known plain text, because we&rsquo;d have to feed every combination into
+our constraint solver. If we&rsquo;re going to be searching blindly, we might
+as well use the simulated annealling technique.</p>
+
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Microseconds is hyperbole.</p>
+<p>It&rsquo;s clear that the &ldquo;microseconds&rdquo; used in the Wikipedia article is hyperbole.
+Microseconds is only enough to try a handful of keys, and playfair is not
+so weak that you can zero in on the solution that quickly. Nor is the problem
+&ldquo;embarassingly parallel&rdquo; - you can run lots of parallel attacks across a large
+server farm, but you can&rsquo;t run $24!$ separate processes, or even make a dent
+in it with brute force. You have to use something clever like simulated annealing
+or constraint solving, and those are fundamentally sequential.</p>
+
+<p>Still, the algorithm is indeed quite weak - an amateur cryptographer with a
+desktop and a couple of free weekends can write a program which will crack
+pretty much any Playfair cipher in well  under a minute.</p>
+
+<p>One suprising thing I learned is that ChatGPT can solve the word segmentation
+problem quite well, and even add punctuation and capitalization back into
+the message. That&rsquo;s suprising because its a classic example of a problem
+which requires dynamic programming and exhaustive search for an optimal
+solution, which ChatGPT can&rsquo;t do. It can only take the tokens one at a time
+and try to make the best decision for each one. Yet, because it understands
+English grammar, that is enough.</p>
+
+<p>I think LLMs have a role to play in cryptography, because while they are far
+too slow to participate in the performance intensive crack (we can use
+simpler heuristics like trigrams for that) they have a useful role to
+play in automating the &ldquo;sense of rightness&rdquo; check which hitherto has been
+left to human cryptographers.</p>
 
     </article>
 

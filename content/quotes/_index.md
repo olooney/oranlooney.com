@@ -341,7 +341,7 @@ predictions with experience."
 
 "Some people will never learn anything, for this reason, because they
 understand everything too soon."
-<br>&mdash;Alexander Pope.
+<br>&mdash;Alexander Pope
 
 
 "It is a capital mistake to theorize before one has data." 
@@ -471,9 +471,7 @@ nature do most of the work. Farmers combine seeds with nutrients to grow crops;
 <br>&mdash;Pedro Domingos
 
 
-"As one Google Translate engineer put it, 'when you go from 10,000 training
-examples to 10 billion training examples, it all starts to work. Data trumps
-everything.'"
+"As one Google Translate engineer put it, 'when you go from 10,000 training examples to 10 billion training examples, it all starts to work. Data trumps everything.'"
 <br>&mdash;Garry Kasparov
 
 
@@ -749,13 +747,13 @@ The Integral $t$-squared $dt$ <br>
 From one to the cube root of three <br>
 Times the cosine <br>
 Of three $\pi$ over nine<br>
-Equals log of the cube root of "e".
+Equals log of the cube root of $e$.
 <br>&mdash;Anonymous
 
 
 <br><b>Mnemonic For Calculating Sixteen</b><br>
 \\[ ln(e^4)\sqrt{1024} + 6 \times 12 - 8 \times 23 = 16 \\]
-The log of e to the four<br>
+The log of $e$ to the four<br>
 Times the square root of one thousand twenty four<br>
 Adding six dozens please<br>
 Minus eight twenty-threes<br>
@@ -766,7 +764,7 @@ Is sixteen, case closed, shut the door.
 <br><b>A Complete Circle</b><br>
 \\[ e^{2 \pi i} = 1 \\]
 We start with the constant called "pi"<br>
-And then multiply by two i<br>
+And then multiply by two $i$<br>
 Apply exponential<br>
 (This step is essential)<br>
 And one's the result - who knows why!
@@ -774,13 +772,13 @@ And one's the result - who knows why!
 
 
 <br><b>Mandelbrot Set (Lyrics)</b><br>
-Just take a point called Z in the complex plane
-Let Z1 be Z squared plus C
-And Z2 is Z1 squared plus C
-And Z3 is Z2 squared plus C
-And so on
-If the series of Z's should always stay
-Close to Z and never trend away
+Just take a point called $Z$ in the complex plane<br>
+Let $Z_1$ be $Z$ squared plus $C$<br>
+And $Z_2$ is $Z_1$ squared plus $C$<br>
+And $Z_3$ is $Z_2$ squared plus $C$<br>
+And so on<br>
+If the series of $Z$'s should always stay<br>
+Close to $Z$ and never trend away<br>
 That point is in the Mandelbrot Set
 <br>&mdash;Jonathan Coulton
 
