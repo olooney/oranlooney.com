@@ -1330,7 +1330,6 @@ knight
 knoll
 know
 known
-kwashiorkor
 labor
 laconic
 lady
