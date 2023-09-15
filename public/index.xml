@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Wed, 28 Jun 2023 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 13 Sep 2023 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,11 +15,11 @@
     <item>
       <title>Cracking Playfair Ciphers</title>
       <link>https://www.oranlooney.com/post/playfair/</link>
-      <pubDate>Wed, 28 Jun 2023 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 13 Sep 2023 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/playfair/</guid>
-      <description>In 2020, the Zodiac 340 cipher was finally cracked after more than 50 years of trying by amateur code breakers. While the effort to crack it was extremely impressive, the cipher itself was ultimately disappointing. A homophonic substitution cipher with a minor gimmick of writing diagonally, the main factor that prevented it from being solved much earlier were the several errors made when encoding it.
-Substitution ciphers, which operate at the level of a single character, are basically children&amp;rsquo;s toys, the kind of thing you might get a decoder ring for from the back of a magazine.</description>
+      <description>In 2020, the Zodiac 340 cipher was finally cracked after more than 50 years of trying by amateur code breakers. While the effort to crack it was extremely impressive, the cipher itself was ultimately disappointing. A homophonic substitution cipher with a minor gimmick of writing diagonally, the main factor that prevented it from being solved much earlier was the several errors the Zodiac killer made when encoding it.
+Substitution ciphers, which operate at the level of a single character, are children&amp;rsquo;s toys, the kind of thing you might get a decoder ring for from the back of a magazine.</description>
     </item>
     
     <item>
