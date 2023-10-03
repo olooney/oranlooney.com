@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Computer Science on OranLooney.com</title>
+    <link>https://www.oranlooney.com/tags/computer-science/</link>
+    <description>Recent content in Computer Science on OranLooney.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
+    <lastBuildDate>Sat, 06 Jul 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.oranlooney.com/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A Seriously Slow Fibonacci Function</title>
+      <link>https://www.oranlooney.com/post/slow-fibonacci/</link>
+      <pubDate>Sat, 06 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/slow-fibonacci/</guid>
+      <description>I recently wrote an article which was ostensibly about the Fibonacciseries but was really about optimization techniques. I wanted to follow up onits (extremely moderate) success by going in the exact opposite direction:by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower,but this is boring. How can we make it slow in a fair and interesting way?</description>
+    </item>
+    
+    <item>
+      <title>A Fairly Fast Fibonacci Function</title>
+      <link>https://www.oranlooney.com/post/fibonacci/</link>
+      <pubDate>Tue, 19 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/fibonacci/</guid>
+      <description>A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
+def naive_fib(n):if n &amp;lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance isterrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamicprogramming. Specifically, either the memoization:
+from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &amp;lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -59,11 +59,50 @@ invented by Samuel Hunter Christie.)
 The Playfair cipher is designed to be done on paper, so places a great
 deal of emphasis on ease of use over security. No addition module 256 here!
 
-The reason it's more secure is not merely because it operates two characters at
-a time, but because it mixes the two values together in a non-linear (but
-reversible) way.  Modern block ciphers like AES use a [substitution-permutation
-network][SPN] which work in a very similar way and are difficult to crack for
-exactly the same reason.
+A Playfair key is a 5x5 grid of unique letters:
+
+<div id="playfairCanvas"><img src="/post/playfair_files/texture.png"></div>
+
+Because there are 26 letters but only 25 spaces, we need to merge two letters;
+by convention this is done by replacing J with I. Also, we will have to omit
+all punctuation and ignore case. One easy way to generate a key that you can
+easily remember is to use a unique phrase or sentence and write it into the
+grid from left to right and top to bottom, skipping any duplicate letters and
+filling up the rest of the grid with any omitted letters in alphabetical order.
+
+The encryption operates on pairs of letters (which I will refer to as digraphs
+from now on.) Let's say the first two letters of your message are "SP." You
+find those two letters on the grid and imagine they form two corners of a
+rectangle, like so:
+
+<img src="/post/playfair_files/rectangle_constraint.png">
+
+Then you simply swap each letter with the unused corner in the same row,
+resulting in "HR" which is our ciphertext. To decrypt ciphertext, you do the
+exact same operation.
+
+That covers about 80% of the cases. However, there are a couple of other cases
+that can occur. If the letters are in the same row, instead of using the
+rectange corner swap, we simply shift each letter one space to the right,
+wrapping around to the leftmost column if we go off the right edge. If the
+letters are in the same column we shift each down one space, wrapping as
+needed. If the two letters are the same, we break them up by inserting a "Z"
+into the message: "LLAMA" becomes "LZLAMA" which becomes "TFMDYE". If the
+duplicate letters happen to be "ZZ", use X instead. And finally, if there
+are an odd number of letters in your message and you need one more letter to make
+a final digraph, stick a Z on the end (or X if the last letter was already a Z.)
+
+These edge cases make the algorithm seem complicated but they rarely come up
+and 99% of the time you are just swapping corners or shifting by one within a 
+row or column. It only takes five or ten minutes to learn the algorithm and 
+once you do, and practice it a couple times on some moderately long messages,
+you'll never forget it.
+
+The reason it's more secure that a substitution cipher is not merely because it
+operates two characters at a time, but because it mixes the two values together
+in a non-linear (but reversible) way.  Modern block ciphers like AES use a
+[substitution-permutation network][SPN] which work in a very similar way and
+are difficult to crack for exactly the same reason.
 
 We can visualize this strength using a heatmap. Here is the structure
 of a simple substitution cipher:
@@ -99,11 +138,8 @@ think the "milliseconds" used by Wikipedia is simply hyperbole, or perhaps a
 confusion between the cost of a decryption vs. the cost of a crack. To see why,
 let's try to estimate the strength of a Playfair key from first principles.
 
-A Playfair key is a 5x5 grid of unique letters:
 
-<div id="playfairCanvas"><img src="/post/playfair_files/texture.png"></div>
-
-At first glance that suggests there are $25! = 1.5 \times 10^{25}$ possible
+At first glance is seems there should be $25! = 1.5 \times 10^{25}$ possible
 keys.  However, if we study the algorithm, we see that all of the operations
 wrap around at the edges - that is, if the algorithm tells you to move one
 column to the right and you're already at the 5th column, you wrap around back
@@ -169,7 +205,7 @@ natural way was to use a 25x2 matrix, where each row represents a letter. The
 first column is the x-coordinate of that letter in the 5x5 playfair key grid,
 and the second is the y-coordinate. So every element of the matrix will be an
 integer between 0 and 4, and we'll also need to make sure that a letter can go
-in one and only one cell.  Because they constraints apply to all Playfair key
+in one and only one cell.  Because the constraints apply to all Playfair key
 grids, we'll call them the universal constraints.
 
     from z3 import *
@@ -214,11 +250,15 @@ such constraints.
         return row_col_constraint(*indices, spacing=1, orientation=1)
 
 
-<img src="/post/playfair_files/rectangle_constraint.png">
 
 Now we have to consider the various special cases. For example, if we see that
 the plaintext "XY" maps to ciphertext "AB", and we also see that "AB" maps to
 "XY", then we know that X, Y, A, B must form a rectangle in the key grid.
+
+<img src="/post/playfair_files/rectangle_constraint.png">
+
+This gives us information about which letters *must* share a row or column,
+and we can encode this information as Z3 constraints:
 
     # XY -> AB and AB -> XY, so XA/BY form a rectangle
     def rectangle_constraint(plain_digraph: str, cipher_digraph: str) -> list:
@@ -680,7 +720,7 @@ find English words and near words, and wrote a heuristic function to gauge the
         return percentage
 
 This approach is still a little slow (still less than a second) but seemingly
-quite reliable. Nonsense gets scores under 10%, which even very bad/malformed
+quite reliable. Nonsense gets scores under 10%, while even very bad/malformed
 English usually gets over 80%.  It's not fast enough to use for inner loop of
 the search, but it is fast and reliable enough to automatically detect when
 we've truly cracked the cipher, and so can be used as a final check to decide

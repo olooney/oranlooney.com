@@ -2,7 +2,7 @@
 title: "A Fairly Fast Fibonacci Function"
 author: "Oran Looney"
 date: 2019-02-19
-tags: ["Python", "C++", "Math"]
+tags: ["Python", "C++", "Math", "Computer Science"]
 image: /post/fibonacci_files/lead.jpg
 ---
 

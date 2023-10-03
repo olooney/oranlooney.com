@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C&#43;&#43; - OranLooney.com</title>
-  <meta property="og:title" content="C&#43;&#43; - OranLooney.com" />
-  <meta name="twitter:title" content="C&#43;&#43; - OranLooney.com" />
+  <title>Computer Science - OranLooney.com</title>
+  <meta property="og:title" content="Computer Science - OranLooney.com" />
+  <meta name="twitter:title" content="Computer Science - OranLooney.com" />
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
-  <link href="/tags/c&#43;&#43;/index.xml" rel="alternate" type="application/rss+xml" title="OranLooney.com" />
-  <link href="/tags/c&#43;&#43;/index.xml" rel="feed" type="application/rss+xml" title="OranLooney.com" />
+  <link href="/tags/computer-science/index.xml" rel="alternate" type="application/rss+xml" title="OranLooney.com" />
+  <link href="/tags/computer-science/index.xml" rel="feed" type="application/rss+xml" title="OranLooney.com" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css" media="all" />
@@ -67,10 +67,44 @@
 
 
   <div class="breadcrumb">
-    <a href="/tags/">Tags</a> / C&#43;&#43;
+    <a href="/tags/">Tags</a> / Computer science
   </div>
   <div class="main" role="main">
     <section class="list taxonomy-list">
+      <article class="article">
+        <a href="/post/slow-fibonacci/" class="article-titles">
+          <h2 class="article-title">A Seriously Slow Fibonacci Function</h2>
+          
+        </a>
+        <ul class="article-meta">
+          <li class="article-meta-date"><time>July 6, 2019</time></li>
+          <li class="article-meta-tags">
+            <a href="/tags/python/">
+              <i class="fas fa-tag"></i>
+              Python
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/math/">
+              <i class="fas fa-tag"></i>
+              Math
+            </a>&nbsp;
+          </li>
+          <li class="article-meta-tags">
+            <a href="/tags/computer-science/">
+              <i class="fas fa-tag"></i>
+              Computer Science
+            </a>&nbsp;
+          </li>
+        </ul>
+        <a href="/post/slow-fibonacci/"><img src="/post/slow-fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
+        <div class="article-content">
+          I recently wrote an article which was ostensibly about the Fibonacciseries but was really about optimization techniques. I wanted to follow up onits (extremely moderate) success by going in the exact opposite direction:by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower,but this is boring. How can we make it slow in a fair and interesting way?
+        </div>
+        <div class="article-readmore"><a href="/post/slow-fibonacci/">Read more...</a></div>
+        <div class="article-floatclear"></div>
+      </article>
       <article class="article">
         <a href="/post/fibonacci/" class="article-titles">
           <h2 class="article-title">A Fairly Fast Fibonacci Function</h2>
@@ -125,7 +159,7 @@ from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2
   </div>
   <ul class="site-footer-items">
     <li class="site-footer-item-rsslink">
-      <a href="/tags/c&#43;&#43;/index.xml" type="application/rss+xml" target="_blank" title="RSS">
+      <a href="/tags/computer-science/index.xml" type="application/rss+xml" target="_blank" title="RSS">
         <i class="fas fa-rss"></i>
       </a>
     </li>

@@ -5,6 +5,7 @@ date: 2019-07-06
 tags:
   - Python
   - Math
+  - Computer Science
 image: /post/slow-fibonacci_files/lead.jpg
 ---
 

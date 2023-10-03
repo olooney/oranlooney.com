@@ -275,6 +275,11 @@ is easy to build, hard to use, and easy to charge for."
 "Knowledge is a process of piling up facts. Wisdom lies in simplification."
 <br>&mdash;Martin Luther King, Jr.
 
+"Simplicity is a great virtue but it requires hard work to achieve it and
+education to appreciate it. And to make matters worse: complexity sells
+better."
+<br>&mdash;Edsger Dijkstra
+
 
 ### Optimization
 
@@ -499,6 +504,16 @@ trees are added\]. You can’t have too many trees: it just stabilizes."
 <br>&mdash;Trevor Hastie
 
 
+"The question of whether a computer can think is no more interesting than the
+question of whether a submarine can swim."
+<br>&mdash;Edsger Dijkstra
+
+
+"Artificial Intelligence is not 'man versus machine.' It is 'man with machines'
+versus 'man without machines.'"
+<br>&mdash;Stephen Thaler
+
+
 ## Philosophy
 
 ### Truth
@@ -529,6 +544,13 @@ give a charlatan power over you, you almost never get it back."
 
 "Humankind cannot bear very much reality."
 <br>&mdash;T. S. Eliot
+
+
+"When people thought the Earth was flat, they were wrong. When people thought
+the Earth was spherical, they were wrong. But if you think that thinking the
+Earth is spherical is just as wrong as thinking the Earth is flat, then your
+view is wronger than both of them put together."
+<br>&mdash;Isaac Asimov
 
 
 "A wise man proportions his belief to the evidence."
