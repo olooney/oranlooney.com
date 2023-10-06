@@ -19,6 +19,7 @@ absolute
 abstain
 abstemious
 abstract
+abstraction
 abut
 abysmal
 accede
@@ -80,7 +81,6 @@ air
 alacrity
 alcove
 algorithm
-algorithms
 all
 allay
 allege
@@ -156,7 +156,6 @@ append
 appendage
 apple
 application
-applications
 appoint
 apposite
 apprehensive
@@ -168,7 +167,6 @@ appurtenance
 apropos
 apt
 aquiline
-arabesque
 arbitrary
 arbitrate
 arcane
@@ -246,13 +244,12 @@ axiom
 baby
 back
 bad
-badinage
 baffling
 baleful
 ball
 banal
+bandersnatch
 bandwidth
-bandy
 bane
 banish
 bank
@@ -273,7 +270,6 @@ became
 because
 become
 bed
-bedizen
 been
 before
 began
@@ -308,8 +304,6 @@ better
 between
 bewilder
 big
-bilious
-bill
 birds
 bit
 black
@@ -323,6 +317,7 @@ blip
 bliss
 blithe
 block
+blockchain
 blood
 blow
 blue
@@ -365,6 +360,7 @@ build
 building
 built
 bullion
+bullish
 bulwark
 buoyant
 burgeon
@@ -413,6 +409,8 @@ careen
 carefully
 carrion
 carry
+cartesian
+cartoonishly
 case
 castigate
 cat
@@ -422,6 +420,7 @@ categorical
 cattle
 caucus
 caught
+causality
 cause
 caustic
 cavalier
@@ -456,10 +455,8 @@ chief
 child
 children
 china
-choleric
 choose
 church
-churlish
 circle
 circumspect
 circumstances
@@ -493,7 +490,6 @@ cognition
 cognitive
 cohere
 cohort
-coiffure
 cold
 collaborative
 collation
@@ -528,7 +524,6 @@ computer
 computing
 conceit
 concept
-concepts
 conceptualization
 concern
 concomitant
@@ -558,6 +553,7 @@ consideration
 console
 consonant
 conspicuous
+conspicuously
 constant
 constituency
 constitute
@@ -569,13 +565,16 @@ contempt
 contend
 contentious
 continued
+continuity
 contract
+contradiction
 contraption
 contrite
 contrive
 contrived
 control
 contusion
+conundrum
 convalesce
 convene
 convention
@@ -630,7 +629,6 @@ cupidity
 current
 cut
 cybernetic
-dais
 dance
 dapper
 dark
@@ -650,6 +648,7 @@ debase
 debilitate
 debugging
 decadence
+decentralized
 decided
 decimal
 decimate
@@ -715,6 +714,7 @@ devolve
 diadem
 dialectic
 diatribe
+dichotomy
 dictionary
 dictum
 did
@@ -795,7 +795,6 @@ does
 doesn't
 dog
 dogged
-doggerel
 dogma
 dogmatic
 dollars
@@ -803,7 +802,6 @@ don't
 done
 door
 dormant
-dormer
 dotage
 dote
 down
@@ -849,7 +847,6 @@ efficacy
 effigy
 effluvium
 effrontery
-effulgence
 eggs
 ego
 egregious
@@ -863,11 +860,11 @@ electron
 elegy
 elements
 elicit
+elixir
 ellipsis
 eloquent
 else
 elude
-elysian
 embellish
 emblazon
 emboss
@@ -985,7 +982,6 @@ existentialism
 exogenous
 exonerate
 exorbitant
-expatiate
 expect
 expedite
 experience
@@ -1027,6 +1023,7 @@ fad
 fail
 fall
 fallacious
+fallacy
 fallow
 falter
 family
@@ -1102,6 +1099,7 @@ flout
 flow
 flowers
 fluid
+flummox
 fly
 flywheel
 focus
@@ -1131,7 +1129,9 @@ forward
 foster
 found
 four
+frabjous
 fracas
+fractal
 fraction
 fractious
 fraudulent
@@ -1160,6 +1160,7 @@ furnish
 furtive
 fusion
 fuzz
+fuzzy
 gadfly
 gainsay
 gale
@@ -1203,6 +1204,7 @@ good
 gossamer
 got
 gouge
+governance
 government
 granary
 grandiloquence
@@ -1257,6 +1259,7 @@ has
 hat
 have
 havoc
+hazy
 he
 head
 headlong
@@ -1274,8 +1277,7 @@ her
 herculean
 here
 heretic
-hermitage
-hew
+heuristic
 heyday
 high
 hill
@@ -1288,10 +1290,13 @@ hit
 hoary
 hold
 hole
+holistic
+homage
 home
 homespun
 homily
 homogeneous
+homomorphic
 hoodwink
 hope
 horde
@@ -1303,6 +1308,7 @@ hovel
 how
 however
 hubbub
+hubris
 huge
 human
 humanism
@@ -1318,11 +1324,13 @@ hypothesis
 ibuprofen
 ice
 iconoclast
+id
 idea
 idealism
 idempotent
 ideology
 idiosyncrasy
+idiosyncratic
 idolatrous
 if
 ignominious
@@ -1394,9 +1402,11 @@ induce
 inductive
 industry
 inebriated
+ineffable
 inert
 inertia
 infallible
+inference
 infest
 infiltrate
 inflammatory
@@ -1431,6 +1441,7 @@ instance
 instead
 instigate
 institute
+instrumental
 instruments
 insular
 insurgent
@@ -1485,6 +1496,7 @@ it's
 itinerant
 its
 itself
+jabberwocky
 jaded
 jargon
 jeer
@@ -1499,6 +1511,7 @@ jumped
 just
 justify
 juxtapose
+juxtaposition
 keen
 keep
 kept
@@ -1557,12 +1570,12 @@ levy
 liberal
 libertine
 library
-libretto
 lie
 life
 lifted
 light
 like
+liminal
 limpid
 line
 lineament
@@ -1601,7 +1614,6 @@ machine
 macroscopic
 made
 magic
-magisterial
 magnanimity
 main
 mainframe
@@ -1700,7 +1712,6 @@ might
 mile
 milk
 million
-minatory
 mincing
 mind
 mine
@@ -1711,10 +1722,12 @@ misanthrope
 mischievous
 miserly
 mishap
+misrepresent
 miss
 mite
 mitigate
 mitochondrion
+mnemonic
 mock
 mode
 modeler
@@ -1725,9 +1738,9 @@ modest
 modicum
 module
 molecule
-molecules
 mollify
 moment
+monad
 monetary
 money
 monism
@@ -1747,7 +1760,6 @@ most
 mote
 mother
 mountain
-mountebank
 mouth
 move
 movement
@@ -1789,7 +1801,6 @@ nimble
 no
 nocturnal
 node
-noisome
 nominal
 nominalism
 nonchalant
@@ -1803,7 +1814,6 @@ normative
 north
 northern
 nose
-nostrum
 not
 note
 nothing
@@ -1812,7 +1822,6 @@ notion
 notwithstanding
 noun
 novel
-novitiate
 now
 noxious
 nuance
@@ -1852,6 +1861,7 @@ onerous
 only
 onomatopoeia
 onset
+ontological
 ontology
 opaque
 open
@@ -1860,10 +1870,10 @@ opposite
 oppress
 opprobrium
 optical
+optimistic
 optimization
 optimized
 or
-oratorio
 orbital
 orchestrate
 ordain
@@ -1916,6 +1926,7 @@ park
 parochial
 parry
 parsimonious
+parsimony
 part
 partial
 partiality
@@ -2039,10 +2050,10 @@ polynomial
 pomp
 pompous
 ponder
-pontifical
 poor
 position
 possible
+postmodernism
 postulate
 potent
 pounds
@@ -2051,6 +2062,7 @@ practice
 practitioner
 pragmatic
 pragmatism
+pragmatist
 prattle
 precarious
 precept
@@ -2068,7 +2080,6 @@ premise
 prepared
 preposterous
 presentation
-presidents
 presumptuous
 preternatural
 pretty
@@ -2097,7 +2108,6 @@ program
 project
 projection
 proletarian
-prolix
 promiscuous
 propensity
 property
@@ -2132,6 +2142,7 @@ purvey
 pushed
 pusillanimous
 put
+quadraceps
 quaff
 quagmire
 quail
@@ -2158,11 +2169,9 @@ raillery
 raiment
 rain
 raised
-rakish
 ramble
 ramify
 rampant
-rampart
 ran
 rancor
 rancorous
@@ -2198,6 +2207,7 @@ recalcitrant
 recant
 recede
 received
+reckoning
 recognition
 reconcile
 recondite
@@ -2207,7 +2217,6 @@ recovering
 red
 redemption
 redolent
-redoubtable
 redundant
 refectory
 reflect
@@ -2240,7 +2249,6 @@ repeal
 repeated
 repel
 repercussion
-repine
 report
 represent
 representation
@@ -2299,7 +2307,6 @@ room
 root
 rope
 rose
-roseate
 round
 rout
 row
@@ -2375,7 +2382,6 @@ serendipity
 series
 serve
 server
-serviceability
 set
 settled
 seven
@@ -2388,6 +2394,7 @@ shard
 sharp
 she
 sherbet
+shibboleth
 ship
 shoes
 shop
@@ -2426,6 +2433,7 @@ six
 size
 skeptical
 skill
+skillset
 skin
 skittish
 skulk
@@ -2437,6 +2445,7 @@ sleek
 sleep
 sleight
 slew
+slithy
 slowly
 sluice
 small
@@ -2469,6 +2478,7 @@ soon
 soporific
 sordid
 sound
+sous-vide
 south
 southern
 space
@@ -2482,6 +2492,7 @@ special
 specious
 spectral
 speculate
+speculation
 speed
 spell
 spindle
@@ -2510,7 +2521,6 @@ stats
 stay
 steel
 steep
-stentorian
 step
 stick
 stifle
@@ -2546,8 +2556,6 @@ study
 stultify
 stump
 stupendous
-suavity
-subaltern
 subdue
 subject
 subjective
@@ -2575,7 +2583,6 @@ sum
 summer
 sun
 super
-superannuated
 supercilious
 superfluous
 suppliant
@@ -2594,7 +2601,7 @@ suspended
 swerve
 swim
 swindle
-sybarite
+swoosh
 sycophant
 syllables
 syllogism
@@ -2602,9 +2609,8 @@ symbols
 symmetry
 synchronization
 synergy
-synonymy
+synonym
 system
-systems
 table
 tacit
 taciturn
@@ -2618,6 +2624,7 @@ tally
 tamper
 tarry
 taunt
+tautology
 tawdry
 teacher
 team
@@ -2626,11 +2633,13 @@ techniques
 technology
 teem
 teeter
+teleology
 teletype
 tell
 temper
 temperate
 temperature
+temporal
 temporize
 ten
 tenable
@@ -2642,7 +2651,6 @@ terms
 territory
 terse
 test
-testator
 testing
 tether
 than
@@ -2656,6 +2664,7 @@ theoretical
 theory
 there
 these
+thesis
 they
 thick
 thin
@@ -2691,7 +2700,6 @@ tone
 too
 took
 tool
-tools
 top
 torpid
 torrid
@@ -2700,6 +2708,7 @@ total
 touch
 tour
 tout
+toves
 toward
 town
 track
@@ -2707,7 +2716,6 @@ tract
 tractable
 trade
 tradition
-traduce
 train
 tranquil
 transgress
@@ -2734,8 +2742,6 @@ try
 tube
 tumult
 turbid
-tureen
-turgid
 turn
 turpitude
 tutelage
@@ -2743,11 +2749,14 @@ two
 type
 typography
 tyro
+ubiquitous
 ulterior
+umami
 umbrage
 unaffected
 unanimity
 unassuming
+uncanny
 uncle
 unconscionable
 unconsciousness
@@ -2790,6 +2799,7 @@ usefulness
 user
 usually
 usurp
+utilitarianism
 utility
 utilization
 utilizes
@@ -2798,6 +2808,7 @@ utter
 vacate
 vacillate
 vagary
+vague
 vain
 validate
 validity
@@ -2898,6 +2909,7 @@ wheedle
 wheels
 when
 where
+whereof
 whet
 whether
 which
@@ -2943,6 +2955,7 @@ workflow
 world
 would
 wouldn't
+wow
 wraith
 wrangle
 wrath
@@ -2972,6 +2985,7 @@ yourself
 zany
 zealot
 zealous
+zeitgeist
 zenith
 zephyr
 zeppelin
@@ -2979,8 +2993,8 @@ zero
 zest
 zestful
 zigzag
+zing
 zodiac
 zombie
-zonal
 zone
 zoom
