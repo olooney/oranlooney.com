@@ -20,6 +20,7 @@ abstain
 abstemious
 abstract
 abstraction
+absurdly
 abut
 abysmal
 accede
@@ -39,6 +40,7 @@ action
 actually
 actuate
 acumen
+acutely
 adage
 adapt
 adaptive
@@ -217,6 +219,7 @@ atone
 attenuate
 attitude
 attribute
+attribution
 audacious
 audacity
 augury
@@ -424,6 +427,7 @@ causality
 cause
 caustic
 cavalier
+caveats
 cede
 celestial
 cells
@@ -492,6 +496,8 @@ cohere
 cohort
 cold
 collaborative
+collated
+collateral
 collation
 collective
 color
@@ -533,6 +539,7 @@ conditions
 conduct
 confer
 confide
+confirmation
 conflagration
 conflate
 confluence
@@ -547,6 +554,7 @@ connotation
 conscientious
 consciousness
 consecrate
+consensus
 conservatory
 consider
 consideration
@@ -610,12 +618,14 @@ crabbed
 craven
 create
 credence
+credibility
 credible
 credo
 credulous
 crevice
 crew
 cried
+criticality
 crone
 crops
 cross
@@ -645,6 +655,7 @@ dearth
 death
 debacle
 debase
+debate
 debilitate
 debugging
 decadence
@@ -705,6 +716,7 @@ desultory
 details
 determine
 deterministic
+deterrent
 detest
 developed
 deviate
@@ -712,6 +724,7 @@ deviation
 device
 devolve
 diadem
+diagnosing
 dialectic
 diatribe
 dichotomy
@@ -744,6 +757,7 @@ disappears
 disapprobation
 discern
 disconcert
+disconnect
 disconsolate
 discordant
 discovered
@@ -804,6 +818,7 @@ door
 dormant
 dotage
 dote
+doubt
 down
 download
 draw
@@ -873,6 +888,7 @@ emend
 emetic
 emollient
 emolument
+emphasis
 empirical
 empiricism
 emulate
@@ -1090,6 +1106,7 @@ flat
 flay
 fledgling
 fleeting
+flimsy
 flippant
 floor
 florid
@@ -1098,6 +1115,8 @@ flourish
 flout
 flow
 flowers
+fluctuate
+fluctuating
 fluid
 flummox
 fly
@@ -1194,6 +1213,7 @@ gist
 give
 glass
 glib
+glitchy
 gloat
 global
 glower
@@ -1263,6 +1283,7 @@ hazy
 he
 head
 headlong
+heady
 hear
 heard
 heart
@@ -1291,6 +1312,7 @@ hoary
 hold
 hole
 holistic
+holistically
 homage
 home
 homespun
@@ -1358,6 +1380,7 @@ impetus
 impiety
 implacable
 implement
+implicitly
 implore
 impolitic
 import
@@ -1383,6 +1406,7 @@ inclement
 inclined
 include
 inclusive
+incomprehensible
 inconceivable
 incongruity
 inconsequential
@@ -1443,6 +1467,7 @@ instigate
 institute
 instrumental
 instruments
+insubstantial
 insular
 insurgent
 insurmountable
@@ -1485,6 +1510,7 @@ irascible
 irate
 irksome
 iron
+irreconcilable
 irresolute
 is
 island
@@ -1676,6 +1702,7 @@ meddle
 medial
 median
 mediate
+mediating
 mediation
 mediator
 medicine
@@ -1781,6 +1808,7 @@ nation
 natty
 natural
 near
+nebulous
 necessary
 need
 nefarious
@@ -1984,6 +2012,7 @@ persist
 person
 personality
 perspicuous
+persuasion
 pert
 pertain
 pertinacious
@@ -2067,10 +2096,12 @@ prattle
 precarious
 precept
 precipitate
+precipitated
 precision
 preconceive
 precursor
 predecessor
+predicate
 prediction
 predictive
 preen
@@ -2105,6 +2136,7 @@ produce
 products
 prognosticate
 program
+prohibitive
 project
 projection
 proletarian
@@ -2116,6 +2148,7 @@ propitious
 propriety
 prosaic
 proscribe
+proselytizing
 prospective
 protected
 proton
@@ -2198,6 +2231,7 @@ readability
 readjustment
 ready
 realism
+realize
 really
 reason
 reasoning
@@ -2220,6 +2254,7 @@ redolent
 redundant
 refectory
 reflect
+reflexively
 refraction
 refractory
 refrain
@@ -2347,6 +2382,7 @@ scalable
 scale
 scarce
 scheme
+schisms
 school
 science
 scientists
@@ -2411,6 +2447,7 @@ sight
 sign
 signal
 significance
+signifies
 signify
 silent
 similar
@@ -2495,12 +2532,14 @@ speculate
 speculation
 speed
 spell
+sphere
 spindle
 sporadic
 spot
 spread
 spring
 spurious
+spurred
 squalor
 squander
 square
@@ -2597,7 +2636,9 @@ surprise
 surreal
 surreptitious
 survey
+suspect
 suspended
+sustainable
 swerve
 swim
 swindle
@@ -2605,6 +2646,8 @@ swoosh
 sycophant
 syllables
 syllogism
+symbol
+symbolizes
 symbols
 symmetry
 synchronization
@@ -2622,10 +2665,12 @@ talk
 tall
 tally
 tamper
+tangible
 tarry
 taunt
 tautology
 tawdry
+taxonomical
 teacher
 team
 technical
@@ -2647,6 +2692,7 @@ tenacious
 tendentious
 tentative
 tenuous
+tepid
 terms
 territory
 terse
@@ -2779,10 +2825,12 @@ universals
 universe
 unmeaning
 unmitigated
+unremarkable
 unscathed
 unseemly
 unstable
 unsupervised
+untenable
 until
 untoward
 unwarranted
@@ -2865,6 +2913,7 @@ volatile
 voluble
 voracious
 vowel
+vulnerable
 waffle
 wait
 waive
