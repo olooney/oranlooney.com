@@ -55,8 +55,6 @@ admonition
 adroit
 adulation
 adulterate
-adumbrate
-adventitious
 adverse
 advert
 advocate
@@ -168,7 +166,6 @@ appropriate
 appurtenance
 apropos
 apt
-aquiline
 arbitrary
 arbitrate
 arcane
@@ -267,7 +264,6 @@ beacon
 bear
 beat
 beatific
-beatify
 beautiful
 became
 because
@@ -343,7 +339,6 @@ both
 bottom
 bouillon
 box
-boy
 branches
 brawn
 brazen
@@ -379,7 +374,6 @@ byte
 cabal
 cacophonous
 cadaverous
-cadge
 caffeine
 cajole
 calamity
@@ -613,7 +607,6 @@ covered
 cower
 cows
 coy
-cozen
 crabbed
 craven
 create
@@ -683,6 +676,7 @@ deliberate
 delicacy
 delirious
 delve
+demarcation
 demographic
 demonstrable
 demoralize
@@ -860,7 +854,6 @@ effervescent
 effete
 efficacy
 effigy
-effluvium
 effrontery
 eggs
 ego
@@ -1003,7 +996,6 @@ expedite
 experience
 experiment
 experimental
-expiate
 explain
 expletive
 explicate
@@ -1297,14 +1289,12 @@ help
 her
 herculean
 here
-heretic
 heuristic
 heyday
 high
 hill
 him
 himself
-hireling
 his
 history
 hit
@@ -1316,7 +1306,6 @@ holistically
 homage
 home
 homespun
-homily
 homogeneous
 homomorphic
 hoodwink
@@ -1353,7 +1342,6 @@ idempotent
 ideology
 idiosyncrasy
 idiosyncratic
-idolatrous
 if
 ignominious
 ignominy
@@ -1408,6 +1396,7 @@ include
 inclusive
 incomprehensible
 inconceivable
+inconclusive
 incongruity
 inconsequential
 incorrigible
@@ -1420,7 +1409,6 @@ indication
 indicator
 indigence
 indignant
-indite
 indolent
 induce
 inductive
@@ -1558,7 +1546,6 @@ laconic
 lady
 lake
 lament
-lancet
 land
 language
 languid
@@ -1656,13 +1643,12 @@ malicious
 malinger
 malleable
 malware
-man
+mammalian
 manageability
 manifest
 manifestation
 manipulate
 mannered
-manumit
 many
 map
 mapping
@@ -1718,7 +1704,6 @@ memory
 men
 mendacious
 mendacity
-mendicant
 mercurial
 merit
 metal
@@ -1805,7 +1790,6 @@ naive
 name
 nascent
 nation
-natty
 natural
 near
 nebulous
@@ -1835,7 +1819,6 @@ nonchalant
 nonentity
 nonlinear
 nonparametric
-nonplus
 nor
 norm
 normative
@@ -1847,7 +1830,6 @@ note
 nothing
 notice
 notion
-notwithstanding
 noun
 novel
 now
@@ -1942,13 +1924,11 @@ palpable
 palpitate
 panegyric
 paper
-parable
 paradigm
 paradox
 paragon
 paragraph
 parameter
-paraphernalia
 parity
 park
 parochial
@@ -1973,7 +1953,6 @@ patronize
 pattern
 paucity
 pay
-peccadillo
 peculiar
 pedagogue
 pedantic
@@ -2042,7 +2021,6 @@ pillage
 pillory
 pinion
 pinnacle
-pious
 pique
 pithy
 placate
@@ -2143,7 +2121,6 @@ proletarian
 promiscuous
 propensity
 property
-propitiate
 propitious
 propriety
 prosaic
@@ -2153,13 +2130,13 @@ prospective
 protected
 proton
 prototyping
-provender
 provide
 provoke
 prowess
 proxy
 prude
 prudent
+pseudoscience
 psychology
 public
 pucker
@@ -2198,7 +2175,6 @@ race
 radio
 radioactive
 rail
-raillery
 raiment
 rain
 raised
@@ -2310,7 +2286,6 @@ reticent
 retinue
 retiring
 retort
-retrench
 retrieval
 retrovirus
 return
@@ -2371,7 +2346,6 @@ sate
 satiate
 satire
 saturate
-saturnine
 savant
 save
 saw
@@ -2396,7 +2370,6 @@ seat
 seclude
 second
 section
-sedulous
 see
 seeds
 seem
@@ -2874,7 +2847,6 @@ vehement
 venal
 venerable
 venerate
-venial
 venture
 veracious
 verb
@@ -2894,11 +2866,10 @@ vindicate
 vindictive
 vintner
 virtual
-virtualisation
+virtualization
 virtuoso
 virtuous
 visage
-viscid
 viscosity
 viscous
 vision
@@ -2906,7 +2877,6 @@ visit
 visualisation
 visualize
 vitiate
-vituperate
 vociferous
 voice
 volatile
@@ -2991,8 +2961,6 @@ within
 without
 wizened
 woe
-woman
-women
 won't
 wonder
 wont
