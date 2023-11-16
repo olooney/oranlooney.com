@@ -62,3 +62,18 @@ Conditioning models on data sets.
 
 Limits of the computational capacity of the universe. Reversable computers.
 
+
+Other Topics
+------------
+
+All truth is pruning, and pruning truth.
+
+Mathematics is mainly done by the subconscious. You load it up and wait.
+
+There's no reasonable way to guess the next number in a series.
+Ditto for Raven's progressive matrices.
+
+If you're sufficiently stupid, it doesn't matter what your purported principles
+are. You will be easily manipulated to vote against your own interests and
+principles.
+

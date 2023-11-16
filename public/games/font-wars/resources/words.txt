@@ -1994,7 +1994,6 @@ perspicuous
 persuasion
 pert
 pertain
-pertinacious
 peruse
 pervade
 pervasive
@@ -2488,7 +2487,6 @@ soon
 soporific
 sordid
 sound
-sous-vide
 south
 southern
 space
