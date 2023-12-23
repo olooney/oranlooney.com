@@ -15,6 +15,10 @@ date = "2022-11-11"
 <br>&mdash;Ken Thompson 
 
 
+"The only three numbers a programmer should ever care about are zero, one, and infinity."
+<br>&mdash;Willem van der Poel
+
+
 "The most important single aspect of software development is to be clear about
 what you are trying to build."
 <br>&mdash;Bjarne Stroustrup
@@ -46,7 +50,6 @@ small and to see something in the large."
 
 "Be careful that victories do not carry the seeds of future defeats."
 <br>&mdash;Ralph Stockman
-
 
 
 ### Process
@@ -629,6 +632,12 @@ merely by making a logically consistent moral argument."
 "Should array indices start at 0 or 1? My compromise of 0.5 was rejected
 without, I thought, proper consideration."
 <br>&mdash;Stan Kelly-Bootle
+
+
+"There are only two hard problems in computer science: cache invalidation,
+naming things, and off-by-one errors."
+<br>&mdash;Leon Bambrick
+
 
 
 "It ain't what you don't know that gets you in trouble. It's what you know for
