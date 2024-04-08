@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Wed, 13 Sep 2023 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 25 Feb 2024 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Magic 6174</title>
+      <link>https://www.oranlooney.com/post/kaprekar/</link>
+      <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/kaprekar/</guid>
+      <description>The Kaprekar routine is a simple arithmetic procedure which, when applied to four digit numbers, rapidly converges to the fixed point 6174, known as the Kaprekar constant. Unlike other famous iterative procedures such as the Collatz function, the somewhat arbitrary nature of the Kaprekar routine doesn&amp;rsquo;t hint at fundamental mathematical discoveries yet to be made; rather, its charm lies in its intuitive definition (requiring no more than elementary mathematics,) its oddly off-center fixed point of 6174, and its surprisingly rapid convergence (which requires only five iterations on average and never more than seven.</description>
+    </item>
     
     <item>
       <title>Cracking Playfair Ciphers</title>

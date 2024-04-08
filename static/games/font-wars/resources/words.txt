@@ -163,7 +163,6 @@ apprise
 approach
 approbation
 appropriate
-appurtenance
 apropos
 apt
 arbitrary

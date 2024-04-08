@@ -732,6 +732,9 @@ multithreading.' Nothhw tpe yawrve o oblems."
 <br>&mdash;Eiríkr Åsheim
 
 
+"The secret to success is an even number of sign errors."
+<br>&mdash;John Carmack
+
 
 ### Poems 
 
