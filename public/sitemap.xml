@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.oranlooney.com/post/angle-addition/</loc>
+    <lastmod>2024-04-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/post/kaprekar/</loc>
     <lastmod>2024-02-25T00:00:00+00:00</lastmod>
   </url>
@@ -164,7 +169,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/tags/math/</loc>
-    <lastmod>2024-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2024-04-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -176,13 +181,13 @@
   
   <url>
     <loc>https://www.oranlooney.com/</loc>
-    <lastmod>2024-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2024-04-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.oranlooney.com/post/</loc>
-    <lastmod>2024-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2024-04-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -212,7 +217,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/tags/visualization/</loc>
-    <lastmod>2024-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2024-04-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

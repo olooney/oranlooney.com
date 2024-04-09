@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Sun, 25 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Apr 2024 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Angle Addition</title>
+      <link>https://www.oranlooney.com/post/angle-addition/</link>
+      <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/angle-addition/</guid>
+      <description>The geometric definition
+\[ \begin{align} \sin(\theta) &amp;amp;= \frac{\text{opposite}}{\text{hypotenuse}} \tag{1} \\\
+\cos(\theta) &amp;amp;= \frac{\text{adjacent}}{\text{hypotenuse}} \tag{2} \end{align} \]
+We set up the problem by simply stacking two right triangles on top of each other.
+Let&amp;rsquo;s define $\overline{AB}$ to have a length of 1. $\overline{AB}$ is hypotenuse of the right triangle ABC. Since the hypotenuse is length 1, the lengths of opposite and adjacent sides are simple $\sin(\beta)$ and $\cos(\beta)$ respectively.
+We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but with the twist that hypotenuse of this triangle is no longer 1.</description>
+    </item>
     
     <item>
       <title>The Magic 6174</title>
