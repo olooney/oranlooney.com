@@ -3,24 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Angle Addition - OranLooney.com</title>
-  <meta property="og:title" content="Angle Addition - OranLooney.com" />
-  <meta name="twitter:title" content="Angle Addition - OranLooney.com" />
-  <meta name="description" content="The geometric definition
-\[ \begin{align} \sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \tag{1} \\\
-\cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}} \tag{2} \end{align} \]
-We set up the problem by simply stacking two right triangles on top of each other.
-Let&rsquo;s define $\overline{AB}$ to have a length of 1. $\overline{AB}$ is hypotenuse of the right triangle ABC. Since the hypotenuse is length 1, the lengths of opposite and adjacent sides are simple $\sin(\beta)$ and $\cos(\beta)$ respectively.
-We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but with the twist that hypotenuse of this triangle is no longer 1.">
-  <meta property="og:description" content="The geometric definition
-\[ \begin{align} \sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \tag{1} \\\
-\cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}} \tag{2} \end{align} \]
-We set up the problem by simply stacking two right triangles on top of each other.
-Let&rsquo;s define $\overline{AB}$ to have a length of 1. $\overline{AB}$ is hypotenuse of the right triangle ABC. Since the hypotenuse is length 1, the lengths of opposite and adjacent sides are simple $\sin(\beta)$ and $\cos(\beta)$ respectively.
-We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but with the twist that hypotenuse of this triangle is no longer 1.">
-  <meta name="twitter:description" content="The geometric definition
-\[ \begin{align} \sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \tag{1} \\\
-\cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}} \tag{2} \end{align} \] …">
+  <title>The Angle Addition Formulas - OranLooney.com</title>
+  <meta property="og:title" content="The Angle Addition Formulas - OranLooney.com" />
+  <meta name="twitter:title" content="The Angle Addition Formulas - OranLooney.com" />
+  <meta name="description" content="The usual way to do this is to start from the series or differential equation definition and then use the unit circle to prove that $\sin$ and $\cos$ really do have the geometric.
+I never liked this because it&rsquo;s very much like pulling a rabbit out of a hat, or perhaps more like pulling a &ldquo;previously prepared&rdquo; turkey out of the oven on a cooking show. It gives students and completely backwards impression of how mathematics is done: we don&rsquo;t start from intuitive definitions and work on them until we can understand them more deeply or connect them to other structures; no, we simply write down a bizarre and unmotivated equation and show it has the desired properties, with no mention of how anyone thought it up in the first place.">
+  <meta property="og:description" content="The usual way to do this is to start from the series or differential equation definition and then use the unit circle to prove that $\sin$ and $\cos$ really do have the geometric.
+I never liked this because it&rsquo;s very much like pulling a rabbit out of a hat, or perhaps more like pulling a &ldquo;previously prepared&rdquo; turkey out of the oven on a cooking show. It gives students and completely backwards impression of how mathematics is done: we don&rsquo;t start from intuitive definitions and work on them until we can understand them more deeply or connect them to other structures; no, we simply write down a bizarre and unmotivated equation and show it has the desired properties, with no mention of how anyone thought it up in the first place.">
+  <meta name="twitter:description" content="The usual way to do this is to start from the series or differential equation definition and then use the unit circle to prove that $\sin$ and $\cos$ really do have the geometric.
+I never liked this …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -83,7 +74,7 @@ We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but
     <article class="article">
       <img src="/post/angle-addition_files/lead.jpg" class="article-image" />
       
-      <h1 class="article-title">Angle Addition</h1>
+      <h1 class="article-title">The Angle Addition Formulas</h1>
       
       <hr class="article-title-bottom">
       <ul class="article-meta">
@@ -103,9 +94,70 @@ We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but
       </ul>
       
 <aside class="toc">
-  
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#notation">Notation</a></li>
+<li><a href="#geometric-proof-of-angle-addition-formulas">Geometric Proof of Angle Addition Formulas</a></li>
+<li><a href="#derivatives">Derivatives</a></li>
+<li><a href="#pythagorean-theorem">Pythagorean Theorem</a></li>
+<li><a href="#arc-length">Arc Length</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
 </aside>
-      <p>The geometric definition</p>
+      
+
+<p>The usual way to do this is to start from the series or differential equation
+definition and then use the unit circle to prove that $\sin$ and $\cos$ really
+do have the geometric.</p>
+
+<p>I never liked this because it&rsquo;s very much like pulling a rabbit out of a hat,
+or perhaps more like pulling a &ldquo;previously prepared&rdquo; turkey out of the oven on
+a cooking show. It gives students and completely backwards impression of how
+mathematics is done: we don&rsquo;t start from intuitive definitions and work on them
+until we can understand them more deeply or connect them to other structures;
+no, we simply write down a bizarre and unmotivated equation and show it has the
+desired properties, with no mention of how anyone thought it up in the first
+place. This often leads to shorter, more elegant proofs but at the cost of
+completely failing to teach the student how to actually &ldquo;do&rdquo; mathematics.</p>
+
+<p>Look at this series definition: Why would anyone ever &ldquo;start&rdquo; from this
+expression?</p>
+
+<p>The differential equation definition is almost as bad.  We also have to rely on
+the <a href="https://en.wikipedia.org/wiki/Picard%E2%80%93Lindel%C3%B6f_theorem">ODE existence and uniqueness theorem</a> which is non-trivial to prove.</p>
+
+<p>What would be nice would be to start from the intuitive, geometric definition
+and derive the analytic definitions by working forward. I think I&rsquo;ve found a
+clear and unambiguous way to explain this at the undergraduate level. Briefly,
+we&rsquo;ll prove the angle addition formulas using geometric methods, then show how
+this leads immediately to the derivatives.</p>
+
+<p>In this post, we&rsquo;re interested in establishing a foundation for $\sin$ and
+$\cos$ from geometric principles, we have to establish some ground rules. It&rsquo;s
+of crucial importance that you ignore everything you already know about these
+functions. Yes, I know you can prove this stuff more easily from Euler&rsquo;s
+formula. Yes, I know there a dozen of different ways to prove any of these. For
+the moment, pretend like you don&rsquo;t know <em>anything</em> about $\sin$ and $\cos$
+except the geometric definitions, and we won&rsquo;t use anything unless we&rsquo;ve proved
+it earlier. The structure of the proofs is as follows:</p>
+
+<p><img src="/post/angle-addition_files/proof_structure.png"></p>
+
+<p>As the goal is to ground everything on the geometric definition in an
+easy-to-follow way, jumping ahead and using theorems before we&rsquo;ve established
+that foundation defeats the purpose.</p>
+
+<p>By far the most elegant and concise way to prove theorems about $sin$ and $cos$
+is to use <a href="https://en.wikipedia.org/wiki/Euler%27s_formula">Euler&rsquo;s formula</a> $e^{ix} = \cos x + i \sin x$ but that has the
+disadvantage of requiring a knowledge of complex analysis which is
+pedagogically backwards. I think it makes more sense to follow the historical
+development and start from purely geometric arguments, move on to algebra and
+calculus, and only then show how the use of complex numbers makes the arguments
+far more elegant.</p>
 
 <p>\[
 \begin{align}
@@ -114,55 +166,92 @@ We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but
 \end{align}
 \]</p>
 
+<h2 id="notation">Notation</h2>
+
+<p>In the first draft of this proof, I left points unlabeled and simply referred
+to &ldquo;the middle triangle&rdquo; or the &ldquo;right angle in the top triangle&rdquo; and so on.
+The idea was to keep things simple for a broad audience but I quickly found it
+was very hard to follow. Instead, we&rsquo;ll use the conventional notation, which
+I&rsquo;ll briefly review here.</p>
+
+<p>We use upper case roman letters such as $A$ or $B$ to label points. The line
+segment connecting two points is written $\overline{AB}$. The triangle with
+vertices $A$, $B$, and $C$ is written $\triangle ABC$. Even though the notation
+symbol shows an equilateral triangle, the triangle in question doesn&rsquo;t have to
+be. I&rsquo;ll write &ldquo;The right triangle $\triangle ABC$&rdquo; if it&rsquo;s important to
+specify that the triangle is a right triangle.</p>
+
+<p>The above are all fairly self-explanatory, but the last bit of notation can be
+confusing if you don&rsquo;t know exactly what it means. To describe the angle at $B$
+between $\overline{AB}$ and $\overline{BC}$, we write $\angle ABC$.</p>
+
+<p><img src="/post/angle-addition_files/angle.png"></p>
+
+<p>$\angle ABC$ is always equal to $\angle CBA$, but $\angle BAC$ or $\angle ACB$
+refer different angles located at a different part of the diagram. To locate an
+angle $\angle ABC$ in the diagram, first look for the point labeled with the
+middle letter $B$. Then imagine lines connecting $B$ to $A$ and $C$ - the angle
+referred to is the angle between those lines.</p>
+
+<p>I know this notation takes some getting used to, but it allows us to
+unambiguously refer to angles on a cluttered diagram.</p>
+
+<h2 id="geometric-proof-of-angle-addition-formulas">Geometric Proof of Angle Addition Formulas</h2>
+
 <p>We set up the problem by simply stacking two right triangles
 on top of each other.</p>
 
 <p><img src="/post/angle-addition_files/aa_01.png"></p>
 
-<p>Let&rsquo;s define $\overline{AB}$ to have a length of 1. $\overline{AB}$ is hypotenuse of
-the right triangle ABC. Since the hypotenuse is length 1,
-the lengths of opposite and adjacent sides are simple $\sin(\beta)$ and $\cos(\beta)$ respectively.</p>
+<p>Let&rsquo;s define $\overline{AB}$ to have a length of 1. $\overline{AB}$ is
+hypotenuse of the right triangle $\triangle ABC$. Since the hypotenuse is
+length 1, the lengths of opposite and adjacent sides are simple $\sin(\beta)$
+and $\cos(\beta)$ respectively.</p>
 
 <p><img src="/post/angle-addition_files/aa_02.png"></p>
 
-<p>We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$ but with the
-twist that hypotenuse of this triangle is no longer 1. Therefore, the lengths
-of the opposite and adjacent sides have to each be multiplied by $\cos(\beta)$.</p>
+<p>We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$
+but with the twist that hypotenuse of this triangle is no longer 1. Therefore,
+the lengths of the opposite and adjacent sides have to each be multiplied by
+$\cos(\beta)$.</p>
 
 <p><img src="/post/angle-addition_files/aa_03.png"></p>
 
-<p>Let&rsquo;s add another triangle to our diagram by extending $\overline{CD}$ out in a straight line
-and drawing a perpendicular line through the point B. This gives us the
-triangle BCE. Since $\overline{BE}$ is perpendicular to EC it is in fact a right triangle.</p>
+<p>Let&rsquo;s add another triangle to our diagram by extending $\overline{CD}$ out in a
+straight line and drawing a perpendicular line through the point $B$. This
+gives us the triangle BCE. Since $\overline{BE}$ is perpendicular to
+$\overline{EC}$ it is in fact a right triangle.</p>
 
-<p>Now, the line $\overline{EC}$ is perpendicular to $\overline{AB}$, and the line $\overline{BC}$ is perpendicular is $\overline{AC}$,
-so the $\angle BCE$ is the same as the $\angle CAD$ which we called $\alpha$.</p>
+<p>Now, the line $\overline{EC}$ is perpendicular to $\overline{AB}$, and the line
+$\overline{BC}$ is perpendicular is $\overline{AC}$, so the angle $\angle BCE$
+is the same as the angle $\angle CAD$ which we called $\alpha$.</p>
 
-<p>A different way of seeing this is to note that because the angles of a triangle
-sum up to $180^\circ$, the $\angle ACD$ is $180^\circ - \alpha - 90^\circ = 90^\circ - alpha$.
-However the angles BCE, BCA, and ACD also add up to $180^\circ$. Since $\angle BCA$ is a right angle,
-we have $\angle BCE + 90^\circ + (90^\circ - \alpha) = 180^\circ$ which simplifies to $\angle BCE = \alpha.$</p>
-
-<p>Regardless of how we get there, we now now the hypotenuse and one angle of the right triangle $\triangle BCE$
-so we can once again use the definitions to label the lengths of the opposite and adjacent sides.</p>
+<p>Now that we know the hypotenuse and one angle of the right triangle $\triangle
+BCE$ we can once again use the definitions of $\sin$ and $\cos$ to label the
+lengths of the opposite and adjacent sides.</p>
 
 <p><img src="/post/angle-addition_files/aa_04.png"></p>
 
-<p>We&rsquo;ll do something similar for the last triangle. We&rsquo;ll draw a line perpendicular to $\overline{AD}$ through
-A and extend it up to point $F$ where it intersects the extension of $\overline{BE}$. $\overline{FE}$ and $\overline{AD}$ are parallel
-(because they are both perpendicular to $\overline{AF}$) therefore $\angle FBA$ is equal to $\angle BAD$ which
-is the sum of $\alpha$ and $\beta$. So we can label this angle $\alpha+\beta$. For the fourth
-and final time, we&rsquo;ll use the definition of $\sin$ and $\cos$ to label opposite and adjacent
-sides of the right triangle FAB. Note that this is where the expressions $\cos(\alpha + \beta)$
-and $\sin(\alpha + \beta)$ enter the proof.</p>
+<p>We&rsquo;ll do something similar for the last triangle. We&rsquo;ll draw a line
+perpendicular to $\overline{AD}$ through $A$ and extend it up to point $F$
+where it intersects the extension of $\overline{BE}$. $\overline{FE}$ and
+$\overline{AD}$ are parallel (because they are both perpendicular to
+$\overline{AF}$) therefore $\angle FBA$ is equal to $\angle BAD$ which is the
+sum of $\alpha$ and $\beta$. So we can label this angle $\alpha+\beta$. For the
+fourth and final time, we&rsquo;ll use the definition of $\sin$ and $\cos$ to label
+opposite and adjacent sides of the right triangle FAB. Note that this is where
+the expressions $\cos(\alpha + \beta)$ and $\sin(\alpha + \beta)$ enter the
+proof.</p>
 
 <p><img src="/post/angle-addition_files/aa_05.png"></p>
 
-<p>So far, everything has been construction - adding triangles and chasing angles to label edge
-lengths. But now that we&rsquo;ve constructed this perfect little square, we can actually read both
-angle addition formulas off the diagram. Note that FEAD forms a perfect rectangle. $\overline{FE}$ and $\overline{AD}$
-are parallel which proves $\overline{AF}$ and $\overline{DE}$ are equal; likewise $\overline{AF}$ and $\overline{ED}$ are parallel, which proves
-$\overline{FE}$ and $\overline{AD}$ are equal.</p>
+<p>So far, everything has been construction - adding triangles and chasing angles
+to label edge lengths. But now the diagram is complete, and we can easily read
+off the angle addition formulas by equating opposite sides.  Note that $FEAD$
+forms a rectangle; $\overline{FE}$ and $\overline{AD}$ are parallel which
+proves $\overline{AF}$ and $\overline{DE}$ are equal; likewise $\overline{AF}$
+and $\overline{ED}$ are parallel, which proves $\overline{FE}$ and
+$\overline{AD}$ are equal.</p>
 
 <p>\[
 \begin{align}
@@ -180,6 +269,191 @@ formulas:</p>
     \sin(\alpha+\beta) &amp;= \sin(\alpha) \cos(\beta) +  \cos(\alpha) \sin(\beta) \tag{6}
 \end{align}
 \]</p>
+
+<h2 id="derivatives">Derivatives</h2>
+
+<p>How does the angle addition formula help?</p>
+
+<p>\[
+\begin{align}
+    \frac{d}{dx} \sin(x) &amp;= \lim_{h \to 0} \frac{\sin(x + h) - \sin(x)}{h} \\\<br />
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+     &amp;= \lim_{h \to 0} \frac{\sin(x)\cos(h) + \cos(x)\sin(h) - \sin(x)}{h}
+\end{align}
+\]</p>
+
+<p>By considering a triangle with hypotenuse 1 and a very small &ldquo;opposite&rdquo; side,
+it&rsquo;s not hard to see geometrically that $\sin(x) \approx x$ and $\cos(h) = x$
+when x is small, so we have:</p>
+
+<p>\[
+\begin{align}
+\frac{d}{dx} \sin(x) &amp;= \lim_{h \to 0} \frac{\sin(x) + \cos(x) h - \sin(x)}{h}
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+                     &amp;= \lim_{h \to 0} \frac{\cos(x) h}{h}
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+                     &amp;= \cos(x)
+\end{align}
+\]</p>
+
+<p>The equivalent argument for $\cos(x)$ is:</p>
+
+<p>\[
+\begin{align}
+\frac{d}{dx} \cos(x) &amp;= \lim_{h \to 0} \frac{\cos(x + h) - \cos(x)}{h}
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+                     &amp;= \lim_{h \to 0} \frac{\cos(x)\cos(h) - \sin(x)\sin(h) - \cos(x)}{h}
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+                     &amp;= \lim_{h \to 0} \frac{\cos(x) - \sin(x) h - \cos(x)}{h}
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+                     &amp;= \lim_{h \to 0} \frac{-\sin(x) h}{h}
+\end{align}
+\]</p>
+
+<p>\[
+\begin{align}
+                     &amp;= -\sin(x)
+\end{align}
+\]</p>
+
+<p>This motivates the differential equation definition of $\sin$ and $\cos$ as the
+solutions to the initial value problem:</p>
+
+<p>For $\cos(t)$:
+\[
+\begin{align}
+\frac{d^2y}{dt^2} &amp;= -y \\\<br />
+y(0) &amp;= 1 ,&amp;
+y&rsquo;(0) &amp;= 0
+\end{align}
+\]</p>
+
+<p>and for $\sin(t)$:
+\[
+\begin{align}
+\frac{d^2y}{dt^2} &amp;= -y \\\<br />
+y(0) &amp;= 0 ,&amp;
+y&rsquo;(0) &amp;= 1
+\end{align}
+\]</p>
+
+<p>Now that we know what the derivatives should be from geometric arguments we can
+motivate the series definition via the Taylor series, and the differential
+equation definition directly.</p>
+
+<h2 id="pythagorean-theorem">Pythagorean Theorem</h2>
+
+<p>There are two other properties that we would like $\sin$ and $\cos$ to have as
+well. First, we&rsquo;d like them to trace out a unit circle; in other words, we want
+to make sure that $\sin^2(\theta) + \cos^2(\theta)$ for all angles $\theta$.</p>
+
+<p>There are lots of ways to prove this, but the angle addition formula provides
+one of the neatest approaches. Instead of adding two seperate angles $\alpha$
+and $\beta$, we&rsquo;ll use $\theta$ and $-\theta$. These two sum to zero so we
+have:</p>
+
+<p>\[
+\begin{align}
+    1  &amp;= cos(0) \\\<br />
+       &amp;= cos(\theta - \theta) \\\<br />
+       &amp;= \cos(\theta)\cos(-\theta) - \sin(\theta)\sin(-\theta) \\\<br />
+       &amp;= \cos(\theta)\cos(\theta) + \sin(\theta)\sin(\theta) \\\<br />
+       &amp;= \cos^2(\theta) + \sin^2(\theta)
+\end{align}
+\]</p>
+
+<p>Here, we additionally used the fact that $\cos$ and $\sin$ are even and odd
+functions respectively, so $\cos(-x) = \cos(x)$ and $\sin(-x) = - \sin(x)$.</p>
+
+<p>That means that the Pythagorean theorem is actually an immediate corrallary of
+the angle addition formula - barely more than a special case, really.</p>
+
+<h2 id="arc-length">Arc Length</h2>
+
+<p>The above shows that $\sin$ and $\cos$ trace out a unit circle, but there is
+one final thing we need to show to fully connect the geometric and analytic
+definitions.</p>
+
+<p>The formula for arc length is:</p>
+
+<p>\[
+L = \int_{a}^{b} \sqrt{\left(\frac{dx}{dt}\right)^2 + \left(\frac{dy}{dt}\right)^2} \, dt
+\]</p>
+
+<p>Let&rsquo;s write down the equations for the unit circle in parametric form. Luckily,
+we already worked out the first derivatives:
+\[
+\begin{align}
+    x(t) = \cos(t), &amp; \frac{dx}{dt} = -\sin(t)
+\end{align}<br />
+\]</p>
+
+<p>\[
+\begin{align}
+y(t) = \sin(t), &amp; \frac{dx}{dt} = \cos(t)
+\end{align}
+\]</p>
+
+<p>Then, substituting these into the arc length formula:
+\[
+L = \int_{0}^{\theta} \sqrt{(-\sin(t))^2 + (\cos(t))^2} \, dt
+\]</p>
+
+<p>Simplifying inside the square root:
+\[
+L = \int_{0}^{\theta} \sqrt{\sin^2(t) + \cos^2(t)} \, dt
+\]</p>
+
+<p>Since we showed above that $\sin^2(t) + \cos^2(t) = 1$ for all $t$, this
+further simplifies to:
+\[
+L = \int_{0}^{\theta} 1 \, dt
+\]</p>
+
+<p>Integrating from $0$ to $\theta$:
+\[
+L = \left. t \right|_{0}^{\theta} = \theta - 0 = \theta
+\]</p>
+
+<!-- x_ -->
+
+<p>This tells us that the parameter $t$ we used is equal to the arc length along
+the unit circle; in other words, the angle expressed in radians.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We&rsquo;ve shown that all of usual analytic definitions of $\sin$ and $\cos$ can be
+derived from the geometric definition, and that this can be made elementary if
+we start by proving the angle addition formulas using geometric arguments. The
+geometric proof itself is quite beautiful and easy to remember as it is simply
+a matter of stacking two triangles, building a rectangle around them, and
+equating the opposing sides. We offer this as a more pedagogically sound and
+historical accurate way to motivate the various analytic definitions of $\sin$
+and $\cos$.</p>
 
     </article>
 
