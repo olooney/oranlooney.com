@@ -212,7 +212,7 @@ Pythagorean Theorem
 OK, now that we have the angle addition formulas, let's put them to work.
 
 First, we'd like sine and cosine to trace out a unit circle; in other words, we
-want to make sure that $\sin^2(\theta) + \cos^2(\theta)$ for all angles
+want to make sure that $\sin^2(\theta) + \cos^2(\theta) = 1$ for all angles
 $\theta$.
 
 There are lots of ways to prove this, but the angle addition formula provides
