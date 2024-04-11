@@ -12,9 +12,9 @@ image: /post/angle-addition_files/lead.jpg
 One thing you may have noticed about the trigonometric functions [sine and
 cosine][WSC] is that they seem to have no agreed upon definition. Or rather,
 different authors choose different definitions as the starting point, mainly
-based on convenience. This isn't problematic, or even particularly unusual in
+based on convenience. This isn't problematic or even particularly unusual in
 mathematics - as long as we can derive any of the other forms from any starting
-point, it makes little theoretical difference which we start from as they're
+point, it makes little theoretical difference which we start from since they're
 all equivalent anyway.
 
 The most common starting points are the series definitions, the solution to an
@@ -28,12 +28,12 @@ day, is that none of these are the obvious trigonometric definitions about the
 opposite and adjacent sides of a right triangle. Aren't axioms and definitions
 supposed to be obvious, so obvious and self-evident they can't be doubted? So
 why are we using a highly non-obvious formulation as our definition, and then
-backing into the intuitive form as a theorem? The answer is actually pretty
-simple - the proofs are slightly shorter and more elegant if we do it that way.
+backing into the intuitive form as a theorem? The answer is actually simple -
+the proofs are slightly shorter and more elegant when we do it that way.
 
 However, I never liked this approach because it's very much like pulling a
 rabbit out of a hat, or perhaps more like pulling a "previously prepared"
-turkey out of the oven on a cooking show. It gives students and completely
+turkey out of the oven on a cooking show. It gives students a completely
 backward impression of how mathematics is done. We don't start from intuitive
 definitions and work on them until we can understand them more deeply or
 connect them to other structures; no, we simply write down a bizarre and
@@ -51,7 +51,7 @@ I mean, look at this thing:
 Anyone who looks at that and says, "yes, that's a self-evident definition" is
 either lying or Ramanujan. 
 
-The differential equation definition is almost as bad. While the equations
+The differential equation definition is almost as bad. The equations
 themselves are fairly simple:
 
 \\[
@@ -66,7 +66,6 @@ The problem is that we have to rely on the [ODE existence and uniqueness
 theorem][PLT] which is non-trivial to prove; the most common proof involves
 invoking the [Banach fixed point theorem][BFP]. That seems like a weirdly
 technical approach to defining what should be an elementary concept.
-
 
 What would be nice would be to start from the intuitive, geometric definition:
 
@@ -217,7 +216,7 @@ $\theta$.
 
 There are lots of ways to prove this, but the angle addition formula provides
 one of the neatest approaches. Instead of adding two separate angles $\alpha$
-and $\beta$, we'll use $\theta$ and $-\theta$. These two sum to zero so we
+and $\beta$, we'll use $\theta$ and $-\theta$. These two angles sum to zero, so we
 have:
 
 \\[
@@ -309,7 +308,8 @@ The equivalent argument for $\cos(x)$ is:
 \end{align}
 \\]
 
-Once we know these first derivatives, computing higher derivates is simple, for example:
+Once we know these first derivatives, computing higher derivates is straight forward.
+For example, the second derivatives are:
 
 \\[
 \frac{d^2}{dx^2} \sin(x) = \frac{d}{dx} \cos(x) = -\sin(x)
@@ -326,7 +326,6 @@ It's equally obvious that we can continue the process indefinitely, alternating 
 sine and cosine. Since we know $\sin(0) = 0$ and $\cos(0) = 1$, we can evaluate all derivatives
 of sine and cosine at zero, allowing us to calculate the Maclaurin series. This gives us
 the series form. 
-
 
 
 Arc Length
