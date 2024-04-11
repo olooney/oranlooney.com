@@ -2,7 +2,7 @@
 title: "The Magic 6174"
 author: "Oran Looney"
 date: 2024-02-25
-publishdate: 2024-04-07
+publishdate: 2024-02-25
 tags:
   - Math
   - Python

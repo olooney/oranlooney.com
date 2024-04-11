@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Angle Addition Formulas - OranLooney.com</title>
-  <meta property="og:title" content="The Angle Addition Formulas - OranLooney.com" />
-  <meta name="twitter:title" content="The Angle Addition Formulas - OranLooney.com" />
-  <meta name="description" content="The usual way to do this is to start from the series or differential equation definition and then use the unit circle to prove that $\sin$ and $\cos$ really do have the geometric.
-I never liked this because it&rsquo;s very much like pulling a rabbit out of a hat, or perhaps more like pulling a &ldquo;previously prepared&rdquo; turkey out of the oven on a cooking show. It gives students and completely backwards impression of how mathematics is done: we don&rsquo;t start from intuitive definitions and work on them until we can understand them more deeply or connect them to other structures; no, we simply write down a bizarre and unmotivated equation and show it has the desired properties, with no mention of how anyone thought it up in the first place.">
-  <meta property="og:description" content="The usual way to do this is to start from the series or differential equation definition and then use the unit circle to prove that $\sin$ and $\cos$ really do have the geometric.
-I never liked this because it&rsquo;s very much like pulling a rabbit out of a hat, or perhaps more like pulling a &ldquo;previously prepared&rdquo; turkey out of the oven on a cooking show. It gives students and completely backwards impression of how mathematics is done: we don&rsquo;t start from intuitive definitions and work on them until we can understand them more deeply or connect them to other structures; no, we simply write down a bizarre and unmotivated equation and show it has the desired properties, with no mention of how anyone thought it up in the first place.">
-  <meta name="twitter:description" content="The usual way to do this is to start from the series or differential equation definition and then use the unit circle to prove that $\sin$ and $\cos$ really do have the geometric.
-I never liked this …">
+  <title>Stacking Triangles for Fun and Profit - OranLooney.com</title>
+  <meta property="og:title" content="Stacking Triangles for Fun and Profit - OranLooney.com" />
+  <meta name="twitter:title" content="Stacking Triangles for Fun and Profit - OranLooney.com" />
+  <meta name="description" content="One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the starting point, mainly based on convenience. This isn&rsquo;t problematic, or even particularly unusual in mathematics - as long as we can derive any of the other forms from any starting point, it makes little theoretical difference which we start from as they&rsquo;re all equivalent anyway.">
+  <meta property="og:description" content="One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the starting point, mainly based on convenience. This isn&rsquo;t problematic, or even particularly unusual in mathematics - as long as we can derive any of the other forms from any starting point, it makes little theoretical difference which we start from as they&rsquo;re all equivalent anyway.">
+  <meta name="twitter:description" content="One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -74,7 +71,7 @@ I never liked this …">
     <article class="article">
       <img src="/post/angle-addition_files/lead.jpg" class="article-image" />
       
-      <h1 class="article-title">The Angle Addition Formulas</h1>
+      <h1 class="article-title">Stacking Triangles for Fun and Profit</h1>
       
       <hr class="article-title-bottom">
       <ul class="article-meta">
@@ -100,8 +97,8 @@ I never liked this …">
 <ul>
 <li><a href="#notation">Notation</a></li>
 <li><a href="#geometric-proof-of-angle-addition-formulas">Geometric Proof of Angle Addition Formulas</a></li>
-<li><a href="#derivatives">Derivatives</a></li>
 <li><a href="#pythagorean-theorem">Pythagorean Theorem</a></li>
+<li><a href="#derivatives">Derivatives</a></li>
 <li><a href="#arc-length">Arc Length</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
@@ -110,61 +107,92 @@ I never liked this …">
 </aside>
       
 
-<p>The usual way to do this is to start from the series or differential equation
-definition and then use the unit circle to prove that $\sin$ and $\cos$ really
-do have the geometric.</p>
+<p>One thing you may have noticed about the trigonometric functions <a href="https://en.wikipedia.org/wiki/Sine_and_cosine">sine and
+cosine</a> is that they seem to have no agreed upon definition. Or rather,
+different authors choose different definitions as the starting point, mainly
+based on convenience. This isn&rsquo;t problematic, or even particularly unusual in
+mathematics - as long as we can derive any of the other forms from any starting
+point, it makes little theoretical difference which we start from as they&rsquo;re
+all equivalent anyway.</p>
 
-<p>I never liked this because it&rsquo;s very much like pulling a rabbit out of a hat,
-or perhaps more like pulling a &ldquo;previously prepared&rdquo; turkey out of the oven on
-a cooking show. It gives students and completely backwards impression of how
-mathematics is done: we don&rsquo;t start from intuitive definitions and work on them
-until we can understand them more deeply or connect them to other structures;
-no, we simply write down a bizarre and unmotivated equation and show it has the
-desired properties, with no mention of how anyone thought it up in the first
-place. This often leads to shorter, more elegant proofs but at the cost of
-completely failing to teach the student how to actually &ldquo;do&rdquo; mathematics.</p>
+<p>The most common starting points are the series definitions, the solution to an
+initial value problem involving ordinary differential equations, or using
+complex numbers as Euler&rsquo;s formula. You can find detailed descriptions of these
+on the <a href="https://en.wikipedia.org/wiki/Sine_and_cosine">Wikipedia page</a>. These are all fine starting points as far as they
+go, and as I said before they are all equivalent.</p>
 
-<p>Look at this series definition: Why would anyone ever &ldquo;start&rdquo; from this
-expression?</p>
+<p>What struck me as odd when I was an undergraduate, and still strikes me to this
+day, is that none of these are the obvious trigonometric definitions about the
+opposite and adjacent sides of a right triangle. Aren&rsquo;t axioms and definitions
+supposed to be obvious, so obvious and self-evident they can&rsquo;t be doubted? So
+why are we using a highly non-obvious formulation as our definition, and then
+backing into the intuitive form as a theorem? The answer is actually pretty
+simple - the proofs are slightly shorter and more elegant if we do it that way.</p>
 
-<p>The differential equation definition is almost as bad.  We also have to rely on
-the <a href="https://en.wikipedia.org/wiki/Picard%E2%80%93Lindel%C3%B6f_theorem">ODE existence and uniqueness theorem</a> which is non-trivial to prove.</p>
+<p>However, I never liked this approach because it&rsquo;s very much like pulling a
+rabbit out of a hat, or perhaps more like pulling a &ldquo;previously prepared&rdquo;
+turkey out of the oven on a cooking show. It gives students and completely
+backward impression of how mathematics is done. We don&rsquo;t start from intuitive
+definitions and work on them until we can understand them more deeply or
+connect them to other structures; no, we simply write down a bizarre and
+unmotivated equation and show it has the desired properties, with no mention of
+how anyone thought it up in the first place. This often leads to shorter, more
+elegant proofs but at the cost of completely failing to teach the student how
+to actually &ldquo;do&rdquo; mathematics.</p>
 
-<p>What would be nice would be to start from the intuitive, geometric definition
-and derive the analytic definitions by working forward. I think I&rsquo;ve found a
+<p>I mean, look at this thing:</p>
+
+<p>\[
+\sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} x^{2n+1}
+\]</p>
+
+<p>Anyone who looks at that and says, &ldquo;yes, that&rsquo;s a self-evident definition&rdquo; is
+either lying or Ramanujan.</p>
+
+<p>The differential equation definition is almost as bad. While the equations
+themselves are fairly simple:</p>
+
+<p>\[
+\begin{align}
+\frac{d^2y}{dt^2} &amp;= -y \\\<br />
+y(0) &amp;= 0 ,&amp;
+y&rsquo;(0) &amp;= 1
+\end{align}
+\]</p>
+
+<p>The problem is that we have to rely on the <a href="https://en.wikipedia.org/wiki/Picard%E2%80%93Lindel%C3%B6f_theorem">ODE existence and uniqueness
+theorem</a> which is non-trivial to prove; the most common proof involves
+invoking the <a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem">Banach fixed point theorem</a>. That seems like a weirdly
+technical approach to defining what should be an elementary concept.</p>
+
+<p>What would be nice would be to start from the intuitive, geometric definition:</p>
+
+<p>\[
+\begin{align}
+\sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \\\<br />
+\cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}}
+\end{align}
+\]</p>
+
+<p>and derive the analytic definitions by working forward. I think I&rsquo;ve found a
 clear and unambiguous way to explain this at the undergraduate level. Briefly,
 we&rsquo;ll prove the angle addition formulas using geometric methods, then show how
-this leads immediately to the derivatives.</p>
+this leads immediately to the other results.</p>
 
-<p>In this post, we&rsquo;re interested in establishing a foundation for $\sin$ and
-$\cos$ from geometric principles, we have to establish some ground rules. It&rsquo;s
+<p>Since we&rsquo;re interested in establishing a <em>foundation</em> for sine and
+cosine from geometric principles, we have to establish some ground rules. It&rsquo;s
 of crucial importance that you ignore everything you already know about these
 functions. Yes, I know you can prove this stuff more easily from Euler&rsquo;s
-formula. Yes, I know there a dozen of different ways to prove any of these. For
-the moment, pretend like you don&rsquo;t know <em>anything</em> about $\sin$ and $\cos$
+formula. Yes, I know there a dozen different ways to prove any of these. For
+the moment, pretend like you don&rsquo;t know <em>anything</em> about sine and cosine
 except the geometric definitions, and we won&rsquo;t use anything unless we&rsquo;ve proved
-it earlier. The structure of the proofs is as follows:</p>
+it earlier. The structure of the proofs will be as follows:</p>
 
 <p><img src="/post/angle-addition_files/proof_structure.png"></p>
 
 <p>As the goal is to ground everything on the geometric definition in an
 easy-to-follow way, jumping ahead and using theorems before we&rsquo;ve established
 that foundation defeats the purpose.</p>
-
-<p>By far the most elegant and concise way to prove theorems about $sin$ and $cos$
-is to use <a href="https://en.wikipedia.org/wiki/Euler%27s_formula">Euler&rsquo;s formula</a> $e^{ix} = \cos x + i \sin x$ but that has the
-disadvantage of requiring a knowledge of complex analysis which is
-pedagogically backwards. I think it makes more sense to follow the historical
-development and start from purely geometric arguments, move on to algebra and
-calculus, and only then show how the use of complex numbers makes the arguments
-far more elegant.</p>
-
-<p>\[
-\begin{align}
-\sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \tag{1} \\\<br />
-\cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}} \tag{2}
-\end{align}
-\]</p>
 
 <h2 id="notation">Notation</h2>
 
@@ -198,8 +226,8 @@ unambiguously refer to angles on a cluttered diagram.</p>
 
 <h2 id="geometric-proof-of-angle-addition-formulas">Geometric Proof of Angle Addition Formulas</h2>
 
-<p>We set up the problem by simply stacking two right triangles
-on top of each other.</p>
+<p>We set up the problem by simply stacking two right triangles on top of each
+other.</p>
 
 <p><img src="/post/angle-addition_files/aa_01.png"></p>
 
@@ -211,9 +239,9 @@ and $\cos(\beta)$ respectively.</p>
 <p><img src="/post/angle-addition_files/aa_02.png"></p>
 
 <p>We can do the same thing for the triangle $\triangle ACD$ and angle $\alpha$
-but with the twist that hypotenuse of this triangle is no longer 1. Therefore,
-the lengths of the opposite and adjacent sides have to each be multiplied by
-$\cos(\beta)$.</p>
+but with the twist that hypotenuse of this triangle is no longer 1 but instead
+$\cos(\beta)$. Therefore, the lengths of the opposite and adjacent sides have
+to each be multiplied by $\cos(\beta)$.</p>
 
 <p><img src="/post/angle-addition_files/aa_03.png"></p>
 
@@ -227,7 +255,7 @@ $\overline{BC}$ is perpendicular is $\overline{AC}$, so the angle $\angle BCE$
 is the same as the angle $\angle CAD$ which we called $\alpha$.</p>
 
 <p>Now that we know the hypotenuse and one angle of the right triangle $\triangle
-BCE$ we can once again use the definitions of $\sin$ and $\cos$ to label the
+BCE$ we can once again use the definitions of sine and cosine to label the
 lengths of the opposite and adjacent sides.</p>
 
 <p><img src="/post/angle-addition_files/aa_04.png"></p>
@@ -238,8 +266,8 @@ where it intersects the extension of $\overline{BE}$. $\overline{FE}$ and
 $\overline{AD}$ are parallel (because they are both perpendicular to
 $\overline{AF}$) therefore $\angle FBA$ is equal to $\angle BAD$ which is the
 sum of $\alpha$ and $\beta$. So we can label this angle $\alpha+\beta$. For the
-fourth and final time, we&rsquo;ll use the definition of $\sin$ and $\cos$ to label
-opposite and adjacent sides of the right triangle FAB. Note that this is where
+fourth and final time, we&rsquo;ll use the definition of sine and cosine to label
+opposite and adjacent sides of the right triangle $\triangle FAB$. Note that this is where
 the expressions $\cos(\alpha + \beta)$ and $\sin(\alpha + \beta)$ enter the
 proof.</p>
 
@@ -251,28 +279,59 @@ off the angle addition formulas by equating opposite sides.  Note that $FEAD$
 forms a rectangle; $\overline{FE}$ and $\overline{AD}$ are parallel which
 proves $\overline{AF}$ and $\overline{DE}$ are equal; likewise $\overline{AF}$
 and $\overline{ED}$ are parallel, which proves $\overline{FE}$ and
-$\overline{AD}$ are equal.</p>
+$\overline{AD}$ are equal. All we have to do now is equate opposite pairs of sides:</p>
 
 <p>\[
 \begin{align}
-    \cos(\alpha+\beta) + \sin(\alpha) \sin(\beta) = \cos(\alpha) \cos(\beta) \tag{3} \\\<br />
-    \sin(\alpha+\beta) = \sin(\alpha) \cos(\beta) +  \cos(\alpha) \sin(\beta) \tag{4}
+    \cos(\alpha+\beta) + \sin(\alpha) \sin(\beta) = \cos(\alpha) \cos(\beta)  \\\<br />
+    \sin(\alpha+\beta) = \sin(\alpha) \cos(\beta) +  \cos(\alpha) \sin(\beta)
 \end{align}
 \]</p>
 
-<p>We only need to rearrange these slightly to put them in the canonical form of the angle addition
+<p>Finally, we rearrange these slightly to put them in the canonical form of the angle addition
 formulas:</p>
 
 <p>\[
 \begin{align}
-    \cos(\alpha+\beta) &amp;= \cos(\alpha) \cos(\beta) -  \sin(\alpha) \sin(\beta) \tag{5} \\\<br />
-    \sin(\alpha+\beta) &amp;= \sin(\alpha) \cos(\beta) +  \cos(\alpha) \sin(\beta) \tag{6}
+    \cos(\alpha+\beta) &amp;= \cos(\alpha) \cos(\beta) -  \sin(\alpha) \sin(\beta)  \\\<br />
+    \sin(\alpha+\beta) &amp;= \sin(\alpha) \cos(\beta) +  \cos(\alpha) \sin(\beta)
 \end{align}
 \]</p>
 
+<h2 id="pythagorean-theorem">Pythagorean Theorem</h2>
+
+<p>OK, now that we have the angle addition formulas, let&rsquo;s put them to work.</p>
+
+<p>First, we&rsquo;d like sine and cosine to trace out a unit circle; in other words, we
+want to make sure that $\sin^2(\theta) + \cos^2(\theta)$ for all angles
+$\theta$.</p>
+
+<p>There are lots of ways to prove this, but the angle addition formula provides
+one of the neatest approaches. Instead of adding two separate angles $\alpha$
+and $\beta$, we&rsquo;ll use $\theta$ and $-\theta$. These two sum to zero so we
+have:</p>
+
+<p>\[
+\begin{align}
+    1  &amp;= \cos(0) \\\<br />
+       &amp;= \cos(\theta - \theta) \\\<br />
+       &amp;= \cos(\theta)\cos(-\theta) - \sin(\theta)\sin(-\theta) \\\<br />
+       &amp;= \cos(\theta)\cos(\theta) + \sin(\theta)\sin(\theta) \\\<br />
+       &amp;= \cos^2(\theta) + \sin^2(\theta)
+\end{align}
+\]</p>
+
+<p>Here, we additionally used the fact that sine and cosine are odd and even
+functions respectively, so $\cos(-x) = \cos(x)$ and $\sin(-x) = - \sin(x)$.</p>
+
+<p>That means that the Pythagorean theorem is actually an immediate corollary of
+the angle addition formula for cosine.</p>
+
 <h2 id="derivatives">Derivatives</h2>
 
-<p>How does the angle addition formula help?</p>
+<p>Another neat thing we can do with the angle addition formulas is calculate the derivatives
+of sine and cosine. This is because the limit definition of derivative includes a term with $f(x+h)$
+which we can handle with the formulas.</p>
 
 <p>\[
 \begin{align}
@@ -340,62 +399,28 @@ when x is small, so we have:</p>
 \end{align}
 \]</p>
 
-<p>This motivates the differential equation definition of $\sin$ and $\cos$ as the
-solutions to the initial value problem:</p>
-
-<p>For $\cos(t)$:
-\[
-\begin{align}
-\frac{d^2y}{dt^2} &amp;= -y \\\<br />
-y(0) &amp;= 1 ,&amp;
-y&rsquo;(0) &amp;= 0
-\end{align}
-\]</p>
-
-<p>and for $\sin(t)$:
-\[
-\begin{align}
-\frac{d^2y}{dt^2} &amp;= -y \\\<br />
-y(0) &amp;= 0 ,&amp;
-y&rsquo;(0) &amp;= 1
-\end{align}
-\]</p>
-
-<p>Now that we know what the derivatives should be from geometric arguments we can
-motivate the series definition via the Taylor series, and the differential
-equation definition directly.</p>
-
-<h2 id="pythagorean-theorem">Pythagorean Theorem</h2>
-
-<p>There are two other properties that we would like $\sin$ and $\cos$ to have as
-well. First, we&rsquo;d like them to trace out a unit circle; in other words, we want
-to make sure that $\sin^2(\theta) + \cos^2(\theta)$ for all angles $\theta$.</p>
-
-<p>There are lots of ways to prove this, but the angle addition formula provides
-one of the neatest approaches. Instead of adding two seperate angles $\alpha$
-and $\beta$, we&rsquo;ll use $\theta$ and $-\theta$. These two sum to zero so we
-have:</p>
+<p>Once we know these first derivatives, computing higher derivates is simple, for example:</p>
 
 <p>\[
-\begin{align}
-    1  &amp;= cos(0) \\\<br />
-       &amp;= cos(\theta - \theta) \\\<br />
-       &amp;= \cos(\theta)\cos(-\theta) - \sin(\theta)\sin(-\theta) \\\<br />
-       &amp;= \cos(\theta)\cos(\theta) + \sin(\theta)\sin(\theta) \\\<br />
-       &amp;= \cos^2(\theta) + \sin^2(\theta)
-\end{align}
+\frac{d^2}{dx^2} \sin(x) = \frac{d}{dx} \cos(x) = -\sin(x)
 \]</p>
 
-<p>Here, we additionally used the fact that $\cos$ and $\sin$ are even and odd
-functions respectively, so $\cos(-x) = \cos(x)$ and $\sin(-x) = - \sin(x)$.</p>
+<p>\[
+\frac{d^2}{dx^2} \cos(x) = \frac{d}{dx} -\sin(x) = -\cos(x)
+\]</p>
 
-<p>That means that the Pythagorean theorem is actually an immediate corrallary of
-the angle addition formula - barely more than a special case, really.</p>
+<p>With just these second derivatives, we can already motivate the initial value problem ODE
+definition of sine and cosine.</p>
+
+<p>It&rsquo;s equally obvious that we can continue the process indefinitely, alternating between
+sine and cosine. Since we know $\sin(0) = 0$ and $\cos(0) = 1$, we can evaluate all derivatives
+of sine and cosine at zero, allowing us to calculate the Maclaurin series. This gives us
+the series form.</p>
 
 <h2 id="arc-length">Arc Length</h2>
 
-<p>The above shows that $\sin$ and $\cos$ trace out a unit circle, but there is
-one final thing we need to show to fully connect the geometric and analytic
+<p>The above shows that sine and cosine trace out a unit circle, but there is one
+final thing we need to show to fully connect the geometric and analytic
 definitions.</p>
 
 <p>The formula for arc length is:</p>
@@ -414,7 +439,7 @@ we already worked out the first derivatives:
 
 <p>\[
 \begin{align}
-y(t) = \sin(t), &amp; \frac{dx}{dt} = \cos(t)
+y(t) = \sin(t), &amp; \frac{dy}{dt} = \cos(t)
 \end{align}
 \]</p>
 
@@ -446,14 +471,13 @@ the unit circle; in other words, the angle expressed in radians.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>We&rsquo;ve shown that all of usual analytic definitions of $\sin$ and $\cos$ can be
-derived from the geometric definition, and that this can be made elementary if
-we start by proving the angle addition formulas using geometric arguments. The
-geometric proof itself is quite beautiful and easy to remember as it is simply
-a matter of stacking two triangles, building a rectangle around them, and
-equating the opposing sides. We offer this as a more pedagogically sound and
-historical accurate way to motivate the various analytic definitions of $\sin$
-and $\cos$.</p>
+<p>We&rsquo;ve shown that all of usual definitions of sine and cosine can be derived
+from the geometric definition, and that this can be made elementary if we start
+by proving the angle addition formulas using geometric arguments. The geometric
+proof itself is quite beautiful and easy to remember as it is simply a matter
+of stacking two triangles, building a rectangle around them, and equating the
+opposing sides. We offer this as a more pedagogically sound and historical
+accurate way to motivate the various definitions of sine and cosine.</p>
 
     </article>
 
