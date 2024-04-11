@@ -29,7 +29,7 @@ opposite and adjacent sides of a right triangle. Aren't axioms and definitions
 supposed to be obvious, so obvious and self-evident they can't be doubted? So
 why are we using a highly non-obvious formulation as our definition, and then
 backing into the intuitive form as a theorem? The answer is actually simple -
-the proofs are slightly shorter and more elegant when we do it that way.
+the proofs are slightly shorter when we do it that way.
 
 However, I never liked this approach because it's very much like pulling a
 rabbit out of a hat, or perhaps more like pulling a "previously prepared"
@@ -45,7 +45,7 @@ to actually "do" mathematics.
 I mean, look at this thing: 
 
 \\[
-\sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} x^{2n+1}
+    \sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} x^{2n+1}
 \\]
 
 Anyone who looks at that and says, "yes, that's a self-evident definition" is
@@ -56,9 +56,9 @@ themselves are fairly simple:
 
 \\[
 \begin{align}
-\frac{d^2y}{dt^2} &= -y \\\\\\\\
-y(0) &= 0 ,&
-y'(0) &= 1
+    \frac{d^2y}{dt^2} &= -y \\\\\\\\
+    y(0) &= 0 ,&
+    y'(0) &= 1
 \end{align}
 \\]
 
@@ -71,8 +71,8 @@ What would be nice would be to start from the intuitive, geometric definition:
 
 \\[
 \begin{align}
-\sin(\theta) &= \frac{\text{opposite}}{\text{hypotenuse}} \\\\\\\\
-\cos(\theta) &= \frac{\text{adjacent}}{\text{hypotenuse}} 
+    \sin(\theta) &= \frac{\text{opposite}}{\text{hypotenuse}} \\\\\\\\
+    \cos(\theta) &= \frac{\text{adjacent}}{\text{hypotenuse}} 
 \end{align}
 \\]
 
@@ -266,13 +266,13 @@ when $h$ is close to zero. Therefore we have:
 
 \\[
 \begin{align}
-                     &= \lim_{h \to 0} \frac{\cos(x) h}{h}
+         &= \lim_{h \to 0} \frac{\cos(x) h}{h}
 \end{align}
 \\]
 
 \\[
 \begin{align}
-                     &= \cos(x)
+         &= \cos(x)
 \end{align}
 \\]
 
@@ -280,52 +280,52 @@ The equivalent argument for $\cos(x)$ is:
 
 \\[
 \begin{align}
-\frac{d}{dx} \cos(x) &= \lim_{h \to 0} \frac{\cos(x + h) - \cos(x)}{h}
+    \frac{d}{dx} \cos(x) &= \lim_{h \to 0} \frac{\cos(x + h) - \cos(x)}{h}
 \end{align}
 \\]
 
 \\[
 \begin{align}
-                     &= \lim_{h \to 0} \frac{\cos(x)\cos(h) - \sin(x)\sin(h) - \cos(x)}{h}
+     &= \lim_{h \to 0} \frac{\cos(x)\cos(h) - \sin(x)\sin(h) - \cos(x)}{h}
 \end{align}
 \\]
 
 \\[
 \begin{align}
-                     &= \lim_{h \to 0} \frac{\cos(x) - \sin(x) h - \cos(x)}{h}
+     &= \lim_{h \to 0} \frac{\cos(x) - \sin(x) h - \cos(x)}{h}
 \end{align}
 \\]
 
 \\[
 \begin{align}
-                     &= \lim_{h \to 0} \frac{-\sin(x) h}{h}
+     &= \lim_{h \to 0} \frac{-\sin(x) h}{h}
 \end{align}
 \\]
 
 \\[
 \begin{align}
-                     &= -\sin(x)
+         &= -\sin(x)
 \end{align}
 \\]
 
-Once we know these first derivatives, computing higher derivates is straight forward.
-For example, the second derivatives are:
+Once we know these first derivatives, computing higher derivates is
+straightforward. For example, the second derivatives are:
 
 \\[
-\frac{d^2}{dx^2} \sin(x) = \frac{d}{dx} \cos(x) = -\sin(x)
+    \frac{d^2}{dx^2} \sin(x) = \frac{d}{dx} \cos(x) = -\sin(x)
 \\]
 
 \\[
-\frac{d^2}{dx^2} \cos(x) = \frac{d}{dx} -\sin(x) = -\cos(x)
+    \frac{d^2}{dx^2} \cos(x) = \frac{d}{dx} -\sin(x) = -\cos(x)
 \\]
 
-With just these second derivatives, we can already motivate the initial value problem ODE
-definition of sine and cosine. 
+With just these second derivatives, we can already motivate the initial value
+problem ODE definition of sine and cosine. 
 
-It's equally obvious that we can continue the process indefinitely, alternating between
-sine and cosine. Since we know $\sin(0) = 0$ and $\cos(0) = 1$, we can evaluate all derivatives
-of sine and cosine at zero, allowing us to calculate the Maclaurin series. This gives us
-the series form. 
+It's equally obvious that we can continue the process indefinitely, alternating
+between sine and cosine. Since we know $\sin(0) = 0$ and $\cos(0) = 1$, we can
+evaluate all derivatives of sine and cosine at zero, allowing us to calculate
+the Maclaurin series. This gives us the series form. 
 
 
 Arc Length

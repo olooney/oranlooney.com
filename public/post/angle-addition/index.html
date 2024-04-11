@@ -127,7 +127,7 @@ opposite and adjacent sides of a right triangle. Aren&rsquo;t axioms and definit
 supposed to be obvious, so obvious and self-evident they can&rsquo;t be doubted? So
 why are we using a highly non-obvious formulation as our definition, and then
 backing into the intuitive form as a theorem? The answer is actually simple -
-the proofs are slightly shorter and more elegant when we do it that way.</p>
+the proofs are slightly shorter when we do it that way.</p>
 
 <p>However, I never liked this approach because it&rsquo;s very much like pulling a
 rabbit out of a hat, or perhaps more like pulling a &ldquo;previously prepared&rdquo;
@@ -143,7 +143,7 @@ to actually &ldquo;do&rdquo; mathematics.</p>
 <p>I mean, look at this thing:</p>
 
 <p>\[
-\sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} x^{2n+1}
+    \sin(x) = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} x^{2n+1}
 \]</p>
 
 <p>Anyone who looks at that and says, &ldquo;yes, that&rsquo;s a self-evident definition&rdquo; is
@@ -154,9 +154,9 @@ themselves are fairly simple:</p>
 
 <p>\[
 \begin{align}
-\frac{d^2y}{dt^2} &amp;= -y \\\<br />
-y(0) &amp;= 0 ,&amp;
-y&rsquo;(0) &amp;= 1
+    \frac{d^2y}{dt^2} &amp;= -y \\\<br />
+    y(0) &amp;= 0 ,&amp;
+    y&rsquo;(0) &amp;= 1
 \end{align}
 \]</p>
 
@@ -169,8 +169,8 @@ technical approach to defining what should be an elementary concept.</p>
 
 <p>\[
 \begin{align}
-\sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \\\<br />
-\cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}}
+    \sin(\theta) &amp;= \frac{\text{opposite}}{\text{hypotenuse}} \\\<br />
+    \cos(\theta) &amp;= \frac{\text{adjacent}}{\text{hypotenuse}}
 \end{align}
 \]</p>
 
@@ -357,13 +357,13 @@ when $h$ is close to zero. Therefore we have:</p>
 
 <p>\[
 \begin{align}
-                     &amp;= \lim_{h \to 0} \frac{\cos(x) h}{h}
+         &amp;= \lim_{h \to 0} \frac{\cos(x) h}{h}
 \end{align}
 \]</p>
 
 <p>\[
 \begin{align}
-                     &amp;= \cos(x)
+         &amp;= \cos(x)
 \end{align}
 \]</p>
 
@@ -371,52 +371,52 @@ when $h$ is close to zero. Therefore we have:</p>
 
 <p>\[
 \begin{align}
-\frac{d}{dx} \cos(x) &amp;= \lim_{h \to 0} \frac{\cos(x + h) - \cos(x)}{h}
+    \frac{d}{dx} \cos(x) &amp;= \lim_{h \to 0} \frac{\cos(x + h) - \cos(x)}{h}
 \end{align}
 \]</p>
 
 <p>\[
 \begin{align}
-                     &amp;= \lim_{h \to 0} \frac{\cos(x)\cos(h) - \sin(x)\sin(h) - \cos(x)}{h}
+     &amp;= \lim_{h \to 0} \frac{\cos(x)\cos(h) - \sin(x)\sin(h) - \cos(x)}{h}
 \end{align}
 \]</p>
 
 <p>\[
 \begin{align}
-                     &amp;= \lim_{h \to 0} \frac{\cos(x) - \sin(x) h - \cos(x)}{h}
+     &amp;= \lim_{h \to 0} \frac{\cos(x) - \sin(x) h - \cos(x)}{h}
 \end{align}
 \]</p>
 
 <p>\[
 \begin{align}
-                     &amp;= \lim_{h \to 0} \frac{-\sin(x) h}{h}
+     &amp;= \lim_{h \to 0} \frac{-\sin(x) h}{h}
 \end{align}
 \]</p>
 
 <p>\[
 \begin{align}
-                     &amp;= -\sin(x)
+         &amp;= -\sin(x)
 \end{align}
 \]</p>
 
-<p>Once we know these first derivatives, computing higher derivates is straight forward.
-For example, the second derivatives are:</p>
+<p>Once we know these first derivatives, computing higher derivates is
+straightforward. For example, the second derivatives are:</p>
 
 <p>\[
-\frac{d^2}{dx^2} \sin(x) = \frac{d}{dx} \cos(x) = -\sin(x)
+    \frac{d^2}{dx^2} \sin(x) = \frac{d}{dx} \cos(x) = -\sin(x)
 \]</p>
 
 <p>\[
-\frac{d^2}{dx^2} \cos(x) = \frac{d}{dx} -\sin(x) = -\cos(x)
+    \frac{d^2}{dx^2} \cos(x) = \frac{d}{dx} -\sin(x) = -\cos(x)
 \]</p>
 
-<p>With just these second derivatives, we can already motivate the initial value problem ODE
-definition of sine and cosine.</p>
+<p>With just these second derivatives, we can already motivate the initial value
+problem ODE definition of sine and cosine.</p>
 
-<p>It&rsquo;s equally obvious that we can continue the process indefinitely, alternating between
-sine and cosine. Since we know $\sin(0) = 0$ and $\cos(0) = 1$, we can evaluate all derivatives
-of sine and cosine at zero, allowing us to calculate the Maclaurin series. This gives us
-the series form.</p>
+<p>It&rsquo;s equally obvious that we can continue the process indefinitely, alternating
+between sine and cosine. Since we know $\sin(0) = 0$ and $\cos(0) = 1$, we can
+evaluate all derivatives of sine and cosine at zero, allowing us to calculate
+the Maclaurin series. This gives us the series form.</p>
 
 <h2 id="arc-length">Arc Length</h2>
 
