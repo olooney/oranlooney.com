@@ -157,7 +157,7 @@ straight line and drawing a perpendicular line through the point $B$. This
 gives us the triangle BCE. Since $\overline{BE}$ is perpendicular to
 $\overline{EC}$ it is in fact a right triangle.
 
-Now, the line $\overline{EC}$ is perpendicular to $\overline{AB}$, and the line
+Now, the line $\overline{EC}$ is perpendicular to $\overline{AD}$, and the line
 $\overline{BC}$ is perpendicular is $\overline{AC}$, so the angle $\angle BCE$
 is the same as the angle $\angle CAD$ which we called $\alpha$. 
 
