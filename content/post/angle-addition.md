@@ -256,8 +256,8 @@ which we can handle with the formulas.
 \\]
 
 By considering a triangle with hypotenuse 1 and a very small "opposite" side,
-it's not hard to see geometrically that $\sin(x) \approx x$ and $\cos(h) = x$
-when x is small, so we have:
+it's not hard to see geometrically that $\sin(h) \approx h$ and $\cos(h) \approx 1$
+when $h$ is close to zero. Therefore we have:
 
 \\[
 \begin{align}
