@@ -60,6 +60,11 @@ html .article .article-meta {
 	margin-bottom: 10px;
 }
 
+.article-meta li.article-meta-author {
+  padding: 0;
+  padding-right: 20px;
+}
+
 html .article .section {
   overflow-x: hidden;
 }

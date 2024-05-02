@@ -272,8 +272,8 @@ Collisions
 
 There are two main mechanisms for collisions:
 
-1) Digit Sorting
-2) Diagonal Neighbors
+1. Digit Sorting
+2. Diagonal Neighbors
 
 There are also many "random" collisions on the first iteration. However, after
 the first iteration, *every* collision is explained by one of those two
