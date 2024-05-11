@@ -46,14 +46,14 @@ play around with hobby-level cryptography.
 The Playfair Cipher
 -------------------
 
-The cipher in question is called the [Playfair cipher][PC]. As you can infer
-from its name, it was invented by Charles Wheatstone in 1854; Playfair merely
-popularized it. (Lest you think Wheatstone was cheated out of credit, rest
-assured that he received due fame for the [Wheatstone bridge][WB], which was
-invented by Samuel Hunter Christie.)
+The cipher in question is called the [Playfair cipher][PC]. In accordance with
+[Stigler's law of eponymy][SLE], it was invented by Charles Wheatstone in 1854.
+(Playfair merely popularized it.) Lest you think Wheatstone was cheated out of
+credit, rest assured that he received due credit for the [Wheatstone bridge][WB],
+which was invented by Samuel Hunter Christie.
 
 [PC]: https://en.wikipedia.org/wiki/Playfair_cipher
-
+[SLE]: https://en.wikipedia.org/wiki/Stigler%27s_law_of_eponymy
 [WB]: https://en.wikipedia.org/wiki/Wheatstone_bridge
 
 The Playfair cipher is designed to be done on paper, so places a great

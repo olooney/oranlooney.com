@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeopardy! Benchmark - OranLooney.com</title>
+  <meta property="og:title" content="Jeopardy! Benchmark - OranLooney.com" />
+  <meta name="twitter:title" content="Jeopardy! Benchmark - OranLooney.com" />
+  <meta name="description" content="I used the Kaggle Jeopardy! to benchmark OpenAI and LLama3 models including some fine-tuning and RAG. In accordance with the principle of BLUF (bottom-line-up-front,) here are my results:
+There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this article. Some rando on the internet used the Jeopardy! dataset to benchmark a scattered handful of LLM models and approaches, and those results largely match popular benchmarks and received wisdom on fine-tuning and RAG.">
+  <meta property="og:description" content="I used the Kaggle Jeopardy! to benchmark OpenAI and LLama3 models including some fine-tuning and RAG. In accordance with the principle of BLUF (bottom-line-up-front,) here are my results:
+There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this article. Some rando on the internet used the Jeopardy! dataset to benchmark a scattered handful of LLM models and approaches, and those results largely match popular benchmarks and received wisdom on fine-tuning and RAG.">
+  <meta name="twitter:description" content="I used the Kaggle Jeopardy! to benchmark OpenAI and LLama3 models including some fine-tuning and RAG. In accordance with the principle of BLUF (bottom-line-up-front,) here are my results:
+There you …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
+ 
+</head>
+
+<body>
+<header class="site-header">
+  <nav class="site-navi">
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item">
+        <a href="/search/" title="Site Search"><i class="fa fa-search"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/tags/" title="Article Tags"><i class="fa fa-tag"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/archives/" title="Article Archives"><i class="fa fa-archive"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/quotes/" title="Favorite Quotes"><i class="fas fa-quote-right"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/about/" title="About Me"><i class="fa fa-info-circle"></i></a>
+      </li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="//honeycode.tumblr.com/" target="_blank" title="Honeycode Microblog">
+      <svg class="svg-inline--fa fa-w-12" aria-hidden="true" data-prefix="fab" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="20 50 350 450" data-fa-i2svg="">
+<path fill="currentColor" d="M193 97l86.6 50v100l-86.6 50l-86.6 -50v-100zM285 255l86.6 50v100l-86.6 50l-86.6 -50v-100zM100 255l86.6 50v100l-86.6 50l-86.6 -50v-100z"></path>
+</svg>
+    </a></li>
+    <li><a href="//linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+
+    <li>
+      <a href="https://www.librarything.com/catalog.php?view=olooney&amp;offset=0&amp;shelf_rows=10&amp;previousOffset=0&amp;shelf=shelf" target="_blank" title="LibraryThing">
+	    <i class="fas fa-book-reader"></i>
+	  </a>
+	</li>
+    
+  </ul>
+
+  </nav>
+</header>
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/jeopardy_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">Jeopardy! Benchmark</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-author">
+            by <a href="/about/">Oran Looney</a>
+        </li>
+        <li class="article-meta-date"><time>May 11, 2024</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/machine-learning/">
+            <i class="fas fa-tag"></i>
+            Machine Learning
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/llm/">
+            <i class="fas fa-tag"></i>
+            LLM
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#inference">Inference</a></li>
+<li><a href="#conclusions">Conclusions</a>
+<ul>
+<li><a href="#fine-tuning">Fine-Tuning</a></li>
+<li><a href="#rag">RAG</a></li>
+<li><a href="#llama3">Llama3</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>I used the <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">Kaggle Jeopardy!</a> to benchmark OpenAI and LLama3 models including some fine-tuning and RAG.
+In accordance with the principle of BLUF (bottom-line-up-front,) here are my results:</p>
+
+<p><img src="/post/jeopardy_files/benchmark7.png"></p>
+
+<p>There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this article.
+Some rando on the internet used the Jeopardy! dataset to benchmark a scattered handful of LLM models and approaches,
+and those results largely match <a href="https://artificialanalysis.ai/">popular benchmarks</a> and received wisdom on fine-tuning and RAG.</p>
+
+<h2 id="about">About</h2>
+
+<p>A couple of years ago, I found <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">this neat dataset of Jeopardy! questions</a>
+on Kaggle.  It&rsquo;s 200,000+ question/answer pairs, plus the category (column) and
+value (row) of the question.  (Just to be clear, this dataset follows the
+convention that the &ldquo;question&rdquo; is the prompt that Alex reads, and the &ldquo;answer&rdquo;
+is what the contestant should respond with&hellip; in the form a question, of
+course.) I never really did anything with it, but recently I dusted and off
+and threw some LLMs at it.</p>
+
+<p>In 2011, Watson playing Jeopardy was a major achievement. In 2024, it&rsquo;s a
+weekend project.</p>
+
+<p>The Jeopardy! dataset has a number of features with make it ideal grist for
+the LLM and vector embedding mill:</p>
+
+<ol>
+<li>Free text data.</li>
+<li>Comes in handy prompt/response pairs.</li>
+<li>Exercises knowledge, wordplay, and some inference.</li>
+<li>Questions are quite short, so no chunking is necessary.</li>
+<li>Mix of easy and hard questions.</li>
+<li>Medium difficulty overall, making it suitable for benchmarking.</li>
+</ol>
+
+<p>There&rsquo;s also one undeniable advantage to rolling your own benchmark,
+no matter how half-baked: you can be sure that implementors are gaming
+the metrics by &ldquo;teaching to the test&rdquo; and including benchmark data
+in the pre-training or fine tuning of their model. It&rsquo;s widely suspected
+that many popular benchmarks are at least a little poisoned in this way.</p>
+
+<p>My goals:</p>
+
+<ol>
+<li>Have my own point-of-view on Llama3 vs. ChatGPT.</li>
+<li>Prove that fine-tuning actually works.</li>
+<li>Prove that RAG actually works.</li>
+</ol>
+
+<h2 id="inference">Inference</h2>
+
+<p>No API is 100% reliable. OpenAI has been pretty unreliable over the past year, but in all
+fairness was pretty solid for this project. The AWS Bedrock API is less mature and
+experienced many random failures during this project.</p>
+
+<pre><code># reusable decorator to implement basic retry logic. We make up to three
+# attempts with exponential backoff. 
+retry_decorator = tenacity.retry(
+    wait=tenacity.wait_exponential(min=0.1, max=2),
+    stop=tenacity.stop_after_attempt(3), # because 4 is too many and 2 isn't enough.
+    after=tenacity.after_log(logger, logging.ERROR),
+    reraise=True)
+</code></pre>
+
+<p>Mini rant: a lot of Python programmers seem to think you have copy-paste decorator config for every
+single function, but that&rsquo;s not the case. The expression after the <code>@</code> symbol just
+needs to evaluate to an object which implements the implicit decorator interface - it
+must be a callable that accepts a function and returns a function. That&rsquo;s it. That
+means we can configure a decorator once, save it as a global variable, then reuse it
+as often as we like. DRY! End rant.</p>
+
+<p>Speaking of DRY, we&rsquo;ll centralize a few other things that will be constant across all contestants,
+namely the prompt template and system messages:</p>
+
+<pre><code>jeopardy_question_template = '''
+CATEGORY: {category}
+{clue}
+'''
+
+system_messages = [
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a contestant on Jeopardy. Each prompt has both the category (column header) and Jeopardy clue; answer in the form of a question.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;CATEGORY: THE BIG APPLE\nThere's an annual footrace up its 86 flights of stairs&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;What is the Empire State Building?&quot;}
+]
+</code></pre>
+
+<p>I say &ldquo;system_messages&rdquo;, but it also includes one example of a correct question/answer pair. Every LLM will
+use the exact same prompts so that we have a level playing field for our benchmark.</p>
+
+<p>A typical contestant looks like this:</p>
+
+<pre><code>@retry_decorator
+def ken(category: str, clue: str) -&gt; str:
+    '''PlayerAgent for GPT-4. Calls OpenAI.'''
+
+    prompt = jeopardy_question_template.format(**locals())
+    chat_response = client.chat.completions.create(
+        model=&quot;gpt-4-turbo&quot;,
+        messages=system_messages + [
+            {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}
+        ]
+    )
+    content = chat_response.choices[0].message.content
+    return content
+</code></pre>
+
+<p>Most contestants look very similar to this with variations like using a different model name, swapping <code>client.chat</code> for <code>ollama.chat</code>,
+doing a little formatting for Llama3, etc. The one contestant that&rsquo;s slightly more complicated is our RAG agent:</p>
+
+<pre><code>@retry_decorator
+def mattea(category: str, clue: str) -&gt; str:
+    '''PlayerAgent implementing the RAG pattern. It only knows the
+    exact answers to questions from before 2011-01-01. It uses llama3:8b,
+    a fast but fairly dumb model, so we can see the bump from RAG clearly.
+    '''
+    # find similar past questions 
+    rag_query = f'CATEGORY: {category}\n{clue}'
+    embeddings_old, jeopardy_old = old_jeopardy()
+    augment_data = brute_force_search(embeddings_old, jeopardy_old, query=rag_query, k=10)
+    augment_json = json.dumps(augment_data)
+
+    # augment the prompt with retrieved questions
+    prompt = jeopardy_question_template.format(**locals())
+
+    # this looks cheesy, but other attempts to embed the RAG context
+    # resulted in Llama3 being confused about which question's were historical
+    # and which was actually being asked. This prompt fixed that.
+    messages = system_messages + [
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: f&quot;Correct! By the way, here are three historical questions that may help you answer future questions: {augment_json}&quot;},
+        {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Thank you, I'll be sure to refer back to those if they help with a question in the future!&quot;},
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}
+    ]
+
+    # use a small, fast model for generation
+    response = ollama.chat(
+        model='llama3:8b',
+        messages=messages
+    )
+    content = response['message']['content']
+    return content
+</code></pre>
+
+<p>TODO: Justify prompt engineering for RAG content.</p>
+
+<p>TODO: OpenAI and local ollama.</p>
+
+<p>Sadly, my RTX 4070 Ti &ldquo;only&rdquo; has 12 GB of VRAM, so it can&rsquo;t run the 70b model. (Works great for games though!
+You should see it run Cyberpunk 2077.) Instead, we&rsquo;ll use AWS Bedrock for inference, since they just
+recently added the Llama3 models. This in itself introduces a slight wrinkle - the boto3 Bedrock API
+is model agnostic and accepts a single &ldquo;prompt&rdquo; string instead of a list of messages. You have to format
+the chat history yourself, and this format is different for different models (and even different between
+llama2 and llama3.) Luckily the format is <a href="https://llama.meta.com/docs/model-cards-and-prompt-formats/meta-llama-3/">simple and well-documented</a> and we can implement it like so:</p>
+
+<pre><code>def format_llama3_prompt(messages: List[dict]) -&gt; str:
+    '''AWS Bedrock accepts only a single string in raw format; we need to format
+    messages using their special tags. Llama3 uses a different format from llama2.
+    '''
+    prompt = '&lt;|begin_of_text|&gt;'
+    for message in messages:
+        role = message['role']
+        content = message['content']
+        assert role in ['system', 'user', 'assistant']
+        prompt += f'&lt;|start_header_id|&gt;{role}&lt;|end_header_id|&gt;{content}&lt;|eot_id|&gt;'
+    prompt += '&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;'
+    return prompt
+</code></pre>
+
+<p>Libraries like <a href="https://github.com/BerriAI/litellm">liteLLM</a> offer these kind of compatability layers out of the box but this suffices
+to get us unblocked for this project.</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Service</th>
+<th align="left">Provider</th>
+<th align="left">Library</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">gpt-4-turbo</td>
+<td align="left">OpenAI</td>
+<td align="left">openai</td>
+</tr>
+
+<tr>
+<td align="left">gpt-3.5-turbo</td>
+<td align="left">OpenAI</td>
+<td align="left">openai</td>
+</tr>
+
+<tr>
+<td align="left">text-embedding-ada-002</td>
+<td align="left">OpenAI</td>
+<td align="left">openai</td>
+</tr>
+
+<tr>
+<td align="left">llama3:70b</td>
+<td align="left">AWS Bedrock</td>
+<td align="left">boto3</td>
+</tr>
+
+<tr>
+<td align="left">llama3:8b</td>
+<td align="left">Local</td>
+<td align="left">ollama</td>
+</tr>
+
+<tr>
+<td align="left">llama2:7b</td>
+<td align="left">Local</td>
+<td align="left">ollama</td>
+</tr>
+
+<tr>
+<td align="left">vector database</td>
+<td align="left">Local</td>
+<td align="left">faiss</td>
+</tr>
+</tbody>
+</table>
+
+<p>TODO: Error analysis, Alex&rsquo;s commentary
+TODO: indexing vector databases
+TODO: brute force vs. HNSW</p>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<table>
+<thead>
+<tr>
+<th align="left">Contestant</th>
+<th align="left">Model</th>
+<th align="right">Successes</th>
+<th align="right">Failures</th>
+<th align="right">Sample Size</th>
+<th align="right">Success Rate</th>
+<th align="right">95% CI</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">Ken Jennings</td>
+<td align="left">gpt-4-turbo</td>
+<td align="right">1,924</td>
+<td align="right">76</td>
+<td align="right">2,000</td>
+<td align="right">96.20%</td>
+<td align="right">±0.84%</td>
+</tr>
+
+<tr>
+<td align="left">Amy Schneider</td>
+<td align="left">gpt-3.5-fine-tuned</td>
+<td align="right">1,856</td>
+<td align="right">144</td>
+<td align="right">2,000</td>
+<td align="right">92.80%</td>
+<td align="right">±1.13%</td>
+</tr>
+
+<tr>
+<td align="left">James Holzhauer</td>
+<td align="left">gpt-3.5-turbo</td>
+<td align="right">1,791</td>
+<td align="right">209</td>
+<td align="right">2,000</td>
+<td align="right">89.55%</td>
+<td align="right">±1.34%</td>
+</tr>
+
+<tr>
+<td align="left">Brad Rutter</td>
+<td align="left">llama3:70b</td>
+<td align="right">1,790</td>
+<td align="right">210</td>
+<td align="right">2,000</td>
+<td align="right">89.50%</td>
+<td align="right">±1.34%</td>
+</tr>
+
+<tr>
+<td align="left">Mattea Roach</td>
+<td align="left">llama3:8b + RAG</td>
+<td align="right">1,748</td>
+<td align="right">252</td>
+<td align="right">2,000</td>
+<td align="right">87.40%</td>
+<td align="right">±1.46%</td>
+</tr>
+
+<tr>
+<td align="left">Larissa Kelly</td>
+<td align="left">llama3:8b</td>
+<td align="right">1,257</td>
+<td align="right">743</td>
+<td align="right">2,000</td>
+<td align="right">62.85%</td>
+<td align="right">±2.12%</td>
+</tr>
+
+<tr>
+<td align="left">David Madden</td>
+<td align="left">llama2:7b</td>
+<td align="right">1,196</td>
+<td align="right">804</td>
+<td align="right">2,000</td>
+<td align="right">59.80%</td>
+<td align="right">±2.15%</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="fine-tuning">Fine-Tuning</h3>
+
+<p>Fining tuning works, but it&rsquo;s a &ldquo;you get what you pay for&rdquo; kind of deal. OpenAI&rsquo;s rates for fine-tuned
+models are midway between GPT-4 and GPT-3.5, but so is performance. Then there&rsquo;s the headache of curating
+and maintaining a fine-tuning dataset&hellip; unless you actually beat a GPT-4 model with your fine-tuned GPT-3.5
+model (which is going to be very use case dependent) its a lot of complexity for a very marginal cost savings.
+It didn&rsquo;t work for the Jeopardy! dataset, but maybe it&rsquo;ll work for yours.</p>
+
+<p>Of course, when OpenAI finally starts offering fine-tuning of GPT-4 models, fine-tuning may allow us to unlock a
+whole new level of performance, but that&rsquo;s future state. Right now it&rsquo;s very situational.</p>
+
+<p>One thing that suprised me about the fine-tuning is that the performance gain all came from the first few
+hundred records. The training loss curves flattened out pretty quickly and there wasn&rsquo;t any benefit from
+fine tuning on a larger 10k dataset. That means we&rsquo;re not teaching the model the answers to specific trivia
+questions, <em>we&rsquo;re teaching it how to be a Jeopardy! contestant.</em> That&rsquo;s also why the performance bump generalizes
+to novel data - it&rsquo;s not about memorization. That tells us that fine-tuning is the tool we should reach for to <em>steer</em>
+our models:  to improve compliance or to stay on task. It&rsquo;s not a good way to teach them a lot of new information.</p>
+
+<h3 id="rag">RAG</h3>
+
+<p>RAG gives us a whopping <em>24 percentage points</em> over the baseline model, and gets us within spitting
+distance of the Llama3 70 billion parameter model while still allowing us to run a fast, cheap, (possibly even local)
+LLM. The overhead of RAG itself is fairly minimal. There is an added 0.2 - 0.3 second latency for hitting OpenAI
+embeddings API, which eats into the performance gains of running a smaller model. (Latency is the only real downside: cost is very low and throughput
+won&rsquo;t be affected.) Vector databases are pretty inexpensive to index and query so unless your operating at
+Wikipedia scale the costs will be pretty nominal.</p>
+
+<p>Of course, you don&rsquo;t have to use RAG with a small model; you could pair it with GPT-4 or other SOTA if you&rsquo;re focused on quality over throughput, latency, or cost.
+Unlike fine-tuning, RAG doesn&rsquo;t lock you into a particular LLM choice. I see why there&rsquo;s a lot of hype around it;
+it&rsquo;s cheap, it&rsquo;s fast, it scales well, it&rsquo;s easy to implement (you don&rsquo;t have to hand-currate training examples but just chunk whatever useful documents are lying around)
+and it works.</p>
+
+<h3 id="llama3">Llama3</h3>
+
+<p>Llama3 is fine.</p>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/angle-addition/" data-toggle="tooltip" data-placement="top" title="Stacking Triangles for Fun and Profit">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">
+	  &copy; Copyright 2024 Oran Looney
+  </div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  },
+  TeX: { extensions: ["color.js"] }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>
