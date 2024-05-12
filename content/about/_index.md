@@ -9,26 +9,30 @@ train are roughly the same complexity as the [*C. elegans*][N] [connectome][CEC]
 Sadly, this is not yet a recognized specialty within the broader field of
 machine learning.
 
-I hold master's degrees in physics and math and have worked in healthcare doing
-software development and data science for two decades.  These days I'm
-professionally interested in Python, R, machine learning, applied statistics,
-data visualization, and healthcare data management.
+I hold master's degrees in physics and math and have worked in the healthcare
+sector doing software development and data science for two decades.  These days
+I'm professionally interested in machine learning, applied statistics, data
+visualization, software architecture, and healthcare informatics.
 
 I am currently employed but open to new opportunities. If you'd like to hire
 me, please review my resume ([Word][RWORD], [PDF][RPDF]) and get in touch.
 The best way to contact me is through email at <a href="mailto:olooney@gmail.com">olooney@gmail.com</a>
 or to message me on <a href="https://www.linkedin.com/in/oran-looney/" target="_blank">LinkedIn</a>.
 
-Outside of work, I like puzzles: programming challenges such as [Advent of
-Code][1] or [leetcode][2]; traditional puzzles like [the Moscow puzzles][3];
-puzzle games like [euclidea][4] or the [Professor Layton][5] games. I've also
-been thrilled by the recent wave of recreational mathematics and other
-educational content on Youtube and elsewhere: [3Blue1Brown][6], [Ben Eater][7],
-[Mathologer][10], [Numberphile][NP], [Veritasium][14], or [Dr.Peyam][12].  I
-think this new wave of math and science popularizers are doing great work and I
-encourage you to check them out and support them if you can.  Or if you're just
-feeling charitable in general, consider supporting [Wikipedia][8] or [helping
-hungry children in Wisconsin][9].
+Outside of work, I like recreational mathematics, programming challenges such
+as [Advent of Code][1] or [leetcode][2], and puzzle games like [Professor
+Layton][5] or [Baba Is You][BIY]. I maintain a repository of [quotes][Q] and
+[poems][P] containing pithy wit and wisdom for programming and science. As for
+my other amateur interests, well, I can only refer you to all the [topics][T]
+covered on this site.
+
+I've also been thrilled by the recent wave of recreational mathematics and
+other educational content on Youtube and elsewhere: [3Blue1Brown][6], [Ben
+Eater][7], [Mathologer][10], [Numberphile][NP], [Veritasium][14], or
+[Dr.Peyam][12].  I think this new wave of math and science popularizers are
+doing great work and I encourage you to check them out and support them if you
+can.  Or if you're just feeling charitable in general, consider supporting
+[Wikipedia][8] or [helping hungry children in Wisconsin][9].
 
 This site was built with [blogdown][15], an R package that combines
 [Pandoc][16] with the static site generator [Hugo][17]. It makes extensive use
@@ -69,3 +73,7 @@ licenses. For HTTPS, it uses a free SSL cert from [Let's Encrypt][23].
 
 [RWORD]: /docs/Oran-Looney-Data-Scientist-Resume-Online.docx 
 [RPDF]: /docs/Oran-Looney-Data-Scientist-Resume-Online.pdf
+[Q]: /quotes/
+[P]: https://www.oranlooney.com/quotes/#poems
+[T]: /tags/
+[BIY]: https://en.wikipedia.org/wiki/Baba_Is_You

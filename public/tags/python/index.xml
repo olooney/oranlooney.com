@@ -7,19 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Sat, 11 May 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 May 2024 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Jeopardy! Benchmark</title>
+      <title>Let&#39;s Play Jeopardy! with LLMs</title>
       <link>https://www.oranlooney.com/post/jeopardy/</link>
-      <pubDate>Sat, 11 May 2024 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 12 May 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/jeopardy/</guid>
-      <description>I used the Kaggle Jeopardy! to benchmark OpenAI and LLama3 models including some fine-tuning and RAG. In accordance with the principle of BLUF (bottom-line-up-front,) here are my results:
-There you go. You&amp;rsquo;ve already gotten 90% of what you&amp;rsquo;re going to get out of this article. Some rando on the internet used the Jeopardy! dataset to benchmark a scattered handful of LLM models and approaches, and those results largely match popular benchmarks and received wisdom on fine-tuning and RAG.</description>
+      <description>How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new LLama3 models. Here are the results:
+There you go. You&amp;rsquo;ve already gotten 90% of what you&amp;rsquo;re going to get out of this article. Some guy on the internet ran a half-baked benchmark on a scattered handful of LLM models and approaches, and those results are largely in line with popular benchmarks and received wisdom on fine-tuning and RAG.</description>
     </item>
     
     <item>
