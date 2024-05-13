@@ -18,8 +18,8 @@
       <pubDate>Sun, 12 May 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/jeopardy/</guid>
-      <description>How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new LLama3 models. Here are the results:
-There you go. You&amp;rsquo;ve already gotten 90% of what you&amp;rsquo;re going to get out of this article. Some guy on the internet ran a half-baked benchmark on a scattered handful of LLM models and approaches, and those results are largely in line with popular benchmarks and received wisdom on fine-tuning and RAG.</description>
+      <description>How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new Llama 3 models. Here are the results:
+There you go. You&amp;rsquo;ve already gotten 90% of what you&amp;rsquo;re going to get out of this article. Some guy on the internet ran a half-baked benchmark on a handful of LLM models, and the results were largely in line with popular benchmarks and received wisdom on fine-tuning and RAG.</description>
     </item>
     
     <item>
