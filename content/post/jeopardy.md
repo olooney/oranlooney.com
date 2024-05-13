@@ -24,18 +24,30 @@ handful of LLM models and approaches, and those results are largely in line with
 Still, the process was interesting, so I'm going to talk about it. At length.
 You've been warned.
 
-All [code][JPT] for this article is available on Github.
+All [code][JPT] for this article is available on GitHub.
+
+
+Goals:
+
+1. Have my own point-of-view on Llama3 vs. ChatGPT. 
+2. Demonstrate fine-tuning has a measurable benefit.
+3. Demonstrate RAG has a measurable benefit.
+4. Have fun and pay homage to Jeopardy!, the greatest trivia show of all time.
 
 
 The Dataset
 -----------
 
 A couple of years ago, I found [this fantastic dataset of Jeopardy!
-questions][JKD] on Kaggle.  It's 200,000+ question/answer pairs, plus the
-category (column) and value (row) of the question.  (Just to be clear, this
-dataset follows the convention that the "question" is the prompt that Alex
-reads, and the "answer" is what the contestant should respond with... in the
-form a question, of course.) Here is a sample:
+questions][JKD] on Kaggle.  I never really did much with it, but recently I
+dusted and off and threw some LLMs at it.  In 2011, Watson playing Jeopardy!
+was a major achievement. In 2024, it's a weekend project.
+
+It's 200,000+ question/answer pairs, plus the category (column) and value (row)
+of the question.  (Just to be clear, this dataset follows the convention that
+the "question" is the prompt that Alex reads, and the "answer" is what the
+contestant should respond with... in the form a question, of course.) Here is a
+sample:
 
 <style>
 
@@ -61,7 +73,6 @@ form a question, of course.) Here is a sample:
     }
 </style>
 
-
 | category                  | air_date   | question                                                                                              |   value | answer                   | round            |   show_number |
 |:--------------------------|:-----------|:------------------------------------------------------------------------------------------------------|--------:|:-------------------------|:-----------------|--------------:|
 | THE GOOD BOOK             | <span class="nowrap">2006-05-22</span> | 'Jeremiah asks, "Is there no balm in" this land?'                         |     400 | Gilead                   | Jeopardy!        |          5006 |
@@ -69,13 +80,6 @@ form a question, of course.) Here is a sample:
 | NUMBER OF LEGS ON...      | <span class="nowrap">2004-03-04</span> | 'A muskellunge'                                                           |    1600 | 0                        | Double Jeopardy! |          4494 |
 | PALINDROMIC WORDS         | <span class="nowrap">2007-12-06</span> | 'It's "the word" when keeping silent'                                     |     400 | mum                      | Jeopardy!        |          5349 |
 | "WA"?                     | <span class="nowrap">2010-05-11</span> | 'This principality united with Moldavia to form Romania'                  |    1600 | Wallachia                | Double Jeopardy! |          5917 |
-
-
-I never really did anything with it, but recently I dusted and off
-and threw some LLMs at it.
-
-In 2011, Watson playing Jeopardy was a major achievement. In 2024, it's a
-weekend project.
 
 The Jeopardy! dataset has a number of features with make it ideal grist for
 the LLM and vector embedding mill:
@@ -87,31 +91,25 @@ the LLM and vector embedding mill:
 5. Mix of easy and hard questions.
 6. Medium difficulty overall, making it suitable for benchmarking.
 
-There's also one undeniable advantage to rolling your own benchmark,
-no matter how half-baked: you can be sure that implementors are gaming
-the metrics by "teaching to the test" and including benchmark data
-in the pre-training or fine tuning of their model. It's widely suspected
-that many popular benchmarks are at least a little poisoned in this way.
-
-My goals:
-
-1. Have my own point-of-view on Llama3 vs. ChatGPT. 
-2. Prove that fine-tuning actually works.
-3. Prove that RAG actually works.
+There's also one undeniable advantage to rolling your own benchmark, no matter
+how half-baked: you can be sure that implementers are gaming the metrics by
+"teaching to the test" and including benchmark data in the pre-training or fine
+tuning of their model. It's widely suspected that many popular benchmarks are
+at least a little poisoned in this way.
 
 If you plan to use the Jeopardy! dataset yourself, there are two "gotchas" that
 you should be aware of:
 
 1. The "value" column is a currency field with a leading `$` and
-   thousand-separators, although this is currently incosistent. 
+   thousand-separators, although this is currently inconsistent. 
 2. Some questions use audio or visual cues that are represented in the dataset
    as links to external resources. These questions are unfair to the LLMs
    because the clue as given doesn't contain enough information to narrow it
    down to a unique answer. However, even if you remove those, over 200,000
    "fair" questions remain.
 
-The function `jpt.load_jeopardy_dataset()` shows how to handle these minor DQA
-issues.
+The functions `clean_currency()` and `jpt.load_jeopardy_dataset()` shows how to
+handle these minor data quality issues.
    
 
 Inference
@@ -177,7 +175,30 @@ I say `"system_messages"`, but it also includes one example of a correct
 question/answer pair. Every LLM will use the exact same prompts so that we have
 a level playing field for our benchmark.
 
-A typical contestant looks like this:
+
+Inference
+---------
+
+To keep things simple, we will model our agents as simple Python functions.
+For contestants, the function signature should look like this:
+
+    PlayerAgent = Callable[[str, str], str]
+
+Here's a dummy implementation of a `PlayerAgent`:
+
+    # example:
+    def contestant(category: str, clue: str) -> str:
+        answer = 42
+        return f"What is {answer}?"
+
+Now let's build a real contestant. Our champion we'll name after Ken Jennings,
+perhaps the greatest Jeopardy! player of all time. Ken will use GPT-4, which
+is similarly the best-of-the-best when it comes to LLM agents. 
+
+To smooth over the occasional API hiccup, we'll use the `retry_decorator` from
+above, which doesn't change the function signature. Then its simply a matter of
+formatting the parameters into a prompt (using the above template,) sticking on
+the shared system messages (so it understands the task,) and hitting the API.
 
     @retry_decorator
     def ken(category: str, clue: str) -> str:
@@ -193,10 +214,10 @@ A typical contestant looks like this:
         content = chat_response.choices[0].message.content
         return content
 
-Most contestants look very similar to this with variations like using a
-different model name, swapping `client.chat` for `ollama.chat`, doing a little
-formatting for Llama3, etc. The one contestant that's slightly more complicated
-is our RAG agent:
+Most contestants will look very similar to this, just with minor variations
+like using a different model name, swapping `client.chat` for `ollama.chat`,
+doing a little formatting for Llama3, etc. The one contestant that's slightly
+more complicated is our RAG agent:
 
     @retry_decorator
     def mattea(category: str, clue: str) -> str:
@@ -235,8 +256,8 @@ is our RAG agent:
         content = response['message']['content']
         return content
 
-In Jeopardy!, the column category is often essential to keep in mind. It can
-provide an initial letter, a word length, a time period, or other essential
+In Jeopardy!, the category (column header on the board) is often essential. It
+can provide an initial letter, a word length, a time period, or other essential
 context without which the answer might be ambiguous. For that reason, we use it
 as part of the prompt template.
 
@@ -251,13 +272,9 @@ Arguably the dollar value should be included as well, since in theory knowing
 if the question is supposed to be easy or obscure could help with guessing, but
 this is tenuous and I haven't done so here.
 
-
 TODO: Justify prompt engineering for RAG content.
 
 TODO: OpenAI and local ollama.
-
-Inference
----------
 
 Sadly, my graphics card "only" has 12 GB of VRAM, so it can't run the 70b
 model. (Works great for games though!  You should see it run Cyberpunk 2077.)
@@ -282,9 +299,9 @@ implement it like so:
         prompt += '<|start_header_id|>assistant<|end_header_id|>'
         return prompt
 
-Libraries like [liteLLM][LL] offer these kind of compatability layers out of the
-box but these 9 lines of code suffices to get us unblocked for this project.
 
+All in all, we'll be using three different libraries for LLM inference for this
+benchmark, plus another for a local vector database:
 
 | Service                | Provider    |   Library  |
 |:-----------------------|:------------|:-----------|
@@ -296,9 +313,16 @@ box but these 9 lines of code suffices to get us unblocked for this project.
 | llama2:7b              | Local       | ollama     |
 | vector database        | Local       | faiss      |
 
+That definitely makes getting the environment set up a bit tricky, but this
+is necessary complexity for a benchmark that compares across model providers.
 
-Evaluation
-----------
+Libraries like [liteLLM][LL] offer a compatibility layers that provide a single
+API to call; that's definitely something to consider if you need to use several
+different LLMs in one project.
+
+
+Judging
+-------
 
 TODO
 
@@ -309,8 +333,26 @@ is a much simpler task actually answering it. However, there are many cases
 where the exact wording won't match, and an LLM can handle such cases pretty
 well while saving us the trouble of manually marking 14,000 rows of results.
 
-This being Jeopardy! we of course call our LLM judge agent Alex:
+Just as with players, we'll also model our judge agent as a simple Python 
+function:
 
+    HostAgent = Callable[[str, str, str, str], str]
+
+Stub `HostAgent`:
+
+    def host(
+        category: str, 
+        clue: str, 
+        correct_response: str, 
+        contestant_response: str
+    ) -> str:
+        factually_correct = (correct_response in contestant_response)
+        phrased_correctly = (contestant_response[-1] == '?')
+        correct = (factually_correct and phrased_correctly)
+
+        return 'Correct! if correct else 'Incorrect.'
+
+We will of course name our LLM judge agent after Alex Trebek:
 
     @retry_decorator
     def alex(
@@ -352,10 +394,10 @@ This being Jeopardy! we of course call our LLM judge agent Alex:
         content = chat_response.choices[0].message.content
         return content
 
-
-One thing I like is that the `alex()` agent often adds a little explanation when
-the answer is wrong or not an exact word match, or just to provide another
-little tidbit of trivia, just like the real Alex Trebek: 
+The prompt engineering cargo cult says telling an LLM they are a famous named
+person is often effective at eliciting high-quality responses. This seems to be
+the case here; the `alex()` agent often adds a little explanation or extra
+trivia tidbit, just like the real Alex Trebek: 
 
 
     Category: THE VEEP RIGHT BEFORE...
@@ -375,9 +417,8 @@ little tidbit of trivia, just like the real Alex Trebek:
                       is the second-largest city in Iraq, not Baghdad.
 
 I didn't explicitly ask it to do that in the prompt, so I'm not sure if its
-modelling what it knows about Alex Trebek and Jeopardy!, or if it's just a
-reflection of the fact that ChatGPT often "over-explains" its answers even when
-you don't want it to.
+role playing as Alex Trebek, or if it's just a reflection of the fact that
+ChatGPT often "over-explains" its answers even when you don't want it to.
 
 Here's an example of where the dataset is problematic:
 
@@ -406,7 +447,6 @@ likely a gun. However, it gets marked wrong anyway.
 Even worse, there's another row where a different contestant was asked the
 same question and gave the same response, but this time it was judged correct!
 
-
     Category: "WIN"
     Question: 'Seen here, Marie Barrow is holding this possession of her late 
                brother Clyde'
@@ -418,14 +458,146 @@ same question and gave the same response, but this time it was judged correct!
 
 So there is *also* some noise on Alex judging answers.  
 
-The above examples probably give the impression the whole thing is flawed, but I
-had to read through a *lot* of judgements to cherry pick those errors.  I didn't
-formally measure it but I estimate the error to be around 1%, capping the
-maximum possible score to be around 99%.  This means that the [Bayes error
-rate][BER] for the Jeopardy! dataset is just 100%.   This doesn't mean it's
+The above examples probably give the impression the whole thing is flawed, but
+I had to read through a *lot* of judgements to cherry pick those errors.  I
+didn't formally measure it but I estimate the error to be around 1%, capping
+the maximum possible score to be around 99%.  This means that the [Bayes error
+rate][BER] for the Jeopardy! dataset is just under 100%.  That doesn't make it
 useless for benchmarking - many popular benchmarks have a ton of errors, and as
 long as they're not too common it doesn't make much practical difference since
 all LLMs will be penalized in the same way.
+
+
+Agentic Workflows
+-----------------
+
+Now that we have a couple of agents, we can wire them together into what are
+called "agentic workflows." Since we modeled our agents as Python functions,
+this is straight-forward:
+<!--(Or as "easy as py," if you will. Man, I crack myself up.)-->
+
+    def jeopardy_dialogue(
+        question_data: dict,
+        contestant: PlayerAgent,
+        host: HostAgent = alex) -> Tuple[str, str]:
+        '''Handles one question/answer/judgement interaction between the host
+        and a contestant. The question is converted to a category and clue
+        and passed to the contestant, who answers. Then the original question,
+        the correct answer, and the contestant's given answer are passed to
+        the host for judgement. 
+        '''
+        q = question_data
+        question = q['question'].strip("'")
+        contestant_answer = contestant(q['category'], question)
+        judgement = alex(q['category'], question, q['answer'], contestant_answer)
+
+        return contestant_answer, judgement
+
+For the benchmark, all we need is a single, isolated question/answer/judgement
+instance, but it's probably not hard to imagine expanding this to a workflow
+that implements a proper game, with three contestants, score tracking, and
+so on. It's easy to imagine because you already know how to create loops,
+control flow, and error handling in Python.
+
+There are of course [libraries][LC] available that will help you make this
+*way* more complicated and opaque, but at the same time also more rigid, if
+that's your kind of thing.  This is apparently a good way for beginners to get
+started because as we all know, there's nothing more educational than calling a
+high-level interface that hides many of the underlying implementation details
+and replaces them with its own ersatz concepts. 
+
+Ahem. Getting back on track, we can then our benchmarking framework on top of
+that. First, ask a contestant a sample of questions and record the results:
+
+    def jeopardy_benchmark(contestant, dataset, sample_size=3) -> pd.DataFrame:
+        '''collects benchmark data for one contestant by choosing `n` random questions
+        from the dataset, putting the question to the contestant agent, and using the `alex()`
+        agent to determine correctness.
+        '''
+        jeopardy_sample = random.sample(dataset, sample_size)
+        
+        for question_data in jeopardy_sample:
+            contestant_answer, judgement = jeopardy_dialogue(
+                question_data=question_data, 
+                contestant=contestant)
+
+            question_data['contestant_answer'] = contestant_answer
+            question_data['judgement'] = judgement
+
+            # parse the host's free-text response to get a Boolean flag.
+            question_data['correct'] = judgement.lower().startswith('correct')
+            
+        
+        jeopardy_df = pd.DataFrame.from_records(jeopardy_sample)
+
+        return jeopardy_df
+
+Then do that for a list of contestants:
+
+    def jeopardy_benchmark_suite(
+        jeopardy_data: List,
+        contestants: List = None,
+        sample_size: int = 3,
+        seed: int = None) -> pd.DataFrame:
+        '''Runs the Jeopardy! benchmark for a number of contestants. All
+        contestants receive the exact same set of questions. Results
+        are returned in a single dataframe with contestants distinguished 
+        by the "label" column.
+        '''    
+        all_benchmark_results = []
+        if contestants is None:
+            contestants = [amy, ken, larissa, david, brad, james, mattea]
+
+        if seed is None:
+            seed = sample_size
+
+        with TemporarySeed(seed):
+            for contestant in contestants:
+                benchmark_results_df = jeopardy_benchmark(
+                    contestant,
+                    dataset=jeopardy_data,
+                    sample_size=sample_size)
+
+                benchmark_results_df.insert(0, 'label', contestant.__name__)
+                all_benchmark_results.append(benchmark_results_df)
+
+        all_benchmark_results_df = pd.concat(all_benchmark_results)
+        return all_benchmark_results_df
+
+Finally, collate the raw results down to a summary for each contestant:
+
+    def evaluate_jeopardy_benchmark(benchmark_results: pd.DataFrame, label=None) -> dict:
+        '''Evaluates the performance of a single contestant, i.e. computes
+        success rate and standard error.
+        '''
+        successes = benchmark_results['correct'].sum()
+        failures = (~benchmark_results['correct']).sum()
+        sample_size = successes + failures
+        
+        # Compute proportion and standard error
+        success_rate = successes / sample_size
+        safe_success_rate = (successes + 0.5) / (sample_size + 1)
+        se = math.sqrt(safe_success_rate * (1 - safe_success_rate) / sample_size)
+
+        # human readable error bars
+        margin_of_error = 1.96 * se
+        
+        return { 
+            "label": label,
+            "successes": successes,
+            "failures": failures,
+            "sample_size": sample_size,
+            "success_rate": success_rate,
+            "standard_error": se,
+        }
+
+This is obviously the data that was plotted on the bar chart at the top.  You
+can see the plotting code in `jpt.py` if you want; I'll omit it here as it uses
+`matplotlib` and is therefore quite unbelievably ugly. (I use `matplotlib`
+quite a bit and love its functionality, but *man* is it hard to get it to do what
+you want the instant you step off the happy path. My number one use of ChatGPT is
+generating boilerplate code `matplotlib` visualizations.)
+
 
 Fine Tuning
 -----------
@@ -442,7 +614,6 @@ that we take the opportunity to teach it that every response should be in the
 form of a question. (Many contestants such as [Matt Amodio][MA] invariably use
 the "What is X?" form instead wasting time thinking about the appropriate
 interrogative  and risk making a mistake, so we know this is a valid strategy.)
-
 
     def format_for_fine_tuning(
         category: str, 
@@ -469,29 +640,48 @@ interrogative  and risk making a mistake, so we know this is a valid strategy.)
         ]
         return { "messages": messages }
 
-TODO: link to training data sample.
+The function [`jpt.generate_fine_tuning_data()`][GFTD] runs this for a random sample
+of data and writes it to a file.  I've also included a sample of the resulting [JSONL file][JF].
 
+
+Fine tuning on 1,000 examples took about 30 minutes and cost about a dollar.
+Note also that inference is also much more expensive for a fine-tuned model
+than for baseline GPT-3.5 - most of the expense won't be the initial training
+but usage.
+
+<img src="/post/jeopardy_files/spend.png">
+
+Interestingly enough, most of the benefit of fine-tuning is achieved in the
+first ten minutes, and this is consistent with the fact that fine-tuning on 10k
+didn't improve performance over training on 1k. I'll talk more about why I
+think that is in the conclusion below.
 
 <img src="/post/jeopardy_files/training_loss_graph_10k.png">
 
+Calling the fine-tuned model is simply a matter of passing a new model ID to
+the API. We'll this wrap this in another standard `PlayerAgent` function. This
+one is named after Amy Schneider, who had a 40 game winning streak and would
+often go several games in a row without a single mistake:
 
-Fine tuning on 1,000 expa
-<img src="/post/jeopardy_files/spend.png">
-
-Calling the fine-tuned model is simply a matter of passing a new model ID to the API:
-
-    chat_response = client.chat.completions.create(
-        model="ft:gpt-3.5-turbo-1106:personal:jeopardy1k:9MJuormU",
-        messages=system_messages + [
-            {"role": "user", "content": prompt}
-        ]
-    )
+    @retry_decorator
+    def amy(category: str, clue: str) -> str:
+        '''PlayerAgent for a fine-tuned GPT-3.5-Turbo. Calls OpenAI.'''
+        
+        prompt = jeopardy_question_template.format(**locals())
+        chat_response = client.chat.completions.create(
+            model="ft:gpt-3.5-turbo-1106:personal:jeopardy1k:9MJuormU",
+            messages=system_messages + [
+                {"role": "user", "content": prompt}
+            ]
+        )
+        content = chat_response.choices[0].message.content
+        return content
 
 
 Vector Database
 ---------------
 
-    Total chunk size: 38 million character (roughly 10X the complete works of shakespeare)
+    Total chunk size: 38 million character (~10X the complete works of shakespeare)
 
     `jeopardy_chunks = [ jeopardy_chunk_template.format(**q) for q in jeopardy_data ]`
     jeopardy_database = create_embeddings_database(jeopardy_chunks)
@@ -500,7 +690,7 @@ Vector Database
     %%timeit
     generate_hnsw_index(jeopardy.embeddings, "temp.index")
     About 1 minute to create the FAISS HNSW Index.
-    It's about 1.3 GB on disk, basically the same as just storing the embedding vectors.
+    It's about 1.3 GB on disk, the same as just storing the embedding vectors.
     Same size in memory.
 
     about 0.6 seconds to load the index off disk
@@ -563,7 +753,6 @@ out its welcome. By that point, the HNSW algorithm (which scales as $O(\log n)$
 for search) is over a 100 times faster than brute force.
 
 
-
 TODO: discuss cross-validation and split date for benchmark.
 
 > If there was any basis to his firmly held belief that the rhythms and
@@ -606,7 +795,7 @@ Of course, when OpenAI finally starts offering fine-tuning of GPT-4 models,
 fine-tuning may allow us to unlock a whole new level of performance, but that's
 future state. Right now it's very situational.
 
-One thing that suprised me about the fine-tuning is that the performance gain
+One thing that surprised me about the fine-tuning is that the performance gain
 all came from the first few hundred records. The training loss curves flattened
 out pretty quickly and there wasn't any benefit from fine tuning on a larger 10k
 dataset. That means we're not teaching the model the answers to specific trivia
@@ -624,14 +813,14 @@ itself is fairly minimal. There is an added 0.2 - 0.3 second latency for hitting
 OpenAI embeddings API, which eats into the performance gains of running a
 smaller model. (Latency is the only real downside: cost is very low and
 throughput won't be affected.) Vector databases are pretty inexpensive to index
-and query so unless your operating at Wikipedia scale the costs will be pretty
+and query so unless you're operating at Wikipedia scale the costs will be pretty
 nominal. 
 
 Of course, you don't have to use RAG with a small model; you could pair it with
 GPT-4 or other SOTA if you're focused on quality over throughput, latency, or
 cost.  Unlike fine-tuning, RAG doesn't lock you into a particular LLM choice. I
 see why there's a lot of hype around it; it's cheap, it's fast, it scales well,
-it's easy to implement (you don't have to hand-currate training examples but
+it's easy to implement (you don't have to hand-curate training examples but
 just chunk whatever useful documents are lying around) and it works. 
 
 #### Llama3
@@ -649,4 +838,6 @@ Llama3 is fine. TODO
 [37]: https://www.youtube.com/watch?v=d6iQrh2TK98
 [JPT]: https://github.com/olooney/jpt
 [BER]: https://en.wikipedia.org/wiki/Bayes_error_rate
-
+[LC]: https://www.langchain.com/
+[JF]: https://github.com/olooney/jpt/blob/main/data/jeopardy_fine_tuning_sample_1000.jsonl
+[GFTD]: https://github.com/olooney/jpt/blob/main/jpt.py#L520
