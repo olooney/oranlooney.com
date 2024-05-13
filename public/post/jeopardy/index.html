@@ -100,16 +100,14 @@ There you go. You&rsquo;ve already gotten 90% of what …">
 <ul>
 <li>
 <ul>
-<li><a href="#about">About</a></li>
+<li><a href="#the-dataset">The Dataset</a></li>
 <li><a href="#inference">Inference</a></li>
 <li><a href="#prompt-engineering">Prompt Engineering</a></li>
+<li><a href="#inference-1">Inference</a></li>
+<li><a href="#evaluation">Evaluation</a></li>
 <li><a href="#fine-tuning">Fine Tuning</a></li>
 <li><a href="#vector-database">Vector Database</a></li>
-<li><a href="#conclusions">Conclusions</a></li>
-</ul></li>
-<li><a href="#todo-stat-sig">TODO: stat-sig.</a>
-<ul>
-<li>
+<li><a href="#conclusions">Conclusions</a>
 <ul>
 <li>
 <ul>
@@ -124,28 +122,29 @@ There you go. You&rsquo;ve already gotten 90% of what …">
 </aside>
       
 
-<p>How good are LLMs at trivia? I used the <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">Jeopardy! dataset</a> from Kaggle to benchmark
-ChatGPT and the new LLama3 models.  Here are the results:</p>
+<p>How good are LLMs at trivia? I used the <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">Jeopardy! dataset</a> from Kaggle to
+benchmark ChatGPT and the new LLama3 models.  Here are the results:</p>
 
 <p><img src="/post/jeopardy_files/benchmark7.png"></p>
 
 <p>There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this
-article.  Some guy on the internet ran a half-baked benchmark on a
-scattered handful of LLM models and approaches, and those results are largely in line with
+article.  Some guy on the internet ran a half-baked benchmark on a scattered
+handful of LLM models and approaches, and those results are largely in line with
 <a href="https://artificialanalysis.ai/">popular benchmarks</a> and received wisdom on fine-tuning and RAG.</p>
 
-<p>Still, the process was interesting, so I&rsquo;m going to talk about it. At length. You&rsquo;ve been warned.</p>
+<p>Still, the process was interesting, so I&rsquo;m going to talk about it. At length.
+You&rsquo;ve been warned.</p>
 
 <p>All <a href="https://github.com/olooney/jpt">code</a> for this article is available on Github.</p>
 
-<h2 id="about">About</h2>
+<h2 id="the-dataset">The Dataset</h2>
 
-<p>A couple of years ago, I found <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">this fantastic dataset of Jeopardy! questions</a>
-on Kaggle.  It&rsquo;s 200,000+ question/answer pairs, plus the category (column) and
-value (row) of the question.  (Just to be clear, this dataset follows the
-convention that the &ldquo;question&rdquo; is the prompt that Alex reads, and the &ldquo;answer&rdquo;
-is what the contestant should respond with&hellip; in the form a question, of
-course.) Here is a sample:</p>
+<p>A couple of years ago, I found <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">this fantastic dataset of Jeopardy!
+questions</a> on Kaggle.  It&rsquo;s 200,000+ question/answer pairs, plus the
+category (column) and value (row) of the question.  (Just to be clear, this
+dataset follows the convention that the &ldquo;question&rdquo; is the prompt that Alex
+reads, and the &ldquo;answer&rdquo; is what the contestant should respond with&hellip; in the
+form a question, of course.) Here is a sample:</p>
 
 <style>
 
@@ -269,27 +268,27 @@ that many popular benchmarks are at least a little poisoned in this way.</p>
 <li>Prove that RAG actually works.</li>
 </ol>
 
-<p>TODO: DQA: value currency and unfair questions.</p>
-
 <p>If you plan to use the Jeopardy! dataset yourself, there are two &ldquo;gotchas&rdquo; that
-you should be aware of.</p>
+you should be aware of:</p>
 
 <ol>
-<li>The &ldquo;value&rdquo; column is a currency field with a leading <code>$</code> and thousand-separators,
-although this is currently incosistent.</li>
-<li>Some questions use audio or visual cues that are represented in the dataset as
-links to external resources. These questions are unfair to the LLMs because the
-clue as given doesn&rsquo;t contain enough information to narrow it down to a unique
-answer. However, even if you remove those, over 200,000 &ldquo;fair&rdquo; questions remain.</li>
+<li>The &ldquo;value&rdquo; column is a currency field with a leading <code>$</code> and
+thousand-separators, although this is currently incosistent.</li>
+<li>Some questions use audio or visual cues that are represented in the dataset
+as links to external resources. These questions are unfair to the LLMs
+because the clue as given doesn&rsquo;t contain enough information to narrow it
+down to a unique answer. However, even if you remove those, over 200,000
+&ldquo;fair&rdquo; questions remain.</li>
 </ol>
 
-<p>The function <code>jpt.load_jeopardy_dataset()</code> shows how to handle these minor DQA issues.</p>
+<p>The function <code>jpt.load_jeopardy_dataset()</code> shows how to handle these minor DQA
+issues.</p>
 
 <h2 id="inference">Inference</h2>
 
-<p>No API is 100% reliable. OpenAI has been pretty unreliable over the past year, but in all
-fairness was pretty solid for this project. The AWS Bedrock API is less mature and
-experienced many random failures during this project.</p>
+<p>No API is 100% reliable. OpenAI has been pretty unreliable over the past year,
+but in all fairness was pretty solid for this project. The AWS Bedrock API is
+less mature and experienced many random failures during this project.</p>
 
 <pre><code># reusable decorator to implement basic retry logic. We make up to three
 # attempts with exponential backoff. 
@@ -305,17 +304,20 @@ isn&rsquo;t enough.&rdquo; I don&rsquo;t why this is the case, but every program
 be true deep in within their soul. It seems to be part of the shared
 subconscious in the same way that <a href="https://www.youtube.com/watch?v=d6iQrh2TK98">37</a> is the most random number.</p>
 
-<p>Mini rant: a lot of Python programmers seem to think you have copy-paste decorator config for every
-single function, but that&rsquo;s not the case. The expression after the <code>@</code> symbol just
-needs to evaluate to an object which implements the implicit decorator interface - it
-must be a callable that accepts a function and returns a function. That&rsquo;s it. That
-means we can configure a decorator once, save it as a global variable, then reuse it
-as often as we like. DRY! End rant.</p>
+<!--
+Mini rant: a lot of Python programmers seem to think you have copy-paste
+decorator config for every single function, but that's not the case. The
+expression after the `@` symbol just needs to evaluate to an object which
+implements the implicit decorator interface - it must be a callable that accepts
+a function and returns a function. That's it. That means we can configure a
+decorator once, save it as a global variable, then reuse it as often as we like.
+DRY! End rant.
+-->
 
 <h2 id="prompt-engineering">Prompt Engineering</h2>
 
-<p>Speaking of DRY, we&rsquo;ll centralize a few other things that will be constant across all contestants,
-namely the prompt template and system messages:</p>
+<p>Speaking of DRY, we&rsquo;ll centralize a few other things that will be constant
+across all contestants, namely the prompt template and system messages:</p>
 
 <pre><code>jeopardy_question_template = '''
 CATEGORY: {category}
@@ -341,7 +343,7 @@ system_messages = [
 ]
 </code></pre>
 
-<p>I say &ldquo;system_messages&rdquo;, but it also includes one example of a correct
+<p>I say <code>&quot;system_messages&quot;</code>, but it also includes one example of a correct
 question/answer pair. Every LLM will use the exact same prompts so that we have
 a level playing field for our benchmark.</p>
 
@@ -362,8 +364,10 @@ def ken(category: str, clue: str) -&gt; str:
     return content
 </code></pre>
 
-<p>Most contestants look very similar to this with variations like using a different model name, swapping <code>client.chat</code> for <code>ollama.chat</code>,
-doing a little formatting for Llama3, etc. The one contestant that&rsquo;s slightly more complicated is our RAG agent:</p>
+<p>Most contestants look very similar to this with variations like using a
+different model name, swapping <code>client.chat</code> for <code>ollama.chat</code>, doing a little
+formatting for Llama3, etc. The one contestant that&rsquo;s slightly more complicated
+is our RAG agent:</p>
 
 <pre><code>@retry_decorator
 def mattea(category: str, clue: str) -&gt; str:
@@ -404,15 +408,16 @@ def mattea(category: str, clue: str) -&gt; str:
 </code></pre>
 
 <p>In Jeopardy!, the column category is often essential to keep in mind. It can
-provide an initial letter, a word length, a time period, or other essential context without which
-the answer might be ambiguous. For that reason, we use it as part of the prompt template.</p>
+provide an initial letter, a word length, a time period, or other essential
+context without which the answer might be ambiguous. For that reason, we use it
+as part of the prompt template.</p>
 
 <p><img src="/post/jeopardy_files/category_matters.png"></p>
 
-<p>In the first prompt, the category &ldquo;THREES&rdquo; is a clue pointing to the &ldquo;Thrice-Great&rdquo; alchemist,
-while &ldquo;FRENCH&rdquo; is the crucial clue that tells us Flamel is probably who is meant. Ken
-(who you&rsquo;ll recall from above is a wrapper around <code>gpt-4-turbo</code>) is smart enough to use that
-context.</p>
+<p>In the first prompt, the category &ldquo;THREES&rdquo; is a clue pointing to the
+&ldquo;Thrice-Great&rdquo; alchemist, while &ldquo;FRENCH&rdquo; is the crucial clue that tells us
+Flamel is probably who is meant. Ken (who you&rsquo;ll recall from above is a wrapper
+around <code>gpt-4-turbo</code>) is smart enough to use that context.</p>
 
 <p>Arguably the dollar value should be included as well, since in theory knowing
 if the question is supposed to be easy or obscure could help with guessing, but
@@ -421,6 +426,8 @@ this is tenuous and I haven&rsquo;t done so here.</p>
 <p>TODO: Justify prompt engineering for RAG content.</p>
 
 <p>TODO: OpenAI and local ollama.</p>
+
+<h2 id="inference-1">Inference</h2>
 
 <p>Sadly, my graphics card &ldquo;only&rdquo; has 12 GB of VRAM, so it can&rsquo;t run the 70b
 model. (Works great for games though!  You should see it run Cyberpunk 2077.)
@@ -446,8 +453,8 @@ implement it like so:</p>
     return prompt
 </code></pre>
 
-<p>Libraries like <a href="https://github.com/BerriAI/litellm">liteLLM</a> offer these kind of compatability layers out of the box but this suffices
-to get us unblocked for this project.</p>
+<p>Libraries like <a href="https://github.com/BerriAI/litellm">liteLLM</a> offer these kind of compatability layers out of the
+box but these 9 lines of code suffices to get us unblocked for this project.</p>
 
 <table>
 <thead>
@@ -503,13 +510,141 @@ to get us unblocked for this project.</p>
 </tbody>
 </table>
 
-<p>TODO: Error analysis, Alex&rsquo;s commentary</p>
+<h2 id="evaluation">Evaluation</h2>
+
+<p>TODO</p>
+
+<p>Instead we use a pattern called LLM-as-Judge, where we ask another LLM agent to
+grade the response. This is a good fit for the Jeopardy! dataset because the
+task of deciding if an answer is correct <em>when you can see the correct answer</em>
+is a much simpler task actually answering it. However, there are many cases
+where the exact wording won&rsquo;t match, and an LLM can handle such cases pretty
+well while saving us the trouble of manually marking 14,000 rows of results.</p>
+
+<p>This being Jeopardy! we of course call our LLM judge agent Alex:</p>
+
+<pre><code>@retry_decorator
+def alex(
+    category: str, 
+    clue: str, 
+    correct_response: str, 
+    contestant_response: str
+) -&gt; str:
+    '''HostAgent used to judge respondants. This is necessary because
+    a correct response may not necessarily match the given answer 100%
+    of the time. This uses GPT-4 (calling OpenAI's API) because it makes
+    very few judging errors; only about 1%. Alex will always start his
+    response with &quot;Correct!&quot; if the contestant got it right, but may include
+    additional commentary.
+    '''
+
+    prompt = f'''
+    CATEGORY: {category}
+    ORIGINAL CLUE: {clue}
+    CORRECT RESPONSE: {correct_response}
+
+    CONTESTANT RESPONSE: {contestant_response}
+    '''
+    chat_response = client.chat.completions.create(
+        model=&quot;gpt-4-turbo&quot;,
+        temperature=0.0,
+        messages=[
+            {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: ws(&quot;&quot;&quot;
+                You are Alex Trebek, the host of Jeopardy. Given a correct
+                answer from the producer and a response (in the form of a
+                question) from a contestant, use your best judgement to decide
+                if the contestant is correct.  If the contestant answered the
+                question correctly and in the form of a question, the first
+                word of your response MUST be &quot;Correct!&quot;.
+            &quot;&quot;&quot;)},
+            {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}
+        ]
+    )
+    content = chat_response.choices[0].message.content
+    return content
+</code></pre>
+
+<p>One thing I like is that the <code>alex()</code> agent often adds a little explanation when
+the answer is wrong or not an exact word match, or just to provide another
+little tidbit of trivia, just like the real Alex Trebek:</p>
+
+<pre><code>Category: THE VEEP RIGHT BEFORE...
+Question: 'George H.W. Bush'
+Correct Answer: Walter Mondale
+Contestant's Answer: Who is Ronald Reagan?
+Alex's Judgement: Incorrect. The correct response was, &quot;Who is Walter
+                  Mondale?&quot; Ronald Reagan was the President before George
+                  H.W. Bush, not the Vice President.
+
+
+Category: SECOND-LARGEST CITIES
+Question: 'Mosul, 1.8 million'
+Correct Answer: Iraq
+Contestant's Answer: What is Baghdad?
+Alex's Judgement: Incorrect. The correct response is &quot;What is Iraq?&quot; Mosul
+                  is the second-largest city in Iraq, not Baghdad.
+</code></pre>
+
+<p>I didn&rsquo;t explicitly ask it to do that in the prompt, so I&rsquo;m not sure if its
+modelling what it knows about Alex Trebek and Jeopardy!, or if it&rsquo;s just a
+reflection of the fact that ChatGPT often &ldquo;over-explains&rdquo; its answers even when
+you don&rsquo;t want it to.</p>
+
+<p>Here&rsquo;s an example of where the dataset is problematic:</p>
+
+<pre><code>Category: &quot;WIN&quot;
+Question: 'Seen here, Marie Barrow is holding this possession of her late
+           brother Clyde'
+Correct Answer: Winchester rifle
+Contestant's Answer: What is a gun?
+Alex's Judgement: Incorrect. The correct response is &quot;What is a Winchester
+                  rifle?&quot;
+</code></pre>
+
+<p>Here, the wording implies that a picture was shown, but without a link the
+question slips past our &ldquo;unfair&rdquo; filter. Some quick Googling turned up what
+I presume to be the photo mentioned:</p>
+
+<p><img 
+    src="/post/jeopardy_files/marie_clyde_winchester.png" 
+    title="Marie Barrow holding Cylde Barrow's Winchester"
+    alt="Marie Barrow holding Cylde Barrow's Winchester"></p>
+
+<p>But of course the LLM didn&rsquo;t get to see that. The given answer is actually
+pretty intelligent, considering that you&rsquo;d have to deduce that Clyde is Clyde
+Barrow of Bonnie and Clyde fame, and then deduce the associated object is most
+likely a gun. However, it gets marked wrong anyway.</p>
+
+<p>Even worse, there&rsquo;s another row where a different contestant was asked the
+same question and gave the same response, but this time it was judged correct!</p>
+
+<pre><code>Category: &quot;WIN&quot;
+Question: 'Seen here, Marie Barrow is holding this possession of her late 
+           brother Clyde'
+Correct Answer: Winchester rifle
+Contestant's Answer: What is a gun?
+Alex's Judgement: Correct! The response &quot;What is a gun?&quot; broadly covers 
+                  the specific answer of &quot;Winchester rifle,&quot; which is 
+                  indeed a type of gun.
+</code></pre>
+
+<p>So there is <em>also</em> some noise on Alex judging answers.</p>
+
+<p>The above examples probably give the impression the whole thing is flawed, but I
+had to read through a <em>lot</em> of judgements to cherry pick those errors.  I didn&rsquo;t
+formally measure it but I estimate the error to be around 1%, capping the
+maximum possible score to be around 99%.  This means that the <a href="https://en.wikipedia.org/wiki/Bayes_error_rate">Bayes error
+rate</a> for the Jeopardy! dataset is just 100%.   This doesn&rsquo;t mean it&rsquo;s
+useless for benchmarking - many popular benchmarks have a ton of errors, and as
+long as they&rsquo;re not too common it doesn&rsquo;t make much practical difference since
+all LLMs will be penalized in the same way.</p>
 
 <h2 id="fine-tuning">Fine Tuning</h2>
 
-<p>OpenAI expects <a href="https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset">fine tuning training data</a> to be provided in the JSONL format with one
-example per line. Each line should be a JSON object containing the messages for
-one chat session in the same message format used by the <code>chat.completions</code> API.</p>
+<p>OpenAI expects <a href="https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset">fine tuning training data</a> to be provided in the JSONL
+format with one example per line. Each line should be a JSON object containing
+the messages for one chat session in the same message format used by the
+<code>chat.completions</code> API.</p>
 
 <p>It&rsquo;s trivial to implement this format. Note that we include the same system
 prompt that we will use for the task, and that we provide the Jeopardy!
@@ -590,6 +725,50 @@ that's about 166X (two orders of magnitude faster)
 <p>TODO: indexing vector databases</p>
 
 <p>TODO: brute force vs. HNSW</p>
+
+<p>Here is how you implement exact search using cosine similarity:</p>
+
+<pre><code>distances = 1.0 - (database @ query)
+</code></pre>
+
+<p>Where <code>@</code> is the Python operator for matrix multiply. Alright, fine,
+there&rsquo;s a little more ceremony to it:</p>
+
+<pre><code>def best_k(database: np.ndarray, query: np.ndarray, k: int = 5):
+    '''Brute force best-k algorithm. Simply computes *all*
+    the cosine distances between the query and every embedding
+    vector in the database and returns the top-k in sorted order
+    (lowest distance first.) Call `brute_force_search()` for
+    a higher level interface.
+    '''
+    # Normalize the query vector
+    query = query / np.linalg.norm(query)
+
+    # Compute cosine distances
+    distances = 1.0 - (database @ query)
+
+    # Find the indices of the k smallest distances
+    best_k_unsorted = np.argpartition(distances, k)[:k]
+
+    # Sort these indices by distance
+    sorted_indices = np.argsort(distances[best_k_unsorted])
+    best_k_sorted = best_k_unsorted[sorted_indices]
+    best_k_distances = distances[best_k_sorted]
+
+    return best_k_distances, best_k_sorted
+</code></pre>
+
+<p>But it&rsquo;s that one matrix multiply that&rsquo;s doing all the work; the rest
+runs in a fraction of the time. Even that&rsquo;s a little more complex
+than it needs to be - we save a few milliseconds by using <code>np.argpartiion()</code>
+and then only sorting the top <code>k</code> results when it would have been more
+obvious to simply sort them all and take the first <code>k</code>.</p>
+
+<p>The brute force strategy is surprisingly viable for small vector stores of only
+a few thousand or tens of thousands of chunks, but by the time we&rsquo;ve reached
+the 200,000+ chunks of the Jeopardy! dataset it&rsquo;s definitely started to wear
+out its welcome. By that point, the HNSW algorithm (which scales as $O(\log n)$
+for search) is over a 100 times faster than brute force.</p>
 
 <p>TODO: discuss cross-validation and split date for benchmark.</p>
 
@@ -691,43 +870,53 @@ forced it.
 </tbody>
 </table>
 
-<h1 id="todo-stat-sig">TODO: stat-sig.</h1>
+<p>TODO: stat-sig.</p>
 
 <h4 id="fine-tuning-1">Fine-Tuning</h4>
 
-<p>Fining tuning works, but it&rsquo;s a &ldquo;you get what you pay for&rdquo; kind of deal. OpenAI&rsquo;s rates for fine-tuned
-models are midway between GPT-4 and GPT-3.5, but so is performance. Then there&rsquo;s the headache of curating
-and maintaining a fine-tuning dataset&hellip; unless you actually beat a GPT-4 model with your fine-tuned GPT-3.5
-model (which is going to be very use case dependent) its a lot of complexity for a very marginal cost savings.
-It didn&rsquo;t work for the Jeopardy! dataset, but maybe it&rsquo;ll work for yours.</p>
+<p>Fining tuning works, but it&rsquo;s a &ldquo;you get what you pay for&rdquo; kind of deal.
+OpenAI&rsquo;s rates for fine-tuned models are priced midway between GPT-4 and
+GPT-3.5, but so is performance. Then there&rsquo;s the headache of curating and
+maintaining a fine-tuning dataset&hellip; unless you actually beat a GPT-4 model with
+your fine-tuned GPT-3.5 model (which is going to be very use case dependent) its
+a lot of complexity for a very marginal cost savings.  It didn&rsquo;t work for the
+Jeopardy! dataset, but maybe it&rsquo;ll work for yours.</p>
 
-<p>Of course, when OpenAI finally starts offering fine-tuning of GPT-4 models, fine-tuning may allow us to unlock a
-whole new level of performance, but that&rsquo;s future state. Right now it&rsquo;s very situational.</p>
+<p>Of course, when OpenAI finally starts offering fine-tuning of GPT-4 models,
+fine-tuning may allow us to unlock a whole new level of performance, but that&rsquo;s
+future state. Right now it&rsquo;s very situational.</p>
 
-<p>One thing that suprised me about the fine-tuning is that the performance gain all came from the first few
-hundred records. The training loss curves flattened out pretty quickly and there wasn&rsquo;t any benefit from
-fine tuning on a larger 10k dataset. That means we&rsquo;re not teaching the model the answers to specific trivia
-questions, <em>we&rsquo;re teaching it how to be a Jeopardy! contestant.</em> That&rsquo;s also why the performance bump generalizes
-to novel data - it&rsquo;s not about memorization. That tells us that fine-tuning is the tool we should reach for to <em>steer</em>
-our models:  to improve compliance or to stay on task. It&rsquo;s not a good way to teach them a lot of new information.</p>
+<p>One thing that suprised me about the fine-tuning is that the performance gain
+all came from the first few hundred records. The training loss curves flattened
+out pretty quickly and there wasn&rsquo;t any benefit from fine tuning on a larger 10k
+dataset. That means we&rsquo;re not teaching the model the answers to specific trivia
+questions, <em>we&rsquo;re teaching it how to be a Jeopardy! contestant.</em> That&rsquo;s also why
+the performance bump generalizes to novel data - it&rsquo;s not about memorization.
+That tells us that fine-tuning is the tool we should reach for to <em>steer</em> our
+models:  to improve compliance or to stay on task.</p>
 
 <h4 id="rag">RAG</h4>
 
-<p>RAG gives us a whopping <em>24 percentage points</em> over the baseline model, and gets us within spitting
-distance of the Llama3 70 billion parameter model while still allowing us to run a fast, cheap, (possibly even local)
-LLM. The overhead of RAG itself is fairly minimal. There is an added 0.2 - 0.3 second latency for hitting OpenAI
-embeddings API, which eats into the performance gains of running a smaller model. (Latency is the only real downside: cost is very low and throughput
-won&rsquo;t be affected.) Vector databases are pretty inexpensive to index and query so unless your operating at
-Wikipedia scale the costs will be pretty nominal.</p>
+<p>RAG gives us a whopping <em>24 percentage points</em> over the baseline model, and gets
+us within spitting distance of the Llama3 70 billion parameter model while still
+allowing us to run a fast, cheap, (possibly even local) LLM. The overhead of RAG
+itself is fairly minimal. There is an added 0.2 - 0.3 second latency for hitting
+OpenAI embeddings API, which eats into the performance gains of running a
+smaller model. (Latency is the only real downside: cost is very low and
+throughput won&rsquo;t be affected.) Vector databases are pretty inexpensive to index
+and query so unless your operating at Wikipedia scale the costs will be pretty
+nominal.</p>
 
-<p>Of course, you don&rsquo;t have to use RAG with a small model; you could pair it with GPT-4 or other SOTA if you&rsquo;re focused on quality over throughput, latency, or cost.
-Unlike fine-tuning, RAG doesn&rsquo;t lock you into a particular LLM choice. I see why there&rsquo;s a lot of hype around it;
-it&rsquo;s cheap, it&rsquo;s fast, it scales well, it&rsquo;s easy to implement (you don&rsquo;t have to hand-currate training examples but just chunk whatever useful documents are lying around)
-and it works.</p>
+<p>Of course, you don&rsquo;t have to use RAG with a small model; you could pair it with
+GPT-4 or other SOTA if you&rsquo;re focused on quality over throughput, latency, or
+cost.  Unlike fine-tuning, RAG doesn&rsquo;t lock you into a particular LLM choice. I
+see why there&rsquo;s a lot of hype around it; it&rsquo;s cheap, it&rsquo;s fast, it scales well,
+it&rsquo;s easy to implement (you don&rsquo;t have to hand-currate training examples but
+just chunk whatever useful documents are lying around) and it works.</p>
 
 <h4 id="llama3">Llama3</h4>
 
-<p>Llama3 is fine. LLama3:70b is comparable to ChatGPT 3.5.</p>
+<p>Llama3 is fine. TODO</p>
 
     </article>
 
