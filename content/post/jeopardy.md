@@ -10,11 +10,13 @@ tags:
 image: /post/jeopardy_files/lead.jpg
 ---
 
+*Update 2024-05-14*: Hot off the presses, the benchmark now includes the 
+recently released [GPT-4o][G4O] model!
 
 How good are LLMs at trivia? I used the [Jeopardy! dataset][JKD] from Kaggle to
 benchmark ChatGPT and the new Llama 3 models.  Here are the results:
 
-<img src="/post/jeopardy_files/benchmark7.png">
+<img src="/post/jeopardy_files/benchmark8.png">
 
 There you go. You've already gotten 90% of what you're going to get out of this
 article.  Some guy on the internet ran a half-baked benchmark on a handful of
@@ -895,13 +897,14 @@ Conclusions
 Now that we understand what the different parts mean, let's take another
 look at the summary bar chart:
 
-<img src="/post/jeopardy_files/benchmark7.png">
+<img src="/post/jeopardy_files/benchmark8.png">
 
 And here are the same results as a table: 
 
 | Contestant      | Model              | Successes   |   Failures | Sample Size   | Success Rate   | 95% CI   |
 |:----------------|:-------------------|------------:|-----------:|--------------:|---------------:|---------:|
 | Ken Jennings    | gpt-4-turbo        | 1,924       |         76 | 2,000         | 96.20%         | ±0.84%   |
+| Cris Pannullo   | gpt-4-o            | 954         |         46 | 1,000         | 95.40%         | ±1.30%   |
 | Amy Schneider   | gpt-3.5-fine-tuned | 1,856       |        144 | 2,000         | 92.80%         | ±1.13%   |
 | James Holzhauer | gpt-3.5-turbo      | 1,791       |        209 | 2,000         | 89.55%         | ±1.34%   |
 | Brad Rutter     | llama3:70b         | 1,790       |        210 | 2,000         | 89.50%         | ±1.34%   |
@@ -909,8 +912,10 @@ And here are the same results as a table:
 | Larissa Kelly   | llama3:8b          | 1,257       |        743 | 2,000         | 62.85%         | ±2.12%   |
 | David Madden    | llama2:7b          | 1,196       |        804 | 2,000         | 59.80%         | ±2.15%   |
 
-The sample size of 2,000 gives us pretty good statistical power. The 95% 
-confidence interval for each measurement is only a few percentage points wide.
+The sample size of 2,000 gives us pretty good statistical power. (Cris Pannulo
+(gpt-4o) is slightly lower because I hit a rate limit on the brand new model.)
+The 95% confidence interval for each measurement is only a few percentage
+points wide.
 
 Except for James (gpt-3.5-turbo) and Brad (llama3:70b), who are basically tied,
 the difference between successive rows are all statistically significant. That
@@ -918,6 +923,26 @@ means its appropriate to treat these differences being meaningful.
 
 Let me wrap this up by giving my thoughts on what this benchmark taught us
 about the various different things we tried.
+
+### GPT-4o "Omni"
+
+OpenAI released their new [GPT-4o][G4O] "Omni" model literally the day after
+I first published this article, so I went back and quickly added it to the
+suite. It's performance is right between GPT 4 and 3.5 which is in line with
+others have reported.
+
+GPT-4o has many other capabilities that were the focus the release:
+
+1. Needle-in-a-Haystack performance is [drastically improved][NIAH], making it
+   more effective at using the full 128k context window.
+2. Multi-modal model results in more natural speech.
+3. Faster speed and lower latency results in more natural, real-time 
+   conversation.
+4. Half the [price][P] of GPT-4 Turbo.
+
+But I'm just regurgitating the sales brochure at this point - this benchmark
+shows that whatever it's other assets, GPT-4 Turbo still has the highest
+quality responses.
 
 ### Fine-Tuning
 
@@ -1008,6 +1033,7 @@ a TV game show.
 [BER]: https://en.wikipedia.org/wiki/Bayes_error_rate
 [CAH]: https://www.reddit.com/r/calvinandhobbes/comments/14l986i/a_blue_light_special/
 [CC]: https://github.com/olooney/jpt/blob/main/jpt.py#L440
+[G4O]: https://openai.com/index/hello-gpt-4o/
 [GFTD]: https://github.com/olooney/jpt/blob/main/jpt.py#L520
 [JF]: https://github.com/olooney/jpt/blob/main/data/jeopardy_fine_tuning_sample_1000.jsonl
 [JKD]: https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated
@@ -1020,11 +1046,12 @@ a TV game show.
 [MCB]: https://github.com/olooney/jpt/blob/main/Mattea%20CV%20Benchmark.ipynb
 [MLF]: https://mlflow.org/
 [MTEB]: https://huggingface.co/spaces/mteb/leaderboard
+[NIAH]: https://nian.llmonpy.ai/
 [OAFT]: https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset
 [OAIP]: https://openai.com/api/pricing/
 [OLL]: https://ollama.com/
 [PE]: https://github.com/olooney/jpt/blob/main/jpt.py#L687
+[P]: https://openai.com/api/pricing/
 [TL]: https://platform.openai.com/docs/guides/embeddings/embedding-models
 [TSS]: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html
 [VAI]: https://docs.voyageai.com/docs/embeddings
-

@@ -6,12 +6,14 @@
   <title>Let&#39;s Play Jeopardy! with LLMs - OranLooney.com</title>
   <meta property="og:title" content="Let&#39;s Play Jeopardy! with LLMs - OranLooney.com" />
   <meta name="twitter:title" content="Let&#39;s Play Jeopardy! with LLMs - OranLooney.com" />
-  <meta name="description" content="How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new Llama 3 models. Here are the results:
+  <meta name="description" content="Update 2024-05-14: Hot off the presses, the benchmark now includes the recently released GPT-4o model!
+How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new Llama 3 models. Here are the results:
 There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this article. Some guy on the internet ran a half-baked benchmark on a handful of LLM models, and the results were largely in line with popular benchmarks and received wisdom on fine-tuning and RAG.">
-  <meta property="og:description" content="How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new Llama 3 models. Here are the results:
+  <meta property="og:description" content="Update 2024-05-14: Hot off the presses, the benchmark now includes the recently released GPT-4o model!
+How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new Llama 3 models. Here are the results:
 There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this article. Some guy on the internet ran a half-baked benchmark on a handful of LLM models, and the results were largely in line with popular benchmarks and received wisdom on fine-tuning and RAG.">
-  <meta name="twitter:description" content="How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and the new Llama 3 models. Here are the results:
-There you go. You&rsquo;ve already gotten 90% of what …">
+  <meta name="twitter:description" content="Update 2024-05-14: Hot off the presses, the benchmark now includes the recently released GPT-4o model!
+How good are LLMs at trivia? I used the Jeopardy! dataset from Kaggle to benchmark ChatGPT and …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -124,6 +126,7 @@ There you go. You&rsquo;ve already gotten 90% of what …">
 </ul></li>
 <li><a href="#conclusions">Conclusions</a>
 <ul>
+<li><a href="#gpt-4o-omni">GPT-4o &ldquo;Omni&rdquo;</a></li>
 <li><a href="#fine-tuning-1">Fine-Tuning</a></li>
 <li><a href="#rag">RAG</a></li>
 <li><a href="#llama-3">Llama 3</a></li>
@@ -134,10 +137,13 @@ There you go. You&rsquo;ve already gotten 90% of what …">
 </aside>
       
 
+<p><em>Update 2024-05-14</em>: Hot off the presses, the benchmark now includes the
+recently released <a href="https://openai.com/index/hello-gpt-4o/">GPT-4o</a> model!</p>
+
 <p>How good are LLMs at trivia? I used the <a href="https://www.kaggle.com/datasets/aravindram11/jeopardy-dataset-updated">Jeopardy! dataset</a> from Kaggle to
 benchmark ChatGPT and the new Llama 3 models.  Here are the results:</p>
 
-<p><img src="/post/jeopardy_files/benchmark7.png"></p>
+<p><img src="/post/jeopardy_files/benchmark8.png"></p>
 
 <p>There you go. You&rsquo;ve already gotten 90% of what you&rsquo;re going to get out of this
 article.  Some guy on the internet ran a half-baked benchmark on a handful of
@@ -1126,7 +1132,7 @@ dataset used for the bar chart at the top of this article.</p>
 <p>Now that we understand what the different parts mean, let&rsquo;s take another
 look at the summary bar chart:</p>
 
-<p><img src="/post/jeopardy_files/benchmark7.png"></p>
+<p><img src="/post/jeopardy_files/benchmark8.png"></p>
 
 <p>And here are the same results as a table:</p>
 
@@ -1152,6 +1158,16 @@ look at the summary bar chart:</p>
 <td align="right">2,000</td>
 <td align="right">96.20%</td>
 <td align="right">±0.84%</td>
+</tr>
+
+<tr>
+<td align="left">Cris Pannullo</td>
+<td align="left">gpt-4-o</td>
+<td align="right">954</td>
+<td align="right">46</td>
+<td align="right">1,000</td>
+<td align="right">95.40%</td>
+<td align="right">±1.30%</td>
 </tr>
 
 <tr>
@@ -1216,8 +1232,10 @@ look at the summary bar chart:</p>
 </tbody>
 </table>
 
-<p>The sample size of 2,000 gives us pretty good statistical power. The 95%
-confidence interval for each measurement is only a few percentage points wide.</p>
+<p>The sample size of 2,000 gives us pretty good statistical power. (Cris Pannulo
+(gpt-4o) is slightly lower because I hit a rate limit on the brand new model.)
+The 95% confidence interval for each measurement is only a few percentage
+points wide.</p>
 
 <p>Except for James (gpt-3.5-turbo) and Brad (llama3:70b), who are basically tied,
 the difference between successive rows are all statistically significant. That
@@ -1225,6 +1243,28 @@ means its appropriate to treat these differences being meaningful.</p>
 
 <p>Let me wrap this up by giving my thoughts on what this benchmark taught us
 about the various different things we tried.</p>
+
+<h3 id="gpt-4o-omni">GPT-4o &ldquo;Omni&rdquo;</h3>
+
+<p>OpenAI released their new <a href="https://openai.com/index/hello-gpt-4o/">GPT-4o</a> &ldquo;Omni&rdquo; model literally the day after
+I first published this article, so I went back and quickly added it to the
+suite. It&rsquo;s performance is right between GPT 4 and 3.5 which is in line with
+others have reported.</p>
+
+<p>GPT-4o has many other capabilities that were the focus the release:</p>
+
+<ol>
+<li>Needle-in-a-Haystack performance is <a href="https://nian.llmonpy.ai/">drastically improved</a>, making it
+more effective at using the full 128k context window.</li>
+<li>Multi-modal model results in more natural speech.</li>
+<li>Faster speed and lower latency results in more natural, real-time
+conversation.</li>
+<li>Half the <a href="https://openai.com/api/pricing/">price</a> of GPT-4 Turbo.</li>
+</ol>
+
+<p>But I&rsquo;m just regurgitating the sales brochure at this point - this benchmark
+shows that whatever it&rsquo;s other assets, GPT-4 Turbo still has the highest
+quality responses.</p>
 
 <h3 id="fine-tuning-1">Fine-Tuning</h3>
 
