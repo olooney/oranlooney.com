@@ -727,7 +727,7 @@ This has the effect of greatly inflating the size of the dataset. A 1,536
 dimensional vector of 32-bit floats takes up 6,144 bytes each. So 200,000
 vectors require a total of 1.2 GB. Storing the original question data and the
 exact chunk text brings that up to 1.3 GB. That means 90% of our database size
-is just the embedding vectors. That isn't normally the case; when make use of
+is just the embedding vectors. That isn't normally the case; when making use of
 the full 8,191 tokens for each chunk, the original text and vectors take up
 roughly the same amount of space. Nevertheless, I think it's the right call use
 use one chunk per question, because it wouldn't make any sense at all to
@@ -786,18 +786,18 @@ there's a little more ceremony to it:
         
         return best_k_distances, best_k_sorted
  
-But that one matrix multiply is what's doing all the work; the rest is a
-negligible in comparison.
+But that one matrix multiply is doing all the work; the rest is negligible in
+comparison.
 
 The brute force strategy is surprisingly viable for small vector stores up
 through about 10,000 vectors, but by the time we've past 100,000 vectors it's
-definitely time to switch to something more sophisticated.  By the time we
-reach 200,000 vectors, the HNSW algorithm (which scales as $O(\log n)$ for
-search) is over a 100 times faster than brute force.
+definitely time to switch to something more sophisticated. For this database of
+200,000 vectors the HNSW algorithm (which scales as $O(\log n)$ for search) is
+more than 100 times faster than brute force.
 
 Not that it really matters for this use case, because whichever we use the
-0.2-0.3 second latency for calling the OpenAI embeddings API with the query
-string is still going to be the bottleneck. 
+0.3 second latency for calling the OpenAI embeddings API to convert the query
+string into a query vector is still going to be the bottleneck. 
 
 ### Cross-Validation
 
@@ -950,7 +950,7 @@ model. It doesn't quite get us all the way up to the performance of the
 70-billion-parameter version, but that's still a very impressive gain
 especially considering how fast and cost effective it is.
 
-The added 0.2 - 0.3 second latency for hitting the embeddings API is
+The added 0.3 second latency for hitting the embeddings API is
 probably the biggest downside. That latency probably isn't coming from the
 actual embedding model; it the typical latency you'd see with any HTTP request
 that has to make a round trip across the internet. 
@@ -963,7 +963,7 @@ over HTTP, but there are also open models that do well on benchmarks such as
 
 The vector database itself is pretty inexpensive to index and essentially free
 to query if you use HNSW so unless you're operating at Wikipedia scale the
-costs will be nominal; it's really the embeddings calls that get you. 
+costs will be nominal; it's really the embeddings call that gets you. 
 
 Of course, you don't have to use RAG with a small model like we did; you could
 pair it with GPT-4 or other SOTA if you're focused on quality over throughput,
@@ -972,8 +972,10 @@ LLM choice.
 
 I see why there's a lot of hype around RAG and HNSW; it's cheap, it's fast, it
 scales well, it's easy to implement (you don't have to hand-curate training
-examples but just chunk whatever useful documents are lying around), and it
-works. 
+examples but just chunk whatever useful documents are lying around), it's
+flexible (you can mix-and-match with any LLM to acheive the right balance of
+cost, quality, and speed) and above it *works*, giving noticeable improvement
+in task performance and answer quality.. 
 
 ### Llama 3
 
@@ -993,10 +995,11 @@ billion and the only difference between OpenAI and Meta is that OpenAI has
 spent more on GPUs. Or it could be that OpenAI has a few secrets that give them
 an algorithmic edge.
 
-Regardless of how it's achieved, OpenAI still has the lead, and Llama 3 did not
-manage to fully close the gap. At least not on the only benchmark that really
-matters, the only benchmark that truly represents an [AI-complete][AIC] measure
-of general intelligence: the ability to win money on a TV game show.
+Regardless of how it's achieved, OpenAI still has the lead, and Meta did not
+manage to fully close the gap with Llama 3. At least not on the only benchmark
+that really matters, the only benchmark that truly represents an
+[AI-complete][AIC] measure of general intelligence: the ability to win money on
+a TV game show.
 
 [37]: https://www.youtube.com/watch?v=d6iQrh2TK98
 [AA]: https://artificialanalysis.ai/
