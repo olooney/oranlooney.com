@@ -440,7 +440,7 @@ explanation or extra trivia tidbit, just like the real Alex Trebek:
     Alex's Judgement: Incorrect. The correct response is "What is Iraq?" Mosul
                       is the second-largest city in Iraq, not Baghdad.
 
-I didn't explicitly ask it to do that, so I'm not sure if its role playing or
+I didn't explicitly ask it to do that, so I'm not sure if it's role playing or
 if this is just a reflection of the fact that ChatGPT often "over-explains" its
 answers even when you don't want it to.
 
@@ -616,7 +616,7 @@ Finally, collate the raw results down to a summary for each contestant:
             "standard_error": se,
         }
 
-This gives us the underling data that was plotted on the bar chart at the top.
+This gives us the underlying data that was plotted on the bar chart at the top.
 
 
 Fine-Tuning
@@ -659,6 +659,7 @@ It's easy to implement the specified format:
 
 We include the same system prompt that we will use for the task, and we provide
 the Jeopardy! question in the exact same format we will use for the real task.
+We omit the "1-shot" example - the fine-tuning should now fill the same role. 
 Finally, note that we take the opportunity to teach it that every response
 should be in the form of a question. (Many contestants such as [Matt
 Amodio][MA] invariably use the form "What is X?" instead wasting time thinking
@@ -718,9 +719,9 @@ Vector Database
 For RAG, we'll want to use a vector database to store and quickly retrieve
 semantically related questions. One nice thing about the Jeopardy! dataset is
 that every question is much, much shorter than the [8,191 token limit][TL] on
-the `text-embedding-ada-002` model. (What happened to that 8,192nd token, I
-wonder?) That means we don't have to think about "chunking" at all - we'll
-just make a separate chunk for each question. 
+the `text-embedding-ada-002` model. (What happened to that 8,192<sup>nd</sup>
+token, I wonder?) That means we don't have to think about "chunking" at all -
+we'll just make a separate chunk for each question. 
 
 This has the effect of greatly inflating the size of the dataset. A 1,536
 dimensional vector of 32-bit floats takes up 6,144 bytes each. So 200,000

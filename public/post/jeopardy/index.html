@@ -452,8 +452,8 @@ for this project.</p>
 
 <p>Llama is more open. You can download and run the models locally if you have a
 powerful enough computer. There are several ways to do this, but
-<a href="https://ollama.com/"><code>ollama</code></a> bills itself as the easiest way to run model locally, and I
-found this to be pretty accurate. You install it, pull the model weights you
+<a href="https://ollama.com/"><code>ollama</code></a> bills itself as a quick and easy way to run model locally, and
+I found this to be pretty accurate. You install it, pull the model weights you
 want using the CLI, and then use the Python <code>ollama</code> package to talk to your
 local <code>ollama</code> server. It&rsquo;s all pretty painless and worked well for <code>llama2:7b</code>
 and <code>llama3:8b</code>.</p>
@@ -667,7 +667,7 @@ Alex's Judgement: Incorrect. The correct response is &quot;What is Iraq?&quot; M
                   is the second-largest city in Iraq, not Baghdad.
 </code></pre>
 
-<p>I didn&rsquo;t explicitly ask it to do that, so I&rsquo;m not sure if its role playing or
+<p>I didn&rsquo;t explicitly ask it to do that, so I&rsquo;m not sure if it&rsquo;s role playing or
 if this is just a reflection of the fact that ChatGPT often &ldquo;over-explains&rdquo; its
 answers even when you don&rsquo;t want it to.</p>
 
@@ -847,7 +847,7 @@ results:</p>
     }
 </code></pre>
 
-<p>This gives us the underling data that was plotted on the bar chart at the top.</p>
+<p>This gives us the underlying data that was plotted on the bar chart at the top.</p>
 
 <h2 id="fine-tuning">Fine-Tuning</h2>
 
@@ -889,6 +889,7 @@ the messages for one chat session, using the same message format used by the
 
 <p>We include the same system prompt that we will use for the task, and we provide
 the Jeopardy! question in the exact same format we will use for the real task.
+We omit the &ldquo;1-shot&rdquo; example - the fine-tuning should now fill the same role.
 Finally, note that we take the opportunity to teach it that every response
 should be in the form of a question. (Many contestants such as <a href="https://www.jeopardy.com/jbuzz/contestants/matt-amodio-talks-winning-streak-ken-jennings-and-most-stressful-jeopardy-moment">Matt
 Amodio</a> invariably use the form &ldquo;What is X?&rdquo; instead wasting time thinking
@@ -947,9 +948,9 @@ a deal-breaker.</p>
 <p>For RAG, we&rsquo;ll want to use a vector database to store and quickly retrieve
 semantically related questions. One nice thing about the Jeopardy! dataset is
 that every question is much, much shorter than the <a href="https://platform.openai.com/docs/guides/embeddings/embedding-models">8,191 token limit</a> on
-the <code>text-embedding-ada-002</code> model. (What happened to that 8,192nd token, I
-wonder?) That means we don&rsquo;t have to think about &ldquo;chunking&rdquo; at all - we&rsquo;ll
-just make a separate chunk for each question.</p>
+the <code>text-embedding-ada-002</code> model. (What happened to that 8,192<sup>nd</sup>
+token, I wonder?) That means we don&rsquo;t have to think about &ldquo;chunking&rdquo; at all -
+we&rsquo;ll just make a separate chunk for each question.</p>
 
 <p>This has the effect of greatly inflating the size of the dataset. A 1,536
 dimensional vector of 32-bit floats takes up 6,144 bytes each. So 200,000
