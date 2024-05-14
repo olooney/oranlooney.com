@@ -447,14 +447,16 @@ this is tenuous and I haven&rsquo;t done so here.</p>
 
 <p>Models have to run somewhere - even the cloud is just someone else&rsquo;s hardware.
 For OpenAI, our choices are Azure or OpenAI&rsquo;s own servers, since the model
-weights are proprietary and cannot be run locally.</p>
+weights are proprietary and cannot be run locally. We&rsquo;ll use OpenAI&rsquo;s server
+for this project.</p>
 
 <p>Llama is more open. You can download and run the models locally if you have a
-powerful enough computer. There are several ways to do this, but <a href="https://ollama.com/"><code>ollama</code></a>
-bills itself as a way to run model locally, and I found this to be pretty
-accurate. You install it, pull the model weights you want using the CLI, and
-then use the Python <code>ollama</code> package to talk to your local <code>ollama</code> server. It&rsquo;s
-all pretty painless and worked well for <code>llama2:7b</code> and <code>llama3:8b</code>.</p>
+powerful enough computer. There are several ways to do this, but
+<a href="https://ollama.com/"><code>ollama</code></a> bills itself as the easiest way to run model locally, and I
+found this to be pretty accurate. You install it, pull the model weights you
+want using the CLI, and then use the Python <code>ollama</code> package to talk to your
+local <code>ollama</code> server. It&rsquo;s all pretty painless and worked well for <code>llama2:7b</code>
+and <code>llama3:8b</code>.</p>
 
 <p>Sadly, my graphics card &ldquo;only&rdquo; has 12 GB of VRAM, so I wasn&rsquo;t able to run the
 <code>llama3:70b</code> locally. (Works great for games though!  You should see it run
@@ -912,7 +914,9 @@ in the conclusion below.</p>
 <p>Calling the fine-tuned model is simply a matter of passing a new model ID to
 the API. We&rsquo;ll this wrap this in another standard <code>PlayerAgent</code> function. This
 one is named after Amy Schneider, who had a 40 game winning streak and would
-often go several games in a row without a single mistake:</p>
+often go several games in a row without a single mistake.</p>
+
+<p><img src="/post/jeopardy_files/amy.png"></p>
 
 <pre><code>@retry_decorator
 def amy(category: str, clue: str) -&gt; str:

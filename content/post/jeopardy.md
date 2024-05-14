@@ -265,14 +265,16 @@ this is tenuous and I haven't done so here.
 
 Models have to run somewhere - even the cloud is just someone else's hardware.
 For OpenAI, our choices are Azure or OpenAI's own servers, since the model
-weights are proprietary and cannot be run locally.
+weights are proprietary and cannot be run locally. We'll use OpenAI's server
+for this project.
 
 Llama is more open. You can download and run the models locally if you have a
-powerful enough computer. There are several ways to do this, but [`ollama`][OLL]
-bills itself as a way to run model locally, and I found this to be pretty
-accurate. You install it, pull the model weights you want using the CLI, and
-then use the Python `ollama` package to talk to your local `ollama` server. It's
-all pretty painless and worked well for `llama2:7b` and `llama3:8b`. 
+powerful enough computer. There are several ways to do this, but
+[`ollama`][OLL] bills itself as a quick and easy way to run model locally, and
+I found this to be pretty accurate. You install it, pull the model weights you
+want using the CLI, and then use the Python `ollama` package to talk to your
+local `ollama` server. It's all pretty painless and worked well for `llama2:7b`
+and `llama3:8b`. 
 
 Sadly, my graphics card "only" has 12 GB of VRAM, so I wasn't able to run the
 `llama3:70b` locally. (Works great for games though!  You should see it run
@@ -682,7 +684,9 @@ in the conclusion below.
 Calling the fine-tuned model is simply a matter of passing a new model ID to
 the API. We'll this wrap this in another standard `PlayerAgent` function. This
 one is named after Amy Schneider, who had a 40 game winning streak and would
-often go several games in a row without a single mistake:
+often go several games in a row without a single mistake.
+
+<img src="/post/jeopardy_files/amy.png">
 
     @retry_decorator
     def amy(category: str, clue: str) -> str:
