@@ -975,7 +975,7 @@ scales well, it's easy to implement (you don't have to hand-curate training
 examples but just chunk whatever useful documents are lying around), it's
 flexible (you can mix-and-match with any LLM to acheive the right balance of
 cost, quality, and speed) and above it *works*, giving noticeable improvement
-in task performance and answer quality.. 
+in task performance and answer quality. 
 
 ### Llama 3
 
