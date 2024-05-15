@@ -404,13 +404,13 @@ to improve it in just a minute. First, though, let’s take a look at how the mo
 on the test set:</p>
 <pre><code>p_hat = model.predict_proba(X_test)
 y_hat = model.predict(X_test)
-accuracy_score(y_test, y_hat)</code></pre>
-<blockquote>
-<p>0.9707602339181286</p>
-</blockquote>
+accuracy_score(y_test, y_hat)
+
+0.9707602339181286
+</code></pre>
 <p>97% accuracy is quite good. We can get a slightly deeper look at this result by looking
 at the confusion matrix for the <span class="math inline">\(p&lt;0.5\)</span> decision rule:</p>
-<table>
+<table style="width: 50%; margin: auto;">
 <thead>
 <tr class="header">
 <th></th>

@@ -322,3 +322,25 @@ html .archives .archives-item > a:visited {
 }
 
 
+/* Tables */
+
+.nowrap {
+    white-space: nowrap;
+}
+html .article table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+}
+
+html .article table th {
+    border: none;
+    border-bottom: 1px solid #800000;
+    font-size: 80%;
+    color: #800000;
+}
+
+html .article table td {
+    border: none;
+    font-size: 80%;
+}
