@@ -72,30 +72,6 @@ The dataset consists of 200,000+ question/answer pairs, plus the category
 (column) and value (row) of the question. Here is a sample to give you an idea
 of what it contains:
 
-<style>
-
-    .nowrap {
-        white-space: nowrap;
-    }
-    html .article > table {
-        width: 100%;
-        border-collapse: collapse;
-        border: none;
-    }
-
-    html .article > table th {
-        border: none;
-        border-bottom: 1px solid #800000;
-        font-size: 80%;
-        color: #800000;
-    }
-
-    html .article > table td {
-        border: none;
-        font-size: 80%;
-    }
-</style>
-
 | category                  | air_date   | question                                                                                              |   value | answer                   | round            |   show_number |
 |:--------------------------|:-----------|:------------------------------------------------------------------------------------------------------|--------:|:-------------------------|:-----------------|--------------:|
 | THE GOOD BOOK             | <span class="nowrap">2006-05-22</span> | 'Jeremiah asks, "Is there no balm in" this land?'                         |     400 | Gilead                   | Jeopardy!        |          5006 |
