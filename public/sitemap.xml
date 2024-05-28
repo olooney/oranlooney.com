@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.oranlooney.com/post/gpt-cnn/</loc>
+    <lastmod>2024-05-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/post/jeopardy/</loc>
     <lastmod>2024-05-12T00:00:00+00:00</lastmod>
   </url>
@@ -143,6 +148,12 @@
   </url>
   
   <url>
+    <loc>https://www.oranlooney.com/tags/cnn/</loc>
+    <lastmod>2024-05-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/tags/computer-science/</loc>
     <lastmod>2019-07-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -168,13 +179,13 @@
   
   <url>
     <loc>https://www.oranlooney.com/tags/llm/</loc>
-    <lastmod>2024-05-12T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.oranlooney.com/tags/machine-learning/</loc>
-    <lastmod>2024-05-12T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -192,13 +203,13 @@
   
   <url>
     <loc>https://www.oranlooney.com/</loc>
-    <lastmod>2024-05-12T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.oranlooney.com/post/</loc>
-    <lastmod>2024-05-12T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
