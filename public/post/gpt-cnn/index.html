@@ -6,17 +6,11 @@
   <title>A Picture is Worth 227 Words - Speculating About GPT-4o Internals - OranLooney.com</title>
   <meta property="og:title" content="A Picture is Worth 227 Words - Speculating About GPT-4o Internals - OranLooney.com" />
   <meta name="twitter:title" content="A Picture is Worth 227 Words - Speculating About GPT-4o Internals - …" />
-  <meta name="description" content="DRAFT DO NOT PUBLISH
-Problem Statement TODO: punchy intro
-GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res mode. (Ignoring the 85 token for the low-res &ldquo;master thumbnail&rdquo;.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
-OK, but why 170? It&rsquo;s an oddly specific number. It&rsquo;s not power of 2 or a multiple of 5 the way most &ldquo;round&rdquo; numbers are.">
-  <meta property="og:description" content="DRAFT DO NOT PUBLISH
-Problem Statement TODO: punchy intro
-GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res mode. (Ignoring the 85 token for the low-res &ldquo;master thumbnail&rdquo;.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
-OK, but why 170? It&rsquo;s an oddly specific number. It&rsquo;s not power of 2 or a multiple of 5 the way most &ldquo;round&rdquo; numbers are.">
-  <meta name="twitter:description" content="DRAFT DO NOT PUBLISH
-Problem Statement TODO: punchy intro
-GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res mode. (Ignoring the 85 token for the low-res &ldquo;master …">
+  <meta name="description" content="Here&rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (Let&rsquo;s ignore the 85 tokens for the low-res master thumbnail for now.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
+OK, but why 170? It&rsquo;s an oddly specific number. Numbers that are just dropped into the codebase without explanation are called &ldquo;magic numbers&rdquo; in programming, and 170 is a pretty glaring magic number.">
+  <meta property="og:description" content="Here&rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (Let&rsquo;s ignore the 85 tokens for the low-res master thumbnail for now.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
+OK, but why 170? It&rsquo;s an oddly specific number. Numbers that are just dropped into the codebase without explanation are called &ldquo;magic numbers&rdquo; in programming, and 170 is a pretty glaring magic number.">
+  <meta name="twitter:description" content="Here&rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (Let&rsquo;s ignore the 85 tokens for the low-res master thumbnail for now.) At 0.75 tokens/word, …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -105,8 +99,10 @@ GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res
 <ul>
 <li>
 <ul>
-<li><a href="#problem-statement">Problem Statement</a></li>
-<li><a href="#making-assumptions">Making Assumptions</a>
+<li><a href="#embeddings">Embeddings</a></li>
+<li><a href="#number-of-feature-dimensions">Number of Feature Dimensions</a></li>
+<li><a href="#number-of-tokens">Number of Tokens</a></li>
+<li><a href="#representing-images">Representing Images</a>
 <ul>
 <li><a href="#strategy-1-raw-pixels">Strategy 1: Raw Pixels</a></li>
 <li><a href="#strategy-2-cnn">Strategy 2: CNN</a></li>
@@ -121,43 +117,57 @@ GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res
 </aside>
       
 
-<p><strong>DRAFT DO NOT PUBLISH</strong></p>
+<p>Here&rsquo;s a <a href="https://openai.com/api/pricing/">fact</a>: GPT-4o charges 170 tokens to process each <code>512x512</code> tile
+used in high-res mode. (Let&rsquo;s ignore the 85 tokens for the low-res master
+thumbnail for now.) At 0.75 tokens/word, this suggests a picture is worth about
+227 words - only a factor of four off from the traditional saying.</p>
 
-<h2 id="problem-statement">Problem Statement</h2>
-
-<p>TODO: punchy intro</p>
-
-<p>GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res mode.
-(Ignoring the 85 token for the low-res &ldquo;master thumbnail&rdquo;.)
-At 0.75 tokens/word, this suggests a picture is worth about 227 words - only
-a factor of four off from the traditional saying.</p>
-
-<p>OK, but why 170? It&rsquo;s an oddly specific number. It&rsquo;s not power of 2 or a
-multiple of 5 the way most &ldquo;round&rdquo; numbers are. Numbers that are just dropped
+<p>OK, but <em>why</em> 170? It&rsquo;s an oddly specific number. Numbers that are just dropped
 into the codebase without explanation are called &ldquo;<a href="https://en.wikipedia.org/wiki/Magic_number_(programming)">magic numbers</a>&rdquo; in
 programming, and 170 is a pretty glaring magic number.</p>
 
-<p>And why are image costs even converted to tokens anyway? If it were just for
-billing purposes, wouldn&rsquo;t it be less confusing to simply list the cost per tile?</p>
+<p>And why the heck are image costs even being converted to token counts anyway?
+If it were just for billing purposes, wouldn&rsquo;t it be less confusing to simply
+list the cost per tile?</p>
 
 <p>What if OpenAI chose 170, not as part of some arcane pricing strategy, but
 simply because it&rsquo;s literally true? What if image tiles are represented
 internally as 170 consecutive tokens? And if so, how?</p>
 
-<h2 id="making-assumptions">Making Assumptions</h2>
+<h2 id="embeddings">Embeddings</h2>
+
+<p>The first thing to recall about the transformer model is that it operates on
+feature vectors, not discrete tokens. They <em>have</em> to be vectors, or the dot
+product similarity at the heart of transformers wouldn&rsquo;t make any sense. Tokens
+are converted to feature vectors by an embedding model before they even hit the
+first layer of the transformer model.</p>
+
+<p>For example, Llama 3 uses 4,096 feature dimensions internally, so 10 input
+tokens are converted <code>10x4096</code> matrix. That&rsquo;s the &ldquo;real&rdquo; input into a transformer
+model.</p>
+
+<p>But there&rsquo;s no law that says that feature vectors <strong>must</strong> come from an
+embedding model. That&rsquo;s a strategy that works well for text data, but if
+we have data in a different format that we want to represent to a transformer
+model, well then, we can simply use a different strategy.</p>
+
+<p>Let&rsquo;s see if we can&rsquo;t deduce what that &ldquo;different strategy&rdquo; might be for image
+data.</p>
+
+<h2 id="number-of-feature-dimensions">Number of Feature Dimensions</h2>
+
+<p>We don&rsquo;t know what number of dimensions GPT-4o uses internally to represent
+features because that&rsquo;s proprietary, but we can make some reasonable
+assumptions:</p>
 
 <p>OpenAI seems to likes powers of 2, sometimes with a factor of 3 mixed in.
-For example, 1,536 (ada-002) or 3,072 (text-embedding-3-large)</p>
+For example, they used 1,536 for <a href="https://openai.com/index/new-and-improved-embedding-model/">ada-002</a> or 3,072 for <a href="https://platform.openai.com/docs/guides/embeddings/embedding-models">text-embedding-3-large</a>.</p>
 
-<p>Alternatively, image tiles are square, so are likely represented by a square grid of tokens.
-Following the &ldquo;powers of 2s and 3s&rdquo; logic, 170 might be <sup>512</sup>&frasl;<sub>3</sub>.
-Following the square logic, 170 is very close to $13 \times 13$.</p>
+<p>For all I know, these publicly available embedding models are <em>literally</em> the
+same ones used by GPT-3.5 and GPT-4. If you have an excellent embedding model
+sitting around, why not make some money off it?</p>
 
-<p>TODO: recall that &ldquo;tokens&rdquo; are represented internally in transformer models
-as vector embeddings.</p>
-
-<p>It&rsquo;s likely that a the internal vector dimension used to represent tokens
-inside of GPT-4o is one of these:</p>
+<p>So, it&rsquo;s likely that the number of feature dimensions used inside of GPT-4o is one of these:</p>
 
 <div style="width: 50%; margin: auto">
     <table>
@@ -173,7 +183,7 @@ inside of GPT-4o is one of these:</p>
                 <td align="center">$3 \cdot 2^9$</td>
             </tr>
             <tr>
-                <td align="center">$2{,}024$</td>
+                <td align="center">$2{,}048$</td>
                 <td align="center">$2^{11}$</td>
             </tr>
             <tr>
@@ -181,94 +191,163 @@ inside of GPT-4o is one of these:</p>
                 <td align="center">$3 \cdot 2^{10}$</td>
             </tr>
             <tr>
-                <td align="center">$4{,}048$</td>
+                <td align="center">$4{,}096$</td>
                 <td align="center">$2^{12}$</td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<p>Let&rsquo;s say it&rsquo;s 3,072 for the sake of argument.
-How do we go from $ 512 \times 512 \times 3 $ to $170 \times 3{,}072$?</p>
+<p>Let&rsquo;s say it&rsquo;s 3,072 for the sake of argument. The factor of three makes sense
+because we start from three color channels and it&rsquo;s not a big deal if we&rsquo;re off
+by a factor of 2 or 4.</p>
+
+<h2 id="number-of-tokens">Number of Tokens</h2>
+
+<p>TODO: move this elsewhere</p>
+
+<p>Image tiles are square, so are likely represented by a square
+grid of tokens. 170 is very close to <code>13x13</code>.</p>
+
+<p>A single <code>&lt;|image start|&gt;</code> special token, followed by 169 consecutive
+feature vectors representing the image.</p>
+
+<p>How do we go from <code>512x512x3</code> to <code>13x13x3072</code>?</p>
+
+<p>Note that <a href="https://blog.eleuther.ai/rotary-embeddings/">RoPE (Rotary Position Embeddings)</a> should help GPT-4o understand the
+approximate positions of tokens within the image, but not perfectly.</p>
+
+<h2 id="representing-images">Representing Images</h2>
 
 <h3 id="strategy-1-raw-pixels">Strategy 1: Raw Pixels</h3>
 
 <p>Here&rsquo;s an extremely simple way to stuff an image into the embedding space:</p>
 
 <ol>
-<li>Divide the $512 \times 512$ into a $16 \times 16$ grid of &ldquo;mini-tiles.&rdquo;</li>
-<li>Each mini-tiles is $32 \times 32 \times 3$, for a total size of $3{,}072$.</li>
-<li>Each mini-tile can be embedded a a single token.</li>
-<li>Represent the image as 256 consecutive tokens.</li>
+<li>Divide the <code>512x512</code> into a <code>16x16</code> grid of &ldquo;mini-tiles.&rdquo;</li>
+<li>Each mini-tiles is <code>32x32x3</code> flatten it a vector of dimension 3,072.</li>
+<li>Each mini-tile is embedded in a single token.</li>
+<li>The entire image tile is represented as 256 consecutive tokens.</li>
 </ol>
 
 <p>There are two main problems with this approach:</p>
 
 <ol>
-<li>256 is larger than 170, and</li>
+<li>256 is slightly larger than 170, and</li>
 <li>it&rsquo;s extremely stupid.</li>
 </ol>
 
 <p>By &ldquo;extremely stupid&rdquo; I mean that it doesn&rsquo;t make much sense to embed using raw
-RGB values and hope the transformer can handle it. The transformer architecture
-is optimized for text, not images, and this brute force way of stuffing data in
-gives us no way to map into the same &ldquo;semantic space&rdquo; used by token embeddings.</p>
+RGB values and hope the transformer can handle it. For example, if the image is
+shifted one pixel to the left, tokens generated in this way would suddenly have
+very low similarity; there&rsquo;s no translational invariance. And that&rsquo;s just a
+small taste of what goes wrong. The transformer architecture is optimized for
+text, not images.</p>
+
+<p>No, we should probably used a model that is designed and proven to be able
+to handle image data.</p>
 
 <h3 id="strategy-2-cnn">Strategy 2: CNN</h3>
 
-<p>TODO Discuss AlexNet and YOLOv3</p>
+<p>Just to get a sense of what the options are, let&rsquo;s take look at a classic CNN
+architecture, <a href="https://en.wikipedia.org/wiki/AlexNet">AlexNet</a>:</p>
 
-<p><img src="/post/gpt-cnn_files/layers_alexnet.png">
-Note: AlexNet was designed to work on $227 \times 227$ pixels. I&rsquo;ve adjusted it to match the $512 \times 512$ input.</p>
+<p><img src="/post/gpt-cnn_files/alexnet.png"></p>
 
-<p><img src="/post/gpt-cnn_files/layers_yolo_v3.png">
-Note: YOLOv3 was designed to work on $416 \times 416$ pixels. I&rsquo;ve adjusted it to match the $512 \times 512$ input.</p>
+<p>The basic building blocks are:</p>
 
-<p>TODO: explain why YOLO ends in a grid instead of a single output, bounding boxes, etc.</p>
+<ol>
+<li>Convolution Layer. These scan over an image in $k \times k$ sized blocks,
+training small a small neural network.</li>
+<li>Max Pool Layer. These also look at a $k \times k$ block, but simply take the
+maximum value from each.</li>
+</ol>
 
-<p>Suggest 3x3 and 5x5 versions</p>
+<p>Let&rsquo;s compare that to a somewhat newer architecture, YOLOv3:</p>
 
-<p><img src="/post/gpt-cnn_files/layers_3x3_speculative.png"></p>
+<p><img src="/post/gpt-cnn_files/yolo_v3.png"></p>
 
-<p>If you use $5 \times 5$ convolution layers alternating with $2 \times 2$
-max pool layers, all the math works beautifully without any special cases:</p>
+<p>Here, the notation &ldquo;xN&rdquo; means that the entire block is repeated N times. YOLOv3
+is 10 times as deep as AlexNet but is still very similar in some regards.</p>
 
-<p><img src="/post/gpt-cnn_files/layers_5x5_speculative.png"></p>
+<p>The main differences (which are characteristic of newer CNN architectures) are:</p>
 
-<p>The $5 \times 5$ version seems to fit extremely neatly, reaching our target
-size of $13 \times 13$ and target embedding dimension of 3,072 without any
-special cases. At 16-bit precision, this uses a maximum of about 12 GB of VRAM
-so can be run quickly on an inexpensive, commodity GPU.</p>
+<ol>
+<li>A preference for <code>3x3</code> over larger kernels.</li>
+<li>The use of &ldquo;stride 2&rdquo; convolutional layers instead of max pool layers. These
+achieve the same step down in dimension but are thought to lose less
+information.</li>
+<li>The use of skip connections, show here as residual &ldquo;layer,&rdquo; which simply add
+on the contribution from an earlier layer to <a href="https://en.wikipedia.org/wiki/Residual_neural_network">prevent training degradation.</a></li>
+</ol>
 
-<p>However, $5 \times 5$ convolutions aren&rsquo;t very common in best-practice CNN
-Architectures, so maybe it&rsquo;s using two back-to-back $3 \times 3$ convolutions,
-similar to the VGG16 architecture:</p>
+<p>A key point is that YOLO stops at <code>13x13</code>. That&rsquo;s because it doesn&rsquo;t predict
+just one class for the entire image - it actually predicts an entire grid of
+object classes. That&rsquo;s how it can see a large number of different objects in
+the same image in a single pass. Hence the name: You Only Look Once. This is
+basically what I think our hypothetical GPT-4o CNN must do too, only it&rsquo;s output
+is a <code>13x13</code> grid of feature vectors.</p>
 
-<!-- <img src="/post/gpt-cnn_files/layers_3x3_vgg_speculative.png"> -->
+<p>These examples give us a pretty good sense of what a &ldquo;best practice&rdquo; CNN would
+look like. All we have to now is play a little game of connect the dots. How
+can we go from <code>512x512x3</code> to <code>13x13x3072</code>? Using these layers?</p>
 
-<p><img src="/post/gpt-cnn_files/layers_3x3_vgg_short_speculative.png"></p>
+<p>There&rsquo;s another decision which is important in determining output dimension:
+the padding strategy. When a CNN kernel runs over the input layer, we have two
+choices on how to handle the edges.</p>
 
-<p>This gets us roughly the same effect, but at the cost of more layers.</p>
+<p>Option One: we can simply start the kernel a little bit inside the image so it
+doesn&rsquo;t go outside, and stop a little early on the other side. For example,
+let&rsquo;s say we have a <code>3x3</code> kernel. Instead of looping from <code>(0, 0)</code> to <code>(width -
+1, height - 1)</code>, we start with the kernel centered at (1, 1) and run to <code>(width
+- 2, height 2)</code>. This strategy is called &ldquo;valid&rdquo; padding or no padding. A layer
+with a $k \times k$ kernel that uses valid padding reduces the output dimension
+by <code>k - 1</code>.</p>
 
-<p>Once we&rsquo;ve transformed the image tensor from $512 \times 512 \times 3$
-to $13 \times 13 \times 3{,}072$, we can represent them to the transfomer
-as 169 consecutive embedding vectors.</p>
+<p>Option Two: we can run the kernel from <code>(0, 0)</code> to <code>(width - 1, height - 1)</code>
+but when we hit the edge and the kernel goes out of bounds, we&rsquo;ll pretend
+like there are zeros everywhere outside the original dimensions. This strategy
+is called &ldquo;zero&rdquo; padding. This keeps the output dimension exactly the same as
+the input dimension.</p>
 
-<p>Add one token for flag the start of an image block:</p>
+<p>I tried
+<a href="/post/gpt-cnn_files/gpt4o_speculative.png" target="_blank">various</a>
+<a href="/post/gpt-cnn_files/gpt4o_speculative4.png" target="_blank">different</a>
+<a href="/post/gpt-cnn_files/gpt4o_speculative2.png" target="_blank">variations</a>,
+but most of these
+required special cases on one or more layers to &ldquo;fit.&rdquo; Until I found this one,
+which steps down elegantly with no special cases at all:</p>
 
-<pre><code>&lt;| Image Tile Start |&gt;
-3,072 channels from (0,0)
-3,072 channels from (1,0)
-...skipping 166 similar embedding vectors...
-3,072 channels from (13,13)
-</code></pre>
+<p><img src="/post/gpt-cnn_files/gpt4o_speculative3.png"></p>
 
-<p>(Alternatively, perhaps its $12 \times 12$ with special tokens for start, end, and &ldquo;row&rdquo; delimiter.)
-Note that RoPE (Rotary Position Embedding) should help GPT-4o understand the approximate positions of tokens within the image, but not perfectly.</p>
+<p>It fits very neatly, doesn&rsquo;t it? From 512 to 13 dimensions in 5 identical
+blocks, while simultaneously quadrupling the number of channels with each
+block to hit the 3,072 number of features dimensions that we assumed.
+Unfortunately, it also feels a little outdated because of the <code>5x5</code> kernels and
+max pool layers.</p>
+
+<p>Here&rsquo;s an alternative that <em>almost</em> worked while staying closer to the YOLO
+design:</p>
+
+<p><img src="/post/gpt-cnn_files/gpt4o_speculative4.png"></p>
+
+<p>This unfortunately ended up at <code>12x12</code> instead of <code>13x13</code>. I mean, obviously
+it could easily be forced to work, but where&rsquo;s the elegance in that?</p>
+
+<p>While impossible to prove, these speculative designs demonstrate that there are
+plausible CNN architectures that could do the job.</p>
 
 <h2 id="semantics">Semantics</h2>
 
-<p>TODO</p>
+<p>There still is a problem, however. The feature vectors generated by the CNN
+from image data and feature vectors generated by the embedding model from
+tokens/text may be being jammed into the same space, but they aren&rsquo;t actually
+compatible. When you take the dot product between the embedding vector for the
+token &ldquo;cat&rdquo; and the feature vector for an image of a cat you should get a
+number close to one - they should be semantically similar.</p>
+
+<p>Maybe this isn&rsquo;t a problem; maybe GPT-4o will simply learn two different &ldquo;languages&rdquo;
+and learn to associate between them by training on labelled image data.</p>
 
 <p>Problem: Aligning image semantics with token semantics</p>
 
@@ -279,6 +358,8 @@ For example, if there&rsquo;s a cat in the upper left, train it to predict the 3
 
 <h2 id="ocr">OCR</h2>
 
+<p>TODO</p>
+
 <p>This does <em>NOT</em> explain how it does OCR.
 YOLO can&rsquo;t really do OCR, especially not the high-quality OCR GPT-4o exhibits.
 I have another theory for that: I think they&rsquo;re running tesseract (or their own in-house OCR) and feeding the identified text in alongside the image data.
@@ -288,21 +369,21 @@ Malicious prompt rejection example.
 However, this does not explain why there&rsquo;s no charge per token for the text found in an image.</p>
 
 <p>Interestingly enough, this seems to suggest its actually <em>more efficient</em> to
-send text as images:A $512 \times 512$ image with a small but readable font
+send text as images:A <code>512x512</code> image with a small but readable font
 can easily fit 400-500 tokens worth of text, yet you&rsquo;re only charged for 170
 input tokens plus the 85 for the master thumbnail for a grand total of 255
 tokens - far less than the number of words on the image.</p>
 
 <p>This theory explains why there is additional latency when processing images.
-The CNN would be essentially instaneous, but OCR takes a bit of time.BTW,
-and I&rsquo;m not saying this proves anything, but the Python environment used by the
-OpenAI code interpreter has pytesseract installed. You can literally just ask
-it to run pytesseract on any image you&rsquo;ve uploaded if you want to get a second
-opinion.</p>
+The CNN would be essentially instantaneous, but OCR takes a bit of time. BTW
+(and I&rsquo;m not saying this proves anything) but the Python environment used by
+the OpenAI code interpreter has pytesseract installed. You can literally just
+ask it to run pytesseract on any image you&rsquo;ve uploaded if you want to get a
+second opinion.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Well, we&rsquo;ve made a lot of speculitive hay out of what is essentially only one
+<p>Well, we&rsquo;ve made a lot of speculative hay out of what is essentially only one
 morsel of hard fact: that OpenAI used the magic number 170.</p>
 
 <p>However, there does seem to be a complete plausible approach, very much in line
@@ -311,33 +392,42 @@ image tiles to embedding vectors.</p>
 
 <p>So, I don&rsquo;t think 170 tokens is just an approximation used to bill for roughly
 the amount of compute it takes to process an image. And I don&rsquo;t think they&rsquo;re
-concatinating layers to join image and text data the way some other multi-modal
+concatenating layers to join image and text data the way some other multi-modal
 models do.</p>
 
-<p>No, I think GPT-4o is <em>literally</em> representing $512 \times 512$ images as 170
+<p>No, I think GPT-4o is <em>literally</em> representing <code>512x512</code> images as 170
 tokens, using an CNN architecture very similar to YOLO to embed the image
-directly into the transformers semantic embedding space.</p>
+directly into the transformers semantic feature space.</p>
 
-<p>The architectures that best &ldquo;fits&rdquo; is 5 layers of $5 \times 5$ convolutions alternating with 5 layers of $2 \times 2$ max pooling,
-or a similar architecture with two back-to-back $3 \times 3$ convolution layers.
-It&rsquo;s impossible to be that precise, but I think it&rsquo;s roughly in that ballpark.
-(Not least because <em>most</em> state-of-the-art image classifiers are roughly in the same ballpark.)</p>
+<p>The architectures that best &ldquo;fits&rdquo; is 5 layers of <code>5x5</code> convolutions
+alternating with 5 layers of <code>2x2</code> max pooling, but honestly it could be nearly
+anything.</p>
 
-<p>This explains how its able to handle multiple images, and tasks like comparing two images, for example.
-It explains how its able to see multiple objects in the same image, but gets overwhelmed when there are too many objects in a busy scene.
-It also explains why GPT-4o seems extremely vague and the absolute and relative positions of separate objects within the scene; RoPE
-can only do so much.</p>
+<p>The theory has a lot of predictive power: it explains how GPT-4o is able to
+handle multiple images, and tasks like comparing two images, for example. It
+explains how its able to see multiple objects in the same image, but gets
+overwhelmed when there are too many objects in a busy scene. And it explains
+why GPT-4o seems extremely vague and the absolute and relative positions of
+separate objects within the scene; RoPE can only do so much.</p>
+
+<p>Perhaps someday OpenAI will open-source GPT-4o and I&rsquo;ll be able to peek under
+the hood and find out if I was close at all.</p>
 
 <!-- https://unsplash.com/photos/black-and-gray-camera-on-white-table-Y5dd6hLkn-8 -->
 
 <h2 id="postscript-alpha-channel-shenanigans">Postscript: Alpha Channel Shenanigans</h2>
 
-<p>One curious thing I noticed while working on this project is that GPT-4o
-<em>ignores</em> the alpha channel, resulting in occasionally suprising behavior.</p>
+<p>One interesting thing I noticed while working on this project is that GPT-4o
+<em>ignores</em> the alpha channel, resulting in somewhat counter-intuitive behavior.</p>
 
-<p>We can illustate this with four carefully prepared images. For convenience,
-These images are displayed on top of a checkboard pattern - the images themselves
-have flat, transparent backgrounds.</p>
+<p>When I say, &ldquo;ignores&rdquo;, I don&rsquo;t mean that it gets rid of transparency by
+compositing it onto some default background, the way an image editor might
+when convert PNG to JPG. No, I mean it literally just grabs the RGB channels
+and ignores the alpha channel.</p>
+
+<p>We can illustrate this with four carefully prepared images. For convenience,
+These images are displayed on top of a checkerboard pattern - the images
+themselves have flat, transparent backgrounds.</p>
 
 <p>What do I mean by &ldquo;transparent black&rdquo; or &ldquo;transparent white?&rdquo; Well, when
 we represent an RGBA color with four bytes, the RGB byes are still there
@@ -440,19 +530,19 @@ even though PNG compression should have made it much smaller if it was really
 a perfectly blank, transparent image. <em>You</em> can&rsquo;t see it, because your browser correctly respects the alpha channel,
 but GPT-4o can, because it ignores it completely.</p>
 
-<p>I&rsquo;m not sure if this is bug but its certainly suprising behavior; In fact,
-it feels like something a malicous user could use to smuggle information past
-humans and directly to GPT-4o. It&rsquo;s true that GPT-4o is <em>much</em> better at
+<p>I&rsquo;m not sure if this is bug but its certainly <a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">surprising</a> behavior; In
+fact, it feels like something a malicious user could use to smuggle information
+past humans and directly to GPT-4o. However, GPT-4o is <em>much</em> better at
 detecting and ignoring malicious prompts hidden in images:</p>
 
 <p><img src="/post/gpt-cnn_files/gpt4o_malicious_test1.png"></p>
 
-<p>You can see several other examples of GPT-4o successfully detecting and
+<p>(You can see several other examples of GPT-4o successfully detecting and
 ignoring malicious prompts hidden in images in my <a href="https://olooney.github.io/image_tagger/gallery/index.html">gallery of GPT-4o test
-images</a>.</p>
+images</a>.)</p>
 
 <p>So even if it is a bug, it&rsquo;s not obvious it can be exploited. Still, it would
-be less suprising in GPT-4o &ldquo;saw&rdquo; the same thing that a human would in a
+be less surprising in GPT-4o &ldquo;saw&rdquo; the same thing that a human would in a
 browser.</p>
 
     </article>

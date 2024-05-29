@@ -18,10 +18,8 @@
       <pubDate>Mon, 27 May 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/gpt-cnn/</guid>
-      <description>DRAFT DO NOT PUBLISH
-Problem Statement TODO: punchy intro
-GPT-4o charges 170 tokens to process each $512 \times 512$ tile used in high-res mode. (Ignoring the 85 token for the low-res &amp;ldquo;master thumbnail&amp;rdquo;.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
-OK, but why 170? It&amp;rsquo;s an oddly specific number. It&amp;rsquo;s not power of 2 or a multiple of 5 the way most &amp;ldquo;round&amp;rdquo; numbers are.</description>
+      <description>Here&amp;rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (Let&amp;rsquo;s ignore the 85 tokens for the low-res master thumbnail for now.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
+OK, but why 170? It&amp;rsquo;s an oddly specific number. Numbers that are just dropped into the codebase without explanation are called &amp;ldquo;magic numbers&amp;rdquo; in programming, and 170 is a pretty glaring magic number.</description>
     </item>
     
   </channel>
