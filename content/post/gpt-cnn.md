@@ -1,5 +1,5 @@
 ---
-title: "A Picture is Worth 227 Words - Speculating About GPT-4o Internals"
+title: "A Picture is Worth 227 Words - Investigating GPT-4o Internals"
 author: "Oran Looney"
 date: 2024-05-27
 publishdate: 2023-05-27
@@ -43,7 +43,7 @@ model.
 But there's no law that says that feature vectors **must** come from an
 embedding model. That's a strategy that works well for text data, but if
 we have data in a different format that we want to represent to a transformer
-model, well then, we can simply use a different strategy. 
+model we can simply use a different strategy. 
 
 Let's see if we can't deduce what that "different strategy" might be for image
 data.
@@ -182,8 +182,16 @@ is a `13x13` grid of feature vectors.
 
 These examples give us a pretty good sense of what a "best practice" CNN would
 look like. All we have to now is play a little game of connect the dots. How
-can we go from `512x512x3` to `13x13x3072`? Using these layers?
+can we go from `512x512x3` to `13x13x3072`?
 
+Note: in the below I use the so-called "[valid][VP]" padding strategy because
+I'm interested in stepping down the dimension and am not worried about keeping
+the dimension exactly the same so that we can repeat blocks or use skip
+connections. The practical upshot is that we lose a few dimensions ($k-1$ for 
+a $k \times k$ kernel) each time we apply a convolution layer.
+
+[VP]: https://stackoverflow.com/questions/37674306/what-is-the-difference-between-same-and-valid-padding-in-tf-nn-max-pool-of-t
+<!--
 There's another decision which is important in determining output dimension:
 the padding strategy. When a CNN kernel runs over the input layer, we have two
 choices on how to handle the edges. 
@@ -201,9 +209,10 @@ but when we hit the edge and the kernel goes out of bounds, we'll pretend
 like there are zeros everywhere outside the original dimensions. This strategy
 is called "zero" padding. This keeps the output dimension exactly the same as
 the input dimension. 
+-->
 
 I tried
-<a href="/post/gpt-cnn_files/gpt4o_speculative.png" target="_blank">various</a>
+<a href="/post/gpt-cnn_files/gpt4o_speculative.png" target="_blank">several</a>
 <a href="/post/gpt-cnn_files/gpt4o_speculative4.png" target="_blank">different</a>
 <a href="/post/gpt-cnn_files/gpt4o_speculative2.png" target="_blank">variations</a>,
 but most of these
@@ -250,6 +259,90 @@ For example, if there's a cat in the upper left, train it to predict the 3,072-d
 
 Possible Solution 2: End-to-End training
 
+
+Experimental Validation
+-----------------------
+
+Does GPT-4o really see a `13x13` grid of semantic feature vectors? I invented
+a task, loosely inspired by [Zener card][ZC], to test this. The task is to
+identify the color and shape for every symbol on a grid in an image.
+
+I wrote a [simple program][ZP] to generate test grids that look like this:
+
+<img src="/post/gpt-cnn_files/zener_5x5.png">
+
+I then used this prompt to obtain comparison data:
+
+    """Divide this image into a {k}x{k} grid and describe the shape and color of
+    each cell. Report your results as a JSON array of array (no objects or row
+    labels) and use all lowercase."""
+
+If the `13x13` tokens hypothesis is correct, GPT-4o should do well on this task
+up to about 13 and then performance should degrade. The CNN isn't literally
+dividing the image up into a grid so it might start to degrade before then,
+and might struggle more with even grid sizes than odd because the cells won't
+be aligned.
+
+However, that is not in fact what happens. Instead, performance is perfect for
+`5x5` grids and smaller (no matter how many times I retried it) but began to
+degrade rapidly after that, and by the time we reach `13x13` it was no better than
+chance.
+
+For example, here is a `7x7` grid:
+
+<img src="/post/gpt-cnn_files/zener_7x7.png">
+
+For which GPT-4o returned this:
+
+    [
+        ["blue diamond", "purple triangle", "red plus", "purple circle", "orange square", "purple circle", "blue circle"],
+        ["blue diamond", "red circle", "green plus", "red square", "orange diamond", "blue triangle", "purple plus"],
+        ["blue diamond", "orange triangle", "red square", "orange square", "blue plus", "purple circle", "blue circle"],
+        ["green diamond", "blue circle", "orange circle", "green circle", "purple diamond", "green triangle", "orange diamond"],
+        ["purple square", "purple circle", "green plus", "green diamond", "green circle", "blue triangle", "purple triangle"],
+        ["red plus", "red triangle", "purple circle", "blue triangle", "orange triangle", "red diamond", "orange diamond"],
+        ["orange plus", "blue diamond", "green triangle", "green plus", "green triangle", "purple diamond", "purple square"]
+    ]
+
+It got 38/49 correct - an accurancy of 76%. The exact pattern of hits and
+misses looks like this:
+
+<img src="/post/gpt-cnn_files/zener_7x7_results.png">
+
+Performance continues to degrade as the grid size increases and by the time we
+get to the `13x13` grid:
+
+
+<img src="/post/gpt-cnn_files/zener_13x13.png">
+
+The results are no better than chance:
+
+<img src="/post/gpt-cnn_files/zener_13x13_results.png">
+
+
+Does that mean I was wrong about 169 tokens representing a `13x13` grid?
+Yes. Yes it does. My disappointment is immeasurable and my day is ruined.
+
+> "The great tragedy of science: the slaying of a beautiful hypothesis by an ugly fact." - Thomas Huxley 
+
+But the `5x5` grid results are suggestive. It really can keep track of 25
+distinct objects and their absolute positions within in the image. Maybe the
+basic concept is right, I just got the dimension wrong. It would be easy
+to tack on another couple of layers to our CNN to get down to `5x5` instead
+of `13x13`. (This is left as an exercise for the reader.)
+
+The trouble with `5x5` is that I can't get it to line up with the 170 token
+cost. You can say, oh, maybe every cell is represented by 6 feature vectors,
+not 1. That would be equivalent to a short sentence describing each cell;
+that's not crazy. Maybe there are special row delimiter tokens at the end of
+every row, maybe the whole image is bracketed by special start and end tokens.
+I played with it for a while, but I don't see any clean way to get to exactly
+170 token cost if we assume the CNN's output layer is `5x5`. For example, we
+could use 6 feature vectors for each cell, and then 4 delimiters per row, that
+would get us to 170. But that's not really a plausible way to structure the
+data.
+
+
 OCR
 ---
 
@@ -280,6 +373,8 @@ second opinion.
 Conclusion
 ----------
 
+TODO
+
 Well, we've made a lot of speculative hay out of what is essentially only one
 morsel of hard fact: that OpenAI used the magic number 170.
 
@@ -307,16 +402,17 @@ overwhelmed when there are too many objects in a busy scene. And it explains
 why GPT-4o seems extremely vague and the absolute and relative positions of
 separate objects within the scene; RoPE can only do so much.
 
-Perhaps someday OpenAI will open-source GPT-4o and I'll be able to peek under
-the hood and find out if I was close at all.
+Perhaps someday OpenAI will open-source GPT-4o and we'll be able to peek under
+the hood and find out how it all works.
 
 <!-- https://unsplash.com/photos/black-and-gray-camera-on-white-table-Y5dd6hLkn-8 -->
+
 
 Postscript: Alpha Channel Shenanigans 
 --------------------------------------
 
-One interesting thing I noticed while working on this project is that GPT-4o
-*ignores* the alpha channel, resulting in somewhat counter-intuitive behavior.
+One interesting thing I noticed is that GPT-4o *ignores* the alpha channel,
+resulting in somewhat counter-intuitive behavior.
 
 When I say, "ignores", I don't mean that it gets rid of transparency by
 compositing it onto some default background, the way an image editor might
@@ -328,10 +424,11 @@ These images are displayed on top of a checkerboard pattern - the images
 themselves have flat, transparent backgrounds.
 
 What do I mean by "transparent black" or "transparent white?" Well, when
-we represent an RGBA color with four bytes, the RGB byes are still there
+we represent an RGBA color with four bytes, the RGB bytes are still there
 even when alpha is 100%. `(0, 0, 0, 255)` and `(255, 255, 255, 255)` are
 in some sense different colors, even though there's no situation where a
-correct renderer would display them differently.
+correct renderer would display them differently since they're both 100%
+transparent.
 
 <style>
     .grid-container {
@@ -395,8 +492,26 @@ This tells us that GPT-4o *disregards* the alpha channel and only looks at the
 RGB channels. To it, transparent black is black, transparent white is white.
 
 We can see this even more clearly if we mess with an image to preserve the
-three RGB channels while setting the alpha channel to 100%. These two images
-have identical RGB data, and only differ in the alpha channel:
+three RGB channels while setting the alpha channel to 100%. Here's a little
+Pillow function to do that:
+
+
+    from PIL import Image
+
+    def set_alpha(image, output_path, alpha_value):
+        # copy the image and ensure it's RGBA
+        image = image.convert("RGBA")
+
+        # set the alpha channel of every pixel to the given value
+        pixels = image.getdata()
+        new_pixels = [(r, g, b, alpha_value) for r, g, b, a in pixels]
+        image.putdata(new_pixels)
+
+        return image
+
+
+I used that to make the two images below; they have identical RGB data, and
+only differ in the alpha channel:
 
 <div class="grid-container">
     <div class="grid-item">
@@ -417,16 +532,14 @@ GPT-4o has no trouble seeing the hidden platypus:
 
 <img src="/post/gpt-cnn_files/chatgpt_hidden_platypus_test.png" alt="ChatGPT passes the hidden platypus test.">
 
-If you don't believe me, download the 
+You can try downloading the 
 <a href="/post/gpt-cnn_files/platypus_hidden.png" download>`hidden_platypus.png`</a> 
-image and paste it into ChatGPT yourself; it will correctly describe it. (DON'T
-right-click copy-and-paste - the transparency will be lost as it passes
-through the clipboard.) You may also note the image is 39.3 KB, the same
-size as
+image and paste it into ChatGPT yourself; it will correctly describe it. 
+You may also note the image is 39.3 KB, the same size as
 <a href="/post/gpt-cnn_files/platypus.png" download>`platypus.png`</a> 
 even though PNG compression should have made it much smaller if it was really
-a perfectly blank, transparent image. *You* can't see it, because your browser correctly respects the alpha channel,
-but GPT-4o can, because it ignores it completely.
+a perfectly blank, transparent image. Or you can use the above function to
+set the alpha channel back to 255, recovering the original image.
 
 I'm not sure if this is bug but its certainly [surprising][PLS] behavior; In
 fact, it feels like something a malicious user could use to smuggle information
@@ -437,13 +550,14 @@ detecting and ignoring malicious prompts hidden in images:
 
 (You can see several other examples of GPT-4o successfully detecting and
 ignoring malicious prompts hidden in images in my [gallery of GPT-4o test
-images][ITG].)
+images][ITG] generated by my [`image_tagger`][IT] utility.)
 
 So even if it is a bug, it's not obvious it can be exploited. Still, it would
 be less surprising in GPT-4o "saw" the same thing that a human would in a
 browser.
 
 [AN]: https://en.wikipedia.org/wiki/AlexNet
+[IT]: https://github.com/olooney/image_tagger
 [ITG]: https://olooney.github.io/image_tagger/gallery/index.html
 [RNN]: https://en.wikipedia.org/wiki/Residual_neural_network
 [PLS]: https://en.wikipedia.org/wiki/Principle_of_least_astonishment
@@ -452,5 +566,5 @@ browser.
 [MNP]: https://en.wikipedia.org/wiki/Magic_number_(programming)
 [ADA]: https://openai.com/index/new-and-improved-embedding-model/
 [TE3]: https://platform.openai.com/docs/guides/embeddings/embedding-models  
-
-
+[ZC]: https://en.wikipedia.org/wiki/Zener_cards
+[ZP]: https://gist.github.com/olooney/07850f0a2f0fcaac973ffabac765454a
