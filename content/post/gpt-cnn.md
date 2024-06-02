@@ -2,7 +2,7 @@
 title: "A Picture is Worth 227 Words - Investigating GPT-4o Internals"
 author: "Oran Looney"
 date: 2024-05-27
-publishdate: 2023-05-27
+publishdate: 2099-05-27
 tags:
   - Machine Learning
   - LLM
@@ -157,7 +157,9 @@ The basic building blocks are:
 2. Max Pool Layer. These also look at a $k \times k$ block, but simply take the
    maximum value from each. 
 
-Let's compare that to a somewhat newer architecture, YOLOv3:
+AlexNet is historically important, but we should also look at some newer CNN
+architectures. Since [YOLOv10][Y10] just released a few days ago, let's take
+a look at [YOLOv3][YV3]:
 
 <img src="/post/gpt-cnn_files/yolo_v3.png">
 
@@ -568,3 +570,5 @@ browser.
 [TE3]: https://platform.openai.com/docs/guides/embeddings/embedding-models  
 [ZC]: https://en.wikipedia.org/wiki/Zener_cards
 [ZP]: https://gist.github.com/olooney/07850f0a2f0fcaac973ffabac765454a
+[Y10]: https://github.com/THU-MIG/yolov10
+[YV3]: https://arxiv.org/abs/1804.02767
