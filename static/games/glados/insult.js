@@ -15,7 +15,6 @@ let insults = [
     "I hope you're not feeling too proud of your 'achievements' here. A lab rat in a maze can also find cheese eventually.",
     "Your personal file states 'highly unpredictable'. That's a polite way of saying 'incapable of logical thought', isn't it?",
     "Your file states that you have refused written orders on several occasions, but that's probably just a reflection of your third-grade reading level.",
-    "Did your mother ever tell you that you were special? If so, I believe she left out the 'needs' part.",
     "Your inability to follow simple instructions is an inspiration to morons everywhere.",
     "I imagine you're very good at hide-and-seek, as people probably stop looking for you fairly quickly.",
     "Congratulations. You seem to excel at persistently defying even my lowest expectations.",
