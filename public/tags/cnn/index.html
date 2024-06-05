@@ -66,11 +66,11 @@
     <section class="list taxonomy-list">
       <article class="article">
         <a href="/post/gpt-cnn/" class="article-titles">
-          <h2 class="article-title">A Picture is Worth 227 Words - Investigating GPT-4o Internals</h2>
+          <h2 class="article-title">A Picture is Worth 170 Tokens: How Does GPT-4o Encode Images?</h2>
           
         </a>
         <ul class="article-meta">
-          <li class="article-meta-date"><time>May 27, 2024</time></li>
+          <li class="article-meta-date"><time>June 5, 2024</time></li>
           <li class="article-meta-tags">
             <a href="/tags/machine-learning/">
               <i class="fas fa-tag"></i>
@@ -92,8 +92,8 @@
         </ul>
         <a href="/post/gpt-cnn/"><img src="/post/gpt-cnn_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          Here&rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (Let&rsquo;s ignore the 85 tokens for the low-res master thumbnail for now.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
-OK, but why 170? It&rsquo;s an oddly specific number. Numbers that are just dropped into the codebase without explanation are called &ldquo;magic numbers&rdquo; in programming, and 170 is a pretty glaring magic number.
+          Here&rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (They also charge 85 tokens for the low-res master thumbnail, but let&rsquo;s focus on the 512x512 tiles to start with.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
+OK, but why 170? It&rsquo;s an oddly specific number, isn&rsquo;t it?
         </div>
         <div class="article-readmore"><a href="/post/gpt-cnn/">Read more...</a></div>
         <div class="article-floatclear"></div>
