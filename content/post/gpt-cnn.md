@@ -430,12 +430,12 @@ and then run specialized character recognition models along those strips, one
 character or word at a time. They aren't just big CNNs.
 
 I guess in theory OpenAI could have built a model that really is just that
-good, but that doesn't concord with it's relatively weak performance on the
+good, but that doesn't concord with its relatively weak performance on the
 Zener grid task. I mean, if it can't read off 36 symbols in a neat `6x6` grid
 from an image, it certainly can't read off a several hundred text characters
 flawlessly. 
 
-I have a simple theory to explain that: I think OpenAI is running an
+I have a simple theory to explain this discrepancy: I think OpenAI is running an
 off-the-shelf OCR tool like [Tesseract][TS] (or more likely some proprietary,
 state-of-the-art tool) and feeding the identified text into the transformer
 alongside the image data. I mean, that's what I would do.
