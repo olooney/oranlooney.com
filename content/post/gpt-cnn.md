@@ -429,10 +429,10 @@ deal of work to clean up images, find bounding boxes and strips of characters,
 and then run specialized character recognition models along those strips, one
 character or word at a time. They aren't just big CNNs.
 
-I guess in theory OpenAI could built a models that really is just that good,
-but that doesn't concord with it's relatively weak performance on the Zener
-grid task. I mean, if it can't read off 36 symbols in a neat `6x6` grid from an
-image, it certainly can't read off a several hundred text characters
+I guess in theory OpenAI could have built a models that really is just that
+good, but that doesn't concord with it's relatively weak performance on the
+Zener grid task. I mean, if it can't read off 36 symbols in a neat `6x6` grid
+from an image, it certainly can't read off a several hundred text characters
 flawlessly. 
 
 I have a simple theory to explain that: I think OpenAI is running an
