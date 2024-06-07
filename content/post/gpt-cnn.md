@@ -475,7 +475,7 @@ to embedding vectors.
 
 As such, I don't think 170 tokens is just an approximation used to bill for
 roughly the amount of compute it takes to process an image. And I don't think
-they're concatenating layers to join image and text data the way some other
+they're concatenating layers to join image and text data the way [some other][LV]
 multi-modal models do.
 
 No, I think GPT-4o is *literally* representing `512x512` images as 170
@@ -686,3 +686,4 @@ browser.
 [VP]: https://stackoverflow.com/questions/37674306/what-is-the-difference-between-same-and-valid-padding-in-tf-nn-max-pool-of-t
 [CNN]: https://en.wikipedia.org/wiki/Convolutional_neural_network
 [BPE]: https://en.wikipedia.org/wiki/Byte_pair_encoding
+[LV]: https://llava-vl.github.io/
