@@ -150,10 +150,10 @@ Embedding Images
 ----------------
 
 Image tiles are square, so are likely represented by a square grid of tokens.
-170 is very close to $13 \times 13$. The extra token could a single embedding vector
-which encodes a kind of gestalt impression of the entire image, exactly as
-CLIP does (and similar to their strategy of using an 85 token "master
-thumbnail" for each image.)
+170 is very close to $13 \times 13$. The extra token could be a single
+embedding vector which encodes a kind of gestalt impression of the entire
+image, exactly as CLIP does (and similar to their strategy of using an 85 token
+"master thumbnail" for each image.)
 
 So, the question is, how do we go from `512x512x3` to `13x13x12228`?
 
@@ -376,7 +376,7 @@ $1^2 + 3^2 + 5^2 + 7^2 + 9^2 = 1 + 9 + 25 + 49 + 81 = 165$
 
 
 If we throw in an *ad hoc* `2x2` grid for the `512x512` tile and assume one
-special `<|image start|>` for each, we can get a perfect match:
+special `<|image start|>` token for each, we can get a perfect match:
 
 $1 + 1^2 + 3^2 + 5^2 + 7^2 = 1 + 1 + 9 + 25 + 49 = 85$
 
@@ -386,9 +386,9 @@ This scheme lacks any sort of delimiters for the start and end of a row, but
 I think that could be handled with positional encoding similar to the way
 [RoPE][RoPE] is used to encode position information for text tokens, but in 2D. 
 
-The above takes only odd grid sizes and goes well beyond `5x5`; given that the
-Zener grid performance starts to fall off after `5x5` this does not entirely
-concord with the evidence.
+The above takes only odd grid sizes and goes past `5x5`; given that the Zener
+grid performance starts to fall off after `5x5` this does not entirely concord
+with the evidence.
 
 As an alternative, we could try taking all the grids (even and odd) up to `5x5`:
 
@@ -418,23 +418,27 @@ Optical Character Recognition
 -----------------------------
 
 The one thing that none of the above hypotheses explain is how GPT-4o is doing
-OCR. YOLO and CLIP can't natively do OCR, and the strategies suggested above
-seem like they would struggle for the same reasons. I mean, if it can't read
-off 36 symbols in a neat `6x6` grid from an image, it certainly can't read off
-a several hundred text characters flawlessly. 
+OCR. CLIP can't natively do OCR very well, at least not for big blocks of text.
+(The fact that it can do it all is actually pretty amazing - a clear example of
+an emergent ability!) And yet GPT-4o patently *can* do high-quality OCR: it can
+transcribe long blocks of text, read handwritten text, or text which has been
+shifted, rotated, projected, or partially occluded.
 
-State-of-the-art OCR engines like [Tesseract][TS] do a great deal of work to
-find bounding boxes and strips of characters, and then run specialized
-character recognition models along those strips, one character or word at a
-time. They aren't just big CNNs.
+It's important to keep in mind that state-of-the-art OCR engines do a great
+deal of work to clean up images, find bounding boxes and strips of characters,
+and then run specialized character recognition models along those strips, one
+character or word at a time. They aren't just big CNNs.
 
-And yet GPT-4o patently *can* do high-quality OCR: it can transcribe long
-blocks of text, read handwritten text, or text which has been shifted, rotated,
-projected, or partially occluded.
+I guess in theory OpenAI could built a models that really is just that good,
+but that doesn't concord with it's relatively weak performance on the Zener
+grid task. I mean, if it can't read off 36 symbols in a neat `6x6` grid from an
+image, it certainly can't read off a several hundred text characters
+flawlessly. 
 
-I have a simple theory to explain that: I think OpenAI is running
-[Tesseract][TS] (or their own in-house OCR) and feeding the identified text
-into the transformer alongside the image data. I mean, that's what I would do.
+I have a simple theory to explain that: I think OpenAI is running an
+off-the-shelf OCR tool like [Tesseract][TS] (or more likely some proprietary,
+state-of-the-art tool) and feeding the identified text into the transformer
+alongside the image data. I mean, that's what I would do.
 
 This would explain why the early versions were so easily confused by text
 hidden in images: from its POV, that text *was* part of the prompt. (This is
