@@ -45,14 +45,17 @@ whole concept of tokens is a pre-processing step: text is converted to tokens
 and tokens are converted to embedding vectors by an embedding model before they
 even hit the first layer of the transformer model.
 
-For example, Llama 3 uses 4,096 feature dimensions internally, so 10 input
-tokens are converted `10x4096` matrix. That's the "real" input into a
-transformer model.
+For example, Llama 3 uses 4,096 feature dimensions internally. Consider the
+sentence, "My very educated mother just served us nine pizzas." It gets
+converted into 10 integer tokens (counting the period) by [BPE][BPE], then
+those are each converted into 4,096-dimensional vectors by an embedding model,
+resulting in a `10x4096` matrix. That's the "real" input into a transformer
+model.
 
 But there's no law that says that these vectors **must** come from a text embedding
 model. It's a strategy that works well for text data, but if we have data in a
-different format that we want to feed into to a transformer then we can
-simply use a different embedding strategy. 
+different format that we want to feed into a transformer then we can simply use
+a different embedding strategy. 
 
 We know that OpenAI has been thinking along these lines because in 2021 they
 released the [CLIP embedding model][CLIP]. CLIP embeds both text and images
@@ -173,7 +176,7 @@ RGB values and then just cross your fingers and hope the transformer will sort i
 Transformers aren't really designed to handle the spatial structure of 2D images,
 especially not when it's embedded in such a braindead way as this.
 
-For example, imagine the image is shifted a few pixel to the left. The dot
+To see why, imagine the image is shifted a few pixel to the left. The dot
 product between the embedding vectors of the original and shifted images would
 immediately drop close to zero. The same would happen if we resize the image.
 
@@ -183,7 +186,7 @@ like it to have translational and scale invariance, to use the technical jargon.
 ### Strategy 2: CNN
 
 Luckily, there already exists a model with those characteristics, with over a
-decade long track record of successfully handling image data: the
+decade-long track record of successfully handling image data: the
 [Convolutional Neural Network][CNN]. (Here, I'm using the term to describe the
 broad family of deep learning models which use convolution layers somewhere
 inside them.)
@@ -205,8 +208,8 @@ network: the height and width get smaller, while the number of "channels"
 (sometimes called "filters") gets larger. That means we're incrementally
 digesting many low-level features into fewer high level concepts until, at the
 very end, AlexNet has turned the entire image into a single categorical concept
-with 1,000 possible classes. CNNs are essentially funnels that squeeze the lemons
-of raw pixels into the lemonade of semantic vectors.
+representing something like a "cat" or "dog." CNNs are essentially funnels that
+squeeze the lemons of raw pixels into the lemonade of semantic vectors.
 
 If you're following my somewhat strained analogy, you should see how a CNN can
 turn an image into a single embedding vector. To see how (and why) a CNN can
@@ -678,4 +681,4 @@ browser.
 [GPT3]: https://dugas.ch/artificial_curiosity/GPT_architecture.html
 [VP]: https://stackoverflow.com/questions/37674306/what-is-the-difference-between-same-and-valid-padding-in-tf-nn-max-pool-of-t
 [CNN]: https://en.wikipedia.org/wiki/Convolutional_neural_network
-
+[BPE]: https://en.wikipedia.org/wiki/Byte_pair_encoding
