@@ -18,8 +18,8 @@
       <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/gpt-cnn/</guid>
-      <description>Here&amp;rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. (They also charge 85 tokens for the low-res master thumbnail, but let&amp;rsquo;s focus on the 512x512 tiles to start with.) At 0.75 tokens/word, this suggests a picture is worth about 227 words - only a factor of four off from the traditional saying.
-OK, but why 170? It&amp;rsquo;s an oddly specific number, isn&amp;rsquo;t it?</description>
+      <description>Here&amp;rsquo;s a fact: GPT-4o charges 170 tokens to process each 512x512 tile used in high-res mode. At ~0.75 tokens/word, this suggests a picture is worth about 227 words&amp;mdash;only a factor of four off from the traditional saying.
+(There&amp;rsquo;s also an 85 tokens charge for a low-res &amp;lsquo;master thumbnail&amp;rsquo; of each picture and higher resolution images are broken into many such 512x512 tiles, but let&amp;rsquo;s just focus on a single high-res tile.</description>
     </item>
     
   </channel>
