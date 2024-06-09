@@ -200,8 +200,8 @@ Substitution ciphers, which operate at the level of a single character, are chil
         </ul>
         <a href="/post/ml-from-scratch-part-6-pca/"><img src="/post/ml-from-scratch-part-6-pca_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          In the previous article in this series we distinguishedbetween two kinds of unsupervised learning (cluster analysis and dimensionalityreduction) and discussed the former in some detail. In this installment we turnour attention to the later.
-In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathbb{R}^m\) where \(n\) is the dimension of the original data \(\mathbf{X}\) and\(m\) is less than or equal to \(n\). That is, we want to map some high dimensionalspace into some lower dimensional space.
+          In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
+In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathbb{R}^m\) where \(n\) is the dimension of the original data \(\mathbf{X}\) and \(m\) is less than or equal to \(n\). That is, we want to map some high dimensional space into some lower dimensional space.
         </div>
         <div class="article-readmore"><a href="/post/ml-from-scratch-part-6-pca/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -234,8 +234,8 @@ In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathb
         </ul>
         <a href="/post/slow-fibonacci/"><img src="/post/slow-fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          I recently wrote an article which was ostensibly about the Fibonacciseries but was really about optimization techniques. I wanted to follow up onits (extremely moderate) success by going in the exact opposite direction:by writing a Fibonacci function which is as slow as possible.
-This is not as easy as it sounds: any program can trivially be made slower,but this is boring. How can we make it slow in a fair and interesting way?
+          I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?
         </div>
         <div class="article-readmore"><a href="/post/slow-fibonacci/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -309,9 +309,9 @@ Unlabled Data
         </ul>
         <a href="/post/adaptive-basis-functions/"><img src="/post/adaptive-basis-functions_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          Today, let me be vague. No statistics, no algorithms, no proofs. Instead,we’re going to go through a series of examples and eyeball a suggestiveseries of charts, which will imply a certain conclusion, without actuallyproving anything; but which will, I hope, provide useful intuition.
+          Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain conclusion, without actually proving anything; but which will, I hope, provide useful intuition.
 The premise is this:
-For any given problem, there exists learned featured representationswhich are better than any fixed/human-engineered set of features, even oncethe cost of the added parameters necessary to also learn the new features into account.
+ For any given problem, there exists learned featured representations which are better than any fixed/human-engineered set of features, even once the cost of the added parameters necessary to also learn the new features into account.
         </div>
         <div class="article-readmore"><a href="/post/adaptive-basis-functions/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -350,7 +350,7 @@ The premise is this:
         </ul>
         <a href="/post/ml-from-scratch-part-4-decision-tree/"><img src="/post/ml-from-scratch-part-4-decision-tree_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          So far in this series we’ve followed one particular thread: linear regression-&gt; logistic regression -&gt; neural network. This is a very natural progression ofideas, but it really represents only one possible approach. Today we’ll switchgears and look at a model with completely different pedigree: the decisiontree, sometimes also referred to as Classification and RegressionTrees, or simply CART models. In contrast to the earlier progression,decision trees are designed from the start to represent non-linear features andinteractions.
+          So far in this series we’ve followed one particular thread: linear regression -&gt; logistic regression -&gt; neural network. This is a very natural progression of ideas, but it really represents only one possible approach. Today we’ll switch gears and look at a model with completely different pedigree: the decision tree, sometimes also referred to as Classification and Regression Trees, or simply CART models. In contrast to the earlier progression, decision trees are designed from the start to represent non-linear features and interactions.
         </div>
         <div class="article-readmore"><a href="/post/ml-from-scratch-part-4-decision-tree/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -390,8 +390,8 @@ The premise is this:
         <a href="/post/fibonacci/"><img src="/post/fibonacci_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
           A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
-def naive_fib(n):if n &lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance isterrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamicprogramming. Specifically, either the memoization:
-from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:
+def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2) This follows the mathematical definition very closely but it’s performance is terrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamic programming. Specifically, either the memoization:
+from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &lt; 2: return n else: return memoized_fib(n-1) + memoized_fib(n-2) or tabulation:
         </div>
         <div class="article-readmore"><a href="/post/fibonacci/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -469,8 +469,8 @@ from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &lt; 2
         </ul>
         <a href="/post/ml-from-scratch-part-2-logistic-regression/"><img src="/post/ml-from-scratch-part-2-logistic-regression_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          In this second installment of the machine learning from scratchwe switch the point of view from regression to classification: instead ofestimating a number, we will be trying to guess which of 2 possible classes agiven input belongs to. A modern example is looking at a photo and deciding ifits a cat or a dog.
-In practice, its extremely common to need to decide between \(k\) classes where\(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - theso-called binary classification problem - because generalizations to manyclasses are usually both tedious and straight-forward.
+          In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a cat or a dog.
+In practice, its extremely common to need to decide between \(k\) classes where \(k &gt; 2\) but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward.
         </div>
         <div class="article-readmore"><a href="/post/ml-from-scratch-part-2-logistic-regression/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -509,8 +509,8 @@ In practice, its extremely common to need to decide between \(k\) classes where
         </ul>
         <a href="/post/ml-from-scratch-part-1-linear-regression/"><img src="/post/ml-from-scratch-part-1-linear-regression_files/lead.192x128.png" class="article-image" /></a>
         <div class="article-content">
-          To kick off this series, will start with something simple yet foundational:linear regression via ordinary least squares.
-While not exciting, linear regression finds widespread use both as a standalonelearning algorithm and as a building block in more advanced learningalgorithms. The output layer of a deep neural network trained for regressionwith MSE loss, simple AR time series models, and the “local regression” part ofLOWESS smoothing are all examples of linear regression being used as aningredient in a more sophisticated model.
+          To kick off this series, will start with something simple yet foundational: linear regression via ordinary least squares.
+While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more advanced learning algorithms. The output layer of a deep neural network trained for regression with MSE loss, simple AR time series models, and the “local regression” part of LOWESS smoothing are all examples of linear regression being used as an ingredient in a more sophisticated model.
         </div>
         <div class="article-readmore"><a href="/post/ml-from-scratch-part-1-linear-regression/">Read more...</a></div>
         <div class="article-floatclear"></div>
@@ -549,8 +549,8 @@ While not exciting, linear regression finds widespread use both as a standalone
         </ul>
         <a href="/post/ml-from-scratch-part-0-introduction/"><img src="/post/ml-from-scratch-part-0-introduction_files/lead.192x128.jpg" class="article-image" /></a>
         <div class="article-content">
-          Motivation“As an apprentice, every new magician must prove to his own satisfaction, atleast once, that there is truly great power in magic.” - The Flying Sorcerers,by David Gerrold and Larry Niven
-How do you know if you really understand something? You could just rely onthe subjective experience of feeling like you understand. This soundsplausible - surely you of all people should know, right? But this runshead-first into in the Dunning-Kruger effect.
+          Motivation  “As an apprentice, every new magician must prove to his own satisfaction, at least once, that there is truly great power in magic.” - The Flying Sorcerers, by David Gerrold and Larry Niven
+ How do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you of all people should know, right? But this runs head-first into in the Dunning-Kruger effect.
         </div>
         <div class="article-readmore"><a href="/post/ml-from-scratch-part-0-introduction/">Read more...</a></div>
         <div class="article-floatclear"></div>

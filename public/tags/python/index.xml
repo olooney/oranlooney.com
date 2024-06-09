@@ -48,8 +48,8 @@ Substitution ciphers, which operate at the level of a single character, are chil
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/ml-from-scratch-part-6-pca/</guid>
-      <description>In the previous article in this series we distinguishedbetween two kinds of unsupervised learning (cluster analysis and dimensionalityreduction) and discussed the former in some detail. In this installment we turnour attention to the later.
-In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathbb{R}^m\) where \(n\) is the dimension of the original data \(\mathbf{X}\) and\(m\) is less than or equal to \(n\). That is, we want to map some high dimensionalspace into some lower dimensional space.</description>
+      <description>In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
+In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathbb{R}^m\) where \(n\) is the dimension of the original data \(\mathbf{X}\) and \(m\) is less than or equal to \(n\). That is, we want to map some high dimensional space into some lower dimensional space.</description>
     </item>
     
     <item>
@@ -58,8 +58,8 @@ In dimensionality reduction we seek a function \(f : \mathbb{R}^n \mapsto \mathb
       <pubDate>Sat, 06 Jul 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/slow-fibonacci/</guid>
-      <description>I recently wrote an article which was ostensibly about the Fibonacciseries but was really about optimization techniques. I wanted to follow up onits (extremely moderate) success by going in the exact opposite direction:by writing a Fibonacci function which is as slow as possible.
-This is not as easy as it sounds: any program can trivially be made slower,but this is boring. How can we make it slow in a fair and interesting way?</description>
+      <description>I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?</description>
     </item>
     
     <item>
@@ -79,9 +79,9 @@ Unlabled Data
       <pubDate>Tue, 21 May 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/adaptive-basis-functions/</guid>
-      <description>Today, let me be vague. No statistics, no algorithms, no proofs. Instead,we’re going to go through a series of examples and eyeball a suggestiveseries of charts, which will imply a certain conclusion, without actuallyproving anything; but which will, I hope, provide useful intuition.
+      <description>Today, let me be vague. No statistics, no algorithms, no proofs. Instead, we’re going to go through a series of examples and eyeball a suggestive series of charts, which will imply a certain conclusion, without actually proving anything; but which will, I hope, provide useful intuition.
 The premise is this:
-For any given problem, there exists learned featured representationswhich are better than any fixed/human-engineered set of features, even oncethe cost of the added parameters necessary to also learn the new features into account.</description>
+ For any given problem, there exists learned featured representations which are better than any fixed/human-engineered set of features, even once the cost of the added parameters necessary to also learn the new features into account.</description>
     </item>
     
     <item>
@@ -90,7 +90,7 @@ The premise is this:
       <pubDate>Fri, 01 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/ml-from-scratch-part-4-decision-tree/</guid>
-      <description>So far in this series we’ve followed one particular thread: linear regression-&amp;gt; logistic regression -&amp;gt; neural network. This is a very natural progression ofideas, but it really represents only one possible approach. Today we’ll switchgears and look at a model with completely different pedigree: the decisiontree, sometimes also referred to as Classification and RegressionTrees, or simply CART models. In contrast to the earlier progression,decision trees are designed from the start to represent non-linear features andinteractions.</description>
+      <description>So far in this series we’ve followed one particular thread: linear regression -&amp;gt; logistic regression -&amp;gt; neural network. This is a very natural progression of ideas, but it really represents only one possible approach. Today we’ll switch gears and look at a model with completely different pedigree: the decision tree, sometimes also referred to as Classification and Regression Trees, or simply CART models. In contrast to the earlier progression, decision trees are designed from the start to represent non-linear features and interactions.</description>
     </item>
     
     <item>
@@ -100,8 +100,8 @@ The premise is this:
       
       <guid>https://www.oranlooney.com/post/fibonacci/</guid>
       <description>A common example of recursion is the function to calculate the \(n\)-th Fibonacci number:
-def naive_fib(n):if n &amp;lt; 2:return nelse:return naive_fib(n-1) + naive_fib(n-2)This follows the mathematical definition very closely but it’s performance isterrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamicprogramming. Specifically, either the memoization:
-from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &amp;lt; 2:return nelse:return memoized_fib(n-1) + memoized_fib(n-2)or tabulation:</description>
+def naive_fib(n): if n &amp;lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2) This follows the mathematical definition very closely but it’s performance is terrible: roughly \(\mathcal{O}(2^n)\). This is commonly patched up with dynamic programming. Specifically, either the memoization:
+from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &amp;lt; 2: return n else: return memoized_fib(n-1) + memoized_fib(n-2) or tabulation:</description>
     </item>
     
     <item>
@@ -119,8 +119,8 @@ from functools import lru_cache@lru_cache(100)def memoized_fib(n):if n &amp;l
       <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/ml-from-scratch-part-2-logistic-regression/</guid>
-      <description>In this second installment of the machine learning from scratchwe switch the point of view from regression to classification: instead ofestimating a number, we will be trying to guess which of 2 possible classes agiven input belongs to. A modern example is looking at a photo and deciding ifits a cat or a dog.
-In practice, its extremely common to need to decide between \(k\) classes where\(k &amp;gt; 2\) but in this article we’ll limit ourselves to just two classes - theso-called binary classification problem - because generalizations to manyclasses are usually both tedious and straight-forward.</description>
+      <description>In this second installment of the machine learning from scratch we switch the point of view from regression to classification: instead of estimating a number, we will be trying to guess which of 2 possible classes a given input belongs to. A modern example is looking at a photo and deciding if its a cat or a dog.
+In practice, its extremely common to need to decide between \(k\) classes where \(k &amp;gt; 2\) but in this article we’ll limit ourselves to just two classes - the so-called binary classification problem - because generalizations to many classes are usually both tedious and straight-forward.</description>
     </item>
     
     <item>
@@ -129,8 +129,8 @@ In practice, its extremely common to need to decide between \(k\) classes where
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/</guid>
-      <description>To kick off this series, will start with something simple yet foundational:linear regression via ordinary least squares.
-While not exciting, linear regression finds widespread use both as a standalonelearning algorithm and as a building block in more advanced learningalgorithms. The output layer of a deep neural network trained for regressionwith MSE loss, simple AR time series models, and the “local regression” part ofLOWESS smoothing are all examples of linear regression being used as aningredient in a more sophisticated model.</description>
+      <description>To kick off this series, will start with something simple yet foundational: linear regression via ordinary least squares.
+While not exciting, linear regression finds widespread use both as a standalone learning algorithm and as a building block in more advanced learning algorithms. The output layer of a deep neural network trained for regression with MSE loss, simple AR time series models, and the “local regression” part of LOWESS smoothing are all examples of linear regression being used as an ingredient in a more sophisticated model.</description>
     </item>
     
     <item>
@@ -139,8 +139,8 @@ While not exciting, linear regression finds widespread use both as a standalone
       <pubDate>Sun, 11 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/ml-from-scratch-part-0-introduction/</guid>
-      <description>Motivation“As an apprentice, every new magician must prove to his own satisfaction, atleast once, that there is truly great power in magic.” - The Flying Sorcerers,by David Gerrold and Larry Niven
-How do you know if you really understand something? You could just rely onthe subjective experience of feeling like you understand. This soundsplausible - surely you of all people should know, right? But this runshead-first into in the Dunning-Kruger effect.</description>
+      <description>Motivation  “As an apprentice, every new magician must prove to his own satisfaction, at least once, that there is truly great power in magic.” - The Flying Sorcerers, by David Gerrold and Larry Niven
+ How do you know if you really understand something? You could just rely on the subjective experience of feeling like you understand. This sounds plausible - surely you of all people should know, right? But this runs head-first into in the Dunning-Kruger effect.</description>
     </item>
     
     <item>
