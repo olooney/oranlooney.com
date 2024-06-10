@@ -8,3 +8,5 @@ rebuild the static site.
 `git push` to copy to github. Then on the server, `bin/stage` and 
 checking <http://staging.oranlooney.com>. Finally, `bin/release` to 
 publish the content to <https://www.oranlooney.com>.
+
+For faster deployments use `bin/stage2`.
