@@ -10,7 +10,7 @@ tags:
 image: /post/kaprekar_files/lead.jpg
 ---
 
-The [Kaprekar routine][KR] is a simple arithmetic procedure which, when applied
+[Kaprekar's routine][KR] is a simple arithmetic procedure which, when applied
 to four digit numbers, rapidly converges to the fixed point 6174, known as the
 Kaprekar constant. Unlike other famous iterative procedures such as the
 [Collatz function][CC], the somewhat arbitrary nature of the Kaprekar routine
