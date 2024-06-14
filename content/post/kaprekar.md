@@ -1,5 +1,5 @@
 ---
-title: "The Magic 6174"
+title: "Kaprekar's Magic 6174"
 author: "Oran Looney"
 date: 2024-02-25
 publishdate: 2024-02-25
@@ -31,12 +31,12 @@ reached the fixed point and the same result will recur endlessly.
 There are two edge cases to consider. In order for the procedure to work
 correctly, we need to treat numbers less than 100 (and which therefore have
 three or fewer digits when written normally) as if they indeed had four digits
-and were left-padded with zeros. For example, we would treat the number 42 as having
-four digits "0042" and take 4200 - 0024 to obtain 4176. Also, if the Kaprekar
-procedure is applied to numbers with all the same digits, such as 5555, then
-the result would be zero, which is inconvenient. For that reason, we exclude
-such numbers from the domain, and simply say that the function is undefined on
-them.
+and were padded with leading zeros. For example, we would treat the number 42
+as having the four digits "0042" and take 4200 - 0024 to obtain 4176. Also, if
+the Kaprekar procedure is applied to numbers with all the same digits, such as
+5555, then the result would be zero, which is inconvenient. For that reason, we
+exclude such numbers from the domain, and simply say that the function is
+undefined on them.
 
 All of this can be succinctly and exactly expressed in a few lines of code:
 
@@ -62,67 +62,71 @@ All of this can be succinctly and exactly expressed in a few lines of code:
 Note that `k(n)` computes one iteration of the routine and returns the next
 number in the series, while `kaprekar(n)` returns both the number of iterations
 it takes to reach the fixed point and the value of the fixed point itself as a
-pair, e.g. `[5, 6174]`.
+pair; for example, `(5, 6174)` means "reached the fixed point 6174 after 5
+iterations."
 
-Implementing Kaprekar is trivial. Showing that every valid four digit number
-reaches the fixed point 6174 is computationally cheap given there are only
-9,990 such numbers. (Remember, numbers having all identical digits are excluded.)
-Explaining why it should have a unique fixed point, or why the convergence is
-rapid, is not so simple. For example, it would be entirely plausible for it
-to converge to a cycle, oscillating forever between two or more values for ever.
-Or for it to converge to one of several distinct fixed points or cycles depending
-on the starting number. 
+Implementing Kaprekar is easy. Showing that every valid four digit number
+reaches the fixed point 6174 is computationally trivial given there are only
+9,990 such numbers. Explaining why it should have a unique fixed point and why
+the convergence is so rapid is not so simple. For example, it would be entirely
+plausible for it to converge to a cycle, oscillating forever between two or
+more values for ever, or for it to converge to one of several distinct fixed
+points or cycles depending on the starting number. 
 
-It's also not at all obvious why the convergence should be so rapid - if every
-iteration sent each number to a "random" number, it's possible that it could
-take up to 9,989 iterations. If each iteration cut down the number of surviving
-numbers by half, it would still take about 13 iterations to collapse to a single
-value. In that sense, Kaprekar converges "surprisingly" quickly. Let's 
-investigate that a little and see if we can say anything about the nature of
-the convergence.
+It's also not clear why the convergence should be *so* rapid: if each iteration
+cut down the number of surviving numbers by half, it would still take about 13
+iterations to collapse to a single value. In that sense, Kaprekar converges
+"surprisingly" quickly. 
+
+Let's see if we can say anything interesting about the nature of the
+convergence. We'll use data visualization to develop intuition and formulate
+hypotheses, then write simple programs to validate them.
 
 
 Number of Iterations
 --------------------
 
-Let's start with a simple histogram:
+We'll start with a simple histogram:
 
 <img src="/post/kaprekar_files/histogram.png">
 
 Most numbers are "far" from the fixed-point and require many iterations
 to reach it.
 
-I've plotted the convergence on a log scale to get it to fit. We start
-with the full pool of 9,990 distinct valid numbers, and for each iteration
-we plot how many unique numbers remain after $k$ iterations.
+Next, let's try to get a sense of how rapid convergence is. We start with the
+full pool of 9,990 distinct valid numbers, and for each iteration we plot
+(using a log scale) how many unique numbers remain after $k$ iterations:
 
 <img src="/post/kaprekar_files/convergence.png">
 
-I've also plotted the number of unique "sorted" values, where "sorted" means
-that the digits of the number where sorted. The reason for that is because it
-is possible to think of the Kaprekar routine in two parts.  First, it sorts the
-digits of the number, then it differences it with its reverse. That means that
-it essentially ignores the original order of digits; any two numbers with the
-same set of digits, regardless of order, will necessarily have the same result.
-So numbers like 4277, 2477, 7427, 7274 and so on will all map the same number.
-This already collapses many values together. In fact, we can see that in the
-very first iteration, this sorting process has already reduced the set of valid
-numbers from 9,990 to 705 - reducing the pool by 97%.
+This graph also shows the number of unique "sorted" values, where "sorted"
+means that the digits of the number where sorted. It is possible to think of
+the Kaprekar routine as two separate steps: it first sorts the digits of the
+number, then it differences it with its reverse. That means that it essentially
+ignores the original order of digits; any two numbers with the same set of
+digits, regardless of order, will necessarily have the same result. Numbers
+like 4277, 2477, 7427, and 7274 will all map the same number. The digit sorting
+step is responsible for the lions share of collisions; in fact, we can see that
+in the very first iteration it has already reduced the set of valid numbers
+from 9,990 to 705 - reducing the pool by 97%.
 
-However, the second part, differencing with the reverse, is also responsible
-for a large number of collapses. After the first iteration, we've gone from 705
-unique sorted values to only 54, reducing the total pool of survivors by
-another 92%.  Together, these eliminate 99.5% of all unique values in the first
-iteration alone.
+However, the second step, differencing with the reverse, is also responsible
+for a large number of collapses. After the first differencing step, we've gone
+from 705 unique sorted values to only 54, reducing the total pool of survivors
+by another 92%. Taken together, these eliminate 99.5% of all unique values in
+the first iteration alone.
 
-After that, however, convergence slows considerably, with each subsequent
-iteration roughly cutting the pool of unique numbers in half until we are
-finally left with only one (the 6174 fixed point) after seven iterations.
+After that, convergence slows considerably. The slope on the log scale plot is
+about 1/2, which means that each subsequent iteration cuts the pool of unique
+numbers roughly in half.
 
-To conveniently visualize all numbers up to 9999, we take the first two digits
-as the x coordinate and the last two digits as the y coordinate and plot them
-on a 100x100 grid. (I didn't invent this - it seems to be quite a common way to
-visualize the Kaprekar routine, although I'm not sure where it originated.)
+The above visualizations are good high level summaries but we want to
+investigate the structure in more detail, ideally all the way down to the
+individual numbers. To visualize all numbers up to 9999 on a single graph, we
+take the first two digits as the x coordinate and the last two digits as the y
+coordinate and plot them on a 100x100 grid. (I didn't invent this - it seems to
+be quite a common way to visualize the Kaprekar routine, although I'm not sure
+where it originated.)
 
     # reshape counts into a 2D grid
     data = np.array([0] + kaprekar_iteration_counts(4))  
@@ -134,36 +138,48 @@ visualize the Kaprekar routine, although I'm not sure where it originated.)
 
 <img src="/post/kaprekar_files/n_iterations.png">
 
-An interesting structure emerges. Note that there are many diagonal blocks that
-share the exact same color. Is there something about two points being diagonal
+An interesting structure emerges: there are many diagonal streaks that share
+the exact same color. Is there something about two points being diagonal
 neighbors in this 100x100 space that makes them more likely to collapse?
-
 
 
 Structure of Convergence
 ------------------------
 
-Another way to use the 100x100 grid is to assign a color to every unique number after $k$ iterations. 
-If two pixels have the same color, we know
+Another way to use the 100x100 grid is to assign a color to every unique number
+after $k$ iterations. If two pixels have the same color, we know they will
+collide in $k$ iterations or fewer.
 
 First iteration:
 
 <img src="/post/kaprekar_files/frame_1.png">
 
-To avoid duplicating this visual seven times, I've compressed it into an animation:
+See if you can mentally visualize this in four dimensions by first stacking
+all the cells in a row to get a 3D shape, then again for each columns to get
+a 4D shape. You should see a kind of 4-dimensional blue football with red
+around the corners. Numbers where all four digits are similar (like 4445) map to low
+numbers (like 0999), while numbers with dissimilar digits (like 0009) map to high
+numbers (like 8991.)
+
+To avoid duplicating this visual seven times, I've compressed it into an
+animation:
 
 <img src="/post/kaprekar_files/animation.gif">
 
 This allows us to see collapses occurring with each iteration and observe the
-complex but obviously non-random structure that emerges.
+complex but obviously non-random structure that emerges. (The static images
+for each iteration are available in the [Jupyter notebook][JH].)
 
+The diagonal structure we notice above seems prominent in this visualization as
+well; in fact, it seems to get even more pronounced as the number of iterations
+increases. What is going on there?
 
 While the 100x100 is good for getting a gestalt impression of the whole, it's
 hard to read off individual transitions or trace the orbits of individual
-numbers through the iteration.  For a more detailed deep dive, we can use
-Graphviz to visualize the exact structure of collapses.  To avoid overwhelming
-the visualization show only the 54 unique numbers that survive the first
-iteration.
+numbers through the iteration. For a more detailed deep dive, we can use
+[Graphviz][GVZ] to visualize the exact structure of collapses. To avoid
+overwhelming the visualization, let's only show the 54 unique numbers that
+survive the first iteration:
 
     # Initialize the unique colors set and the arrows set
     unique_colors = set()
@@ -187,24 +203,50 @@ iteration.
 <img src="/post/kaprekar_files/kaprekar_graph_colored.png">
 
 On this graph, each number is a node, and you can follow the arrow to see where
-the Kaprekar function sends that number.  The nodes are colored according to
+the Kaprekar function sends that number. The nodes are color-coded according to
 their sorted digits, so any two numbers which are the same modulo the digit
-sorting operation will have the same color. That makes it obvious that digit
+sorting operation will be the same color. That makes it obvious that digit
 sorting is still responsible for a large number of collapses. For example, we
 can see that 7623, 3267, and 7263 (shown in light green) all map to 5265, and
 that is entirely due to them have the same set of digits, just in a different
 order.
 
 It's the collapses which are *not* due to digit sorting which are really
-fascinating, however. Why do 7173 and 8262 collapse together, for example?
-If you look closely, these numbers do have a relationship. Each digit is
-only different by exactly 1.
+fascinating, though. Why do 7173 and 8262 collapse together, for example?
+If you look closely, these numbers do have a relationship; each digit is
+different by exactly 1:
 
-
-    7 8    +1
-    1 2    +1
-    7 6    -1
-    3 2    -1
+<table style="max-width: 50%; margin: auto; font-size: 120%;">
+<thead>
+<tr>
+<th align="center">7173</th>
+<th align="center">8262</th>
+<th align="center">Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">7</td>
+<td align="center">8</td>
+<td align="center">+1</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">+1</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">6</td>
+<td align="center">-1</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">-1</td>
+</tr>
+</tbody>
+</table>
 
 This same pattern occurs in many other places on the graph as well. That
 can't be a coincidence, can it? 
@@ -301,7 +343,7 @@ while (for example) 3 or 5 digit numbers are ignored.
 Why is the fixed point 6174? I originally thought there was some significance
 to the fact that this was quite close to the average $k(n)$ - that is to say,
 if you choose a random number $n$ uniformly between 1 and 9999, and calculate
-$k(n)$, then the expected value is 6108 - quite close to the fixed point.  This
+$k(n)$, then the expected value is 6108 - quite close to the fixed point. This
 is fairly intuitive when you consider that sorting the digits of a number in
 descending order tends to increase it (to about 8054 on average) and sorting
 them ascending tends to decrease it (to an average of 1946) And the Kaprekar
@@ -331,7 +373,7 @@ but hard to interpret. The color-coded graph showing individual transitions
 is complex but rewards close study and the "diagonal neighbor" structure is even
 more apparent on this graph than on the 100x100 views.
 
-Source code for this project is available as a Jupyter notebook( [.html][JH], [.ipynb][JNB]).
+Source code for this project is available as a Jupyter notebook ([.html][JH], [.ipynb][JNB]).
 
 
 [RS]: https://en.wikipedia.org/wiki/Range_(statistics)
@@ -341,4 +383,4 @@ Source code for this project is available as a Jupyter notebook( [.html][JH], [.
 [BP]: https://en.wikipedia.org/wiki/Birthday_problem
 [JH]: /post/kaprekar_files/Kaprekar.html
 [JNB]: /post/kaprekar_files/Kaprekar.ipynb
-
+[GVZ]: https://graphviz.org/
