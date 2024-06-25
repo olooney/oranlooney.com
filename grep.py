@@ -9,6 +9,7 @@ DEFAULT_IGNORE_DIRS = [
     "helvetiker_font",
     ".git",
     ".Rproj.user",
+    ".ipynb_checkpoints"
 ]
 
 # ignore binary file extensions
@@ -32,6 +33,7 @@ DEFAULT_IGNORE_EXTS = [
     ".docx",
     ".RData",
     ".gitignore",
+    ".pickle",
 ]
 
 
