@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 80%; /* Adjust the width as needed */
+            max-width: 800px;
+            margin: auto; /* Horizontally center the grid */
+        }
+
+        .grid-item {
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .grid-item img {
+            width: 192px;
+            height: 160px;
+            object-fit: contain;
+            border-radius: 10px;
+            background-color: #f0f0f0; /* Fallback color when image is missing */
+            display: inline-block;
+        }
+
+        .grid-item p {
+            margin: 2px;
+            font-size: 1.1em;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        a:visited {
+            color: inherit;
+        }
+
+        h1, h2 {
+            color: #800000;
+            text-align: center;
+            margin-bottom: 20px; 
+            width: 100%;
+        }
+        .site-footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: #f8f8f8;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #ccc;
+        }
+
+        .copyright {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1><a href="/">OranLooney.com</a></h1>
+    <h2>Games and Demos</h2>
+    <div class="grid-container">
+        <!--
+        <div class="grid-item">
+            <a href="barchart/">
+                <img src="barchart/lead.png" alt="Barchart Thumbnail">
+                <p>Three.js Barchart</p>
+            </a>
+        </div>
+        -->
+        <!--
+        <div class="grid-item">
+            <a href="chatbase/">
+                <img src="chatbase/lead.png" alt="Chatbase Thumbnail">
+                <p>Chatbase Demo</p>
+            </a>
+        </div>
+        -->
+        <div class="grid-item">
+            <a href="design-elements/">
+                <img src="design-elements/lead.png" alt="Design Elements Thumbnail">
+                <p>Design Elements</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="desktop/">
+                <img src="desktop/lead.png" alt="ExtJS Desktop Thumbnail">
+                <p>ExtJS Desktop</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="euclid_37/">
+                <img src="euclid_37/lead.png" alt="Euclid 37 Thumbnail">
+                <p>Euclid Proposition 37</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="font-wars/">
+                <img src="font-wars/lead.png" alt="Font Wars Thumbnail">
+                <p>Font Wars</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="glados/">
+                <img src="glados/lead.png" alt="Glados Thumbnail">
+                <p>Glados</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="parabolic-rectangle/">
+                <img src="parabolic-rectangle/lead.png" alt="Parabolic Rectangle Thumbnail">
+                <p>Parabolic Rectangle</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="torus/">
+                <img src="torus/lead.png" alt="Playfair Torus Thumbnail">
+                <p>Playfair Torus</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="tron/">
+                <img src="tron/lead.png" alt="Tron CSS Theme Thumbnail">
+                <p>Tron CSS Theme</p>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="word-graph/">
+                <img src="word-graph/lead.png" alt="Word Graph Thumbnail">
+                <p>Word Graph</p>
+            </a>
+        </div>
+    </div>
+    <div class="site-footer">
+      <div class="copyright">
+          © Copyright 2024 Oran Looney
+      </div>
+    </div>
+</body>
+</html>

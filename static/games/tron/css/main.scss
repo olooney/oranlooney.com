@@ -1,0 +1,240 @@
+$main-color: rgb(21,171,195); // blue-green
+$highlight-color: lighten($main-color, 20%);
+$code-color: lighten($main-color, 25%);
+
+@mixin glow($radius, $color) {
+	-moz-box-shadow: 0 0 $radius $color;
+	-webkit-box-shadow: 0 0 $radius $color;
+	box-shadow: 0 0 $radius $color;
+}
+
+@mixin roundy($radius) {
+	-moz-border-radius: $radius;
+	-webkit-border-radius: $radius;
+	border-radius: $radius;
+}
+
+/* a crosshair looks more tron-y */
+* {
+	cursor: crosshair;
+}
+body {
+	background: black;
+	color: $main-color;
+	font-family: "Bitstream Vera Sans Mono", monospace;
+	/* give all text a cold glow */
+	text-shadow: 0 0 5px fade_out($main-color, 0.3);
+}
+
+.content-page {
+	font-size: 13px;
+	line-height: 21px;
+	display: block;
+	/*margin: 0px 5px 20px 55px; todo*/
+    margin: 0 auto 20px;
+	width: 500px;
+	padding: 25px 75px;
+	border: 1px solid $main-color;
+	background: url(../images/quote_right.png) top right no-repeat;
+
+	@include roundy(15px);
+	@include glow(9px, $main-color);
+}
+
+.content-page a {
+	color: $highlight-color;
+	text-shadow: 0 0 5px $highlight-color;
+	cursor: pointer;
+}
+
+.content-page h1 {
+	margin: .8em 0 0 0;
+	font-size: 1.7em;
+	text-align: center;
+	font-weight: bold;
+	padding: .5ex;
+	border: 1px solid $highlight-color;
+	margin-bottom: 1ex;
+	font-family: "Bitstream Vera Sans Mono", monospace;
+
+	background-color: $highlight-color;
+	color: black;
+
+	@include roundy(1em);
+	@include glow(10px, $highlight-color);
+}
+.content-page h2 {
+	background: url(../images/quote_right.png) center right no-repeat;
+}
+a.big-rss-link {
+	display: block;
+	float: left;
+	top: 10px;
+	left: 0px;
+	width: 59px;
+	height: 58px;
+	background-image: url(../images/rss.png);
+	text-indent: -999em;
+	margin: 5px;
+	cursor: pointer;
+
+	&:hover {
+		background-image: url(../images/rss_bright.png);
+	}
+}
+
+
+.content-page blockquote {
+	width: 400px;
+	background-image: url(../images/quote_left.png);
+	background-repeat: no-repeat;
+	/*background: url(../images/quote_left.png) top left no-repeat, url(../images/quote_right.png) top right no-repeat;*/
+	font-size: 1.3em;
+	text-indent: 1em;
+	padding: 20px 50px 10px;
+	margin: .2em auto;
+	border: 2px solid $main-color;
+
+	@include roundy(1em);
+	@include glow(5px, $main-color);
+}
+.content-page code {
+	font-family: "Bitstream Vera Sans Mono", monospace;
+	font-style: normal;
+	color: $code-color;
+	text-shadow: 0 0 5px $code-color;
+}
+.content-page blockquote a {
+    font-size: .85em;
+}
+
+
+.content-page ul {
+	list-style-type: none;
+    padding-left: 1ex;
+}
+.content-page ul li {
+	background-image: url(../images/bullet_point.png);
+	background-repeat: no-repeat;
+	background-position: 0 2px;
+	padding-left: 20px;
+}
+.content-page ol {
+	list-style: decimal inside;
+    padding-left: 1ex;
+}
+.content-page ol li {
+	list-style: decimal inside;
+    display: list-item;
+}
+/* shared styles for ul and ol items */
+.content-page li {
+	margin: 1em 0 1em;
+	font-size: 13px;
+	line-height: 17px;
+	font-family: "Bitstream Vera Sans Mono", monospace;
+}
+
+/* Menu style */
+ul.menu {
+    position: relative;
+    right: 500px;
+	list-style-type: none;
+}
+ul.menu li {
+	display: block;
+	width: 110px;
+	border: 1px solid $main-color;
+	text-align: center;
+	background-color: rgba(0,0,0,0.7);
+	margin-bottom: 0.5ex;
+
+	@include roundy(1em);
+	@include glow(10px, fade_out($main-color, 0.5));
+
+	cursor: pointer;
+	
+	a {
+		cursor: pointer;
+		text-decoration: none;
+		color: $main-color;
+	}
+
+	&:hover {
+		color: $highlight-color;
+		border-color: $highlight-color;
+		@include glow(10px, $highlight-color);
+		cursor: pointer;
+
+		a {
+			color: $highlight-color;
+			text-shadow: 0 0 5px $highlight-color;
+			cursor: pointer;
+		}
+	}
+}
+ul.menu a:hover, ul.menu a:active,ul.menu a:visited:hover,ul.menu a:active:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+ul.menu li.menu_break {
+	height: 10px;
+	visibility: hidden;
+}
+
+#quick-search {
+	display: none;
+}
+
+#sidebar {
+	/* margin: 1em 5px 10px 0px; todo */
+    position: absolute;
+    left: 50%;
+}
+
+
+/* keyboard */
+.keyboard {
+	width: 27em;
+	border: 4px double $main-color;
+	padding: 4px 0;
+	font-size: 18px;
+	cursor: pointer;
+
+	@include glow(5px, $main-color);
+	@include roundy(5px);
+}
+.keyboard * { 
+	cursor: pointer;
+}
+.keyboard-row {
+	clear: both;
+	padding: 4px 0;
+	text-align: center;
+}
+.keyboard-key {
+	border: 1px solid $main-color;
+	display: inline;
+	margin: 2px;
+	padding: 0 5px;
+	height: 20px;
+
+	background-color: $main-color;
+	color: rgba(0,0,0,0.7);
+
+	@include glow(5px, $main-color);
+	@include roundy(5px);
+
+	&:hover {
+		border: 1px solid $highlight-color;
+		background-color: $highlight-color;
+		@include glow(7px, $highlight-color);
+	}
+
+	&:active {
+		border: 1px solid $highlight-color;
+		color: $highlight-color;
+		background-color: fade_out($highlight-color, 0.7);
+		@include glow(7px, $highlight-color);
+	}
+}

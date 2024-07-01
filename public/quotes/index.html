@@ -6,19 +6,9 @@
   <title>Quotes - OranLooney.com</title>
   <meta property="og:title" content="Quotes - OranLooney.com" />
   <meta name="twitter:title" content="Quotes - OranLooney.com" />
-  <meta name="description" content="Programming Writing Code &ldquo;A procedure should fit on a page.&rdquo; &mdash;David Tribble
-&ldquo;When in doubt, use brute force.&rdquo; &mdash;Ken Thompson
-&ldquo;The only three numbers a programmer should ever care about are zero, one, and infinity.&rdquo; &mdash;Willem van der Poel
-&ldquo;The most important single aspect of software development is to be clear about what you are trying to build.&rdquo; &mdash;Bjarne Stroustrup
-&ldquo;The cardinal sin is to make a choice without knowing you are making one.">
-  <meta property="og:description" content="Programming Writing Code &ldquo;A procedure should fit on a page.&rdquo; &mdash;David Tribble
-&ldquo;When in doubt, use brute force.&rdquo; &mdash;Ken Thompson
-&ldquo;The only three numbers a programmer should ever care about are zero, one, and infinity.&rdquo; &mdash;Willem van der Poel
-&ldquo;The most important single aspect of software development is to be clear about what you are trying to build.&rdquo; &mdash;Bjarne Stroustrup
-&ldquo;The cardinal sin is to make a choice without knowing you are making one.">
-  <meta name="twitter:description" content="Programming Writing Code &ldquo;A procedure should fit on a page.&rdquo; &mdash;David Tribble
-&ldquo;When in doubt, use brute force.&rdquo; &mdash;Ken Thompson
-&ldquo;The only three numbers a …">
+  <meta name="description" content=".search-container { margin-top: 20px; width: 100%; max-width: 600px; margin-left: 0; } .search-form-control { width: 100%; padding: 10px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }   No matching quotes to display  function filterQuotes() { var input = document.getElementById(&#34;searchInput&#34;); var searchTerms = input.value.toUpperCase().split(/\s&#43;/); var quotes = document.getElementsByTagName(&#34;p&#34;); var headers = document.querySelectorAll(&#34;h2, h3&#34;); var noResults = document.getElementById(&#34;search-no-results&#34;); // Filter quotes Array.from(quotes).forEach(quote = { var quoteText = (quote.">
+  <meta property="og:description" content=".search-container { margin-top: 20px; width: 100%; max-width: 600px; margin-left: 0; } .search-form-control { width: 100%; padding: 10px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }   No matching quotes to display  function filterQuotes() { var input = document.getElementById(&#34;searchInput&#34;); var searchTerms = input.value.toUpperCase().split(/\s&#43;/); var quotes = document.getElementsByTagName(&#34;p&#34;); var headers = document.querySelectorAll(&#34;h2, h3&#34;); var noResults = document.getElementById(&#34;search-no-results&#34;); // Filter quotes Array.from(quotes).forEach(quote = { var quoteText = (quote.">
+  <meta name="twitter:description" content=".search-container { margin-top: 20px; width: 100%; max-width: 600px; margin-left: 0; } .search-form-control { width: 100%; padding: 10px; margin-bottom: 20px; box-sizing: border-box; border: 1px solid …">
   <meta name="author" content="Oran Looney"/>
 
   <meta name="generator" content="Hugo 0.42.1" />
@@ -100,6 +90,7 @@
 <ul>
 <li><a href="#truth">Truth</a></li>
 <li><a href="#ethics">Ethics</a></li>
+<li><a href="#ignorance">Ignorance</a></li>
 </ul></li>
 <li><a href="#humor">Humor</a>
 <ul>
@@ -110,6 +101,77 @@
 </ul>
 </nav>
       
+
+<style>
+    .search-container {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 600px;
+        margin-left: 0;
+    }
+    .search-form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="search-container">
+    <input type="text" id="searchInput" onkeyup="filterQuotes()" placeholder="Search quotes..." class="search-form-control">
+</div>
+<div id="search-no-results" style="display: none">No matching quotes to display</div>
+
+<script>
+    function filterQuotes() {
+        var input = document.getElementById("searchInput");
+        var searchTerms = input.value.toUpperCase().split(/\s+/);
+        var quotes = document.getElementsByTagName("p");
+        var headers = document.querySelectorAll("h2, h3");
+        var noResults = document.getElementById("search-no-results");
+
+        // Filter quotes
+        Array.from(quotes).forEach(quote => {
+            var quoteText = (quote.textContent || quote.innerText).toUpperCase();
+            var allMatch = searchTerms.every(term => quoteText.includes(term));
+            quote.style.display = allMatch ? "" : "none";
+        });
+
+         // Filter headers
+        Array.from(headers).forEach(header => {
+            var nextSibling = header.nextElementSibling;
+            var hideHeader = true;
+            if (header.tagName === "H2") {
+                while (nextSibling && nextSibling.tagName !== "H2") {
+                    if (nextSibling.tagName === "H3") {
+                        nextSibling = nextSibling.nextElementSibling;
+                        continue;
+                    }
+                    if (nextSibling.style.display !== "none") {
+                        hideHeader = false;
+                        break;
+                    }
+                    nextSibling = nextSibling.nextElementSibling;
+                }
+            } else if (header.tagName === "H3") {
+                while (nextSibling && nextSibling.tagName !== "H3" && nextSibling.tagName !== "H2") {
+                    if (nextSibling.style.display !== "none") {
+                        hideHeader = false;
+                        break;
+                    }
+                    nextSibling = nextSibling.nextElementSibling;
+                }
+            }
+            header.style.display = hideHeader ? "none" : "";
+        });
+
+        // display the "no results" message as needed
+        var anyVisible = Array.from(quotes).some(quote => quote.style.display !== "none");
+        noResults.style.display = anyVisible ? "none" : "";
+    }
+</script>
 
 <h2 id="programming">Programming</h2>
 
@@ -150,6 +212,9 @@ small and to see something in the large.&rdquo;
 <p>&ldquo;Be careful that victories do not carry the seeds of future defeats.&rdquo;
 <br>&mdash;Ralph Stockman</p>
 
+<p>&ldquo;Make it work, make it right, make it fast.&rdquo;
+<br>&mdash;Kent Beck</p>
+
 <h3 id="process">Process</h3>
 
 <p>&ldquo;If it&rsquo;s your decision, it&rsquo;s design; if not, it&rsquo;s a requirement.&rdquo;
@@ -179,7 +244,7 @@ always refer to &lsquo;the number of lines of code spent.&rsquo;&rdquo;
 
 <p>&ldquo;As a programmer, it&rsquo;s your job to put yourself out-of-business. What you can
 do today can be automated tomorrow.&rdquo;
-<br>&mdash;Douglas Mcilroy</p>
+<br>&mdash;Douglas McIlroy</p>
 
 <p>&ldquo;Measuring programming progress by lines of code is like measuring aircraft
 building progress by weight.&rdquo;
@@ -208,13 +273,13 @@ of some portion of the world or of some universe of discourse.&rdquo;
 <p>&ldquo;Less than 10 percent of the code has to do with the ostensible purpose of the
 system; the rest deals with input-output, data validation, data structure
 maintenance, and other housekeeping.&rdquo;
-<br>&mdash;May Shaw</p>
+<br>&mdash;Mary Shaw</p>
 
 <p>&ldquo;[Thompson&rsquo;s rule for first-time telescope makers] It is faster to make a
 four-inch mirror then a six-inch mirror than to make a six-inch mirror.&rdquo;
 <br>&mdash;Bill McKeeman</p>
 
-<p>&ldquo;Build one to throw away - you will anyway.&rdquo;
+<p>&ldquo;Build one to throw away&mdash;you will anyway.&rdquo;
 <br>&mdash;George Stocker</p>
 
 <p>&ldquo;People don&rsquo;t want to buy a quarter-inch drill, they want a quarter-inch hole.&rdquo;
@@ -244,17 +309,17 @@ you <em>do</em> see the use of it, I <em>may</em> allow you to destroy it.&rdquo
 <br>&mdash;Tom Duff</p>
 
 <p>&ldquo;Finding your bug is a process of confirming the many things that you believe
-are true - until you find one which is not true.&rdquo;
+are true&mdash;until you find one which is not true.&rdquo;
 <br>&mdash;Norm Matloff</p>
 
 <p>&ldquo;Debugging is twice as hard as writing the code in the first place. Therefore,
 if you write the code as cleverly as possible, you are, by definition, not
 smart enough to debug it.&rdquo;
-<br>&mdash;Brian Kernigham</p>
+<br>&mdash;Brian Kernighan</p>
 
 <p>&ldquo;The most effective debugging tool is still careful thought, coupled with
 judiciously placed print statements.&rdquo;
-<br>&mdash;Brian Kernigham</p>
+<br>&mdash;Brian Kernighan</p>
 
 <p>&ldquo;Never test [at runtime] for an error condition you don&rsquo;t know how to handle.&rdquo;
 <br>&mdash;Steinbach</p>
@@ -268,7 +333,7 @@ judiciously placed print statements.&rdquo;
 <h3 id="simplicity">Simplicity</h3>
 
 <p>&ldquo;Controlling complexity is the essence of computer programming.&rdquo;
-<br>&mdash;Brian Kernigham</p>
+<br>&mdash;Brian Kernighan</p>
 
 <p>&ldquo;If people do not believe that mathematics is simple, it is only because they
 do not realize how complicated life is.&rdquo;
@@ -343,7 +408,7 @@ better.&rdquo;
 
 <h3 id="optimization">Optimization</h3>
 
-<p>&ldquo;[The First Rule of Program Optimization] Don&rsquo;t do it.&rdquo;
+<p>&ldquo;[The First Rule of Program Optimization] Don&rsquo;t do it.&rdquo;<br>
 &ldquo;[The Second Rule of Program Optimization-For experts only] Don&rsquo;t do it yet.&rdquo;
 <br>&mdash;Michael A. Jackson</p>
 
@@ -375,15 +440,19 @@ Implement that and forget the rest of the paper.&rdquo;
 <p>&ldquo;Knowledge itself is power.&rdquo;
 <br>&mdash;Francis Bacon</p>
 
+<p>&ldquo;Truth is ever to be found in simplicity, and not in the multiplicity and
+confusion of things.&rdquo;
+<br>&mdash;Isaac Newton</p>
+
 <p>&ldquo;Models should be as simple as possible, but not more so.&rdquo;
 <br>&mdash;Attributed to Einstein</p>
-
-<p>&ldquo;Measure what is measurable, and make measurable what is not so.&rdquo;
-<br>&mdash;Galileo Galilei</p>
 
 <p>&ldquo;Science is simply common sense at its best, that is, rigidly accurate in
 observation, and merciless to fallacy in logic.&rdquo;
 <br>&mdash;Thomas Henry Huxley</p>
+
+<p>&ldquo;Measure what is measurable, and make measurable what is not so.&rdquo;
+<br>&mdash;Galileo Galilei</p>
 
 <p>&ldquo;The only relevant test of the validity of a hypothesis is comparison of its
 predictions with experience.&rdquo;
@@ -412,6 +481,10 @@ measurement in science is always given with the probable error&hellip; every obs
 admits that he is likely wrong, and knows about how much wrong he is likely to
 be.&rdquo;
 <br>&mdash;Bertrand Russell</p>
+
+<p>&ldquo;I would rather have questions that can&rsquo;t be answered than answers that can&rsquo;t
+be questioned.&rdquo;
+<br>&mdash;Richard Feynman</p>
 
 <h3 id="statistics">Statistics</h3>
 
@@ -461,6 +534,9 @@ may pick out from the whole armamentarium of scientific methodology.&rdquo;
 and original manner possible.&rdquo;
 <br>&mdash;Richard Feynman</p>
 
+<p>&ldquo;Everything is interesting if you go into it deeply enough.&rdquo;
+<br>&mdash;Richard Feynman</p>
+
 <p>&ldquo;You think you know when you can learn, are more sure when you can write, even
 more when you can teach, but certain when you can program.&rdquo;
 <br>&mdash;Alan J. Perlis</p>
@@ -498,7 +574,9 @@ nature do most of the work. Farmers combine seeds with nutrients to grow crops;
 [Machine] Learners combine knowledge with data to grow programs.&rdquo;
 <br>&mdash;Pedro Domingos</p>
 
-<p>&ldquo;As one Google Translate engineer put it, &lsquo;when you go from 10,000 training examples to 10 billion training examples, it all starts to work. Data trumps everything.&rsquo;&rdquo;
+<p>&ldquo;As one Google Translate engineer put it, &lsquo;when you go from 10,000 training
+examples to 10 billion training examples, it all starts to work. Data trumps
+everything.&lsquo;&rdquo;
 <br>&mdash;Garry Kasparov</p>
 
 <p>&ldquo;A single neuron in the brain is an incredibly complex machine that even today
@@ -532,6 +610,9 @@ versus &lsquo;man without machines.&rsquo;&rdquo;
 <h2 id="philosophy">Philosophy</h2>
 
 <h3 id="truth">Truth</h3>
+
+<p>&ldquo;Facts do not cease to exist because they are ignored.&rdquo;
+<br>&mdash;Aldous Huxley</p>
 
 <p>&ldquo;If any man is able to convince me and show me that I do not think or act
 right, I will gladly change; for I seek the truth by which no man was ever
@@ -603,18 +684,71 @@ post factum, they appear so obvious.&rdquo;
 superstition ain&rsquo;t the way.&rdquo;
 <br>&mdash;Stevie Wonder</p>
 
-<p>&ldquo;There is a cult of ignorance in the United States, and there always has been.
-The strain of anti-intellectualism has been a constant thread winding its way
-through our political and cultural life, nurtured by the false notion that
-democracy means that &lsquo;my ignorance is just as good as your knowledge.&rsquo;&rdquo;
-<br>&mdash;Isaac Asimov</p>
-
 <p>&ldquo;The world would be a much simpler place if one could bring about social change
 merely by making a logically consistent moral argument.&rdquo;
 <br>&mdash;Peter Singer</p>
 
-<p>&ldquo;Any sufficiently crappy research is indistinguishable from fraud.&rdquo;
-<br>&mdash;Andrew Gelman</p>
+<p>&ldquo;This too shall pass.&rdquo;
+<br>&mdash;Persian Adage</p>
+
+<p>&ldquo;A ship in harbor is safe, but that&rsquo;s not what ships are built for.&rdquo;
+<br>&mdash;John A. Shedd</p>
+
+<p>&ldquo;Our responsibility is to do what we can, learn what we can, improve the
+solutions, and pass them on.&rdquo;
+<br>&mdash;Richard P. Feynman</p>
+
+<h3 id="ignorance">Ignorance</h3>
+
+<p>&ldquo;The trouble with the world is that the stupid are cocksure and the intelligent
+full of doubt.&rdquo;
+<br>&mdash;Bertrand Russell</p>
+
+<p>&ldquo;Ignorance more frequently begets confidence than does knowledge.&rdquo;
+<br>&mdash;Charles Darwin</p>
+
+<p>&ldquo;For the great enemy of truth is very often not the lie&mdash;deliberate,
+contrived and dishonest&mdash;but the myth&mdash;persistent, persuasive, and
+unrealistic. Too often we hold fast to the cliches of our forebears. We subject
+all facts to a prefabricated set of interpretations. We enjoy the comfort of
+opinion without the discomfort of thought.&rdquo;
+<br>&mdash;John F. Kennedy</p>
+
+<p>&ldquo;If they can get you asking the wrong questions, they don&rsquo;t have to worry about
+answers.&rdquo;
+<br>&mdash;Thomas Pynchon, <em>Gravity&rsquo;s Rainbow</em></p>
+
+<p>&ldquo;I have a foreboding of an America in my children&rsquo;s or grandchildren&rsquo;s
+time&mdash;when the United States is a service and information economy; when
+nearly all the manufacturing industries have slipped away to other countries;
+when awesome technological powers are in the hands of a very few, and no one
+representing the public interest can even grasp the issues; when the people
+have lost the ability to set their own agendas or knowledgeably question those
+in authority; when, clutching our crystals and nervously consulting our
+horoscopes, our critical faculties in decline, unable to distinguish between
+what feels good and what&rsquo;s true, we slide, almost without noticing, back into
+superstition and darkness&hellip; The dumbing down of American is most evident in
+the slow decay of substantive content in the enormously influential media, the
+30 second sound bites (now down to 10 seconds or less), lowest common
+denominator programming, credulous presentations on pseudoscience and
+superstition, but especially a kind of celebration of ignorance.&rdquo;
+<br>&mdash;Carl Sagan</p>
+
+<p>&ldquo;There is a cult of ignorance in the United States, and there has always been.
+The strain of anti-intellectualism has been a constant thread winding its way
+through our political and cultural life, nurtured by the false notion that
+democracy means that my ignorance is just as good as your knowledge.&rdquo;
+<br>&mdash;Isaac Asimov</p>
+
+<p>&ldquo;If we are to have another contest in the near future of our national
+existence, I predict that the dividing line will not be Mason and Dixon&rsquo;s but
+between patriotism and intelligence on the one side, and superstition, ambition
+and ignorance on the other.&rdquo;
+<br>&mdash;Ulysses S. Grant, 1879</p>
+
+<p>&ldquo;Either America will destroy ignorance or ignorance will destroy the United
+States.&rdquo;
+<br>&mdash;W.E.B. Du Bois</p>
 
 <h2 id="humor">Humor</h2>
 
@@ -668,13 +802,13 @@ solve the problem well.&rdquo;
 <p>&ldquo;Corollary: A co-mathematician is a device for turning ffee into co-theorems.&rdquo;
 <br>&mdash;Anonymous</p>
 
+<p>&ldquo;Anyone who considers arithmetical methods of producing random numbers is, of
+course, in a state of sin.&rdquo;
+<br>&mdash;John von Neumann</p>
+
 <p>&ldquo;A statistician is someone who is good with numbers but lacks the personality
 to be an accountant.&rdquo;
 <br>&mdash;Anonymous</p>
-
-<p>&ldquo;Anyone who considers arithmetical methods of producing random numbers is, of
-course, in a state of sin.&rdquo;
-<br>&mdash;John Von Neumann</p>
 
 <p>&ldquo;Learning to program teaches you how to think. Computer science is a liberal
 art.&rdquo;

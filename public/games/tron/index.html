@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Tron Theme</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+<div id="sidebar" class="box">
+	
+		<form action="/search/" method="get" id="quick-search">
+			<div>
+				<input type="hidden" name="alltags">
+				<input type="text" class="keyword-field" name="keyword">
+				<button class="search-submit-button" type="submit">Search</button>
+		  	</div>
+		  </form>
+	
+
+    <ul class="menu">
+      
+
+      
+        <li class="menu_tags"><a title="search articles by tag" href="/tags/">Tags</a></li>
+        <li class="menu_index"><a title="search articles chronologically" href="/archive">Archive</a></li>
+        <li class="menu_break"></li>
+        <li title="my books on librarything.com" class="menu_bookshelf"><a href="http://www.librarything.com/catalog.php?view=olooney&amp;offset=0&amp;shelf_rows=10&amp;previousOffset=0&amp;shelf=shelf">Bookshelf</a></li>
+        <li title="about the site itself" class="menu_about_site"><a href="/colophon/">Colophon</a></li>
+        <li class="menu_about_me"><a title="about the author" href="/author/">Author</a></li> 
+      
+      
+      
+      
+          <li class="menu_break"></li>
+        
+          <li class="menu_validate"><a href="http://validator.w3.org/check?uri=referer">Validate</a></li> 
+          <li class="menu_analytics"><a href="http://www.google.com/analytics/">Analytics</a></li> 
+		  <li class="menu_admin"><a href="https://registryrocket.com/default.asp?ec=5E8EE0F6-96EA-4947-BABA-2">DNS</a></li>
+          <li class="menu_break"></li>
+          <li class="menu_admin"><a href="/admin/">Admin</a></li>    
+          <li class="menu_logout"><a href="/admin/logout/">Logout</a></li> 
+        
+      
+    </ul>
+  </div>
+<div id="main-wrapper">
+<div class="content-page">
+	<h1>Tron Stylesheet</h1>
+	<p>This is a static HTML page that has representative markup for my site.  By styling this page, I can create a theme that could be applied to all of my content.</p>
+	<blockquote><p>Functions should be short and sweet, and do just one thing.<br>
+	   - Linus Torvalds
+	</p></blockquote>
+
+	<h2>Paragraphs and Lists</h2>
+	<p>  This object accepts a series of data-points through the <code>collect()</code> method, and provides an average via the <code>getAverage()</code> method.  Note:
+	</p>
+	<ul>
+	 <li>
+		 We can do anything we want to the object via <code>this</code>: we can access, set, delete, or mutate any attribute.
+	 </li>
+
+	 <li>
+		 We can't use the <code>function f(x,y)</code> syntax when defining methods; instead, assign an attribute of the object to an anonymous function, as shown.
+	 </li>
+
+	 <li>
+		 if you don't have anything else to return, return <code>this</code> from methods.  This enables method chaining (see below) which is very convenient.  <br>
+	 </li>
+	</ul>
+	<h2>Code Blocks</h2>
+	<p>The <code>methodize </code> function is defined as follows:
+	</p>
+	<pre><code>
+function methodize(original) {
+  return function() {
+    [].unshift.call(arguments, this);
+    return original.apply(this, arguments);
+  }
+}
+  </code></pre>
+	<h2>Keyboard</h2>
+	<p>Just for fun, let's implement the touchscreen keyboard we see in the arcade using pure CSS.  We can't quite curve the border around the space bar, but it's pretty close otherwise.</p>
+	<div class="keyboard">
+		<script type="text/javascript">
+			(function() { 
+				var row = function(left, keys, right) { return [left].concat(keys.split(''), [right]); }
+				var keyboard = [
+					row('Esc',   '1234567890-', 'Back'),
+					row('Tab',   'qertyuip<', '>'),
+					row('Caps',  'asdfghjkl;', 'Ret'),
+					row('Shift', 'zxcvbnm,./', 'Shift'),
+					['          SPACE          ']
+				];
+
+				var letters = "1234567890qwertyuiopasdfghjklzxcvbnm";
+				for ( var i=0; i<keyboard.length; i++ ) {
+					var keys = keyboard[i];
+					document.write('<div class="keyboard-row">');
+					for ( var j=0; j<keys.length; j++ ) {
+						document.write('<div class="keyboard-key">' + keys[j].toUpperCase().replace(/ /g, '&nbsp;') + '</div>');
+					}
+					document.write('</div>');
+				}
+			})();
+		</script>
+	</div>
+	<p>
+Thanks for reading. This blog is in "archive" mode and comments and RSS feed are disabled. We appologize for the inconvenience.
+	</p>
+	<p>Back to <a href="http://www.oranlooney.com/tron-theme/">the article about this theme</a>.
+	</p>
+
+</div>
+</div>
+
+</body>
+</html>

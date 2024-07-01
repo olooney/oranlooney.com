@@ -3,6 +3,78 @@ title = "Quotes"
 date = "2022-11-11"
 +++
 
+<style>
+    .search-container {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 600px;
+        margin-left: 0;
+    }
+    .search-form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="search-container">
+    <input type="text" id="searchInput" onkeyup="filterQuotes()" placeholder="Search quotes..." class="search-form-control">
+</div>
+<div id="search-no-results" style="display: none">No matching quotes to display</div>
+
+<script>
+    function filterQuotes() {
+        var input = document.getElementById("searchInput");
+        var searchTerms = input.value.toUpperCase().split(/\s+/);
+        var quotes = document.getElementsByTagName("p");
+        var headers = document.querySelectorAll("h2, h3");
+        var noResults = document.getElementById("search-no-results");
+
+        // Filter quotes
+        Array.from(quotes).forEach(quote => {
+            var quoteText = (quote.textContent || quote.innerText).toUpperCase();
+            var allMatch = searchTerms.every(term => quoteText.includes(term));
+            quote.style.display = allMatch ? "" : "none";
+        });
+
+         // Filter headers
+        Array.from(headers).forEach(header => {
+            var nextSibling = header.nextElementSibling;
+            var hideHeader = true;
+            if (header.tagName === "H2") {
+                while (nextSibling && nextSibling.tagName !== "H2") {
+                    if (nextSibling.tagName === "H3") {
+                        nextSibling = nextSibling.nextElementSibling;
+                        continue;
+                    }
+                    if (nextSibling.style.display !== "none") {
+                        hideHeader = false;
+                        break;
+                    }
+                    nextSibling = nextSibling.nextElementSibling;
+                }
+            } else if (header.tagName === "H3") {
+                while (nextSibling && nextSibling.tagName !== "H3" && nextSibling.tagName !== "H2") {
+                    if (nextSibling.style.display !== "none") {
+                        hideHeader = false;
+                        break;
+                    }
+                    nextSibling = nextSibling.nextElementSibling;
+                }
+            }
+            header.style.display = hideHeader ? "none" : "";
+        });
+
+        // display the "no results" message as needed
+        var anyVisible = Array.from(quotes).some(quote => quote.style.display !== "none");
+        noResults.style.display = anyVisible ? "none" : "";
+    }
+</script>
+
+
 ## Programming
 
 ### Writing Code
@@ -12,7 +84,7 @@ date = "2022-11-11"
 
 
 "When in doubt, use brute force."
-<br>&mdash;Ken Thompson 
+<br>&mdash;Ken Thompson
 
 
 "The only three numbers a programmer should ever care about are zero, one, and infinity."
@@ -52,6 +124,10 @@ small and to see something in the large."
 <br>&mdash;Ralph Stockman
 
 
+"Make it work, make it right, make it fast."
+<br>&mdash;Kent Beck
+
+
 ### Process
 
 "If it's your decision, it's design; if not, it's a requirement."
@@ -87,7 +163,7 @@ always refer to 'the number of lines of code spent.'"
 
 "As a programmer, it's your job to put yourself out-of-business. What you can
 do today can be automated tomorrow."
-<br>&mdash;Douglas Mcilroy
+<br>&mdash;Douglas McIlroy
 
 
 "Measuring programming progress by lines of code is like measuring aircraft
@@ -123,15 +199,15 @@ of some portion of the world or of some universe of discourse."
 "Less than 10 percent of the code has to do with the ostensible purpose of the
 system; the rest deals with input-output, data validation, data structure
 maintenance, and other housekeeping."
-<br>&mdash;May Shaw
+<br>&mdash;Mary Shaw
 
 
 "[Thompson's rule for first-time telescope makers] It is faster to make a
 four-inch mirror then a six-inch mirror than to make a six-inch mirror."
-<br>&mdash;Bill McKeeman 
+<br>&mdash;Bill McKeeman
 
 
-"Build one to throw away - you will anyway."
+"Build one to throw away&mdash;you will anyway."
 <br>&mdash;George Stocker
 
 
@@ -168,19 +244,19 @@ you *do* see the use of it, I *may* allow you to destroy it."
 
 
 "Finding your bug is a process of confirming the many things that you believe
-are true - until you find one which is not true."
+are true&mdash;until you find one which is not true."
 <br>&mdash;Norm Matloff
 
 
 "Debugging is twice as hard as writing the code in the first place. Therefore,
 if you write the code as cleverly as possible, you are, by definition, not
 smart enough to debug it."
-<br>&mdash;Brian Kernigham
+<br>&mdash;Brian Kernighan
 
 
 "The most effective debugging tool is still careful thought, coupled with
 judiciously placed print statements."
-<br>&mdash;Brian Kernigham
+<br>&mdash;Brian Kernighan
 
 
 "Never test \[at runtime\] for an error condition you don't know how to handle."
@@ -198,7 +274,7 @@ judiciously placed print statements."
 ### Simplicity
 
 "Controlling complexity is the essence of computer programming."
-<br>&mdash;Brian Kernigham
+<br>&mdash;Brian Kernighan
 
 
 "If people do not believe that mathematics is simple, it is only because they
@@ -290,7 +366,7 @@ better."
 
 ### Optimization
 
-"[The First Rule of Program Optimization] Don't do it."
+"[The First Rule of Program Optimization] Don't do it."<br>
 "[The Second Rule of Program Optimization-For experts only] Don't do it yet."
 <br>&mdash;Michael A. Jackson
 
@@ -329,17 +405,22 @@ Implement that and forget the rest of the paper."
 <br>&mdash;Francis Bacon
 
 
+"Truth is ever to be found in simplicity, and not in the multiplicity and
+confusion of things."
+<br>&mdash;Isaac Newton
+
+
 "Models should be as simple as possible, but not more so." 
 <br>&mdash;Attributed to Einstein
-
-
-"Measure what is measurable, and make measurable what is not so."
-<br>&mdash;Galileo Galilei
 
 
 "Science is simply common sense at its best, that is, rigidly accurate in
 observation, and merciless to fallacy in logic."
 <br>&mdash;Thomas Henry Huxley 
+
+
+"Measure what is measurable, and make measurable what is not so."
+<br>&mdash;Galileo Galilei
 
 
 "The only relevant test of the validity of a hypothesis is comparison of its
@@ -375,6 +456,10 @@ admits that he is likely wrong, and knows about how much wrong he is likely to
 be."
 <br>&mdash;Bertrand Russell
 
+
+"I would rather have questions that can't be answered than answers that can't
+be questioned."
+<br>&mdash;Richard Feynman
 
 
 ### Statistics
@@ -438,6 +523,10 @@ and original manner possible."
 <br>&mdash;Richard Feynman
 
 
+"Everything is interesting if you go into it deeply enough."
+<br>&mdash;Richard Feynman
+
+
 "You think you know when you can learn, are more sure when you can write, even
 more when you can teach, but certain when you can program."
 <br>&mdash;Alan J. Perlis
@@ -483,7 +572,9 @@ nature do most of the work. Farmers combine seeds with nutrients to grow crops;
 <br>&mdash;Pedro Domingos
 
 
-"As one Google Translate engineer put it, 'when you go from 10,000 training examples to 10 billion training examples, it all starts to work. Data trumps everything.'"
+"As one Google Translate engineer put it, 'when you go from 10,000 training
+examples to 10 billion training examples, it all starts to work. Data trumps
+everything.'"
 <br>&mdash;Garry Kasparov
 
 
@@ -524,6 +615,10 @@ versus 'man without machines.'"
 ## Philosophy
 
 ### Truth
+
+"Facts do not cease to exist because they are ignored."
+<br>&mdash;Aldous Huxley
+
 
 "If any man is able to convince me and show me that I do not think or act
 right, I will gladly change; for I seek the truth by which no man was ever
@@ -612,21 +707,83 @@ superstition ain't the way."
 <br>&mdash;Stevie Wonder
 
 
-"There is a cult of ignorance in the United States, and there always has been.
-The strain of anti-intellectualism has been a constant thread winding its way
-through our political and cultural life, nurtured by the false notion that
-democracy means that 'my ignorance is just as good as your knowledge.'"
-<br>&mdash;Isaac Asimov
-
-
 "The world would be a much simpler place if one could bring about social change
 merely by making a logically consistent moral argument."
 <br>&mdash;Peter Singer
 
 
-"Any sufficiently crappy research is indistinguishable from fraud."
-<br>&mdash;Andrew Gelman
+"This too shall pass."
+<br>&mdash;Persian Adage
 
+
+"A ship in harbor is safe, but that's not what ships are built for."
+<br>&mdash;John A. Shedd
+
+
+"Our responsibility is to do what we can, learn what we can, improve the
+solutions, and pass them on."
+<br>&mdash;Richard P. Feynman
+
+
+
+### Ignorance
+
+"The trouble with the world is that the stupid are cocksure and the intelligent
+full of doubt."
+<br>&mdash;Bertrand Russell 
+
+
+"Ignorance more frequently begets confidence than does knowledge."
+<br>&mdash;Charles Darwin
+
+
+"For the great enemy of truth is very often not the lie&mdash;deliberate,
+contrived and dishonest&mdash;but the myth&mdash;persistent, persuasive, and
+unrealistic. Too often we hold fast to the cliches of our forebears. We subject
+all facts to a prefabricated set of interpretations. We enjoy the comfort of
+opinion without the discomfort of thought."
+<br>&mdash;John F. Kennedy
+
+
+"If they can get you asking the wrong questions, they don't have to worry about
+answers."
+<br>&mdash;Thomas Pynchon, *Gravity's Rainbow*
+
+
+"I have a foreboding of an America in my children's or grandchildren's 
+time&mdash;when the United States is a service and information economy; when 
+nearly all the manufacturing industries have slipped away to other countries;
+when awesome technological powers are in the hands of a very few, and no one
+representing the public interest can even grasp the issues; when the people
+have lost the ability to set their own agendas or knowledgeably question those
+in authority; when, clutching our crystals and nervously consulting our
+horoscopes, our critical faculties in decline, unable to distinguish between
+what feels good and what's true, we slide, almost without noticing, back into
+superstition and darkness... The dumbing down of American is most evident in
+the slow decay of substantive content in the enormously influential media, the
+30 second sound bites (now down to 10 seconds or less), lowest common
+denominator programming, credulous presentations on pseudoscience and
+superstition, but especially a kind of celebration of ignorance." 
+<br>&mdash;Carl Sagan
+
+
+"There is a cult of ignorance in the United States, and there has always been.
+The strain of anti-intellectualism has been a constant thread winding its way
+through our political and cultural life, nurtured by the false notion that
+democracy means that my ignorance is just as good as your knowledge." 
+<br>&mdash;Isaac Asimov
+
+
+"If we are to have another contest in the near future of our national
+existence, I predict that the dividing line will not be Mason and Dixon's but
+between patriotism and intelligence on the one side, and superstition, ambition
+and ignorance on the other."
+<br>&mdash;Ulysses S. Grant, 1879
+
+
+"Either America will destroy ignorance or ignorance will destroy the United
+States." 
+<br>&mdash;W.E.B. Du Bois
 
 
 ## Humor
@@ -696,14 +853,14 @@ solve the problem well."
 <br>&mdash;Anonymous
 
 
+"Anyone who considers arithmetical methods of producing random numbers is, of
+course, in a state of sin."
+<br>&mdash;John von Neumann 
+
+
 "A statistician is someone who is good with numbers but lacks the personality
 to be an accountant."
 <br>&mdash;Anonymous
-
-
-"Anyone who considers arithmetical methods of producing random numbers is, of
-course, in a state of sin."
-<br>&mdash;John Von Neumann 
 
 
 "Learning to program teaches you how to think. Computer science is a liberal

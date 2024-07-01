@@ -23,12 +23,15 @@ href="mailto:olooney@gmail.com">olooney@gmail.com</a> or to message me on
 Outside of work, I enjoy recreational mathematics, programming challenges such
 as [Advent of Code][1] or [leetcode][2], and puzzle games like [Baba Is
 You][BIY]. I maintain a repository of [quotes][Q] and [poems][P] containing
-pithy wit and wisdom for programming and science. I sometimes make small web
-toys like a satirical ["AI" feedback generator][AFG], a
-really-quite-good-once-you-get-past-the-graphics [typing game][FW], or animated
-[design elements][DE] for a hypothetical "high tech" landing page. As for my
-other amateur interests, well, I can only refer you to all the [topics][T]
-covered on this site.
+pithy wit and wisdom for programming and science. I sometimes make <a
+href="/games/">small web games or demos.</a> As for my other amateur interests,
+well, I can only refer you to all the [topics][T] covered on this site.
+
+<!--
+I sometimes make small web toys like a satirical ["AI" feedback generator][AFG], 
+a really-quite-good-once-you-get-past-the-graphics [typing game][FW], or 
+animated [design elements][DE] for a hypothetical "high tech" landing page. 
+-->
 
 I've also been thrilled by the recent wave of recreational mathematics and
 other educational content on YouTube such as

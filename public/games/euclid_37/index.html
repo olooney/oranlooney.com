@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Proof with D3</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #content {
+            width: 640px;
+        }
+        svg {
+            border: 1px solid black; /* Adds a border around the SVG for visibility */
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+    <h3><a href="http://aleph0.clarku.edu/~djoyce/java/elements/bookI/propI37.html">Euclid Book 1, Proposition 37</a></h3>
+    <p>Triangles which are on the same base and in the same parallels equal one another.</p>
+    <svg width="640" height="480"></svg>
+    </div>
+    <script src="triangle.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+/* Copyright 2010 Oran Looney */
+.os-docs-viewer-icon { background-image: url(../../icons/silk/script.png); }
+.os-docs-list-icon { background-image: url(../../icons/silk/script.png); }
+.os-docs-source-viewer-icon { background-image: url(../../icons/silk/script_code.png); }
+
+.os-docs-list-namespaces {
+	margin: 5px;
+	font-size: 120%;
+}
+
+.os-docs-list-namespaces li {
+	margin: 2px;
+}
