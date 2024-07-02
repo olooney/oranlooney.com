@@ -31,6 +31,10 @@ body {
   text-shadow: 0 0 5px #52d7ec;
   cursor: pointer; }
 
+.content-page a:hover {
+  color: #63e8fd;
+}
+
 .content-page h1 {
   margin: .8em 0 0 0;
   font-size: 1.7em;
@@ -49,13 +53,24 @@ body {
   -webkit-box-shadow: 0 0 10px #52d7ec;
   box-shadow: 0 0 10px #52d7ec; }
 
+.content-page h1:hover {
+  background-color: #63e8fd;
+}
+
 .content-page h2 {
-  background: url(../images/quote_right.png) center right no-repeat; }
+  padding: 2px;
+  background: url(../images/quote_right.png) center right no-repeat; 
+  background-clip: border-box;
+}
+
+.menu-big-rss {
+    min-height: 70px;
+}
 
 a.big-rss-link {
   display: block;
   float: left;
-  top: 10px;
+  top: 0px;
   left: 0px;
   width: 59px;
   height: 58px;
@@ -72,7 +87,6 @@ a.big-rss-link {
   background-repeat: no-repeat;
   /*background: url(../images/quote_left.png) top left no-repeat, url(../images/quote_right.png) top right no-repeat;*/
   font-size: 1.3em;
-  text-indent: 1em;
   padding: 20px 50px 10px;
   margin: .2em auto;
   border: 2px solid #15abc3;
@@ -193,8 +207,9 @@ ul.menu li.menu_break {
 
 .keyboard-key {
   border: 1px solid #15abc3;
-  display: inline;
-  margin: 2px;
+  display: inline-block;
+  transition: transform 0.3s ease, box-shadow 0.2s ease;
+  margin: 0 2px;
   padding: 0 5px;
   height: 20px;
   background-color: #15abc3;
@@ -204,8 +219,11 @@ ul.menu li.menu_break {
   box-shadow: 0 0 5px #15abc3;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  border-radius: 5px; }
+  border-radius: 5px; 
+
+}
   .keyboard-key:hover {
+    transform: translateY(-2px);
     border: 1px solid #52d7ec;
     background-color: #52d7ec;
     -moz-box-shadow: 0 0 7px #52d7ec;

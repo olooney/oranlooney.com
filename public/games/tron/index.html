@@ -18,37 +18,57 @@
 
     <ul class="menu">
       
-
-      
+        <li class="menu_tags"><a title="search articles by tag" href="/search/">Search</a></li>
         <li class="menu_tags"><a title="search articles by tag" href="/tags/">Tags</a></li>
-        <li class="menu_index"><a title="search articles chronologically" href="/archive">Archive</a></li>
+        <li class="menu_index"><a title="search articles chronologically" href="/archives/">Archive</a></li>
+        <li class="menu_tags"><a title="search articles by tag" href="/quotes/">Quotes</a></li>
+
         <li class="menu_break"></li>
-        <li title="my books on librarything.com" class="menu_bookshelf"><a href="http://www.librarything.com/catalog.php?view=olooney&amp;offset=0&amp;shelf_rows=10&amp;previousOffset=0&amp;shelf=shelf">Bookshelf</a></li>
-        <li title="about the site itself" class="menu_about_site"><a href="/colophon/">Colophon</a></li>
-        <li class="menu_about_me"><a title="about the author" href="/author/">Author</a></li> 
-      
-      
-      
-      
-          <li class="menu_break"></li>
-        
-          <li class="menu_validate"><a href="http://validator.w3.org/check?uri=referer">Validate</a></li> 
-          <li class="menu_analytics"><a href="http://www.google.com/analytics/">Analytics</a></li> 
-		  <li class="menu_admin"><a href="https://registryrocket.com/default.asp?ec=5E8EE0F6-96EA-4947-BABA-2">DNS</a></li>
-          <li class="menu_break"></li>
-          <li class="menu_admin"><a href="/admin/">Admin</a></li>    
-          <li class="menu_logout"><a href="/admin/logout/">Logout</a></li> 
+        <li title="about the site itself" class="menu_about_site"><a href="/about/">Colophon</a></li>
+        <li class="menu_about_me"><a title="about the author" href="/about/">Author</a></li> 
+
+        <li class="menu_break"></li>
+        <li class="menu_admin"><a href="/">Admin</a></li>    
+        <li class="menu_logout"><a href="/">Logout</a></li> 
+        <a class="big-rss-link" href="/">&nbsp;</a>
         
       
     </ul>
   </div>
 <div id="main-wrapper">
 <div class="content-page">
-	<h1>Tron Stylesheet</h1>
-	<p>This is a static HTML page that has representative markup for my site.  By styling this page, I can create a theme that could be applied to all of my content.</p>
-	<blockquote><p>Functions should be short and sweet, and do just one thing.<br>
-	   - Linus Torvalds
+	<h1>Tron Theme</h1>
+    <p>A <a href="css/main.css">CSS stylesheet</a> that implements a theme similar to the <a href="images/ui.png">UI</a> we briefly see in Tron: Legacy. Try hovering over various elements to see how they react.</p>
+	<blockquote><p>The Grid. A digital frontier. I tried to picture clusters of information as they traveled through the computer. Ships, motorcycles. With the circuits like freeways. I kept dreaming of a world I thought I’d never see. And then, one day... I got in.
+     <br>&mdash;Kevin Flynn
 	</p></blockquote>
+
+	<h2>Keyboard</h2>
+	<p>The touchscreen keyboard we see in the arcade scene using pure CSS.  We can't quite curve the border around the space bar, but it's pretty close otherwise.</p>
+	<div class="keyboard">
+		<script type="text/javascript">
+			(function() { 
+				var row = function(left, keys, right) { return [left].concat(keys.split(''), [right]); }
+				var keyboard = [
+					row('Esc',   '1234567890-', 'Back'),
+					row('Tab',   'qwertyuip<', '>'),
+					row('Caps',  'asdfghjkl;', 'Ret'),
+					row('Shift', 'zxcvbnm,./', 'Shift'),
+					['          SPACE          ']
+				];
+
+				var letters = "1234567890qwertyuiopasdfghjklzxcvbnm";
+				for ( var i=0; i<keyboard.length; i++ ) {
+					var keys = keyboard[i];
+					document.write('<div class="keyboard-row">');
+					for ( var j=0; j<keys.length; j++ ) {
+						document.write('<div class="keyboard-key">' + keys[j].toUpperCase().replace(/ /g, '&nbsp;') + '</div>');
+					}
+					document.write('</div>');
+				}
+			})();
+		</script>
+	</div>
 
 	<h2>Paragraphs and Lists</h2>
 	<p>  This object accepts a series of data-points through the <code>collect()</code> method, and provides an average via the <code>getAverage()</code> method.  Note:
@@ -77,37 +97,6 @@ function methodize(original) {
   }
 }
   </code></pre>
-	<h2>Keyboard</h2>
-	<p>Just for fun, let's implement the touchscreen keyboard we see in the arcade using pure CSS.  We can't quite curve the border around the space bar, but it's pretty close otherwise.</p>
-	<div class="keyboard">
-		<script type="text/javascript">
-			(function() { 
-				var row = function(left, keys, right) { return [left].concat(keys.split(''), [right]); }
-				var keyboard = [
-					row('Esc',   '1234567890-', 'Back'),
-					row('Tab',   'qertyuip<', '>'),
-					row('Caps',  'asdfghjkl;', 'Ret'),
-					row('Shift', 'zxcvbnm,./', 'Shift'),
-					['          SPACE          ']
-				];
-
-				var letters = "1234567890qwertyuiopasdfghjklzxcvbnm";
-				for ( var i=0; i<keyboard.length; i++ ) {
-					var keys = keyboard[i];
-					document.write('<div class="keyboard-row">');
-					for ( var j=0; j<keys.length; j++ ) {
-						document.write('<div class="keyboard-key">' + keys[j].toUpperCase().replace(/ /g, '&nbsp;') + '</div>');
-					}
-					document.write('</div>');
-				}
-			})();
-		</script>
-	</div>
-	<p>
-Thanks for reading. This blog is in "archive" mode and comments and RSS feed are disabled. We appologize for the inconvenience.
-	</p>
-	<p>Back to <a href="http://www.oranlooney.com/tron-theme/">the article about this theme</a>.
-	</p>
 
 </div>
 </div>
