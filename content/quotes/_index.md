@@ -289,6 +289,11 @@ simple system."
 <br>&mdash;John Gall
 
 
+"Sometimes, the elegant implementation is a function. Not a method. Not a
+class. Not a framework. Just a function."
+<br>&mdash;John Carmack
+
+
 "Simplicity is prerequisite for reliability."
 <br>&mdash;Edsger Dijkstra
 
