@@ -208,10 +208,9 @@ formulas:
 Pythagorean Theorem
 -------------------
 
-OK, now that we have the angle addition formulas, let's put them to work.
-
-First, we'd like sine and cosine to trace out a unit circle; in other words, we
-want to make sure that $\sin^2(\theta) + \cos^2(\theta) = 1$ for all angles
+Now that we have the angle addition formulas, let's put them to work. First,
+we'd like sine and cosine to trace out a unit circle; in other words, we want
+to make sure that $\sin^2(\theta) + \cos^2(\theta) = 1$ for all angles
 $\theta$.
 
 There are lots of ways to prove this, but the angle addition formula provides
@@ -231,6 +230,9 @@ have:
 
 Here, we additionally used the fact that sine and cosine are odd and even
 functions respectively, so $\cos(-x) = \cos(x)$ and $\sin(-x) = - \sin(x)$.
+We haven't proved these theorems, or even defined what we mean by a "negative
+angle" or a "negative length," so I encourage you to draw out the diagrams
+and convince yourself that this is correct.
 
 That means that the Pythagorean theorem is actually an immediate corollary of
 the angle addition formula for cosine.
@@ -238,9 +240,9 @@ the angle addition formula for cosine.
 Derivatives
 -----------
 
-Another neat thing we can do with the angle addition formulas is calculate the derivatives
-of sine and cosine. This is because the limit definition of derivative includes a term with $f(x+h)$
-which we can handle with the formulas.
+Another neat thing we can do with the angle addition formulas is calculate the
+derivatives of sine and cosine. This is because the limit definition of
+derivative includes a term with $f(x+h)$ which we can handle with the formulas.
 
 \\[
 \begin{align}

@@ -10,9 +10,6 @@ tags:
 image: /post/jeopardy_files/lead.jpg
 ---
 
-*Update 2024-05-14*: Hot off the presses, the benchmark now includes the 
-recently released [GPT-4o][G4O] model!
-
 How good are LLMs at trivia? I used the [Jeopardy! dataset][JKD] from Kaggle to
 benchmark ChatGPT and the new Llama 3 models.  Here are the results:
 
