@@ -56,7 +56,8 @@ def cropped_thumbnail(img, size):
         side_cut_line = (original.width - crop_size.width) / 2
         img = img.crop( flat(side_cut_line, 0,  side_cut_line + crop_size.width, crop_size.height) )
         
-    return img.resize(target.size, Image.ANTIALIAS)
+
+    return img.resize(target.size, Image.LANCZOS)
 
 def lead_photos(size):
     size = flat(*size)
