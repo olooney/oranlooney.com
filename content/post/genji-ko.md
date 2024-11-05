@@ -43,17 +43,24 @@ incense they would score a single point; otherwise they would score nothing.
 Obviously contestants would need some kind of notation to record their answers
 in a concise, unambiguous, and easy to read way. 
 
+Rules
+-----
+
+<img src="/post/genji-ko_files/examples.png">
+
+
 TODO intro to genji-ko
 
 <img src="/post/genji-ko_files/blocks.png">
 
+History
+-------
 
 Genji-ko, by the way is named after the titular Genji of the Heian era literary
 classic [The Tale of Genji][TG]. There are actually two connections: First, in
-one chapter of the book, Genji hosts an incense appreciation party. This is
-presumably the inspiration for naming the game after him. Second, since there
-are 52 possible patterns and 54 chapters of the book, each pattern is
-traditionally associated with and named after each chapter (except for the
+one chapter of the book, Genji hosts an incense appreciation party. Second,
+since there are 52 possible patterns and 54 chapters of the book, each pattern
+is traditionally associated with and named after each chapter (except for the
 first and last chapters, which are omitted.) This gives each pattern a kind of
 literary resonance - every Muromachi era noble would be intimately familiar
 with the book, and would know the themes, season, and characters associated
