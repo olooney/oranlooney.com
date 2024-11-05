@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Art and Mathematics of Genji-Ko - OranLooney.com</title>
+  <meta property="og:title" content="The Art and Mathematics of Genji-Ko - OranLooney.com" />
+  <meta name="twitter:title" content="The Art and Mathematics of Genji-Ko - OranLooney.com" />
+  <meta name="description" content="You might think there&rsquo;s unlikely to be any interesting mathematics arising from incense appreciation, but that&rsquo;s only because you&rsquo;re unfamiliar with the peculiar character of Muromachi (室町) era Japanese nobles.
+You see, it was a time of great insecurity and political instability, TODO
+Never before or after, in any place or period of history, did you have have a group of people who were so desperate to display their sophistication and refinement.">
+  <meta property="og:description" content="You might think there&rsquo;s unlikely to be any interesting mathematics arising from incense appreciation, but that&rsquo;s only because you&rsquo;re unfamiliar with the peculiar character of Muromachi (室町) era Japanese nobles.
+You see, it was a time of great insecurity and political instability, TODO
+Never before or after, in any place or period of history, did you have have a group of people who were so desperate to display their sophistication and refinement.">
+  <meta name="twitter:description" content="You might think there&rsquo;s unlikely to be any interesting mathematics arising from incense appreciation, but that&rsquo;s only because you&rsquo;re unfamiliar with the peculiar character of …">
+  <meta name="author" content="Oran Looney"/>
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css" media="all" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
+ 
+</head>
+
+<body>
+<header class="site-header">
+  <nav class="site-navi">
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item">
+        <a href="/search/" title="Site Search"><i class="fa fa-search"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/tags/" title="Article Tags"><i class="fa fa-tag"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/archives/" title="Article Archives"><i class="fa fa-archive"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/quotes/" title="Favorite Quotes"><i class="fas fa-quote-right"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/about/" title="About Me"><i class="fa fa-info-circle"></i></a>
+      </li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="//honeycode.tumblr.com/" target="_blank" title="Honeycode Microblog">
+      <svg class="svg-inline--fa fa-w-12" aria-hidden="true" data-prefix="fab" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="20 50 350 450" data-fa-i2svg="">
+<path fill="currentColor" d="M193 97l86.6 50v100l-86.6 50l-86.6 -50v-100zM285 255l86.6 50v100l-86.6 50l-86.6 -50v-100zM100 255l86.6 50v100l-86.6 50l-86.6 -50v-100z"></path>
+</svg>
+    </a></li>
+    <li><a href="//linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
+  </ul>
+
+  </nav>
+</header>
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/genji-ko_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">The Art and Mathematics of Genji-Ko</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-author">
+            by <a href="/about/">Oran Looney</a>
+        </li>
+        <li class="article-meta-date"><time>October 30, 2024</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/python/">
+            <i class="fas fa-tag"></i>
+            Python
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/visualization/">
+            <i class="fas fa-tag"></i>
+            Visualization
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/history/">
+            <i class="fas fa-tag"></i>
+            History
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#culture">Culture</a></li>
+<li><a href="#patterns">Patterns</a></li>
+<li><a href="#order">Order</a></li>
+<li><a href="#final-result">Final Result</a></li>
+<li><a href="#mathematics">Mathematics</a></li>
+<li><a href="#art">Art</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>You might think there&rsquo;s unlikely to be any interesting mathematics arising from
+incense appreciation, but that&rsquo;s only because you&rsquo;re unfamiliar with the
+peculiar character of Muromachi (室町) era Japanese nobles.</p>
+
+<p>You see, it was a time of great insecurity and political instability, TODO</p>
+
+<p>Never before or after, in any place or period of history, did you have have a
+group of people who were so desperate to display their sophistication and
+refinement. It was a matter of life or death. It wouldn&rsquo;t do to merely put out
+a few sticks of incense. You would have to demonstrate that your taste was more
+exquisite, your judgement more refined, your etiquette more oblique. You could
+of course merely invite some other nobles over for an incense appreciation
+party, make a few cutting but plausibly deniable remarks about a rival, maybe
+drop a few lines of poetry linking the incense to the current season. But if
+you were really deadly serious (and they were) you&rsquo;d be looking for a way you
+could simultaneously humiliate your rivals, flirt with romantic interests, and
+impress people in a position of power. These nobles didn&rsquo;t just perfect
+cultured refinement - they weaponized it.</p>
+
+<p>Only under such conditions could something genji-ko (源氏香) arise. It is a
+parlor game played with incense - just one of many similar games inside the
+broader umbrella of kōdō (香道). What sets genji-ko apart is its extreme
+difficulty - where another game might have contestants write down their guesses
+for three separate incenses and score a point for each correct guess, Genji-ko
+asks contestants to smell five separate samples, then determine which of the
+five are the same. All five might be the same, or all five might be different.
+The might be in groups of two or three or four - there might be one group of
+two and a second group of three. If the contestant correctly grouped all five
+incense they would score a single point; otherwise they would score nothing.</p>
+
+<p>Obviously contestants would need some kind of notation to record their answers
+in a concise, unambiguous, and easy to read way.</p>
+
+<p>TODO intro to genji-ko</p>
+
+<p><img src="/post/genji-ko_files/blocks.png"></p>
+
+<p>Genji-ko, by the way is named after the titular Genji of the Heian era literary
+classic <a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji">The Tale of Genji</a>. There are actually two connections: First, in
+one chapter of the book, Genji hosts an incense appreciation party. This is
+presumably the inspiration for naming the game after him. Second, since there
+are 52 possible patterns and 54 chapters of the book, each pattern is
+traditionally associated with and named after each chapter (except for the
+first and last chapters, which are omitted.) This gives each pattern a kind of
+literary resonance - every Muromachi era noble would be intimately familiar
+with the book, and would know the themes, season, and characters associated
+with each chapter.</p>
+
+<h2 id="culture">Culture</h2>
+
+<p>I wouldn&rsquo;t say genji-ko is exactly well-known in Japan - even kōdō is fairly
+obscure compared to more popular traditional arts from the same era such
+as tea ceremony or flower arranging - but they do show up fairly often as a motif in
+contemporary Japanese graphic design or on traditional handcrafted goods.</p>
+
+<p><img src="/post/genji-ko_files/kimono.jpg">
+<img src="/post/genji-ko_files/fabric.jpg"></p>
+
+<p>Often found on good related to incense or kōdō in some way:</p>
+
+<p><img src="/post/genji-ko_files/incense_set.jpg">
+<img src="/post/genji-ko_files/incense_box.jpg">
+<img src="/post/genji-ko_files/incense_holder.jpg"></p>
+
+<p>Utagawa Kunisada, circa 1843, painted a  wall scoll for each chapter
+of the Tale of Genji and included the genji-ko on each:</p>
+
+<p><img src="/post/genji-ko_files/yugiri_wall_scroll.jpg"></p>
+
+<h2 id="patterns">Patterns</h2>
+
+<p>Knuth writes about it:
+<img src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png"></p>
+
+<pre><code class="language-python">def partitions(s: Set[int]) -&gt; Iterator[List[Set[int]]]:
+    &quot;&quot;&quot;Yield all partitions of a set as they are generated.&quot;&quot;&quot;
+    if not s:
+        yield []
+        return
+    first = next(iter(s))
+    rest = s - {first}
+    for partition in partitions(rest):
+        yield [{first}] + partition
+        for i in range(len(partition)):
+            new_partition = (
+                partition[:i] + 
+                [partition[i] | {first}] + partition[i+1:]
+            )
+            yield new_partition
+</code></pre>
+
+<p>Optimal Genji-ko layouts for each partition:</p>
+
+<pre><code class="language-python">def optimal_genjiko_for_partition(
+    partition: List[Set[int]]
+) -&gt; List[Tuple[float, Set[int]]]:
+    &quot;&quot;&quot;
+    Given a partition, find the optimal genji-ko layout by minimizing a cost
+    function.
+
+    I was originally hoping to get to 100% algorithmic generation, but this
+    simple rule captures all but 4 of layouts, and the remaining 4 cannot be
+    expressed in any rule which is shorter and simpler than just simply listing
+    the 4 special cases.
+    &quot;&quot;&quot;
+    best_cost = math.inf
+    best_genjiko = None
+    HEIGHTS = [1.0, 0.8, 0.6]
+    
+    # Generate all possible combinations of heights
+    for height_combo in itertools.product(HEIGHTS, repeat=len(partition)):
+        genjiko_candidate = [
+            (height, group) 
+            for height, group 
+            in zip(height_combo, partition)
+        ]
+        
+        # Skip invalid configurations
+        if not validate_genjiko(genjiko_candidate):
+            continue
+        
+        # Encourage larger heights
+        cost = -sum(height for height, _ in genjiko_candidate)  
+        
+        for height1, group1 in genjiko_candidate:
+            for height2, group2 in genjiko_candidate:
+                # Large penalty for higher inner group height
+                if is_nested_within(group1, group2) and height1 &gt; height2:
+                    cost += 1
+        
+        # keep track of the best solution so far
+        if cost &lt; best_cost:
+            best_cost = cost
+            best_genjiko = genjiko_candidate
+
+    return best_genjiko
+</code></pre>
+
+<p>Here&rsquo;s what we get if always use the algorithmically calculated &ldquo;optimal&rdquo;
+layout and simply put them in the order returned by <code>partitions()</code>:</p>
+
+<p><img src="/post/genji-ko_files/algorithmic_genjiko.png"></p>
+
+<p>Good, but not perfect. The order is largely wrong, and there are four
+genji-ko (the ones rendered in red) where our concept of &ldquo;optimal&rdquo; has
+failed to reproduce the traditional design.</p>
+
+<h2 id="order">Order</h2>
+
+<p>Knuth <a href="https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052">mentions</a> that the genji-ko patterns &ldquo;were not arranged in any
+particularly logical order&rdquo; and I&rsquo;m inclined to agree. I tried several
+variations of the above <code>partition()</code> function hoping to find one where the
+traditional order would just fall out naturally, but it never did. A close
+inspection of the table makes it clear that this was never going to happen:
+there&rsquo;s an overall trend from many separate groups to fewer groups, but there
+are just too many cases where the order is arbitrary.</p>
+
+<p>I found a ton of references that put the genji-ko in a different order, and
+even some that tried to stretch it to 54 using some kind of duplication or
+introducing irregular patterns. However, the association between the 52
+patterns and chapter titles for chapters 2-53 of the <em>Tale of Genji</em> seem
+water tight and consistent. Also, the order of those chapters is mostly
+consistent across sources (there is some disagreement about the order of the
+later chapters, and one chapter which survives only as a title or perhaps was
+intentionally elided as a delicate way to elude to a character&rsquo;s death) so
+I&rsquo;ve put my genji-ko in chapter order.</p>
+
+<p>TODO: Table? Link to .txt?</p>
+
+<h2 id="final-result">Final Result</h2>
+
+<p>I spent some time trying to find some elegant heuristic that would nudge
+the layout algorithm to produce those four without breaking any of the others,
+but the rules were more complex than simply listing the special cases (and
+none of them correctly handled Yuguri, which I&rsquo;ll discuss below.)</p>
+
+<p>The four special cases are:</p>
+
+<pre><code class="language-python">    # Suma: {1, 3, 4} should be lower than {2, 5}
+    df.at[10, 'Genjiko'] = [(0.8, {1, 3, 4}), (1.0, {2, 5})]
+    
+    # Hatsune: {1, 3} should be lower than {2, 4}
+    df.at[21, 'Genjiko'] = [(0.8, {1, 3}), (1.0, {2, 4}), (1.0, {5})]
+    
+    # Yuguri: {1, 4} should be lower than {3, 5}, and {2} even lower.
+    df.at[37, 'Genjiko'] = [(0.8, {1, 4}), (0.6, {2}), (1.0, {3, 5})]
+    
+    # Nioumiya: {1, 2, 4} should be lower than {3, 5}
+    df.at[40, 'Genjiko'] = [(0.8, {1, 2, 4}), (1.0, {3, 5})]
+</code></pre>
+
+<p>With these corrections, and using the <em>Tale of Genji</em> chapter order.</p>
+
+<p><img src="/post/genji-ko_files/genjiko.png"></p>
+
+<p>Of the four exceptions, three are obvious improvements but the fourth, Yugiri,
+seems to actively violate the basic rules around nesting and creates a
+three-level structure when two would have sufficed.</p>
+
+<p><img src="/post/genji-ko_files/yuguri_diff.png"></p>
+
+<p>I&rsquo;m not about to stand in the way of 900 years of tradition, nor am I about to
+argue with the aesthetic sensibilities of Utagawa Kunisada, so we&rsquo;ll use the
+traditional version.</p>
+
+<h2 id="mathematics">Mathematics</h2>
+
+<p>The connection between genji-ko and mathematics becomes apparent if we ask
+ourselves, &ldquo;Why are there exactly 52 genji-ko patterns? How can we be sure
+there aren&rsquo;t more?&rdquo;</p>
+
+<p>Let&rsquo;s ask ourselves exactly what we&rsquo;re counting, anyway. Each pattern divides
+the five incenses into a number of distinct groups. Each of incense belongs
+to one and only one group, and every incense belongs to at least one group.
+Within each group, there&rsquo;s no particular <em>order</em> to the incenses that belong
+to that group - an incense either belongs to a group or it doesn&rsquo;t, it isn&rsquo;t
+the first or last of a group. Equally, there&rsquo;s no particular order to the
+groups themselves - putting incense 1, 2, 3 into the first group and 4 and 5
+into the other is the same as putting 4 and 5 in the first group and 1, 2, 3
+and into the second.</p>
+
+<p>In mathematical language, an object which is a collection of other objects
+in no particular order so that only membership matters is called a <em>set</em>. Let&rsquo;s
+model our problem by starting with a set of five distinct elements that we&rsquo;ll
+call $I$ after &ldquo;incense:&rdquo;</p>
+
+<p>\[
+    I = \{ 1, 2, 3, 4, 5 \}
+\]</p>
+
+<p>Each group of a genji-ko solution is a <em>subset</em> of $I$. Furthermore, since the
+genji-ko pattern consists of subsets of $I$ in no particular order, we can
+model it as a set too - a set containing other sets.</p>
+
+<p>For example, we could write the 9th genji-ko Sakaki (賢木) as</p>
+
+<p>\[
+    G_9 = \{ \{1, 2, 3\}, \{4, 5\} \}
+\]</p>
+
+<p>More generally, each genji-ko is given as</p>
+
+<p>\[
+    G = \{ S_1, S_2, \dots, S_k \}
+\]
+where each $S_i$ is a subset of $I$:</p>
+
+<p>\[
+    \forall i, S_ \neq \emptyset \land S_i  \subseteq I
+\]</p>
+
+<p>Furthermore, we require that no two groups overlap:</p>
+
+<p>\[
+    \forall x, y \in G, \, x \neq y \implies x \cap y = \emptyset
+\]</p>
+
+<p>and all the groups unioned together covers $I$:</p>
+
+<p>\[
+    \bigcup_{S \in G} S = I
+\]</p>
+
+<p>This particular structure as a name: it&rsquo;s called a <em>partition</em> of $I$. The
+combinatorics of partitions is well-known, so we could just look the formulas
+up. But let&rsquo;s see if we can continue our analysis.</p>
+
+<p>We know that partitions of $I$ exist, by construction. For example, we could
+put each incense in its own group: $\{ \{1\},\{2\}, \{3\}, \{4\}, \{5\} \}$
+or lump them into one big group: $\{ 1, 2, 3, 4, 5\}$. The task is to count
+them in a more systematic way.</p>
+
+<p>Here, as is often the case in mathematics, the problem is made easier by abstracting it.
+Instead of focusing on sets of five elements, let&rsquo;s ask how we can count to partitions
+of any set consisting of a finite number of distinct elements. Let&rsquo;s give it a
+name: for reasons that will become clear in a moment,  we&rsquo;ll call the number of
+partitions of a set of $k$ distinct elements $B_k$.</p>
+
+<p>The first couple are
+easy: it&rsquo;s easy to see that the only way to partition an empty set is $\{\}$, and
+the only way to partition a set with one element $\{a\}$ is $\{ \{a\} \}$.
+If you&rsquo;re not sure why, refer to the above definition of a partition, particularly
+the part where we require that the subsets be non-empty, and try to convince yourself
+this is true.</p>
+
+<p>\[
+    B_0 = 1
+\]</p>
+
+<p>and</p>
+
+<p>\[
+    B_1 = 1
+\]</p>
+
+<p>Returning to the general case of $B_k$ for $k&gt;1$, we know that our partition
+is going to have at least one group in it, so let&rsquo;s focus on that first group
+for a second, and ignore any other groups for now. How many ways are there
+of selecting just that first group?</p>
+
+<p>Well, it depends on how big that first group is. It&rsquo;s non-empty, so it must be greater than
+one, and of course it must be less than k. So we have $1 \ge |S_1| \ge k$.</p>
+
+<p>Again,</p>
+
+<p>\[
+    B_{n+1} = \sum_{k=0}^n \binom{n}{k} B_k
+\]</p>
+
+<h2 id="art">Art</h2>
+
+<p>Genji-ko are often rendered with very narrow negative space:</p>
+
+<p><img src="/post/genji-ko_files/genjiko_dense.png"></p>
+
+<p>I think that might be the most beautiful image I&rsquo;ve ever generated.</p>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/gpt-cnn/" data-toggle="tooltip" data-placement="top" title="A Picture is Worth 170 Tokens: How Does GPT-4o Encode Images?">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">
+	  &copy; Copyright 2024 Oran Looney
+  </div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
+    processEscapes: true,
+    processEnvironments: true
+  },
+  // Center justify equations in code and markdown cells. Elsewhere
+  // we use CSS to left justify single line equations in code cells.
+  displayAlign: 'center',
+  "HTML-CSS": {
+    styles: {'.MathJax_Display': {"margin": 0}},
+    linebreaks: { automatic: true }
+  },
+  TeX: { extensions: ["color.js"] }
+});
+</script>
+
+
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+  hljs.configure({
+    languages: ['python', 'r', 'javascript']
+  })
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+
+</body>
+</html>

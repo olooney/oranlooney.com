@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Mon, 08 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 30 Oct 2024 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Art and Mathematics of Genji-Ko</title>
+      <link>https://www.oranlooney.com/post/genji-ko/</link>
+      <pubDate>Wed, 30 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/genji-ko/</guid>
+      <description>You might think there&amp;rsquo;s unlikely to be any interesting mathematics arising from incense appreciation, but that&amp;rsquo;s only because you&amp;rsquo;re unfamiliar with the peculiar character of Muromachi (室町) era Japanese nobles.
+You see, it was a time of great insecurity and political instability, TODO
+Never before or after, in any place or period of history, did you have have a group of people who were so desperate to display their sophistication and refinement.</description>
+    </item>
     
     <item>
       <title>Stacking Triangles for Fun and Profit</title>

@@ -1,0 +1,411 @@
+"""
+Utilities for generating, working with, and drawing genji-ko (源氏香),
+traditional Japanese patterns representing partitions of sets of five
+elements.
+"""
+from PIL import Image, ImageDraw, ImageFont
+from typing import List, Set, Tuple, Iterator
+from pydantic import validate_call
+import itertools
+import math
+import pandas as pd
+
+
+__all__ = [ 
+    "GenjikoType",
+    "intervals_overlap",
+    "validate_genjiko",
+    "draw_genjiko",
+    "partitions",
+    "is_nested_within",
+    "optimal_genjiko_for_partition",
+    "generate_all_genjiko_patterns",
+    "draw_genjiko_grid",
+    "parse_genjiko_file",
+    "check_dataframe_partitions",
+    "load_genjiko",
+    "draw_annotated_genjiko_grid",
+    "draw_genjiko_font_grid",
+]
+
+
+GenjikoType = List[Tuple[float, Set[int]]]
+
+
+def intervals_overlap(group1: Set[int], group2: Set[int]) -> bool:
+    """
+    Checks if the intervals defined by two groups overlap.
+    Returns True if they overlap, False otherwise.
+    """
+    min1, max1 = min(group1), max(group1)
+    min2, max2 = min(group2), max(group2)
+    return not (max1 < min2 or max2 < min1)
+
+
+@validate_call
+def validate_genjiko(genjiko: GenjikoType):
+    """
+    Validates that no two groups with the same height overlap.
+    Returns True if valid, False otherwise.
+    """
+    for i, (height1, group1) in enumerate(genjiko):
+        for height2, group2 in genjiko[i + 1:]:
+            if height1 == height2 and intervals_overlap(group1, group2):
+                return False
+    return True
+
+
+@validate_call
+def draw_genjiko(
+    img,
+    x: int,
+    y: int,
+    height: int,
+    width: int,
+    line_width: int,
+    genjiko: GenjikoType, color="black"
+):
+    """Draws a single genji-ko pattern on an existing image at a specified position."""
+    if not validate_genjiko(genjiko):
+        raise ValueError(f"Genjiko pattern {genjiko!r} is invalid.")
+    
+    draw = ImageDraw.Draw(img)
+
+    # positions of the 6 vertical lines.
+    line_positions = [
+        x + (i * (width - line_width) // 4) + line_width // 2
+        for i in range(5)
+    ]
+
+    # Draw each group
+    for height_ratio, group in genjiko:
+        group_height = y + (1 - height_ratio) * height  # Calculate the top position of the group
+        min_pos = min(group) - 1 
+        max_pos = max(group) - 1
+
+        # Draw vertical lines for each element in the group
+        for element in group:
+            pos = line_positions[element - 1]  # Get x position of the line
+            draw.line([(pos, y + height-1), (pos, group_height)], fill=color, width=line_width)
+
+        if len(group) > 1:
+            # Draw horizontal connector line across the group
+            start_pos = line_positions[min_pos] - line_width // 2
+            end_pos = line_positions[max_pos] + line_width // 2 - ((line_width+1) % 2)
+            cap_width = line_width // 2 - 1
+            draw.line([
+                (start_pos, group_height + cap_width), 
+                (end_pos, group_height + cap_width)
+            ], fill=color, width=line_width)
+
+
+@validate_call
+def partitions(s: Set[int]) -> Iterator[List[Set[int]]]:
+    """Yield all partitions of a set as they are generated."""
+    if not s:
+        yield []
+        return
+    first = next(iter(s))
+    rest = s - {first}
+    for partition in partitions(rest):
+        yield [{first}] + partition
+        for i in range(len(partition)):
+            new_partition = partition[:i] + [partition[i] | {first}] + partition[i+1:]
+            yield new_partition
+
+
+@validate_call
+def is_nested_within(group1: Set[int], group2: Set[int]) -> bool:
+    """
+    Checks if group1 is nested within group2 based on interval overlap.
+    Returns True if group1 is strictly inside group2, False otherwise.
+    """
+    return min(group1) > min(group2) and max(group1) < max(group2)
+
+
+@validate_call
+def optimal_genjiko_for_partition(partition: List[Set[int]]) -> List[Tuple[float, Set[int]]]:
+    """
+    Given a partition, find the optimal genji-ko layout by minimizing a cost function.
+
+    I was originally hoping to get to 100% algorithmic generation, but this simple rule captures
+    all but 4 of layouts, and the remaining 4 cannot be expressed in any rule which is shorter
+    and simpler than just simply listing the 4 special cases.
+    """
+    best_cost = math.inf
+    best_genjiko = None
+    HEIGHTS = [1.0, 0.8, 0.6]
+    
+    # Generate all possible combinations of heights for each group in the partition
+    for height_combo in itertools.product(HEIGHTS, repeat=len(partition)):
+        genjiko_candidate = [(height, group) for height, group in zip(height_combo, partition)]
+        
+        # Skip invalid configurations
+        if not validate_genjiko(genjiko_candidate):
+            continue
+        
+        # Calculate the cost of the valid genjiko candidate
+        cost = -sum(height for height, _ in genjiko_candidate)  # Encourage larger heights
+        
+        for height1, group1 in genjiko_candidate:
+            for height2, group2 in genjiko_candidate:
+                # Large penalty for higher inner group height
+                if is_nested_within(group1, group2) and height1 > height2:
+                    cost += 1
+        
+        # keep track of the best solution so far
+        if cost < best_cost:
+            best_cost = cost
+            best_genjiko = genjiko_candidate
+
+    return best_genjiko
+
+
+@validate_call
+def generate_all_genjiko_patterns() -> List[List[Tuple[float, Set[int]]]]:
+    """
+    Generate optimal genji-ko patterns for all partitions of {1, 2, 3, 4, 5}.
+    """
+    all_patterns = []
+    for partition in partitions({1, 2, 3, 4, 5}):
+        optimal_genjiko = optimal_genjiko_for_partition(partition)
+        if optimal_genjiko:
+            all_patterns.append(optimal_genjiko)
+    return all_patterns
+
+
+@validate_call
+def draw_genjiko_grid(
+    genjiko_patterns: List[GenjikoType],
+    cell_size: int = 100,
+    padding: int = 50,
+    grid_width: int = 4,
+    grid_height: int = 13,
+    grid_indent: int = 0,
+    line_width: int = 14,
+) -> Image:
+    """
+    A simple utility to draw a list of genjiko patterns in an arbitrary grid.
+    """
+    
+    # Setup grid parameters
+    image_width = grid_width * (cell_size + padding) - padding + 100
+    image_height = grid_height * (cell_size + padding) - padding + 100
+    
+    # Create a new image with a white background
+    img = Image.new("RGB", (image_width, image_height), "white")
+    
+    # Draw each Genjiko in the grid
+    for i, genjiko in enumerate(genjiko_patterns[:52]):  # Take the first 52 patterns
+        i += grid_indent
+        row, col = divmod(i, grid_width)
+        x = col * (cell_size + padding) + padding // 2
+        y = row * (cell_size + padding) + padding // 2
+        
+        # Draw the Genjiko pattern at the specified position
+        draw_genjiko(img, x=x, y=y, height=cell_size, width=cell_size, line_width=line_width, genjiko=genjiko)
+    
+    # Display or save the final image
+    return img
+
+
+@validate_call
+def parse_genjiko_file(filename: str) -> Iterator[Tuple[str, str, List[Set[int]]]]:
+    """
+    Reads the genji-ko text file, which is in this line-delimited format:
+    
+        "Kanji - Romaji - Permutation"
+
+    with  no column headers. Be sure to use utf-8 so that Kanji load!
+    """
+    
+    with open(filename, 'r', encoding='utf-8') as file:
+        for line in file:
+            kanji, romaji, partition_json = line.strip().split(" - ")
+            partition = eval(partition_json)
+            yield (kanji, romaji, partition)
+
+
+def check_dataframe_partitions(df: pd.DataFrame):
+    """
+    Interactive function to verify the partitions of the data frame
+    exactly match the set of all partitions of a set of 5 elements.
+    Only needed when making changes to `genjiko.txt`.
+    """
+    # check for duplicates in the data frame
+    dupes = df[df["Partition"].duplicated(keep=False)]
+    if len(dupes):
+        print(dupes)
+
+    # we need hashable types to put things into sets
+    def freeze(items):
+        return frozenset(
+            frozenset(s) for s in items
+        )
+    # the set of partitions of 5 things.
+    p5 = set(freeze(p) for p in partitions({1, 2, 3, 4, 5}))
+    
+    # check for extra patterns in the data frame
+    for partition in df['Partition']:
+        frozen_partition = freeze(partition)
+        if frozen_partition not in p5:
+            print(partition)
+    
+    # check for patterns missing from the data frame
+    dfp5 = set(freeze(p) for p in df["Partition"])
+    for frozen_partition in p5:
+        if frozen_partition not in dfp5:
+            print(frozen_partition)
+            
+
+def load_genjiko() -> pd.DataFrame:
+    """
+    Loads the file containing the traditional name, order, and permutation of each genji-ko,
+    validates it, calculates an optimal layout, and handles special cases where the optimal
+    layout does not match the traditional layout.
+    """
+    df = pd.DataFrame(
+        list(parse_genjiko_file("genjiko.txt")),
+        columns=["Kanji", "Romaji", "Partition"]
+    )
+
+    # calculate optimal layouts
+    df["Genjiko"] = df["Partition"].apply(optimal_genjiko_for_partition)
+
+    # default color is black.
+    df["Color"] = "black"
+    
+    # special cases. flag these in red for review.
+    
+    # Suma: {1, 3, 4} should be lower than {2, 5}
+    df.at[10, 'Genjiko'] = [(0.8, {1, 3, 4}), (1.0, {2, 5})]
+    df.at[10, 'Color'] = "red"
+    
+    # Hatsune: {1, 3} should be lower than {2, 4}
+    df.at[21, 'Genjiko'] = [(0.8, {1, 3}), (1.0, {2, 4}), (1.0, {5})]
+    df.at[21, 'Color'] = "red"
+    
+    # Yuguri: {1, 4} should be lower than {3, 5}, and {2} even lower.
+    df.at[37, 'Genjiko'] = [(0.8, {1, 4}), (0.6, {2}), (1.0, {3, 5})]
+    df.at[37, 'Color'] = "red"
+    
+    # Nioumiya: {1, 2, 4} should be lower than {3, 5}
+    df.at[40, 'Genjiko'] = [(0.8, {1, 2, 4}), (1.0, {3, 5})]
+    df.at[40, 'Color'] = "red"
+
+    return df
+    
+
+def draw_annotated_genjiko_grid(
+    df: pd.DataFrame,
+    grid_width: int = 4,
+    grid_height: int = 13,
+    cell_size: int = 100,
+    padding: int = 50,
+    text_height: int = 20,
+    include_index_label: bool = True,
+    include_kanji_label: bool = True,
+    include_romaji_label: bool = True,
+    kanji_font: str = "msgothic.ttc",
+    kanji_font_size: int = 18,
+    kanji_text_offset: int = 14,
+    romaji_text_offset: int = 20,
+    romaji_font: str = "arial.ttf",
+    romaji_font_size: int = 14,
+    line_width: int = 14,
+    grid_indent: int = 0,
+):
+    """
+    A more specialized function to draw genji-ko, this time using the data frame
+    as the source of truth for order and genji-ko pattern; this pattern will
+    be the algorithmically determined optimal pattern, or the special case if
+    overridden. Also prints the index, kanji, and romaji.
+    """
+    # Setup grid parameters
+    image_width = grid_width * (cell_size + padding) - padding + cell_size
+    image_height = grid_height * (cell_size + padding + text_height) - padding + cell_size
+    
+    # Create a new image with a white background
+    img = Image.new("RGB", (image_width, image_height), "white")
+    draw = ImageDraw.Draw(img)
+
+    # font setup
+    font_kanji = ImageFont.truetype(kanji_font, kanji_font_size)
+    font_romaji = ImageFont.truetype(romaji_font, romaji_font_size)
+
+    # Draw each Genjiko in the grid
+    for i, row in df.iterrows():
+        i += grid_indent
+        row_num, col_num = divmod(i, grid_width)
+        x = col_num * (cell_size + padding) + padding
+        y = row_num * (cell_size + padding + text_height) + padding
+        
+        # Draw the Genjiko pattern at the specified position
+        draw_genjiko(
+            img,
+            x=x,
+            y=y,
+            height=cell_size,
+            width=cell_size,
+            line_width=line_width,
+            genjiko=row["Genjiko"],
+            color=row.get("Color", "black"),
+        )
+        
+        # Calculate text positions
+        kanji_text_y = y + cell_size + kanji_text_offset  # Slightly below the Genjiko pattern
+        romaji_text_y = kanji_text_y + romaji_text_offset  # Slightly below the Kanj
+
+        # Draw Kanji and Romaji text
+        if include_index_label:
+            draw.text((x, kanji_text_y), f"{i+1}.", font=font_romaji, fill="black", anchor="lm")
+
+        if include_kanji_label:
+            draw.text((x + cell_size / 2, kanji_text_y), row["Kanji"], font=font_kanji, fill="black", anchor="mm")
+
+        if include_romaji_label:
+            draw.text((x + cell_size / 2, romaji_text_y), row["Romaji"], font=font_romaji, fill="black", anchor="mm")
+
+    # Display or save the final image
+    return img
+
+
+def draw_genjiko_font_grid():
+    """
+    Draws the genji-ko from genjiko.ttf in the same grid pattern, so
+    it can be compared to my algorithmically generated version.
+    This font comes from here:
+
+        https://www.illllli.com/font/symbol/genjiko/
+
+    And seems to be 100% correct in terms of the names and order, so
+    is a high-quality reference point. 
+    """
+    # Load the genjiko font from the local directory
+    font_genjiko = ImageFont.truetype("genjiko.ttf", 80)
+
+    # Grid parameters
+    grid_width, grid_height = 4, 13
+    cell_size = 100
+    padding = 20
+    image_width = grid_width * (cell_size + padding) - padding
+    image_height = grid_height * (cell_size + padding) - padding
+
+    # Create a new image with a white background
+    img = Image.new("RGB", (image_width, image_height), "white")
+    draw = ImageDraw.Draw(img)
+
+    # Genjiko character sequence in genjiko.ttf
+    genjiko_chars = "BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12"
+
+    # Draw each Genjiko pattern in the grid
+    for i, char in enumerate(genjiko_chars):
+        row, col = divmod(i, grid_width)
+        x = col * (cell_size + padding)
+        y = row * (cell_size + padding)
+
+        # Draw the Genjiko character in the center of each cell
+        draw.text((x + cell_size / 2, y + cell_size / 2), char, font=font_genjiko, fill="black", anchor="mm")
+
+    # Display or save the final image
+    return img
