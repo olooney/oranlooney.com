@@ -1,5 +1,5 @@
 ---
-title: "The Art and Mathematics of Genji-Ko"
+title: "The Art and Mathematics of Genji-Kō"
 author: "Oran Looney"
 date: 2024-10-30
 publishdate: 2024-10-30
@@ -29,11 +29,11 @@ could simultaneously humiliate your rivals, flirt with romantic interests, and
 impress people in a position of power. These nobles didn't just perfect
 cultured refinement - they weaponized it.
 
-Only under such conditions could something genji-ko (源氏香) arise. It is a
+Only under such conditions could something genji-kō (源氏香) arise. It is a
 parlor game played with incense - just one of many similar games inside the
-broader umbrella of kōdō (香道). What sets genji-ko apart is its extreme
+broader umbrella of kōdō (香道). What sets genji-kō apart is its extreme
 difficulty - where another game might have contestants write down their guesses
-for three separate incenses and score a point for each correct guess, Genji-ko
+for three separate incenses and score a point for each correct guess, Genji-kō
 asks contestants to smell five separate samples, then determine which of the
 five are the same. All five might be the same, or all five might be different.
 The might be in groups of two or three or four - there might be one group of
@@ -56,7 +56,7 @@ TODO intro to genji-ko
 History
 -------
 
-Genji-ko, by the way is named after the titular Genji of the Heian era literary
+Genji-kō, by the way is named after the titular Genji of the Heian era literary
 classic [The Tale of Genji][TG]. There are actually two connections: First, in
 one chapter of the book, Genji hosts an incense appreciation party. Second,
 since there are 52 possible patterns and 54 chapters of the book, each pattern
@@ -71,7 +71,7 @@ with each chapter.
 Culture
 -------
 
-I wouldn't say genji-ko is exactly well-known in Japan - even kōdō is fairly
+I wouldn't say genji-kō is exactly well-known in Japan - even kōdō is fairly
 obscure compared to more popular traditional arts from the same era such
 as tea ceremony or flower arranging - but they do show up fairly often as a motif in
 contemporary Japanese graphic design or on traditional handcrafted goods.
@@ -86,7 +86,7 @@ Often found on good related to incense or kōdō in some way:
 <img src="/post/genji-ko_files/incense_holder.jpg">
 
 Utagawa Kunisada, circa 1843, painted a  wall scoll for each chapter
-of the Tale of Genji and included the genji-ko on each:
+of the Tale of Genji and included the genji-kō on each:
 
 <img src="/post/genji-ko_files/yugiri_wall_scroll.jpg">
 
@@ -116,14 +116,14 @@ def partitions(s: Set[int]) -> Iterator[List[Set[int]]]:
             yield new_partition
 ```
 
-Optimal Genji-ko layouts for each partition:
+Optimal genji-kō layouts for each partition:
 
 ```python
 def optimal_genjiko_for_partition(
     partition: List[Set[int]]
 ) -> List[Tuple[float, Set[int]]]:
     """
-    Given a partition, find the optimal genji-ko layout by minimizing a cost
+    Given a partition, find the optimal genji-kō layout by minimizing a cost
     function.
 
     I was originally hoping to get to 100% algorithmic generation, but this
@@ -170,13 +170,13 @@ layout and simply put them in the order returned by `partitions()`:
 <img src="/post/genji-ko_files/algorithmic_genjiko.png">
 
 Good, but not perfect. The order is largely wrong, and there are four
-genji-ko (the ones rendered in red) where our concept of "optimal" has
+genji-kō (the ones rendered in red) where our concept of "optimal" has
 failed to reproduce the traditional design.
 
 Order
 -----
 
-Knuth [mentions][CAM] that the genji-ko patterns "were not arranged in any
+Knuth [mentions][CAM] that the genji-kō patterns "were not arranged in any
 particularly logical order" and I'm inclined to agree. I tried several
 variations of the above `partition()` function hoping to find one where the
 traditional order would just fall out naturally, but it never did. A close
@@ -184,7 +184,7 @@ inspection of the table makes it clear that this was never going to happen:
 there's an overall trend from many separate groups to fewer groups, but there
 are just too many cases where the order is arbitrary.
 
-I found a ton of references that put the genji-ko in a different order, and
+I found a ton of references that put the genji-kō in a different order, and
 even some that tried to stretch it to 54 using some kind of duplication or 
 introducing irregular patterns. However, the association between the 52 
 patterns and chapter titles for chapters 2-53 of the *Tale of Genji* seem
@@ -192,7 +192,7 @@ water tight and consistent. Also, the order of those chapters is mostly
 consistent across sources (there is some disagreement about the order of the
 later chapters, and one chapter which survives only as a title or perhaps was
 intentionally elided as a delicate way to elude to a character's death) so
-I've put my genji-ko in chapter order.
+I've put my genji-kō in chapter order.
 
 TODO: Table? Link to .txt?
 
@@ -240,9 +240,21 @@ traditional version.
 Mathematics
 -----------
 
-The connection between genji-ko and mathematics becomes apparent if we ask
-ourselves, "Why are there exactly 52 genji-ko patterns? How can we be sure
+The connection between genji-kō and mathematics becomes apparent if we ask
+ourselves, "Why are there exactly 52 genji-kō patterns? How can we be sure
 there aren't more?"
+
+TODO: rewrite section
+
+Two:
+<img src="/post/genji-ko_files/counting_partitions2.png">
+
+
+Three:
+<img src="/post/genji-ko_files/counting_partitions3.png">
+
+Four:
+<img src="/post/genji-ko_files/counting_partitions4.png">
 
 Let's ask ourselves exactly what we're counting, anyway. Each pattern divides
 the five incenses into a number of distinct groups. Each of incense belongs
@@ -263,17 +275,17 @@ call $I$ after "incense:"
     I = \\{ 1, 2, 3, 4, 5 \\}
 \\]
 
-Each group of a genji-ko solution is a *subset* of $I$. Furthermore, since the
-genji-ko pattern consists of subsets of $I$ in no particular order, we can
+Each group of a genji-kō solution is a *subset* of $I$. Furthermore, since the
+genji-kō pattern consists of subsets of $I$ in no particular order, we can
 model it as a set too - a set containing other sets.
 
-For example, we could write the 9th genji-ko Sakaki (賢木) as 
+For example, we could write the 9th genji-kō Sakaki (賢木) as 
 
 \\[
     G\_9 = \\{ \\{1, 2, 3\\}, \\{4, 5\\} \\}
 \\]
 
-More generally, each genji-ko is given as 
+More generally, each genji-kō is given as 
 
 \\[
     G = \\{ S\_1, S\_2, \dots, S\_k \\}
@@ -349,7 +361,7 @@ Again,
 Art
 ---
 
-Genji-ko are often rendered with very narrow negative space:
+Genji-kō are often rendered with very narrow negative space:
 
 <img src="/post/genji-ko_files/genjiko_dense.png">
 
