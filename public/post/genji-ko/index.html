@@ -158,7 +158,7 @@ in a concise, unambiguous, and easy to read way.</p>
 
 <h2 id="history">History</h2>
 
-<p>Genji-kō, by the way is named after the titular Genji of the Heian era literary
+<p>Genji-kō, by the way, is named after the titular Genji of the Heian era literary
 classic <a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji">The Tale of Genji</a>. There are actually two connections: First, in
 one chapter of the book, Genji hosts an incense appreciation party. Second,
 since there are 52 possible patterns and 54 chapters of the book, each pattern
@@ -331,13 +331,69 @@ traditional version.</p>
 ourselves, &ldquo;Why are there exactly 52 genji-kō patterns? How can we be sure
 there aren&rsquo;t more?&rdquo;</p>
 
-<p>TODO: rewrite section</p>
-
 <p>Two:
 <img src="/post/genji-ko_files/counting_partitions2.png"></p>
 
+<p>Since each group of the partition must contain at least one element, it&rsquo;s
+obvious that there can be at most two groups by the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle">pigeonhole principle</a>.
+Thus, there are either zero, one or two groups. Zero doesn&rsquo;t work because
+it doesn&rsquo;t cover the set. One does work, and there&rsquo;s obviously only one way to
+do it. Suppose there&rsquo;s two groups. At least one of the groups must contain 1.
+The other must contain at least one element, but it can&rsquo;t contain 1, therefore
+it must contain 1. Since these two groups already cover the set, this is the
+full partition. Since we were able to prove the structure of the partition
+starting from only the definition of a partition and the fact the set had two
+elements, all partitions of a set of two elements must have this structure;
+therefore this partition is unique.</p>
+
+<p>For three, things start to get interesting. We need a principle by which we
+can divide possible partitions into groups and be assured,</p>
+
+<p>a) that we never count a partition twice
+b) that we count every partition.</p>
+
+<p>The trick is to &ldquo;pin&rdquo; one of the elements. Since it&rsquo;s arbitrary, we&rsquo;ll
+select element 1, represented by the left vertical bar in a genji-kō pattern.
+Exactly one of groups <em>must</em> contain element 1; we&rsquo;ll call this the &ldquo;first&rdquo;
+group. This group can any size from 1 to N. Suppose it has size n. Then there
+are &ldquo;N-1 choose n&rdquo; possible ways to select the first group. However, whichever
+way we pick, there will be N-n elements &ldquo;left over&rdquo; that we must partition.</p>
+
+<p>There&rsquo;s only one way to for the first group to contain only a single element:
+if it consists of the first group and no other. However, there are two elements
+left over. We already know there are exactly two ways to partition of a set
+of two elements, so there must be two partitions of a group of three elements
+where the first group is of size one.</p>
+
+<p>What if the first group is of size two? Well, then we have to pick the position
+of the other element, and our choices are 2 or 3. Regardless of what we pick,
+there will always be one element left over, which can only be partitioned one way.</p>
+
+<p>Finally, if the first group is of size three, there are no elements left over.</p>
+
+<p>Thus we have 1*2 + 2*1 + 1 = 5 ways to partition a set of three elements.</p>
+
 <p>Three:
 <img src="/post/genji-ko_files/counting_partitions3.png"></p>
+
+<p>Let&rsquo;s do that for a set of four elements. The first group is of size 1, 2, 3, or 4.</p>
+
+<p>There&rsquo;s only one way to choose a first group of size one, and there are three elements left over,
+which we showed above can be partitioned five different ways.</p>
+
+<p>For a first group of size two, we have a choice of three possible elements for other
+element of the first group. Regardless of which we pick, we&rsquo;ll have two left
+over, and we know there are two ways to partition a set of two elements. Thus
+there are 3*2 = 6 partitions where the first group is size two.</p>
+
+<p>There are three ways to pick a first group of size three, because we are essentially
+picking which of {2, 3, 4} to leave out. Regardless of how we pick, there is one
+element left over, which can only be partitioned one way.</p>
+
+<p>Finally, there is only one way to pick a first group of size four, and with no
+elements left over, this gives us only one way to partition the set.</p>
+
+<p>So the total number of ways to partition a set of size 4 is 1*5 + 3*2 + 3*1 + 1</p>
 
 <p>Four:
 <img src="/post/genji-ko_files/counting_partitions4.png"></p>
