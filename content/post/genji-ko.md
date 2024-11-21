@@ -12,82 +12,172 @@ image: /post/genji-ko_files/lead.jpg
 
 You might think there's unlikely to be any interesting mathematics arising from
 incense appreciation, but that's only because you're unfamiliar with the
-peculiar character of Muromachi (室町) era Japanese nobles.
+peculiar character of Muromachi (室町) era (circa 1300-1500) Japanese nobles.
 
-You see, it was a time of great insecurity and political instability, TODO
-
-Never before or after, in any place or period of history, did you have have a
-group of people who were so desperate to display their sophistication and
-refinement. It was a matter of life or death. It wouldn't do to merely put out
-a few sticks of incense. You would have to demonstrate that your taste was more
+There has never been a group of people in any time or place who were so keen to
+display their sophistication and refinement. It wouldn't do to merely put out a
+few sticks of incense - no, you would have to prove that your taste was more
 exquisite, your judgement more refined, your etiquette more oblique. You could
 of course merely invite some other nobles over for an incense appreciation
 party, make a few cutting but plausibly deniable remarks about a rival, maybe
 drop a few lines of poetry linking the incense to the current season. But if
-you were really deadly serious (and they were) you'd be looking for a way you
-could simultaneously humiliate your rivals, flirt with romantic interests, and
-impress people in a position of power. These nobles didn't just perfect
-cultured refinement - they weaponized it.
+you were really on the ball you'd be looking for a way to simultaneously
+humiliate your rivals, flirt with your love interest, and impress people in a
+position of power. They didn't just perfect cultured refinement - they
+weaponized it.
 
-Only under such conditions could something genji-kō (源氏香) arise. It is a
-parlor game played with incense - just one of many similar games inside the
-broader umbrella of kōdō (香道). What sets genji-kō apart is its extreme
-difficulty - where another game might have contestants write down their guesses
-for three separate incenses and score a point for each correct guess, Genji-kō
-asks contestants to smell five separate samples, then determine which of the
-five are the same. All five might be the same, or all five might be different.
-The might be in groups of two or three or four - there might be one group of
-two and a second group of three. If the contestant correctly grouped all five
-incense they would score a single point; otherwise they would score nothing.
+Only under such conditions could something like genji-kō (源氏香) arise. It is
+a parlor game played with incense - just one of many similar games inside the
+broader umbrella of kōdō (香道), the traditional art of incense appreciation. 
+
+What sets genji-kō apart is its extreme difficulty - where another game might
+have contestants write down their guesses for three separate incenses and score
+a point for each correct guess, genji-kō asks contestants to smell five
+separate samples, then determine which of the five are the same. All five might
+be the same, or all five might be different, or (and this is where it gets
+interesting) they might be in groups of two or three or four. For example, the
+correct solution might be that the first and fourth are the same, the second
+and fifth are the same, and the third in a group by itself. Or any other
+possible combination of groupings.
+
+Contestants score a single point if they correctly group all five incenses;
+otherwise they score nothing. A typical game would have five rounds over the
+course of the evening, with an overall winner declared at the end. 
 
 Obviously contestants would need some kind of notation to record their answers
-in a concise, unambiguous, and easy to read way. 
+in a concise, unambiguous, and easy to read way, and it is this notation - and
+the art and mathematics that arose from it - that this article is about.
 
-Rules
------
+Notation
+--------
 
+Every pattern has exactly five vertical lines, representing the five possible incenses.
+To show that two or more incenses are part of the same group, you draw a horizontal
+line connecting the top of every vertical line in that group. To avoid confusion
+when there are two or more groups, you draw these horizontal lines at different
+heights, shortening the vertical lines as needed:
 
 <img src="/post/genji-ko_files/examples.png">
 
+There are a few nuances to the notation worth mentioning. If two groups don't
+overlap, there is no need draw them at different heights (top center.) If one
+group is "contained" inside another, the inner group is drawn at the lower height (top right, bottom left)
+so that it appears nested inside the other. And in some cases, say when the
+groups are $\\{\\{1, 3\\}, \\{2, 5\\},$ $\\{4\\}\\}$ (bottom center), it is impossible to avoid
+an intersection but we understand that the groups are still distinct because
+the horizontal connecting lines are at different heights.
 
-TODO intro to genji-ko
+
+Genji-Kō features as a plot point in [episode 8 of the experimental horror
+anime Mononoke][MNNK8], where it is suggested that players used blocks to
+record their solutions. While this might be true - the episodes description of
+genji-Kō is otherwise grounded and well-researched - I haven't seen any other
+references to this; everything else I've seen suggests the game was played with
+ink and paper.
 
 <img src="/post/genji-ko_files/blocks.png">
 
 
-History
--------
+Etymology
+---------
 
-Genji-kō, by the way, is named after the titular Genji of the Heian era literary
-classic [The Tale of Genji][TG]. There are actually two connections: First, in
-one chapter of the book, Genji hosts an incense appreciation party. Second,
+Genji-kō, by the way, is named after the titular Genji of the Heian (平安) era
+literary classic [The Tale of Genji][TG]. There are two connections. First, in
+one chapter of the book Genji hosts an incense appreciation party. Second,
 since there are 52 possible patterns and 54 chapters of the book, each pattern
-is traditionally associated with and named after each chapter (except for the
-first and last chapters, which are omitted.) This gives each pattern a kind of
-literary resonance - every Muromachi era noble would be intimately familiar
-with the book, and would know the themes, season, and characters associated
-with each chapter. 
+is traditionally associated with - and named after - each chapter (except for
+the first and last chapters, which are omitted.) Every educated person of the
+Muromachi era would be intimately familiar with *The Tale of Genji* and would
+know the themes, season, and characters associated with each chapter. by heart,
+giving each pattern a literary resonance.
 
+Genji-kō refers to the game, but the game is so closely tied to the patterns
+that it can refer to them as well. I used Google to count the number of search
+results for different ways of referring to the patterns themselves. 
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Kanji</th>
+      <th style="text-align: left">Romaji</th>
+      <th style="text-align: left">English Translation</th>
+      <th style="text-align: left">Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>源氏紋</td>
+      <td>Genjimon</td>
+      <td>Genji Crest</td>
+      <td>844,000</td>
+    </tr>
+    <tr>
+      <td>源氏香図</td>
+      <td>Genji-kōzu</td>
+      <td>Genji-kō Diagram</td>
+      <td>686,000</td>
+    </tr>
+    <tr>
+      <td>源氏香の模様</td>
+      <td>Genji-kō no moyō</td>
+      <td>Genji-kō Pattern</td>
+      <td>400,000</td>
+    </tr>
+    <tr>
+      <td>源氏香模様</td>
+      <td>Genji-kō moyō</td>
+      <td>Genji-kō Design</td>
+      <td>479,000</td>
+    </tr>
+    <tr>
+      <td>源氏香文様</td>
+      <td>Genji-kō monyō</td>
+      <td>Genji-kō Motif</td>
+      <td>129,000</td>
+    </tr>
+  </tbody>
+</table>
+
+Based on these results, I'll refer to the patterns themselves as genji-mon
+when I want to explicitly refer to the visual pattern.
+
+TODO
 
 Culture
 -------
 
-I wouldn't say genji-kō is exactly well-known in Japan - even kōdō is fairly
-obscure compared to more popular traditional arts from the same era such
-as tea ceremony or flower arranging - but they do show up fairly often as a motif in
-contemporary Japanese graphic design or on traditional handcrafted goods.
+Compared to other traditional arts from the same era such as tea ceremony or
+flower arranging, kōdō is not particular popular or well-known even in Japan;
+nevertheless it is [still played][KV] even to this day.
+
+However, its cultural influence extends beyond the few who actually play the
+game - the patterns show up fairly often as a motif in contemporary Japanese
+graphic design:
+
+<img src="/post/genji-ko_files/genjiko_colorful.jpg">
+
+It's especially popular on traditional handcrafted goods, such as kimino:
 
 <img src="/post/genji-ko_files/kimono.jpg">
+
+Cheaper fabrics simply print the same genji-mon repeatedly, but the mark of
+high-quality genji-Kō fabric is to use a variety of genji-mon so that the
+pattern never quite repeats:
+
 <img src="/post/genji-ko_files/fabric.jpg">
 
-Often found on good related to incense or kōdō in some way:
+They are often found on good related to incense or kōdō in some way, such
+as this incense box:
 
-<img src="/post/genji-ko_files/incense_set.jpg">
 <img src="/post/genji-ko_files/incense_box.jpg">
+
+<!-- <img src="/post/genji-ko_files/incense_set.jpg"> -->
+
+or this incense holder:
 <img src="/post/genji-ko_files/incense_holder.jpg">
 
-Utagawa Kunisada, circa 1843, painted a  wall scoll for each chapter
-of the Tale of Genji and included the genji-kō on each:
+[Utagawa Kunisada][UK], circa 1843, painted a  wall scoll for each chapter
+of the Tale of Genji and included the associated genji-mon on every one:
 
 <img src="/post/genji-ko_files/yugiri_wall_scroll.jpg">
 
@@ -195,7 +285,7 @@ later chapters, and one chapter which survives only as a title or perhaps was
 intentionally elided as a delicate way to elude to a character's death) so
 I've put my genji-kō in chapter order.
 
-TODO: Table? Link to .txt?
+
 
 
 Final Result
@@ -421,16 +511,545 @@ Again,
 \\]
 
 
-Art
----
+Appendix A: Full Chart
+----------------------
 
-Genji-kō are often rendered with very narrow negative space:
+Genji-kō are often rendered with very narrow negative space, resulting
+in a very pleasing effect:
 
 <img src="/post/genji-ko_files/genjiko_dense.png">
 
-I think that might be the most beautiful image I've ever generated.
+
+Appendix B: Full Table
+----------------------
+
+The full table in HTML format, so you can copy-and-paste the Kanji. The Genji-mon column table uses
+the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/symbol/genjiko/).
+
+<div class="genjiko-wrapper">
+    <style>
+        html .article table.genjiko-table td {
+            font-size: 100%;
+            line-height: 1;
+        }
+        html .article table.genjiko-table th {
+            font-size: 100%;
+        }
+       html .article table.genjiko-table td.genjiko-chapter {
+        text-align: center;
+       }
+       html .article table.genjiko-table td.genjiko-kanji {
+            font-size: 125%;
+            text-align: center;
+        }
+        html .article table.genjiko-table td.genjiko-icon {
+            font-size: 200%;
+            font-family: 'GenjiKo', sans-serif;
+            text-align: center;
+            padding: 0px;
+            margin: 0px;
+        }
+        html .article table.genjiko-table td..genjiko-partition {
+            text-align: center;
+        }
+        @font-face {
+            font-family: 'GenjiKo';
+            src: url('/post/genji-ko_files/genjiko.ttf') format('truetype');
+        }
+    </style>
+    <table class="genjiko-table">
+        <thead>
+            <tr>
+                <th>Chapter</th>
+                <th>Kanji</th>
+                <th style="text-align: left;">Romaji</th>
+                <th style="text-align: left;">English</th>
+                <th style="text-align: left;">Partition</th>
+                <th>Genji-mon</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td class="genjiko-chapter">2</td>
+                <td class="genjiko-kanji">帚木</td>
+                <td class="genjiko-romaji">Hōkigi</td>
+                <td class="genjiko-english">The Broom-Tree</td>
+                <td class="genjiko-partition">{1}, {2}, {3}, {4}, {5}</td>
+                <td class="genjiko-icon">B</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">3</td>
+                <td class="genjiko-kanji">空蝉</td>
+                <td class="genjiko-romaji">Utsusemi</td>
+                <td class="genjiko-english">Utsusemi</td>
+                <td class="genjiko-partition">{1}, {2}, {3}, {4, 5}</td>
+                <td class="genjiko-icon">C</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">4</td>
+                <td class="genjiko-kanji">夕顔</td>
+                <td class="genjiko-romaji">Yūgao</td>
+                <td class="genjiko-english">Yugao</td>
+                <td class="genjiko-partition">{1}, {2}, {3, 4}, {5}</td>
+                <td class="genjiko-icon">D</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">5</td>
+                <td class="genjiko-kanji">若紫</td>
+                <td class="genjiko-romaji">Wakamurasaki</td>
+                <td class="genjiko-english">Murasaki</td>
+                <td class="genjiko-partition">{1}, {2, 3}, {4, 5}</td>
+                <td class="genjiko-icon">E</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">6</td>
+                <td class="genjiko-kanji">末摘花</td>
+                <td class="genjiko-romaji">Suetsumuhana</td>
+                <td class="genjiko-english">The Saffron-Flower</td>
+                <td class="genjiko-partition">{1, 2, 3, 4}, {5}</td>
+                <td class="genjiko-icon">F</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">7</td>
+                <td class="genjiko-kanji">紅葉賀</td>
+                <td class="genjiko-romaji">Momijinoga</td>
+                <td class="genjiko-english">The Festival of Red Leaves</td>
+                <td class="genjiko-partition">{1}, {2, 3, 5}, {4}</td>
+                <td class="genjiko-icon">G</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">8</td>
+                <td class="genjiko-kanji">花宴</td>
+                <td class="genjiko-romaji">Hana no en</td>
+                <td class="genjiko-english">The Flower Feast</td>
+                <td class="genjiko-partition">{1}, {2}, {3, 5}, {4}</td>
+                <td class="genjiko-icon">H</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">9</td>
+                <td class="genjiko-kanji">葵</td>
+                <td class="genjiko-romaji">Aoi</td>
+                <td class="genjiko-english">Aoi</td>
+                <td class="genjiko-partition">{1, 2}, {3}, {4}, {5}</td>
+                <td class="genjiko-icon">I</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">10</td>
+                <td class="genjiko-kanji">賢木</td>
+                <td class="genjiko-romaji">Sakaki</td>
+                <td class="genjiko-english">The Sacred Tree</td>
+                <td class="genjiko-partition">{1, 2, 3}, {4, 5}</td>
+                <td class="genjiko-icon">J</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">11</td>
+                <td class="genjiko-kanji">花散里</td>
+                <td class="genjiko-romaji">Hana chiru sato</td>
+                <td class="genjiko-english">The Village of Falling Flowers</td>
+                <td class="genjiko-partition">{1}, {2, 4}, {3, 5}</td>
+                <td class="genjiko-icon">K</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">12</td>
+                <td class="genjiko-kanji">須磨</td>
+                <td class="genjiko-romaji">Suma</td>
+                <td class="genjiko-english">Exile at Suma</td>
+                <td class="genjiko-partition">{1, 3, 4}, {2, 5}</td>
+                <td class="genjiko-icon">L</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">13</td>
+                <td class="genjiko-kanji">明石</td>
+                <td class="genjiko-romaji">Akashi</td>
+                <td class="genjiko-english">Akashi</td>
+                <td class="genjiko-partition">{1}, {2, 3}, {4}, {5}</td>
+                <td class="genjiko-icon">M</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">14</td>
+                <td class="genjiko-kanji">澪標</td>
+                <td class="genjiko-romaji">Miotsukushi</td>
+                <td class="genjiko-english">The Flood Gauge</td>
+                <td class="genjiko-partition">{1}, {2, 4, 5}, {3}</td>
+                <td class="genjiko-icon">N</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">15</td>
+                <td class="genjiko-kanji">蓬生</td>
+                <td class="genjiko-romaji">Yomogiu</td>
+                <td class="genjiko-english">The Palace in the Tangled Woods</td>
+                <td class="genjiko-partition">{1, 2, 3}, {4}, {5}</td>
+                <td class="genjiko-icon">O</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">16</td>
+                <td class="genjiko-kanji">関屋</td>
+                <td class="genjiko-romaji">Sekiya</td>
+                <td class="genjiko-english">A Meeting at the Frontier</td>
+                <td class="genjiko-partition">{1}, {2, 3, 4}, {5}</td>
+                <td class="genjiko-icon">P</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">17</td>
+                <td class="genjiko-kanji">絵合</td>
+                <td class="genjiko-romaji">Eawase</td>
+                <td class="genjiko-english">The Picture Competition</td>
+                <td class="genjiko-partition">{1, 3}, {2, 5}, {4}</td>
+                <td class="genjiko-icon">Q</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">18</td>
+                <td class="genjiko-kanji">松風</td>
+                <td class="genjiko-romaji">Matsukaze</td>
+                <td class="genjiko-english">The Wind in the Pine-Trees</td>
+                <td class="genjiko-partition">{1, 2}, {3, 4}, {5}</td>
+                <td class="genjiko-icon">R</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">19</td>
+                <td class="genjiko-kanji">薄雲</td>
+                <td class="genjiko-romaji">Usugumo</td>
+                <td class="genjiko-english">A Wreath of Cloud</td>
+                <td class="genjiko-partition">{1}, {2, 3, 4, 5}</td>
+                <td class="genjiko-icon">S</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">20</td>
+                <td class="genjiko-kanji">朝顔</td>
+                <td class="genjiko-romaji">Asagao</td>
+                <td class="genjiko-english">Asagao</td>
+                <td class="genjiko-partition">{1, 3, 4}, {2}, {5}</td>
+                <td class="genjiko-icon">T</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">21</td>
+                <td class="genjiko-kanji">乙女</td>
+                <td class="genjiko-romaji">Otome</td>
+                <td class="genjiko-english">The Maiden</td>
+                <td class="genjiko-partition">{1, 3}, {2}, {4}, {5}</td>
+                <td class="genjiko-icon">U</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">22</td>
+                <td class="genjiko-kanji">玉鬘</td>
+                <td class="genjiko-romaji">Tamakazura</td>
+                <td class="genjiko-english">Tamakatsura</td>
+                <td class="genjiko-partition">{1, 2}, {3, 4, 5}</td>
+                <td class="genjiko-icon">V</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">23</td>
+                <td class="genjiko-kanji">初音</td>
+                <td class="genjiko-romaji">Hatsune</td>
+                <td class="genjiko-english">The First Song of the Year</td>
+                <td class="genjiko-partition">{1, 3}, {2, 4}, {5}</td>
+                <td class="genjiko-icon">W</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">24</td>
+                <td class="genjiko-kanji">胡蝶</td>
+                <td class="genjiko-romaji">Kochō</td>
+                <td class="genjiko-english">The Butterflies</td>
+                <td class="genjiko-partition">{1, 4}, {2, 3, 5}</td>
+                <td class="genjiko-icon">X</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">25</td>
+                <td class="genjiko-kanji">蛍</td>
+                <td class="genjiko-romaji">Hotaru</td>
+                <td class="genjiko-english">The Glow-Worm</td>
+                <td class="genjiko-partition">{1, 2, 4}, {3}, {5}</td>
+                <td class="genjiko-icon">Y</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">26</td>
+                <td class="genjiko-kanji">常夏</td>
+                <td class="genjiko-romaji">Tokonatsu</td>
+                <td class="genjiko-english">A Bed of Carnations</td>
+                <td class="genjiko-partition">{1}, {2}, {3, 4, 5}</td>
+                <td class="genjiko-icon">Z</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">27</td>
+                <td class="genjiko-kanji">篝火</td>
+                <td class="genjiko-romaji">Kagaribi</td>
+                <td class="genjiko-english">The Flares</td>
+                <td class="genjiko-partition">{1}, {2, 4}, {3}, {5}</td>
+                <td class="genjiko-icon">a</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">28</td>
+                <td class="genjiko-kanji">野分</td>
+                <td class="genjiko-romaji">Nowaki</td>
+                <td class="genjiko-english">The Typhoon</td>
+                <td class="genjiko-partition">{1, 2}, {3}, {4, 5}</td>
+                <td class="genjiko-icon">b</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">29</td>
+                <td class="genjiko-kanji">御幸</td>
+                <td class="genjiko-romaji">Miyuki</td>
+                <td class="genjiko-english">The Royal Visit</td>
+                <td class="genjiko-partition">{1, 3}, {2, 4, 5}</td>
+                <td class="genjiko-icon">c</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">30</td>
+                <td class="genjiko-kanji">藤袴</td>
+                <td class="genjiko-romaji">Fujibakama</td>
+                <td class="genjiko-english">Blue Trousers</td>
+                <td class="genjiko-partition">{1, 4}, {2}, {3}, {5}</td>
+                <td class="genjiko-icon">d</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">31</td>
+                <td class="genjiko-kanji">真木柱</td>
+                <td class="genjiko-romaji">Makibashira</td>
+                <td class="genjiko-english">Makibashira</td>
+                <td class="genjiko-partition">{1, 5}, {2, 4}, {3}</td>
+                <td class="genjiko-icon">e</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">32</td>
+                <td class="genjiko-kanji">梅枝</td>
+                <td class="genjiko-romaji">Umegae</td>
+                <td class="genjiko-english">The Spray of Plum-Blossom</td>
+                <td class="genjiko-partition">{1, 2, 3, 5}, {4}</td>
+                <td class="genjiko-icon">f</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">33</td>
+                <td class="genjiko-kanji">藤裏葉</td>
+                <td class="genjiko-romaji">Fuji no uraba</td>
+                <td class="genjiko-english">Fuji no Uraba</td>
+                <td class="genjiko-partition">{1}, {2, 5}, {3, 4}</td>
+                <td class="genjiko-icon">g</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">34</td>
+                <td class="genjiko-kanji">若菜上</td>
+                <td class="genjiko-romaji">Wakana jō</td>
+                <td class="genjiko-english">Wakana, Part I</td>
+                <td class="genjiko-partition">{1, 2, 5}, {3, 4}</td>
+                <td class="genjiko-icon">h</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">35</td>
+                <td class="genjiko-kanji">若菜下</td>
+                <td class="genjiko-romaji">Wakana ge</td>
+                <td class="genjiko-english">Wakana, Part II</td>
+                <td class="genjiko-partition">{1, 3}, {2}, {4, 5}</td>
+                <td class="genjiko-icon">i</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">36</td>
+                <td class="genjiko-kanji">柏木</td>
+                <td class="genjiko-romaji">Kashiwagi</td>
+                <td class="genjiko-english">Kashiwagi</td>
+                <td class="genjiko-partition">{1, 3, 5}, {2}, {4}</td>
+                <td class="genjiko-icon">j</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">37</td>
+                <td class="genjiko-kanji">横笛</td>
+                <td class="genjiko-romaji">Yokobue</td>
+                <td class="genjiko-english">The Flute</td>
+                <td class="genjiko-partition">{1, 4, 5}, {2}, {3}</td>
+                <td class="genjiko-icon">k</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">38</td>
+                <td class="genjiko-kanji">鈴虫</td>
+                <td class="genjiko-romaji">Suzumushi</td>
+                <td class="genjiko-english">The Bell Cricket</td>
+                <td class="genjiko-partition">{1, 5}, {2}, {3, 4}</td>
+                <td class="genjiko-icon">l</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">39</td>
+                <td class="genjiko-kanji">夕霧</td>
+                <td class="genjiko-romaji">Yūgiri</td>
+                <td class="genjiko-english">Yugiri</td>
+                <td class="genjiko-partition">{1, 4}, {2}, {3, 5}</td>
+                <td class="genjiko-icon">m</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">40</td>
+                <td class="genjiko-kanji">御法</td>
+                <td class="genjiko-romaji">Minori</td>
+                <td class="genjiko-english">The Law</td>
+                <td class="genjiko-partition">{1, 4}, {2, 5}, {3}</td>
+                <td class="genjiko-icon">n</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">41</td>
+                <td class="genjiko-kanji">幻</td>
+                <td class="genjiko-romaji">Maboroshi</td>
+                <td class="genjiko-english">Mirage</td>
+                <td class="genjiko-partition">{1, 5}, {2}, {3}, {4}</td>
+                <td class="genjiko-icon">o</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">42</td>
+                <td class="genjiko-kanji">匂宮</td>
+                <td class="genjiko-romaji">Nioumiya</td>
+                <td class="genjiko-english">Niou</td>
+                <td class="genjiko-partition">{1, 2, 4}, {3, 5}</td>
+                <td class="genjiko-icon">p</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">43</td>
+                <td class="genjiko-kanji">紅梅</td>
+                <td class="genjiko-romaji">Kōbai</td>
+                <td class="genjiko-english">Kobai</td>
+                <td class="genjiko-partition">{1}, {2, 5}, {3}, {4}</td>
+                <td class="genjiko-icon">q</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">44</td>
+                <td class="genjiko-kanji">竹河</td>
+                <td class="genjiko-romaji">Takekawa</td>
+                <td class="genjiko-english">Bamboo River</td>
+                <td class="genjiko-partition">{1, 5}, {2, 3, 4}</td>
+                <td class="genjiko-icon">r</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">45</td>
+                <td class="genjiko-kanji">橋姫</td>
+                <td class="genjiko-romaji">Hashihime</td>
+                <td class="genjiko-english">The Bridge Maiden</td>
+                <td class="genjiko-partition">{1, 3, 4, 5}, {2}</td>
+                <td class="genjiko-icon">s</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">46</td>
+                <td class="genjiko-kanji">椎本</td>
+                <td class="genjiko-romaji">Shiigamoto</td>
+                <td class="genjiko-english">At the Foot of the Oak-Tree</td>
+                <td class="genjiko-partition">{1, 4}, {2, 3}, {5}</td>
+                <td class="genjiko-icon">t</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">47</td>
+                <td class="genjiko-kanji">総角</td>
+                <td class="genjiko-romaji">Agemaki</td>
+                <td class="genjiko-english">Agemaki</td>
+                <td class="genjiko-partition">{1, 4, 5}, {2, 3}</td>
+                <td class="genjiko-icon">u</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">48</td>
+                <td class="genjiko-kanji">早蕨</td>
+                <td class="genjiko-romaji">Sawarabi</td>
+                <td class="genjiko-english">Fern-Shoots</td>
+                <td class="genjiko-partition">{1, 2}, {3, 5}, {4}</td>
+                <td class="genjiko-icon">v</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">49</td>
+                <td class="genjiko-kanji">宿木</td>
+                <td class="genjiko-romaji">Yadorigi</td>
+                <td class="genjiko-english">The Mistletoe</td>
+                <td class="genjiko-partition">{1, 2, 4, 5}, {3}</td>
+                <td class="genjiko-icon">w</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">50</td>
+                <td class="genjiko-kanji">東屋</td>
+                <td class="genjiko-romaji">Azumaya</td>
+                <td class="genjiko-english">The Eastern House</td>
+                <td class="genjiko-partition">{1, 2, 5}, {3}, {4}</td>
+                <td class="genjiko-icon">x</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">51</td>
+                <td class="genjiko-kanji">浮舟</td>
+                <td class="genjiko-romaji">Ukifune</td>
+                <td class="genjiko-english">Ukifune</td>
+                <td class="genjiko-partition">{1, 5}, {2, 3}, {4}</td>
+                <td class="genjiko-icon">y</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">52</td>
+                <td class="genjiko-kanji">蜻蛉</td>
+                <td class="genjiko-romaji">Kagerō</td>
+                <td class="genjiko-english">The Gossamer-Fly</td>
+                <td class="genjiko-partition">{1, 3, 5}, {2, 4}</td>
+                <td class="genjiko-icon">z</td>
+            </tr>
+            
+            <tr>
+                <td class="genjiko-chapter">53</td>
+                <td class="genjiko-kanji">手習</td>
+                <td class="genjiko-romaji">Tenarai</td>
+                <td class="genjiko-english">Writing-Practice</td>
+                <td class="genjiko-partition">{1, 2, 3, 4, 5}</td>
+                <td class="genjiko-icon">1</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+
+You can download this same table as a [UTF-8 encoded CSV file](/post/genji-ko_files/genjiko.csv)
+or [Excel spreadsheet](/post/genji-ko_files/genjiko.xlsx).
 
 
 
 [TG]: https://en.wikipedia.org/wiki/The_Tale_of_Genji
 [CAM]: https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052
+[KV]: https://www.youtube.com/watch?v=wpDb5LhvvSM
+[MNNK8]: https://www.imdb.com/title/tt2076558/
+[UK]: https://en.wikipedia.org/wiki/Kunisada
+
