@@ -41,31 +41,33 @@ and fifth are the same, and the third in a group by itself. Or any other
 possible combination of groupings.
 
 Contestants score a single point if they correctly group all five incenses;
-otherwise they score nothing. A typical game would have five rounds over the
-course of the evening, with an overall winner declared at the end. 
+otherwise they score nothing. A typical game has five rounds over the course of
+an evening, with an overall winner declared at the end. 
 
 Obviously contestants would need some kind of notation to record their answers
-in a concise, unambiguous, and easy to read way, and it is this notation - and
-the art and mathematics that arose from it - that this article is about.
+in a concise, unambiguous, and easy to read way, and it is really about this
+notation - and the art, mathematics, and culture connected to it - that this
+article is about.
 
 Notation
 --------
 
-Every pattern has exactly five vertical lines, representing the five possible incenses.
-To show that two or more incenses are part of the same group, you draw a horizontal
-line connecting the top of every vertical line in that group. To avoid confusion
-when there are two or more groups, you draw these horizontal lines at different
-heights, shortening the vertical lines as needed:
+Every pattern has exactly five vertical lines, representing the five possible
+incenses. To show that two or more incenses are part of the same group, you
+draw a horizontal line connecting the top of every vertical line in that group.
+To avoid confusion when there are two or more groups, you draw these horizontal
+lines at different heights, shortening the vertical lines as needed:
 
 <img src="/post/genji-ko_files/examples.png">
 
 There are a few nuances to the notation worth mentioning. If two groups don't
 overlap, there is no need draw them at different heights (top center.) If one
-group is "contained" inside another, the inner group is drawn at the lower height (top right, bottom left)
-so that it appears nested inside the other. And in some cases, say when the
-groups are $\\{\\{1, 3\\}, \\{2, 5\\},$ $\\{4\\}\\}$ (bottom center), it is impossible to avoid
-an intersection but we understand that the groups are still distinct because
-the horizontal connecting lines are at different heights.
+group is "contained" inside another, the inner group is drawn at the lower
+height (top right, bottom left) so that it appears nested inside the other. And
+in some cases, say when the groups are $\\{1, 3\\}, \\{2, 5\\}, \\{4\\}$
+(bottom center), it is impossible to avoid an intersection but we understand
+that the groups are still distinct because the horizontal connecting lines are
+at different heights.
 
 
 Genji-Kō features as a plot point in [episode 8 of the experimental horror
@@ -82,12 +84,12 @@ Etymology
 ---------
 
 Genji-kō, by the way, is named after the titular Genji of the Heian (平安) era
-literary classic [The Tale of Genji][TG]. There are two connections. First, in
+literary classic [*The Tale of Genji*][TG]. There are two connections. First, in
 one chapter of the book Genji hosts an incense appreciation party. Second,
 since there are 52 possible patterns and 54 chapters of the book, each pattern
 is traditionally associated with - and named after - each chapter (except for
 the first and last chapters, which are omitted.) Every educated person of the
-Muromachi era would be intimately familiar with *The Tale of Genji* and would
+Muromachi era would be intimately familiar with [*The Tale of Genji*][TG] and would
 know the themes, season, and characters associated with each chapter. by heart,
 giving each pattern a literary resonance.
 
@@ -95,48 +97,6 @@ Genji-kō refers to the game, but the game is so closely tied to the patterns
 that it can refer to them as well. I used Google to count the number of search
 results for different ways of referring to the patterns themselves. 
 
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">Kanji</th>
-      <th style="text-align: left">Romaji</th>
-      <th style="text-align: left">English Translation</th>
-      <th style="text-align: left">Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>源氏紋</td>
-      <td>Genjimon</td>
-      <td>Genji Crest</td>
-      <td>844,000</td>
-    </tr>
-    <tr>
-      <td>源氏香図</td>
-      <td>Genji-kōzu</td>
-      <td>Genji-kō Diagram</td>
-      <td>686,000</td>
-    </tr>
-    <tr>
-      <td>源氏香の模様</td>
-      <td>Genji-kō no moyō</td>
-      <td>Genji-kō Pattern</td>
-      <td>400,000</td>
-    </tr>
-    <tr>
-      <td>源氏香模様</td>
-      <td>Genji-kō moyō</td>
-      <td>Genji-kō Design</td>
-      <td>479,000</td>
-    </tr>
-    <tr>
-      <td>源氏香文様</td>
-      <td>Genji-kō monyō</td>
-      <td>Genji-kō Motif</td>
-      <td>129,000</td>
-    </tr>
-  </tbody>
-</table>
 
 Based on these results, I'll refer to the patterns themselves as genji-mon
 when I want to explicitly refer to the visual pattern.
@@ -177,7 +137,7 @@ or this incense holder:
 <img src="/post/genji-ko_files/incense_holder.jpg">
 
 [Utagawa Kunisada][UK], circa 1843, painted a  wall scoll for each chapter
-of the Tale of Genji and included the associated genji-mon on every one:
+of [*The Tale of Genji*][TG] and included the associated genji-mon on every single one.
 
 <img src="/post/genji-ko_files/yugiri_wall_scroll.jpg">
 
@@ -185,8 +145,8 @@ of the Tale of Genji and included the associated genji-mon on every one:
 Patterns
 --------
 
-Knuth writes about it:
-<img src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png">
+Knuth mentions them in the introduction to a [book on the history of combinatorics][CAM]:
+<img class="drop-shadow" style="height: 50%; width: 50%;" src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png">
 
 
 ```python
@@ -260,32 +220,37 @@ layout and simply put them in the order returned by `partitions()`:
 
 <img src="/post/genji-ko_files/algorithmic_genjiko.png">
 
-Good, but not perfect. The order is largely wrong, and there are four
-genji-kō (the ones rendered in red) where our concept of "optimal" has
-failed to reproduce the traditional design.
+Good, but not perfect. The order is largely wrong, and the four genji-mon
+rendered in red are the ones where our "optimal" layout has failed to reproduce
+the traditional design.
 
-Order
------
+<h3 id="maintext">Order</h3>
 
-Knuth [mentions][CAM] that the genji-kō patterns "were not arranged in any
-particularly logical order" and I'm inclined to agree. I tried several
-variations of the above `partition()` function hoping to find one where the
-traditional order would just fall out naturally, but it never did. A close
-inspection of the table makes it clear that this was never going to happen:
-there's an overall trend from many separate groups to fewer groups, but there
-are just too many cases where the order is arbitrary.
+Knuth [mentions][CAM] that the genji-mon "were not arranged in any particularly
+logical order" and I'm inclined to agree. I tried several variations of the
+above `partition()` function hoping to find one where the traditional order
+would just fall out naturally, but it never did. A close inspection of the
+table makes it clear that this was never going to happen: While there is an
+overall trend from many to fewer groups, there are just too many cases
+where the order is clearly arbitrary.
 
-I found a ton of references that put the genji-kō in a different order, and
-even some that tried to stretch it to 54 using some kind of duplication or 
-introducing irregular patterns. However, the association between the 52 
+I found a several references that put the genji-mon in a different order, and
+even some that tried to stretch it to 54 using some kind of 
+<a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a> or introducing 
+<a target="_blank" href="/post/genji-ko_files/irregular.jpg">irregular</a> 
+patterns.<sup><a href="#footnote">*</a></sup>
+ If we
+recall the original purpose they served in the game, though, this is clearly
+nonsense, not to mention being both mathematically impossible and at odds with tradition.
+
+
+However, the association between the 52 
 patterns and chapter titles for chapters 2-53 of the *Tale of Genji* seem
-water tight and consistent. Also, the order of those chapters is mostly
+watertight and consistent. Also, the order of those chapters is mostly
 consistent across sources (there is some disagreement about the order of the
 later chapters, and one chapter which survives only as a title or perhaps was
 intentionally elided as a delicate way to elude to a character's death) so
 I've put my genji-kō in chapter order.
-
-
 
 
 Final Result
@@ -294,7 +259,7 @@ Final Result
 I spent some time trying to find some elegant heuristic that would nudge
 the layout algorithm to produce those four without breaking any of the others,
 but the rules were more complex than simply listing the special cases (and
-none of them correctly handled Yuguri, which I'll discuss below.)
+none of them correctly handled Yūgiri (夕霧) which I'll discuss below.)
 
 The four special cases are:
 
@@ -323,18 +288,18 @@ three-level structure when two would have sufficed.
 
 <img src="/post/genji-ko_files/yuguri_diff.png">
 
-I'm not about to stand in the way of 900 years of tradition, nor am I about to
-argue with the aesthetic sensibilities of Utagawa Kunisada, so we'll use the
+TODO I'm not about to stand in the way of 900 years of tradition, nor am I about to
+argue with the aesthetic sensibilities of [Utagawa Kunisada][UK], so we'll use the
 traditional version.
+
 
 
 Mathematics
 -----------
 
 The connection between genji-kō and mathematics becomes apparent if we ask
-ourselves, "Why are there exactly 52 genji-kō patterns? How can we be sure
+ourselves, "Why are there exactly 52 genji-mon patterns? How can we be sure
 there aren't more?" 
-
 
 
 Two:
@@ -381,7 +346,7 @@ there will always be one element left over, which can only be partitioned one wa
 
 Finally, if the first group is of size three, there are no elements left over.
 
-Thus we have 1*2 + 2*1 + 1 = 5 ways to partition a set of three elements.
+Thus we have $1 \\times 2 + 2 \\times 1 + 1 = 5$ ways to partition a set of three elements.
 
 Three:
 <img src="/post/genji-ko_files/counting_partitions3.png">
@@ -394,7 +359,7 @@ which we showed above can be partitioned five different ways.
 For a first group of size two, we have a choice of three possible elements for other
 element of the first group. Regardless of which we pick, we'll have two left
 over, and we know there are two ways to partition a set of two elements. Thus
-there are 3*2 = 6 partitions where the first group is size two.
+there are $3 \\times 2 = 6$ partitions where the first group is size two.
 
 There are three ways to pick a first group of size three, because we are essentially
 picking which of {2, 3, 4} to leave out. Regardless of how we pick, there is one
@@ -403,7 +368,8 @@ element left over, which can only be partitioned one way.
 Finally, there is only one way to pick a first group of size four, and with no
 elements left over, this gives us only one way to partition the set.
 
-So the total number of ways to partition a set of size 4 is 1*5 + 3*2 + 3*1 + 1
+So the total number of ways to partition a set of size 4 is 
+$1 \\times 5 + 3 \\times 2 + 3 \\times 1 + 1 = 15$.
 
 
 Four:
@@ -466,22 +432,24 @@ combinatorics of partitions is well-known, so we could just look the formulas
 up. But let's see if we can continue our analysis.
 
 We know that partitions of $I$ exist, by construction. For example, we could
-put each incense in its own group: $\\{ \\{1\\},\\{2\\}, \\{3\\}, \\{4\\}, \\{5\\} \\}$
-or lump them into one big group: $\\{ 1, 2, 3, 4, 5\\}$. The task is to count
+put each incense in its own group: 
+$\\{ \\{1\\},\\{2\\}, \\{3\\}, \\{4\\}, \\{5\\} \\}$
+or lump them into one big group: 
+$\\{ 1, 2, 3, 4, 5\\}$. 
+The task is to count
 them in a more systematic way. 
 
-Here, as is often the case in mathematics, the problem is made easier by abstracting it.
-Instead of focusing on sets of five elements, let's ask how we can count to partitions
-of any set consisting of a finite number of distinct elements. Let's give it a
-name: for reasons that will become clear in a moment,  we'll call the number of
-partitions of a set of $k$ distinct elements $B\_k$. 
+Here, as is often the case in mathematics, the problem is made easier by
+abstracting it. Instead of focusing on sets of five elements, let's ask how we
+can count to partitions of any set consisting of a finite number of distinct
+elements. Let's give it a name: for reasons that will become clear in a moment,
+we'll call the number of partitions of a set of $k$ distinct elements $B\_k$. 
 
-The first couple are
-easy: it's easy to see that the only way to partition an empty set is $\\{\\}$, and
-the only way to partition a set with one element $\\{a\\}$ is $\\{ \\{a\\} \\}$.
-If you're not sure why, refer to the above definition of a partition, particularly
-the part where we require that the subsets be non-empty, and try to convince yourself
-this is true.
+The first couple are easy: it's easy to see that the only way to partition an
+empty set is $\\{\\}$, and the only way to partition a set with one element
+$\\{a\\}$ is $\\{ \\{a\\} \\}$. If you're not sure why, refer to the above
+definition of a partition, particularly the part where we require that the
+subsets be non-empty, and try to convince yourself this is true.
 
 \\[
     B\_0 = 1
@@ -511,20 +479,47 @@ Again,
 \\]
 
 
-Appendix A: Full Chart
-----------------------
+Appendix A: Alternative Genji-Kō Chart<a name="chart"></a>
+--------------------------------------
 
-Genji-kō are often rendered with very narrow negative space, resulting
-in a very pleasing effect:
+Genji-mon are often rendered with thick lines which achieves an interesting
+effect with the negative space. By playing around with the parameters a little:
+
+```python
+genjiko_df = load_genjiko()
+genjiko_df['Color'] = "black"
+draw_annotated_genjiko_grid(
+    genjiko_df,
+    cell_size=82,
+    grid_width=8,
+    grid_height=7,
+    line_width=14,
+    padding=20,
+    include_index_label=False,
+    include_romaji_label=False,
+    grid_indent=1,
+)
+```
+
+We can achieve a very attractive result:
 
 <img src="/post/genji-ko_files/genjiko_dense.png">
 
 
-Appendix B: Full Table
+Appendix B: Full Table<a name="table"></a>
 ----------------------
 
-The full table in HTML format, so you can copy-and-paste the Kanji. The Genji-mon column table uses
-the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/symbol/genjiko/).
+The full table in HTML format, so you can copy-and-paste the kanji and other
+fields. The Genji-mon column uses the [Genji-Kō TrueType font available from
+illllli.com](https://www.illllli.com/font/symbol/genjiko/).
+
+You can download this same table as a [UTF-8 encoded CSV file](/post/genji-ko_files/genjiko.csv)
+or [Excel spreadsheet](/post/genji-ko_files/genjiko.xlsx).
+
+Note: whenever the English column has apparently been left untranslated, that
+is because the chapter title is the proper name of one of the characters from
+[*The Tale of Genji*][TG]. Translating these would be as nonsensical as translating
+"Jack Smith" to "Lifting Device Metal Worker."
 
 <div class="genjiko-wrapper">
     <style>
@@ -592,7 +587,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
                 <td class="genjiko-chapter">4</td>
                 <td class="genjiko-kanji">夕顔</td>
                 <td class="genjiko-romaji">Yūgao</td>
-                <td class="genjiko-english">Yugao</td>
+                <td class="genjiko-english">Yūgao</td>
                 <td class="genjiko-partition">{1}, {2}, {3, 4}, {5}</td>
                 <td class="genjiko-icon">D</td>
             </tr>
@@ -627,7 +622,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
             <tr>
                 <td class="genjiko-chapter">8</td>
                 <td class="genjiko-kanji">花宴</td>
-                <td class="genjiko-romaji">Hana no en</td>
+                <td class="genjiko-romaji">Hana no En</td>
                 <td class="genjiko-english">The Flower Feast</td>
                 <td class="genjiko-partition">{1}, {2}, {3, 5}, {4}</td>
                 <td class="genjiko-icon">H</td>
@@ -654,7 +649,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
             <tr>
                 <td class="genjiko-chapter">11</td>
                 <td class="genjiko-kanji">花散里</td>
-                <td class="genjiko-romaji">Hana chiru sato</td>
+                <td class="genjiko-romaji">Hana Chiru Sato</td>
                 <td class="genjiko-english">The Village of Falling Flowers</td>
                 <td class="genjiko-partition">{1}, {2, 4}, {3, 5}</td>
                 <td class="genjiko-icon">K</td>
@@ -852,7 +847,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
             <tr>
                 <td class="genjiko-chapter">33</td>
                 <td class="genjiko-kanji">藤裏葉</td>
-                <td class="genjiko-romaji">Fuji no uraba</td>
+                <td class="genjiko-romaji">Fuji no Uraba</td>
                 <td class="genjiko-english">Fuji no Uraba</td>
                 <td class="genjiko-partition">{1}, {2, 5}, {3, 4}</td>
                 <td class="genjiko-icon">g</td>
@@ -861,7 +856,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
             <tr>
                 <td class="genjiko-chapter">34</td>
                 <td class="genjiko-kanji">若菜上</td>
-                <td class="genjiko-romaji">Wakana jō</td>
+                <td class="genjiko-romaji">Wakana Jō</td>
                 <td class="genjiko-english">Wakana, Part I</td>
                 <td class="genjiko-partition">{1, 2, 5}, {3, 4}</td>
                 <td class="genjiko-icon">h</td>
@@ -870,7 +865,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
             <tr>
                 <td class="genjiko-chapter">35</td>
                 <td class="genjiko-kanji">若菜下</td>
-                <td class="genjiko-romaji">Wakana ge</td>
+                <td class="genjiko-romaji">Wakana Ge</td>
                 <td class="genjiko-english">Wakana, Part II</td>
                 <td class="genjiko-partition">{1, 3}, {2}, {4, 5}</td>
                 <td class="genjiko-icon">i</td>
@@ -907,7 +902,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
                 <td class="genjiko-chapter">39</td>
                 <td class="genjiko-kanji">夕霧</td>
                 <td class="genjiko-romaji">Yūgiri</td>
-                <td class="genjiko-english">Yugiri</td>
+                <td class="genjiko-english">Yūgiri</td>
                 <td class="genjiko-partition">{1, 4}, {2}, {3, 5}</td>
                 <td class="genjiko-icon">m</td>
             </tr>
@@ -943,7 +938,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
                 <td class="genjiko-chapter">43</td>
                 <td class="genjiko-kanji">紅梅</td>
                 <td class="genjiko-romaji">Kōbai</td>
-                <td class="genjiko-english">Kobai</td>
+                <td class="genjiko-english">Kōbai</td>
                 <td class="genjiko-partition">{1}, {2, 5}, {3}, {4}</td>
                 <td class="genjiko-icon">q</td>
             </tr>
@@ -1033,7 +1028,7 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
                 <td class="genjiko-chapter">53</td>
                 <td class="genjiko-kanji">手習</td>
                 <td class="genjiko-romaji">Tenarai</td>
-                <td class="genjiko-english">Writing-Practice</td>
+                <td class="genjiko-english">Writing Practice</td>
                 <td class="genjiko-partition">{1, 2, 3, 4, 5}</td>
                 <td class="genjiko-icon">1</td>
             </tr>
@@ -1042,10 +1037,67 @@ the [genjiko TTF font available from illllli.com](https://www.illllli.com/font/s
     </table>
 </div>
 
-You can download this same table as a [UTF-8 encoded CSV file](/post/genji-ko_files/genjiko.csv)
-or [Excel spreadsheet](/post/genji-ko_files/genjiko.xlsx).
 
+Appendix C: Popularity of Names for Genji-Kō Patterns<a name="names"></a>
+-----------------------------------------------------
 
+This table is included merely to illustrate the variety of legitimate ways
+to refer to the patterns used in genji-kō, and to justify my choice to
+standardize on genji-mon. Click on any of the kanji to link directly to
+the Google Image Search for that name.
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Kanji</th>
+      <th style="text-align: left">Romaji</th>
+      <th style="text-align: left">English Translation</th>
+      <th style="text-align: left">Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.google.com/search?tbm=isch&q=源氏紋" target="_blank">源氏紋</a></td>
+      <td>Genji-mon</td>
+      <td>Genji Crest</td>
+      <td style="font-weight: bold;">844,000</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.google.com/search?tbm=isch&q=源氏香図" target="_blank">源氏香図</a></td>
+      <td>Genji-kōzu</td>
+      <td>Genji-kō Diagram</td>
+      <td>686,000</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.google.com/search?tbm=isch&q=源氏香" target="_blank">源氏香の模様</a></td>
+      <td>Genji-kō no Moyō</td>
+      <td>Genji-kō Pattern</td>
+      <td>400,000</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.google.com/search?tbm=isch&q=源氏香模様" target="_blank">源氏香模様</a></td>
+      <td>Genji-kō Moyō</td>
+      <td>Genji-kō Design</td>
+      <td>479,000</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.google.com/search?tbm=isch&q=源氏香文様" target="_blank">源氏香文様</a></td>
+      <td>Genji-kō Monyō</td>
+      <td>Genji-kō Motif</td>
+      <td>129,000</td>
+    </tr>
+  </tbody>
+</table>
+
+Footnotes
+---------
+
+<p id="footnote">
+  <sup><a href="#maintext">*</a></sup>
+  I know I should cite the creators of these images, but I have not done so to spare any potential embarrassment.
+  You can find the originals through Google, if you're curious.
+  <a href="#maintext">Back to the main text</a>
+</p>
 
 [TG]: https://en.wikipedia.org/wiki/The_Tale_of_Genji
 [CAM]: https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052
