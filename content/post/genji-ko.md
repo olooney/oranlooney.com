@@ -26,13 +26,13 @@ humiliate your rivals, flirt with your love interest, and impress people in a
 position of power. They didn't just perfect cultured refinement - they
 weaponized it.
 
-Only under such conditions could something like genji-kō (源氏香) arise. It is
+Only under such conditions could something like Genji-kō (源氏香) arise. It is
 a parlor game played with incense - just one of many similar games inside the
 broader umbrella of kōdō (香道), the traditional art of incense appreciation. 
 
-What sets genji-kō apart is its extreme difficulty - where another game might
+What sets Genji-kō apart is its extreme difficulty - where another game might
 have contestants write down their guesses for three separate incenses and score
-a point for each correct guess, genji-kō asks contestants to smell five
+a point for each correct guess, Genji-kō asks contestants to smell five
 separate samples, then determine which of the five are the same. All five might
 be the same, or all five might be different, or (and this is where it gets
 interesting) they might be in groups of two or three or four. For example, the
@@ -72,39 +72,45 @@ at different heights.
 
 Genji-Kō features as a plot point in [episode 8 of the experimental horror
 anime Mononoke][MNNK8], where it is suggested that players used blocks to
-record their solutions. While this might be true - the episodes description of
-genji-Kō is otherwise grounded and well-researched - I haven't seen any other
-references to this; everything else I've seen suggests the game was played with
-ink and paper.
+record their solutions. 
 
 <img src="/post/genji-ko_files/blocks.png">
+
+While this might be true - the episodes description of Genji-Kō is otherwise
+grounded and well-researched - I haven't seen any other references to this;
+everything else I've seen suggests the game was played with ink and paper. I
+think it's probably just a case of artistic license - the blocks were more
+visually interesting to animate.
 
 
 Etymology
 ---------
 
 Genji-kō, by the way, is named after the titular Genji of the Heian (平安) era
-literary classic [*The Tale of Genji*][TG]. There are two connections. First, in
-one chapter of the book Genji hosts an incense appreciation party. Second,
-since there are 52 possible patterns and 54 chapters of the book, each pattern
-is traditionally associated with - and named after - each chapter (except for
-the first and last chapters, which are omitted.) Every educated person of the
-Muromachi era would be intimately familiar with [*The Tale of Genji*][TG] and would
-know the themes, season, and characters associated with each chapter. by heart,
-giving each pattern a literary resonance.
+literary classic [*The Tale of Genji*][TG]. (The fact that "Genji" is a proper
+name is also why I capitalize Genji-kō and Genji-mon.)
 
-Genji-kō refers to the game, but the game is so closely tied to the patterns
-that it can refer to them as well. I used Google to count the number of search
-results for different ways of referring to the patterns themselves. 
+There are two connections. First, in one chapter of the book Genji hosts an
+incense appreciation party. Second, since there are 52 possible patterns and 54
+chapters of the book, each pattern is traditionally associated with - and named
+after - each chapter (except for the first and last chapters, which are
+omitted.) Every educated person of the Muromachi era would be intimately
+familiar with [*The Tale of Genji*][TG] and would know the themes, season, and
+characters associated with each chapter by heart, giving each pattern a
+literary resonance. A skillful kōdō practitioner hosting a game of Genji-kō
+would choose a solution that referenced the current season or recent event,
+adding both a layer of meaning to the game and a hint to other skilled players.
+
+Genji-kō refers to the specifically to the game and via synecdoche can also
+refer to the patterns themselves; however there are several other words we
+could use to more explicitly refer to the square, five-line visual patterns
+used as solutions in the Genji-kō game. I used Google to <a href="#names">count
+the number of search results for various options</a> and based on those
+results, I decided to call the patterns themselves Genji-mon in this article.
 
 
-Based on these results, I'll refer to the patterns themselves as genji-mon
-when I want to explicitly refer to the visual pattern.
-
-TODO
-
-Culture
--------
+Cultural Impact
+---------------
 
 Compared to other traditional arts from the same era such as tea ceremony or
 flower arranging, kōdō is not particular popular or well-known even in Japan;
@@ -112,39 +118,42 @@ nevertheless it is [still played][KV] even to this day.
 
 However, its cultural influence extends beyond the few who actually play the
 game - the patterns show up fairly often as a motif in contemporary Japanese
-graphic design:
+graphic design, and it's especially popular on traditional goods such as
+kimono:
 
-<img src="/post/genji-ko_files/genjiko_colorful.jpg">
+<div style="text-align: center">
+<img style="display:inline; height: 600px; padding: 0px;" src="/post/genji-ko_files/genjiko_colorful.jpg">
+<img style="display:inline; padding: 0px;" src="/post/genji-ko_files/kimono.jpg">
+</div>
 
-It's especially popular on traditional handcrafted goods, such as kimino:
-
-<img src="/post/genji-ko_files/kimono.jpg">
-
-Cheaper fabrics simply print the same genji-mon repeatedly, but the mark of
-high-quality genji-Kō fabric is to use a variety of genji-mon so that the
-pattern never quite repeats:
+[Cheaper fabrics][CGK] simply print the same Genji-mon repeatedly, but
+high-quality Genji-Kō textiles will use a variety of Genji-mon so that the
+pattern seems to never quite repeat:
 
 <img src="/post/genji-ko_files/fabric.jpg">
 
-They are often found on good related to incense or kōdō in some way, such
-as this incense box:
+Naturally Genji-mon are often found on good related to incense or kōdō in some
+way, such as this kōdō set, incense box, or incense holder:
 
-<img src="/post/genji-ko_files/incense_box.jpg">
+<div style="text-align: center">
+<img "display:inline; padding: 0px;" src="/post/genji-ko_files/incense_set.jpg">
+<img style="display:inline; padding: 0px; height: 400px;" src="/post/genji-ko_files/incense_box.jpg">
+<img style="display:inline; padding: 0px; height: 400px;" src="/post/genji-ko_files/incense_holder.jpg">
+</div>
 
-<!-- <img src="/post/genji-ko_files/incense_set.jpg"> -->
+[Utagawa Kunisada][UK], circa 1843, painted a series of wall scolls, one for
+each chapter of [*The Tale of Genji*][TG], and included the associated
+Genji-mon on each:
 
-or this incense holder:
-<img src="/post/genji-ko_files/incense_holder.jpg">
-
-[Utagawa Kunisada][UK], circa 1843, painted a  wall scoll for each chapter
-of [*The Tale of Genji*][TG] and included the associated genji-mon on every single one.
-
-<img src="/post/genji-ko_files/yugiri_wall_scroll.jpg">
+<a href="/post/genji-ko_files/minori_wall_scroll.png" target="_blank">
+<img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
+</a>
 
 
-Patterns
---------
+Drawing Genji-Mon
+-----------------
 
+TODO
 Knuth mentions them in the introduction to a [book on the history of combinatorics][CAM]:
 <img class="drop-shadow" style="height: 50%; width: 50%;" src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png">
 
@@ -167,14 +176,14 @@ def partitions(s: Set[int]) -> Iterator[List[Set[int]]]:
             yield new_partition
 ```
 
-Optimal genji-kō layouts for each partition:
+Optimal Genji-mon layouts for each partition:
 
 ```python
 def optimal_genjiko_for_partition(
     partition: List[Set[int]]
 ) -> List[Tuple[float, Set[int]]]:
     """
-    Given a partition, find the optimal genji-kō layout by minimizing a cost
+    Given a partition, find the optimal Genji-kō layout by minimizing a cost
     function.
 
     I was originally hoping to get to 100% algorithmic generation, but this
@@ -220,13 +229,13 @@ layout and simply put them in the order returned by `partitions()`:
 
 <img src="/post/genji-ko_files/algorithmic_genjiko.png">
 
-Good, but not perfect. The order is largely wrong, and the four genji-mon
+Good, but not perfect. The order is largely wrong, and the four Genji-mon
 rendered in red are the ones where our "optimal" layout has failed to reproduce
 the traditional design.
 
 <h3 id="maintext">Order</h3>
 
-Knuth [mentions][CAM] that the genji-mon "were not arranged in any particularly
+Knuth [mentions][CAM] that the Genji-mon "were not arranged in any particularly
 logical order" and I'm inclined to agree. I tried several variations of the
 above `partition()` function hoping to find one where the traditional order
 would just fall out naturally, but it never did. A close inspection of the
@@ -234,7 +243,7 @@ table makes it clear that this was never going to happen: While there is an
 overall trend from many to fewer groups, there are just too many cases
 where the order is clearly arbitrary.
 
-I found a several references that put the genji-mon in a different order, and
+I found a several references that put the Genji-mon in a different order, and
 even some that tried to stretch it to 54 using some kind of 
 <a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a> or introducing 
 <a target="_blank" href="/post/genji-ko_files/irregular.jpg">irregular</a> 
@@ -245,16 +254,16 @@ nonsense, not to mention being both mathematically impossible and at odds with t
 
 
 However, the association between the 52 
-patterns and chapter titles for chapters 2-53 of the *Tale of Genji* seem
+patterns and chapter titles for chapters 2-53 of the *Tale of Genji* seems
 watertight and consistent. Also, the order of those chapters is mostly
 consistent across sources (there is some disagreement about the order of the
 later chapters, and one chapter which survives only as a title or perhaps was
 intentionally elided as a delicate way to elude to a character's death) so
-I've put my genji-kō in chapter order.
+I've put my Genji-kō in chapter order.
 
 
-Final Result
-------------
+Special Cases
+-------------
 
 I spent some time trying to find some elegant heuristic that would nudge
 the layout algorithm to produce those four without breaking any of the others,
@@ -265,218 +274,357 @@ The four special cases are:
 
 ```python
     # Suma: {1, 3, 4} should be lower than {2, 5}
-    df.at[10, 'Genjiko'] = [(0.8, {1, 3, 4}), (1.0, {2, 5})]
+    df.at[10, "Layout"] = [ (0.8, {1, 3, 4}), (1.0, {2, 5}) ]
     
     # Hatsune: {1, 3} should be lower than {2, 4}
-    df.at[21, 'Genjiko'] = [(0.8, {1, 3}), (1.0, {2, 4}), (1.0, {5})]
+    df.at[21, "Layout"] = [ (0.8, {1, 3}), (1.0, {2, 4}), (1.0, {5}) ]
     
     # Yuguri: {1, 4} should be lower than {3, 5}, and {2} even lower.
-    df.at[37, 'Genjiko'] = [(0.8, {1, 4}), (0.6, {2}), (1.0, {3, 5})]
+    df.at[37, "Layout"] = [ (0.8, {1, 4}), (0.6, {2}), (1.0, {3, 5}) ]
     
     # Nioumiya: {1, 2, 4} should be lower than {3, 5}
-    df.at[40, 'Genjiko'] = [(0.8, {1, 2, 4}), (1.0, {3, 5})]
+    df.at[40, "Layout"] = [ (0.8, {1, 2, 4}), (1.0, {3, 5}) ]
 ```
 
-With these corrections, and using the *Tale of Genji* chapter order.
+With these corrections, and using the *Tale of Genji* chapter order:
 
 <img src="/post/genji-ko_files/genjiko.png">
 
-
-Of the four exceptions, three are obvious improvements but the fourth, Yugiri,
-seems to actively violate the basic rules around nesting and creates a
-three-level structure when two would have sufficed. 
+Of the four exceptions, two are obvious improvements (fixing the "hole" in Suma
+and the "dent" in Hatsune) and one (Nioumiya) is a matter of indifference.
+However, the fourth, Yugiri, seems to actively violate the basic rules around
+nesting and creates a three-level structure when two would have sufficed:
 
 <img src="/post/genji-ko_files/yuguri_diff.png">
 
-TODO I'm not about to stand in the way of 900 years of tradition, nor am I about to
-argue with the aesthetic sensibilities of [Utagawa Kunisada][UK], so we'll use the
-traditional version.
+The cost-based optimizer would have never chosen that layout because its most
+basic tenet is to make the groups as tall as possible. A heuristic, let me 
+remind you, that holds for the other 51 Genji-mon. However, all the examples
+of Yuguri I found online use the traditional design, and [Kunisada][UK] himself
+used it on his Yugiri wall scroll:
+
+<a href="/post/genji-ko_files/yugiri_wall_scroll.png" target="_blank">
+<img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
+</a>
+
+So I don't think I have a leg to stand on unless I want to spit in the face of
+hundreds of years of tradition; we'll just have to hard-code Yuguri as a
+special case.
 
 
+Counting Genji-Mon
+------------------
 
-Mathematics
------------
-
-The connection between genji-kō and mathematics becomes apparent if we ask
-ourselves, "Why are there exactly 52 genji-mon patterns? How can we be sure
+The connection between Genji-kō and mathematics becomes apparent if we ask
+ourselves, "Why are there exactly 52 Genji-mon patterns? How can we be sure
 there aren't more?" 
 
+Like a lot of questions in mathematics, it helps to generalize things. Instead
+of focusing on five incenses, let's ask ourselves, how many unique ways are
+there of grouping $n$ elements? This lets us ease into the problem, starting
+with a simpler case and building complexity gradually.
 
-Two:
+For $n = 1$, there's clearly only solution:
+
+<img src="/post/genji-ko_files/counting_partitions1.png">
+
+For $n = 2$, there are only two possible solutions. Either the first element is
+in a group by itself, or it is in a group with another.
+
 <img src="/post/genji-ko_files/counting_partitions2.png">
 
-Since each group of the partition must contain at least one element, it's
-obvious that there can be at most two groups by the [pigeonhole principle][PHP].
-Thus, there are either zero, one or two groups. Zero doesn't work because
-it doesn't cover the set. One does work, and there's obviously only one way to
-do it. Suppose there's two groups. At least one of the groups must contain 1.
-The other must contain at least one element, but it can't contain 1, therefore
-it must contain 1. Since these two groups already cover the set, this is the
-full partition. Since we were able to prove the structure of the partition
-starting from only the definition of a partition and the fact the set had two
-elements, all partitions of a set of two elements must have this structure;
-therefore this partition is unique.
+For $n = 3$, things start to get more interesting. Let's repeat the trick we
+used for $n = 2$ and focus on the first element. It must either be in a group
+by itself, in a pair with another, or in the same group as all others. That
+gives us exactly three cases to consider:
 
+1. If it is in a group by itself, there there are two elements left over, and
+   we already know that there are two ways to group those two remaining 
+   elements.
+2. If it in a pair, then we have a choice: we can either pair it with the
+   second or third element. In either case there will only be one element left
+   over. 
+3. And there is only one way to have all the elements be in the same
+   group.
 
-[PHP]: https://en.wikipedia.org/wiki/Pigeonhole_principle
+Here they all are, in Genji-kō notation:
 
-
-For three, things start to get interesting. We need a principle by which we
-can divide possible partitions into groups and be assured,
-
-a) that we never count a partition twice
-b) that we count every partition.
-
-The trick is to "pin" one of the elements. Since it's arbitrary, we'll
-select element 1, represented by the left vertical bar in a genji-kō pattern.
-Exactly one of groups *must* contain element 1; we'll call this the "first"
-group. This group can any size from 1 to N. Suppose it has size n. Then there
-are "N-1 choose n" possible ways to select the first group. However, whichever
-way we pick, there will be N-n elements "left over" that we must partition.
-
-There's only one way to for the first group to contain only a single element:
-if it consists of the first group and no other. However, there are two elements
-left over. We already know there are exactly two ways to partition of a set
-of two elements, so there must be two partitions of a group of three elements 
-where the first group is of size one.
-
-What if the first group is of size two? Well, then we have to pick the position
-of the other element, and our choices are 2 or 3. Regardless of what we pick,
-there will always be one element left over, which can only be partitioned one way.
-
-Finally, if the first group is of size three, there are no elements left over.
-
-Thus we have $1 \\times 2 + 2 \\times 1 + 1 = 5$ ways to partition a set of three elements.
-
-Three:
 <img src="/post/genji-ko_files/counting_partitions3.png">
 
-Let's do that for a set of four elements. The first group is of size 1, 2, 3, or 4.
+Thus we have $1 \\times 2 + 2 \\times 1 + 1 = 5$ ways to partition a set of
+three elements.
 
-There's only one way to choose a first group of size one, and there are three elements left over,
-which we showed above can be partitioned five different ways.
+This is starting to look like a repeatable strategy. We always start by
+focusing on the first element. We can neatly divide the set of all possible
+solutions by the size $k$ of the group containing this first element. For each
+$k$ between $1$ and $n$, there are two questions to ask:
 
-For a first group of size two, we have a choice of three possible elements for other
-element of the first group. Regardless of which we pick, we'll have two left
-over, and we know there are two ways to partition a set of two elements. Thus
-there are $3 \\times 2 = 6$ partitions where the first group is size two.
+1. How many ways are there of choosing the set that contains the first element?
+2. How many ways are there of putting the remaining $n-k$ elements into groups?
 
-There are three ways to pick a first group of size three, because we are essentially
-picking which of {2, 3, 4} to leave out. Regardless of how we pick, there is one
-element left over, which can only be partitioned one way.
+Let's try that out for $n = 4$. The other cases are obvious, but let's focus on
+the case where $k = 2$ as there's a new wrinkle there. We have to choose one
+other element from three possible elements, so there are three ways of doing
+that. We'll always have two left over, and there are always two ways of
+grouping those together. This these are two independent choices - choosing the
+first group, then choosing how to partition the remaining elements, there are
+$3 \\times 2 = 6$ ways of doing that. This case teaches us that we have to count
+both the ways of selecting a set of $k$ elements, *and* the ways to group the
+remaining elements, and multiply them together.
 
-Finally, there is only one way to pick a first group of size four, and with no
-elements left over, this gives us only one way to partition the set.
-
-So the total number of ways to partition a set of size 4 is 
-$1 \\times 5 + 3 \\times 2 + 3 \\times 1 + 1 = 15$.
-
-
-Four:
 <img src="/post/genji-ko_files/counting_partitions4.png">
 
-Let's ask ourselves exactly what we're counting, anyway. Each pattern divides
-the five incenses into a number of distinct groups. Each of incense belongs
-to one and only one group, and every incense belongs to at least one group.
-Within each group, there's no particular *order* to the incenses that belong
-to that group - an incense either belongs to a group or it doesn't, it isn't
-the first or last of a group. Equally, there's no particular order to the
-groups themselves - putting incense 1, 2, 3 into the first group and 4 and 5
-into the other is the same as putting 4 and 5 in the first group and 1, 2, 3
-and into the second.
+So, for $n = 4$, there are $1 \\times 5 + 3 \\times 2 + 3 \\times 1 + 1 = 15$
+possible solutions.
 
-In mathematical language, an object which is a collection of other objects
-in no particular order so that only membership matters is called a *set*. Let's
-model our problem by starting with a set of five distinct elements that we'll
-call $I$ after "incense:"
 
-\\[
-    I = \\{ 1, 2, 3, 4, 5 \\}
-\\]
+Mathematical Approach
+---------------------
 
-Each group of a genji-kō solution is a *subset* of $I$. Furthermore, since the
-genji-kō pattern consists of subsets of $I$ in no particular order, we can
-model it as a set too - a set containing other sets.
+For the case of $n = 5$, I've 
+<a href="/post/genji-ko_files/counting_partitions5.png" target="_blank">drawn out the diagram</a>
+showing how to use the same strategy to count all possible Genji-mon,
+but I think it's more useful to take the strategy we've learned and abstract it.
 
-For example, we could write the 9th genji-kō Sakaki (賢木) as 
+First, let's use the right terminology. What we've so far called a "Genji-kō solution,"
+mathematicians would call a [partition][P]. In mathematical terms, the question
+we're asking is, "How many distinct partitions are there for a set of $n$ elements?"
+This number also has a name: the [Bell number][BN] denotated $B\_n$. 
 
-\\[
-    G\_9 = \\{ \\{1, 2, 3\\}, \\{4, 5\\} \\}
-\\]
-
-More generally, each genji-kō is given as 
+Above, we brute-forced a calculation for $B\_1$ through $B\_4$ using a mix of
+intuition and common sense. To formalize the strategy we discovered into
+mathematical notation, we'll need one concept you may or may not have seen: "the number
+of ways to choose $k$ elements from $n$ distinct elements, ignoring order" is
+called "$n$ choose $k$" or the [binomial coefficient][BC] and is denoted $nCk$
+or with this tall bracket notation:
 
 \\[
-    G = \\{ S\_1, S\_2, \dots, S\_k \\}
+    \\binom{n}{k} = \\frac{n!}{k! (n-k)!}
 \\]
-where each $S\_i$ is a subset of $I$:
+
+There are many ways of deriving the equation in terms of factorials, but here's
+one I like: imagine we put all $n$ elements in order; there are $n!$ ways of
+doing that. Then we always take the $k$ leftmost elements for our choice. However,
+because order doesn't matter, we divided by all the different ways of ordering
+the $k$ chosen elements, which is $k!$, and the $n-k$ remaining elements, which
+is $(n-k)!$. 
+
+With that tool in hand, we start can start to define the Bell numbers. The first
+couple can be treated as special cases, since obviously there's only one way
+to partition a set of zero or one elements:
 
 \\[
-    \forall i, S\_ \neq \emptyset \\land S\_i  \subseteq I
+    B\_0 = 1,  B\_1 = 1
 \\]
 
-Furthermore, we require that no two groups overlap:
+For $n > 1$, we generalize the strategy we discovered above:
+
+1. Pick an arbitrary element to represent the "first element."
+2. We'll call whichever set in the partition that contains this first element
+   the "first set." Every element is in exactly one set of the partition, so this
+   uniquely picks out a particular set in the partition.
+3. For each $k$ between $1$ and $n$, consider only partitions where the first
+   set is of size $k$. This divides the problem up into non-overlapping buckets:
+   if two partitions have different sized first set, they cannot 
+   possibly be the same.
+4. We have to make a choice about the other $k-1$ elements to include in the
+   first set, and there are $\\binom{n-1}{k-1}$ ways of doing that.
+5. Regardless of which elements we choose for the first set, there will 
+   be $n-k$ elements left over. They won't always be the same elements,
+   but there will always be $n-k$ of them. Thankfully, we already know how many ways
+   there are to partition a set of $n-k$ elements: it's $B\_{n-k}$.
+6. Since our choices for step 4 and step 5 are independent, we can *multiply*
+   the two counts together to get the total number of partitions where the
+   first set is of size $k$.
+7. Finally, we just have to add up everything for $k$ from $1$ to $n$.
+
+In concise mathematical notation, this algorithm is:
 
 \\[
-    \forall x, y \in G, \, x \neq y \implies x \cap y = \emptyset
+    B\_{n} = \sum\_{k=1}^{n} \binom{n-1}{k-1} B\_{n-k}   \\tag{1}
 \\]
 
-and all the groups unioned together covers $I$:
+We can make this a little neater if we run $k$ from $0$ to $n-1$ instead and
+use the fact that $\binom{n}{r} = \binom{n}{n-r}$ to count down instead of up:
 
 \\[
-    \bigcup\_{S \in G} S = I
+    B\_{n} = \sum\_{k=0}^{n-1} \binom{n-1}{k} B\_{k}     \\tag{2}
 \\]
 
-This particular structure as a name: it's called a *partition* of $I$. The
-combinatorics of partitions is well-known, so we could just look the formulas
-up. But let's see if we can continue our analysis.
-
-We know that partitions of $I$ exist, by construction. For example, we could
-put each incense in its own group: 
-$\\{ \\{1\\},\\{2\\}, \\{3\\}, \\{4\\}, \\{5\\} \\}$
-or lump them into one big group: 
-$\\{ 1, 2, 3, 4, 5\\}$. 
-The task is to count
-them in a more systematic way. 
-
-Here, as is often the case in mathematics, the problem is made easier by
-abstracting it. Instead of focusing on sets of five elements, let's ask how we
-can count to partitions of any set consisting of a finite number of distinct
-elements. Let's give it a name: for reasons that will become clear in a moment,
-we'll call the number of partitions of a set of $k$ distinct elements $B\_k$. 
-
-The first couple are easy: it's easy to see that the only way to partition an
-empty set is $\\{\\}$, and the only way to partition a set with one element
-$\\{a\\}$ is $\\{ \\{a\\} \\}$. If you're not sure why, refer to the above
-definition of a partition, particularly the part where we require that the
-subsets be non-empty, and try to convince yourself this is true.
+Substituting $n+1$ for $n$ we can put the recurrence relation in an even tidier
+form, which is the canonical form you'll find in textbooks:
 
 \\[
-    B\_0 = 1
+    B\_{n+1} = \sum\_{k=0}^n \binom{n}{k} B\_k           \\tag{3}
 \\]
 
-and
+Equation $(3)$ looks a little cleaner and easier to work with, and can be
+understood intuitively if you reconceptualize $k$ not as the number of elements
+in the first group, but as the number of elements *not* in the first group.
+Shifting to calculating $B\_{n+1}$ also allows us to get rid of the "minus
+ones" in the original that made the expression seem messy. However, it's a
+little divorced from the intuition about pinning the size of the first set we
+used to motivate $(1)$ although of course they're completely equivalent
+mathematically.
+
+Of these three equivalent equations, $(2)$ is the most natural fit for a Python
+implementation because `range(n)` naturally runs from `0` to `n-1` and it makes
+far more sense to implement a function for $B\_n$ instead of $B\_{n+1}$:
+
+```python
+def bell_number(n: int) -> int:
+    """Calculate Bell's number $B_n$ for any integer `n`."""
+    if n < 0:
+        raise ValueError("The Bell number is not defined for n < 0.")
+    elif n < 2:
+        return 1
+    else:
+        return sum(
+            comb(n-1, k) * bell_number(k)
+            for k in range(n)
+        )
+```
+
+
+(Optimizing this function is left as a exercise to the reader, who may find the
+techniques described in the earlier article on writing [a fairly fast Fibonacci
+function][FFFF] helpful.)
+
+We can use it to calculate the first 20 Bell numbers:
+
+<style>
+    html .article #bell-table table td,
+    html .article #bell-table table th
+    {
+        text-align: center;
+        font-size: 100%;
+    }
+</style>
+<div id="bell-table" style="width: 40%; margin: auto">
+    <table>
+        <thead>
+            <tr>
+                <th>$n$</th>
+                <th>$B\_n$</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">5</td>
+                <td style="font-weight: bold;">52</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>203</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>877</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>4,140</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>21,147</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>115,975</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>678,570</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>4,213,597</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>27,644,437</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>190,899,322</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>1,382,958,545</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>10,480,142,147</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>82,864,869,804</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>682,076,806,159</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>5,832,742,205,057</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>51,724,158,235,372</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+And there it is: $B\_5 = 52$, so there are exactly 52 Genji-mon, no more and
+no fewer.
+
+
+Asymptotic Behavior
+-------------------
+
+As you can see, Bell numbers grow very fast. The asymptotic growth is approximately:
 
 \\[
-    B\_1 = 1
+    B\_n \\sim \\frac{1}{\\sqrt{2 \\pi n}} \\left( \\frac{n}{\\ln n} \\right)^n
 \\]
 
-Returning to the general case of $B\_k$ for $k>1$, we know that our partition
-is going to have at least one group in it, so let's focus on that first group
-for a second, and ignore any other groups for now. How many ways are there
-of selecting just that first group?
-
-Well, it depends on how big that first group is. It's non-empty, so it must be greater than
-one, and of course it must be less than k. So we have $1 \ge |S\_1| \ge k$. 
-
-Again, 
+Which is just a tiny bit slower than factorials (as you can see if you compare
+it to [Stirling's approximation][SA].)
 
 
+Conclusion
+----------
 
-
-\\[
-    B\_{n+1} = \sum\_{k=0}^n \binom{n}{k} B\_k
-\\]
+It's not too surprising that some of these mathematics were worked out over
+seven hundred years ago; combinatorics is an easy branch to stumble into when
+it arises in connection to some practical problem. It does, however, feel
+slightly surreal that it was a bunch of bored nobles playing an esoteric parlor
+game who first noticed these patterns and used it to attach literary
+significance to their activities. But I'm happy they did so, because they did
+something we mere bean counters would not have thought to do: they made them
+beautiful.
 
 
 Appendix A: Alternative Genji-Kō Chart<a name="chart"></a>
@@ -569,7 +717,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">2</td>
                 <td class="genjiko-kanji">帚木</td>
                 <td class="genjiko-romaji">Hōkigi</td>
-                <td class="genjiko-english">The Broom-Tree</td>
+                <td class="genjiko-english">The Broom Tree</td>
                 <td class="genjiko-partition">{1}, {2}, {3}, {4}, {5}</td>
                 <td class="genjiko-icon">B</td>
             </tr>
@@ -596,7 +744,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">5</td>
                 <td class="genjiko-kanji">若紫</td>
                 <td class="genjiko-romaji">Wakamurasaki</td>
-                <td class="genjiko-english">Murasaki</td>
+                <td class="genjiko-english">Young Murasaki</td>
                 <td class="genjiko-partition">{1}, {2, 3}, {4, 5}</td>
                 <td class="genjiko-icon">E</td>
             </tr>
@@ -605,7 +753,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">6</td>
                 <td class="genjiko-kanji">末摘花</td>
                 <td class="genjiko-romaji">Suetsumuhana</td>
-                <td class="genjiko-english">The Saffron-Flower</td>
+                <td class="genjiko-english">The Saffron Flower</td>
                 <td class="genjiko-partition">{1, 2, 3, 4}, {5}</td>
                 <td class="genjiko-icon">F</td>
             </tr>
@@ -713,7 +861,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">18</td>
                 <td class="genjiko-kanji">松風</td>
                 <td class="genjiko-romaji">Matsukaze</td>
-                <td class="genjiko-english">The Wind in the Pine-Trees</td>
+                <td class="genjiko-english">The Wind in the Pine Trees</td>
                 <td class="genjiko-partition">{1, 2}, {3, 4}, {5}</td>
                 <td class="genjiko-icon">R</td>
             </tr>
@@ -839,7 +987,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">32</td>
                 <td class="genjiko-kanji">梅枝</td>
                 <td class="genjiko-romaji">Umegae</td>
-                <td class="genjiko-english">The Spray of Plum-Blossom</td>
+                <td class="genjiko-english">The Spray of Plum Blossom</td>
                 <td class="genjiko-partition">{1, 2, 3, 5}, {4}</td>
                 <td class="genjiko-icon">f</td>
             </tr>
@@ -965,7 +1113,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">46</td>
                 <td class="genjiko-kanji">椎本</td>
                 <td class="genjiko-romaji">Shiigamoto</td>
-                <td class="genjiko-english">At the Foot of the Oak-Tree</td>
+                <td class="genjiko-english">At the Foot of the Oak Tree</td>
                 <td class="genjiko-partition">{1, 4}, {2, 3}, {5}</td>
                 <td class="genjiko-icon">t</td>
             </tr>
@@ -983,7 +1131,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">48</td>
                 <td class="genjiko-kanji">早蕨</td>
                 <td class="genjiko-romaji">Sawarabi</td>
-                <td class="genjiko-english">Fern-Shoots</td>
+                <td class="genjiko-english">Fern Shoots</td>
                 <td class="genjiko-partition">{1, 2}, {3, 5}, {4}</td>
                 <td class="genjiko-icon">v</td>
             </tr>
@@ -1019,7 +1167,7 @@ is because the chapter title is the proper name of one of the characters from
                 <td class="genjiko-chapter">52</td>
                 <td class="genjiko-kanji">蜻蛉</td>
                 <td class="genjiko-romaji">Kagerō</td>
-                <td class="genjiko-english">The Gossamer-Fly</td>
+                <td class="genjiko-english">The Gossamer Fly</td>
                 <td class="genjiko-partition">{1, 3, 5}, {2, 4}</td>
                 <td class="genjiko-icon">z</td>
             </tr>
@@ -1038,13 +1186,15 @@ is because the chapter title is the proper name of one of the characters from
 </div>
 
 
-Appendix C: Popularity of Names for Genji-Kō Patterns<a name="names"></a>
------------------------------------------------------
+Appendix C: Popularity of Names for Genji-Kō Pattern
+----------------------------------------------------
 
+<p id="names">
 This table is included merely to illustrate the variety of legitimate ways
-to refer to the patterns used in genji-kō, and to justify my choice to
-standardize on genji-mon. Click on any of the kanji to link directly to
+to refer to the patterns used in Genji-kō, and to justify my choice to
+standardize on Genji-mon. Click on any of the kanji to link directly to
 the Google Image Search for that name.
+</p>
 
 <table>
   <thead>
@@ -1089,19 +1239,27 @@ the Google Image Search for that name.
   </tbody>
 </table>
 
+
 Footnotes
 ---------
 
 <p id="footnote">
   <sup><a href="#maintext">*</a></sup>
-  I know I should cite the creators of these images, but I have not done so to spare any potential embarrassment.
+  I know I should cite the creators of these misguided images, but I have not done so to spare any potential embarrassment.
   You can find the originals through Google, if you're curious.
-  <a href="#maintext">Back to the main text</a>
+  <a href="#maintext">Back</a>
 </p>
 
-[TG]: https://en.wikipedia.org/wiki/The_Tale_of_Genji
+
+[BC]: https://en.wikipedia.org/wiki/Binomial_coefficient
+[BN]: https://en.wikipedia.org/wiki/Bell_number
 [CAM]: https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052
+[CGK]: /post/genji-ko_files/cheap_genjiko_kimono.jpg
+[FFFF]: /post/fibonacci/
 [KV]: https://www.youtube.com/watch?v=wpDb5LhvvSM
 [MNNK8]: https://www.imdb.com/title/tt2076558/
+[P]: https://en.wikipedia.org/wiki/Partition_of_a_set
+[SA]: https://en.wikipedia.org/wiki/Stirling%27s_approximation
+[TG]: https://en.wikipedia.org/wiki/The_Tale_of_Genji
 [UK]: https://en.wikipedia.org/wiki/Kunisada
 

@@ -1,9 +1,9 @@
-Chapter,Kanji,Romaji,English,Partition,Icon,Genjiko,Color
-2,帚木,Hōkigi,The Broom-Tree,"[{1}, {2}, {3}, {4}, {5}]",B,"[(1.0, {1}), (1.0, {2}), (1.0, {3}), (1.0, {4}), (1.0, {5})]",black
+Chapter,Kanji,Romaji,English,Partition,Icon,Layout,Color
+2,帚木,Hōkigi,The Broom Tree,"[{1}, {2}, {3}, {4}, {5}]",B,"[(1.0, {1}), (1.0, {2}), (1.0, {3}), (1.0, {4}), (1.0, {5})]",black
 3,空蝉,Utsusemi,Utsusemi,"[{1}, {2}, {3}, {4, 5}]",C,"[(1.0, {1}), (1.0, {2}), (1.0, {3}), (1.0, {4, 5})]",black
-4,夕顔,Yūgao,Yugao,"[{1}, {2}, {3, 4}, {5}]",D,"[(1.0, {1}), (1.0, {2}), (1.0, {3, 4}), (1.0, {5})]",black
-5,若紫,Wakamurasaki,Murasaki,"[{1}, {2, 3}, {4, 5}]",E,"[(1.0, {1}), (1.0, {2, 3}), (1.0, {4, 5})]",black
-6,末摘花,Suetsumuhana,The Saffron-Flower,"[{1, 2, 3, 4}, {5}]",F,"[(1.0, {1, 2, 3, 4}), (1.0, {5})]",black
+4,夕顔,Yūgao,Yūgao,"[{1}, {2}, {3, 4}, {5}]",D,"[(1.0, {1}), (1.0, {2}), (1.0, {3, 4}), (1.0, {5})]",black
+5,若紫,Wakamurasaki,Young Murasaki,"[{1}, {2, 3}, {4, 5}]",E,"[(1.0, {1}), (1.0, {2, 3}), (1.0, {4, 5})]",black
+6,末摘花,Suetsumuhana,The Saffron Flower,"[{1, 2, 3, 4}, {5}]",F,"[(1.0, {1, 2, 3, 4}), (1.0, {5})]",black
 7,紅葉賀,Momijinoga,The Festival of Red Leaves,"[{1}, {2, 3, 5}, {4}]",G,"[(1.0, {1}), (1.0, {2, 3, 5}), (0.8, {4})]",black
 8,花宴,Hana no en,The Flower Feast,"[{1}, {2}, {3, 5}, {4}]",H,"[(1.0, {1}), (1.0, {2}), (1.0, {3, 5}), (0.8, {4})]",black
 9,葵,Aoi,Aoi,"[{1, 2}, {3}, {4}, {5}]",I,"[(1.0, {1, 2}), (1.0, {3}), (1.0, {4}), (1.0, {5})]",black
@@ -15,7 +15,7 @@ Chapter,Kanji,Romaji,English,Partition,Icon,Genjiko,Color
 15,蓬生,Yomogiu,The Palace in the Tangled Woods,"[{1, 2, 3}, {4}, {5}]",O,"[(1.0, {1, 2, 3}), (1.0, {4}), (1.0, {5})]",black
 16,関屋,Sekiya,A Meeting at the Frontier,"[{1}, {2, 3, 4}, {5}]",P,"[(1.0, {1}), (1.0, {2, 3, 4}), (1.0, {5})]",black
 17,絵合,Eawase,The Picture Competition,"[{1, 3}, {2, 5}, {4}]",Q,"[(0.8, {1, 3}), (1.0, {2, 5}), (0.8, {4})]",black
-18,松風,Matsukaze,The Wind in the Pine-Trees,"[{1, 2}, {3, 4}, {5}]",R,"[(1.0, {1, 2}), (1.0, {3, 4}), (1.0, {5})]",black
+18,松風,Matsukaze,The Wind in the Pine Trees,"[{1, 2}, {3, 4}, {5}]",R,"[(1.0, {1, 2}), (1.0, {3, 4}), (1.0, {5})]",black
 19,薄雲,Usugumo,A Wreath of Cloud,"[{1}, {2, 3, 4, 5}]",S,"[(1.0, {1}), (1.0, {2, 3, 4, 5})]",black
 20,朝顔,Asagao,Asagao,"[{1, 3, 4}, {2}, {5}]",T,"[(1.0, {1, 3, 4}), (0.8, {2}), (1.0, {5})]",black
 21,乙女,Otome,The Maiden,"[{1, 3}, {2}, {4}, {5}]",U,"[(1.0, {1, 3}), (0.8, {2}), (1.0, {4}), (1.0, {5})]",black
@@ -29,25 +29,25 @@ Chapter,Kanji,Romaji,English,Partition,Icon,Genjiko,Color
 29,御幸,Miyuki,The Royal Visit,"[{1, 3}, {2, 4, 5}]",c,"[(1.0, {1, 3}), (0.8, {2, 4, 5})]",black
 30,藤袴,Fujibakama,Blue Trousers,"[{1, 4}, {2}, {3}, {5}]",d,"[(1.0, {1, 4}), (0.8, {2}), (0.8, {3}), (1.0, {5})]",black
 31,真木柱,Makibashira,Makibashira,"[{1, 5}, {2, 4}, {3}]",e,"[(1.0, {1, 5}), (0.8, {2, 4}), (0.6, {3})]",black
-32,梅枝,Umegae,The Spray of Plum-Blossom,"[{1, 2, 3, 5}, {4}]",f,"[(1.0, {1, 2, 3, 5}), (0.8, {4})]",black
+32,梅枝,Umegae,The Spray of Plum Blossom,"[{1, 2, 3, 5}, {4}]",f,"[(1.0, {1, 2, 3, 5}), (0.8, {4})]",black
 33,藤裏葉,Fuji no uraba,Fuji no Uraba,"[{1}, {2, 5}, {3, 4}]",g,"[(1.0, {1}), (1.0, {2, 5}), (0.8, {3, 4})]",black
 34,若菜上,Wakana jō,"Wakana, Part I","[{1, 2, 5}, {3, 4}]",h,"[(1.0, {1, 2, 5}), (0.8, {3, 4})]",black
 35,若菜下,Wakana ge,"Wakana, Part II","[{1, 3}, {2}, {4, 5}]",i,"[(1.0, {1, 3}), (0.8, {2}), (1.0, {4, 5})]",black
 36,柏木,Kashiwagi,Kashiwagi,"[{1, 3, 5}, {2}, {4}]",j,"[(1.0, {1, 3, 5}), (0.8, {2}), (0.8, {4})]",black
 37,横笛,Yokobue,The Flute,"[{1, 4, 5}, {2}, {3}]",k,"[(1.0, {1, 4, 5}), (0.8, {2}), (0.8, {3})]",black
 38,鈴虫,Suzumushi,The Bell Cricket,"[{1, 5}, {2}, {3, 4}]",l,"[(1.0, {1, 5}), (0.8, {2}), (0.8, {3, 4})]",black
-39,夕霧,Yūgiri,Yugiri,"[{1, 4}, {2}, {3, 5}]",m,"[(0.8, {1, 4}), (0.6, {2}), (1.0, {3, 5})]",red
+39,夕霧,Yūgiri,Yūgiri,"[{1, 4}, {2}, {3, 5}]",m,"[(0.8, {1, 4}), (0.6, {2}), (1.0, {3, 5})]",red
 40,御法,Minori,The Law,"[{1, 4}, {2, 5}, {3}]",n,"[(1.0, {1, 4}), (0.8, {2, 5}), (0.6, {3})]",black
 41,幻,Maboroshi,Mirage,"[{1, 5}, {2}, {3}, {4}]",o,"[(1.0, {1, 5}), (0.8, {2}), (0.8, {3}), (0.8, {4})]",black
 42,匂宮,Nioumiya,Niou,"[{1, 2, 4}, {3, 5}]",p,"[(0.8, {1, 2, 4}), (1.0, {3, 5})]",red
-43,紅梅,Kōbai,Kobai,"[{1}, {2, 5}, {3}, {4}]",q,"[(1.0, {1}), (1.0, {2, 5}), (0.8, {3}), (0.8, {4})]",black
+43,紅梅,Kōbai,Kōbai,"[{1}, {2, 5}, {3}, {4}]",q,"[(1.0, {1}), (1.0, {2, 5}), (0.8, {3}), (0.8, {4})]",black
 44,竹河,Takekawa,Bamboo River,"[{1, 5}, {2, 3, 4}]",r,"[(1.0, {1, 5}), (0.8, {2, 3, 4})]",black
 45,橋姫,Hashihime,The Bridge Maiden,"[{1, 3, 4, 5}, {2}]",s,"[(1.0, {1, 3, 4, 5}), (0.8, {2})]",black
-46,椎本,Shiigamoto,At the Foot of the Oak-Tree,"[{1, 4}, {2, 3}, {5}]",t,"[(1.0, {1, 4}), (0.8, {2, 3}), (1.0, {5})]",black
+46,椎本,Shiigamoto,At the Foot of the Oak Tree,"[{1, 4}, {2, 3}, {5}]",t,"[(1.0, {1, 4}), (0.8, {2, 3}), (1.0, {5})]",black
 47,総角,Agemaki,Agemaki,"[{1, 4, 5}, {2, 3}]",u,"[(1.0, {1, 4, 5}), (0.8, {2, 3})]",black
-48,早蕨,Sawarabi,Fern-Shoots,"[{1, 2}, {3, 5}, {4}]",v,"[(1.0, {1, 2}), (1.0, {3, 5}), (0.8, {4})]",black
+48,早蕨,Sawarabi,Fern Shoots,"[{1, 2}, {3, 5}, {4}]",v,"[(1.0, {1, 2}), (1.0, {3, 5}), (0.8, {4})]",black
 49,宿木,Yadorigi,The Mistletoe,"[{1, 2, 4, 5}, {3}]",w,"[(1.0, {1, 2, 4, 5}), (0.8, {3})]",black
 50,東屋,Azumaya,The Eastern House,"[{1, 2, 5}, {3}, {4}]",x,"[(1.0, {1, 2, 5}), (0.8, {3}), (0.8, {4})]",black
 51,浮舟,Ukifune,Ukifune,"[{1, 5}, {2, 3}, {4}]",y,"[(1.0, {1, 5}), (0.8, {2, 3}), (0.8, {4})]",black
-52,蜻蛉,Kagerō,The Gossamer-Fly,"[{1, 3, 5}, {2, 4}]",z,"[(1.0, {1, 3, 5}), (0.8, {2, 4})]",black
-53,手習,Tenarai,Writing-Practice,"[{1, 2, 3, 4, 5}]",1,"[(1.0, {1, 2, 3, 4, 5})]",black
+52,蜻蛉,Kagerō,The Gossamer Fly,"[{1, 3, 5}, {2, 4}]",z,"[(1.0, {1, 3, 5}), (0.8, {2, 4})]",black
+53,手習,Tenarai,Writing Practice,"[{1, 2, 3, 4, 5}]",1,"[(1.0, {1, 2, 3, 4, 5})]",black
