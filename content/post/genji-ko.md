@@ -300,11 +300,12 @@ nesting and creates a three-level structure when two would have sufficed:
 The cost-based optimizer would have never chosen that layout because its most
 basic tenet is to make the groups as tall as possible. A heuristic, let me 
 remind you, that holds for the other 51 Genji-mon. However, all the examples
-of Yuguri I found online use the traditional design, and [Kunisada][UK] himself
-used it on his Yugiri wall scroll:
+of Yuguri I found online use the traditional design, such as this 
+<a href="/post/genji-ko_files/yugiri_wall_scroll.png" target="_blank">wall scroll</a>
+by [Kunisada][UK] or this woodblock print by [Masao Maeda][MM]:
 
-<a href="/post/genji-ko_files/yugiri_wall_scroll.png" target="_blank">
-<img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
+<a href="/post/genji-ko_files/yuguri_woodblock_print.png" target="_blank">
+<img style="height: 75%; width: 75%;" src="/post/genji-ko_files/yuguri_woodblock_print.png">
 </a>
 
 So I don't think I have a leg to stand on unless I want to spit in the face of
@@ -1257,6 +1258,7 @@ Footnotes
 [CGK]: /post/genji-ko_files/cheap_genjiko_kimono.jpg
 [FFFF]: /post/fibonacci/
 [KV]: https://www.youtube.com/watch?v=wpDb5LhvvSM
+[MM]: https://en.wikipedia.org/wiki/Masao_Maeda
 [MNNK8]: https://www.imdb.com/title/tt2076558/
 [P]: https://en.wikipedia.org/wiki/Partition_of_a_set
 [SA]: https://en.wikipedia.org/wiki/Stirling%27s_approximation
