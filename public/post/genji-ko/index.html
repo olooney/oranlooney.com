@@ -73,7 +73,7 @@ There has never been a group of people in any time or place who were so keen to 
         <li class="article-meta-author">
             by <a href="/about/">Oran Looney</a>
         </li>
-        <li class="article-meta-date"><time>October 30, 2024</time></li>
+        <li class="article-meta-date"><time>November 26, 2024</time></li>
         <li class="article-meta-tags">
           <a href="/tags/python/">
             <i class="fas fa-tag"></i>
@@ -109,10 +109,10 @@ There has never been a group of people in any time or place who were so keen to 
 <li><a href="#conclusion">Conclusion</a></li>
 <li><a href="#appendices">Appendices</a>
 <ul>
-<li><a href="#appendix-a-alternative-genji-kō-chart-a-name-chart-a">Appendix A: Alternative Genji-Kō Chart<a name="chart"></a></a></li>
-<li><a href="#appendix-b-full-table-a-name-table-a">Appendix B: Full Table<a name="table"></a></a></li>
-<li><a href="#appendix-c-names-for-genji-kō-pattern">Appendix C: Names for Genji-Kō Pattern</a></li>
-<li><a href="#appendix-d-asymptotic-behavior">Appendix D: Asymptotic Behavior</a></li>
+<li><a href="#appendix-a-source-code">Appendix A: Source Code</a></li>
+<li><a href="#appendix-b-alternative-genji-kō-chart-a-name-chart-a">Appendix B: Alternative Genji-Kō Chart<a name="chart"></a></a></li>
+<li><a href="#appendix-d-names-for-genji-kō-pattern">Appendix D: Names for Genji-Kō Pattern</a></li>
+<li><a href="#appendix-e-asymptotic-behavior">Appendix E: Asymptotic Behavior</a></li>
 </ul></li>
 <li><a href="#footnotes">Footnotes</a></li>
 </ul></li>
@@ -246,9 +246,9 @@ such as this kōdō set, incense box, or incense holder:</p>
 <img style="display:inline; padding: 0px; height: 400px;" src="/post/genji-ko_files/incense_holder.jpg">
 </div>
 
-<p><a href="https://en.wikipedia.org/wiki/Kunisada">Utagawa Kunisada</a>, circa 1843, painted a series of wall scolls, one for
-each chapter of <a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji"><em>The Tale of Genji</em></a>, and included the associated
-Genji-mon on each:</p>
+<p>In the 1840&rsquo;s <a href="https://en.wikipedia.org/wiki/Kunisada">Kunisada</a> painted a series of wall scolls, one for each
+chapter of <a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji"><em>The Tale of Genji</em></a>, and included the associated Genji-mon on
+each:</p>
 
 <p><a href="/post/genji-ko_files/minori_wall_scroll.png" target="_blank">
 <img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
@@ -339,6 +339,10 @@ get rid of the remaining special cases, which I&rsquo;ll discuss below.)</p>
     return best_genjiko
 </code></pre>
 
+<p>Actually <a href="https://github.com/olooney/genjiko/blob/main/src/genjiko.py#L122">drawing these using Pillow</a> or <a href="https://github.com/olooney/genjiko/blob/main/src/genjiko.py#L270">organizing them into a
+grid</a> is straight-forward, so you can check the source code if you&rsquo;re
+interested in those details.</p>
+
 <p>Here&rsquo;s what we get if always use the algorithmically calculated &ldquo;optimal&rdquo;
 layout and simply put them in the order returned by <code>partitions()</code>:</p>
 
@@ -360,7 +364,8 @@ cases where the order is clearly arbitrary.</p>
 
 <p>I found a several references that put the Genji-mon in a different order, and
 even some that tried to stretch it to 54 using some kind of
-<a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a> or introducing
+<a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a>
+or introducing
 <a target="_blank" href="/post/genji-ko_files/irregular.jpg">irregular</a>
 patterns.<sup><a href="#footnote2">*</a></sup>
 If we recall the original purpose they served in the game, though, this is
@@ -373,7 +378,7 @@ centuries back. Also, the order of the chapters is mostly consistent across
 sources (there is some disagreement about the order of the later chapters, and
 one chapter which survives only as a title or perhaps was intentionally elided
 as a delicate way to elude to a character&rsquo;s death) so I&rsquo;ve put my Genji-mon in
-chapter order.</p>
+chapter order. You can find the full table in <a href="#table">Appendix C</a>.</p>
 
 <h2 id="special-cases">Special Cases</h2>
 
@@ -720,14 +725,20 @@ it arises in connection to some practical problem. It does, however, feel
 slightly surreal that it was a bunch of bored nobles playing an esoteric parlor
 game who first noticed these patterns and used it to attach literary
 significance to their activities. But I&rsquo;m happy they did so, because they did
-something we mere bean counters would not have thought to do: they made them
+something we mere number crunchers would not have thought to do: they made them
 beautiful.</p>
 
 <hr>
 
 <h2 id="appendices">Appendices</h2>
 
-<h3 id="appendix-a-alternative-genji-kō-chart-a-name-chart-a">Appendix A: Alternative Genji-Kō Chart<a name="chart"></a></h3>
+<h3 id="appendix-a-source-code">Appendix A: Source Code</h3>
+
+<p>The full <a href="https://github.com/olooney/genjiko">source code</a> use for this article is available on GitHub. The
+main Python code is in <a href="https://github.com/olooney/genjiko/blob/main/src/genjiko.py">src/genjiko.py</a> and the <a href="https://github.com/olooney/genjiko/tree/main/notebooks">notebooks</a>
+directory contains many examples of usage.</p>
+
+<h3 id="appendix-b-alternative-genji-kō-chart-a-name-chart-a">Appendix B: Alternative Genji-Kō Chart<a name="chart"></a></h3>
 
 <p>Genji-mon are often rendered with thick lines which achieves an interesting
 effect with the negative space. By playing around with the parameters a little:</p>
@@ -751,19 +762,14 @@ draw_annotated_genjiko_grid(
 
 <p><img src="/post/genji-ko_files/genjiko_dense.png"></p>
 
-<h3 id="appendix-b-full-table-a-name-table-a">Appendix B: Full Table<a name="table"></a></h3>
+<h3 id="table">Appendix C: Full Table</h3>
 
-<p>The full table in HTML format, so you can copy-and-paste the kanji and other
+<p>Here is the full table in HTML format, so you can copy-and-paste the kanji and other
 fields. The Genji-mon column uses the <a href="https://www.illllli.com/font/symbol/genjiko/">Genji-Kō TrueType font available from
 illllli.com</a>.</p>
 
-<p>You can download this same table as a <a href="/post/genji-ko_files/genjiko.csv">UTF-8 encoded CSV file</a>
+<p>You can also download this same table as a <a href="/post/genji-ko_files/genjiko.csv">UTF-8 encoded CSV file</a>
 or <a href="/post/genji-ko_files/genjiko.xlsx">Excel spreadsheet</a>.</p>
-
-<p>Note: whenever the English column has apparently been left untranslated, that
-is because the chapter title is the proper name of one of the characters from
-<a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji"><em>The Tale of Genji</em></a>. Translating these would be as nonsensical as translating
-&ldquo;Jack Smith&rdquo; to &ldquo;Lifting Device Metal Worker.&rdquo;</p>
 
 <div class="genjiko-wrapper">
     <style>
@@ -1281,7 +1287,12 @@ is because the chapter title is the proper name of one of the characters from
     </table>
 </div>
 
-<h3 id="appendix-c-names-for-genji-kō-pattern">Appendix C: Names for Genji-Kō Pattern</h3>
+<p>Note that whenever the English column has apparently been left untranslated,
+this is because the chapter title is the proper name of one of the characters
+from <a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji"><em>The Tale of Genji</em></a>. Translating these would be as nonsensical as
+translating &ldquo;Jack Smith&rdquo; to &ldquo;Lifting Device Metal Worker.&rdquo;</p>
+
+<h3 id="appendix-d-names-for-genji-kō-pattern">Appendix D: Names for Genji-Kō Pattern</h3>
 
 <p id="names">
 This table is included merely to illustrate the variety of legitimate ways
@@ -1333,7 +1344,7 @@ the Google Image Search for that name.
   </tbody>
 </table>
 
-<h3 id="appendix-d-asymptotic-behavior">Appendix D: Asymptotic Behavior</h3>
+<h3 id="appendix-e-asymptotic-behavior">Appendix E: Asymptotic Behavior</h3>
 
 <p>The Bell numbers grow very fast. The asymptotic growth is approximately:</p>
 

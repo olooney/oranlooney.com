@@ -1,8 +1,8 @@
 ---
 title: "The Art and Mathematics of Genji-Kō"
 author: "Oran Looney"
-date: 2024-10-30
-publishdate: 2024-10-30
+date: 2024-11-26
+publishdate: 2024-11-26
 tags:
     - Python
     - Visualization
@@ -140,9 +140,9 @@ such as this kōdō set, incense box, or incense holder:
 <img style="display:inline; padding: 0px; height: 400px;" src="/post/genji-ko_files/incense_holder.jpg">
 </div>
 
-[Utagawa Kunisada][UK], circa 1843, painted a series of wall scolls, one for
-each chapter of [*The Tale of Genji*][TG], and included the associated
-Genji-mon on each:
+In the 1840's [Kunisada][UK] painted a series of wall scolls, one for each
+chapter of [*The Tale of Genji*][TG], and included the associated Genji-mon on
+each:
 
 <a href="/post/genji-ko_files/minori_wall_scroll.png" target="_blank">
 <img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
@@ -236,6 +236,10 @@ def optimal_genjiko_for_partition(
     return best_genjiko
 ```
 
+Actually [drawing these using Pillow][SCD] or [organizing them into a
+grid][SCG] is straight-forward, so you can check the source code if you're
+interested in those details.
+
 Here's what we get if always use the algorithmically calculated "optimal"
 layout and simply put them in the order returned by `partitions()`:
 
@@ -257,7 +261,8 @@ cases where the order is clearly arbitrary.
 
 I found a several references that put the Genji-mon in a different order, and
 even some that tried to stretch it to 54 using some kind of 
-<a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a> or introducing 
+<a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a>
+or introducing 
 <a target="_blank" href="/post/genji-ko_files/irregular.jpg">irregular</a> 
 patterns.<sup><a href="#footnote2">*</a></sup>
 If we recall the original purpose they served in the game, though, this is
@@ -271,7 +276,7 @@ centuries back. Also, the order of the chapters is mostly consistent across
 sources (there is some disagreement about the order of the later chapters, and
 one chapter which survives only as a title or perhaps was intentionally elided
 as a delicate way to elude to a character's death) so I've put my Genji-mon in
-chapter order.
+chapter order. You can find the full table in <a href="#table">Appendix C</a>.
 
 
 Special Cases
@@ -623,14 +628,20 @@ it arises in connection to some practical problem. It does, however, feel
 slightly surreal that it was a bunch of bored nobles playing an esoteric parlor
 game who first noticed these patterns and used it to attach literary
 significance to their activities. But I'm happy they did so, because they did
-something we mere bean counters would not have thought to do: they made them
+something we mere number crunchers would not have thought to do: they made them
 beautiful.
 
 <hr>
 
 ## Appendices
 
-### Appendix A: Alternative Genji-Kō Chart<a name="chart"></a>
+### Appendix A: Source Code
+
+The full [source code][SC] use for this article is available on GitHub. The
+main Python code is in [src/genjiko.py][GPY] and the [notebooks][SCN]
+directory contains many examples of usage.
+
+### Appendix B: Alternative Genji-Kō Chart<a name="chart"></a>
 
 Genji-mon are often rendered with thick lines which achieves an interesting
 effect with the negative space. By playing around with the parameters a little:
@@ -656,19 +667,14 @@ We can achieve a very attractive result:
 <img src="/post/genji-ko_files/genjiko_dense.png">
 
 
-### Appendix B: Full Table<a name="table"></a>
+<h3 id="table">Appendix C: Full Table</h3>
 
-The full table in HTML format, so you can copy-and-paste the kanji and other
+Here is the full table in HTML format, so you can copy-and-paste the kanji and other
 fields. The Genji-mon column uses the [Genji-Kō TrueType font available from
 illllli.com](https://www.illllli.com/font/symbol/genjiko/).
 
-You can download this same table as a [UTF-8 encoded CSV file](/post/genji-ko_files/genjiko.csv)
+You can also download this same table as a [UTF-8 encoded CSV file](/post/genji-ko_files/genjiko.csv)
 or [Excel spreadsheet](/post/genji-ko_files/genjiko.xlsx).
-
-Note: whenever the English column has apparently been left untranslated, that
-is because the chapter title is the proper name of one of the characters from
-[*The Tale of Genji*][TG]. Translating these would be as nonsensical as translating
-"Jack Smith" to "Lifting Device Metal Worker."
 
 <div class="genjiko-wrapper">
     <style>
@@ -1186,8 +1192,14 @@ is because the chapter title is the proper name of one of the characters from
     </table>
 </div>
 
+Note that whenever the English column has apparently been left untranslated,
+this is because the chapter title is the proper name of one of the characters
+from [*The Tale of Genji*][TG]. Translating these would be as nonsensical as
+translating "Jack Smith" to "Lifting Device Metal Worker."
 
-### Appendix C: Names for Genji-Kō Pattern
+
+
+### Appendix D: Names for Genji-Kō Pattern
 
 <p id="names">
 This table is included merely to illustrate the variety of legitimate ways
@@ -1240,7 +1252,7 @@ the Google Image Search for that name.
 </table>
 
 
-### Appendix D: Asymptotic Behavior
+### Appendix E: Asymptotic Behavior
 
 The Bell numbers grow very fast. The asymptotic growth is approximately:
 
@@ -1277,11 +1289,17 @@ Footnotes
 [CAM]: https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052
 [CGK]: /post/genji-ko_files/cheap_genjiko_kimono.jpg
 [FFFF]: /post/fibonacci/
+[GPY]: https://github.com/olooney/genjiko/blob/main/src/genjiko.py
 [KV]: https://www.youtube.com/watch?v=wpDb5LhvvSM
 [MM]: https://en.wikipedia.org/wiki/Masao_Maeda
 [MNNK8]: https://www.imdb.com/title/tt2076558/
 [P]: https://en.wikipedia.org/wiki/Partition_of_a_set
 [SA]: https://en.wikipedia.org/wiki/Stirling%27s_approximation
+[SCD]: https://github.com/olooney/genjiko/blob/main/src/genjiko.py#L122
+[SCG]: https://github.com/olooney/genjiko/blob/main/src/genjiko.py#L270
+[SCN]: https://github.com/olooney/genjiko/tree/main/notebooks
+[SC]: https://github.com/olooney/genjiko
 [TG]: https://en.wikipedia.org/wiki/The_Tale_of_Genji
 [UK]: https://en.wikipedia.org/wiki/Kunisada
+
 
