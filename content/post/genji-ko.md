@@ -28,13 +28,14 @@ weaponized it.
 
 Only under such conditions could something like Genji-kō (源氏香) arise. It is
 a parlor game played with incense - just one of many similar games inside the
-broader umbrella of kōdō (香道), the traditional art of incense appreciation. 
+broader umbrella of kōdō (香道), the traditional Japanese art of incense
+appreciation. 
 
-What sets Genji-kō apart is its extreme difficulty - where another game might
-have contestants write down their guesses for three separate incenses and score
-a point for each correct guess, Genji-kō asks contestants to smell five
+What sets Genji-kō apart is its extreme difficulty - where another kōdō game
+might have contestants write down their guesses for three separate incenses and
+score a point for each correct guess, Genji-kō asks contestants to smell five
 separate samples, then determine which of the five are the same. All five might
-be the same, or all five might be different, or (and this is where it gets
+be the same, all five might be different, or (and this is where it gets
 interesting) they might be in groups of two or three or four. For example, the
 correct solution might be that the first and fourth are the same, the second
 and fifth are the same, and the third in a group by itself. Or any other
@@ -52,7 +53,8 @@ article is about.
 Notation
 --------
 
-Every pattern has exactly five vertical lines, representing the five possible
+The solutions that Genji-kō players submit are called Genji-mon (源氏紋) and
+are drawn with exactly five vertical lines, representing the five possible
 incenses. To show that two or more incenses are part of the same group, you
 draw a horizontal line connecting the top of every vertical line in that group.
 To avoid confusion when there are two or more groups, you draw these horizontal
@@ -60,27 +62,24 @@ lines at different heights, shortening the vertical lines as needed:
 
 <img src="/post/genji-ko_files/examples.png">
 
-There are a few nuances to the notation worth mentioning. If two groups don't
-overlap, there is no need draw them at different heights (top center.) If one
-group is "contained" inside another, the inner group is drawn at the lower
-height (top right, bottom left) so that it appears nested inside the other. And
-in some cases, say when the groups are $\\{1, 3\\}, \\{2, 5\\}, \\{4\\}$
-(bottom center), it is impossible to avoid an intersection but we understand
-that the groups are still distinct because the horizontal connecting lines are
-at different heights.
-
+There are a few nuances worth mentioning. If two groups don't overlap, there is
+no need draw them at different heights (top center.) If one group is
+"contained" inside another, the inner group is drawn at the lower height (top
+right, bottom left) so that it appears nested inside the other. Sometimes it is
+impossible to avoid an intersection (bottom center) but it is clear that groups
+are distinct because the horizontal connecting lines are at different heights.
 
 Genji-Kō features as a plot point in [episode 8 of the experimental horror
 anime Mononoke][MNNK8], where it is suggested that players used blocks to
-record their solutions. 
+record their solutions:
 
 <img src="/post/genji-ko_files/blocks.png">
 
 While this might be true - the episodes description of Genji-Kō is otherwise
 grounded and well-researched - I haven't seen any other references to this;
-everything else I've seen suggests the game was played with ink and paper. I
-think it's probably just a case of artistic license - the blocks were more
-visually interesting to animate.
+everything else I've seen says the game was played with ink and paper. I think
+it's probably just a case of artistic license - the blocks were more visually
+interesting to animate.
 
 
 Etymology
@@ -92,25 +91,24 @@ name is also why I capitalize Genji-kō and Genji-mon.)
 
 There are two connections. First, in one chapter of the book Genji hosts an
 incense appreciation party. Second, since there are 52 possible patterns and 54
-chapters of the book, each pattern is traditionally associated with - and named
-after - each chapter (except for the first and last chapters, which are
-omitted.) Every educated person of the Muromachi era would be intimately
-familiar with [*The Tale of Genji*][TG] and would know the themes, season, and
-characters associated with each chapter by heart, giving each pattern a
-literary resonance. A skillful kōdō practitioner hosting a game of Genji-kō
-would choose a solution that referenced the current season or recent event,
-adding both a layer of meaning to the game and a hint to other skilled players.
+chapters of the book, each Genji-mon is traditionally associated with - and
+named after - a chapter, except for the first and last chapters, which are
+omitted. 
 
-Genji-kō refers to the specifically to the game and via synecdoche can also
-refer to the patterns themselves; however there are several other words we
-could use to more explicitly refer to the square, five-line visual patterns
-used as solutions in the Genji-kō game. I used Google to <a href="#names">count
-the number of search results for various options</a> and based on those
-results, I decided to call the patterns themselves Genji-mon in this article.
+Every educated person of the Muromachi era would be intimately familiar with
+[*The Tale of Genji*][TG] and would know the themes, season, and characters
+associated with each chapter by heart, giving each pattern a literary
+resonance. A skillful kōdō practitioner hosting a game of Genji-kō would choose
+a solution that referenced the current season or recent event, adding both a
+layer of meaning to the game and a hint to other skilled players.
+
+There are <a href="#names#">several different words</a> we could use to refer
+to the patterns themselves, but I've chosen Genji-mon as it seems to be the
+most common.
 
 
-Cultural Impact
----------------
+Cultural Influence
+------------------
 
 Compared to other traditional arts from the same era such as tea ceremony or
 flower arranging, kōdō is not particular popular or well-known even in Japan;
@@ -126,14 +124,15 @@ kimono:
 <img style="display:inline; padding: 0px;" src="/post/genji-ko_files/kimono.jpg">
 </div>
 
-[Cheaper fabrics][CGK] simply print the same Genji-mon repeatedly, but
-high-quality Genji-Kō textiles will use a variety of Genji-mon so that the
-pattern seems to never quite repeat:
+While 
+<a href="/post/genji-ko_files/cheap_genjiko_kimono.jpg" target="_blank">cheaper fabrics</a> 
+simply print the same Genji-mon repeatedly, high-quality Genji-Kō textiles will
+use a variety of Genji-mon so that the pattern seems to never quite repeat:
 
 <img src="/post/genji-ko_files/fabric.jpg">
 
-Naturally Genji-mon are often found on good related to incense or kōdō in some
-way, such as this kōdō set, incense box, or incense holder:
+Naturally, Genji-mon are often found on good related to incense in some way,
+such as this kōdō set, incense box, or incense holder:
 
 <div style="text-align: center">
 <img "display:inline; padding: 0px;" src="/post/genji-ko_files/incense_set.jpg">
@@ -153,9 +152,13 @@ Genji-mon on each:
 Drawing Genji-Mon
 -----------------
 
-TODO
+To draw Genji-Mon programatically, we'll use the standard recursive algorithm
+to generate all possible partitions for a set of five elements:
+
+<!--
 Knuth mentions them in the introduction to a [book on the history of combinatorics][CAM]:
 <img class="drop-shadow" style="height: 50%; width: 50%;" src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png">
+-->
 
 
 ```python
@@ -176,7 +179,21 @@ def partitions(s: Set[int]) -> Iterator[List[Set[int]]]:
             yield new_partition
 ```
 
-Optimal Genji-mon layouts for each partition:
+<p id="maintext1">
+However, the partition alone does not suffice to fully characterize a Genji-mon.
+While we must draw overlapping groups at different heights to avoid ambiguity,
+there is still a free choice about which groups we make taller. After studying
+the chart of traditional Genji-mon, two rules became clear:
+</p>
+
+1. Groups should be as tall as possible.
+2. Groups entirely inside<a href="#footnote1"><sup>&dagger;</sup></a> other
+   groups should be lower and appear to nest inside the outer group.
+
+I implemented this as a simple brute-force cost-based optimizer, because that
+made it easy to experiment with different rules. (Even though in the end I
+only used those two simple rules, I experimented with many others trying to
+get rid of the remaining special cases, which I'll discuss below.)
 
 ```python
 def optimal_genjiko_for_partition(
@@ -185,11 +202,6 @@ def optimal_genjiko_for_partition(
     """
     Given a partition, find the optimal Genji-kō layout by minimizing a cost
     function.
-
-    I was originally hoping to get to 100% algorithmic generation, but this
-    simple rule captures all but 4 of layouts, and the remaining 4 cannot be
-    expressed in any rule which is shorter and simpler than just simply listing
-    the 4 special cases.
     """
     best_cost = math.inf
     best_genjiko = None
@@ -229,37 +241,37 @@ layout and simply put them in the order returned by `partitions()`:
 
 <img src="/post/genji-ko_files/algorithmic_genjiko.png">
 
-Good, but not perfect. The order is largely wrong, and the four Genji-mon
+Good, but not perfect. The order is only vaguely similar, and the four Genji-mon
 rendered in red are the ones where our "optimal" layout has failed to reproduce
 the traditional design.
 
-<h3 id="maintext">Order</h3>
+<h3 id="maintext2">Genji-mon Order</h3>
 
 Knuth [mentions][CAM] that the Genji-mon "were not arranged in any particularly
 logical order" and I'm inclined to agree. I tried several variations of the
 above `partition()` function hoping to find one where the traditional order
 would just fall out naturally, but it never did. A close inspection of the
-table makes it clear that this was never going to happen: While there is an
-overall trend from many to fewer groups, there are just too many cases
-where the order is clearly arbitrary.
+traditional order makes it clear that this was never going to happen: While
+there is an overall trend from many to fewer groups, there are just too many
+cases where the order is clearly arbitrary.
 
 I found a several references that put the Genji-mon in a different order, and
 even some that tried to stretch it to 54 using some kind of 
 <a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a> or introducing 
 <a target="_blank" href="/post/genji-ko_files/irregular.jpg">irregular</a> 
-patterns.<sup><a href="#footnote">*</a></sup>
- If we
-recall the original purpose they served in the game, though, this is clearly
-nonsense, not to mention being both mathematically impossible and at odds with tradition.
+patterns.<sup><a href="#footnote2">*</a></sup>
+If we recall the original purpose they served in the game, though, this is
+clearly nonsense, not to mention being both mathematically impossible and at
+odds with tradition.
 
 
-However, the association between the 52 
-patterns and chapter titles for chapters 2-53 of the *Tale of Genji* seems
-watertight and consistent. Also, the order of those chapters is mostly
-consistent across sources (there is some disagreement about the order of the
-later chapters, and one chapter which survives only as a title or perhaps was
-intentionally elided as a delicate way to elude to a character's death) so
-I've put my Genji-kō in chapter order.
+However, the association between the 52 patterns and chapter titles for
+chapters 2-53 of the *Tale of Genji* seems watertight and consistent for
+centuries back. Also, the order of the chapters is mostly consistent across
+sources (there is some disagreement about the order of the later chapters, and
+one chapter which survives only as a title or perhaps was intentionally elided
+as a delicate way to elude to a character's death) so I've put my Genji-mon in
+chapter order.
 
 
 Special Cases
@@ -383,21 +395,21 @@ Mathematical Approach
 ---------------------
 
 For the case of $n = 5$, I've 
-<a href="/post/genji-ko_files/counting_partitions5.png" target="_blank">drawn out the diagram</a>
+<a href="/post/genji-ko_files/counting_partitions5.png" target="_blank">generated the diagram</a>
 showing how to use the same strategy to count all possible Genji-mon,
 but I think it's more useful to take the strategy we've learned and abstract it.
 
-First, let's use the right terminology. What we've so far called a "Genji-kō solution,"
+First, let's use the right terminology. What we've so far called a "Genji-mon,"
 mathematicians would call a [partition][P]. In mathematical terms, the question
 we're asking is, "How many distinct partitions are there for a set of $n$ elements?"
 This number also has a name: the [Bell number][BN] denotated $B\_n$. 
 
 Above, we brute-forced a calculation for $B\_1$ through $B\_4$ using a mix of
-intuition and common sense. To formalize the strategy we discovered into
-mathematical notation, we'll need one concept you may or may not have seen: "the number
-of ways to choose $k$ elements from $n$ distinct elements, ignoring order" is
-called "$n$ choose $k$" or the [binomial coefficient][BC] and is denoted $nCk$
-or with this tall bracket notation:
+intuition and common sense. To formalize the strategy we discovered by doing
+that into mathematical notation we'll need one concept you may or may not have
+seen: "the number of ways to choose $k$ elements from $n$ distinct elements,
+ignoring order" is called "$n$ choose $k$" or the [binomial coefficient][BC]
+and is denoted $nCk$ or with this tall bracket notation:
 
 \\[
     \\binom{n}{k} = \\frac{n!}{k! (n-k)!}
@@ -474,7 +486,7 @@ far more sense to implement a function for $B\_n$ instead of $B\_{n+1}$:
 
 ```python
 def bell_number(n: int) -> int:
-    """Calculate Bell's number $B_n$ for any integer `n`."""
+    """Calculate the Bell number for any integer `n`."""
     if n < 0:
         raise ValueError("The Bell number is not defined for n < 0.")
     elif n < 2:
@@ -488,7 +500,7 @@ def bell_number(n: int) -> int:
 
 
 (Optimizing this function is left as a exercise to the reader, who may find the
-techniques described in the earlier article on writing [a fairly fast Fibonacci
+techniques described in my earlier article on writing [a fairly fast Fibonacci
 function][FFFF] helpful.)
 
 We can use it to calculate the first 20 Bell numbers:
@@ -602,19 +614,6 @@ And there it is: $B\_5 = 52$, so there are exactly 52 Genji-mon, no more and
 no fewer.
 
 
-Asymptotic Behavior
--------------------
-
-As you can see, Bell numbers grow very fast. The asymptotic growth is approximately:
-
-\\[
-    B\_n \\sim \\frac{1}{\\sqrt{2 \\pi n}} \\left( \\frac{n}{\\ln n} \\right)^n
-\\]
-
-Which is just a tiny bit slower than factorials (as you can see if you compare
-it to [Stirling's approximation][SA].)
-
-
 Conclusion
 ----------
 
@@ -627,9 +626,11 @@ significance to their activities. But I'm happy they did so, because they did
 something we mere bean counters would not have thought to do: they made them
 beautiful.
 
+<hr>
 
-Appendix A: Alternative Genji-Kō Chart<a name="chart"></a>
---------------------------------------
+## Appendices
+
+### Appendix A: Alternative Genji-Kō Chart<a name="chart"></a>
 
 Genji-mon are often rendered with thick lines which achieves an interesting
 effect with the negative space. By playing around with the parameters a little:
@@ -655,8 +656,7 @@ We can achieve a very attractive result:
 <img src="/post/genji-ko_files/genjiko_dense.png">
 
 
-Appendix B: Full Table<a name="table"></a>
-----------------------
+### Appendix B: Full Table<a name="table"></a>
 
 The full table in HTML format, so you can copy-and-paste the kanji and other
 fields. The Genji-mon column uses the [Genji-Kō TrueType font available from
@@ -1187,8 +1187,7 @@ is because the chapter title is the proper name of one of the characters from
 </div>
 
 
-Appendix C: Popularity of Names for Genji-Kō Pattern
-----------------------------------------------------
+### Appendix C: Names for Genji-Kō Pattern
 
 <p id="names">
 This table is included merely to illustrate the variety of legitimate ways
@@ -1241,16 +1240,37 @@ the Google Image Search for that name.
 </table>
 
 
+### Appendix D: Asymptotic Behavior
+
+The Bell numbers grow very fast. The asymptotic growth is approximately:
+
+\\[
+    B\_n \\sim \\frac{1}{\\sqrt{2 \\pi n}} \\left( \\frac{n}{\\ln n} \\right)^n
+\\]
+
+Which is just a tiny bit slower than factorials, as you can see if you compare
+it to [Stirling's approximation][SA].
+
+
 Footnotes
 ---------
 
-<p id="footnote">
-  <sup><a href="#maintext">*</a></sup>
-  I know I should cite the creators of these misguided images, but I have not done so to spare any potential embarrassment.
-  You can find the originals through Google, if you're curious.
-  <a href="#maintext">Back</a>
+<p id="footnote1">
+    <sup><a href="#maintext1">&dagger;</a></sup>
+    By "inside", I mean which respect to interval logic, not set containment. Obviously
+    no group will be a subset of another, because no incense belongs to more than one
+    group. But when the leftmost element of a group is to the left of the leftmost
+    element of another, and likewise <i>mutatis mutandis</i> for the rightmost, then
+    visually the second group is inside the first.
+    <a href="#maintext1">Back</a>
 </p>
 
+<p id="footnote2">
+  <sup><a href="#maintext2">*</a></sup>
+  I know I should cite the creators of these misguided images, but I have not done so to spare any potential embarrassment.
+  You can find the originals through a Google reverse image search if you're curious.
+  <a href="#maintext2">Back</a>
+</p>
 
 [BC]: https://en.wikipedia.org/wiki/Binomial_coefficient
 [BN]: https://en.wikipedia.org/wiki/Bell_number
