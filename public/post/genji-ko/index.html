@@ -247,18 +247,13 @@ chapter of <a href="https://en.wikipedia.org/wiki/The_Tale_of_Genji"><em>The Tal
 each:</p>
 
 <p><a href="/post/genji-ko_files/minori_wall_scroll.png" target="_blank">
-<img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
+<img style="max-width: 500px;" src="/post/genji-ko_files/minori_wall_scroll.png">
 </a></p>
 
 <h2 id="drawing-genji-mon">Drawing Genji-Mon</h2>
 
 <p>To draw Genji-Mon programmatically, we&rsquo;ll use the standard recursive algorithm
 to generate all possible partitions for a set of five elements:</p>
-
-<!--
-Knuth mentions them in the introduction to a [book on the history of combinatorics][CAM]:
-<img class="drop-shadow" style="height: 50%; width: 50%;" src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png">
--->
 
 <pre><code class="language-python">def partitions(s: Set[int]) -&gt; Iterator[List[Set[int]]]:
     &quot;&quot;&quot;Yield all partitions of a set as they are generated.&quot;&quot;&quot;
@@ -348,7 +343,7 @@ layout and simply put them in the order returned by <code>partitions()</code>:</
 rendered in red are the ones where our &ldquo;optimal&rdquo; layout has failed to reproduce
 the traditional design.</p>
 
-<h3 id="maintext2">Genji-mon Order</h3>
+<h2 id="maintext2">Genji-mon Order</h2>
 
 <p>In the introduction he wrote for a <a href="https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052">book on ancient combinatorics</a>, Knuth
 <a href="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png" target="_blank">mentions</a>
@@ -420,7 +415,7 @@ of Yūgiri I found online use the traditional design, such as this
 by <a href="https://en.wikipedia.org/wiki/Kunisada">Kunisada</a> or this woodblock print by <a href="https://en.wikipedia.org/wiki/Masao_Maeda">Masao Maeda</a>:</p>
 
 <p><a href="/post/genji-ko_files/yugiri_woodblock_print.png" target="_blank">
-<img style="height: 75%; width: 75%;" src="/post/genji-ko_files/yugiri_woodblock_print.png">
+<img style="max-width: 667px;" src="/post/genji-ko_files/yugiri_woodblock_print.png">
 </a></p>
 
 <p>So I don&rsquo;t think I have a leg to stand on unless I want to fly in the face of
@@ -617,7 +612,7 @@ function</a> helpful.)</p>
         font-size: 100%;
     }
 </style>
-<div id="bell-table" style="width: 40%; margin: auto">
+<div id="bell-table" style="max-width: 400px; margin: auto">
     <table>
         <thead>
             <tr>
