@@ -764,11 +764,7 @@ have lost the ability to set their own agendas or knowledgeably question those
 in authority; when, clutching our crystals and nervously consulting our
 horoscopes, our critical faculties in decline, unable to distinguish between
 what feels good and what's true, we slide, almost without noticing, back into
-superstition and darkness... The dumbing down of American is most evident in
-the slow decay of substantive content in the enormously influential media, the
-30 second sound bites (now down to 10 seconds or less), lowest common
-denominator programming, credulous presentations on pseudoscience and
-superstition, but especially a kind of celebration of ignorance." 
+superstition and darkness..." 
 <br>&mdash;Carl Sagan
 
 
