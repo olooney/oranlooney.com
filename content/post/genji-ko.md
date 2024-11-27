@@ -64,7 +64,7 @@ impossible to avoid an intersection (bottom center) but it is clear that groups
 are distinct because the horizontal connecting lines are at different heights;
 nevertheless, we try to minimize such intersections.
 
-Genji-Kō features as a plot point in [episode 8 of the experimental horror
+Genji-kō features as a plot point in [episode 8 of the experimental horror
 anime Mononoke][MNNK8], where it is suggested that players used blocks to
 record their solutions:
 
