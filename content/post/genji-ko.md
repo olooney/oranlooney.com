@@ -4,9 +4,10 @@ author: "Oran Looney"
 date: 2024-11-26
 publishdate: 2024-11-26
 tags:
-    - Python
+    - Math
     - Visualization
     - History
+    - Python
 image: /post/genji-ko_files/lead.jpg
 ---
 
@@ -140,7 +141,7 @@ chapter of [*The Tale of Genji*][TG], and included the associated Genji-mon on
 each:
 
 <a href="/post/genji-ko_files/minori_wall_scroll.png" target="_blank">
-<img style="height: 50%; width: 50%;" src="/post/genji-ko_files/minori_wall_scroll.png">
+<img style="max-width: 75%;" src="/post/genji-ko_files/minori_wall_scroll.png">
 </a>
 
 
@@ -149,11 +150,6 @@ Drawing Genji-Mon
 
 To draw Genji-Mon programmatically, we'll use the standard recursive algorithm
 to generate all possible partitions for a set of five elements:
-
-<!--
-Knuth mentions them in the introduction to a [book on the history of combinatorics][CAM]:
-<img class="drop-shadow" style="height: 50%; width: 50%;" src="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png">
--->
 
 
 ```python
@@ -244,7 +240,7 @@ Good, but not perfect. The order is only vaguely similar, and the four Genji-mon
 rendered in red are the ones where our "optimal" layout has failed to reproduce
 the traditional design.
 
-<h3 id="maintext2">Genji-mon Order</h3>
+<h2 id="maintext2">Genji-mon Order</h2>
 
 In the introduction he wrote for a [book on ancient combinatorics][CAM], Knuth 
 <a href="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png" target="_blank">mentions</a>
@@ -319,7 +315,7 @@ of Yūgiri I found online use the traditional design, such as this
 by [Kunisada][UK] or this woodblock print by [Masao Maeda][MM]:
 
 <a href="/post/genji-ko_files/yugiri_woodblock_print.png" target="_blank">
-<img style="height: 75%; width: 75%;" src="/post/genji-ko_files/yugiri_woodblock_print.png">
+<img style="max-width: 75%;" src="/post/genji-ko_files/yugiri_woodblock_print.png">
 </a>
 
 So I don't think I have a leg to stand on unless I want to fly in the face of
@@ -517,7 +513,7 @@ We can use it to calculate the first 20 Bell numbers:
         font-size: 100%;
     }
 </style>
-<div id="bell-table" style="width: 40%; margin: auto">
+<div id="bell-table" style="max-width: 400px; margin: auto">
     <table>
         <thead>
             <tr>
