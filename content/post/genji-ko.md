@@ -32,7 +32,7 @@ a parlor game played with incense&mdash;just one of many similar games inside th
 broader umbrella of kōdō (香道), the traditional Japanese art of incense
 appreciation. 
 
-What sets Genji-kō apart is its extreme difficulty - where another kōdō game
+What sets Genji-kō apart is its extreme difficulty. While another kōdō game
 might have contestants write down their guesses for three separate incenses and
 score a point for each correct guess, Genji-kō asks contestants to smell five
 separate samples, then determine which of the five were the same scent. All
@@ -46,6 +46,7 @@ an evening, with an overall winner declared at the end.
 Obviously contestants would need some kind of notation to submit their answers
 in a concise and unambiguous way, and it is really about this notation (and
 the art, mathematics, and culture connected to it) that this article is about.
+
 
 Notation
 --------
@@ -71,7 +72,7 @@ record their solutions:
 
 <img src="/post/genji-ko_files/blocks.png">
 
-While this might be true - the episode's description of Genji-Kō is otherwise
+While this might be true - the episode's description of Genji-kō is otherwise
 grounded and well-researched - I haven't seen any other references to this;
 everything else I've seen indicates the game was played with ink and paper. I
 think it's probably just a case of artistic license.
@@ -122,7 +123,7 @@ kimono:
 
 While 
 <a href="/post/genji-ko_files/cheap_genjiko_kimono.jpg" target="_blank">cheaper fabrics</a> 
-simply print the same Genji-mon repeatedly, high-quality Genji-Kō textiles will
+simply print the same Genji-mon repeatedly, high-quality Genji-kō textiles will
 use a variety of Genji-mon so that the pattern seems to never quite repeat:
 
 <img src="/post/genji-ko_files/fabric.jpg">
@@ -148,7 +149,7 @@ each:
 Drawing Genji-Mon
 -----------------
 
-To draw Genji-Mon programmatically, we'll use the standard recursive algorithm
+To draw Genji-mon programmatically, we'll use the standard recursive algorithm
 to generate all possible partitions for a set of five elements:
 
 
@@ -245,7 +246,7 @@ the traditional design.
 In the introduction he wrote for a [book on ancient combinatorics][CAM], Knuth 
 <a href="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png" target="_blank">mentions</a>
 that the Genji-mon "were not arranged in any particularly logical order" and
-I'm inclined to agree. I tried several variations of the above `partition()`
+I'm inclined to agree. I tried several variations of the above `partitions()`
 function hoping to find one where the traditional order would just fall out
 naturally, but it never did. A close inspection of the traditional order makes
 it clear that this was never going to happen: While there is an overall trend
@@ -376,11 +377,10 @@ Let's try that out for $n = 4$. The other cases are obvious, but let's focus on
 the case where $k = 2$ as there's a new wrinkle there. We have to choose one
 other element from three possible elements, so there are three ways of doing
 that. We'll always have two left over, and there are always two ways of
-grouping those together. This these are two independent choices - choosing the
-first group, then choosing how to partition the remaining elements, there are
-$3 \\times 2 = 6$ ways of doing that. This case teaches us that we have to
-count both the ways of selecting a set of $k$ elements and the number of ways
-to partition the remaining elements, and multiply them together.
+grouping those together. These are two independent choices: we choose the
+first group, then choose how to partition the remaining elements. Because
+they are independent, we multiply to find there are  $3 \\times 2 = 6$ ways of
+putting them together.
 
 <img src="/post/genji-ko_files/counting_partitions4.png">
 
@@ -412,7 +412,7 @@ bracket notation:
     \\binom{n}{k} = \\frac{n!}{k! (n-k)!}
 \\]
 
-There are many ways of deriving the equation in terms of factorials, but here's
+There are many ways of deriving this equation, but here's
 one I like: imagine we put all $n$ elements in order; there are $n!$ ways of
 doing that. Then we always take the $k$ leftmost elements for our choice. However,
 because order doesn't matter, we divided by all the different ways of ordering
@@ -476,6 +476,7 @@ ones" in the original that made the expression seem messy. However, it's a
 little divorced from the intuition about pinning the size of the first set we
 used to motivate $(1)$ although of course they're completely equivalent
 mathematically.
+
 
 Computing Bell Numbers
 ----------------------
@@ -1190,7 +1191,6 @@ Note that whenever the English column has apparently been left untranslated,
 this is because the chapter title is the proper name of one of the characters
 from [*The Tale of Genji*][TG]. Translating these would be as nonsensical as
 translating "Jack Smith" to "Lifting Device Metal Worker."
-
 
 
 ### Appendix D: Names for Genji-Kō Pattern

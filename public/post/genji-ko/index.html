@@ -149,7 +149,7 @@ a parlor game played with incense&mdash;just one of many similar games inside th
 broader umbrella of kōdō (香道), the traditional Japanese art of incense
 appreciation.</p>
 
-<p>What sets Genji-kō apart is its extreme difficulty - where another kōdō game
+<p>What sets Genji-kō apart is its extreme difficulty. While another kōdō game
 might have contestants write down their guesses for three separate incenses and
 score a point for each correct guess, Genji-kō asks contestants to smell five
 separate samples, then determine which of the five were the same scent. All
@@ -187,7 +187,7 @@ record their solutions:</p>
 
 <p><img src="/post/genji-ko_files/blocks.png"></p>
 
-<p>While this might be true - the episode&rsquo;s description of Genji-Kō is otherwise
+<p>While this might be true - the episode&rsquo;s description of Genji-kō is otherwise
 grounded and well-researched - I haven&rsquo;t seen any other references to this;
 everything else I&rsquo;ve seen indicates the game was played with ink and paper. I
 think it&rsquo;s probably just a case of artistic license.</p>
@@ -234,7 +234,7 @@ kimono:</p>
 
 <p>While
 <a href="/post/genji-ko_files/cheap_genjiko_kimono.jpg" target="_blank">cheaper fabrics</a>
-simply print the same Genji-mon repeatedly, high-quality Genji-Kō textiles will
+simply print the same Genji-mon repeatedly, high-quality Genji-kō textiles will
 use a variety of Genji-mon so that the pattern seems to never quite repeat:</p>
 
 <p><img src="/post/genji-ko_files/fabric.jpg"></p>
@@ -258,7 +258,7 @@ each:</p>
 
 <h2 id="drawing-genji-mon">Drawing Genji-Mon</h2>
 
-<p>To draw Genji-Mon programmatically, we&rsquo;ll use the standard recursive algorithm
+<p>To draw Genji-mon programmatically, we&rsquo;ll use the standard recursive algorithm
 to generate all possible partitions for a set of five elements:</p>
 
 <pre><code class="language-python">def partitions(s: Set[int]) -&gt; Iterator[List[Set[int]]]:
@@ -354,7 +354,7 @@ the traditional design.</p>
 <p>In the introduction he wrote for a <a href="https://www.amazon.com/Combinatorics-Ancient-Modern-Robin-Wilson/dp/0198739052">book on ancient combinatorics</a>, Knuth
 <a href="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png" target="_blank">mentions</a>
 that the Genji-mon &ldquo;were not arranged in any particularly logical order&rdquo; and
-I&rsquo;m inclined to agree. I tried several variations of the above <code>partition()</code>
+I&rsquo;m inclined to agree. I tried several variations of the above <code>partitions()</code>
 function hoping to find one where the traditional order would just fall out
 naturally, but it never did. A close inspection of the traditional order makes
 it clear that this was never going to happen: While there is an overall trend
@@ -484,11 +484,10 @@ $k$ between $1$ and $n$, there are two questions to ask:</p>
 the case where $k = 2$ as there&rsquo;s a new wrinkle there. We have to choose one
 other element from three possible elements, so there are three ways of doing
 that. We&rsquo;ll always have two left over, and there are always two ways of
-grouping those together. This these are two independent choices - choosing the
-first group, then choosing how to partition the remaining elements, there are
-$3 \times 2 = 6$ ways of doing that. This case teaches us that we have to
-count both the ways of selecting a set of $k$ elements and the number of ways
-to partition the remaining elements, and multiply them together.</p>
+grouping those together. These are two independent choices: we choose the
+first group, then choose how to partition the remaining elements. Because
+they are independent, we multiply to find there are  $3 \times 2 = 6$ ways of
+putting them together.</p>
 
 <p><img src="/post/genji-ko_files/counting_partitions4.png"></p>
 
@@ -518,7 +517,7 @@ bracket notation:</p>
     \binom{n}{k} = \frac{n!}{k! (n-k)!}
 \]</p>
 
-<p>There are many ways of deriving the equation in terms of factorials, but here&rsquo;s
+<p>There are many ways of deriving this equation, but here&rsquo;s
 one I like: imagine we put all $n$ elements in order; there are $n!$ ways of
 doing that. Then we always take the $k$ leftmost elements for our choice. However,
 because order doesn&rsquo;t matter, we divided by all the different ways of ordering
