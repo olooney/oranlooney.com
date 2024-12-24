@@ -29,7 +29,7 @@ refinement: they weaponized it.
 
 Only under such conditions could something like Genji-kō (源氏香) arise. It is
 a parlor game played with incense&mdash;just one of many similar games inside the
-broader umbrella of kōdō (香道), the traditional Japanese art of incense
+broader umbrella of [kōdō (香道)][KD], the traditional Japanese art of incense
 appreciation. 
 
 What sets Genji-kō apart is its extreme difficulty. While another kōdō game
@@ -99,7 +99,7 @@ would choose a solution that referenced the current season or recent event,
 adding both a additional layer of meaning to the game and a hint to skilled
 players.
 
-There are <a href="#names#">several different words</a> we could use to refer
+There are <a href="#names">several different words</a> we could use to refer
 to the patterns themselves, but I've chosen Genji-mon as it seems to be the
 most common.
 
@@ -268,8 +268,8 @@ chapters 2-53 of the *Tale of Genji* seems watertight and consistent for
 centuries back. Also, the order of the chapters is mostly consistent across
 sources (there is some disagreement about the order of the later chapters, and
 one chapter which survives only as a title or perhaps was intentionally elided
-as a delicate way to allude to a character's death) so I've put my Genji-mon in
-chapter order following Waley. You can find the full table in 
+as a delicate way to allude to a certain character's death) so I've put my
+Genji-mon in chapter order following Waley. You can find the full table in 
 <a href="#table">Appendix C</a>.
 
 
@@ -303,17 +303,17 @@ With these corrections, and using the *Tale of Genji* chapter order:
 
 Of the four exceptions, two are obvious improvements (fixing the "hole" in Suma
 and the "dent" in Hatsune), and one (Nioumiya) is a matter of indifference.
-However, the fourth, Yūgiri, seems to actively violate the basic rules around
-nesting and creates a three-level structure when two would have sufficed:
+However, the fourth, Yūgiri, seems to violate the most basic rule of nesting
+and creates a three-level structure when two would have sufficed:
 
 <img src="/post/genji-ko_files/yugiri_diff.png">
 
 The cost-based optimizer would never have chosen that layout because its most
 basic tenet is to make the groups as tall as possible. A heuristic, let me 
 remind you, that holds for the other 51 Genji-mon. However, all the examples
-of Yūgiri I found online use the traditional design, such as this 
+of Yūgiri I found online use the traditional design, such as the
 <a href="/post/genji-ko_files/yugiri_wall_scroll.png" target="_blank">wall scroll</a>
-by [Kunisada][UK] or this woodblock print by [Masao Maeda][MM]:
+by Kunisada or this woodblock print by [Masao Maeda][MM]:
 
 <a href="/post/genji-ko_files/yugiri_woodblock_print.png" target="_blank">
 <img style="max-width: 75%;" src="/post/genji-ko_files/yugiri_woodblock_print.png">
@@ -345,13 +345,12 @@ in a group by itself, or it is in a group with another.
 
 <img src="/post/genji-ko_files/counting_partitions2.png">
 
-For $n = 3$, things start to get more interesting. Let's repeat the trick we
-used for $n = 2$ and focus on the first element. It must either be in a group
-by itself, in a pair with another, or in the same group as all others. That
-gives us exactly three cases to consider:
+For $n = 3$, things start to get more interesting. Let's focus on the first
+element. It must either be in a group by itself, in a pair with another, or in
+the same group as all others. That gives us exactly three cases to consider:
 
 1. If the first element in a group by itself, then there are two elements left
-   over; We showed above that there are two ways to partition them.
+   over; we showed above that there are two ways to partition those.
 2. If it's in a pair, then we have a choice: we can either pair it with the
    second or third element. In either case there will only be one element left
    over. 
@@ -366,19 +365,19 @@ Thus, we have $1 \\times 2 + 2 \\times 1 + 1 = 5$ ways to partition a set of
 three elements.
 
 This is starting to look like a repeatable strategy. We always start by
-focusing on the first element. We then neatly divide the set of all possible
+focusing on the first element. We then divide up the set of all possible
 solutions by the size $k$ of the group containing this first element. For each
 $k$ between $1$ and $n$, there are two questions to ask:
 
 1. How many ways are there of choosing the set that contains the first element?
 2. How many ways are there of putting the remaining $n-k$ elements into groups?
 
-Let's try that out for $n = 4$. The other cases are obvious, but let's focus on
-the case where $k = 2$ as there's a new wrinkle there. We have to choose one
-other element from three possible elements, so there are three ways of doing
-that. We'll always have two left over, and there are always two ways of
-grouping those together. These are two independent choices: we choose the
-first group, then choose how to partition the remaining elements. Because
+Let's try that out for $n = 4$. The other cases are obvious, but let's go into
+more depth for the case where $k = 2$ as there's a new wrinkle there. We have
+to choose one other element from three possible elements, so there are three
+ways of doing that. We'll always have two left over, and there are always two
+ways of grouping those together. These are two independent choices: we choose
+the first group, then choose how to partition the remaining elements. Because
 they are independent, we multiply to find there are  $3 \\times 2 = 6$ ways of
 putting them together.
 
@@ -405,8 +404,8 @@ Above, we calculated $B\_1$ through $B\_4$ using a mix of intuition and common
 sense. To formalize the strategy we used in mathematical notation we'll need a
 concept you may or may not have seen before: "the number of ways to choose $k$
 elements from $n$ distinct elements, ignoring order" is called "$n$ choose $k$"
-or the [binomial coefficient][BC] and is denoted $nCk$ or with this tall
-bracket notation:
+or the [binomial coefficient][BC] and is denoted with this tall bracket
+notation:
 
 \\[
     \\binom{n}{k} = \\frac{n!}{k! (n-k)!}
@@ -623,12 +622,10 @@ hundred years ago; combinatorics is an easy branch to stumble into when it
 arises in connection to some practical problem. It does, however, feel slightly
 surreal that it was a bunch of bored nobles playing an esoteric parlor game who
 first noticed these patterns and used it to attach literary significance to
-their activities. But I'm happy they did so, because they did something we mere
+their activities. But I'm glad they did so, because they did something we mere
 number crunchers would not have thought to do: they made them beautiful.
 
 <hr>
-
-## Appendices
 
 ### Appendix A: Source Code
 
@@ -1273,8 +1270,9 @@ Footnotes
 
 <p id="footnote2">
   <sup><a href="#maintext2">*</a></sup>
-  I know I should cite the creators of these misguided images, but I have not done so to spare any potential embarrassment.
-  You can find the originals through a Google reverse image search if you're curious.
+  I know I should cite the creators of these misguided images, but I have not
+  done so to spare any potential embarrassment. You can find the originals
+  through a Google reverse image search if you're curious.
   <a href="#maintext2">Back</a>
 </p>
 
@@ -1284,6 +1282,7 @@ Footnotes
 [CGK]: /post/genji-ko_files/cheap_genjiko_kimono.jpg
 [FFFF]: /post/fibonacci/
 [GPY]: https://github.com/olooney/genjiko/blob/main/src/genjiko.py
+[KD]: https://en.wikipedia.org/wiki/K%C5%8Dd%C5%8D
 [KV]: https://www.youtube.com/watch?v=wpDb5LhvvSM
 [MM]: https://en.wikipedia.org/wiki/Masao_Maeda
 [MP]: https://en.wikipedia.org/wiki/Muromachi_period
