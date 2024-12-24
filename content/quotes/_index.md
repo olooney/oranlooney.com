@@ -801,6 +801,12 @@ naming things, and off-by-one errors."
 <br>&mdash;Leon Bambrick
 
 
+"It should be noted that no ethically-trained software engineer would ever
+consent to write a `DestroyBaghdad` procedure. Basic professional ethics would
+instead require him to write a `DestroyCity` procedure, to which Baghdad could
+be given as a parameter."
+<br>&mdash;Nathaniel Borenstein
+
 
 "It ain't what you don't know that gets you in trouble. It's what you know for
 sure that just ain't so."
