@@ -237,6 +237,13 @@ you *do* see the use of it, I *may* allow you to destroy it."
 <br>&mdash;G. K. Chesterton
 
 
+"It is a profoundly erroneous truism that we should cultivate the habit of
+thinking of what we are doing. The precise opposite is the case. Civilization
+advances by extending the number of important operations which we can perform
+without thinking about them."
+<br>&mdash;Alfred North Whitehead
+
+
 ### Bugs
 
 "The first step in fixing a broken program is getting it to fail repeatably."
