@@ -336,7 +336,7 @@ of focusing on five incenses, let's ask ourselves, how many unique ways are
 there of grouping $n$ elements? This approach lets us ease into the problem,
 starting with a simpler case and building complexity gradually.
 
-For $n = 1$, there's clearly only solution:
+For $n = 1$, there's clearly only one solution:
 
 <img src="/post/genji-ko_files/counting_partitions1.png">
 
