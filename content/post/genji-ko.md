@@ -232,7 +232,7 @@ def optimal_genjiko_for_partition(
 straight-forward, so you can check the source code if you're interested in
 those details.
 
-Here's what we get if always use the algorithmically calculated "optimal"
+Here's what we get if we always use the algorithmically calculated "optimal"
 layout and simply put them in the order returned by `partitions()`:
 
 <img src="/post/genji-ko_files/algorithmic_genjiko.png">
@@ -253,7 +253,7 @@ it clear that this was never going to happen: While there is an overall trend
 from many to fewer groups, there are just too many cases where the order is
 clearly arbitrary.
 
-I found a several references that put them in a different order, and even some
+I found several references that put them in a different order, and even some
 that tried to stretch it to 54 using some kind of 
 <a target="_blank" href="/post/genji-ko_files/dupes.gif">duplication</a>
 or introducing 
