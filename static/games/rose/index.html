@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petals Around the Rose</title>
+  <link rel="stylesheet" href="rose.css" />
+</head>
+<body>
+  <div class="rose">
+    <h2>Petals Around the Rose</h2>
+    <svg width="800" height="140"></svg>
+    <div class="result">
+      Petals Around the Rose: <span id="petal_count">?</span>
+    </div>
+    <div class="controls">
+      <button id="reroll">Reroll</button>
+      <button id="reveal">Reveal Solution</button>
+    </div>
+    <div class="problem">
+      <h3>Problem</h3>
+      <p>
+        The challenge is to determine the rule used to calculate the number above
+        from the dice shown. Your only clues are the name of the game and
+        the fact that the rule must be fairly simple, able to be calculated at a glance
+        if someone knows it.
+      </p>
+      <p>
+        You may reroll the dice as many times as necessary until you are sure
+        you know the rule. Be careful though: you may only have one opportunity
+        in your lifetime to solve the problem yourself, so be certain you are
+        ready before clicking Reveal Solution.
+      </p>
+    </div>
+    <div class="answer">
+      <h3>Solution</h3>
+      <h4>Definitions:</h4>
+      <ul>
+        <li>A <em>rose</em> is the center pip on a die face.</li>
+        <li>A <em>petal</em> is any pip on the outer edge.</li>
+      </ul>
+      <h4>The Rule:</h4>
+      <p>
+        The number shown is the total number of petals (edge pips) on dice with a
+        rose (center pip).
+      </p>
+      <h4>Explanation:</h4>
+      <p>Only odd numbered faces can contribute to the total, but not all of them do. Going case by case:</p>
+      <ul>
+        <li><strong>1</strong> has a rose, but no petals, so contributes nothing.</li>
+        <li><strong>3</strong> has a rose and a petal on each side so contributes 2.</li>
+        <li><strong>5</strong> has a rose and a petal each corner so contributes 4.</li>
+      </ul>
+      <p>The even numbered faces (2, 4, and 6) do not have a center pip, so contribute nothing to the total.</p>
+      <p>Now that you have revealed the answer petals will be shown in red; you may reroll to see other examples.</p>
+    </div>
+  </div>
+  <script src="rose.js" type="module"></script>
+</body>
+</html>
