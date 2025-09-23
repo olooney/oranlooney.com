@@ -142,7 +142,7 @@ still greatly enhanced our ability to carry out practical calculations.</p>
 <p>I propose to flesh out the missing history, starting in prehistoric Africa and
 ending in Victorian-era England. I won&rsquo;t be exhaustive; with so much ground to
 cover even to try would exhaust both you and me. Instead, we&rsquo;ll go skipping
-down the corridors of time like a stone across a still lake, touch down
+down the corridors of time like a stone across a still lake, touching down
 only at key moments. That way, we&rsquo;ll have enough breathing room to really dig
 into each breakthrough. If I do my job right, you&rsquo;ll practically hear a little
 &ldquo;Level Up!&rdquo; chime with each discovery.</p>
@@ -594,7 +594,9 @@ multiplication operation:</p>
 n(xy) = n(x) + n(y) - 161180956
 \]</p>
 
-<p>This constant arises because $10^7 \ln\left(10^{7}\right) \;\approx\; 161180956.509\ldots$ Not a huge deal, but it adds an extra step to every single calculation.</p>
+<p>This constant arises because $10^7 \ln\left(10^{7}\right) \;\approx\;
+161180956.509\ldots$ Not a huge deal, but it does add an extra step to every
+single calculation.</p>
 
 <p>It was <a href="https://en.wikipedia.org/wiki/Henry_Briggs_(mathematician)">Henry Briggs</a> (the same one mentioned in the Edmund Gunter anecdote
 above) who realized that this constant could be eliminated entirely. He
@@ -803,7 +805,7 @@ expensive, and harder to work with than those made with <a href="https://en.wiki
 <a href="https://en.wikipedia.org/wiki/Photolithography">photolithography</a>. (Matthew Jones goes into considerable detail about
 these technical and financial difficulties in his book, <em><a href="https://www.amazon.com/Reckoning-Matter-Calculating-Innovation-2016-11-29/dp/B01NGZURDX">Reckoning with
 Matter</a></em>.) While limited by the technology of his time, Leibniz clearly
-saw the potential:</p>
+saw their vast potential:</p>
 
 <blockquote>
 <p>&ldquo;It is unworthy of excellent men to lose hours like slaves in the labour of
@@ -819,10 +821,10 @@ theoretical rather than practical side. As a young man, he wrote a paper called
 numbers and operating on them algebraically. Throughout the rest of his life,
 he tried to develop what he called &ldquo;<a href="https://en.wikipedia.org/wiki/Characteristica_universalis">Characteristica universalis</a>&rdquo;, a kind
 of universal formal language. One of his attempts in this direction, the
-<a href="https://iep.utm.edu/leib-log/#SH3c">plus-minus calculus</a>, was a formal language which presaged Boolean
-algebra and set theory. He <a href="https://spectrum.ieee.org/in-the-17th-century-leibniz-dreamed-of-a-machine-that-could-calculate-ideas">dreamed</a> of setting logic and mathematics on
-the same solid, axiomatic foundation as Euclidean geometry so that arguments
-could be <a href="https://en.wikipedia.org/wiki/Formal_verification">formally verified</a>:</p>
+<a href="https://iep.utm.edu/leib-log/#SH3c">plus-minus calculus</a>, was a formal, axiomatic language which presaged
+Boolean algebra and set theory. He <a href="https://spectrum.ieee.org/in-the-17th-century-leibniz-dreamed-of-a-machine-that-could-calculate-ideas">dreamed</a> of setting logic and
+mathematics on the same solid foundation as Euclidean geometry so that
+arguments could be <a href="https://en.wikipedia.org/wiki/Formal_verification">formally verified</a>:</p>
 
 <blockquote>
 <p>&ldquo;When there are disputes among persons, we can simply say, ‘Let us
@@ -941,13 +943,13 @@ tables for 7th-degree polynomials to a high degree of precision and reliability.
 special functions? Seems less useful than the older stuff we&rsquo;ve already talked
 about.&rdquo; Well, technically he proposed using the <a href="https://en.wikipedia.org/wiki/Finite_difference_method">finite difference
 method</a>, which is an early form of polynomial interpolation. This would
-have worked well enough.</p>
+have worked well, as we saw above.</p>
 
 <p>OK, so how did Babbage propose to automate polynomial evaluation? The key idea
 is that differences turn polynomial evaluation into simple addition. If you
 have a polynomial $p(x)$ and you want its values at equally spaced points $x,
 x+1, x+2, \dots$, you can avoid recomputing the full polynomial each time.
-Instead, you build a difference table</p>
+Instead, you build a difference table:</p>
 
 <ul>
 <li>The <em>first differences</em> are the differences between consecutive values of the polynomial.<br /></li>

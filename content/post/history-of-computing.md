@@ -30,7 +30,7 @@ still greatly enhanced our ability to carry out practical calculations.
 I propose to flesh out the missing history, starting in prehistoric Africa and
 ending in Victorian-era England. I won't be exhaustive; with so much ground to
 cover even to try would exhaust both you and me. Instead, we'll go skipping
-down the corridors of time like a stone across a still lake, touch down
+down the corridors of time like a stone across a still lake, touching down
 only at key moments. That way, we'll have enough breathing room to really dig
 into each breakthrough. If I do my job right, you'll practically hear a little
 "Level Up!" chime with each discovery.
@@ -499,7 +499,9 @@ multiplication operation:
 n(xy) = n(x) + n(y) - 161180956
 \\]
 
-This constant arises because $10^7 \ln\left(10^{7}\right) \;\approx\; 161180956.509\ldots$ Not a huge deal, but it adds an extra step to every single calculation. 
+This constant arises because $10^7 \ln\left(10^{7}\right) \;\approx\;
+161180956.509\ldots$ Not a huge deal, but it does add an extra step to every
+single calculation. 
 
 It was [Henry Briggs][HB] (the same one mentioned in the Edmund Gunter anecdote
 above) who realized that this constant could be eliminated entirely. He
@@ -709,7 +711,7 @@ expensive, and harder to work with than those made with [CMOS][CMOS] and
 [photolithography][PLTH]. (Matthew Jones goes into considerable detail about
 these technical and financial difficulties in his book, *[Reckoning with
 Matter][RWM]*.) While limited by the technology of his time, Leibniz clearly
-saw the potential:
+saw their vast potential:
 
 > "It is unworthy of excellent men to lose hours like slaves in the labour of
 > calculation which could safely be relegated to anyone else if machines were
@@ -724,10 +726,10 @@ theoretical rather than practical side. As a young man, he wrote a paper called
 numbers and operating on them algebraically. Throughout the rest of his life,
 he tried to develop what he called "[Characteristica universalis][GLCU]", a kind
 of universal formal language. One of his attempts in this direction, the
-[plus-minus calculus][GLPM], was a formal language which presaged Boolean
-algebra and set theory. He [dreamed][GLDM] of setting logic and mathematics on
-the same solid, axiomatic foundation as Euclidean geometry so that arguments
-could be [formally verified][FV]:
+[plus-minus calculus][GLPM], was a formal, axiomatic language which presaged
+Boolean algebra and set theory. He [dreamed][GLDM] of setting logic and
+mathematics on the same solid foundation as Euclidean geometry so that
+arguments could be [formally verified][FV]:
 
 [FV]: https://en.wikipedia.org/wiki/Formal_verification
 [GLPM]: https://iep.utm.edu/leib-log/#SH3c
@@ -857,13 +859,13 @@ tables for 7th-degree polynomials to a high degree of precision and reliability.
 special functions? Seems less useful than the older stuff we've already talked
 about." Well, technically he proposed using the [finite difference
 method][FDM], which is an early form of polynomial interpolation. This would
-have worked well enough.
+have worked well, as we saw above.
 
 OK, so how did Babbage propose to automate polynomial evaluation? The key idea
 is that differences turn polynomial evaluation into simple addition. If you
 have a polynomial $p(x)$ and you want its values at equally spaced points $x,
 x+1, x+2, \dots$, you can avoid recomputing the full polynomial each time.
-Instead, you build a difference table
+Instead, you build a difference table:
 
 - The *first differences* are the differences between consecutive values of the polynomial.  
 - The *second differences* are the differences of those differences, and so on.  
