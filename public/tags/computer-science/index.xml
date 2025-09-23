@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Sat, 06 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 21 Sep 2025 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>20,000 Years of Computing</title>
+      <link>https://www.oranlooney.com/post/history-of-computing/</link>
+      <pubDate>Sun, 21 Sep 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/history-of-computing/</guid>
+      <description>Ask the average CS student to tell you about the history of computing and they&amp;rsquo;ll probably start with Babbage&amp;rsquo;s Analytical Engine. Fair enough: our modern conception of a &amp;ldquo;computer&amp;rdquo; is strongly linked to the universal Turing machine, which can take a program as input and carry out an arbitrary computation&amp;mdash;anything less, we tend to dismiss as a mere &amp;ldquo;calculator.&amp;rdquo; Since Babbage was the first to propose a machine with conditional branching (making it Turing complete) it does mark a watershed moment.</description>
+    </item>
     
     <item>
       <title>A Seriously Slow Fibonacci Function</title>

@@ -1,5 +1,9 @@
 /* Articles */
 
+html .article {
+    overflow-wrap: break-word;
+}
+
 html .article code,
 html .article pre {
 	background: none;
