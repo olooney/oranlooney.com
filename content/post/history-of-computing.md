@@ -909,12 +909,11 @@ html .article table th
 Crucially, after three differences (the same as the order of our polynomial)
 the difference becomes constant. Why does that matter? Because we can reverse
 the process. Working right to left, we can compute the differences and
-ultimately $p(x)$ from the preceding row through nothing more complex than
-addition! This allows us to generate a complete table very efficiently.
-
-Here we've taken an integer step for the sake of clarity, but this $\Delta x$
-can be arbitrarily small, and the whole process can be used to create large
-tables with high precision. 
+ultimately $p(x)$ from the preceding row using nothing more complex than
+addition! Here we've taken an integer step for the sake of clarity, but this
+$\Delta x$ can be arbitrarily small, and the whole process can be used to
+create large tables with high precision. The Difference Engine would have
+automated this process, allowing it to generate large tables very efficiently.
 
 The Difference Engine may not have had that magical Turing-completeness, but it
 was still a very clever and important idea.
@@ -923,19 +922,26 @@ was still a very clever and important idea.
 Conclusion
 ----------
 
-After Babbage there was a brief era of electro-mechanical computers: [Herman
+You know the rest of the story. [Babbage][CB] moved on from the [Difference
+Engine][CBDE] to the much more ambitious [Analytical Engine][AE]. Neither was
+successfully completed: as Leibniz had found centuries earlier, designing
+mechanical computers is a lot easier than actually getting them to work.
+Despite this, [Ada Lovelace][AL] wrote the first [computer program][ALNG] for
+it, targeting its envisioned [instruction set architecture][ISA].
+
+After Babbage, there was a brief era of electro-mechanical computers: [Herman
 Hollerith][HH] and the [punch card][HHPC], the [IBM 602 Calculating
-Punch][IBM], [Bessy the Bessel engine][HMI], the [Z3][Z3], and similar machines. 
-Slide rules were still in common use until WWII, and mechanical calculators
-such as the [Curta][CMC] were still being manufactured as late as the 1970s.
-Meanwhile, [Turing][TM], [Shannon][SIF], [Church][LC], [Gödel][GRF], [von
-Neumann][VNA], and [many others][HCS] were putting computer science on a [firm
-theoretical foundation][CTT].
+Punch][IBM], the delightfully named [Bessy the Bessel engine][HMI], the
+[Z3][Z3], and similar machines. Slide rules were still in common use until
+WWII, and mechanical calculators such as the [Curta][CMC] were still being
+manufactured as late as the 1970s. Meanwhile, [Turing][TM], [Shannon][SIF],
+[Church][LC], [Gödel][GRF], [von Neumann][VNA], and [many others][HCS] were
+putting computer science on a [firm theoretical foundation][CTT].
 
 With the advent of the [transistor][TRN], [CMOS][CMOS] and
-[photolithography][PLTH] it was clear that digital was the way to go. Today,
+[photolithography][PLTH], it was clear that digital was the way to go. Today,
 electronic computers are a billion (and, in some special cases like GPUs, a
-quadrillion) times faster than their mechanical counterparts, while also being
+trillion) times faster than their mechanical counterparts, while also being
 cheaper and more reliable.
 
 Despite this, not much has changed: we still use lookup tables, polynomial
@@ -948,7 +954,7 @@ have to think about them. This is undoubtedly a good thing:
 > <br>&mdash;Alfred North Whitehead
 
 But if we stand on the shoulders of giants today, it is only because
-generations of humans sat by smoking campfires scratching lessons onto bones to
+generations of humans sat by smoky campfires scratching lessons onto bones to
 teach their children how to count beyond their number of fingers, or stayed up
 late into the night to measure the exact positions of stars, or tried to teach
 a box of rods and wheels how to multiply. 
@@ -1029,6 +1035,8 @@ computing.
 [AE]: https://en.wikipedia.org/wiki/Analytical_engine
 [AHI]: https://www.dougengelbart.org/pubs/augment-3906.html
 [AITC]: https://archive.org/details/introductiontocy00ashb
+[ALNG]: https://en.wikipedia.org/wiki/Note_G
+[AL]: https://en.wikipedia.org/wiki/Ada_Lovelace
 [APT]: https://en.wikipedia.org/wiki/Approximation_theory
 [ARTH]: https://en.wikipedia.org/wiki/Arithmometer
 [ASM]: https://en.wikipedia.org/wiki/American_system_of_manufacturing#History "American System of Manufacturing – History"
@@ -1037,6 +1045,7 @@ computing.
 [BCI]: https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface
 [BP]: https://en.wikipedia.org/wiki/Blaise_Pascal
 [CA]: https://en.wikipedia.org/wiki/Carry_(arithmetic)
+[CBDE]: https://en.wikipedia.org/wiki/Difference_engine
 [CB]: https://en.wikipedia.org/wiki/Charles_Babbage
 [CDT]: https://en.wikipedia.org/wiki/Compass_(drawing_tool)
 [CLA]: https://en.wikipedia.org/wiki/Carry-lookahead_adder
@@ -1082,6 +1091,7 @@ computing.
 [IBM]: https://en.wikipedia.org/wiki/IBM_602
 [IB]: https://en.wikipedia.org/wiki/Ishango_bone
 [IPO]: https://en.wikipedia.org/wiki/Interchangeable_parts#Origins_of_the_modern_concept "Origins of Interchangeable Parts"
+[ISA]: https://en.wikipedia.org/wiki/Instruction_set_architecture
 [JB]: https://en.wikipedia.org/wiki/Jost_B%C3%BCrgi
 [JKRT]: https://en.wikipedia.org/wiki/Rudolphine_Tables
 [JK]: https://en.wikipedia.org/wiki/Johannes_Kepler
