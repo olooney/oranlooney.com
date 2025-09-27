@@ -7,18 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Sun, 21 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 27 Sep 2025 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/tags/history/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>20,000 Years of Computing</title>
+      <title>The Prehistory of Computing, Part II</title>
+      <link>https://www.oranlooney.com/post/history-of-computing-2/</link>
+      <pubDate>Sat, 27 Sep 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/history-of-computing-2/</guid>
+      <description>In part I of this two-part series we covered lookup tables and simple devices with at most a handful of moving parts. This time we&amp;rsquo;ll pick up in the 17th centuries, when computing devices started to became far more complex and the groundwork for later theoretical work began to be laid.
+Pascal We enter the era of mechanical calculators in 1642 when Pascal invented a machine, charmingly called the pascaline, which could perform addition and subtraction:</description>
+    </item>
+    
+    <item>
+      <title>The Prehistory of Computing, Part I</title>
       <link>https://www.oranlooney.com/post/history-of-computing/</link>
       <pubDate>Sun, 21 Sep 2025 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/history-of-computing/</guid>
-      <description>Ask the average CS student to tell you about the history of computing and they&amp;rsquo;ll probably start with Babbage&amp;rsquo;s Analytical Engine. Fair enough: our modern conception of a &amp;ldquo;computer&amp;rdquo; is strongly linked to the universal Turing machine, which can take a program as input and carry out an arbitrary computation&amp;mdash;anything less, we tend to dismiss as a mere &amp;ldquo;calculator.&amp;rdquo; Since Babbage was the first to propose a machine with conditional branching (making it Turing complete) it does mark a watershed moment.</description>
+      <description>What is a computer, really? Where did it come from? When did we realize we could trick rocks into doing our math homework for us?
+In this two-part series, I&amp;rsquo;ll cover the origin and early history of computing and computer science, starting in prehistoric Africa and ending in Victorian-era England. Not exhaustively (because that would require an entire book) but selectively, highlighting the most interesting innovations and focusing on the untold (or at least less well known) stories.</description>
     </item>
     
     <item>
