@@ -628,6 +628,12 @@ versus 'man without machines.'"
 
 ### Truth
 
+"I have wished to understand the hearts of men. I have wished to know why the
+stars shine. And I have tried to apprehend the Pythagorean power by which
+number holds sway above the flux."
+<br>&mdash;Bertrand Russell
+
+
 "Facts do not cease to exist because they are ignored."
 <br>&mdash;Aldous Huxley
 
