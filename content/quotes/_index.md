@@ -409,6 +409,7 @@ Implement that and forget the rest of the paper."
 <br>&mdash;Ian Wong
 
 
+
 ## Science
 
 ### Methodology
@@ -489,8 +490,13 @@ be content to begin with doubts he shall end in certainties."
 <br>&mdash;Francis Bacon
 
 
-"There are three types of lies -- lies, damn lies, and statistics."
-<br>&mdash;Benjamin Disraeli
+"On a log-log plot, my grandmother fits on a straight line."
+<br>&mdash;Fritz Houtermans
+
+
+"With four parameters I can fit an elephant, and with five I can make him
+wiggle his trunk."
+<br>&mdash;John von Neumann 
 
 
 "If your experiment needs statistics, you ought to have done a better experiment."
@@ -521,7 +527,6 @@ illumination."
 person untrained in it trusts himself with a tool quite as dangerous as any he
 may pick out from the whole armamentarium of scientific methodology."
 <br>&mdash;Edwin B. Wilson
-
 
 
 ### Research 
@@ -566,7 +571,6 @@ than an exact answer to the wrong question which can always be made precise."
 things. But not for me; my role is to be on the bottom of things. What I do
 takes long hours of studying and uninterruptible concentration."
 <br>&mdash;Donald Knuth
-
 
 
 ### Machine Learning
@@ -622,6 +626,7 @@ question of whether a submarine can swim."
 "Artificial Intelligence is not 'man versus machine.' It is 'man with machines'
 versus 'man without machines.'"
 <br>&mdash;Stephen Thaler
+
 
 
 ## Philosophy
@@ -701,7 +706,6 @@ post factum, they appear so obvious."
 <br>&mdash;Arthur Koestler
 
 
-
 ### Ethics
 
 "The only good is knowledge and the only evil is ignorance."
@@ -741,7 +745,6 @@ merely by making a logically consistent moral argument."
 "Our responsibility is to do what we can, learn what we can, improve the
 solutions, and pass them on."
 <br>&mdash;Richard P. Feynman
-
 
 
 ### Ignorance
@@ -800,6 +803,7 @@ States."
 <br>&mdash;W.E.B. Du Bois
 
 
+
 ## Humor
 
 ### Jokes
@@ -807,6 +811,10 @@ States."
 "Should array indices start at 0 or 1? My compromise of 0.5 was rejected
 without, I thought, proper consideration."
 <br>&mdash;Stan Kelly-Bootle
+
+
+"There are three types of lies -- lies, damn lies, and statistics."
+<br>&mdash;Benjamin Disraeli
 
 
 "There are only two hard problems in computer science: cache invalidation,
