@@ -19,11 +19,9 @@ copyright = "&copy; Copyright {year} Oran Looney"
   gravatar = "4fd33509c8963cefcdb6bf03af9c34cc"
   github = "olooney"
   linkedin = "oran-looney"
-  # twitter = "oranlooney"
+  twitter = "oranlooney"
   stackoverflow = "273231/olooney"
   crossvalidated = "48250/olooney"
-  tumblr = "honeycode"
-  # email = "olooney@gmail.com"
 
 [taxonomies]
   tag = "tags"
