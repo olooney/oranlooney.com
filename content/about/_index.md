@@ -18,7 +18,7 @@ learning, applied statistics, software architecture, and occasionally data
 visualization.
 
 I am currently actively looking for a new position; if you're hiring, please
-take a look at my [resume][RPDF] and get in touch if it looks like a good fit.
+take a look at my [résumé][RPDF] and get in touch if it looks like a good fit.
 
 ### Interests
 
