@@ -11,20 +11,20 @@ worm's [connectome][CEC]. Sadly, this is not yet a recognized specialty within
 the broader field of machine learning, so you should probably think of me as a
 Data Scientist or a Machine Learning Engineer.
 
-I hold master's degrees in physics and math and have worked in the healthcare
+I hold master's degrees in physics and math, and have worked in the healthcare
 and insurance sectors doing software development and data science for two
-decades. These days I'm professionally interested in data science, machine
+decades. These days, I'm professionally interested in data science, machine
 learning, applied statistics, software architecture, and occasionally data
 visualization.
 
-I am currently actively looking for a new position; if you're hiring, please
-take a look at my [résumé][RPDF] and get in touch if it looks like a good fit.
+I am actively looking for a new position; if you're hiring, please take a look
+at my [résumé][RPDF] and get in touch if it looks like a good fit.
 
 ### Interests
 
 Outside of work, I enjoy recreational mathematics, the [history of science and
 mathematics][TH], programming challenges such as [Advent of Code][1] or
-[leetcode][2], and puzzle games like [Baba Is You][BIY]. I maintain a
+[LeetCode][2], and puzzle games like [Baba Is You][BIY]. I maintain a
 repository of [quotes and poems][Q] containing pithy wit and wisdom for
 programming and science. I sometimes make [small web games and demos][G]. As for
 my other interests, well, I can only refer you to all the [topics][T] covered
@@ -40,9 +40,9 @@ other educational content on YouTube such as
 [Two Minute Papers][TMP],
 [Veritasium][14], or
 [Welch Labs][WL].
-I think this new wave of math and science popularizers are
-doing great work and I encourage you to check them out and support them if you
-can.  Or if you're just feeling charitable in general, consider supporting
+I think this new wave of math and science popularizers is doing great work and
+I encourage you to check them out and support them if you can.  Or if you're
+just feeling charitable in general, consider supporting
 [Wikipedia][8] or [helping hungry children in Wisconsin][9].
 
 ### Colophon
@@ -51,7 +51,7 @@ This site was built with [blogdown][15], an R package that combines
 [Pandoc][16] with the static site generator [Hugo][17]. It makes extensive use
 of [MathJax][18] for formatting
 <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>
-equations. Articles that are mainly in R are authored in [Rmarkdown][19] while
+equations. Articles that are mainly in R are authored in [Rmarkdown][19], while
 articles that are mainly in Python are first authored in a [Jupyter Lab][20]
 and then ported to vanilla Markdown. Many of the photos come from
 [Unsplash][21] due to its good selection of images with permissive licenses.
