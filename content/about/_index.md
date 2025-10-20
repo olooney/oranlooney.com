@@ -3,23 +3,32 @@ title = "About Me"
 date = "2022-11-11"
 +++
 Hi, I'm Oran Looney. I do math. I write programs. I science... data? That
-doesn't sound right.  I -tican stats? No, that's even worse. My ideal job title
-would be Senior Nematode Wrangler because many of the neural networks I work
-with are roughly the same complexity as the [*C. elegans*][N]
-[connectome][CEC]. Sadly, this is not yet a recognized specialty within the
-broader field of machine learning.
+doesn't sound right.  I -tican stats? No, that's even worse.
+
+My ideal job title would be Senior Nematode Wrangler because many of the neural
+networks I work with are roughly the same complexity as the [*C. elegans*][N]
+worm's [connectome][CEC]. Sadly, this is not yet a recognized specialty within
+the broader field of machine learning, so you should probably think of me as a
+Data Scientist or a Machine Learning Engineer.
 
 I hold master's degrees in physics and math and have worked in the healthcare
-sector doing software development and data science for two decades. These days
-I'm professionally interested in machine learning, applied statistics, data
-visualization, software architecture, and healthcare informatics.
+and insurance sectors doing software development and data science for two
+decades. These days I'm professionally interested in data science, machine
+learning, applied statistics, software architecture, and occasionally data
+visualization.
 
-Outside of work, I enjoy recreational mathematics, programming challenges such
-as [Advent of Code][1] or [leetcode][2], and puzzle games like [Baba Is
-You][BIY]. I maintain a repository of [quotes][Q] and [poems][P] containing
-pithy wit and wisdom for programming and science. I sometimes make <a
-href="/games/">small web games or demos.</a> As for my other amateur interests,
-well, I can only refer you to all the [topics][T] covered on this site.
+I am currently actively looking for a new position; if you're hiring, please
+take a look at my [resume][RPDF] and get in touch if it looks like a good fit.
+
+### Interests
+
+Outside of work, I enjoy recreational mathematics, the [history of science and
+mathematics][TH], programming challenges such as [Advent of Code][1] or
+[leetcode][2], and puzzle games like [Baba Is You][BIY]. I maintain a
+repository of [quotes and poems][Q] containing pithy wit and wisdom for
+programming and science. I sometimes make [small web games and demos][G]. As for
+my other interests, well, I can only refer you to all the [topics][T] covered
+on this site.
 
 I've also been thrilled by the recent wave of recreational mathematics and
 other educational content on YouTube such as
@@ -36,6 +45,8 @@ doing great work and I encourage you to check them out and support them if you
 can.  Or if you're just feeling charitable in general, consider supporting
 [Wikipedia][8] or [helping hungry children in Wisconsin][9].
 
+### Colophon
+
 This site was built with [blogdown][15], an R package that combines
 [Pandoc][16] with the static site generator [Hugo][17]. It makes extensive use
 of [MathJax][18] for formatting
@@ -49,13 +60,10 @@ For HTTPS, it uses a free SSL cert from [Let's Encrypt][23].
 
 [1]: https://adventofcode.com/
 [2]: https://leetcode.com/
-[3]: https://www.amazon.com/Moscow-Puzzles-Mathematical-Recreations-Recreational/dp/0486270785/
-[4]: https://www.euclidea.xyz/
-[5]: https://en.wikipedia.org/wiki/Professor_Layton 
 [6]: https://www.youtube.com/c/3blue1brown
 [7]: https://www.youtube.com/user/eaterbc
 [8]: https://donate.wikimedia.org/
-[9]: https://www.charitynavigator.org/ein/391490691
+[9]: https://www.secondharvestsw.org/
 [10]: https://www.youtube.com/c/Mathologer
 [11]: https://www.patreon.com/home
 [12]: https://www.youtube.com/c/DrPeyam
@@ -67,23 +75,18 @@ For HTTPS, it uses a free SSL cert from [Let's Encrypt][23].
 [19]: https://rmarkdown.rstudio.com/lesson-10.html
 [20]: https://jupyter.org/
 [21]: https://unsplash.com/
-[22]: https://www.nginx.com/
 [23]: https://letsencrypt.org/
 
+[BIY]: https://en.wikipedia.org/wiki/Baba_Is_You
+[CEC]: http://wormwiring.org/
+[FI]: https://www.youtube.com/@FoldingIdeas
+[G]: /games/
 [NP]: https://www.youtube.com/c/numberphile
 [N]: https://en.wikipedia.org/wiki/Nematode
-[CEC]: http://wormwiring.org/
-
-[RWORD]: /docs/Oran-Looney-Data-Scientist-Resume-Online.docx 
-[RPDF]: /docs/Oran-Looney-Data-Scientist-Resume-Online.pdf
 [Q]: /quotes/
-[P]: https://www.oranlooney.com/quotes/#poems
-[T]: /tags/
-[BIY]: https://en.wikipedia.org/wiki/Baba_Is_You
-[TMP]: https://www.youtube.com/@TwoMinutePapers
+[RPDF]: /docs/Oran-Looney-Data-Scientist-Resume.pdf
 [SM]: https://www.youtube.com/@SteveMould
+[TH]: /tags/history/
+[TMP]: https://www.youtube.com/@TwoMinutePapers
+[T]: /tags/
 [WL]: https://www.youtube.com/@WelchLabsVideo
-[FI]: https://www.youtube.com/@FoldingIdeas
-[AFG]: /games/glados/
-[FW]: /games/font-wars/
-[DE]: /games/design-elements/

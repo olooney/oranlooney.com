@@ -310,10 +310,15 @@ level in which one can be absolutely precise."
 <br>&mdash;Edsger Dijkstra
 
 
-"\[...\] but there is one quality that cannot be purchased that way - and that is
-reliability. The price of reliability is the pursuit of the utmost simplicity.
-It is a price which the very rich find most hard to pay."
+"\[...\] but there is one quality that cannot be purchased that way - and that
+is reliability. The price of reliability is the pursuit of the utmost
+simplicity. It is a price which the very rich find most hard to pay."
 <br>&mdash;C.A.R. Hoare
+
+
+"So much complexity in software comes from trying to make one thing do two
+things."
+<br>&mdash;Ryan Singer
 
 
 "Inside every large program is a small program trying to get out."
