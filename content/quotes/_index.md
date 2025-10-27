@@ -941,7 +941,6 @@ Is nine squared (and not a bit more.)
 
 
 <b>Word Crunching</b><br>
-<br>
 I<br>
 wrote<br>
 a poem<br>
