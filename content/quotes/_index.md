@@ -1061,6 +1061,14 @@ by machines of loving grace.
 <br>&mdash;Richard Brautigan
 
 
+<br><b>Wonder</b><br>
+I wonder...<br>
+I wonder why?<br>
+I wonder *why* I wonder why,<br>
+I wonder why I wonder?
+<br>&mdash;Richard Feynman
+
+
 <br><b>Bertrand's Postulate</b><br>
 Chebyshev said it, but I'll say it again:<br>
 there's always a prime between $n$ and $2n$.
