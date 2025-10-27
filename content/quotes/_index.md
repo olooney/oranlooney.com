@@ -989,7 +989,7 @@ Is sixteen, case closed, shut the door.
 
 <br><b>A Complete Circle</b><br>
 \\[ e^{2 \pi i} = 1 \\]
-We start with the constant called "pi"<br>
+We start with the constant called $\pi$<br>
 And then multiply by two $i$<br>
 Apply exponential<br>
 (This step is essential)<br>
