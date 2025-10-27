@@ -51,7 +51,7 @@ html .article img {
 }
 
 html .article h1 {
-	color: #800000;
+	color: #800000; /* 766 nm maroon red */
 	font-size: 1.8em;
 	font-weight: normal;
 }
@@ -96,12 +96,6 @@ html header.site-header .site-title {
   font-family: garamond, "Times New Roman", serif;
   font-size: 44px;
   line-height: 50px;
-  /*background-image: url('/favicon_master.png');
-  background-size: 100px;
-  background-repeat: no-repeat;
-  background-position: 0 -25px;
-  text-indent: -9999px;
-  direction: ltr;*/
 }
 html header.site-header nav.site-navi {
 	max-width: 900px;

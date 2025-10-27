@@ -811,8 +811,6 @@ States."
 
 ## Humor
 
-### Jokes
-
 "Should array indices start at 0 or 1? My compromise of 0.5 was rejected
 without, I thought, proper consideration."
 <br>&mdash;Stan Kelly-Bootle
@@ -930,7 +928,7 @@ multithreading.' Nothhw tpe yawrve o oblems."
 <br>&mdash;John Carmack
 
 
-### Poems 
+## Poems 
 
 <b>A Dozen, A Gross, A Score</b><br>
 \\[ \frac{12 + 144 + 20 + 3\sqrt{4}}{7 + 5 \times 11} = 9^2 \\]
@@ -1009,6 +1007,58 @@ If the series of $Z$'s should always stay<br>
 Close to $Z$ and never trend away<br>
 That point is in the Mandelbrot Set
 <br>&mdash;Jonathan Coulton
+
+
+<br><b>16-bit Intel 8088 chip</b><br>
+with an Apple Macintosh<br>
+you can't run Radio Shack programs<br>
+in its disc drive.<br>
+nor can a Commodore 64<br>
+drive read a file<br>
+you have created on an<br>
+IBM Personal Computer.<br>
+both Kaypro and Osborne computers use<br>
+the CP/M operating system<br>
+but can't read each other's<br>
+handwriting<br>
+for they format (write<br>
+on) discs in different<br>
+ways.<br>
+the Tandy 2000 runs MS-DOS but<br>
+can't use most programs produced for<br>
+the IBM Personal Computer<br>
+unless certain<br>
+bits and bytes are<br>
+altered<br>
+but the wind still blows over<br>
+Savannah<br>
+and in the Spring<br>
+the turkey buzzard struts and<br>
+flounces before his<br>
+hens.
+<br>&mdash;Charles Bukowski
+
+
+<br><b>Roses are Red, Science is Blue</b><br>
+Roses have anthocyanin,<br>
+Which reflects wavelengths of approximately 700 nm,<br>
+Sucrose is C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>,<br>
+And human attraction is a complex biochemical phenomenon<br>
+mediated by oxytocin and other hormones.
+<br>&mdash;Anonymous
+
+
+<br><b>Machines of Loving Grace</b><br>
+I like to think<br>
+(it has to be!)<br>
+of a cybernetic ecology<br>
+where we are free of our labors<br>
+and joined back to nature,<br>
+returned to our mammal<br>
+brothers and sisters,<br>
+and all watched over<br>
+by machines of loving grace.
+<br>&mdash;Richard Brautigan
 
 
 <br><b>Bertrand's Postulate</b><br>
