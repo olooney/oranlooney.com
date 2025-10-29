@@ -725,6 +725,10 @@ post factum, they appear so obvious."
 <br>&mdash;Russian Proverb
 
 
+"The greatest thing / you'll ever learn / is just to love / and be loved in return."
+<br>&mdash;eden ahbez, *Nature Boy* (sung by [Nat King Cole][NKCNB])
+
+
 "When I do good I feel good, when I do bad I feel bad, and that's my religion."
 <br>&mdash;Abraham Lincoln
 
@@ -1072,3 +1076,6 @@ I wonder why I wonder?
 Chebyshev said it, but I'll say it again:<br>
 there's always a prime between $n$ and $2n$.
 <br>&mdash;N. J. Fine
+
+
+[NKCNB]: https://www.youtube.com/watch?v=ZpF1J9FnD4E
