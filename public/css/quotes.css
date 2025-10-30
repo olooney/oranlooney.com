@@ -1,0 +1,14 @@
+.search-container {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin-left: 0;
+}
+.search-form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
