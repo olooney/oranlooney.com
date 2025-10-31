@@ -4,7 +4,7 @@ author: "Oran Looney"
 date: 2025-10-23
 publishdate: 2025-10-23
 tags:
-  - Nonsense
+  - Satire
 image: /post/em-dash_files/lead.jpg
 ---
 

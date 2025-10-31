@@ -3,7 +3,7 @@ title: "A History of Encabulation"
 author: "Oran Looney"
 date: 2022-12-01
 tags:
-    - Nonsense
+    - Satire
     - Machine Learning
 image: /post/encabulation_files/lead.png
 ---
