@@ -503,7 +503,7 @@ def bell_number(n: int) -> int:
 techniques described in my earlier article on writing [a fairly fast Fibonacci
 function][FFFF] helpful.)
 
-We can use it to calculate the first 20 Bell numbers:
+We can use it to calculate the first ten Bell numbers:
 
 <style>
     html .article #bell-table table td,
@@ -566,46 +566,6 @@ We can use it to calculate the first 20 Bell numbers:
                 <td>10</td>
                 <td>115,975</td>
             </tr>
-            <tr>
-                <td>11</td>
-                <td>678,570</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>4,213,597</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>27,644,437</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>190,899,322</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>1,382,958,545</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>10,480,142,147</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>82,864,869,804</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>682,076,806,159</td>
-            </tr>
-            <tr>
-                <td>19</td>
-                <td>5,832,742,205,057</td>
-            </tr>
-            <tr>
-                <td>20</td>
-                <td>51,724,158,235,372</td>
-            </tr>
         </tbody>
     </table>
 </div>
@@ -621,7 +581,7 @@ It's not too surprising that some of these ideas were worked out over seven
 hundred years ago; combinatorics is an easy branch to stumble into when it
 arises in connection to some practical problem. It does, however, feel slightly
 surreal that it was a bunch of bored nobles playing an esoteric parlor game who
-first noticed these patterns and used it to attach literary significance to
+first noticed these patterns and used them to attach literary significance to
 their activities. But I'm glad they did so, because they did something we mere
 number crunchers would not have thought to do: they made them beautiful.
 
@@ -995,7 +955,7 @@ or [Excel spreadsheet](/post/genji-ko_files/genjiko.xlsx).
                 <td class="genjiko-chapter">33</td>
                 <td class="genjiko-kanji">藤裏葉</td>
                 <td class="genjiko-romaji">Fuji no Uraba</td>
-                <td class="genjiko-english">Fuji no Uraba</td>
+                <td class="genjiko-english">Wisteria Leaves</td>
                 <td class="genjiko-partition">{1}, {2, 5}, {3, 4}</td>
                 <td class="genjiko-icon">g</td>
             </tr>
@@ -1185,8 +1145,8 @@ or [Excel spreadsheet](/post/genji-ko_files/genjiko.xlsx).
 </div>
 
 Note that whenever the English column has apparently been left untranslated,
-this is because the chapter title is the proper name of one of the characters
-from [*The Tale of Genji*][TG]. Translating these would be as nonsensical as
+this is because the chapter title is the name of one of the characters from
+[*The Tale of Genji*][TG]. Translating these would be as nonsensical as
 translating "Jack Smith" to "Lifting Device Metal Worker."
 
 
