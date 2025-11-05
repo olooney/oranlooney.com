@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>OranLooney.com</title>
+    <title>Archives on OranLooney.com</title>
     <link>https://www.oranlooney.com/archives/</link>
-    <description>Recent content on OranLooney.com</description>
+    <description>Recent content in Archives on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>

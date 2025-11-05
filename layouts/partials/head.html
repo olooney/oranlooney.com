@@ -3,17 +3,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {{- if .IsHome }}
   <title>{{ .Site.Title }}</title>
-  <meta property="og:title" content="{{ .Site.Title }}" />
-  <meta name="twitter:title" content="{{ .Site.Title | truncate 70 }}" />
   {{- else }}
-  <title>{{ .Title }} - {{ .Site.Title }}</title>
-  <meta property="og:title" content="{{ .Title }} - {{ .Site.Title }}" />
-  <meta name="twitter:title" content="{{ printf "%s - %s" .Title .Site.Title | truncate 70 }}" />
-  {{- end }}
-  {{- with .Description | default .Params.subtitle | default .Summary }}
-  <meta name="description" content="{{ . }}">
-  <meta property="og:description" content="{{ . }}">
-  <meta name="twitter:description" content="{{ . | truncate 200 }}">
+  <title>{{ .Title | default .Site.Title }}</title>
   {{- end }}
   <meta name="author" content="{{ .Site.Params.author.name }}"/>
   {{- with .Site.Params.favicon }}
@@ -32,5 +23,4 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
 
   <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
- 
 </head>
