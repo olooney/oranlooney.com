@@ -491,6 +491,11 @@ and original manner possible."
 <br>&mdash;Richard Feynman
 
 
+"Taking fun as simply fun / and earnestness in earnest / shows how thoroughly
+thou none / of the two discernest."
+<br>&mdash;Piet Hein
+
+
 "You think you know when you can learn, are more sure when you can write, even
 more when you can teach, but certain when you can program."
 <br>&mdash;Alan J. Perlis
@@ -518,6 +523,11 @@ than an exact answer to the wrong question which can always be made precise."
 things. But not for me; my role is to be on the bottom of things. What I do
 takes long hours of studying and uninterruptible concentration."
 <br>&mdash;Donald Knuth
+
+
+"He who aims to keep abreast / is forever second best."
+<br>&mdash;Piet Hein
+
 
 
 ### Machine Learning
@@ -985,8 +995,8 @@ hens.
 
 
 <br><b>Roses are Red, Science is Blue</b><br>
-Roses have anthocyanin,<br>
-Which reflects wavelengths of approximately 700 nm,<br>
+Roses contain anthocyanin,<br>
+Which reflects wavelengths of roughly 700 nm,<br>
 Sucrose is C<sub>12</sub>H<sub>22</sub>O<sub>11</sub>,<br>
 And human attraction is a complex biochemical phenomenon<br>
 mediated by oxytocin and other hormones.
@@ -1012,6 +1022,18 @@ I wonder why?<br>
 I wonder *why* I wonder why,<br>
 I wonder why I wonder?
 <br>&mdash;Richard Feynman
+
+
+<br><b>The Road to Wisdom</b><br>
+The road to wisdom? &ndash; Well, it's plain<br>
+and simple to express:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Err<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and err<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and err again<br>
+&nbsp;&nbsp;&nbsp;&nbsp;but less<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and less<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and less.
+<br>&mdash;Piet Hein, *<a href="https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/" target="_">Grooks</a>*
 
 
 <br><b>Emily's Advice</b><br>
