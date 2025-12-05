@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tetromino 3D Viewer</title>
+    <style>
+        body { margin: 0; }
+        canvas { 
+            display: block; 
+        }
+        .article {
+            margin: auto;
+            max-width: 900px;
+        }
+        #tetromino-board {
+            margin: auto;
+            width: 640px; 
+            height: 480px;
+        }
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;  /* Chrome and Safari */
+            -moz-user-select: none;  /* Firefox */
+            -ms-user-select: none;  /* IE 10 and 11 */
+        }
+    </style>
+</head>
+<body>
+    <div class="article">
+        <h1>Title of Article</h1>
+        <p>Lorem ipsum, you know. Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know. </p>
+        <h2>Inner Title Quite Long</h2>
+        <p>Lorem ipsum, you know. Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know. </p>
+        <p>Lorem ipsum, you know. Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know. </p>
+        <p>Lorem ipsum, you know. Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know. </p>
+        <h2>Inner Title Quite Long</h2>
+        <p>Lorem ipsum, you know. Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know.Lorem ipsum, you know.Lorem ipsum, you
+        know.Lorem ipsum, you know. </p>
+    </div>
+
+    <div id="tetromino-board">
+        <div>
+            <button id="prev-solution">Previous</button>
+            <button id="next-solution">Next</button>
+            <button id="cycle-solution">Cycle</button>
+        </div>
+    </div>
+    <script type="module">
+        import { renderTetrominoBoard } from './tetromino_cube.js';
+        import { loadJSON } from './loader.js';
+
+
+        loadJSON('solutions.json').then(solutions=> {
+            let currentIndex = 0;
+            let update = renderTetrominoBoard(solutions[currentIndex], 'tetromino-board');
+
+            document.getElementById('prev-solution').addEventListener('click', () => {
+                currentIndex = (currentIndex + solutions.length - 1) % solutions.length;
+                update(solutions[currentIndex]);
+            });
+            document.getElementById('next-solution').addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % solutions.length;
+                update(solutions[currentIndex]);
+            });
+            document.getElementById('cycle-solution').addEventListener('click', () => {
+                setInterval(function() { 
+                    currentIndex = (currentIndex + 1) % solutions.length;
+                    update(solutions[currentIndex]);
+                }, 100);
+            });
+        }).catch(error => {
+            console.error('Failed to load JSON:', error);
+        });
+
+
+
+    </script>
+</body>
+</html>

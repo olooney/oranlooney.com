@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tetromino 3D Viewer</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #tetromino-board {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tetromino-board">
+    </div>
+    <script type="module">
+        import { renderTetrominoForest } from './tetromino_forest.js';
+        import { loadJSON } from './loader.js';
+
+
+        Promise.all([
+            loadJSON('positions.json'),
+            loadJSON('solutions.json')
+        ]).then(([positions, solutions]) => {
+            renderTetrominoForest(positions, solutions, 'tetromino-board');
+        }).catch(error => {
+            console.error('Failed to load JSON:', error);
+        });
+
+
+    </script>
+</body>
+</html>
