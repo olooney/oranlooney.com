@@ -8,7 +8,7 @@ tags:
   - Math
   - Python
   - Visualization
-image: /post/grifters-skeptics-marks/lead.png
+image: /post/grifters-skeptics-marks_files/lead.jpg
 ---
 
 Golden Age of Grift, "crime is legal now."
@@ -24,6 +24,8 @@ into periodic orbits.
 "Lilies of the valley" - Marks have a higher payoff in a high-trust environment
 with fewer grifters. Trust is efficient and easy, so long as most people are
 trustworthy.
+
+Paper Moon.
 
 Sensitive to parameters, other scenarios, like the cost of skepticism being
 too high leads to extinction.
