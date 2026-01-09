@@ -772,7 +772,7 @@ without, I thought, proper consideration."
 <br>&mdash;Stan Kelly-Bootle
 
 
-"There are three types of lies -- lies, damn lies, and statistics."
+"There are three types of lies: lies, damn lies, and statistics."
 <br>&mdash;Benjamin Disraeli
 
 
@@ -887,7 +887,7 @@ multithreading.' Nothhw tpe yawrve o oblems."
 ## Poems 
 
 <b>A Dozen, A Gross, A Score</b><br>
-\\[ \frac{12 + 144 + 20 + 3\sqrt{4}}{7 + 5 \times 11} = 9^2 \\]
+\\[ \frac{12 + 144 + 20 + 3\sqrt{4}}{7 + 5 \times 11} = 9^2 + 0 \\]
 A dozen, a gross, plus a score<br>
 Plus three times the square root of four<br>
 Divided by seven<br>
