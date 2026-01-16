@@ -88,7 +88,121 @@
         </li>
       </ul>
       
-      <p>Golden Age of Grift, &ldquo;crime is legal now.&rdquo;</p>
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#gsm-model">GSM Model</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>We’re in the golden age of grift. Where adventurers once flocked to California
+and the Yukon because “there was gold in them thar hills,” the most exploitable
+resource in 2026 are suckers. Great Grift Rush of ’06. “crime is legal now”,
+smart money and retail investors. CAT bonds for retail investors, etc.</p>
+
+<p>This is hardly the first time. The great depression brought with it a wave of
+con artists, as portrayed in movies like Paper Moon (see lead photo above) or
+The Sting. Mark Twain wrote of the innumerable swindlers and card sharps of his
+day; he lost most of his own fortune investing in fraudulent schemes so
+presumably he knew what he was talking about. When the conditions are right,
+they seem to crawl out of the woodwork.</p>
+
+<p>John Maynard Smith</p>
+
+<p><a href="https://www.scribd.com/document/686059918/Evolution-and-the-Theory-of-Games-PDFDrive">Evolution and The Theory of Games</a></p>
+
+<p><img src="/post/grifters-skeptics-marks_files/etg_book_cover.jpg" alt="Book Cover" /></p>
+
+<h2 id="gsm-model">GSM Model</h2>
+
+<table>
+<thead>
+<tr>
+<th>Player \ Opponent</th>
+<th>Grifter</th>
+<th>Skeptic</th>
+<th>Mark</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Grifter</strong></td>
+<td>-grifter_loss</td>
+<td>-grifter_loss</td>
+<td>grift_gain</td>
+</tr>
+
+<tr>
+<td><strong>Skeptic</strong></td>
+<td>-skeptic_cost</td>
+<td>mutual_benefit - skeptic_cost</td>
+<td>mutual_benefit - skeptic_cost</td>
+</tr>
+
+<tr>
+<td><strong>Mark</strong></td>
+<td>-mark_loss</td>
+<td>mutual_benefit</td>
+<td>mutual_benefit</td>
+</tr>
+</tbody>
+</table>
+
+<p>TODO: justify constant cost</p>
+
+<table>
+<thead>
+<tr>
+<th>Player \ Opponent</th>
+<th>Grifter</th>
+<th>Skeptic</th>
+<th>Mark</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Grifter</strong></td>
+<td>-0.5</td>
+<td>-0.5</td>
+<td>1.5</td>
+</tr>
+
+<tr>
+<td><strong>Skeptic</strong></td>
+<td>-0.2</td>
+<td>0.8</td>
+<td>0.8</td>
+</tr>
+
+<tr>
+<td><strong>Mark</strong></td>
+<td>-2.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm.png" alt="GSM Simplex" /></p>
+
+<p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm_ts.png" alt="GSM Time Series" /></p>
+
+<p><img src="/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png" alt="GSM High Skeptic Cost Simplex" /></p>
+
+<p><img src="/post/grifters-skeptics-marks_files/hsr.png" alt="HDR Simplex" /></p>
+
+<p>Discusses &ldquo;asymmetric games with cyclical dynamics.&rdquo;</p>
+
+<p>Non-transitive games (rock-paper-scissors game where every strategy can be beat by at least one other) always lead to these kinds of cyclical dynamics and do not converge to a single equilibrium point.</p>
+
+<p>Golden Age of Grift, &ldquo;crime is legal now.&rdquo;</p>
 
 <p>Evolutionary Game Theory, toy models, qualitative behavior.</p>
 
@@ -101,6 +215,8 @@ into periodic orbits.</p>
 <p>&ldquo;Lilies of the valley&rdquo; - Marks have a higher payoff in a high-trust environment
 with fewer grifters. Trust is efficient and easy, so long as most people are
 trustworthy.</p>
+
+<p>Paper Moon.</p>
 
 <p>Sensitive to parameters, other scenarios, like the cost of skepticism being
 too high leads to extinction.</p>
