@@ -94,6 +94,10 @@
 <li>
 <ul>
 <li><a href="#gsm-model">GSM Model</a></li>
+<li><a href="#replicator-dynamics">Replicator Dynamics</a></li>
+<li><a href="#results">Results</a></li>
+<li><a href="#variations">Variations</a></li>
+<li><a href="#hawks-doves-and-retaliators">Hawks, Doves, and Retaliators</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -101,16 +105,16 @@
       
 
 <p>We’re in the golden age of grift. Where adventurers once flocked to California
-and the Yukon because “there was gold in them thar hills,” the most exploitable
-resource in 2026 are suckers. Great Grift Rush of ’06. “crime is legal now”,
+and the Yukon because &ldquo;there was gold in them thar hills,&rdquo; the most exploitable
+resource in 2026 are suckers. Great Grift Rush of ’06. &ldquo;crime is legal now&rdquo;,
 smart money and retail investors. CAT bonds for retail investors, etc.</p>
 
-<p>This is hardly the first time. The great depression brought with it a wave of
-con artists, as portrayed in movies like Paper Moon (see lead photo above) or
-The Sting. Mark Twain wrote of the innumerable swindlers and card sharps of his
-day; he lost most of his own fortune investing in fraudulent schemes so
-presumably he knew what he was talking about. When the conditions are right,
-they seem to crawl out of the woodwork.</p>
+<p>This is hardly the first time. The Great Depression brought with it a wave of
+con artists, as portrayed in movies like <a href="https://en.wikipedia.org/wiki/Paper_Moon_(film)"><em>Paper Moon</em></a> or <a href="https://en.wikipedia.org/wiki/The_Sting"><em>The
+Sting</em></a>. A century earlier, Mark Twain wrote of the innumerable swindlers
+and card sharps of his day; he lost most of his own fortune investing in
+<a href="https://time.com/4297572/mark-twain-bad-business/">doomed investment schemes</a> When the conditions are right, they seem to
+crawl out of the woodwork.</p>
 
 <p>John Maynard Smith</p>
 
@@ -123,7 +127,7 @@ they seem to crawl out of the woodwork.</p>
 <table>
 <thead>
 <tr>
-<th>Player \ Opponent</th>
+<th>Players</th>
 <th>Grifter</th>
 <th>Skeptic</th>
 <th>Mark</th>
@@ -154,12 +158,72 @@ they seem to crawl out of the woodwork.</p>
 </tbody>
 </table>
 
-<p>TODO: justify constant cost</p>
+<p>When a Grifter meets another Grifter or a Skeptic, the scam fails. The Grifter
+wastes time and effort and incurs a loss. But when a Grifter meets a Mark does
+the strategy pay off: the Grifter successfully exploits the Mark and gains a
+sizable reward.</p>
+
+<p>A Skeptic never gets scammed, but pays a constant price for vigilance. When a
+Skeptic meets anyone&mdash;Grifter, Skeptic, or Mark&mdash;they incur an
+constant overhead cost, which represents costs investing in education and
+doing due diligence.
+When interacting with honest counterparts (Skeptics or Marks), they still
+achieve mutual cooperation, but still have to pay the cost for their caution.</p>
+
+<p>A Mark is trusting and unguarded. When a Mark meets another Mark, everything
+goes smoothly: they cooperate without hesitation and both receive maximal payoffs.
+Things go almost as well when they meet a Skeptic; after the Skeptic has done
+their homework the two are able to cooperate without issue, and the Mark still
+recieves a maximal payoff.</p>
+
+<p>It&rsquo;s only when a Mark encounters a Grifter that things go south. The Mark is
+exploited and incurs a large loss.</p>
+
+<p>TODO Here are some reasonable parameter values:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>parameter_name</th>
+      <th>value</th>
+      <th colspan="2">note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>mutual_benefit</td>
+      <td>1.0</td>
+      <td colspan="2">mutual benefit of cooperation</td>
+    </tr>
+    <tr>
+      <td>skeptic_cost</td>
+      <td>0.2</td>
+      <td colspan="2">overhead of being a skeptic</td>
+    </tr>
+    <tr>
+      <td>grift_gain</td>
+      <td>1.5</td>
+      <td colspan="2">payoff for a Grifter exploiting a Mark</td>
+    </tr>
+    <tr>
+      <td>mark_loss</td>
+      <td>2.0</td>
+      <td colspan="2">loss suffered by a Mark when exploited</td>
+    </tr>
+    <tr>
+      <td>grifter_loss</td>
+      <td>0.5</td>
+      <td colspan="2">cost of a failed grift</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Which results in</p>
 
 <table>
 <thead>
 <tr>
-<th>Player \ Opponent</th>
+<th>Players</th>
 <th>Grifter</th>
 <th>Skeptic</th>
 <th>Mark</th>
@@ -190,13 +254,49 @@ they seem to crawl out of the woodwork.</p>
 </tbody>
 </table>
 
+<h2 id="replicator-dynamics">Replicator Dynamics</h2>
+
+<pre><code class="language-python">def replicator(populations, A, delta=0.05, N=2000):
+    &quot;&quot;&quot;
+    Given an initial vector of `populations`, an payoff matrix `A`, a step size
+    `delta`, and a number of iterations `N`, return the trajectory as a 2D
+    numpy matrix and the final population as a 1D numpy array the same shape as
+    the population.
+    &quot;&quot;&quot;
+    # ensure populations is a normalized numpy vector
+    populations = np.asarray(populations, float)
+    populations = populations / populations.sum()
+
+    # initialize the trajectory with the initial conditions
+    trajectory = [populations.copy()]
+    
+    for _ in range(N):
+        # payoff for this iteration
+        fitness = A @ populations 
+
+        # update population in direction of the most successful strategy
+        average = populations @ fitness
+        populations = populations + delta * (populations * (fitness - average))
+
+        # avoid extinction and normalize
+        populations = np.clip(populations, 1e-6, 1 + delta) 
+        populations = populations / populations.sum()
+        
+        # track the full history of population trajectories
+        trajectory.append(populations.copy())
+
+    return np.array(trajectory), populations
+</code></pre>
+
+<h2 id="results">Results</h2>
+
 <p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm.png" alt="GSM Simplex" /></p>
 
 <p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm_ts.png" alt="GSM Time Series" /></p>
 
-<p><img src="/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png" alt="GSM High Skeptic Cost Simplex" /></p>
+<h2 id="variations">Variations</h2>
 
-<p><img src="/post/grifters-skeptics-marks_files/hsr.png" alt="HDR Simplex" /></p>
+<p><img src="/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png" alt="GSM High Skeptic Cost Simplex" /></p>
 
 <p>Discusses &ldquo;asymmetric games with cyclical dynamics.&rdquo;</p>
 
@@ -221,8 +321,14 @@ trustworthy.</p>
 <p>Sensitive to parameters, other scenarios, like the cost of skepticism being
 too high leads to extinction.</p>
 
+<h2 id="hawks-doves-and-retaliators">Hawks, Doves, and Retaliators</h2>
+
 <p>Compare to Hawks, Doves, and Retaliators, which leads to a fairly boring
-equilibrium. Vigilante justice ultimately doesn&rsquo;t work. Due diligence does
+equilibrium.</p>
+
+<p><img src="/post/grifters-skeptics-marks_files/hdr.png" alt="HDR Simplex" /></p>
+
+<p>Vigilante justice ultimately doesn&rsquo;t work. Due diligence does
 work, but once there are sufficient consumer protections in place that you
 are exceedingly unlikely to be scammed, everyone lowers their guard (or forgets
 how to raise it at all) and soon the population is ripe for a new generation
@@ -241,6 +347,13 @@ would change the dynamics, on so on ad infinitum. This is why human behavior
 en masse is so hard to model: there isn&rsquo;t some &ldquo;grifter&rdquo; gene that fixes an
 individuals behavior for life, but a rational decision based on innumerable
 factors.</p>
+
+<style>
+  .article table tbody td {
+    text-align: center;
+    width: 25%;
+  }
+</style>
 
     </article>
 
