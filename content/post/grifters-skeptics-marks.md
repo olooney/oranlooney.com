@@ -1,8 +1,8 @@
 ---
 title: "Grifters, Skeptics, and Marks"
 author: "Oran Looney"
-date: 2026-01-08
-publishdate: 2026-01-08
+date: 2026-01-24
+publishdate: 2026-01-24
 tags:
   - Computer Science
   - Math
@@ -12,19 +12,41 @@ image: /post/grifters-skeptics-marks_files/lead.jpg
 ---
 
 
+
 We’re in the golden age of grift. Where adventurers once flocked to California
-and the Yukon because "there was gold in them thar hills," the most exploitable
-resource in 2026 are suckers. Great Grift Rush of ’06. "crime is legal now",
-smart money and retail investors. CAT bonds for retail investors, etc.
+and the Yukon because "there was gold in them thar hills," the best way to get
+rich these days is to fleece suckers. We've got crypto rug pulls, meme stocks,
+CAT bonds for retail investors; meanwhile, the regulatory landscape is becoming
+increasingly lax, with financial professionals frequently joking, "crime is
+legal now."
 
- 
+TODO: youtube citation for crime and CAT bonds
 
-This is hardly the first time. The Great Depression brought with it a wave of
-con artists, as portrayed in movies like [*Paper Moon*][PM] or [*The
-Sting*][TS]. A century earlier, Mark Twain wrote of the innumerable swindlers
-and card sharps of his day; he lost most of his own fortune investing in
-[doomed investment schemes][MTI] When the conditions are right, they seem to
-crawl out of the woodwork.
+
+Now, this is hardly the first time in history this has happend. The Great
+Depression brought with it a wave of con artists, as portrayed in movies like
+[*Paper Moon*][PM] or [*The Sting*][TS]. A century earlier, Mark Twain wrote of
+the innumerable swindlers and card sharps of his day; he lost most of his own
+fortune investing in [doomed investment schemes][MTI] When the conditions are
+right, they seem to crawl out of the woodwork.
+
+For example, this WWI era comic is still perfectly relevant today, with influencers
+routinely shilling products without declaring affiliation:
+
+![Old Comic](/post/grifters-skeptics-marks_files/old_comic.jpg)
+
+The question: is this just the new normal, and things are just going to keep 
+getting worse? Or is there some reason why it comes in waves? If so, is it
+driven by external circumstances such as war or poverty, or is it a natural
+fluctuation?
+
+The answer, I'd argue, lies in a moderately obscure mathematical theory from
+the 1980's. 
+
+
+Evolutionary Game Theory
+------------------------
+
 
 [PM]: https://en.wikipedia.org/wiki/Paper_Moon_(film)
 [TS]: https://en.wikipedia.org/wiki/The_Sting
@@ -39,6 +61,12 @@ John Maynard Smith
 
 ![Book Cover](/post/grifters-skeptics-marks_files/etg_book_cover.jpg)
 
+Note that triange diagram on the cover of the book; we'll be revisting that
+visualization several times.
+
+Source code available in the [Jupyter notebook][NB].
+
+[NB]: /post/grifters-skeptics-marks_files/grifters-skeptics-marks.ipynb
 
 
 GSM Model
@@ -228,6 +256,14 @@ factors.
 
 
 
+TODO: Which AI lies best?
+
+https://news.ycombinator.com/item?id=46698370
+
+https://so-long-sucker.vercel.app/blog
+
+
+
 
 
 <style>
@@ -236,3 +272,4 @@ factors.
     width: 25%;
   }
 </style>
+
