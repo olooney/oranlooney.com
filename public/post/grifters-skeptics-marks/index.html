@@ -97,57 +97,88 @@
 <li><a href="#gsm-model">GSM Model</a></li>
 <li><a href="#replicator-dynamics">Replicator Dynamics</a></li>
 <li><a href="#results">Results</a></li>
-<li><a href="#variations">Variations</a></li>
 <li><a href="#hawks-doves-and-retaliators">Hawks, Doves, and Retaliators</a></li>
+<li><a href="#cost-of-skepticism">Cost of Skepticism</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
 </ul>
 </nav>
 </aside>
       
 
-<p>We’re in the golden age of grift. Where adventurers once flocked to California
-and the Yukon because &ldquo;there was gold in them thar hills,&rdquo; the best way to get
-rich these days is to fleece suckers. We&rsquo;ve got crypto rug pulls, meme stocks,
-CAT bonds for retail investors; meanwhile, the regulatory landscape is becoming
-increasingly lax, with financial professionals frequently joking, &ldquo;crime is
-legal now.&rdquo;</p>
+<p>We are in a golden age of grift. Where adventurers once flocked to California
+or the Yukon because &ldquo;there was gold in them thar hills,&rdquo; the best way to get
+rich today is to fleece suckers. We&rsquo;ve got crypto rug pulls, meme stocks, and a
+seemingly endless stream of financial products engineered for nothing more than
+plausible deniability. Things have gotten so bad that financial professionals
+frequently joke, &ldquo;<a href="https://www.youtube.com/watch?v=UqWHiMBBNGM">crime is legal now</a>.&rdquo;</p>
 
-<p>TODO: youtube citation for crime and CAT bonds</p>
-
-<p>Now, this is hardly the first time in history this has happend. The Great
-Depression brought with it a wave of con artists, as portrayed in movies like
-<a href="https://en.wikipedia.org/wiki/Paper_Moon_(film)"><em>Paper Moon</em></a> or <a href="https://en.wikipedia.org/wiki/The_Sting"><em>The Sting</em></a>. A century earlier, Mark Twain wrote of
-the innumerable swindlers and card sharps of his day; he lost most of his own
-fortune investing in <a href="https://time.com/4297572/mark-twain-bad-business/">doomed investment schemes</a> When the conditions are
-right, they seem to crawl out of the woodwork.</p>
-
-<p>For example, this WWI era comic is still perfectly relevant today, with influencers
-routinely shilling products without declaring affiliation:</p>
+<p>This is hardly the first time. The Great Depression brought with it a wave of
+con artists, as portrayed in movies like <a href="https://en.wikipedia.org/wiki/Paper_Moon_(film)"><em>Paper Moon</em></a> or <a href="https://en.wikipedia.org/wiki/The_Sting"><em>The
+Sting</em></a>. A century earlier, Mark Twain wrote of the innumerable swindlers
+and card sharps operating along the Mississippi river; indeed, Twain himself
+lost most of his own fortune investing in <a href="https://time.com/4297572/mark-twain-bad-business/">fraudulent investment schemes</a>.
+When the conditions are right, grifters seem to crawl out of the woodwork. This
+WWI era comic is still relevant today, with influencers routinely shilling
+products without declaring affiliation:</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/old_comic.jpg" alt="Old Comic" /></p>
 
-<p>The question: is this just the new normal, and things are just going to keep
-getting worse? Or is there some reason why it comes in waves? If so, is it
-driven by external circumstances such as war or poverty, or is it a natural
-fluctuation?</p>
+<p>Nor is this a purely American phenomenon: Umberto Eco writes about the fairly
+loose relationship the middle ages had with truth in books like <em><a href="https://en.wikipedia.org/wiki/The_Prague_Cemetery">The Prague Cemetery</a></em>
+or <em><a href="https://en.wikipedia.org/wiki/Baudolino">Baudolino</a></em>.</p>
+
+<p><img src="/post/grifters-skeptics-marks_files/baudolino_book_cover.jpg" alt="Baudolino Book Cover" /></p>
+
+<p>Is this just the new normal? Is it just going to keep getting worse? Or is this
+just the high watermark in a cycle as old as civilization? If it is cyclic, is
+it driven by external circumstances such as war or poverty, or does the
+oscillation arise naturally from the dynamics of system?</p>
+
+<p>Such ivory tower questions have a pragmatic application: should we expect grift
+and corruption to get worse, stay the same, or get better over the next decade?</p>
 
 <p>The answer, I&rsquo;d argue, lies in a moderately obscure mathematical theory from
 the 1980s.</p>
 
 <h2 id="evolutionary-game-theory">Evolutionary Game Theory</h2>
 
-<p>John Maynard Smith</p>
+<p>The version of game theory most people have seen is the rational-agent sort:
+perfectly informed players maximize utility, best responses snap into place,
+and equilibria have the clean finality of a solved puzzle. Evolutionary Game
+Theory (EGT) is different. It assumes that all strategies exist in the
+population and that success in games leads to reproductive success slowly
+increases the relative proportion of that strategy in the population over time.
+Strategies that earn higher payoffs become more common. Strategies that earn
+lower payoffs decline.</p>
 
-<p><a href="https://www.scribd.com/document/686059918/Evolution-and-the-Theory-of-Games-PDFDrive">Evolution and The Theory of Games</a></p>
+<p>This is the framework John Maynard Smith popularized in <a href="https://www.scribd.com/document/686059918/Evolution-and-the-Theory-of-Games-PDFDrive"><em>Evolution and the
+Theory of Games</em></a>. The book is now mostly read by specialists, but it
+contains a small number of ideas that are so widely applicable that once you
+see them, you start seeing them everywhere.</p>
 
-<p><img src="/post/grifters-skeptics-marks_files/etg_book_cover.jpg" alt="Book Cover" /></p>
+<p><img src="/post/grifters-skeptics-marks_files/etg_book_cover.jpg" alt="Evolutionary Game Theory Book Cover" /></p>
 
-<p>Note that triange diagram on the cover of the book; we&rsquo;ll be revisting that
+<p>Note that triangle diagram on the cover of the book; we&rsquo;ll be revisiting that
 visualization several times.</p>
 
 <p>Source code available in the <a href="/post/grifters-skeptics-marks_files/grifters-skeptics-marks.ipynb">Jupyter notebook</a>.</p>
 
 <h2 id="gsm-model">GSM Model</h2>
+
+<p>We&rsquo;re going to try and model the prevalence of grifters with a EGT model with
+three strategies, then use the mathematical tools Maynard developed to study
+that model. While such a simplistic toy model won&rsquo;t even try to capture all
+the nuances of the real-world, we can hope for qualitative insights. The three
+strategies are:</p>
+
+<ul>
+<li><strong>Grifter</strong>: attempts exploitation when possible.</li>
+<li><strong>Skeptic</strong>: pays an ongoing cost to avoid being exploited.</li>
+<li><strong>Mark</strong>: trusts by default; cooperates cheaply, but is vulnerable.</li>
+</ul>
+
+<p>We can formalize these strategies within EGT by defining a payoff matrix:</p>
 
 <table>
 <thead>
@@ -190,21 +221,22 @@ sizable reward.</p>
 
 <p>A Skeptic never gets scammed, but pays a constant price for vigilance. When a
 Skeptic meets anyone&mdash;Grifter, Skeptic, or Mark&mdash;they incur an
-constant overhead cost, which represents costs investing in education and
-doing due diligence.
-When interacting with honest counterparts (Skeptics or Marks), they still
-achieve mutual cooperation, but still have to pay the cost for their caution.</p>
+constant overhead cost, which represents costs investing in education and doing
+due diligence. When interacting with honest counterparts (Skeptics or Marks),
+they still achieve mutual cooperation, but still have to pay the cost for their
+caution.</p>
 
 <p>A Mark is trusting and unguarded. When a Mark meets another Mark, everything
 goes smoothly: they cooperate without hesitation and both receive maximal payoffs.
 Things go almost as well when they meet a Skeptic; after the Skeptic has done
 their homework the two are able to cooperate without issue, and the Mark still
-recieves a maximal payoff.</p>
+receives a maximal payoff.</p>
 
-<p>It&rsquo;s only when a Mark encounters a Grifter that things go south. The Mark is
-exploited and incurs a large loss.</p>
+<p>It&rsquo;s only when a Mark encounters a Grifter that things go south. When that
+happens, the Mark gets exploited and incurs a large loss.</p>
 
-<p>TODO Here are some reasonable parameter values:</p>
+<p>The specific parameters don&rsquo;t affect the qualitative outcome much, but here are
+some reasonable parameter values for concreteness:</p>
 
 <table>
   <thead>
@@ -243,7 +275,7 @@ exploited and incurs a large loss.</p>
   </tbody>
 </table>
 
-<p>Which results in</p>
+<p>With those parameters, the concrete payoff matrix is:</p>
 
 <table>
 <thead>
@@ -281,6 +313,12 @@ exploited and incurs a large loss.</p>
 
 <h2 id="replicator-dynamics">Replicator Dynamics</h2>
 
+<p>To turn payoffs into population dynamics, we use replicator equations: each
+strategy grows (or shrinks) in proportion to how well it is doing relative to
+the population average.</p>
+
+<p>Here is the simple, discrete-time simulator I used:</p>
+
 <pre><code class="language-python">def replicator(populations, A, delta=0.05, N=2000):
     &quot;&quot;&quot;
     Given an initial vector of `populations`, an payoff matrix `A`, a step size
@@ -313,15 +351,40 @@ exploited and incurs a large loss.</p>
     return np.array(trajectory), populations
 </code></pre>
 
+<p>This is not the only way to do it but works well enough for our purposes. Note
+that the simulation returns the complete trajectory (history) of each
+population over time: we are not searching for an optimal strategy; we are
+watching what happens when strategies compete and the winners become more
+common.</p>
+
 <h2 id="results">Results</h2>
+
+<p>The state of a three-strategy population fits naturally on a simplex: a
+triangle where each corner is a pure population (100% Grifter, 100% Skeptic,
+100% Mark), and each interior point is a mixture. Several different trajectories
+are shown as colored fields, each with different random initial conditions, and
+a vector field showing the evolutionary pressure at each point is overlaid.</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm.png" alt="GSM Simplex" /></p>
 
+<p>It&rsquo;s also instructive to look at the longitudinal view, ploting the three
+populations as a time series:</p>
+
 <p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm_ts.png" alt="GSM Time Series" /></p>
 
-<h2 id="variations">Variations</h2>
+<p>We can see the system does not settle down to a single equilibrium point but
+instead falls into quasi-periodic cycles. This is the signature of
+&ldquo;non-transitive&rdquo; games such as rock-paper-scissors; in such games trajectories
+orbit rather than converge.</p>
 
-<p><img src="/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png" alt="GSM High Skeptic Cost Simplex" /></p>
+<p>Our game is &ldquo;non-transitive&rdquo; because success is a function of the current
+population mix, and that very success always leads to a different mix:</p>
+
+<ul>
+<li>Marks prosper when grifters are rare, because trust is efficient.</li>
+<li>Grifters prosper when marks are common, because exploitation is easy.</li>
+<li>Skeptics prosper when grifters are common, because vigilance pays for itself.</li>
+</ul>
 
 <p>Discusses &ldquo;asymmetric games with cyclical dynamics.&rdquo;</p>
 
@@ -348,36 +411,42 @@ too high leads to extinction.</p>
 
 <h2 id="hawks-doves-and-retaliators">Hawks, Doves, and Retaliators</h2>
 
-<p>Compare to Hawks, Doves, and Retaliators, which leads to a fairly boring
-equilibrium.</p>
+<p>A useful contrast is the classic Hawks/Doves/Retaliators story, which is often
+used as a first EGT example because it is compact and behaves nicely: it tends
+to settle to a stable equilibrium point.</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/hdr.png" alt="HDR Simplex" /></p>
 
-<p>Vigilante justice ultimately doesn&rsquo;t work. Due diligence does
-work, but once there are sufficient consumer protections in place that you
-are exceedingly unlikely to be scammed, everyone lowers their guard (or forgets
-how to raise it at all) and soon the population is ripe for a new generation
-of grifters. They do well for a while, until their very success leads to
-numerous copycats, which leads to a low-trust environment, which brings the
-skeptics back&hellip; there&rsquo;s no way for the system to every truly stabilize.</p>
+<p>This point is called an <a href="https://en.wikipedia.org/wiki/Evolutionarily_stable_strategy">Evolutionarily stable strategy</a> (ESS).</p>
 
-<p>Staying as a permanent skeptic has a higher payoff than any other permanent
-strategy, but fixing a strategy is not optimal. The worst strategy is to do
-whatever worked a dozen iterations ago, because by then the population mix has
-evolved to exploit that. The theoretically best strategy is to be aware of the
-current mix and switch just before its about to change. Note that such advanced,
-memory based strategies are out-of-scope of this EGT model, and if they were
-possible we would have to include them as a separate population, which in turn
-would change the dynamics, on so on ad infinitum. This is why human behavior
-en masse is so hard to model: there isn&rsquo;t some &ldquo;grifter&rdquo; gene that fixes an
-individuals behavior for life, but a rational decision based on innumerable
-factors.</p>
+<p>Why does HDR converge to an ESS while GSM does not? The Realiator strategy goes
+extinct and stays extinct because it bears the full cost of policing Hawks
+itself. In contrast, the Skeptic in GSM is not concerned with punishing
+Grifters but simply avoiding them.</p>
 
-<p>TODO: Which AI lies best?</p>
+<h2 id="cost-of-skepticism">Cost of Skepticism</h2>
 
-<p><a href="https://news.ycombinator.com/item?id=46698370">https://news.ycombinator.com/item?id=46698370</a></p>
+<p>It is possible for the GSM model to collapse to an ESS equilibrium if
+we make the constant cost of skepticism (which you&rsquo;ll remember represents the
+overhead of eduction and conducting due diligence before deals) too high:</p>
 
-<p><a href="https://so-long-sucker.vercel.app/blog">https://so-long-sucker.vercel.app/blog</a></p>
+<p><img src="/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png" alt="GSM High Skeptic Cost Simplex" /></p>
+
+<p>Such a model basically collapses to feudalism, with an underclass permanently
+exploited by by an aristocracy, which is only limited in size by its frequent
+destructive conflicts with itself.</p>
+
+<p>However, as long as the cost of skepticism isn&rsquo;t prohibitive, it remains
+a competitive strategy.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>The current generation of grifters is putting on a masterclass in spotting
+con artists</p>
+
+<p>lilies of the valley.</p>
+
+<p>Does due diligence work? Private equity firms seem to think so.</p>
 
 <style>
   .article table tbody td {
