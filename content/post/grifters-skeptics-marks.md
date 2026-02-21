@@ -41,7 +41,7 @@ driven by external circumstances such as war or poverty, or is it a natural
 fluctuation?
 
 The answer, I'd argue, lies in a moderately obscure mathematical theory from
-the 1980's. 
+the 1980s. 
 
 
 Evolutionary Game Theory

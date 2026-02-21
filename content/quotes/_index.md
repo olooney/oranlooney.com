@@ -76,6 +76,11 @@ small and to see something in the large."
 <br>&mdash;Alistair Cockburn
 
 
+"Hofstadter's law: It always takes longer than you expect, even when you take
+into account Hofstadter's law."
+<br>&mdash;Douglas Hofstadter
+
+
 "Building a four-foot tower requires a steady hand, a level surface, and 10
 undamaged beer cans. Building a 400 foot tower doesn't merely require 100 times
 as many beer cans."
@@ -131,6 +136,11 @@ of 8.5-by-11 inch paper cannot be understood."
 development time. The remaining 10 percent of the code accounts for the other
 90 percent of the development time."
 <br>&mdash;Tom Cargill 
+
+
+"every twenty minute job is one broken bolt away from becoming a three day
+ordeal."
+<br>&mdash;Anonymous
 
 
 "Any program is a model of a model within a theory of a model of an abstraction
@@ -325,8 +335,8 @@ better."
 
 ### Optimization
 
-"[The First Rule of Program Optimization] Don't do it."<br>
-"[The Second Rule of Program Optimization-For experts only] Don't do it yet."
+"The First Rule of Program Optimization: Don't do it.<br>
+The Second Rule of Program Optimization (For Experts Only): Don't do it yet."
 <br>&mdash;Michael A. Jackson
 
 
@@ -435,6 +445,10 @@ be questioned."
 "If a man will begin with certainties, he shall end in doubts; but if he will
 be content to begin with doubts he shall end in certainties."
 <br>&mdash;Francis Bacon
+
+
+"All models are wrong, but some are useful."
+<br>&mdash;George Box
 
 
 "On a log-log plot, my grandmother fits on a straight line."
@@ -677,8 +691,8 @@ post factum, they appear so obvious."
 <br>&mdash;Russian Proverb
 
 
-"The greatest thing / you'll ever learn / is just to love / and be loved in return."
-<br>&mdash;eden ahbez, *Nature Boy* (sung by [Nat King Cole][NKCNB])
+"The greatest thing you'll ever learn / is just to love and be loved in return."
+<br>&mdash;eden ahbez, *[Nature Boy][NKCNB]*
 
 
 "When I do good I feel good, when I do bad I feel bad, and that's my religion."
@@ -762,7 +776,6 @@ and ignorance on the other."
 "Either America will destroy ignorance or ignorance will destroy the United
 States." 
 <br>&mdash;W.E.B. Du Bois
-
 
 
 ## Humor
@@ -863,11 +876,6 @@ art."
 with them. You can’t just place a LISP book on top of an x86 chip and hope that
 the hardware learns about lambda calculus by osmosis."
 <br>&mdash;James Mickens
-
-
-"Math is all about nuance. For example, there's a fine line between a numerator
-and a denominator."
-<br>&mdash;Anonymous
 
 
 "Every time I fire a linguist, the performance of the speech recognizer goes
@@ -1033,7 +1041,7 @@ and simple to express:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;but less<br>
 &nbsp;&nbsp;&nbsp;&nbsp;and less<br>
 &nbsp;&nbsp;&nbsp;&nbsp;and less.
-<br>&mdash;Piet Hein, *<a href="https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/" target="_">Grooks</a>*
+<br>&mdash;Piet Hein, *[Grooks][PHG]</a>*
 
 
 <br><b>Emily's Advice</b><br>
@@ -1055,3 +1063,4 @@ there's always a prime between $n$ and $2n$.
 
 
 [NKCNB]: https://www.youtube.com/watch?v=ZpF1J9FnD4E
+[PHG]: https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/

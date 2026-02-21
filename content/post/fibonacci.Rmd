@@ -373,11 +373,11 @@ Now, we *could* just rely on [NumPy][NP]'s matrix multiplication, like so:
     numpy.linalg.matrix_power(F1, n)
 
 This works. (Although strangely enough matrix multiplication with the `@`
-operator *doesn't* work when `dtype='object'`.) As much as love numpy though,
+operator *doesn't* work when `dtype='object'`.) As much as I love numpy though,
 I don't think we need to drag it in as a dependency just to multiply $2 \times
 2$ matrices when we're not even using native integer types.
 
-Plus, we'll see see in a second that there are some optimizations we can make
+Plus, we'll see in a second that there are some optimizations we can make
 that wouldn't be possible if we let NumPy handle everything for us.  So for
 now, let's implement the naive matrix algorithm in native Python; we'll come
 back and refactor in the next section.
@@ -844,7 +844,7 @@ We can make a few observations:
   point number.
 * The best asymptotic performance is from the version using both GMP and the
   dynamic programming cache.
-* By construction, the "hybrid" algorithm traces out lower bound - constant
+* By construction, the "hybrid" algorithm traces out the lower bound: constant
   until 92, then hugs the Cython curve for a while, then switches to the
   dynamic GMP solution for large numbers.
 
@@ -938,8 +938,7 @@ practice.
 As good as today's hardware is, it's often the algorithm that makes the
 impossible possible.
 
-The code for today's article is available as a [Jupyter notebook][JN] if you'd
-like to hack on  it. You will need to install [GMP][GMP], its Python wrapper
+The code for today's article is available as a [Jupyter notebook][JN]. You will need to install [GMP][GMP], its Python wrapper
 [gmpy2][G2], and [Cython][CYI]. I am sure there is another order of magnitude
 of performance to be found somewhere.
 

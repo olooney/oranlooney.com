@@ -312,9 +312,9 @@ convenient language for working with very large numbers.</p>
 <pre><code>F1 = numpy.array([[1,1],[1,]], dtype=&#39;object&#39;) 
 numpy.linalg.matrix_power(F1, n)</code></pre>
 <p>This works. (Although strangely enough matrix multiplication with the <code>@</code>
-operator <em>doesn’t</em> work when <code>dtype='object'</code>.) As much as love numpy though,
+operator <em>doesn’t</em> work when <code>dtype='object'</code>.) As much as I love numpy though,
 I don’t think we need to drag it in as a dependency just to multiply <span class="math inline">\(2 \times 2\)</span> matrices when we’re not even using native integer types.</p>
-<p>Plus, we’ll see see in a second that there are some optimizations we can make
+<p>Plus, we’ll see in a second that there are some optimizations we can make
 that wouldn’t be possible if we let NumPy handle everything for us. So for
 now, let’s implement the naive matrix algorithm in native Python; we’ll come
 back and refactor in the next section.</p>
@@ -758,7 +758,7 @@ overflowing once it can no longer represent its solution as a 64-bit floating
 point number.</li>
 <li>The best asymptotic performance is from the version using both GMP and the
 dynamic programming cache.</li>
-<li>By construction, the “hybrid” algorithm traces out lower bound - constant
+<li>By construction, the “hybrid” algorithm traces out the lower bound: constant
 until 92, then hugs the Cython curve for a while, then switches to the
 dynamic GMP solution for large numbers.</li>
 </ul>
@@ -840,8 +840,7 @@ somewhere between magical and impossible. Yet they all work, both in theory and
 practice.</p>
 <p>As good as today’s hardware is, it’s often the algorithm that makes the
 impossible possible.</p>
-<p>The code for today’s article is available as a <a href="/post/fibonacci_files/Fibonacci.ipynb">Jupyter notebook</a> if you’d
-like to hack on it. You will need to install <a href="https://gmplib.org/">GMP</a>, its Python wrapper
+<p>The code for today’s article is available as a <a href="/post/fibonacci_files/Fibonacci.ipynb">Jupyter notebook</a>. You will need to install <a href="https://gmplib.org/">GMP</a>, its Python wrapper
 <a href="https://pypi.org/project/gmpy2/">gmpy2</a>, and <a href="https://cython.readthedocs.io/en/latest/src/quickstart/install.html#install">Cython</a>. I am sure there is another order of magnitude
 of performance to be found somewhere.</p>
 </div>
