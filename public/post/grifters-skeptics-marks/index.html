@@ -61,7 +61,7 @@
         <li class="article-meta-author">
             by <a href="/about/">Oran Looney</a>
         </li>
-        <li class="article-meta-date"><time>January 24, 2026</time></li>
+        <li class="article-meta-date"><time>February 22, 2026</time></li>
         <li class="article-meta-tags">
           <a href="/tags/computer-science/">
             <i class="fas fa-tag"></i>
@@ -98,7 +98,6 @@
 <li><a href="#replicator-dynamics">Replicator Dynamics</a></li>
 <li><a href="#results">Results</a></li>
 <li><a href="#hawks-doves-and-retaliators">Hawks, Doves, and Retaliators</a></li>
-<li><a href="#cost-of-skepticism">Cost of Skepticism</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
 </ul>
@@ -107,33 +106,38 @@
       
 
 <p>We are in a golden age of grift. Where adventurers once flocked to California
-or the Yukon because &ldquo;there was gold in them thar hills,&rdquo; the best way to get
-rich today is to fleece suckers. We&rsquo;ve got crypto rug pulls, meme stocks, and a
-seemingly endless stream of financial products engineered for nothing more than
-plausible deniability. Things have gotten so bad that financial professionals
-frequently joke, &ldquo;<a href="https://www.youtube.com/watch?v=UqWHiMBBNGM">crime is legal now</a>.&rdquo;</p>
+or the Yukon because &ldquo;there was gold in them thar hills,&rdquo; the fastest way to
+get rich today is by fleecing suckers. We&rsquo;ve got crypto rug pulls, meme stocks,
+nutritional supplements, MLMs&mdash;anything to make a quick buck. Financial
+professionals frequently joke, &ldquo;<a href="https://www.youtube.com/watch?v=UqWHiMBBNGM">crime is legal now</a>.&rdquo;</p>
 
-<p>This is hardly the first time. The Great Depression brought with it a wave of
-con artists, as portrayed in movies like <a href="https://en.wikipedia.org/wiki/Paper_Moon_(film)"><em>Paper Moon</em></a> or <a href="https://en.wikipedia.org/wiki/The_Sting"><em>The
-Sting</em></a>. A century earlier, Mark Twain wrote of the innumerable swindlers
-and card sharps operating along the Mississippi river; indeed, Twain himself
-lost most of his own fortune investing in <a href="https://time.com/4297572/mark-twain-bad-business/">fraudulent investment schemes</a>.
-When the conditions are right, grifters seem to crawl out of the woodwork. This
-WWI era comic is still relevant today, with influencers routinely shilling
-products without declaring affiliation:</p>
+<p>This is hardly new. The Great Depression brought with it a wave of con artists,
+as portrayed in movies such as <a href="https://en.wikipedia.org/wiki/Paper_Moon_(film)"><em>Paper Moon</em></a> or <a href="https://en.wikipedia.org/wiki/The_Sting"><em>The Sting</em></a>. A century
+earlier, Mark Twain wrote of the innumerable swindlers and card sharps
+operating along the Mississippi River; indeed, Twain himself lost most of his
+own fortune investing in <a href="https://time.com/4297572/mark-twain-bad-business/">fraudulent investment schemes</a>. When conditions
+are right, they seem to crawl out of the woodwork.</p>
 
-<p><img src="/post/grifters-skeptics-marks_files/old_comic.jpg" alt="Old Comic" /></p>
+<!--
+This WWI era comic is still relevant today, with influencers routinely shilling
+products without declaring affiliation:
 
-<p>Nor is this a purely American phenomenon: Umberto Eco writes about the fairly
-loose relationship the middle ages had with truth in books like <em><a href="https://en.wikipedia.org/wiki/The_Prague_Cemetery">The Prague Cemetery</a></em>
-or <em><a href="https://en.wikipedia.org/wiki/Baudolino">Baudolino</a></em>.</p>
+![Old Comic](/post/grifters-skeptics-marks_files/old_comic.jpg)
+-->
+
+<p>Not that things were better in the past. The medievalist Umberto Eco seems
+fascinated with pre-modern conceptions of truth and has written several novels
+exploring <a href="https://en.wikipedia.org/wiki/The_Prague_Cemetery">frauds</a>, <a href="https://en.wikipedia.org/wiki/Baudolino">liars</a>, and <a href="https://en.wikipedia.org/wiki/The_Island_of_the_Day_Before">magical thinkers</a>.
+<a href="https://en.wikipedia.org/wiki/Baudolino">Baudolino</a> in particular is about how easy it is to take advantage of
+people in a superstitious age, and how easy it is to get lost in a maze of
+half-truths if you try to do so.</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/baudolino_book_cover.jpg" alt="Baudolino Book Cover" /></p>
 
 <p>Is this just the new normal? Is it just going to keep getting worse? Or is this
 just the high watermark in a cycle as old as civilization? If it is cyclic, is
 it driven by external circumstances such as war or poverty, or does the
-oscillation arise naturally from the dynamics of system?</p>
+oscillation arise naturally from the dynamics of the system?</p>
 
 <p>Such ivory tower questions have a pragmatic application: should we expect grift
 and corruption to get worse, stay the same, or get better over the next decade?</p>
@@ -147,7 +151,7 @@ the 1980s.</p>
 perfectly informed players maximize utility, best responses snap into place,
 and equilibria have the clean finality of a solved puzzle. Evolutionary Game
 Theory (EGT) is different. It assumes that all strategies exist in the
-population and that success in games leads to reproductive success slowly
+population and that success in games leads to reproductive success which slowly
 increases the relative proportion of that strategy in the population over time.
 Strategies that earn higher payoffs become more common. Strategies that earn
 lower payoffs decline.</p>
@@ -162,7 +166,8 @@ see them, you start seeing them everywhere.</p>
 <p>Note that triangle diagram on the cover of the book; we&rsquo;ll be revisiting that
 visualization several times.</p>
 
-<p>Source code available in the <a href="/post/grifters-skeptics-marks_files/grifters-skeptics-marks.ipynb">Jupyter notebook</a>.</p>
+<p>Source code available in the <a href="/post/grifters-skeptics-marks_files/grifters-skeptics-marks.ipynb">Jupyter notebook</a>. It even has a cell with
+interactive widgets so you can play around with the parameters in real time.</p>
 
 <h2 id="gsm-model">GSM Model</h2>
 
@@ -367,7 +372,7 @@ a vector field showing the evolutionary pressure at each point is overlaid.</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm.png" alt="GSM Simplex" /></p>
 
-<p>It&rsquo;s also instructive to look at the longitudinal view, ploting the three
+<p>It&rsquo;s also instructive to look at the longitudinal view, plotting the three
 populations as a time series:</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/cannonical_gsm_ts.png" alt="GSM Time Series" /></p>
@@ -386,67 +391,75 @@ population mix, and that very success always leads to a different mix:</p>
 <li>Skeptics prosper when grifters are common, because vigilance pays for itself.</li>
 </ul>
 
-<p>Discusses &ldquo;asymmetric games with cyclical dynamics.&rdquo;</p>
-
-<p>Non-transitive games (rock-paper-scissors game where every strategy can be beat by at least one other) always lead to these kinds of cyclical dynamics and do not converge to a single equilibrium point.</p>
-
-<p>Golden Age of Grift, &ldquo;crime is legal now.&rdquo;</p>
-
-<p>Evolutionary Game Theory, toy models, qualitative behavior.</p>
-
-<p>Due diligence and education, I&rsquo;m convinced this is a constant cost.</p>
-
-<p>Non-transitive relationships causes the system to converge not a single point
-but to an orbit. Not uncommon; many predator/prey ecological models also fall
-into periodic orbits.</p>
-
-<p>&ldquo;Lilies of the valley&rdquo; - Marks have a higher payoff in a high-trust environment
-with fewer grifters. Trust is efficient and easy, so long as most people are
-trustworthy.</p>
-
-<p>Paper Moon.</p>
-
-<p>Sensitive to parameters, other scenarios, like the cost of skepticism being
-too high leads to extinction.</p>
+<p>In models like this, a few different long-run patterns are possible: the system
+might converge to one stable balance (a fixed-point attractor), it might circle
+around in a stable loop (a limit cycle), or it might swing closer and closer to
+each corner in turn, spending long stretches dominated by one strategy before
+shifting again (a heteroclinic cycle). The qualitative behavior is roughly the
+same, though: periodic cycles, not a steady state.</p>
 
 <h2 id="hawks-doves-and-retaliators">Hawks, Doves, and Retaliators</h2>
 
-<p>A useful contrast is the classic Hawks/Doves/Retaliators story, which is often
-used as a first EGT example because it is compact and behaves nicely: it tends
-to settle to a stable equilibrium point.</p>
+<p>A useful contrast is the classic Hawks/Doves/Retaliators model, which is often
+used as a first EGT example because it tends to settle to a stable equilibrium
+point.</p>
 
 <p><img src="/post/grifters-skeptics-marks_files/hdr.png" alt="HDR Simplex" /></p>
 
-<p>This point is called an <a href="https://en.wikipedia.org/wiki/Evolutionarily_stable_strategy">Evolutionarily stable strategy</a> (ESS).</p>
+<p>Such a stable equilibrium point is called an <a href="https://en.wikipedia.org/wiki/Evolutionarily_stable_strategy">evolutionarily stable strategy</a> (ESS).</p>
 
-<p>Why does HDR converge to an ESS while GSM does not? The Realiator strategy goes
+<p>Why does HDR converge to an ESS while GSM does not? The Retaliator strategy goes
 extinct and stays extinct because it bears the full cost of policing Hawks
 itself. In contrast, the Skeptic in GSM is not concerned with punishing
 Grifters but simply avoiding them.</p>
 
-<h2 id="cost-of-skepticism">Cost of Skepticism</h2>
+<!--
+Cost of Skepticism
+------------------
 
-<p>It is possible for the GSM model to collapse to an ESS equilibrium if
-we make the constant cost of skepticism (which you&rsquo;ll remember represents the
-overhead of eduction and conducting due diligence before deals) too high:</p>
+It is possible for the GSM model to collapse to an ESS equilibrium if
+we make the constant cost of skepticism (which you'll remember represents the
+overhead of eduction and conducting due diligence before deals) too high:
 
-<p><img src="/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png" alt="GSM High Skeptic Cost Simplex" /></p>
+![GSM High Skeptic Cost Simplex](/post/grifters-skeptics-marks_files/high_skeptic_cost_gsm.png)
 
-<p>Such a model basically collapses to feudalism, with an underclass permanently
+Such a model basically collapses to feudalism, with an underclass permanently
 exploited by by an aristocracy, which is only limited in size by its frequent
-destructive conflicts with itself.</p>
+destructive conflicts with itself.
 
-<p>However, as long as the cost of skepticism isn&rsquo;t prohibitive, it remains
-a competitive strategy.</p>
+However, as long as the cost of skepticism isn't prohibitive, it remains
+a competitive strategy.
+-->
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>The current generation of grifters is putting on a masterclass in spotting
-con artists</p>
+<p>If you believe the assumptions of the model, the implications are pretty clear.
+Grift is cyclical, and any period of high grift will soon give way to a period
+of high skepticism, which will last until enough time has passed for people to
+once again forget the lessons they&rsquo;ve learned. In other words, the current
+generation of grifters is putting on a masterclass in spotting con artists and
+it won&rsquo;t be long before their tricks are well known enough to stop working;
+consider NFTs, which crashed pretty hard once people saw through them.</p>
 
-<p>lilies of the valley.</p>
+<p>OK then,<em>should</em> we believe the model? On one hand, obviously not. It&rsquo;s a
+ridiculously simplified caricature of human behavior and every aspect of the
+model can be legitimately challenged. In some ways we can say it is definitely
+wrong; for example, it has the various populations crashing to near zero with
+each period, whereas in the real world the change is more a matter of degree.
+On the other hand, sometimes very simple toy models <em>do</em> somehow capture the
+essence of a phenomenon. &ldquo;All models are wrong, but some are useful,&rdquo; to quote
+George Box. If nothing else, I think this model shows that a certain
+fluctuation in the number of con artists arises naturally from the dynamics of
+the system, without the need for any external drivers.</p>
 
-<p>Does due diligence work? Private equity firms seem to think so.</p>
+<p>I&rsquo;d like to leave you with this timeless piece of advice:</p>
+
+<blockquote>
+<p>Exercise caution in your business affairs; for the world is full of trickery.
+But let this not blind you to what virtue there is; many persons strive for
+high ideals; and everywhere life is full of heroism.<br>
+&mdash;Max Ehrmann, <a href="https://www.desiderata.com/desiderata.html">Desiderata</a></p>
+</blockquote>
 
 <style>
   .article table tbody td {
