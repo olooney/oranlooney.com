@@ -235,7 +235,7 @@ of GPT-4o is one of these:</p>
     </table>
 </div>
 
-<p>For the sake of argument, I&rsquo;ll assume that GPT-4o is using 12,228 for the
+<p>For the sake of argument, I&rsquo;ll assume that GPT-4o is using 12,288 for the
 dimension of its embedding vectors. It doesn&rsquo;t really matter if we&rsquo;re off by a
 factor of 2 or 4; the same arguments will work.</p>
 
@@ -255,7 +255,7 @@ image, exactly as CLIP does (and similar to their strategy of using an 85 token
 
 <ol>
 <li>Divide the <code>512x512</code> image into a <code>8x8</code> grid of &ldquo;mini-tiles.&rdquo;</li>
-<li>Each mini-tile is <code>64x64x3</code>; flatten it a vector of dimension 12,228.</li>
+<li>Each mini-tile is <code>64x64x3</code>; flatten it a vector of dimension 12,288.</li>
 <li>Each mini-tile is a single embedding vector.</li>
 <li>The entire image tile is represented as 64 consecutive embedding vectors.</li>
 </ol>
@@ -346,7 +346,7 @@ or <code>1x1</code> convolutional layers as these don&rsquo;t affect the overall
 
 <p>The goal is to suggest a workable CNN architecture that connects the known
 input size (<code>512x512</code> images with 3 RGB color channels) to the assumed output
-shape (<code>13x13</code> embedding vectors with 12,228 dimensions each.)</p>
+shape (<code>13x13</code> embedding vectors with 12,288 dimensions each.)</p>
 
 <p>I tried
 <a href="/post/gpt-cnn_files/gpt4o_speculative.png" target="_blank">several</a>
@@ -359,7 +359,7 @@ I found this one, which steps down elegantly with no special cases at all:</p>
 
 <p>It very neat, isn&rsquo;t it? It&rsquo;s almost identical to AlexNet, and it steps down
 from from 512 to 13 in five identical repeating blocks, while simultaneously
-quadrupling the number of channels with each block to hit 12,228 on the bottom
+quadrupling the number of channels with each block to hit 12,288 on the bottom
 layer. Unfortunately, it also feels a little outdated due to the <code>5x5</code> kernels
 and max pool layers. AlexNet was a breakthrough in 2012 but I would be suprised
 if OpenAI was using something similar in 2024.</p>

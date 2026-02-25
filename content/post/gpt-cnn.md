@@ -141,7 +141,7 @@ of GPT-4o is one of these:
     </table>
 </div>
 
-For the sake of argument, I'll assume that GPT-4o is using 12,228 for the
+For the sake of argument, I'll assume that GPT-4o is using 12,288 for the
 dimension of its embedding vectors. It doesn't really matter if we're off by a
 factor of 2 or 4; the same arguments will work.
 
@@ -162,7 +162,7 @@ So, the question is, how do we go from `512x512x3` to `13x13x12228`?
 Here's an extremely simple way to stuff an image into a vector space:
 
 1. Divide the `512x512` image into a `8x8` grid of "mini-tiles."
-2. Each mini-tile is `64x64x3`; flatten it a vector of dimension 12,228.
+2. Each mini-tile is `64x64x3`; flatten it a vector of dimension 12,288.
 3. Each mini-tile is a single embedding vector.
 4. The entire image tile is represented as 64 consecutive embedding vectors.
 
@@ -248,7 +248,7 @@ or `1x1` convolutional layers as these don't affect the overall tensor size.
 
 The goal is to suggest a workable CNN architecture that connects the known
 input size (`512x512` images with 3 RGB color channels) to the assumed output
-shape (`13x13` embedding vectors with 12,228 dimensions each.)
+shape (`13x13` embedding vectors with 12,288 dimensions each.)
 
 I tried
 <a href="/post/gpt-cnn_files/gpt4o_speculative.png" target="_blank">several</a>
@@ -261,7 +261,7 @@ I found this one, which steps down elegantly with no special cases at all:
 
 It very neat, isn't it? It's almost identical to AlexNet, and it steps down
 from from 512 to 13 in five identical repeating blocks, while simultaneously
-quadrupling the number of channels with each block to hit 12,228 on the bottom
+quadrupling the number of channels with each block to hit 12,288 on the bottom
 layer. Unfortunately, it also feels a little outdated due to the `5x5` kernels
 and max pool layers. AlexNet was a breakthrough in 2012 but I would be suprised
 if OpenAI was using something similar in 2024.
