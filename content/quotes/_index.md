@@ -138,7 +138,7 @@ development time. The remaining 10 percent of the code accounts for the other
 <br>&mdash;Tom Cargill 
 
 
-"every twenty minute job is one broken bolt away from becoming a three day
+"Every twenty minute job is one broken bolt away from becoming a three day
 ordeal."
 <br>&mdash;Anonymous
 
