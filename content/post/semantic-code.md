@@ -2,7 +2,9 @@
 title: "Semantic Code"
 author: "Oran Looney"
 date: 2008-04-30
-tags: ["Python"]
+tags: 
+    - Python
+    - Philosophy
 image: /post/semantic-code_files/lead.jpg
 ---
 

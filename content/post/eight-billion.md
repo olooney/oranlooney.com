@@ -5,6 +5,7 @@ date: 2022-11-14
 publishdate: 2022-11-12
 tags:
   - Future
+  - Philosophy
 image: /post/eight-billion_files/lead.jpg
 ---
 
