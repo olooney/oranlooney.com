@@ -733,6 +733,13 @@ full of doubt."
 <br>&mdash;Charles Darwin
 
 
+"If a man objects to truths that are all too evident, it is no easy task finding
+arguments that will change his mind. This is proof neither of his own strength
+nor his teacher's weakness. When someone caught in an argument hardens to stone,
+there is just no more reasoning with them."
+<br>&mdash;Epictetus
+
+
 "For the great enemy of truth is very often not the lie&mdash;deliberate,
 contrived and dishonest&mdash;but the myth&mdash;persistent, persuasive, and
 unrealistic. Too often we hold fast to the cliches of our forebears. We subject

@@ -57,7 +57,7 @@ which was invented by Samuel Hunter Christie.
 [WB]: https://en.wikipedia.org/wiki/Wheatstone_bridge
 
 The Playfair cipher is designed to be done on paper, so places a great
-deal of emphasis on ease of use over security. No addition module 256 here!
+deal of emphasis on ease of use over security. No addition modulo 256 here!
 
 A Playfair key is a 5x5 grid of unique letters:
 
@@ -81,16 +81,18 @@ Then you simply swap each letter with the unused corner in the same row,
 resulting in "HR" which is our ciphertext. To decrypt ciphertext, you do the
 exact same operation.
 
-That covers about 80% of the cases. However, there are a couple of other cases
-that can occur. If the letters are in the same row, instead of using the
-rectange corner swap, we simply shift each letter one space to the right,
+That covers about 90% of the cases. However, there are a couple of other
+situations that can occur. If the letters are in the same row, instead of using
+the rectangle corner swap, we simply shift each letter one space to the right,
 wrapping around to the leftmost column if we go off the right edge. If the
-letters are in the same column we shift each down one space, wrapping as
-needed. If the two letters are the same, we break them up by inserting a "Z"
-into the message: "LLAMA" becomes "LZLAMA" which becomes "TFMDYE". If the
-duplicate letters happen to be "ZZ", use X instead. And finally, if there
-are an odd number of letters in your message and you need one more letter to make
-a final digraph, stick a Z on the end (or X if the last letter was already a Z.)
+letters are in the same column, we shift each down one space, wrapping as
+needed. 
+
+If the two letters are the same, we break them up by inserting an X into the
+message: "LLAMA" becomes "LXLAMA". If the duplicate letters happen to be "XX",
+insert a Q instead. And finally, if there are an odd number of letters in your
+message and you need one more letter to make a final digraph, append a Z to the
+end (or Q if the last letter was already a Z.)
 
 These edge cases make the algorithm seem complicated but they rarely come up
 and 99% of the time you are just swapping corners or shifting by one within a 
@@ -98,7 +100,7 @@ row or column. It only takes five or ten minutes to learn the algorithm and
 once you do, and practice it a couple times on some moderately long messages,
 you'll never forget it.
 
-The reason it's more secure that a substitution cipher is not merely because it
+The reason it's more secure than a substitution cipher is not merely because it
 operates two characters at a time, but because it mixes the two values together
 in a non-linear (but reversible) way.  Modern block ciphers like AES use a
 [substitution-permutation network][SPN] which work in a very similar way and
@@ -127,10 +129,10 @@ How secure is Playfair? Wikipedia has this to say:
 
 [WPC]: https://en.wikipedia.org/wiki/Playfair_cipher
 
-Really, microseconds? I'm not so sure about that... let's be generous and say
-we can implement the Playfair decryption using 3 operations, and the bigraph
+Really, microseconds? I'm not so sure about that... Let's be generous and say
+we can implement the Playfair decryption using 3 operations, and the digraph
 lookup using 1 operation, all of which hit the L1 cache. That's roughly 4
-nanoseconds per bigraph, or 2 nanoseconds per character. We'll need 100
+nanoseconds per digraph, or 2 nanoseconds per character. We'll need 100
 characters or more to have any hope of cracking the cipher, so that's 200
 nanoseconds per candidate key that we check. That means we have to find a
 solution while checking fewer than 5,000 keys. That's not much of a budget.  I
@@ -139,7 +141,7 @@ confusion between the cost of a decryption vs. the cost of a crack. To see why,
 let's try to estimate the strength of a Playfair key from first principles.
 
 
-At first glance is seems there should be $25! = 1.5 \times 10^{25}$ possible
+At first glance it seems there should be $25! = 1.5 \times 10^{25}$ possible
 keys.  However, if we study the algorithm, we see that all of the operations
 wrap around at the edges - that is, if the algorithm tells you to move one
 column to the right and you're already at the 5th column, you wrap around back
@@ -148,9 +150,9 @@ visualized as being on a torus:
 
 <div id="playfairTorus"><img src="/post/playfair_files/torus.png"></div>
 
-We can effectively rotate all the rows or columns of a key an obtain an
+We can effectively rotate all the rows or columns of a key to obtain an
 equivalent key - they both perform the same encryption and decryption. This
-means there there are effectively only $25!/25 = 24! = 6.2 \times 10^{23}$ possible
+means there are effectively only $25!/25 = 24! = 6.2 \times 10^{23}$ possible
 keys. 
 
 <link rel="stylesheet" href="/post/playfair_files/playfair.css">
@@ -163,17 +165,17 @@ keys.
 There are, broadly speaking, two ways to attack ciphers. The first is to search
 the space of all possible keys, decrypting the ciphertext with each candidate
 key and hunting for some kind of leaked information that might betray the fact
-that we're getting closer. The second is obtain, by spycraft or guesswork, some
-plaintext message for which we also have the corresponding encrypted ciphertext
-(although the key is still unknown) and to mathematically deduce the key. We'll
-do both, but let's start with the second approach first, as it's more fun - more
-like solving a puzzle and less like groping around in the dark.
+that we're getting closer. The second is to obtain, by spycraft or guesswork,
+some plaintext message for which we also have the corresponding encrypted
+ciphertext (although the key is still unknown) and to mathematically deduce the
+key. We'll do both, but let's start with the second approach first, as it's
+more fun - more like solving a puzzle and less like groping around in the dark.
 
 
 Known Plaintext Attack
 ----------------------
 
-Known plaintext attacks sound rather pointless at first glance. "You're
+Known-plaintext attacks sound rather pointless at first glance. "You're
 telling me you can crack this cipher for me, but only if I give you the
 original message? I think I'll take my business to a different cryptographer."
 
@@ -202,7 +204,7 @@ are extremely clever.
 
 We have options about how we represent this problem to Z3. I found the most
 natural way was to use a 25x2 matrix, where each row represents a letter. The
-first column is the x-coordinate of that letter in the 5x5 playfair key grid,
+first column is the x-coordinate of that letter in the 5x5 Playfair key grid,
 and the second is the y-coordinate. So every element of the matrix will be an
 integer between 0 and 4, and we'll also need to make sure that a letter can go
 in one and only one cell.  Because the constraints apply to all Playfair key
@@ -222,7 +224,7 @@ grids, we'll call them the universal constraints.
     ]
     universal_constraints = position_constraints + distinct_constraints
 
-We'll write some helper function so help keep track of the constraints. Most of
+We'll write some helper functions to help keep track of the constraints. Most of
 the information will come in the form of learning that two letters are in the
 same row/column, or in adjacent rows/columns, so we'll make it easy to describe
 such constraints.
@@ -276,7 +278,8 @@ and we can encode this information as Z3 constraints:
             Not(same_col(c1, c2))
         )
 
-There are several other such special cases to consider. Such as this chain constraints three in a row, either in a column or row:
+There are several other such special cases to consider. The first are chain
+constraints where we have three letters in a row, either in a column or row:
 
 <img src="/post/playfair_files/chain_constraint.png">
 
@@ -312,10 +315,10 @@ In code:
 
 However, even if we don't see any special pattern, we do actually glean a small
 amount of information from every digraph we see. Remember, there are only three
-cases for encoding a pair: the rectangle case, the same row case, and the same column case.
-In all three, the ciphertext letter is *always* in the same row or the same column as 
-the plaintext letter. If it's the same column, then the ciphertext letter is immediately
-below the plaintext character:
+cases for encoding a pair: the rectangle case, the same row case, and the same
+column case. In all three, the ciphertext letter is *always* in the same row or
+the same column as the plaintext letter. If it's the same column, then the
+ciphertext letter is immediately below the plaintext character:
 
 <img src="/post/playfair_files/simple_constraint.png">
 
@@ -331,80 +334,81 @@ This is true for both the first and second character of each digraph.  In code:
             Or(same_row(p2, c2), And(same_col(p2, c2), next_row(p2, c2)))
         )
 
-It's easy to scan through the known text and quickly build up a map of digraphs. This is also
-a good opportunity to validate that the ciphertext really does look like it came from Playfair cipher.
+It's easy to scan through the known text and quickly build up a map of
+digraphs. This is also a good opportunity to validate that the ciphertext
+really does look like it came from a Playfair cipher.
 
-    def parse_bigraph_map(plaintext: str, ciphertext: str) -> dict:
+    def parse_digraph_map(plaintext: str, ciphertext: str) -> dict:
         """
         Parse and validate matching plaintext and ciphertext. A dict of distinct
-        plaintext to ciphertext bigraphs mappings are returned, including all 
+        plaintext to ciphertext digraphs mappings are returned, including all 
         mirrored mappings. This checks for obvious violations of the Playfair
         cipher algorithm and will raise an Exception if any are found.
         """
         
         # we only care about unique/distinct digraph mappings of the form AB -> XY 
         # and will ignore duplicates.
-        bigraph_map = {}
-        for plain_bigraph, cipher_bigraph in zip(bigraphs(plaintext), bigraphs(ciphertext)):
+        digraph_map = {}
+        for plain_digraph, cipher_digraph in zip(digraphs(plaintext), digraphs(ciphertext)):
             # XY -> AB => YX -> BA, add both the original and mirrored versions to the map
-            bigraph_map[plain_bigraph] = cipher_bigraph
-            bigraph_map[ plain_bigraph[::-1] ] = cipher_bigraph[::-1]
+            digraph_map[plain_digraph] = cipher_digraph
+            digraph_map[ plain_digraph[::-1] ] = cipher_digraph[::-1]
             
-        return bigraph_map
+        return digraph_map
 
-We have to examine each digraph mapping to see if we have enough information to identify a special
-case:
+We have to examine each digraph mapping to see if we have enough information to
+identify a special case:
 
 
     def constraints_from_known_text(plaintext: str, ciphertext: str, verbose_level=0) -> list:
         """
-        Analyze the plain/ciphertext bigraph pairs of a message and make deductions about
-        the structure of the key. These are returns as a list of Z3 constraints.
+        Analyze the plain/ciphertext digraph pairs of a message and make deductions about
+        the structure of the key. These are returned as a list of Z3 constraints.
         """
-        bigraph_map = parse_bigraph_map(plaintext, ciphertext)
+        digraph_map = parse_digraph_map(plaintext, ciphertext)
 
         # build up constraints
         constraints = []
         seen_already = set()
-        for plain_bigraph, cipher_bigraph in bigraph_map.items():
+        for plain_digraph, cipher_digraph in digraph_map.items():
             # we only need to handle one of each mirror version.
-            if plain_bigraph[::-1] in seen_already:
+            if plain_digraph[::-1] in seen_already:
                 continue
             else:
-                seen_already.add(plain_bigraph)
+                seen_already.add(plain_digraph)
 
             # XY -> YZ => XYZ in row or col
-            if plain_bigraph[1] == cipher_bigraph[0]:
-                constraints.append( adjacent_constraint(plain_bigraph, cipher_bigraph) )
+            if plain_digraph[1] == cipher_digraph[0]:
+                constraints.append( adjacent_constraint(plain_digraph, cipher_digraph) )
                 continue
 
             # XY -> ZX => YXZ in row or col
             # omitted for brevity
 
-            if cipher_bigraph in bigraph_map:
-                next_bigraph = bigraph_map[cipher_bigraph]
+            if cipher_digraph in digraph_map:
+                next_digraph = digraph_map[cipher_digraph]
 
                 # XY -> AB, AB -> XY => rectangle
-                if next_bigraph == plain_bigraph:
-                    constraints.append( rectangle_constraint(plain_bigraph, cipher_bigraph) )
+                if next_digraph == plain_digraph:
+                    constraints.append( rectangle_constraint(plain_digraph, cipher_digraph) )
                     continue
 
                 # XY -> PQ, PQ -> YA => row or col of XPYQA
-                if plain_bigraph[1] == next_bigraph[0]:
+                if plain_digraph[1] == next_digraph[0]:
                     constraints.append( 
-                        chain_constraint(plain_bigraph, cipher_bigraph, next_bigraph))
+                        chain_constraint(plain_digraph, cipher_digraph, next_digraph))
                     continue
 
-                # XY -> PQ, PQ -> BX => rol or col of YQXPB
+                # XY -> PQ, PQ -> BX => row or col of YQXPB
                 # omitted for brevity
                         
             # AB -> XY
-            constraints.append( simple_constraint(plain_bigraph, cipher_bigraph) )
+            constraints.append( simple_constraint(plain_digraph, cipher_digraph) )
 
         return constraints
 
-Now that we've built up a set of Z3 constraints describing our specific problem, we can ask Z3 to find
-a key meeting all of the above constraints:
+Now that we've built up a set of Z3 constraints describing our specific
+problem, we can ask Z3 to find a key meeting all of the above constraints:
 
 
     def solve_playfair_constraints(dynamic_constraints):
@@ -422,8 +426,9 @@ a key meeting all of the above constraints:
         else:
             return check, None
 
-We can also get Z3 to keep generating different unique solutions through the simple trick of
-adding a constraint to block the previous solution and re-solving:
+We can also get Z3 to keep generating different unique solutions through the
+simple trick of adding a constraint to block the previous solution and
+re-solving:
 
     def iter_playfair_constraints(dynamic_constraints):
         solver = Solver()
@@ -448,8 +453,9 @@ adding a constraint to block the previous solution and re-solving:
             else:
                 break
 
-When given only the first 100 characters as known plaintext, this approach was able to recover
-almost the entire key, except for a transposition of Z and X in the last row. 
+When given only the first 100 characters as known plaintext, this approach was
+able to recover almost the entire key, except for a transposition of Z and X in
+the last row. 
 
     M Y N A E
     I S O R W
@@ -457,24 +463,24 @@ almost the entire key, except for a transposition of Z and X in the last row.
     G H K P Q
     T U V Z X
 
-This is enough to recover most of the message:
+This is enough to recover most of the plaintext:
 
 <img src="/post/playfair_files/kpa_visual_diff.png">
 
-I was very impressed with Z3's capabilities for this task. It was quite easy to express
-the constraints in its DSL and its performance was really good. The exact time it takes
-to find a key depends on how many characters of known plaintext we are able to provide;
-it usually requires about 100 to identify the correct key (or at least one close enough
-to work in practice) and that only takes a few seconds. However, that's still three orders
-of magnitude out from the "microseconds" the Wikipedia article claimed, and tracking down
-known plaintext is kind of a pain, so let's try another approach.
+I was very impressed with Z3's capabilities for this task. It was quite easy to
+express the constraints in its DSL and its performance was really good. The
+exact time it takes to find a key depends on how many characters of known
+plaintext we are able to provide; it usually requires about 100 to identify the
+correct key (or at least one close enough to work in practice) and that only
+takes a few seconds. However, that's still three orders of magnitude out from
+the "microseconds" the Wikipedia article claimed, and tracking down known
+plaintext is kind of a pain, so let's try another approach.
 
 Guessing Plaintext
 ------------------
 
 As the Wikipedia article points out, one way of acquiring probable plaintext
-sequences from Playfair ciphertext is to make educated guesses at known
-plaintext from patterns in the ciphertext.
+from Playfair ciphertexts is to make educated guesses based on common patterns.
 
 First, and most obviously, Playfair always encrypts a given digraph to the same
 ciphertext everywhere in the message. So if we see ciphertext of the form
@@ -491,7 +497,7 @@ know the plaintext follows the pattern "AB????BA".
 
 The reason this is useful is because there are a limited number of words in
 the English language that match these patterns. For example, here is a list
-set of common English words having a gap of two letters between such patterns:
+of common English words having a gap of two letters between such patterns:
 
     BAseBAll
     CHurCH
@@ -537,11 +543,11 @@ The program identified 161 words in all, but for any given pattern (gap length
 & flipped or not) there are usually only about a dozen words to try. I estimate
 the prevalence of such patterns is about one matching pattern for every 75
 characters of ciphertext, so if you have 1,000 characters of ciphertext, you
-might expect to find 13 matching patterns, each of which given you a dozen or
+might expect to find 13 matching patterns, each of which gives you a dozen or
 so words to try that might or might not yield about 10 characters of known
 plaintext.
 
-The problem, as I see it, is that there is a combinatoric explosion of different
+The problem, as I see it, is that there is a combinatorial explosion of different
 combinations to try. For the pattern XYXY you might guess "immigration", for
 a separate pattern WZ????ZW you might try "students", for UV??????VU you might
 try "researchers", and so on. But you'd have to try every possible combination and
@@ -721,10 +727,9 @@ find English words and near words, and wrote a heuristic function to gauge the
 
 This approach is still a little slow (still less than a second) but seemingly
 quite reliable. Nonsense gets scores under 10%, while even very bad/malformed
-English usually gets over 80%.  It's not fast enough to use for inner loop of
-the search, but it is fast and reliable enough to automatically detect when
-we've truly cracked the cipher, and so can be used as a final check to decide
-when to stop. (This is surprisingly difficult!)
+English usually gets over 80%.  It's not fast enough to use for the inner loop
+of the search, but it's a good way to automatically detect when we've truly
+cracked the cipher, and so can be used as a final check to decide when to stop.
 
 [WSG]: https://pypi.org/project/wordsegment/
 [BKT]: https://en.wikipedia.org/wiki/BK-tree
@@ -737,7 +742,7 @@ To summarize, we automate the "sense of rightness" using a threefold approach:
 
 Using these scoring techniques, we can do a good enough job identifying English
 text to tell if we are making progress on the crack or not. The next step
-is to use this information to guide us towards the correct solution.
+is to use this information to guide us toward the correct solution.
 
 Simulated Annealing
 -------------------
@@ -798,35 +803,37 @@ Output:
         njev: 72
         nhev: 0
 
-The final solution found is that `x` value of 0.5, which it found in a few milliseconds
-starting from a random initial point. It's very powerful!
+The final solution found is that `x` value of 0.5, which it found in a few
+milliseconds starting from a random initial point. It's very powerful!
 
-Intuitively, the way the algorithm works is by starting from some initial point and evaluating
-the score function at that point. Then, it makes a change to that point and re-evaluates.
-If the score improved, great; we'll keep the new point. If the score got worse, then we have
-a tougher judgment call to make. At the beginning of search, we don't mind going downhill
-sometimes - we have to if we want to avoid getting stuck in local minima. Our priority at
-first is the explore the whole space. However, later on, once we've found a "pretty good"
-solution, we'll want to build on that. We might be willing to accept a lateral move or even
-a slightly downward one, but late in the search we'll want to avoid throwing away all our
-hard work.
+Intuitively, the way the algorithm works is by starting from some initial point
+and evaluating the score function at that point. Then, it makes a change to
+that point and re-evaluates. If the score improves, great; we'll keep the new
+point. If the score got worse, then we have to make a tougher judgment call. At
+the beginning of the search, we don't mind going downhill sometimes - we have
+to if we want to avoid getting stuck in local minima. Our priority at first is
+to explore the whole space. Later on, once we've found a "pretty good"
+solution, we'll want to build on that. We might be willing to accept a lateral
+move or even a slightly downward one, but late in the search we'll want to
+avoid throwing away all our hard work.
 
 Simulated annealing's solution to the differing priorities early and late in
 the search is to introduce a "temperature" which measures our willingness to
 move downhill. We start at a high temperature and will often accept downward
 moves in order to explore the full space, but as the temperature decreases
-we'll become more conservative and reject moves that seem like we'll losing too
+we'll become more conservative and reject moves that seem like they'll lose too
 much progress. (This, in some way that I don't know enough metallurgy to fully
 understand, parallels the annealing process that occurs when a material is
-treated by being heated and cooled.)
+treated by heating and cooling.)
 
-When cracking Playfair ciphers, the space we're exploring is the space of all possible
-keys, which are distinct permutations of the 25 letters of the alphabet (I and J are merged 
-into one to fit the 5x5 grid.) This is a discrete space, but in many ways acts like high
-dimensional space. It's easy to get lost in high dimensional spaces, and it's possible
-to wander away from a "pretty good" key and not be able to find your way back. Therefore,
-we also implement a "restart patience" concept, where we forcibly reset to the best known
-solution if we've been wandering blindly for a while and seem to have lost our way.
+When cracking Playfair ciphers, the space we're exploring is the space of all
+possible keys, which are distinct permutations of the 25 letters of the
+alphabet (I and J are merged into one to fit the 5x5 grid.) This is a discrete
+space, but in many ways acts like high dimensional space. It's easy to get lost
+in high dimensional spaces, and it's possible to wander away from a "pretty
+good" key and not be able to find your way back. Therefore, we also implement a
+"restart patience" concept, where we forcibly reset to the best known solution
+if we've been wandering blindly for a while and seem to have lost our way.
 
     def simulated_annealing_crack(
         cipher_text: str,
@@ -916,20 +923,23 @@ solution if we've been wandering blindly for a while and seem to have lost our w
 
         return best_key, best_score, temperature
 
-This function, together with digraph/trigraph scoring is able to crack Playfair ciphers, but it takes
-several minutes, even up to half an hour. We need it to be a lot faster.
+This function, together with digraph/trigraph scoring, is able to crack Playfair
+ciphers, but it takes several minutes, even up to half an hour. We need it to
+be a lot faster.
 
 Parallel
 --------
 
-One obvious way to get more performance is to run many searches in parallel. I could have done this
-the easy way and simply kicked off a number of independent searches each seeded with a different
-random starting key, but I didn't like the way most of the processes would be flailing around blindly
-while one process ended up doing all the work. That meant implementing some coordination mechanisms
-so that processes that weren't having any luck would be recycled and used to "swarm" the current best
-solution. This involved Python's `multiprocessing` package to share locks and values across processes,
-but it ended up being worth it. The swarming approach really made a huge difference in the total time
-to find a correct solution.
+One obvious way to get more performance is to run many searches in parallel. I
+could have done this the easy way and simply kicked off a number of independent
+searches, each seeded with a different random starting key, but I didn't like
+the way most of the processes would be flailing around blindly while one
+process ended up doing all the work. That meant implementing some coordination
+mechanisms so that processes that weren't having any luck would be recycled and
+used to "swarm" the current best solution. This involved Python's
+`multiprocessing` package to share locks and values across processes, but it
+ended up being worth it. The swarming approach really made a huge difference in
+the total time to find a correct solution.
 
 
     def process_worker(args):
@@ -976,14 +986,13 @@ to find a correct solution.
                     sample_text = cipher.decrypt(ciphertext[:sample_length])
                     human_readable_score = 100 * best_score / perfect_score
                     log(1, f'{best_key} '
-                        '{sample_text:<{terminal_width-46}} '
-                        '{human_readable_score:.0f}%')
+                        f'{sample_text:<{terminal_width-46}} '
+                        f'{human_readable_score:.0f}%')
                     global_since.value = 0
                 else:
                     global_since.value += 1
 
-            # if no process have improved on the global best in a long time,
-            # it's time call it quits
+            # quit if no process has improved on the global best in a long time
             if global_since.value > global_patience:
                 break
             
@@ -1049,10 +1058,12 @@ to find a correct solution.
         return solutions
 
 
-Here is what the output typical run looks like. You can see the "percent english" column on the far right steadily ticking
-upwards, and you can see from the process ID in the second column that more than one process is contributing even in
-the final seconds of the crack, demonstrating the power of the swarming approach. Personally, I really enjoy watching
-recognizable words start to appear in the sample plaintext in the fourth column; it's oddly hypnotic.
+Here is what the output of a typical run looks like. You can see the "percent
+english" column on the far right steadily ticking upwards, and you can see from
+the process ID in the second column that more than one process is contributing
+even in the final seconds of the crack, demonstrating the power of the swarming
+approach. Personally, I really enjoy watching recognizable words start to
+appear in the sample plaintext in the fourth column; it's oddly hypnotic.
 
 
 <pre style="font-size: 0.77em; background-color: black; color: green; padding: 0.5em;">
@@ -1091,7 +1102,7 @@ YWYMCLTGUMAYMMVFYNSACNIIXMDKCAGWAQYYOSREV
 
 Candidate solution found!
 Key: BCDFLHKPQGUVXZTYNAEMSORWI
-Bigraph/Trigraph Score: 87%
+Digraph/Trigraph Score: 87%
 
 Plain Text:
 UNDERNEATHTHEGAZEOFORIONSBELTWHERETHESEAOFTRANQUILITYMEETSTHEEDGEOFTWILIGHTLIESAHIDDENTROVEOFWISDOMFORGOTTENBYMANYCOVET
@@ -1114,20 +1125,22 @@ English Word Score: 91%
 Accepted solution.
 </pre>
 
-At the end, you can see the word segmentation and "percent English" functions evaluating the final cracked plaintext;
-if this check fails, the whole process simply resets from scratch. (Due to the randomization involved, it does sometimes
-get stuck, and resetting is often the kindest thing we can do.) That means you can simply "fire and forget" and
-trust the algorithm and its "sense of rightness" to know when the cipher has been successfully cracked.
+At the end, you can see the word segmentation and "percent English" functions
+evaluating the final cracked plaintext; if this check fails, the whole process
+simply resets from scratch. (Due to the randomization involved, it does
+sometimes get stuck, and resetting is often the kindest thing we can do.) That
+means you can simply "fire and forget" and trust the algorithm and its "sense
+of rightness" to know when the cipher has been successfully cracked.
 
-However, even with parallelization, (which gives me a 12x speed-up on this machine, and theoretically a lot more
-if I rented a beefy AWS compute instance) this is still taking minutes to crack, not seconds. So let's see what
+However, even with parallelization (which gives me a 12x speed-up on my
+machine) this is still taking minutes to crack, not seconds. So let's see what
 other optimizations we can make.
 
 
 Cython
 ------
 
-Python is very slow at character-by-character string manipulation. Unfortunately,
+Python is very slow at character-by-character string manipulation, and unfortunately,
 that's exactly what the inner loop of `Playfair.decrypt()` is doing. We can use Cython
 to optimize the performance critical section of the code:
 
@@ -1188,17 +1201,17 @@ to optimize the performance critical section of the code:
             # Free the allocated memory
             free(decrypted_text)
 
-This worked like magic and resulted in a significant speed-up. It did have
-some downsides; this version is extremely brittle and will segfault if the input
+This worked like magic and resulted in a significant speed-up. It did have some
+downsides; this version is extremely brittle and will segfault if the input
 ciphertext or key do not exactly match what it expects - for example, if the
 ciphertext is an odd number of characters. You'll notice that is largely my own
-fault - I'm explicitly turning off bounds checking for example - but could easily
-be avoided by implementing a few simple sanity checks before entering the hot, 
-Cython optimized, section of the code. Because in theory the ciphertext is
-coming from the wild, I thought it would be useful to write these sanity checks
-in a user-friendly way so that any problems in the ciphertext (which may indeed
-indicate that the ciphertext isn't from Playfair at all, but some other algorithm
-entirely) can be reported to the user:
+fault - I'm explicitly turning off bounds checking for example - but could
+easily be avoided by implementing a few simple sanity checks before entering
+the hot, Cython optimized, section of the code. Because in theory the
+ciphertext is coming from the wild, I thought it would be useful to write these
+sanity checks in a user-friendly way so that any problems in the ciphertext
+(which may indeed indicate that the ciphertext isn't from Playfair at all, but
+some other algorithm entirely) can be reported to the user:
 
     def playfair_ciphertext_violations(text: str) -> list:
         violations = []
@@ -1240,7 +1253,7 @@ entirely) can be reported to the user:
         length = len(text)
         if length < 100:
             violations.append(
-                f"Text contains only c{length} characters and may be too short to crack.")
+                f"Text contains only {length} characters and may be too short to crack.")
 
         return violations
 
@@ -1316,7 +1329,8 @@ as the "loss" returned from the objective function.
             # other metrics omitted
         }
 
-With our objective function fleshed out, let's ask `hyperopt` to find us the optimal parameters:
+With our objective function fleshed out, let's ask `hyperopt` to find us the
+optimal parameters:
 
     def hyperoptimize(trials=None):
         if trials is None:
@@ -1355,25 +1369,26 @@ combination of hyperparameters that magically give you 10X performance.
 Conclusion
 ----------
 
-It's clear that the "microseconds" used in the Wikipedia article is hyperbole.
-That's only enough time to try a handful of keys, and Playfair is not
-*so* weak that you can zero in on the solution that quickly. Nor is the problem
-"embarrassingly parallel" - you can run lots of parallel attacks across a large
-server farm, but you can't run $24!$ separate processes, or even make a dent
-in it with brute force. You have to use something clever like simulated annealing
-or constraint solving, and those are fundamentally sequential.
+It's clear that the use of "microseconds" in the Wikipedia article is
+hyperbole. That's only enough time to try a handful of keys, and Playfair is
+not *so* weak that you can zero in on the solution that quickly. Nor is the
+problem "embarrassingly parallel" - you can run lots of parallel attacks across
+a large server farm, but you can't feasibly run $24!$ separate processes, or
+even make a dent in it with brute force. You have to use something clever like
+simulated annealing or constraint solving, and those are fundamentally
+sequential.
 
-Still, the Playfair cipher is indeed quite weak - an amateur cryptographer with a
-desktop and a couple of free weekends can write a program which will crack
-it in under a minute. Don't use it for your important secrets! But do use it
-for fun and games, as it's delightful.
+Still, the Playfair cipher is indeed quite weak - an amateur cryptographer with
+a desktop and a couple of free weekends can write a program which will crack it
+in under a minute. Don't use it for your important secrets! But do use it for
+fun and games, as it's delightful.
 
 One surprising thing I learned is that ChatGPT can solve the word segmentation
 problem quite well, and it can even add punctuation and capitalization back
 into the message. While LLMs  are far too slow to participate in the
 performance-intensive crack (we can use simpler heuristics like trigrams for
 that,) their ability to make semantic sense of partially mangled text might
-still be useful in automating the "sense of rightness" which hitherto has been
+still be useful in automating the "sense of rightness" which has hitherto been
 left to human cryptographers.
 
 
