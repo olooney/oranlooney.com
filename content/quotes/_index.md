@@ -160,10 +160,10 @@ four-inch mirror then a six-inch mirror than to make a six-inch mirror."
 
 
 "Build one to throw away&mdash;you will anyway."
-<br>&mdash;George Stocker
+<br>&mdash;Fred Brooks
 
 
-"People don't want to buy a quarter-inch drill, they want a quarter-inch hole."
+"People don't want to buy a quarter-inch drill; they want a quarter-inch hole."
 <br>&mdash;Theodore Levitt
 
 
@@ -353,7 +353,7 @@ maintenance are considered."
 
 
 "The fastest I/O is no I/O."
-<br>&mdash;Nil's-Peter Nelson
+<br>&mdash;Nils-Peter Nelson
 
 
 "The cheapest, fastest, and most reliable components of a computer system are
@@ -819,7 +819,7 @@ unwarranted assumption to a foregone conclusion."
 
 
 "If it works, it's obsolete."
-<br>&mdash;Marshall Mcluhan
+<br>&mdash;Marshall McLuhan
 
 
 "A Bayesian is one who, vaguely expecting a horse, and catching a glimpse of a
@@ -1048,7 +1048,7 @@ and simple to express:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;but less<br>
 &nbsp;&nbsp;&nbsp;&nbsp;and less<br>
 &nbsp;&nbsp;&nbsp;&nbsp;and less.
-<br>&mdash;Piet Hein, *[Grooks][PHG]</a>*
+<br>&mdash;Piet Hein, *[Grooks][PHG]*
 
 
 <br><b>Emily's Advice</b><br>
