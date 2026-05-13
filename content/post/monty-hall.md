@@ -18,7 +18,7 @@ don't usually care enough about math problems to get worked up over them, but
 there's something about the way this particular problem is framed that really
 pushes people's buttons.
 
-Suprisingly, there is a good answer to this question, and it's not just, "it's
+Surprisingly, there is a good answer to this question, and it's not just, "it's
 a tricky problem and people don't like being wrong." It's related to what
 Kahneman called [attribution substitution][AS], but instead of substituting an
 *easier* question, I'm going to argue that people are substituting an
@@ -53,12 +53,19 @@ The Adversarial Variant
 
 The true Monty Hall Problem (MHP) assumes that Monty *always* shows you a
 goat and *always* gives you the option to switch. In the adversarial variant
-of the game, Monty has a choice: he can either open and door and give you
+of the game, Monty has a choice: he can either open a door and give you
 the option switch, or he can *immediately* give you what's behind the door
 you picked. He still has full information about what's behind the door, but
-something's changed. Now it's a zero sum game: he doesn't want you to win, and
+something's changed. Now it's a zero-sum game: he doesn't want you to win, and
 is willing to bend the rules to ensure that you don't.
 
+From Monty's point of view, the optimal policy is obvious. He knows if the door
+you chose has a goat or a car. If its a goat, he has zero incentive to offer
+you a chance to switch as that *might* result in you switching to the car. If
+its a car, then he has every reason to offer you the choice in the hope that
+you'll switch. 
+
+That means from the player's point of view, the game now looks like this:
 
 ![Canonical Monty Hall Flowchart](/post/monty-hall_files/adversarial_flowchart.png)
 
@@ -160,7 +167,7 @@ It's worth comparing the outcomes in these two different variants:
 
 The proportion of green in each column tells you the probability of winning
 under each strategy in each variant. In the canonical game, switching nets
-you a 2/3 chance of winning, vs. only 1/3 if you stay, so your best move it
+you a 2/3 chance of winning, vs. only 1/3 if you stay, so your best move is
 to switch. So much we already knew.
 
 But look at the adversarial game. Now if you switch, you're totally doomed:
@@ -169,7 +176,7 @@ to switch if he *knows* you've already chosen the car. It's a trap: he's giving
 you a second opportunity to lose. Your only real option is to choose to
 stay if given a choice. Of course, you often won't be given a choice: you'll
 pick a goat door, he'll immediately reveal it, and you'll think, "ah, bad luck."
-You never even know you that you were denied an opportunity to switch unless
+You never even know that you were denied an opportunity to switch unless
 you'd seen the game played before.
 
 
@@ -183,13 +190,13 @@ you to cut the deck into two piles and point to one. If the force card is in
 the pile you indicate, he says, "great, we'll use this one." But if the force
 card is in the other pile, he reframes your gesture as eliminating the pile you
 pointed to: "fine, we'll get rid of this one." Either way, the pile containing
-the force card survives. From the your perspective, it feels as though you made
+the force card survives. From your perspective, it feels as though you made
 a free choice, but the magician was really using hidden information to
-reinterpret the meaning of your gesture to achieve own ends.
+reinterpret the meaning of your gesture to achieve his own ends.
 
 Of course, if the magician kept doing that over and over, sometimes retaining
 the pile you select and sometimes eliminating it, you'd catch on pretty quickly.
-That's why magician's actually use a variety of techniques to force cards and
+That's why magicians actually use a variety of techniques to force cards and
 would never use this particular way more than once a show.
 
 What makes the force possible is that the process wasn't explained clearly up
@@ -202,16 +209,16 @@ Adversarial Substitution as a Robust Strategy
 ---------------------------------------------
 
 Now, I put it to you that people are constantly on guard against being scammed.
-Even though Monty Hall himself is playing fair, they pick on the
+Even though Monty Hall himself is playing fair, they pick up on the
 fact that the whole setup is "scam shaped." I think people subconsciously
 substitute the adversarial variant for the true problem. Their intuition analyzes
 the adversarial variant and correctly comes to the conclusion that they should
-stay. They are instinctively suspicious of the fact that their getting an 
-opportunity to second guess themselves; why would Monty bother to do that if
+stay. They are instinctively suspicious of the fact that they're getting an 
+opportunity to second-guess themselves; why would Monty bother to do that if
 it didn't benefit him in some way?
 
 I would go further; rather than being a mistake or fallacy, isn't this a kind
-of wisdom? A street smart intuition that protects you from scams? 
+of wisdom? A street-smart intuition that protects you from scams? 
 
 It's worth reiterating, none of that adversarial stuff is in the actual rules
 of the game, which are explicit that Monty *always* reveals a goat and *always*
@@ -219,16 +226,16 @@ gives you an opportunity to switch. So instead of being street smart, it's just
 paranoid. Instead of protecting you, your lack of trust leads you astray.
 
 I suspect that's where the cognitive dissonance comes from: subconsciously
-people feel like switching it a trap that they should stay away from, but they
+people feel like switching is a trap that they should stay away from, but they
 can't actually identify anything in the rules to justify that feeling. Of
 course not: the "trap" isn't in the rules as stated, but in the space around
-the those rules that a clever operator could take advantage of.
+those rules that a clever operator could take advantage of.
 
 
-History of Badly Framing Questions
-----------------------------------
+History of Badly Framed Questions
+---------------------------------
 
-Asking undergraduates questions logic questions in natural language and
+Asking undergraduates logic questions in natural language and
 then acting superior and bemoaning the intelligence of the youth these days
 has a long history.
 
@@ -237,13 +244,13 @@ has a long history.
 
 These specific interpretations are not found in natural language but are
 arbitrary decisions mathematicians and logicians made when mapping natural
-language onto formal language. Student's find it counterintuitive because
+language onto formal language. Students find it counterintuitive because
 it *is*: there's nothing in natural language that says every OR
-must be interpretted as non-exclusive.
+must be interpreted as non-exclusive.
 
 In fact, this violates the Gricean maxims. If someone says, "either we eat
 pizza or I'm going home," they are using an exclusive OR. Asking questions
-badly and then laughing at students for using their native languages in the
+badly and then laughing at students for using their native language in the
 manner it was intended is a little silly.
 
 Framing is hugely important. Framing a problem as checking the "you must be
