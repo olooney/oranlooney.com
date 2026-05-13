@@ -8,6 +8,7 @@ tags:
   - Math
   - Python
   - Visualization
+  - Game Theory
 image: /post/grifters-skeptics-marks_files/lead.jpg
 ---
 

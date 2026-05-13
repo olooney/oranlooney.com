@@ -74,6 +74,12 @@
             Philosophy
           </a>&nbsp;
         </li>
+        <li class="article-meta-tags">
+          <a href="/tags/game-theory/">
+            <i class="fas fa-tag"></i>
+            Game Theory
+          </a>&nbsp;
+        </li>
       </ul>
       
 <aside class="toc">
@@ -83,6 +89,7 @@
 <ul>
 <li><a href="#the-monty-hall-problem">The Monty Hall Problem</a></li>
 <li><a href="#the-adversarial-variant">The Adversarial Variant</a></li>
+<li><a href="#card-forcing">Card Forcing</a></li>
 <li><a href="#adversarial-substitution-as-a-robust-strategy">Adversarial Substitution as a Robust Strategy</a></li>
 <li><a href="#history-of-badly-framing-questions">History of Badly Framing Questions</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
@@ -104,10 +111,10 @@ pushes people&rsquo;s buttons.</p>
 a tricky problem and people don&rsquo;t like being wrong.&rdquo; It&rsquo;s related to what
 Kahneman called <a href="https://en.wikipedia.org/wiki/Attribute_substitution">attribution substitution</a>, but instead of substituting an
 <em>easier</em> question, I&rsquo;m going to argue that people are substituting an
-<em>adversarial</em> game. Arguably, this is the more streetwise approach; which it
-turn is why people get upset when you insist on the cannonical example: they
-don&rsquo;t just think they&rsquo;ve gotten an abstract math problem wrong, they think they&rsquo;ve
-gotten conned.</p>
+<em>adversarial</em> game. Arguably, this is the more streetwise approach; which in
+turn is why people get upset when you insist on the canonical example: they
+don&rsquo;t just think they&rsquo;ve gotten an abstract math problem wrong, they just feel
+like they&rsquo;ve been conned.</p>
 
 <p>Obviously this is going to take a little work to unpack, but I think it&rsquo;s worth
 sticking around for the details because I strongly suspect this specific trick
@@ -125,24 +132,175 @@ The glib answer is sexism, but this is inadequate; she wrote on many topics,
 which surely attracted hate mail, but not to the same extent. No, there must
 be something about the problem itself that triggers this reaction.</p>
 
+<p><img src="/post/monty-hall_files/canonical_flowchart.png" alt="Canonical Monty Hall Flowchart" /></p>
+
 <h2 id="the-adversarial-variant">The Adversarial Variant</h2>
 
-<p>TODO</p>
-
 <p>The true Monty Hall Problem (MHP) assumes that Monty <em>always</em> shows you a
-goat and <em>always</em> gives you the option to switch.  In the adversarial variant
+goat and <em>always</em> gives you the option to switch. In the adversarial variant
 of the game, Monty has a choice: he can either open and door and give you
 the option switch, or he can <em>immediately</em> give you what&rsquo;s behind the door
-you picked. He still has full information about what&rsquo;s behind the door, and
-it&rsquo;s a zero sum game: he doesn&rsquo;t want you to win.</p>
+you picked. He still has full information about what&rsquo;s behind the door, but
+something&rsquo;s changed. Now it&rsquo;s a zero sum game: he doesn&rsquo;t want you to win, and
+is willing to bend the rules to ensure that you don&rsquo;t.</p>
 
-<p>TODO: write this as a shady street artist.</p>
+<p><img src="/post/monty-hall_files/adversarial_flowchart.png" alt="Canonical Monty Hall Flowchart" /></p>
 
-<p>Force</p>
+<p>It&rsquo;s worth comparing the outcomes in these two different variants:</p>
+
+<style>
+  :root {
+    --win-bg: #d9ead3;
+    --lose-bg: #f4cccc;
+    --win-text: #0b4f0b;
+    --lose-text: #7f0000;
+  }
+
+  table.monty-grid {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .monty-grid th,
+  .monty-grid td {
+    padding: 0.5em;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.15;
+    font-size: 0.95rem;
+  }
+
+  .monty-grid th {
+    background: transparent;
+    font-weight: 700;
+  }
+
+  .monty-grid .choice {
+    width: 10rem;
+  }
+
+  .monty-grid .win {
+    background: var(--win-bg);
+    color: var(--win-text);
+  }
+
+  .monty-grid .lose {
+    background: var(--lose-bg);
+    color: var(--lose-text);
+  }
+
+  .monty-grid .group-separator {
+    border-left: 1px solid #800000;
+  }
+
+  .monty-grid .row-label {
+    color: #800000;
+    font-weight: bold;
+  }
+</style>
+
+<table class="monty-grid" aria-label="Monty Hall outcomes by initial car location and player decision">
+  <thead>
+    <tr>
+      <th rowspan="2" class="row-label">Car Location</th>
+      <th colspan="2" class="group-separator">Canonical</th>
+      <th colspan="2" class="group-separator">Adversarial</th>
+    </tr>
+    <tr>
+      <th class="choice group-separator">Stay</th>
+      <th class="choice">Switch</th>
+      <th class="choice group-separator">Stay</th>
+      <th class="choice">Switch</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="row-label">Initial Door</td>
+      <td class="win group-separator">Win</td>
+      <td class="lose">Lose</td>
+      <td class="win group-separator">Win</td>
+      <td class="lose">Lose</td>
+    </tr>
+    <tr>
+      <td class="row-label">Other Door #1</td>
+      <td class="lose group-separator">Lose</td>
+      <td class="win">Win</td>
+      <td class="lose group-separator">Lose</td>
+      <td class="lose">Lose</td>
+    </tr>
+    <tr>
+      <td class="row-label">Other Door #2</td>
+      <td class="lose group-separator">Lose</td>
+      <td class="win">Win</td>
+      <td class="lose group-separator">Lose</td>
+      <td class="lose">Lose</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The proportion of green in each column tells you the probability of winning
+under each strategy in each variant. In the canonical game, switching nets
+you a <sup>2</sup>&frasl;<sub>3</sub> chance of winning, vs. only <sup>1</sup>&frasl;<sub>3</sub> if you stay, so your best move it
+to switch. So much we already knew.</p>
+
+<p>But look at the adversarial game. Now if you switch, you&rsquo;re totally doomed:
+no chance of winning at all. That&rsquo;s because Monty <em>only</em> gives you the opportunity
+to switch if he <em>knows</em> you&rsquo;ve already chosen the car. It&rsquo;s a trap: he&rsquo;s giving
+you a second opportunity to lose. Your only real option is to choose to
+stay if given a choice. Of course, you often won&rsquo;t be given a choice: you&rsquo;ll
+pick a goat door, he&rsquo;ll immediately reveal it, and you&rsquo;ll think, &ldquo;ah, bad luck.&rdquo;
+You never even know you that you were denied an opportunity to switch unless
+you&rsquo;d seen the game played before.</p>
+
+<h2 id="card-forcing">Card Forcing</h2>
+
+<p>You can see the same structure in a classic magician&rsquo;s &ldquo;force.&rdquo; Suppose a
+magician wants to force you to end up with a particular card. He of course
+knows where it is, but he wants to make it seem as if you picked it. He asks
+you to cut the deck into two piles and point to one. If the force card is in
+the pile you indicate, he says, &ldquo;great, we&rsquo;ll use this one.&rdquo; But if the force
+card is in the other pile, he reframes your gesture as eliminating the pile you
+pointed to: &ldquo;fine, we&rsquo;ll get rid of this one.&rdquo; Either way, the pile containing
+the force card survives. From the your perspective, it feels as though you made
+a free choice, but the magician was really using hidden information to
+reinterpret the meaning of your gesture to achieve own ends.</p>
+
+<p>Of course, if the magician kept doing that over and over, sometimes retaining
+the pile you select and sometimes eliminating it, you&rsquo;d catch on pretty quickly.
+That&rsquo;s why magician&rsquo;s actually use a variety of techniques to force cards and
+would never use this particular way more than once a show.</p>
+
+<p>What makes the force possible is that the process wasn&rsquo;t explained clearly up
+front. You&rsquo;re just going along with the act, getting fed instructions one at a
+time. There&rsquo;s no way for you to see how the larger picture constrains you.</p>
 
 <h2 id="adversarial-substitution-as-a-robust-strategy">Adversarial Substitution as a Robust Strategy</h2>
 
-<p>TODO</p>
+<p>Now, I put it to you that people are constantly on guard against being scammed.
+Even though Monty Hall himself is playing fair, they pick on the
+fact that the whole setup is &ldquo;scam shaped.&rdquo; I think people subconsciously
+substitute the adversarial variant for the true problem. Their intuition analyzes
+the adversarial variant and correctly comes to the conclusion that they should
+stay. They are instinctively suspicious of the fact that their getting an
+opportunity to second guess themselves; why would Monty bother to do that if
+it didn&rsquo;t benefit him in some way?</p>
+
+<p>I would go further; rather than being a mistake or fallacy, isn&rsquo;t this a kind
+of wisdom? A street smart intuition that protects you from scams?</p>
+
+<p>It&rsquo;s worth reiterating, none of that adversarial stuff is in the actual rules
+of the game, which are explicit that Monty <em>always</em> reveals a goat and <em>always</em>
+gives you an opportunity to switch. So instead of being street smart, it&rsquo;s just
+paranoid. Instead of protecting you, your lack of trust leads you astray.</p>
+
+<p>I suspect that&rsquo;s where the cognitive dissonance comes from: subconsciously
+people feel like switching it a trap that they should stay away from, but they
+can&rsquo;t actually identify anything in the rules to justify that feeling. Of
+course not: the &ldquo;trap&rdquo; isn&rsquo;t in the rules as stated, but in the space around
+the those rules that a clever operator could take advantage of.</p>
 
 <h2 id="history-of-badly-framing-questions">History of Badly Framing Questions</h2>
 
@@ -173,8 +331,7 @@ certain subset of students.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Look for this pattern, you&rsquo;ll see it everwhere.
-It&rsquo;s about getting to trust, and navigating a world of bad actors.</p>
+<p>TODO</p>
 
     </article>
 
