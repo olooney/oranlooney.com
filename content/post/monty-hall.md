@@ -17,7 +17,7 @@ answers, and so upset by the correct answer? That's weird, right? People don't
 usually care enough about math problems to get worked up over them, but there's
 something about this particular problem that really pushes people's buttons.
 
-There is a good answer to this question, and it's not just, "it's a bit tricky
+There is a good answer to this question, and it's not just "it's a bit tricky
 and people don't like admitting they're wrong." The closest analogy I know of
 is what Kahneman called [attribution substitution][AS], but instead of
 substituting an easier version of a question, people substitute an
@@ -45,10 +45,10 @@ Prior to that, it was discussed by Marilyn vos Savant, to a [famously negative
 public reaction][MVS]. After giving the correct answer in a newspaper column,
 she was bombarded with hate mail vehemently insisting she was wrong. But why?
 
-The glib answer is sexism, but this is at most part of the reason. She wrote on
-many other topics which did not elicit the same reaction despite having the
-same author. No, there must be something about the problem itself that triggers
-an unusually strong reaction.
+The glib answer is sexism, but this is at most only part of the reason. She
+wrote on many other topics which did not elicit the same reaction despite
+having the same author. No, there must be something about the problem itself
+that triggers an unusually strong reaction.
 
 
 The Adversarial Variant
@@ -56,7 +56,7 @@ The Adversarial Variant
 
 The original Monty Hall Problem assumes that Monty *always* shows you a goat
 and *always* gives you the option to switch. The sequence of play looks
-something like this:
+like this:
 
 ![Canonical Monty Hall Flowchart](/post/monty-hall_files/canonical_flowchart.png)
 
@@ -88,10 +88,10 @@ It's worth comparing the outcomes in these two different variants:
     --lose-text: #7f0000;
   }
 
-  table.monty-grid {
+  html body table.monty-grid {
     border-collapse: collapse;
     table-layout: fixed;
-    width: 100%;
+    width: 80%;
     max-width: 980px;
     margin: 0 auto;
   }
@@ -219,7 +219,7 @@ The Psychology
 
 People are constantly on guard against being scammed. Even though Monty himself
 is playing fair, they still instinctively pick up on the fact that the whole
-setup is "scam shaped." Their intuition analyzes the adversarial variant
+setup is "scam-shaped." Their intuition analyzes the adversarial variant
 instead of the original game and comes to the mistaken conclusion that they
 shouldn't switch. They are instinctively suspicious of the fact that they're
 getting an opportunity to second-guess themselves; why would Monty bother to do
@@ -229,8 +229,7 @@ It's worth reiterating that none of that adversarial stuff is in the actual
 rules of the game, which are explicit that Monty *always* reveals a goat and
 *always* gives you an opportunity to switch. So instead of being street smart,
 it's just paranoid, and instead of protecting you, your lack of trust leads you
-astray, leading to a suboptimal decision which costs you (on average) 1/3 of a
-car.
+astray.
 
 I suspect that's where the anger comes from: subconsciously people feel like
 switching is a trap that they should stay away from, but they can't actually
@@ -247,7 +246,7 @@ Badly Framed Questions
 There's a long history of researchers giving subjects highly abstract logic
 puzzles and clicking their tongues when subjects made the *faux pas* of
 interpreting their riddles as if they were normal English sentences. More often
-than not, it's the translation into natural language which is faulty, not the
+than not, it's the translation into natural language that is faulty, not the
 subjects' ability to reason; when the same logic puzzles are rewritten, the
 deficit in logical thinking disappears.
 
@@ -260,7 +259,7 @@ number of cards that need to be turned over to confirm the rule.
 
 Most people perform badly on the abstract version of this task. But when the
 exact same logical structure is reframed as a social rule&mdash;"If a person is
-drinking beer, then they must be over 21"&mdash;performance improves
+drinking beer, then they must be at least 21"&mdash;performance improves
 dramatically. People immediately understand that you need to check the beer
 drinker and the underage person.
 
@@ -272,7 +271,7 @@ simultaneously.
 
 Why not? [Grice's conversational maxims][GCM] provide an answer. Grice argued
 that in ordinary conversation, speakers are assumed to be cooperative and
-informative. One of the maxims is the maxim of quantity: say as much as is needed,
+informative. One of them is the maxim of quantity: say as much as is needed,
 but no more. If a speaker knew both options were true, then the more
 informative thing to say would simply be "A and B." By instead choosing the
 weaker statement "A or B," the speaker conversationally implies that the
@@ -284,10 +283,10 @@ assumption that the speaker is communicating efficiently and honestly.
 > cleverness."
 > <br>&mdash;Randall Munroe
 
-The point is that translation of a puzzle from natural language to formal
-mathematics is fraught with peril. For the Monty Hall problem, it's the
-*framing* of the probability problem as a "game show" that naturally causes
-people to start thinking of it in adversarial terms. 
+The point is that translating between natural language and formal mathematics
+is fraught with peril. For the Monty Hall problem, it's the *framing* of the
+probability problem as a "game show" that naturally causes people to start
+thinking of it in adversarial terms.
 
 
 Conclusion
@@ -305,9 +304,9 @@ conscious decision. When you start to get that gut feeling that you might be
 about to be scammed, ask yourself if you really have sufficient guarantees about
 the rules of the game to analyze it correctly. In the case of the Monty Hall
 problem, we can double-check the rules to confirm that Monty will *always* open
-a door and *always* reveal a goat (meaning he didn't choose a door at random.)
+a door and *always* reveal a goat.
 Once we are sure of that, we can follow the optimal strategy of switching
-doors. The net benefit is an additional 1/3 of a car, doubling our expected
+doors. The net gain is an additional 1/3 of a car, doubling our expected
 reward.
 
 On the other hand, in situations with different social dynamics, say playing a
@@ -326,5 +325,5 @@ out while trying to play it overly safe.
 
 [AS]: https://en.wikipedia.org/wiki/Attribute_substitution
 [WST]: https://en.wikipedia.org/wiki/Wason_selection_task
-[GCM]:https://en.wikipedia.org/wiki/Cooperative_principle 
+[GCM]: https://en.wikipedia.org/wiki/Cooperative_principle 
 [MVS]: https://en.wikipedia.org/wiki/Monty_Hall_problem
