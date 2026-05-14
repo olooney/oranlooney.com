@@ -33,13 +33,19 @@ The Monty Hall Problem
 
 The Monty Hall Problem was best described on this episode of Brooklyn 99:
 
-<div style="width: 560px; margin: auto">
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/AD6eJlbFa2I?si=XETowN3gxlp9QS0M"
-title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;
-clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<div class="youtube-container">
+    <iframe 
+        class="youtube-iframe" 
+        src="https://www.youtube.com/embed/AD6eJlbFa2I?si=XETowN3gxlp9QS0M"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
 </div>
+
 
 Prior to that, it was discussed by Marilyn vos Savant, to a [famously negative
 public reaction][MVS]. After giving the correct answer in a newspaper column,
@@ -58,7 +64,7 @@ The original Monty Hall Problem assumes that Monty *always* shows you a goat
 and *always* gives you the option to switch. The sequence of play looks
 like this:
 
-![Canonical Monty Hall Flowchart](/post/monty-hall_files/canonical_flowchart.png)
+![Original Monty Hall Flowchart](/post/monty-hall_files/original_flowchart.png)
 
 We're now going to introduce an adversarial variation of the game. In this
 version, Monty has a choice: he can either open a door and give you the option
@@ -75,7 +81,7 @@ you'll switch.
 
 That means from the player's point of view, the game now looks like this:
 
-![Canonical Monty Hall Flowchart](/post/monty-hall_files/adversarial_flowchart.png)
+![Adversarial Monty Hall Flowchart](/post/monty-hall_files/adversarial_flowchart.png)
 
 
 It's worth comparing the outcomes in these two different variants:
@@ -138,7 +144,7 @@ It's worth comparing the outcomes in these two different variants:
   <thead>
     <tr>
       <th rowspan="2" class="row-label">Car Location</th>
-      <th colspan="2" class="group-separator">Canonical</th>
+      <th colspan="2" class="group-separator">Original</th>
       <th colspan="2" class="group-separator">Adversarial</th>
     </tr>
     <tr>
@@ -310,8 +316,8 @@ doors. The net gain is an additional 1/3 of a car, doubling our expected
 reward.
 
 On the other hand, in situations with different social dynamics, say playing a
-version of the same game against a street hustler, you might be wise to adopt a
-more defensive strategy of not switching.
+version of the same game against a street hustler, you might be wise to adopt
+the more defensive strategy of not switching.
 
 It also pays to be aware that other people might be automatically making the
 same adversarial substitution. Maybe the reason they aren't accepting a

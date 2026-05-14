@@ -9,7 +9,7 @@ tags:
   - Python
   - Visualization
   - Game Theory
-image: /post/grifters-skeptics-marks_files/lead.jpg
+image: /post/grifters-skeptics-marks_files/lead.jpg?v=2
 ---
 
 

@@ -347,3 +347,15 @@ html .article table td {
 .drop-shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
 }
+
+
+
+/* Embedded Youtube Videos */
+.article .youtube-container {
+    display: flex;
+    justify-content: center;
+}
+.article iframe.youtube-iframe {
+    aspect-ratio: 16 / 9;
+    width: 100% !important;
+}

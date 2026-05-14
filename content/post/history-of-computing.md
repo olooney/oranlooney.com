@@ -326,20 +326,16 @@ Chris Staecker has a good video demonstrating in detail the use of this
 specific sector for those who want to go into the details:
 
 
-<style>
-.youtube-container {
-    display: flex;
-    justify-content: center;
-}
-iframe.youtube-iframe {
-    aspect-ratio: 16 / 9;
-    width: 100% !important;
-}
-</style>
-
-
 <div class="youtube-container">
-    <iframe class="youtube-iframe" src="https://www.youtube.com/embed/qmmRuh_xEiM?si=iBnrDEfJ8_hJTfQX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe 
+        class="youtube-iframe"
+        src="https://www.youtube.com/embed/qmmRuh_xEiM?si=iBnrDEfJ8_hJTfQX"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
 </div>
 
 

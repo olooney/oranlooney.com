@@ -9,7 +9,7 @@
   <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
-  <link rel="stylesheet" href="/css/custom.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=2" media="all" />
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
 
@@ -120,12 +120,16 @@ world around them.</p>
 
 <p>The Monty Hall Problem was best described on this episode of Brooklyn 99:</p>
 
-<div style="width: 560px; margin: auto">
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/AD6eJlbFa2I?si=XETowN3gxlp9QS0M"
-title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;
-clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<div class="youtube-container">
+    <iframe 
+        class="youtube-iframe" 
+        src="https://www.youtube.com/embed/AD6eJlbFa2I?si=XETowN3gxlp9QS0M"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
 </div>
 
 <p>Prior to that, it was discussed by Marilyn vos Savant, to a <a href="https://en.wikipedia.org/wiki/Monty_Hall_problem">famously negative
@@ -143,7 +147,7 @@ that triggers an unusually strong reaction.</p>
 and <em>always</em> gives you the option to switch. The sequence of play looks
 like this:</p>
 
-<p><img src="/post/monty-hall_files/canonical_flowchart.png" alt="Canonical Monty Hall Flowchart" /></p>
+<p><img src="/post/monty-hall_files/original_flowchart.png" alt="Original Monty Hall Flowchart" /></p>
 
 <p>We&rsquo;re now going to introduce an adversarial variation of the game. In this
 version, Monty has a choice: he can either open a door and give you the option
@@ -160,7 +164,7 @@ you&rsquo;ll switch.</p>
 
 <p>That means from the player&rsquo;s point of view, the game now looks like this:</p>
 
-<p><img src="/post/monty-hall_files/adversarial_flowchart.png" alt="Canonical Monty Hall Flowchart" /></p>
+<p><img src="/post/monty-hall_files/adversarial_flowchart.png" alt="Adversarial Monty Hall Flowchart" /></p>
 
 <p>It&rsquo;s worth comparing the outcomes in these two different variants:</p>
 
@@ -222,7 +226,7 @@ you&rsquo;ll switch.</p>
   <thead>
     <tr>
       <th rowspan="2" class="row-label">Car Location</th>
-      <th colspan="2" class="group-separator">Canonical</th>
+      <th colspan="2" class="group-separator">Original</th>
       <th colspan="2" class="group-separator">Adversarial</th>
     </tr>
     <tr>
@@ -390,8 +394,8 @@ doors. The net gain is an additional <sup>1</sup>&frasl;<sub>3</sub> of a car, d
 reward.</p>
 
 <p>On the other hand, in situations with different social dynamics, say playing a
-version of the same game against a street hustler, you might be wise to adopt a
-more defensive strategy of not switching.</p>
+version of the same game against a street hustler, you might be wise to adopt
+the more defensive strategy of not switching.</p>
 
 <p>It also pays to be aware that other people might be automatically making the
 same adversarial substitution. Maybe the reason they aren&rsquo;t accepting a
