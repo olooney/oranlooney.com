@@ -10,23 +10,22 @@ tags:
 image: /post/monty-hall_files/lead.jpg
 ---
 
-This essay isn't about explaining the Monty Hall Problem&mdash;you can look
-that up anywhere these days&mdash;but a closely related question: why does
-this puzzle seem to drive some people crazy? Why do they get so attached to
-their wrong answers, and so upset by the correct answer? That's weird, right?
-People don't usually care enough about math problems to get worked up over
-them, but there's something about the way this particular problem is framed
-that really pushes people's buttons.
+This essay isn't to explain the solution to the Monty Hall Problem&mdash;you
+can look that up anywhere&mdash;but to answer a related question: why does it
+seem to drive some people crazy? Why do they get so attached to their wrong
+answers, and so upset by the correct answer? That's weird, right? People don't
+usually care enough about math problems to get worked up over them, but there's
+something about this particular problem that really pushes people's buttons.
 
-There is a good answer to this question, and it's not just, "it's a tricky
-problem and people don't like being wrong." It's roughly analogous to what
-Kahneman called [attribution substitution][AS], but instead of substituting an
-*easier* version of a question, I'm going to argue that people are substituting
-an *adversarial* version of a game.
+There is a good answer to this question, and it's not just, "it's a bit tricky
+and people don't like admitting they're wrong." The closest analogy I know of
+what Kahneman called [attribution substitution][AS], but instead of
+substituting an easier version of a question, people substitute an
+*adversarial* version of a game.
 
-This is going to take a little work to unpack, but I think it's worth digging
-into because it explains a lot about how people understand (and misunderstand)
-the world around them.
+This is going to take a while to unpack, but I think it's worth digging into
+because it explains a lot about how people understand (and misunderstand) the
+world around them.
 
 
 The Monty Hall Problem
@@ -46,16 +45,16 @@ Prior to that, it was discussed by Marilyn vos Savant, to a [famously negative
 public reaction][MVS]. After giving the correct answer in a newspaper column,
 she was bombarded with hate mail vehemently insisting she was wrong. But why?
 
-The glib answer is sexism, but this is inadequate; she wrote on many other
-topics which did not elicit the same reaction despite having the same author.
-No, there must be something about the problem itself that triggers an unusually
-strong reaction.
+The glib answer is sexism, but this at most part of the reason. She wrote on
+many other topics which did not elicit the same reaction despite having the
+same author. No, there must be something about the problem itself that triggers
+an unusually strong reaction.
 
 
 The Adversarial Variant
 -----------------------
 
-The true Monty Hall Problem (MHP) assumes that Monty *always* shows you a goat
+The original Monty Hall Problem assumes that Monty *always* shows you a goat
 and *always* gives you the option to switch. The sequence of play looks
 something like this:
 
@@ -65,9 +64,8 @@ We're now going to introduce an adversarial variation of the game. In this
 version, Monty has a choice: he can either open a door and give you the option
 switch, just like in the original game, or he can *immediately* give you what's
 behind the door you picked. He still has full information about what's behind
-the door, but something's changed. What's more, it's a zero-sum game: Monty
-doesn't *want* you to win, and will make his choice based on whatever is worse
-for you.
+the door, of course. Let's also say this is a zero-sum game: Monty doesn't
+*want* you to win, and will make his choice based on whatever is worse for you.
 
 From Monty's point of view, the optimal policy is obvious. He knows if the door
 you chose has a goat or a car. If its a goat, he has zero incentive to offer
@@ -176,60 +174,62 @@ It's worth comparing the outcomes in these two different variants:
 </table>
 
 The proportion of green in each column tells you the probability of winning
-under each strategy in each variant. In the canonical game, switching nets
+under each strategy in each variant. In the original game, switching nets
 you a 2/3 chance of winning, vs. only 1/3 if you stay, so your best move is
 to switch. So much we already knew.
 
-But look at the adversarial game. If you switch, you're doomed: there's no
+But look at outcomes for the adversarial game on the right. They're completely
+different. Now if you switch, you really shoot yourself in the foot: there's no
 chance of winning at all. That's because Monty *only* gives you the opportunity
 to switch if he *knows* you've already chosen the car. It's a trap: he's giving
-you a second opportunity to lose. Your only real option is to choose to stay if
-given a choice. Of course, you often won't be given a choice: you'll pick a
-goat door, he'll immediately reveal it, and you'll think, "ah, bad luck." You
-never even know that you were denied an opportunity to switch unless you'd seen
-the game played before.
+you a second chance to make a mistake. Your only real option is to choose to
+stay if given a choice. Of course, you often won't be given a choice: you'll
+pick a goat door, he'll immediately reveal it, and you'll think, "ah, bad
+luck." You never even know that you were denied an opportunity to switch unless
+you'd seen the game played before.
 
 
 Card Forcing
 ------------
 
 This structure is reminiscent of the classic magician's "force." Suppose a
-magician wants to force you to end up with a particular card. He of course
-knows where it is, but he wants to make it seem as if you picked it. He asks
-you to cut the deck into two piles and point to one. If the force card is in
-the pile you indicate, he says, "great, we'll use this one." But if the force
-card is in the other pile, he reframes your gesture as eliminating the pile you
-pointed to: "fine, we'll get rid of this one." Either way, the pile containing
-the force card survives. From your perspective, it feels as though you made a
-free choice, but the magician was really using hidden information to
-reinterpret the meaning of your gesture to achieve his own ends.
+magician wants you to end up with a particular card. He of course knows where
+it is, but he wants to make it seem as if you picked it. He asks you to cut the
+deck into two piles and point to one. If the force card is in the pile you
+indicate, he says, "great, we'll use this one." But if the force card is in the
+other pile, he reframes your gesture as eliminating the pile you pointed to:
+"fine, we'll get rid of this one." Either way, the pile containing the force
+card survives. From your perspective, it feels as though you made a free
+choice, but the magician was really using hidden information to reinterpret the
+meaning of your gesture to achieve his own ends.
 
 Of course, if the magician kept doing that over and over, sometimes retaining
 the pile you select and sometimes eliminating it, you'd catch on pretty
-quickly. That's why magicians actually use a variety of techniques to force
-cards and would never use this particular way more than once a show.
+quickly. That's why magicians use a wide variety of techniques to force
+cards and never use the same one twice.
 
-What makes the force possible is that the process wasn't explained clearly up
+What makes the force possible is that the rules weren't fully explained up
 front. You're just going along with the act, getting fed instructions one at a
-time. There's no way for you to see how the larger picture constrains you.
+time, so there's no way for you to see how the rules of the game are actually
+twisting themselves to ensure a certain outcome.
 
 
-Adversarial Substitution as a Robust Strategy
----------------------------------------------
+The Psychology
+--------------
 
-People are constantly on guard against being scammed. Even though Monty Hall
-himself is playing fair, they pick up on the fact that the whole setup is "scam
-shaped." Their intuition analyzes the adversarial variant instead of the true
-game and comes to the mistaken conclusion that they shouldn't switch. They are
-instinctively suspicious of the fact that they're getting an opportunity to
-second-guess themselves; why would Monty bother to do that if it didn't benefit
-him in some way?
+People are constantly on guard against being scammed. Even though Monty himself
+is playing fair, they still instinctively pick up on the fact that the whole
+setup is "scam shaped." Their intuition analyzes the adversarial variant
+instead of the original game and comes to the mistaken conclusion that they
+shouldn't switch. They are instinctively suspicious of the fact that they're
+getting an opportunity to second-guess themselves; why would Monty bother to do
+that if it didn't benefit him in some way?
 
 It's worth reiterating that none of that adversarial stuff is in the actual
 rules of the game, which are explicit that Monty *always* reveals a goat and
 *always* gives you an opportunity to switch. So instead of being street smart,
-it's just paranoid. Instead of protecting you, your lack of trust leads you
-astray, leading to a suboptimal decision and costing you (on average) 1/3 of
+it's just paranoid, and instead of protecting you, your lack of trust leads you
+astray, leading to a suboptimal decision which costs you (on average) 1/3 of
 car.
 
 I suspect that's where the anger comes from: subconsciously people feel like
@@ -241,28 +241,30 @@ cognitive dissonance and the vague feeling they're being taken advantage of
 somehow.
 
 
-History of Badly Framed Questions
----------------------------------
+Badly Framed Questions
+----------------------
 
-There's a long history of researchers giving people highly abstract logic
+There's a long history of researchers giving subjects highly abstract logic
 puzzles and clicking their tongues when subjects made the *faux pas* of
-interpreting sentences that had been reversed translated from symbolic logic
-expressions  as if they were normal English sentences. More often then not,
-its the translation into natural language which is faulty, not the subjects
-ability to reason. When the same logic puzzles are rewritten to actually make
-sense, the deficit in logical thinking disappears.
+interpreting their riddles as if they were normal English sentences. More often
+then not, it's the translation into natural language which is faulty, not the
+subjects ability to reason; when the same logic puzzles are rewritten, the
+deficit in logical thinking disappears.
 
 A classic example is the [Wason selection task][WST]. Subjects are shown four
 cards and told a rule like, "If a card has an even number on one side, then it
-has a red color on the other." Most people perform badly on this abstract
-version of the task. But when the exact same logical structure is reframed as a
-social rule -- for example, "If a person is drinking beer, then they must be
-over 21" -- performance improves dramatically. People immediately understand
-that you need to check the beer drinker and the underage person.
+has a red color on the other." Their job is to decide on the absolute minimum
+number of cards that need to be turned over to confirm the rule.
 
 ![Wason Task](/post/monty-hall_files/wason.png)
 
-You can see the same thing with the ordinary English word "or." In formal
+Most people perform badly on the abstract version of this task. But when the
+exact same logical structure is reframed as a social rule&mdash;"If a person is
+drinking beer, then they must be over 21"&mdash;performance improves
+dramatically. People immediately understand that you need to check the beer
+drinker and the underage person.
+
+We can see the same thing with the ordinary English word "or." In formal
 logic, OR is inclusive: "A or B" means A, or B, or both. But in natural
 language, people often interpret OR exclusively. If someone says, "Either we
 eat pizza or I'm going home," nobody thinks the speaker means both could happen
@@ -283,9 +285,9 @@ assumption that the speaker is communicating efficiently and honestly.
 > <br>&mdash;Randall Munroe
 
 The point is that translation of a puzzle from natural language to formal
-mathematics is fraught with peril. It's the *framing* of the probability
-problem as a "game show" that naturally causes people to start thinking of
-it in adversarial terms. 
+mathematics is fraught with peril. For the Monty Hall problem, it's the
+*framing* of the probability problem as a "game show" that naturally causes
+people to start thinking of it in adversarial terms. 
 
 
 Conclusion
@@ -303,18 +305,23 @@ conscious decision. When you start to get that gut feeling that you might be
 about to scammed, ask yourself if you really have sufficient guarantees about
 the rules of the game to analyze it correctly. In the case of the Monty Hall
 problem, we can double-check the rules to confirm that Monty will *always* open
-a door and reveal a goat. Once we are sure of that, we can follow the optimal
-strategy of switching doors. The net benefit is an additional 1/3 of the value
-of a  car, doubling our expected reward, so surely worth doing!
+a door and *always* reveal a goat (meaning he didn't choose a door at random.)
+Once we are sure of that, we can follow the optimal strategy of switching
+doors. The net benefit is an additional 1/3 of of a car, doubling our expected
+reward.
 
 On the other hand, in situation with different social dynamics, say playing a
 version of the same game against a street hustler, you might be wise to adopt a
 more defensive strategy of not switching.
 
 It also pays to be aware that other people might be automatically making the
-same adversarial substitution. Maybe the reason they aren't accepting your
+same adversarial substitution. Maybe the reason they aren't accepting a
 perfectly legitimate offer is because the structure of the deal feels like it
-could be exploited in this way, setting off alarm bells. 
+could be exploited in some way, setting off alarm bells. 
+
+There needs to be a lot of trust, transparency, and clarity before we can take
+advantage of the opportunities in front of us, otherwise we're liable to lose
+out while trying to play it overly safe.
 
 
 [AS]: https://en.wikipedia.org/wiki/Attribute_substitution
