@@ -19,7 +19,7 @@ something about this particular problem that really pushes people's buttons.
 
 There is a good answer to this question, and it's not just, "it's a bit tricky
 and people don't like admitting they're wrong." The closest analogy I know of
-what Kahneman called [attribution substitution][AS], but instead of
+is what Kahneman called [attribution substitution][AS], but instead of
 substituting an easier version of a question, people substitute an
 *adversarial* version of a game.
 
@@ -45,7 +45,7 @@ Prior to that, it was discussed by Marilyn vos Savant, to a [famously negative
 public reaction][MVS]. After giving the correct answer in a newspaper column,
 she was bombarded with hate mail vehemently insisting she was wrong. But why?
 
-The glib answer is sexism, but this at most part of the reason. She wrote on
+The glib answer is sexism, but this is at most part of the reason. She wrote on
 many other topics which did not elicit the same reaction despite having the
 same author. No, there must be something about the problem itself that triggers
 an unusually strong reaction.
@@ -62,15 +62,15 @@ something like this:
 
 We're now going to introduce an adversarial variation of the game. In this
 version, Monty has a choice: he can either open a door and give you the option
-switch, just like in the original game, or he can *immediately* give you what's
+to switch, just like in the original game, or he can *immediately* give you what's
 behind the door you picked. He still has full information about what's behind
 the door, of course. Let's also say this is a zero-sum game: Monty doesn't
 *want* you to win, and will make his choice based on whatever is worse for you.
 
 From Monty's point of view, the optimal policy is obvious. He knows if the door
-you chose has a goat or a car. If its a goat, he has zero incentive to offer
+you chose has a goat or a car. If it's a goat, he has zero incentive to offer
 you a chance to switch as that *might* result in you switching to the car. If
-its a car, then he has every reason to offer you the choice in the hope that
+it's a car, then he has every reason to offer you the choice in the hope that
 you'll switch. 
 
 That means from the player's point of view, the game now looks like this:
@@ -229,7 +229,7 @@ It's worth reiterating that none of that adversarial stuff is in the actual
 rules of the game, which are explicit that Monty *always* reveals a goat and
 *always* gives you an opportunity to switch. So instead of being street smart,
 it's just paranoid, and instead of protecting you, your lack of trust leads you
-astray, leading to a suboptimal decision which costs you (on average) 1/3 of
+astray, leading to a suboptimal decision which costs you (on average) 1/3 of a
 car.
 
 I suspect that's where the anger comes from: subconsciously people feel like
@@ -247,8 +247,8 @@ Badly Framed Questions
 There's a long history of researchers giving subjects highly abstract logic
 puzzles and clicking their tongues when subjects made the *faux pas* of
 interpreting their riddles as if they were normal English sentences. More often
-then not, it's the translation into natural language which is faulty, not the
-subjects ability to reason; when the same logic puzzles are rewritten, the
+than not, it's the translation into natural language which is faulty, not the
+subjects' ability to reason; when the same logic puzzles are rewritten, the
 deficit in logical thinking disappears.
 
 A classic example is the [Wason selection task][WST]. Subjects are shown four
@@ -272,7 +272,7 @@ simultaneously.
 
 Why not? [Grice's conversational maxims][GCM] provide an answer. Grice argued
 that in ordinary conversation, speakers are assumed to be cooperative and
-informative. One of maxims is the maxim of quantity: say as much as is needed,
+informative. One of the maxims is the maxim of quantity: say as much as is needed,
 but no more. If a speaker knew both options were true, then the more
 informative thing to say would simply be "A and B." By instead choosing the
 weaker statement "A or B," the speaker conversationally implies that the
@@ -293,7 +293,7 @@ people to start thinking of it in adversarial terms.
 Conclusion
 ----------
 
-Is adversarial substitution actually a fallacy? Or is it a street smart, robust
+Is adversarial substitution actually a fallacy? Or is it a street-smart, robust
 strategy to avoid being conned? One thing we can say for sure is that doing it
 *subconsciously* is always a mistake. 
 
@@ -302,15 +302,15 @@ strategy to avoid being conned? One thing we can say for sure is that doing it
 
 However, merely being aware of the phenomenon lets us make a more intentional,
 conscious decision. When you start to get that gut feeling that you might be
-about to scammed, ask yourself if you really have sufficient guarantees about
+about to be scammed, ask yourself if you really have sufficient guarantees about
 the rules of the game to analyze it correctly. In the case of the Monty Hall
 problem, we can double-check the rules to confirm that Monty will *always* open
 a door and *always* reveal a goat (meaning he didn't choose a door at random.)
 Once we are sure of that, we can follow the optimal strategy of switching
-doors. The net benefit is an additional 1/3 of of a car, doubling our expected
+doors. The net benefit is an additional 1/3 of a car, doubling our expected
 reward.
 
-On the other hand, in situation with different social dynamics, say playing a
+On the other hand, in situations with different social dynamics, say playing a
 version of the same game against a street hustler, you might be wise to adopt a
 more defensive strategy of not switching.
 
