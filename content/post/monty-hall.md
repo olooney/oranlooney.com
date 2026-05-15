@@ -1,8 +1,8 @@
 ---
 title: "Why the Monty Hall Problem Drives People Crazy"
 author: "Oran Looney"
-date: 2026-03-24
-publishdate: 2026-03-24
+date: 2026-05-13
+publishdate: 2026-05-13
 tags:
   - Math
   - Philosophy
@@ -10,20 +10,21 @@ tags:
 image: /post/monty-hall_files/lead.jpg
 ---
 
-This essay isn't to explain the solution to the Monty Hall Problem&mdash;you
-can look that up anywhere&mdash;but to answer a related question: why does it
-seem to drive some people crazy? Why do they get so attached to their wrong
-answers, and so upset by the correct answer? That's weird, right? People don't
-usually care enough about math problems to get worked up over them, but there's
-something about this particular problem that really pushes people's buttons.
+This essay isn't to explain the solution to the [Monty Hall
+problem][MHP]&mdash;you can look that up anywhere&mdash;but to ask a related
+question: why does it seem to drive some people crazy? Why do they get so
+attached to their wrong answers, and so upset by the correct answer? That's
+weird, right? People don't usually care enough about math problems to get
+worked up over them, but there's something about this particular problem that
+really pushes people's buttons.
 
-There is a good answer to this question, and it's not just "it's a bit tricky
-and people don't like admitting they're wrong." The closest analogy I know of
-is what Kahneman called [attribution substitution][AS], but instead of
-substituting an easier version of a question, people substitute an
-*adversarial* version of a game.
+There *is* an answer to this question, and it's not just "it's a bit tricky and
+people don't like being wrong." It's analogous to what Kahneman called
+[attribution substitution][AS], but instead of substituting an *easier* version
+of a *question*, people substitute an *adversarial* version of a *game*, so
+let's call it "adversarial substitution."
 
-This is going to take a while to unpack, but I think it's worth digging into
+This is going to take some work to unpack, but I think it'll be worth it
 because it explains a lot about how people understand (and misunderstand) the
 world around them.
 
@@ -48,7 +49,7 @@ The Monty Hall Problem was best described on this episode of Brooklyn 99:
 
 
 Prior to that, it was discussed by Marilyn vos Savant, to a [famously negative
-public reaction][MVS]. After giving the correct answer in a newspaper column,
+public reaction][MHP]. After giving the correct answer in a newspaper column,
 she was bombarded with hate mail vehemently insisting she was wrong. But why?
 
 The glib answer is sexism, but this is at most only part of the reason. She
@@ -74,10 +75,10 @@ the door, of course. Let's also say this is a zero-sum game: Monty doesn't
 *want* you to win, and will make his choice based on whatever is worse for you.
 
 From Monty's point of view, the optimal policy is obvious. He knows if the door
-you chose has a goat or a car. If it's a goat, he has zero incentive to offer
-you a chance to switch as that *might* result in you switching to the car. If
-it's a car, then he has every reason to offer you the choice in the hope that
-you'll switch. 
+you chose has a goat or a car behind it. If it's a goat, he has zero incentive
+to offer you a chance to switch as that *might* result in you switching to the
+car. If it's a car, then he has every reason to offer you the choice in the
+hope that you'll switch. 
 
 That means from the player's point of view, the game now looks like this:
 
@@ -246,15 +247,16 @@ cognitive dissonance and the vague feeling they're being taken advantage of
 somehow.
 
 
-Badly Framed Questions
-----------------------
+Precise Questions, Asked Imprecisely
+------------------------------------
 
-There's a long history of researchers giving subjects highly abstract logic
-puzzles and clicking their tongues when subjects made the *faux pas* of
-interpreting their riddles as if they were normal English sentences. More often
-than not, it's the translation into natural language that is faulty, not the
-subjects' ability to reason; when the same logic puzzles are rewritten, the
-deficit in logical thinking disappears.
+There's a long history of cognitive psychology researchers giving subjects
+highly abstract logic puzzles and clicking their tongues when subjects make the
+*faux pas* of interpreting their thinly veiled formulas as if they were normal
+English sentences. More often than not, it's the translation into natural
+language that's problematic, not the subjects' ability to reason; when the same
+logic puzzles are rewritten in a more natural way, the supposed deficit in
+logical thinking disappears entirely.
 
 A classic example is the [Wason selection task][WST]. Subjects are shown four
 cards and told a rule like, "If a card has an even number on one side, then it
@@ -269,30 +271,14 @@ drinking beer, then they must be at least 21"&mdash;performance improves
 dramatically. People immediately understand that you need to check the beer
 drinker and the underage person.
 
-We can see the same thing with the ordinary English word "or." In formal
-logic, OR is inclusive: "A or B" means A, or B, or both. But in natural
-language, people often interpret OR exclusively. If someone says, "Either we
-eat pizza or I'm going home," nobody thinks the speaker means both could happen
-simultaneously.
-
-Why not? [Grice's conversational maxims][GCM] provide an answer. Grice argued
-that in ordinary conversation, speakers are assumed to be cooperative and
-informative. One of them is the maxim of quantity: say as much as is needed,
-but no more. If a speaker knew both options were true, then the more
-informative thing to say would simply be "A and B." By instead choosing the
-weaker statement "A or B," the speaker conversationally implies that the
-stronger statement is not true. The exclusivity is therefore not contained in
-the literal meaning of OR itself, but inferred pragmatically from the
-assumption that the speaker is communicating efficiently and honestly.
-
 > "Communicating badly and then acting smug when you're misunderstood is not
 > cleverness."
 > <br>&mdash;Randall Munroe
 
 The point is that translating between natural language and formal mathematics
-is fraught with peril. For the Monty Hall problem, it's the *framing* of the
-probability problem as a "game show" that naturally causes people to start
-thinking of it in adversarial terms.
+isn't easy. For the Monty Hall problem, simply *framing* of the probability
+problem as a game show with money on the line that naturally causes people to
+start thinking of it in adversarial terms.
 
 
 Conclusion
@@ -332,4 +318,4 @@ out while trying to play it overly safe.
 [AS]: https://en.wikipedia.org/wiki/Attribute_substitution
 [WST]: https://en.wikipedia.org/wiki/Wason_selection_task
 [GCM]: https://en.wikipedia.org/wiki/Cooperative_principle 
-[MVS]: https://en.wikipedia.org/wiki/Monty_Hall_problem
+[MHP]: https://en.wikipedia.org/wiki/Monty_Hall_problem
