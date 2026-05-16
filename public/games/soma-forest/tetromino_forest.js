@@ -3,8 +3,8 @@ import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/
 
 const SCALE = 8;
 const GROUND_SIZE = 1000;
-const FOREST_SCALE = 10.0;
-const TREE_HEIGHT = 5.0;
+const FOREST_SCALE = 7.0;
+const TREE_HEIGHT = 4.0;
 const TRUNK_WIDTH = 0.6;
 const EYE_HEIGHT = 3;
 
@@ -68,6 +68,21 @@ function newBoardGroup(board) {
 
 function renderTetrominoForest(positions, solutions, elementId) {
     const container = document.getElementById(elementId);
+    container.style.position = 'relative';
+
+    const instructions = document.createElement('div');
+    instructions.textContent = 'Click to capture the mouse. Then use WASD or arrow keys to move.';
+    instructions.style.position = 'absolute';
+    instructions.style.left = '50%';
+    instructions.style.top = '25%';
+    instructions.style.transform = 'translate(-50%, -50%)';
+    instructions.style.padding = '12px 16px';
+    instructions.style.background = 'rgba(255, 255, 255, 0.85)';
+    instructions.style.border = '1px solid #999';
+    instructions.style.font = '32px sans-serif';
+    instructions.style.zIndex = '10';
+    instructions.style.pointerEvents = 'none';
+    container.appendChild(instructions);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -79,7 +94,7 @@ function renderTetrominoForest(positions, solutions, elementId) {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
+    scene.background = new THREE.Color(0x87CEEB);
 
     // Lights
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -116,7 +131,8 @@ function renderTetrominoForest(positions, solutions, elementId) {
         const board = solutions[i];
 
         const boardGroup = newBoardGroup(board);
-        const treeHeight = TREE_HEIGHT + (i % 5)/2.0;
+        const treeHeight = TREE_HEIGHT + (i % 4)/1.5;
+        boardGroup.rotation.y = i*10; // psuedo-random rotation
 
         // tree trunk 
         const trunkGeometry = new THREE.BoxGeometry(TRUNK_WIDTH, treeHeight, TRUNK_WIDTH);
@@ -127,7 +143,7 @@ function renderTetrominoForest(positions, solutions, elementId) {
                 side: THREE.DoubleSide
             });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-
+        
         trunk.position.set(0, -treeHeight / 2, 0);
         boardGroup.add(trunk);
 
@@ -146,6 +162,14 @@ function renderTetrominoForest(positions, solutions, elementId) {
     // Click anywhere on the container to lock the pointer
     container.addEventListener('click', () => {
         controls.lock();
+    });
+
+    controls.addEventListener('lock', () => {
+        instructions.style.display = 'none';
+    });
+
+    controls.addEventListener('unlock', () => {
+        instructions.style.display = 'block';
     });
 
     // Movement state
