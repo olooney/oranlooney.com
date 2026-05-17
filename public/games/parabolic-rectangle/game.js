@@ -1,14 +1,8 @@
 // global gravity constant
-G = 0.5;
+const G = 0.5;
 
-requestAnimFrame = (function(callback) {
-    return window.requestAnimationFrame || 
-        window.webkitRequestAnimationFrame || 
-        window.mozRequestAnimationFrame || 
-        window.oRequestAnimationFrame || 
-        window.msRequestAnimationFrame ||
-        function(callback) { window.setTimeout(callback, 1000 / 60); };
-})();
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
 
 // base class for the various states the game toggles between.
 class GameState {
@@ -43,19 +37,19 @@ class Game extends GameState {
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#7ec0ee';
+        ctx.fillStyle = "#7ec0ee";
         ctx.fillRect(0, 0, game.width, game.height);
         this.getState().draw(ctx);
     }
 
     keydown(ev) {
-        if ( ev.keyCode == 38 ) {
+        if ( ev.code === "Space" ) {
             this.up();
         }
     }
 
     click(ev) {
-        if ( ev.button === 0 ) {
+        if ( ev.button === 0 || ev.pointerType ) {
             this.up();
         }
     }
@@ -73,6 +67,7 @@ class GamePlay extends GameState {
     constructor() {
         super();
         this.score = 0;
+        this.highScore = 0;
         this.entities = [];
     }
 
@@ -98,7 +93,7 @@ class GamePlay extends GameState {
         this.collisions();
 
         this.entities.forEach(function(e) {
-            if ( e.tag == 'pipe' ) {
+            if ( e.tag == "pipe" ) {
                 var pipe = e;
                 if ( pipe.x === bird.x && !pipe.scored && !pipe.dead) {
                     pipe.scored = true;
@@ -108,7 +103,8 @@ class GamePlay extends GameState {
         });
 
         if ( bird.y > game.height || bird.y < 0 ) {
-            sfx.play('dead');
+            sfx.play("dead");
+            sfx.music.stop();
             game.over = true;
         }
     }
@@ -145,8 +141,8 @@ class GamePlay extends GameState {
     }
 
     drawScore(ctx) {
-        ctx.font = '32px Arial';
-        ctx.fillStyle = '#FFF';
+        ctx.font = "32px Arial";
+        ctx.fillStyle = "#FFF";
         ctx.fillText(this.score, game.width - 70, game.height - 20);
     }
 
@@ -159,17 +155,51 @@ class GamePlay extends GameState {
 class GameMenu extends GameState {
     draw(ctx) {
         bird.draw(ctx);
+        this.drawTitle(ctx);
+        this.drawInstructions(ctx);
+        this.drawHighScore(ctx);
+    }
 
-        ctx.font = '64px Arial';
-        ctx.fillStyle = '#FFF';
-        ctx.fillText('PRESS UP', game.width / 2 - 160, game.height / 2);
+    drawTitle(ctx) {
+        ctx.save();
+        ctx.font = "48px Arial";
+        ctx.fillStyle = "#FFF";
+        ctx.textAlign = "center";
+
+        ctx.fillText("PARABOLIC", game.width / 2, game.height / 4);
+        ctx.fillText("RECTANGLE", game.width / 2, game.height / 4 + 48 + 4);
+        ctx.restore();
+    }
+
+    drawInstructions(ctx) {
+        ctx.save();
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "#FFF";
+        const action = isTouchDevice ? "TAP" : "CLICK OR SPACE";
+        ctx.fillText(`${action} TO FLAP`, game.width / 2 - 160, game.height / 2 + 11);
+        ctx.restore();
+    }
+
+    drawHighScore(ctx) {
+        if (game.play.highScore > 0) {
+            ctx.save();
+            ctx.font = "32px Arial";
+            ctx.fillStyle = "#FFF";
+            ctx.fillText(game.play.highScore, game.width - 70, game.height - 20);
+            ctx.restore();
+        }
     }
 
     up() {
         bird.dy = -5;
         game.started = true;
         sfx.init();
+
+        if (sfx.music) {
+            sfx.music.start();
+        }
     }
+
 }
 
 // game over state
@@ -184,10 +214,12 @@ class GameEnding extends GameState {
     }
 
     draw(ctx) {
-        ctx.font = '64px Arial';
-        ctx.fillStyle = '#FFF';
-        ctx.fillText('GAME OVER', game.width / 2 - 200, game.height / 2);
+        ctx.save();
+        ctx.font = "64px Arial";
+        ctx.fillStyle = "#FFF";
+        ctx.fillText("GAME OVER", game.width / 2 - 200, game.height / 2);
         game.play.drawScore(ctx);
+        ctx.restore();
     }
 
     restart() {
@@ -195,7 +227,10 @@ class GameEnding extends GameState {
         game.started = false;
         game.over = false;
         game.frame = -1;
-        game.play.entities = [bird];
+        game.play.entities = [...scenery, bird];
+        if (game.play.score > game.play.highScore) {
+            game.play.highScore = game.play.score;
+        }
         game.play.score = 0;
         bird.y = 240;
         bird.dy = 0;
@@ -229,7 +264,8 @@ class Hitbox {
 }
 
 class Entity {
-    tag = 'unknown';
+    tag = "unknown";
+    hitboxes = [];
 
     update() { }
     draw(ctx) { } 
@@ -237,7 +273,7 @@ class Entity {
 
 // the global Bird entity.
 class Bird extends Entity { 
-    tag = 'bird';
+    tag = "bird";
 
     constructor(x, y) { 
         super();
@@ -255,30 +291,31 @@ class Bird extends Entity {
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#f00';
+        ctx.fillStyle = "#f00";
         ctx.fillRect(this.x - 20, this.y - 20, 40, 40);
 
         if ( Math.floor(game.frame / 20) % 2 ) {
-            ctx.fillStyle = '#a00';
+            ctx.fillStyle = "#a00";
             ctx.fillRect(this.x - 15, this.y - 5, 20, 20);
         } else {
-            ctx.fillStyle = '#a00';
+            ctx.fillStyle = "#a00";
             ctx.fillRect(this.x - 15, this.y - 15, 20, 15);
         }
 
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = "#000";
         ctx.fillRect(this.x + 7, this.y - 10, 5, 5);
 
-        ctx.fillStyle = '#ffed5f';
+        ctx.fillStyle = "#ffed5f";
         ctx.fillRect(this.x + 8, this.y - 5, 17, 5);
     }
 
     handleCollision(e2) {
-        if ( e2.tag == 'pipe' ) {
+        if ( e2.tag == "pipe" ) {
             game.over = true;
-            sfx.play('thud');
-        } else if ( e2.tag == 'coin' ) {
-            sfx.play('coin');
+            sfx.play("thud");
+            sfx.music.stop();
+        } else if ( e2.tag == "coin" ) {
+            sfx.play("coin");
             game.play.score++;
             e2.dead = true;
         }
@@ -291,13 +328,13 @@ class Bird extends Entity {
 
         if ( this.dy < -18 ) this.dy = -18;
         
-        sfx.play('flap');
+        sfx.play("flap");
     }
 };
 
 
 class Pipe extends Entity {
-    tag = 'pipe';
+    tag = "pipe";
     width = 40;
     gap = 180;
 
@@ -317,14 +354,23 @@ class Pipe extends Entity {
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#080';
+        ctx.save();
+        ctx.fillStyle = "#080";
+
+        // top and bottom pipes
         ctx.fillRect(this.x - this.width / 2, 0, this.width, this.y - this.gap / 2);
         ctx.fillRect(this.x - this.width / 2, this.y + this.gap / 2, this.width, game.height);
+
+        // add pipe caps
+        ctx.fillRect(this.x - this.width / 2 - 4, this.y - this.gap / 2 - 5, this.width + 8, 5);
+        ctx.fillRect(this.x - this.width / 2 - 4, this.y + this.gap / 2, this.width + 8, 5);
+
+        ctx.restore();
     }
 }
 
 class Coin extends Entity {
-    tag = 'coin';
+    tag = "coin";
     radius = 20;
     gap = 180;
 
@@ -343,10 +389,44 @@ class Coin extends Entity {
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#ff0';
+        ctx.save();
+        ctx.fillStyle = "#ff0";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
+        ctx.restore();
+    }
+}
+
+class Cloud extends Entity {
+    tag = "cloud";
+
+    constructor(x, y, scale, speed) {
+        super();
+        this.x = x;
+        this.y = y;
+        this.scale = scale;
+        this.speed = speed;
+    }
+
+    update() {
+        this.x -= this.speed;
+
+        if (this.x < -160 * this.scale) {
+            this.x = game.width + 160 * this.scale;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+
+        const s = this.scale;
+        ctx.fillRect(this.x, this.y, 80 * s, 24 * s);
+        ctx.fillRect(this.x + 18 * s, this.y - 16 * s, 48 * s, 24 * s);
+        ctx.fillRect(this.x + 58 * s, this.y - 8 * s, 64 * s, 24 * s);
+
+        ctx.restore();
     }
 }
 
@@ -356,24 +436,24 @@ class SoundEffects {
     }
 
     library = {
-        'dead' : { 
-            url : 'sounds/dead.wav'
+        "dead" : { 
+            url : "sounds/dead.wav"
         },
-        'coin' : { 
-            url : 'sounds/coin.mp3',
+        "coin" : { 
+            url : "sounds/coin.mp3",
             volume: 2.0
         },
-        'thud' : { 
-            url : 'sounds/thud.mp3',
+        "thud" : { 
+            url : "sounds/thud.mp3",
             volume: 0.5
         },
-        'flap' : { 
-            url: 'sounds/flap.mp3',
+        "flap" : { 
+            url: "sounds/flap.mp3",
             volume: 0.2
         }
     }
 
-    init() {
+    async init() {
         if ( this.initialized ) {
             return;
         } else {
@@ -382,8 +462,19 @@ class SoundEffects {
 
         this.context = new AudioContext();
 
+        if (this.context.state === "suspended") {
+            console.log("resuming audio...");
+            await this.context.resume();
+        }
+
         for ( var key in this.library ) {
+            console.log(`loading audio ${key}`);
             this.load(key);
+        }
+
+        if (!this.music) {
+            this.music = new ChiptuneMusic(this.context);
+            this.music.start();
         }
     }
 
@@ -391,8 +482,8 @@ class SoundEffects {
         let sound = this.library[name];
 
         var request = new XMLHttpRequest();
-        request.open('GET', sound.url, true);
-        request.responseType = 'arraybuffer';
+        request.open("GET", sound.url, true);
+        request.responseType = "arraybuffer";
 
         request.onload = function() {
             sfx.context.decodeAudioData(request.response, function(newBuffer) {
@@ -419,18 +510,131 @@ class SoundEffects {
     }
 }
 
+const song = [
+    ['E5', 0.5], ['G5', 0.5], ['C6', 0.5], ['G5', 0.5],
+    ['A5', 0.5], ['G5', 0.5], ['E5', 0.5], ['C5', 0.5],
+
+    ['D5', 0.5], ['F5', 0.5], ['A5', 0.5], ['F5', 0.5],
+    ['G5', 1.0],
+
+    ['E5', 0.5], ['G5', 0.5], ['C6', 0.5], ['E6', 0.5],
+    ['D6', 0.5], ['C6', 0.5], ['A5', 0.5], ['G5', 0.5],
+
+    ['F5', 0.5], ['A5', 0.5], ['D6', 0.5], ['C6', 0.5],
+    ['G5', 1.0],
+];
+
+const frequencies = {
+    C5: 523.25,
+    D5: 587.33,
+    E5: 659.25,
+    F5: 698.46,
+    G5: 783.99,
+    A5: 880.00,
+    C6: 1046.50,
+    D6: 1174.66,
+    E6: 1318.51,
+};
+
+class ChiptuneMusic {
+    constructor(audioContext) {
+        this.ctx = audioContext;
+        this.tempo = 160;
+        this.enabled = false;
+        this.activeNodes = [];
+        this.timeoutId = null;
+    }
+
+    start() {
+        if (this.enabled) return;
+
+        this.enabled = true;
+        this.playLoop();
+    }
+
+    playLoop() {
+        if (!this.enabled) return;
+
+        const beat = 60 / this.tempo;
+        let t = this.ctx.currentTime;
+
+        for (const [note, beats] of song) {
+            this.playNote(note, t, beats * beat);
+            t += beats * beat;
+        }
+
+        const loopDelayMs = Math.max(0, (t - this.ctx.currentTime) * 1000);
+
+        this.timeoutId = setTimeout(() => {
+            this.timeoutId = null;
+            this.playLoop();
+        }, loopDelayMs);
+    }
+
+    playNote(note, startTime, duration) {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = "square";
+        osc.frequency.value = frequencies[note];
+
+        gain.gain.setValueAtTime(0.0001, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.03, startTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+
+        this.activeNodes.push(osc);
+
+        osc.onended = () => {
+            this.activeNodes = this.activeNodes.filter(n => n !== osc);
+
+            osc.disconnect();
+            gain.disconnect();
+        };
+    }
+
+    stop() {
+        this.enabled = false;
+
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+        }
+
+        for (const node of this.activeNodes) {
+            try {
+                node.stop();
+            } catch (e) {}
+        }
+
+        this.activeNodes = [];
+    }
+}
+
 
 // global game initialization
-game = new Game();
+const game = new Game();
 
 game.play = new GamePlay();
 game.menu = new GameMenu();
 game.ending = new GameEnding();
 
-sfx = new SoundEffects();
+const sfx = new SoundEffects();
 
-bird = new Bird(100, 240);
-game.play.entities.push(bird);
+const bird = new Bird(100, 240);
+
+const scenery = [
+    new Cloud(80, 80, 1.3, 1.5),
+    new Cloud(280, 140, 1.5, 1.4),
+    new Cloud(520, 50, 1.1, 1.3),
+    new Cloud(800, 250, 0.9, 1.2),
+];
+game.play.entities = [...scenery, bird];
 
 
 // Keep the simulation at the original 60 updates per second.
@@ -452,23 +656,23 @@ function mainLoop(timestamp) {
         game.draw(canvasContext);
     }
 
-    requestAnimFrame(mainLoop);
+    requestAnimationFrame(mainLoop);
 }
 
 window.onload = function() {
-    canvasElement = document.getElementById('ctx');
-    canvasContext = canvasElement.getContext('2d');
+    canvasElement = document.getElementById("game-canvas");
+    canvasContext = canvasElement.getContext("2d");
 
     game.height = canvasElement.height;
     game.width = canvasElement.width;
 
-    document.addEventListener('keydown', function(ev) { 
+    document.addEventListener("keydown", function(ev) { 
         game.keydown(ev); 
     });
 
-    canvasElement.addEventListener('click', function(ev) {
+    document.addEventListener("pointerdown", function(ev) {
         game.click(ev);
     });
 
-    requestAnimFrame(mainLoop);
+    requestAnimationFrame(mainLoop);
 };

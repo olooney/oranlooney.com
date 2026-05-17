@@ -2,11 +2,26 @@
 <html>
     <head>
         <title>Parabolic Rectangle</title>
+        <style>
+            .game-wrapper {
+                margin: 50px auto; 
+                width:640px
+            }
+            h3.game-title {
+                text-align: center; 
+                font: 64px Arial;
+            }
+            body {
+                margin: 0;
+                overflow: hidden;
+                touch-action: none;
+            }
+        </style>
     </head>
     <body>
-        <div style="margin: 50px auto; width:640px">
-            <h3 style="text-align: center; font: 64px Arial ">Parabolic Rectangle</h3>
-            <canvas id="ctx" height="480" width="640"></canvas>
+        <div class="game-wrapper">
+            <h3 class="game-title">Parabolic Rectangle</h3>
+            <canvas id="game-canvas" height="480" width="640"></canvas>
         </div>
         <script src="game.js"></script>
     </body>
