@@ -101,7 +101,7 @@ function newSky() {
         return sky;
 }
 
-function renderTetrominoForest(positions, solutions, elementId) {
+function renderSomaCubeForest(positions, solutions, elementId) {
     const container = document.getElementById(elementId);
     container.style.position = 'relative';
 
@@ -338,4 +338,4 @@ function renderTetrominoForest(positions, solutions, elementId) {
     animate();
 }
 
-export { renderTetrominoForest };
+export { renderSomaCubeForest };

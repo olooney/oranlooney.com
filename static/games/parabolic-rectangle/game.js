@@ -14,7 +14,9 @@ requestAnimFrame = (function(callback) {
 class GameState {
     update() { }
     draw(ctx) { }
-    keydown(ev) { } 
+    keydown(ev) { }
+    click(ev) { }
+    up() { }
 }
 
 // the game object delegates almost all behavior
@@ -41,23 +43,32 @@ class Game extends GameState {
     }
 
     draw(ctx) {
-        // 'clear' the screen by drawing a solid blue rectangle over it
         ctx.fillStyle = '#7ec0ee';
         ctx.fillRect(0, 0, game.width, game.height);
-
-        // delegrate the rest of the drawing to the current state.
         this.getState().draw(ctx);
     }
 
     keydown(ev) {
-        this.getState().keydown(ev);
+        if ( ev.keyCode == 38 ) {
+            this.up();
+        }
+    }
+
+    click(ev) {
+        if ( ev.button === 0 ) {
+            this.up();
+        }
+    }
+
+    up() {
+        this.getState().up();
     }
 };
 
 
 // gameplay state. This keeps track of a set of Entities and delegates draw()
 // and update() behavior to each entity, as well as checking for collisions
-// between entities. keydown() events are handled directly.
+// between entities.
 class GamePlay extends GameState {
     constructor() {
         super();
@@ -66,32 +77,26 @@ class GamePlay extends GameState {
     }
 
     update() {
-        // spawn a new pipe at regular intervals
         if ( game.frame % 60 === 0 ) { 
             this.entities.push(new Pipe()); 
         } 
 
-        // spawn a new coin at random
         if ( game.frame > 60*3 && (game.frame+30) % 60 === 0 ) { 
             if ( Math.random() < 0.333 ) { 
                 this.entities.push(new Coin()); 
             }
         }
 
-        // cull dead entities
         this.entities = this.entities.filter(function(e) { return !e.dead; });
 
-        // allow each entity the opportunity to update themselves
         this.entities.forEach(function(e) { 
             if ( e.update ) { 
                 e.update(); 
             } 
         });
 
-        // handle interactions between objects
         this.collisions();
 
-        // earn 1 point for every pipe passed
         this.entities.forEach(function(e) {
             if ( e.tag == 'pipe' ) {
                 var pipe = e;
@@ -102,7 +107,6 @@ class GamePlay extends GameState {
             }
         });
 
-        // end the game if the bird goes off screen
         if ( bird.y > game.height || bird.y < 0 ) {
             sfx.play('dead');
             game.over = true;
@@ -110,9 +114,6 @@ class GamePlay extends GameState {
     }
 
     collisions() {
-        // each entity can have multiple hitboxes, and any hitbox can
-        // collide with any other hitbox. When a collision is detected,
-        // both entities are given an opportunity to handle the collision.
         var N = this.entities.length;
         for ( var i=0; i<N; i++ ) {
             var e1hbs = this.entities[i].hitboxes;
@@ -139,47 +140,34 @@ class GamePlay extends GameState {
     }
 
     draw(ctx) {
-        // first, draw all entities.
         this.entities.forEach(function(e) { if ( e.draw ) { e.draw(ctx); } });
-
-        // next, draw the HUD (just a score counter in this case) on top.
         this.drawScore(ctx);
     }
 
     drawScore(ctx) {
-        // draw the current score onto the HUD at a fixed location
         ctx.font = '32px Arial';
         ctx.fillStyle = '#FFF';
-        ctx.fillText(this.score, game.width - 70, game.height- 20);
+        ctx.fillText(this.score, game.width - 70, game.height - 20);
     }
 
-    keydown(ev) {
-        // we handle only one key: the up arrow.
-        if ( ev.keyCode == 38 ) {
-            bird.flap();
-        }
+    up() {
+        bird.flap();
     }
 }
 
 // menu state
 class GameMenu extends GameState {
-
     draw(ctx) {
-        // the bird sprite is already visible on menu screen.
         bird.draw(ctx);
 
-        // draw the instructions in big block letters across the middle
         ctx.font = '64px Arial';
         ctx.fillStyle = '#FFF';
-        ctx.fillText('PRESS UP', game.width/2 - 160, game.height/2);
+        ctx.fillText('PRESS UP', game.width / 2 - 160, game.height / 2);
     }
 
-    keydown(ev) {
-        if ( ev.keyCode == 38 ) {
-            bird.dy = -5;
-            game.started = true;
-        }
-
+    up() {
+        bird.dy = -5;
+        game.started = true;
         sfx.init();
     }
 }
@@ -187,8 +175,6 @@ class GameMenu extends GameState {
 // game over state
 class GameEnding extends GameState {
     update() {
-        // the game over screen is only shown for at most two seconds and then
-        // we return to the title screen.
         if ( !this.lastFrame ) {
             this.lastFrame = game.frame;
         }
@@ -200,7 +186,7 @@ class GameEnding extends GameState {
     draw(ctx) {
         ctx.font = '64px Arial';
         ctx.fillStyle = '#FFF';
-        ctx.fillText('GAME OVER', game.width/2 - 200, game.height/2);
+        ctx.fillText('GAME OVER', game.width / 2 - 200, game.height / 2);
         game.play.drawScore(ctx);
     }
 
@@ -215,8 +201,7 @@ class GameEnding extends GameState {
         bird.dy = 0;
     }
 
-    keydown(ev) {
-        // you can skip the two second wait by pressing any key.
+    up() {
         if ( game.frame > this.lastFrame + 10 ) {
             this.restart();
         }
@@ -265,39 +250,30 @@ class Bird extends Entity {
         this.dy += G;
         this.y += this.dy;
         this.hitboxes = [
-            new Hitbox(this.x-20, this.y-20, 40, 40)
+            new Hitbox(this.x - 20, this.y - 20, 40, 40)
         ];
     }
 
     draw(ctx) {
-        // body
         ctx.fillStyle = '#f00';
-        ctx.fillRect(this.x-20, this.y-20, 40, 40);
+        ctx.fillRect(this.x - 20, this.y - 20, 40, 40);
 
-        // wing 
         if ( Math.floor(game.frame / 20) % 2 ) {
-            // down flap
             ctx.fillStyle = '#a00';
-            ctx.fillRect(this.x-15, this.y-5, 20, 20);
+            ctx.fillRect(this.x - 15, this.y - 5, 20, 20);
         } else {
-            // up flap
             ctx.fillStyle = '#a00';
-            ctx.fillRect(this.x-15, this.y-15, 20, 15);
+            ctx.fillRect(this.x - 15, this.y - 15, 20, 15);
         }
 
-        // eye
         ctx.fillStyle = '#000';
-        ctx.fillRect(this.x+7, this.y-10, 5, 5);
+        ctx.fillRect(this.x + 7, this.y - 10, 5, 5);
 
-        // beak
         ctx.fillStyle = '#ffed5f';
-        ctx.fillRect(this.x+8, this.y-5, 17, 5);
+        ctx.fillRect(this.x + 8, this.y - 5, 17, 5);
     }
 
     handleCollision(e2) {
-        // the bird dies if it touches a pipe (ending
-        // the game instantly) but earns a point if
-        // it touches a coin.
         if ( e2.tag == 'pipe' ) {
             game.over = true;
             sfx.play('thud');
@@ -309,16 +285,10 @@ class Bird extends Entity {
     }
 
     flap() {
-        // flapping your wings always arrests all downward motion
         if ( this.dy > 0 ) this.dy = 0;
 
-        // flapping your wings boosts your upward speed a bit.
-        // multiple quick presses will be cumulative.
         this.dy += -10;
 
-        // if the user holds the up arrow the bird goes shooting
-        // off at a ridiculous rate. To fix this, we limit upwards
-        // velocity.
         if ( this.dy < -18 ) this.dy = -18;
         
         sfx.play('flap');
@@ -334,22 +304,22 @@ class Pipe extends Entity {
     constructor() {
         super();
         this.x = game.width;
-        this.y = Math.floor(Math.random() * (game.height-200) + 100);
+        this.y = Math.floor(Math.random() * (game.height - 200) + 100);
     }
 
     update() {
         this.x -= 5;
         if ( this.x < -this.width ) this.dead = true;
         this.hitboxes = [
-            new Hitbox(this.x-this.width/2, 0, this.width, this.y-this.gap/2),
-            new Hitbox(this.x-this.width/2, this.y+this.gap/2, this.width, game.height)
+            new Hitbox(this.x - this.width / 2, 0, this.width, this.y - this.gap / 2),
+            new Hitbox(this.x - this.width / 2, this.y + this.gap / 2, this.width, game.height)
         ];
     }
 
     draw(ctx) {
         ctx.fillStyle = '#080';
-        ctx.fillRect(this.x-this.width/2, 0, this.width, this.y-this.gap/2);
-        ctx.fillRect(this.x-this.width/2, this.y+this.gap/2, this.width, game.height);
+        ctx.fillRect(this.x - this.width / 2, 0, this.width, this.y - this.gap / 2);
+        ctx.fillRect(this.x - this.width / 2, this.y + this.gap / 2, this.width, game.height);
     }
 }
 
@@ -361,21 +331,21 @@ class Coin extends Entity {
     constructor() {
         super();
         this.x = game.width;
-        this.y = Math.floor(Math.random() * (game.height-200) + 100);
+        this.y = Math.floor(Math.random() * (game.height - 200) + 100);
     }
 
     update() {
         this.x -= 5;
         if ( this.x < -this.width ) this.dead = true;
         this.hitboxes = [
-            new Hitbox(this.x-this.radius, this.y-this.radius, this.radius*2, this.radius*2)
+            new Hitbox(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2)
         ];
     }
 
     draw(ctx) {
         ctx.fillStyle = '#ff0';
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
     }
 }
@@ -385,70 +355,68 @@ class SoundEffects {
         this.initialized = false;
     }
 
-	library = {
-		'dead' : { 
+    library = {
+        'dead' : { 
             url : 'sounds/dead.wav'
         },
-		'coin' : { 
+        'coin' : { 
             url : 'sounds/coin.mp3',
             volume: 2.0
         },
-		'thud' : { 
+        'thud' : { 
             url : 'sounds/thud.mp3',
             volume: 0.5
         },
-		'flap' : { 
-			url: 'sounds/flap.mp3',
-			volume: 0.2
-		}
+        'flap' : { 
+            url: 'sounds/flap.mp3',
+            volume: 0.2
+        }
     }
 
-    // do not call until user interaction to avoid be supressed!
-	init() {
+    init() {
         if ( this.initialized ) {
             return;
         } else {
             this.initialized = true;
         }
 
-		this.context = new AudioContext();
+        this.context = new AudioContext();
 
-		for ( var key in this.library ) {
-			this.load(key);
-		}
-	}
+        for ( var key in this.library ) {
+            this.load(key);
+        }
+    }
 
-    // load a sound file asyncronously
-	load(name) {
-	  let sound = this.library[name];
+    load(name) {
+        let sound = this.library[name];
 
-	  var request = new XMLHttpRequest();
-	  request.open('GET', sound.url, true);
-	  request.responseType = 'arraybuffer';
+        var request = new XMLHttpRequest();
+        request.open('GET', sound.url, true);
+        request.responseType = 'arraybuffer';
 
-	  request.onload = function() {
-		sfx.context.decodeAudioData(request.response, function(newBuffer) {
-		  sound.buffer = newBuffer;
-		});
-	  }
+        request.onload = function() {
+            sfx.context.decodeAudioData(request.response, function(newBuffer) {
+                sound.buffer = newBuffer;
+            });
+        }
 
-	  request.send();
-	}
+        request.send();
+    }
 
-	play(name) {
-		var sound = this.library[name];
+    play(name) {
+        var sound = this.library[name];
 
-		if ( !sound || !sound.buffer ) return;
+        if ( !sound || !sound.buffer ) return;
 
-		var source = this.context.createBufferSource();
-		source.buffer = sound.buffer;
-		var volumeGain = this.context.createGain();
-		volumeGain.gain.value = sound.volume || 1;
+        var source = this.context.createBufferSource();
+        source.buffer = sound.buffer;
+        var volumeGain = this.context.createGain();
+        volumeGain.gain.value = sound.volume || 1;
 
-		volumeGain.connect(this.context.destination);
-		source.connect(volumeGain);
-		source.start(0);
-	}
+        volumeGain.connect(this.context.destination);
+        source.connect(volumeGain);
+        source.start(0);
+    }
 }
 
 
@@ -465,21 +433,41 @@ bird = new Bird(100, 240);
 game.play.entities.push(bird);
 
 
-function mainLoop() {
-    game.update();
-    game.draw(canvasContext);
+// Keep the simulation at the original 60 updates per second.
+var targetFrameDuration = 1000 / 60;
+var lastFrameTime = 0;
+
+function mainLoop(timestamp) {
+    timestamp = timestamp || Date.now();
+
+    if ( !lastFrameTime ) {
+        lastFrameTime = timestamp - targetFrameDuration;
+    }
+
+    var elapsed = timestamp - lastFrameTime;
+
+    if ( elapsed >= targetFrameDuration ) {
+        lastFrameTime = timestamp - (elapsed % targetFrameDuration);
+        game.update();
+        game.draw(canvasContext);
+    }
+
     requestAnimFrame(mainLoop);
 }
 
 window.onload = function() {
     canvasElement = document.getElementById('ctx');
-    canvasContext= canvasElement.getContext('2d');
+    canvasContext = canvasElement.getContext('2d');
 
     game.height = canvasElement.height;
     game.width = canvasElement.width;
 
     document.addEventListener('keydown', function(ev) { 
         game.keydown(ev); 
+    });
+
+    canvasElement.addEventListener('click', function(ev) {
+        game.click(ev);
     });
 
     requestAnimFrame(mainLoop);

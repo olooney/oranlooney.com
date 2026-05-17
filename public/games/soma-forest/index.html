@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tetromino 3D Viewer</title>
+    <title>Soma Cube Foreest</title>
     <style>
         html, body {
             margin: 0;
@@ -15,7 +15,7 @@
             display: block;
         }
 
-        #tetromino-board {
+        #soma-cube-forest {
             width: 100%;
             height: 100%;
         }
@@ -23,10 +23,10 @@
 </head>
 <body>
 
-    <div id="tetromino-board">
+    <div id="soma-cube-forest">
     </div>
     <script type="module">
-        import { renderTetrominoForest } from './tetromino_forest.js';
+        import { renderSomaCubeForest } from './soma_cube_forest.js';
         import { loadJSON } from './loader.js';
 
 
@@ -34,7 +34,7 @@
             loadJSON('positions.json'),
             loadJSON('solutions.json')
         ]).then(([positions, solutions]) => {
-            renderTetrominoForest(positions, solutions, 'tetromino-board');
+            renderSomaCubeForest(positions, solutions, 'soma-cube-forest');
         }).catch(error => {
             console.error('Failed to load JSON:', error);
         });
