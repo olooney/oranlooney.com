@@ -1,7 +1,15 @@
 // global gravity constant
 const G = 0.5;
+const UPDATE_HZ = 60;
+const DELTA_TIME = 1000 / UPDATE_HZ;
+const MAX_FRAME_TIME = 250;
+const MAX_UPDATES_PER_FRAME = 3;
 
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+// fixed-timestep accumulator
+let lastTime = 0;
+let accumulator = 0;
 
 
 // base class for the various states the game toggles between.
@@ -18,11 +26,16 @@ class GameState {
 class Game extends GameState {
     constructor() { 
         super();
-        this.height = 100;
-        this.width = 100;
+        this.height = null;
+        this.width = null;
         this.started = false;
         this.over = false;
         this.frame = -1;
+    }
+
+    setSize(height, width) {
+        this.height = height;
+        this.width = width;
     }
 
     getState() {
@@ -619,13 +632,14 @@ class ChiptuneMusic {
 
 // global game initialization
 const game = new Game();
-
 game.play = new GamePlay();
 game.menu = new GameMenu();
 game.ending = new GameEnding();
 
+// sound effects and music
 const sfx = new SoundEffects();
 
+// global entities
 const bird = new Bird(100, 240);
 
 const scenery = [
@@ -637,42 +651,47 @@ const scenery = [
 game.play.entities = [...scenery, bird];
 
 
-// Keep the simulation at the original 60 updates per second.
-var targetFrameDuration = 1000 / 60;
-var lastFrameTime = 0;
-
 function mainLoop(timestamp) {
-    timestamp = timestamp || Date.now();
+    if (!lastTime) lastTime = timestamp;
 
-    if ( !lastFrameTime ) {
-        lastFrameTime = timestamp - targetFrameDuration;
+    let frameTime = timestamp - lastTime;
+    lastTime = timestamp;
+
+    // Prevent one long pause from causing hundreds of updates.
+    frameTime = Math.min(frameTime, MAX_FRAME_TIME);
+
+    accumulator += frameTime;
+
+    let updatesThisFrame = 0;
+
+    while (accumulator >= DELTA_TIME && updatesThisFrame < MAX_UPDATES_PER_FRAME) {
+        game.update(); // seconds; omit arg if your game assumes 1/60
+        accumulator -= DELTA_TIME;
+        updatesThisFrame++;
     }
 
-    var elapsed = timestamp - lastFrameTime;
-
-    if ( elapsed >= targetFrameDuration ) {
-        lastFrameTime = timestamp - (elapsed % targetFrameDuration);
-        game.update();
-        game.draw(canvasContext);
+    // If the game cannot keep up, drop excess accumulated time.
+    if (updatesThisFrame === MAX_UPDATES_PER_FRAME) {
+        accumulator = 0;
     }
+
+    game.draw(canvasContext);
 
     requestAnimationFrame(mainLoop);
 }
+
+requestAnimationFrame(mainLoop);
 
 window.onload = function() {
     canvasElement = document.getElementById("game-canvas");
     canvasContext = canvasElement.getContext("2d");
 
-    game.height = canvasElement.height;
-    game.width = canvasElement.width;
+    // once we have the canvas, we can set the correct size
+    game.setSize(canvasElement.height, canvasElement.width);
 
-    document.addEventListener("keydown", function(ev) { 
-        game.keydown(ev); 
-    });
-
-    document.addEventListener("pointerdown", function(ev) {
-        game.click(ev);
-    });
+    // bind input events
+    document.addEventListener("keydown", ev => game.keydown(ev));
+    document.addEventListener("pointerdown", ev => game.click(ev));
 
     requestAnimationFrame(mainLoop);
 };
