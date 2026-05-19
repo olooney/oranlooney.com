@@ -1,16 +1,21 @@
 // global gravity constant
 const G = 0.5;
+const UPDATE_HZ = 60;
+const DELTA_TIME = 1000 / UPDATE_HZ;
+const MAX_FRAME_TIME = 250;
+const MAX_UPDATES_PER_FRAME = 3;
 
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
+// fixed-timestep accumulator
+let lastTime = 0;
+let accumulator = 0;
 
 // base class for the various states the game toggles between.
 class GameState {
     update() { }
     draw(ctx) { }
-    keydown(ev) { }
-    click(ev) { }
-    up() { }
+    button() { }
 }
 
 // the game object delegates almost all behavior
@@ -18,11 +23,16 @@ class GameState {
 class Game extends GameState {
     constructor() { 
         super();
-        this.height = 100;
-        this.width = 100;
+        this.height = null;
+        this.width = null;
         this.started = false;
         this.over = false;
         this.frame = -1;
+    }
+
+    setSize(height, width) {
+        this.height = height;
+        this.width = width;
     }
 
     getState() {
@@ -37,25 +47,29 @@ class Game extends GameState {
     }
 
     draw(ctx) {
+        // clear the screen 
+        ctx.save()
         ctx.fillStyle = "#7ec0ee";
         ctx.fillRect(0, 0, game.width, game.height);
+        ctx.restore();
+
         this.getState().draw(ctx);
     }
 
     keydown(ev) {
         if ( ev.code === "Space" ) {
-            this.up();
+            this.button();
         }
     }
 
     click(ev) {
         if ( ev.button === 0 || ev.pointerType ) {
-            this.up();
+            this.button();
         }
     }
 
-    up() {
-        this.getState().up();
+    button() {
+        this.getState().button();
     }
 };
 
@@ -72,26 +86,28 @@ class GamePlay extends GameState {
     }
 
     update() {
+        // spawn pipes periodically
         if ( game.frame % 60 === 0 ) { 
             this.entities.push(new Pipe()); 
         } 
 
+        // occasionally spawn coins
         if ( game.frame > 60*3 && (game.frame+30) % 60 === 0 ) { 
             if ( Math.random() < 0.333 ) { 
                 this.entities.push(new Coin()); 
             }
         }
 
-        this.entities = this.entities.filter(function(e) { return !e.dead; });
+        // clean up dead entities
+        this.entities = this.entities.filter(e => !e.dead);
 
-        this.entities.forEach(function(e) { 
-            if ( e.update ) { 
-                e.update(); 
-            } 
-        });
+        // physics update for all entities
+        this.entities.forEach(e => e.update());
 
+        // handle pairwise collisions
         this.collisions();
 
+        // score one point each time you pass through a pipe
         this.entities.forEach(function(e) {
             if ( e.tag == "pipe" ) {
                 var pipe = e;
@@ -102,6 +118,7 @@ class GamePlay extends GameState {
             }
         });
 
+        // end the game if you go off the top or bottom
         if ( bird.y > game.height || bird.y < 0 ) {
             sfx.play("dead");
             sfx.music.stop();
@@ -109,6 +126,9 @@ class GamePlay extends GameState {
         }
     }
 
+    // a collision occurs if any hitbox of an entity touches any hitbox of
+    // another. On collision, both entities are given an opportunity to handle
+    // the collision. No attempt is made to deduplicate collisions.
     collisions() {
         var N = this.entities.length;
         for ( var i=0; i<N; i++ ) {
@@ -146,7 +166,7 @@ class GamePlay extends GameState {
         ctx.fillText(this.score, game.width - 70, game.height - 20);
     }
 
-    up() {
+    button() {
         bird.flap();
     }
 }
@@ -190,7 +210,7 @@ class GameMenu extends GameState {
         }
     }
 
-    up() {
+    button() {
         bird.dy = -5;
         game.started = true;
         sfx.init();
@@ -236,7 +256,7 @@ class GameEnding extends GameState {
         bird.dy = 0;
     }
 
-    up() {
+    button() {
         if ( game.frame > this.lastFrame + 10 ) {
             this.restart();
         }
@@ -463,12 +483,10 @@ class SoundEffects {
         this.context = new AudioContext();
 
         if (this.context.state === "suspended") {
-            console.log("resuming audio...");
             await this.context.resume();
         }
 
         for ( var key in this.library ) {
-            console.log(`loading audio ${key}`);
             this.load(key);
         }
 
@@ -619,13 +637,14 @@ class ChiptuneMusic {
 
 // global game initialization
 const game = new Game();
-
 game.play = new GamePlay();
 game.menu = new GameMenu();
 game.ending = new GameEnding();
 
+// sound effects and music
 const sfx = new SoundEffects();
 
+// global entities
 const bird = new Bird(100, 240);
 
 const scenery = [
@@ -637,42 +656,47 @@ const scenery = [
 game.play.entities = [...scenery, bird];
 
 
-// Keep the simulation at the original 60 updates per second.
-var targetFrameDuration = 1000 / 60;
-var lastFrameTime = 0;
-
 function mainLoop(timestamp) {
-    timestamp = timestamp || Date.now();
+    if (!lastTime) lastTime = timestamp;
 
-    if ( !lastFrameTime ) {
-        lastFrameTime = timestamp - targetFrameDuration;
-    }
+    let frameTime = timestamp - lastTime;
+    lastTime = timestamp;
 
-    var elapsed = timestamp - lastFrameTime;
+    // Prevent one long pause from causing hundreds of updates.
+    frameTime = Math.min(frameTime, MAX_FRAME_TIME);
 
-    if ( elapsed >= targetFrameDuration ) {
-        lastFrameTime = timestamp - (elapsed % targetFrameDuration);
+    accumulator += frameTime;
+
+    let updatesThisFrame = 0;
+
+    while (accumulator >= DELTA_TIME && updatesThisFrame < MAX_UPDATES_PER_FRAME) {
         game.update();
-        game.draw(canvasContext);
+        accumulator -= DELTA_TIME;
+        updatesThisFrame++;
     }
+
+    // If the game cannot keep up, drop excess accumulated time.
+    if (updatesThisFrame === MAX_UPDATES_PER_FRAME) {
+        accumulator = 0;
+    }
+
+    game.draw(canvasContext);
 
     requestAnimationFrame(mainLoop);
 }
+
+requestAnimationFrame(mainLoop);
 
 window.onload = function() {
     canvasElement = document.getElementById("game-canvas");
     canvasContext = canvasElement.getContext("2d");
 
-    game.height = canvasElement.height;
-    game.width = canvasElement.width;
+    // once we have the canvas, we can set the correct size
+    game.setSize(canvasElement.height, canvasElement.width);
 
-    document.addEventListener("keydown", function(ev) { 
-        game.keydown(ev); 
-    });
-
-    document.addEventListener("pointerdown", function(ev) {
-        game.click(ev);
-    });
+    // bind input events
+    document.addEventListener("keydown", ev => game.keydown(ev));
+    document.addEventListener("pointerdown", ev => game.click(ev));
 
     requestAnimationFrame(mainLoop);
 };

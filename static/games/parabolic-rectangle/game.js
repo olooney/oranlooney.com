@@ -11,14 +11,11 @@ const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 let lastTime = 0;
 let accumulator = 0;
 
-
 // base class for the various states the game toggles between.
 class GameState {
     update() { }
     draw(ctx) { }
-    keydown(ev) { }
-    click(ev) { }
-    up() { }
+    button() { }
 }
 
 // the game object delegates almost all behavior
@@ -50,25 +47,29 @@ class Game extends GameState {
     }
 
     draw(ctx) {
+        // clear the screen 
+        ctx.save()
         ctx.fillStyle = "#7ec0ee";
         ctx.fillRect(0, 0, game.width, game.height);
+        ctx.restore();
+
         this.getState().draw(ctx);
     }
 
     keydown(ev) {
         if ( ev.code === "Space" ) {
-            this.up();
+            this.button();
         }
     }
 
     click(ev) {
         if ( ev.button === 0 || ev.pointerType ) {
-            this.up();
+            this.button();
         }
     }
 
-    up() {
-        this.getState().up();
+    button() {
+        this.getState().button();
     }
 };
 
@@ -85,26 +86,28 @@ class GamePlay extends GameState {
     }
 
     update() {
+        // spawn pipes periodically
         if ( game.frame % 60 === 0 ) { 
             this.entities.push(new Pipe()); 
         } 
 
+        // occasionally spawn coins
         if ( game.frame > 60*3 && (game.frame+30) % 60 === 0 ) { 
             if ( Math.random() < 0.333 ) { 
                 this.entities.push(new Coin()); 
             }
         }
 
-        this.entities = this.entities.filter(function(e) { return !e.dead; });
+        // clean up dead entities
+        this.entities = this.entities.filter(e => !e.dead);
 
-        this.entities.forEach(function(e) { 
-            if ( e.update ) { 
-                e.update(); 
-            } 
-        });
+        // physics update for all entities
+        this.entities.forEach(e => e.update());
 
+        // handle pairwise collisions
         this.collisions();
 
+        // score one point each time you pass through a pipe
         this.entities.forEach(function(e) {
             if ( e.tag == "pipe" ) {
                 var pipe = e;
@@ -115,6 +118,7 @@ class GamePlay extends GameState {
             }
         });
 
+        // end the game if you go off the top or bottom
         if ( bird.y > game.height || bird.y < 0 ) {
             sfx.play("dead");
             sfx.music.stop();
@@ -122,6 +126,9 @@ class GamePlay extends GameState {
         }
     }
 
+    // a collision occurs if any hitbox of an entity touches any hitbox of
+    // another. On collision, both entities are given an opportunity to handle
+    // the collision. No attempt is made to deduplicate collisions.
     collisions() {
         var N = this.entities.length;
         for ( var i=0; i<N; i++ ) {
@@ -159,7 +166,7 @@ class GamePlay extends GameState {
         ctx.fillText(this.score, game.width - 70, game.height - 20);
     }
 
-    up() {
+    button() {
         bird.flap();
     }
 }
@@ -203,7 +210,7 @@ class GameMenu extends GameState {
         }
     }
 
-    up() {
+    button() {
         bird.dy = -5;
         game.started = true;
         sfx.init();
@@ -249,7 +256,7 @@ class GameEnding extends GameState {
         bird.dy = 0;
     }
 
-    up() {
+    button() {
         if ( game.frame > this.lastFrame + 10 ) {
             this.restart();
         }
@@ -476,12 +483,10 @@ class SoundEffects {
         this.context = new AudioContext();
 
         if (this.context.state === "suspended") {
-            console.log("resuming audio...");
             await this.context.resume();
         }
 
         for ( var key in this.library ) {
-            console.log(`loading audio ${key}`);
             this.load(key);
         }
 
@@ -665,7 +670,7 @@ function mainLoop(timestamp) {
     let updatesThisFrame = 0;
 
     while (accumulator >= DELTA_TIME && updatesThisFrame < MAX_UPDATES_PER_FRAME) {
-        game.update(); // seconds; omit arg if your game assumes 1/60
+        game.update();
         accumulator -= DELTA_TIME;
         updatesThisFrame++;
     }
