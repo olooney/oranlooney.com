@@ -25,8 +25,6 @@ class Game extends GameState {
         super();
         this.height = null;
         this.width = null;
-        this.started = false;
-        this.over = false;
         this.frame = -1;
     }
 
@@ -35,15 +33,9 @@ class Game extends GameState {
         this.width = width;
     }
 
-    getState() {
-        if ( !game.started ) return game.menu;
-        if ( game.over ) return game.ending;
-        return game.play;
-    }
-
     update() {
         this.frame++;
-        this.getState().update();
+        this.state.update();
     }
 
     draw(ctx) {
@@ -53,7 +45,7 @@ class Game extends GameState {
         ctx.fillRect(0, 0, game.width, game.height);
         ctx.restore();
 
-        this.getState().draw(ctx);
+        this.state.draw(ctx);
     }
 
     keydown(ev) {
@@ -69,7 +61,7 @@ class Game extends GameState {
     }
 
     button() {
-        this.getState().button();
+        this.state.button();
     }
 };
 
@@ -121,8 +113,10 @@ class GamePlay extends GameState {
         // end the game if you go off the top or bottom
         if ( bird.y > game.height || bird.y < 0 ) {
             sfx.play("dead");
-            sfx.music.stop();
-            game.over = true;
+            if ( sfx.music ) { 
+                sfx.music.stop();
+            }
+            game.state = game.over;
         }
     }
 
@@ -171,6 +165,60 @@ class GamePlay extends GameState {
     }
 }
 
+class Autoplay extends GamePlay {
+    constructor() {
+        super();
+        this.lastButtonFrame = -Infinity;
+    }
+
+    update() {
+        this.maybeFlap();
+        game.play.update();
+    }
+
+    draw(ctx) {
+        game.play.draw(ctx);
+    }
+
+    button() {
+        game.play.button();
+    }
+
+    maybeFlap() {
+        const pipe = this.nextPipe();
+        const birdRadius = 20;
+        const cornerMargin = 20;
+
+        let targetY;
+        let dt;
+
+        if (pipe) {
+            dt = Math.min(Math.max(0, Math.ceil((pipe.x - bird.x) / 5)), 10)
+            targetY = pipe.y + pipe.gap - birdRadius - cornerMargin;
+        } else {
+            dt = 3;
+            targetY = game.height / 2;
+        }
+
+        const predictedY = bird.y + bird.dy * dt + 0.5 * G * dt * dt;
+        const shouldFlap = predictedY > targetY;
+        const canFlap = game.frame >= this.lastButtonFrame + Math.ceil(0.3 * UPDATE_HZ);
+        console.log(dt, targetY, predictedY, shouldFlap ? "FLAP": " ", canFlap ? "!" : "?");
+
+        if (shouldFlap && canFlap) {
+            this.lastButtonFrame = game.frame;
+            this.button();
+        } 
+    }
+
+    nextPipe() {
+        return game.play.entities
+            .filter(e => e.tag === "pipe" && !e.dead && e.x + e.width / 2 >= bird.x - 20)
+            .sort((a, b) => a.x - b.x)
+            .shift();
+    }
+}
+
 // menu state
 class GameMenu extends GameState {
     draw(ctx) {
@@ -212,7 +260,7 @@ class GameMenu extends GameState {
 
     button() {
         bird.dy = -5;
-        game.started = true;
+        game.state = game.play;
         sfx.init();
 
         if (sfx.music) {
@@ -244,9 +292,9 @@ class GameEnding extends GameState {
 
     restart() {
         delete this.lastFrame;
-        game.started = false;
-        game.over = false;
+        game.state = game.menu;
         game.frame = -1;
+        game.autoplay.lastButtonFrame = -Infinity;
         game.play.entities = [...scenery, bird];
         if (game.play.score > game.play.highScore) {
             game.play.highScore = game.play.score;
@@ -331,9 +379,11 @@ class Bird extends Entity {
 
     handleCollision(e2) {
         if ( e2.tag == "pipe" ) {
-            game.over = true;
+            game.state = game.over;
             sfx.play("thud");
-            sfx.music.stop();
+            if (sfx.music) { 
+                sfx.music.stop();
+            }
         } else if ( e2.tag == "coin" ) {
             sfx.play("coin");
             game.play.score++;
@@ -638,8 +688,10 @@ class ChiptuneMusic {
 // global game initialization
 const game = new Game();
 game.play = new GamePlay();
+game.autoplay = new Autoplay();
 game.menu = new GameMenu();
-game.ending = new GameEnding();
+game.over = new GameEnding();
+game.state = game.menu;
 
 // sound effects and music
 const sfx = new SoundEffects();
