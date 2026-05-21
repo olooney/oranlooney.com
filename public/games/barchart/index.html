@@ -164,7 +164,7 @@
                 camera.position.set( (N+3)*sin(cameraRotation), dy/100, (N+3)*cos(cameraRotation) );
                 camera.lookAt(v(0,0,0));
 
-                theta += PI / 1e3;
+                theta += PI / 5e3;
                 bars.forEach(function(row, i) {
                     row.forEach(function(bar, j) {
                         var h = data[i][j] * (1 + 0.1 * sin(theta * (i+j+1)/(N*.1)));

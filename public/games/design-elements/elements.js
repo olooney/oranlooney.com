@@ -62,7 +62,6 @@ function sineWave(x, y, amplitude, period, phase, n, step, width, alphaWidth, co
         ];
         context.lineTo(...point);
         if ( i % 50 === 0 ) {
-            context.globalAlpha = 0.8 * Math.exp(-Math.abs((i-25)-n/2)*step/alphaWidth);
             context.stroke();
             context.beginPath();
             context.moveTo(...point);
@@ -92,11 +91,8 @@ function isosquare(x, y, z, e, color) {
     context.filter = 'blur(0.5px)';
     context.stroke();
 
-    let ga = context.globalAlpha;
-    context.globalAlpha = context.globalAlpha/2;
     context.fillStyle = color;
     context.fill();
-    context.globalAlpha = ga;
 }
 
 function isocube(x, y, z, e, color) {
@@ -150,13 +146,11 @@ function banner() {
 
 function draw() { 
     // strings
-    context.globalAlpha = 0.5;
     for ( let i=0; i<10; i++ ) {
         color = hexcolor(50, 50 + (10-i)*13, 250-(10-i)*13);
         line(canvas.width - 50 + 20*Math.sin(0.01*frameIndex) - i*25, 0, canvas.width, canvas.height - i*40 - 100 + 20*Math.sin(0.01*frameIndex), color);
     }
 
-    context.globalAlpha = 0.8;
     hexagon(55 + 5*Math.cos(0.01*frameIndex), canvas.height + 5*Math.sin(0.01*frameIndex) - 95, 50, hexcolor(50, 50 + 5*13, 250-5*13), 2.5);
     hexagon(63 + 2*Math.cos(0.015*frameIndex+5), canvas.height + 2*Math.sin(0.015*frameIndex+1) - 45, 30, hexcolor(50, 50 + 2*13, 250-2*13), 2.5);
     hexagon(90 + 5*Math.cos(0.01*frameIndex+7), canvas.height + 5*Math.sin(0.01*frameIndex+2) - 115, 40, hexcolor(50, 50 + 7*13, 250-7*13), 2);
@@ -166,9 +160,8 @@ function draw() {
     hexagon(18 + 3*Math.cos(0.015*frameIndex+3), canvas.height + 3*Math.sin(0.015*frameIndex+6) - 172, 13, hexcolor(50, 50 + 0*13, 250-0*13), 1);
     hexagon(95 + 5*Math.cos(0.015*frameIndex+6), canvas.height + 5*Math.sin(0.015*frameIndex+7) - 30, 20, hexcolor(50, 50 + 8*13, 250-8*13), 1.5);
 
-    context.globalAlpha = 0.5;
-    for ( let i=0; i<5; i++ ) {
-        isosquare(0, 0, i * (0.5 + 0.05*Math.sin(0.03*frameIndex)), 1, hexcolor(50, 50 + (i+3)*13, 250-(i+3)*13));
+    for ( let i=0; i<3; i++ ) {
+        isosquare(0, 0, (5/3) * i * (0.5 + 0.05*Math.sin(0.03*frameIndex)), 1, hexcolor(50, 50 + (i+3)*20, 250-(i+3)*20));
     }
     isocube(0, 0, 1, 1.2, hexcolor(50, 50 + 7*13, 250-7*13));
 
@@ -187,7 +180,6 @@ function draw() {
         );
     }
 
-    context.globalAlpha = 0.5;
     banner();
 }
 
@@ -203,23 +195,12 @@ function hexcolor(r, g, b) {
 }
 
 
-requestAnimFrame = (function(callback) {
-    return window.requestAnimationFrame || 
-        window.webkitRequestAnimationFrame || 
-        window.mozRequestAnimationFrame || 
-        window.oRequestAnimationFrame || 
-        window.msRequestAnimationFrame ||
-        function(callback) { window.setTimeout(callback, 1000 / 60); };
-})();
-
 frameIndex = 0;
 function mainLoop() {
-    frameIndex++;	
-    if ( frameIndex % 2 ) {
-        clear();
-        draw(frameIndex);
-    }
-    requestAnimFrame(mainLoop);
+    frameIndex++;
+    clear();
+    draw(frameIndex);
+    requestAnimationFrame(mainLoop);
 }
 
 $(document).ready(function() {
