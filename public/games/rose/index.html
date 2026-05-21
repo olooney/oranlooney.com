@@ -7,33 +7,51 @@
   <link rel="stylesheet" href="rose.css" />
 </head>
 <body>
+  <header>
+    <nav>
+      <a href="/" class="site-title">OWL</a>
+    </nav>
+  </header>
   <div class="rose">
     <h2>Petals Around the Rose</h2>
-    <svg width="800" height="140"></svg>
+    <svg viewBox="0 0 800 140" aria-label="Dice roll"></svg>
     <div class="result">
       Petals Around the Rose: <span id="petal_count">?</span>
     </div>
     <div class="controls">
       <button id="reroll">Reroll</button>
       <button id="reveal">Reveal Solution</button>
+      <button id="hide" class="hidden">Hide Solution</button>
     </div>
     <div class="problem">
       <h3>Problem</h3>
       <p>
-        The challenge is to determine the rule used to calculate the number above
-        from the dice shown. Your only clues are the name of the game and
-        the fact that the rule must be fairly simple, able to be calculated at a glance
-        if someone knows it.
+        Determine the rule used to calculate the number above from the dice
+        shown. Your only clues are the name of the game (<em>Petals Around the
+        Rose</em>) and the fact that the rule must be fairly simple, able to be
+        calculated at a glance by anyone who knows it.
       </p>
       <p>
-        You may reroll the dice as many times as necessary until you are sure
-        you know the rule. Be careful though: you may only have one opportunity
-        in your lifetime to solve the problem yourself, so be certain you are
-        ready before clicking Reveal Solution.
+        You may reroll the dice as many times as necessary by clicking the
+        Reroll button until you are sure you know the rule. Once you are
+        comfortable that you can reliably predict the number, click Reveal
+        Solution to see the full explanation.
+      </p>
+
+      </p>
+        Be warned though: you may only have one opportunity in your lifetime to
+        solve this problem yourself, so be <strong>certain</strong> you are
+        ready before revealing the solution!
       </p>
     </div>
     <div class="answer">
       <h3>Solution</h3>
+      <p>
+        <a href="https://en.wikipedia.org/wiki/Petals_around_the_rose">Petals Around the Rose</a>
+        is a very famous exericse in induction and lateral thinking. It <em>is</em> possible 
+        to brute force it with enough rerolls, but the best approach is to look carefully
+        at what you are being shown and to think carefully about the context clues you are provided.
+      </p>
       <h4>Definitions:</h4>
       <ul>
         <li>A <em>rose</em> is the center pip on a die face.</li>
@@ -48,13 +66,20 @@
       <p>Only odd numbered faces can contribute to the total, but not all of them do. Going case by case:</p>
       <ul>
         <li><strong>1</strong> has a rose, but no petals, so contributes nothing.</li>
-        <li><strong>3</strong> has a rose and a petal on each side so contributes 2.</li>
-        <li><strong>5</strong> has a rose and a petal each corner so contributes 4.</li>
+        <li><strong>3</strong> has a rose and a petal on each side, so contributes 2.</li>
+        <li><strong>5</strong> has a rose and a petal each corner, so contributes 4.</li>
       </ul>
       <p>The even numbered faces (2, 4, and 6) do not have a center pip, so contribute nothing to the total.</p>
-      <p>Now that you have revealed the answer petals will be shown in red; you may reroll to see other examples.</p>
+      <p>Now that you have revealed the answer, petals will be shown in red; you may reroll to see other examples.</p>
     </div>
   </div>
+  <dialog id="rose-confirm">
+    <p>Are you sure you're ready to reveal the solution?</p>
+    <form method="dialog">
+      <button value="cancel">Cancel</button>
+      <button value="confirm">Reveal Solution</button>
+    </form>
+  </dialog>
   <script src="rose.js" type="module"></script>
 </body>
 </html>
