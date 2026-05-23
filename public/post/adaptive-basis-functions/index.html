@@ -11,7 +11,11 @@
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
   <link rel="stylesheet" href="/css/custom.css?v=2" media="all" />
 
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" async></script>
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
 
   <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous" async></script>
 </head>
@@ -42,8 +46,8 @@
     </ul>
     
   <ul class="author-social">
-    <li><a href="//x.com/oranlooney" target="_blank"><i class="fab fa-twitter"></i></a></li>
-    <li><a href="//linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+    <li><a href="https://x.com/oranlooney" target="_blank"><i class="fab fa-twitter"></i></a></li>
+    <li><a href="https://linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
     <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fab fa-github"></i></a></li>
     <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fab fa-stack-overflow"></i></a></li>
     <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa fa-flask"></i></a></li>
@@ -598,36 +602,25 @@ proceeds at the same pace, this could easily take over a hundred years.</p>
 <script src="/js/custom.js"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-    displayMath: [ ["\\[","\\]"] ],  // ['$$','$$'], 
-    processEscapes: true,
-    processEnvironments: true
-  },
-  // Center justify equations in code and markdown cells. Elsewhere
-  // we use CSS to left justify single line equations in code cells.
-  displayAlign: 'center',
-  "HTML-CSS": {
-    styles: {'.MathJax_Display': {"margin": 0}},
-    linebreaks: { automatic: true }
-  },
-  TeX: { extensions: ["color.js"] }
-});
-</script>
-
-
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>
-  hljs.configure({
-    languages: ['python', 'r', 'javascript']
-  })
-  hljs.initHighlightingOnLoad()
+window.MathJax = {
+  loader: {
+    load: ['[tex]/color']
+  },
+
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    packages: {'[+]': ['color']}
+  }
+};
 </script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4.1.2/tex-chtml.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 
 
 
