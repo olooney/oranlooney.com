@@ -1,12 +1,28 @@
-Replacement Blog, now with blogdown and Hugo.
+Oranlooney.com
+==============
 
-Run `python thumbnails.py` to rebuild the thumbnails for lead images.
+Personal website, built with Blogdown/Hugo. Uses MathJax and highlight.js.
 
-Delete the `public` folder and use `blogdown::build_site()` to completely
-rebuild the static site.
+Development
+-----------
 
-`git push` to copy to github. Then on the server, `bin/stage` and 
-checking <http://staging.oranlooney.com>. Finally, `bin/release` to 
-publish the content to <https://www.oranlooney.com>.
+* In R, `blogdown::build_site()` to rebuild `/public`.
 
-For faster deployments use `bin/stage2`.
+* `python thumbnails.py` to rebuild the thumbnails for lead images.
+
+Deployment
+----------
+
+* `git push` to copy GitHub. 
+* `sudo bin/stage` and check staging.
+* `sudo bin/stage_branch BRANCH_NAME` to stage a branch.
+* `sudo bin/release` to copy staging to prod.
+
+If something goes wrong:
+
+* `sudo bin/rollback` to revert prod to the previous snapshot.
+* `sudo bin/unstage` to revert to staging to the previous snapshop.
+
+To see the analytics:
+
+* `uv run analytics.py`
