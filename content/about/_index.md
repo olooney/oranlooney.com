@@ -89,4 +89,4 @@ For HTTPS, it uses a free SSL cert from [Let's Encrypt][23].
 [TH]: /tags/history/
 [TMP]: https://www.youtube.com/@TwoMinutePapers
 [T]: /tags/
-[WL]: https://www.youtube.com/@WelchLabsVideo
+[WL]: https://www.youtube.com/WelchLabsVideo
