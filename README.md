@@ -22,17 +22,39 @@ Deployment
 ----------
 
 * `git push` to copy GitHub. 
-* `sudo bin/stage` and check staging.
-* `sudo bin/stage_branch BRANCH_NAME` to stage a branch.
-* `sudo bin/release` to copy staging to prod.
+* `sudo scripts/bin/stage` and check staging.
+* `sudo scripts/bin/release` to copy staging to prod.
 
 If something goes wrong:
 
-* `sudo bin/rollback` to revert prod to the previous snapshot.
-* `sudo bin/unstage` to revert to staging to the previous snapshop.
+* `sudo scripts/bin/rollback` to revert prod to the previous snapshot.
+* `sudo scripts/bin/unstage` to revert staging to the previous snapshot.
 
 To see the analytics:
 
 * `uv run analytics.py`
 
 
+Structure
+---------
+
+```
+.
+├── content/                    # Blog posts and pages
+│   ├── post/                   # Articles
+│   ├── about/                  # About me
+│   ├── quotes/                 # Quotes & Poems
+│   └── archives/               # Archive List
+├── public/                     # Generated static site (output)
+├── static/                     # Static assets (images, fonts, etc)
+│   ├── games/                  # JS games and demos
+├── layouts/                    # Custom Hugo templates
+├── themes/whiteplain/          # Site theme
+├── config.toml                 # Hugo configuration
+├── scripts/                    # Development, testing, and deployment scripts
+│   ├── dev-server.py           # Development server with auto-rebuild
+│   ├── thumbnails.py           # Generate thumbnail images
+│   ├── check-mathjax.js        # Test MathJax rendering
+│   ├── setup-playwright.sh     # Install Playwright dependencies
+│   └── bin/                    # Deployment scripts (staging, release, rollback)
+```
