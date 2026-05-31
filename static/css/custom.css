@@ -404,5 +404,26 @@ section.terms ul li {
 
 /* Search */
 .search-field-wrapper {
-  margin-top: 1em;
+  margin-top: 20px;
+  width: 100%;
+  margin-left: 0;
+}
+.search-field-wrapper input {
+  width: 50%;
+  min-width: 400px;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.search-field-wrapper input::placeholder {
+  color: gray;
+}
+.search-field-wrapper input:focus-visible {
+  outline: none;
+}
+
+.search-status {
+  margin-bottom: 1em;
 }
