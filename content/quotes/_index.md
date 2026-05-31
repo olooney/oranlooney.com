@@ -3,7 +3,7 @@ title = "Quotes"
 date = "2022-11-11"
 +++
 
-<link rel="stylesheet" href="/css/quotes.css">
+<link rel="stylesheet" href="/css/quotes.css?v=2">
 <script src="/js/quotes.js"></script>
 <div class="search-container">
   <input 

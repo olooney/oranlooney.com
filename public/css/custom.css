@@ -186,6 +186,15 @@ html .archives .archives-item > a:visited {
   color: #800000;
 }
 
+html .archives .archives-item {
+
+}
+
+html .archives .archives-item ul.taxonomies {
+
+}
+
+
 .list .article-readmore {
   float: right;
 }
@@ -358,4 +367,42 @@ html .article table td {
 .article iframe.youtube-iframe {
     aspect-ratio: 16 / 9;
     width: 100% !important;
+}
+
+/* Archives page - tags on separate line */
+html .archives {
+  font-size: 1.2em;
+}
+.archives .archives-item {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  border-bottom: 0px;
+  margin-bottom: 1em;
+}
+.archives .archives-item > a {
+  flex-grow: 0;
+  order: 1;
+}
+.archives .archives-item time {
+  flex-grow: 1;
+  text-align: right;
+  order: 2;
+}
+.archives ul.taxonomies {
+  flex-basis: 100%;
+  order: 3;
+  padding: 5px 0 0 0;
+}
+
+/* Tags ("terms" in Hego) */
+section.terms {
+  font-size: 1.1em;
+}
+section.terms ul li {
+  margin-top: 0.7em;
+}
+
+/* Search */
+.search-field-wrapper {
+  margin-top: 1em;
 }

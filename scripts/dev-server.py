@@ -128,12 +128,11 @@ def main():
     
     httpd = HTTPServer(server_address, RebuildOnChangeHandler)
     
+    RebuildOnChangeHandler.rebuild_site()
+    
     print(f"Development server running at http://localhost:{port}")
     print(f"Serving from: {public_dir}")
     print("Press Ctrl+C to stop.\n")
-    
-    # Set initial build time to now
-    RebuildOnChangeHandler.last_build_time = time.time()
     
     try:
         httpd.serve_forever()

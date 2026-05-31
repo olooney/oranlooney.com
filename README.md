@@ -10,6 +10,12 @@ Development
 * Or manually: `blogdown::build_site()` in R to rebuild, then serve `/public` with a static server.
 * `python scripts/thumbnails.py` to rebuild the thumbnails for lead images.
 
+Notes:
+
+* Don't touch `themes/whiteplain/` if you can help it; over it in `layouts` instead.
+* Don't touch `style.css` either, make CSS changes in `/static/custom.css` instead.
+* Remember to manually update `static/search/index.html` when changing shared header, social, CSS, or Font Awesome assets.
+
 
 Testing
 ---------

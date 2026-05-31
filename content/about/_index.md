@@ -17,8 +17,10 @@ decades. These days, I'm professionally interested in data science, machine
 learning, applied statistics, software architecture, and occasionally data
 visualization.
 
+<!--
 I am actively looking for a new position; if you're hiring, please take a look
 at my [résumé][RPDF] and get in touch if it looks like a good fit.
+-->
 
 ### Interests
 
@@ -26,9 +28,8 @@ Outside of work, I enjoy recreational mathematics, the [history of science and
 mathematics][TH], programming challenges such as [Advent of Code][1] or
 [LeetCode][2], and puzzle games like [Baba Is You][BIY]. I maintain a
 repository of [quotes and poems][Q] containing pithy wit and wisdom for
-programming and science. I sometimes make [small web games and demos][G]. As for
-my other interests, well, I can only refer you to all the [topics][T] covered
-on this site.
+programming and science. I sometimes make small [web toys][G] or interactive 
+[Jupyer notebooks][JN] to share.
 
 I've also been thrilled by the recent wave of recreational mathematics and
 other educational content on YouTube such as
@@ -45,6 +46,9 @@ I encourage you to check them out and support them if you can.  Or if you're
 just feeling charitable in general, consider supporting
 [Wikipedia][8] or [helping hungry children in Wisconsin][9].
 
+As for my other interests, well, I can only refer you to the many [topics][T]
+covered on this site.
+
 ### Colophon
 
 This site was built with [blogdown][15], an R package that combines
@@ -55,7 +59,9 @@ equations. Articles that are mainly in R are authored in [Rmarkdown][19], while
 articles that are mainly in Python are first authored in a [Jupyter Lab][20]
 and then ported to vanilla Markdown. Many of the photos come from
 [Unsplash][21] due to its good selection of images with permissive licenses.
-For HTTPS, it uses a free SSL cert from [Let's Encrypt][23].
+For HTTPS, it uses a free SSL cert from [Let's Encrypt][23]. Jupyter Notebooks
+are published live on the web where you can run them in your browser with 
+[JupyerLite][JL].
 
 
 [1]: https://adventofcode.com/
@@ -90,3 +96,5 @@ For HTTPS, it uses a free SSL cert from [Let's Encrypt][23].
 [TMP]: https://www.youtube.com/@TwoMinutePapers
 [T]: /tags/
 [WL]: https://www.youtube.com/WelchLabsVideo
+[JN]: https://notebooks.oranlooney.com
+[JL]: https://jupyterlite.readthedocs.io/en/stable/
