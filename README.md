@@ -51,10 +51,6 @@ Structure
 ├── layouts/                    # Custom Hugo templates
 ├── themes/whiteplain/          # Site theme
 ├── config.toml                 # Hugo configuration
-├── scripts/                    # Development, testing, and deployment scripts
-│   ├── dev-server.py           # Development server with auto-rebuild
-│   ├── thumbnails.py           # Generate thumbnail images
-│   ├── check-mathjax.js        # Test MathJax rendering
-│   ├── setup-playwright.sh     # Install Playwright dependencies
+├── scripts/                    # Dev and testing scripts
 │   └── bin/                    # Deployment scripts (staging, release, rollback)
 ```
