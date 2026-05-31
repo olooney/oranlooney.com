@@ -6,7 +6,8 @@ Personal website, built with Blogdown/Hugo. Uses MathJax and highlight.js.
 Development
 -----------
 
-* In R, `blogdown::build_site()` to rebuild `/public`.
+* `python scripts/dev-server.py` to run a dev server that serves `/public` and auto-rebuilds on file changes.
+* Or manually: `blogdown::build_site()` in R to rebuild, then serve `/public` with a static server.
 * `python scripts/thumbnails.py` to rebuild the thumbnails for lead images.
 
 
