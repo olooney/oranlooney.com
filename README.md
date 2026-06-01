@@ -53,7 +53,7 @@ Structure
 │   └── archives/               # Archive List
 ├── public/                     # Generated static site (output)
 ├── static/                     # Static assets (images, fonts, etc)
-│   ├── games/                  # JS games and demos
+│   ├── demos/                  # Web demos
 ├── layouts/                    # Custom Hugo templates
 ├── themes/whiteplain/          # Site theme
 ├── config.toml                 # Hugo configuration

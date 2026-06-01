@@ -28,7 +28,7 @@ Outside of work, I enjoy recreational mathematics, the [history of science and
 mathematics][TH], programming challenges such as [Advent of Code][1] or
 [LeetCode][2], and puzzle games like [Baba Is You][BIY]. I maintain a
 repository of [quotes and poems][Q] containing pithy wit and wisdom for
-programming and science. I sometimes make small [web toys][G] or interactive 
+programming and science. I sometimes make small [web demos][WD] or interactive 
 [Jupyer notebooks][JN] to share.
 
 I've also been thrilled by the recent wave of recreational mathematics and
@@ -86,7 +86,7 @@ are published live on the web where you can run them in your browser with
 [BIY]: https://en.wikipedia.org/wiki/Baba_Is_You
 [CEC]: http://wormwiring.org/
 [FI]: https://www.youtube.com/@FoldingIdeas
-[G]: /games/
+[WD]: /demos/
 [NP]: https://www.youtube.com/c/numberphile
 [N]: https://en.wikipedia.org/wiki/Nematode
 [Q]: /quotes/

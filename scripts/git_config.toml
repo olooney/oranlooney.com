@@ -1,0 +1,2 @@
+[alias]
+	search = "!f() { git grep \"$@\" -- . \":(exclude)public/**\" \":(exclude)static/demos/barchart/helvetiker_font/**\" \":(exclude)static/demos/desktop/ext-2.2.1/**\" \":(exclude)static/demos/desktop/icons/**\" \":(exclude)static/demos/word-graph/data.json\" \":(exclude)static/demos/soma-forest/solutions.json\"; }; f"
