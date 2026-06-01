@@ -1,0 +1,112 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.grid-container {
+    --card-width: 240px;
+    --grid-gap: 20px;
+
+    display: grid;
+    grid-template-columns: var(--card-width);
+    gap: var(--grid-gap);
+    justify-content: center;
+    width: calc(100% - 32px);
+    max-width: calc((var(--card-width) * 3) + (var(--grid-gap) * 2));
+    margin: 32px auto;
+}
+
+.grid-item {
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: var(--card-width);
+    padding: 5px;
+}
+
+.grid-item a {
+    color: #800000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+}
+
+.grid-item img {
+    width: min(100%, 192px);
+    height: 160px;
+    object-fit: contain;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.grid-item p {
+    margin: 2px;
+    font-size: 1.1em;
+}
+
+.grid-item a:hover {
+    text-decoration: underline;
+}
+
+@media (hover: hover) {
+    .grid-item {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .grid-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}
+
+header {
+    width: 100%;
+    background: #800000;
+}
+
+header nav {
+    text-align: center;
+    padding: 0.8em;
+}
+
+.site-title {
+    color: white;
+    text-decoration: none;
+    font-family: garamond, "Times New Roman", serif;
+    font-size: 44px;
+    line-height: 50px;
+    display: inline-block;
+}
+
+.site-footer {
+    margin-top: auto;
+    width: 100%;
+    background-color: #f8f8f8;
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+}
+
+.copyright {
+    font-size: 0.9em;
+    color: #666;
+}
+
+@media (min-width: 536px) {
+    .grid-container {
+        grid-template-columns: repeat(2, var(--card-width));
+    }
+}
+
+@media (min-width: 792px) {
+    .grid-container {
+        grid-template-columns: repeat(3, var(--card-width));
+    }
+}
