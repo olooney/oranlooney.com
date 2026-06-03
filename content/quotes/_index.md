@@ -82,9 +82,14 @@ into account Hofstadter's law."
 
 
 "Building a four-foot tower requires a steady hand, a level surface, and 10
-undamaged beer cans. Building a 400 foot tower doesn't merely require 100 times
+undamaged beer cans. Building a 400-foot tower doesn't merely require 100 times
 as many beer cans."
 <br>&mdash;Steve McConnell
+
+
+"Organizations which design systems ([...]) are constrained to produce designs
+which are copies of the communication structures of these organizations."
+<br>&mdash;Melvin Conway
 
 
 "If we'd asked the customers what they wanted, they would have said, 'faster
@@ -308,9 +313,14 @@ necessary may speak."
 
 
 "Any intelligent fool can make things bigger, more complex, more violent. It
-takes a touch of genius - and a lot of courage - to move in the opposite
+takes a touch of genius&mdash;and a lot of courage&mdash;to move in the opposite
 direction."
 <br>&mdash;Albert Einstein
+
+
+"Perfection is achieved, not when there is nothing more to add, but when there
+is nothing left to take away."
+<br>&mdash;Antoine de Saint-Exupéry
 
 
 "Such is modern computing: everything simple is made too complicated because
@@ -326,6 +336,7 @@ is easy to build, hard to use, and easy to charge for."
 
 "Knowledge is a process of piling up facts. Wisdom lies in simplification."
 <br>&mdash;Martin Luther King, Jr.
+
 
 "Simplicity is a great virtue but it requires hard work to achieve it and
 education to appreciate it. And to make matters worse: complexity sells
