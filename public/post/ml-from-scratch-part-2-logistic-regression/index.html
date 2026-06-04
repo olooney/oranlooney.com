@@ -9,7 +9,7 @@
   <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
-  <link rel="stylesheet" href="/css/custom.css?v=4" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=5" media="all" />
 
   <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -389,11 +389,10 @@ import matplotlib.pyplot as plt
 <pre><code>model = LogisticClassifier(tolerance=1e-5, max_iter=2000)
 %time model.fit(X_train, y_train)
 model.converged, model.iterations, model.loss</code></pre>
-<blockquote>
-<p>CPU times: user 2.78 s, sys: 3.31 s, total: 6.09 s
-Wall time: 3.07 s</p>
-<p>(True, 1094, 0.063013434109990218)</p>
-</blockquote>
+<pre><code>CPU times: user 2.78 s, sys: 3.31 s, total: 6.09 s
+Wall time: 3.07 s
+
+(True, 1094, 0.063013434109990218)</code></pre>
 <p>So it took 1000 iterations and 3 seconds to converge. That’s not great, and we’ll see how
 to improve it in just a minute. First, though, let’s take a look at how the model performs
 on the test set:</p>
@@ -612,11 +611,10 @@ mini-batch SGD by adding an inner loop inside our fit function.</p>
 <pre><code>model = LogisticClassifier(tolerance=1e-5, batch_size=8)
 %time model.fit(X_train, y_train)
 model.converged, model.iterations, model.loss</code></pre>
-<blockquote>
-<p>CPU times: user 1.36 s, sys: 1.23 s, total: 2.59 s
-Wall time: 1.31 s</p>
-<p>(True, 373, 0.049284666911268454)</p>
-</blockquote>
+<pre><code>CPU times: user 1.36 s, sys: 1.23 s, total: 2.59 s
+Wall time: 1.31 s
+
+(True, 373, 0.049284666911268454)</code></pre>
 <p>It now takes 1.4 seconds to converge instead of 4 seconds: a 2X wall-clock
 speed up. It only takes 373 epochs (full passes through the data) instead of the 1,000 for batch gradient
 descent. And the final result has achieved similar test performance:</p>
@@ -745,11 +743,10 @@ in play.</p>
     validation_set=(X_test, y_test))
 %time model.fit(X_train, y_train)
 model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
-<blockquote>
-<p>CPU times: user 100 ms, sys: 140 ms, total: 240 ms
-Wall time: 123 ms</p>
-<p>(True, False, 30, 0.046659741686488669)</p>
-</blockquote>
+<pre><code>CPU times: user 100 ms, sys: 140 ms, total: 240 ms
+Wall time: 123 ms
+
+(True, False, 30, 0.046659741686488669)</code></pre>
 <p>Another simple change to our algorithm, another impressive speed-up. We’re now converging
 <em>ten times</em> faster than the version without Nesterov Accelerated Momentum, and <em>25 times</em>
 faster than the naive batch gradient descent.</p>
@@ -938,11 +935,9 @@ implementation details omitted above:</p>
     validation_set=(X_test, y_test))
 %time model.fit(X_train, y_train)
 model.converged, model.stopped_early, model.iterations, model.loss</code></pre>
-<blockquote>
-<p>CPU times: user 40 ms, sys: 30 ms, total: 70 ms
+<pre><code>CPU times: user 40 ms, sys: 30 ms, total: 70 ms
 Wall time: 49.1 ms
-(False, True, 10, 0.053536116001088603)</p>
-</blockquote>
+(False, True, 10, 0.053536116001088603)</code></pre>
 <p>Convergence is crazy fast. 49 ms? Is that some kind of joke? We started with
 3 seconds and now you’re telling me its 49 ms? As in, 60X faster? No, this
 is actually fairly typical. That’s why it’s so important to use a good

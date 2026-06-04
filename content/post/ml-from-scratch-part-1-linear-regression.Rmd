@@ -363,7 +363,7 @@ can *see* that reflecting about the dotted plane sends $x$ to $||x||e_1$, and
 *believe* that $v$ is a unit vector orthogonal to the dotted plane of
 reflection.
 
-<a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
+<a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="/post/ml-from-scratch-part-1-linear-regression_files/householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
 
 Because a reflection is a linear transformation, we can express it as a matrix,
 which we will call $H$. Here is how we go from our geometric intuition to a
@@ -759,9 +759,9 @@ cloud of points.
 	plt.subplot(1, 2, 2)
 	goodness_of_fit_report("Test Set", model, X_test, y_test)
 
-> Training Set     mse=21.30     r2=0.73
->
-> Test Set         mse=25.12     r2=0.75
+	Training Set     mse=21.30     r2=0.73
+
+	Test Set         mse=25.12     r2=0.75
 
 And in point of fact this linear regression model does reasonably well on both
 the train and test set, with correlation scores around 75%. That means it's

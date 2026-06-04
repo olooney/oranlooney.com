@@ -310,8 +310,8 @@ lack of success from grifters. Perhaps that's naïve.
 
 > Exercise caution in your business affairs; for the world is full of trickery.
 > But let this not blind you to what virtue there is; many persons strive for
-> high ideals; and everywhere life is full of heroism.<br>
-> &mdash;Max Ehrmann, [Desiderata][MED]
+> high ideals; and everywhere life is full of heroism.
+> <br>&mdash;Max Ehrmann, [Desiderata][MED]
 
 
 <style>

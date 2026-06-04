@@ -93,8 +93,8 @@ faster and cheaper than earlier version, and a reduction in embedding dimension
 may have been part of that if the developers had benchmarks showing that the
 smaller size was just as good in terms of quality. 
 
-> "Interest rates may go up, they may go down, or they may stay the same. I'm
-> sorry, but I really can't be any more vague than that." 
+> Interest rates may go up, they may go down, or they may stay the same. I'm
+> sorry, but I really can't be any more vague than that.
 > <br>&mdash;Alan Greenspan
 
 Given all that, it's likely that the number of feature dimensions used inside
@@ -339,8 +339,8 @@ The results are no better than chance:
 Does that mean I was wrong about 169 tokens representing a `13x13` grid?
 Yes. Yes it does. My disappointment is immeasurable and my day is ruined.
 
-> "The great tragedy of science: the slaying of a beautiful hypothesis by an
-> ugly fact." 
+> The great tragedy of science: the slaying of a beautiful hypothesis by an
+> ugly fact.
 > <br>&mdash;Thomas Huxley 
 
 But the `5x5` grid results are suggestive. GPT-4o really can keep track of 25

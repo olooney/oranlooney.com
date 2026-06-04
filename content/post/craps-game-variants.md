@@ -381,8 +381,7 @@ amazing, really, what we can do with a pair of dice and a few simple rules.
 
 > Beware of bugs in the above code; I have only proved it correct, not tried
 > it.
->
-> - Donald Knuth
+> <br>&mdash;Donald Knuth
 
 The above code was careful to calculate exact probabilities. This was much
 faster and more accurate than a Monte Carlo simulation; indeed it would

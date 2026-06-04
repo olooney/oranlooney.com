@@ -90,9 +90,10 @@ to understand them as two separate phenomena.
 
 Changes in scale often result in this kind of so-called [regime shift][RS].  
 
-> "Building a four-foot tower requires a steady hand, a level surface, and 10
+> Building a four-foot tower requires a steady hand, a level surface, and 10
 > undamaged beer cans. Building a 400 foot tower doesn't merely require 100
-> times as many beer cans." - Steve McConnell
+> times as many beer cans.
+> <br>&mdash;Steve McConnell
 
 We can tell a similar story across a wide variety of problem domains. A human
 can run about 8 miles per hour. To go from 8 mph to 80 mph, you don't just need
@@ -123,11 +124,11 @@ of change. And the rate of change increases proportional to the number of
 scientists, which is only going up. Even as population growth levels off,
 technological innovation is only going to speed up.
 
-> "In the whispering quiet of Heaven's night you imagine you can hear the
+> In the whispering quiet of Heaven's night you imagine you can hear the
 > paradigms shatter, shards of theory tinkling into brilliant dust as the
 > lifework of some corporate think tank is reduced to the tersest historical
-> footnote..."
-> <br>- William Gibson, *Hinterlands*
+> footnote...
+> <br>&mdash;William Gibson, *Hinterlands*
 
 The first time I really felt this firsthand was working with JavaScript
 frameworks circa 2010. It was a wild time. Entire frameworks would come into

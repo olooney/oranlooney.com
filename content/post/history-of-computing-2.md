@@ -115,7 +115,7 @@ While we don’t have time to go into the full [history][MTH] of [precision][GB]
 say that what was impossible for a lone craftsman in the 17th century was
 commonplace by the 19th. Leibniz himself lamented the difficulties, saying:
 
-> "If only a craftsman could execute the instrument as I had thought the model!"
+> If only a craftsman could execute the instrument as I had thought the model!
 > <br>&mdash;Leibniz
 
 This is the main reason I don't think we would have ended up with a [steampunk
@@ -127,9 +127,10 @@ these technical and financial difficulties in his book, *[Reckoning with
 Matter][RWM]*.) While limited by the technology of his time, Leibniz clearly
 saw their vast potential:
 
-> "It is unworthy of excellent men to lose hours like slaves in the labour of
+> It is unworthy of excellent men to lose hours like slaves in the labour of
 > calculation which could safely be relegated to anyone else if machines were
-> used."<br>&mdash;Leibniz
+> used.
+> <br>&mdash;Leibniz
 
 Formal Languages
 ----------------
@@ -154,8 +155,8 @@ arguments could be [formally verified][FV]:
 [GF]: https://en.wikipedia.org/wiki/Gottlob_Frege
 [GLCU]: https://en.wikipedia.org/wiki/Characteristica_universalis
 
-> "When there are disputes among persons, we can simply say, ‘Let us
-> calculate,’ and without further ado, see who is right."
+> When there are disputes among persons, we can simply say, "Let us
+> calculate," and without further ado, see who is right.
 > <br>&mdash;Leibniz
 
 Leibniz's ideas on this subject never got as far as he liked, but nevertheless
@@ -363,8 +364,8 @@ approximation, and logarithms as needed to speed up calculations; the only
 difference is we've pushed these down into libraries where we hardly ever
 have to think about them. This is undoubtedly a good thing:
 
-> "Civilization advances by extending the number of important operations which
-> we can perform without thinking of them."
+> Civilization advances by extending the number of important operations which
+> we can perform without thinking of them.
 > <br>&mdash;Alfred North Whitehead
 
 But if we stand on the shoulders of giants today, it is only because

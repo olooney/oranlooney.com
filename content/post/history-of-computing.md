@@ -580,9 +580,10 @@ the church and feudal lords in a world of handcrafted objects, they could not
 have conceived the value that a pocket slide rule would have to a 20th century
 engineer.
 
-> "Some of the greatest discoveries consist mainly in the clearing away of
+> Some of the greatest discoveries consist mainly in the clearing away of
 > psychological roadblocks which obstruct the approach to reality; which is
-> why, *post factum*, they appear so obvious."<br>&mdash;Arthur Koestler
+> why, *post factum*, they appear so obvious.
+> <br>&mdash;Arthur Koestler
 
 
 Conclusion

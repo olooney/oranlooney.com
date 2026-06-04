@@ -9,7 +9,7 @@
   <meta name="generator" content="Hugo 0.42.1" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
-  <link rel="stylesheet" href="/css/custom.css?v=4" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=5" media="all" />
 
   <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -4130,11 +4130,10 @@ I think if you keep these three limitations in mind it's possible to get an enor
 
 <style>
   .thread {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 25px;
-      margin-left: auto;
-      margin-right: auto;
+     border: 1px solid #ddd;
+     padding: 14px 10px 6px;
+     margin: 1.4em auto 1.8em;
+     background: #fafafa;
   }
 
   .message {
@@ -4142,25 +4141,54 @@ I think if you keep these three limitations in mind it's possible to get an enor
       margin: 0px;
   }
 
-  .message.user {
-      background: #e4e7fb;
-      padding: 5px;
-      margin-bottom: 10px;
-      padding-left: 40px;
-      background-image: url("/post/my-dinner-with-chatgpt_files/user_icon.png");
-      background-position: 5px 5px;
-      background-repeat: no-repeat;
-      min-height: 32px;
-  }
+  .message.user,
   .message.chatgpt {
-      background: #dfffe6;
-      margin-bottom: 10px;
-      padding: 5px;
-      padding-left: 40px;
+     position: relative;
+     margin-bottom: 12px;
+     padding: 8px 10px 8px 42px;
+     min-height: 32px;
+     border: 1px solid transparent;
+   border-radius: 10px;
+     background-position: 8px 8px;
+     background-repeat: no-repeat;
+     box-sizing: border-box;
+  }
+
+  .message.user {
+     margin-right: 2.2em;
+     background-color: #f1f3ff;
+      background-image: url("/post/my-dinner-with-chatgpt_files/user_icon.png");
+     border-color: #d7dcf5;
+  }
+
+  .message.chatgpt {
+     margin-left: 2.2em;
+   background-color: #f5fdf6;
       background-image: url("/post/my-dinner-with-chatgpt_files/chatgpt_icon.png");
-      background-position: 5px 5px;
-      background-repeat: no-repeat;
-      min-height: 32px;
+   border-color: #e2f4e2;
+  }
+
+  .message.user::after,
+  .message.chatgpt::after {
+     position: absolute;
+     top: 13px;
+     width: 9px;
+     height: 9px;
+     border: inherit;
+     border-top: 0;
+     border-left: 0;
+     content: "";
+     transform: rotate(45deg);
+  }
+
+  .message.user::after {
+     left: -5px;
+     background: #f1f3ff;
+  }
+
+  .message.chatgpt::after {
+     right: -5px;
+   background: #f5fdf6;
   }
 
   .message.chatgpt *:first-child {
@@ -4168,14 +4196,15 @@ I think if you keep these three limitations in mind it's possible to get an enor
       padding-top: 0px;
   }
   .message.annotation {
-      background: #fbfbe4;
-      margin-bottom: 10px;
-      padding: 5px;
+   background: #fffdf1;
+     margin-bottom: 12px;
+     padding: 8px 10px;
       padding-left: 40px;
+   border: 1px solid #f2eac8;
+   border-radius: 8px;
       background-image: url("/post/my-dinner-with-chatgpt_files/annotation_icon.png");
-      background-position: 5px 5px;
+     background-position: 8px 12px;
       background-repeat: no-repeat;
-      min-height: 32px;
   }
 
   body .message.chatgpt pre {

@@ -36,8 +36,8 @@ Functions like `strcpy()` are semantic symbols, and as such allow you to inject 
 
 Likewise, you can create new semantic symbols by writing functions that do one &mdash; and only one &mdash; thing and giving them a descriptive names.
 
-> Functions should be short and sweet, and do just one thing.<br/>
-> - Linus Torvalds
+> Functions should be short and sweet, and do just one thing.
+> <br>&mdash;Linus Torvalds
 
 The [Linux Coding Style][LCS] guide contains [good, practical advice][LCS] on how to write meaningful functions.  A program built out of such semantic functions will be more meaningful, hence more readable and understandable.
 

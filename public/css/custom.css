@@ -50,6 +50,7 @@ html .article blockquote::after {
 html .article blockquote > p {
     padding: 0;
     margin: 0;
+  text-indent: 0.75em;
 }
 html .article blockquote a,
 html .article blockquote a:visited {

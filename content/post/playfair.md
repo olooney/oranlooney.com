@@ -568,7 +568,8 @@ cipher, made this rather damning statement:
 
 > When a cryptogram has been decrypted properly there is an unmistakable sense
 > of rightness about the solution. This sense of rightness is completely absent
-> in the proposed solution.  <br>&mdash; [FBI][FBI]
+> in the proposed solution.
+> <br>&mdash;[FBI][FBI]
 
 [FBI]: http://zodiackillerfacts.com/main/the-340-cipher-dead-ends/
 

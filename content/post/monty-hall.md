@@ -271,8 +271,8 @@ drinking beer, then they must be at least 21"&mdash;performance improves
 dramatically. People immediately understand that you need to check the beer
 drinker and the underage person.
 
-> "Communicating badly and then acting smug when you're misunderstood is not
-> cleverness."
+> Communicating badly and then acting smug when you're misunderstood is not
+> cleverness.
 > <br>&mdash;Randall Munroe
 
 The point is that translating between natural language and formal mathematics
@@ -288,7 +288,7 @@ Is adversarial substitution actually a fallacy? Or is it a street-smart, robust
 strategy to avoid being conned? One thing we can say for sure is that doing it
 *subconsciously* is always a mistake. 
 
-> "The cardinal sin is to make a choice without knowing you are making one."
+> The cardinal sin is to make a choice without knowing you are making one.
 > <br>&mdash;Jonathan Shewchuk
 
 However, merely being aware of the phenomenon lets us make a more intentional,
