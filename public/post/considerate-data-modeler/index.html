@@ -91,78 +91,99 @@
 </aside>
       
 
-<p>Database modeling is closer to library science than computer science. No one is
-impressed by a librarian who gets creative and files cookbooks under &ldquo;G&rdquo; for
-&ldquo;Gourmand.&rdquo; The best catalog system is where everything is in an obvious place,
-where everything conforms to expectations.</p>
+<p>What&rsquo;s your hot take on relational databases? Here&rsquo;s mine: Data modeling is
+closer to library science than computer science. No one is impressed by a
+librarian who gets creative and files cookbooks under &ldquo;G&rdquo; for &ldquo;Gourmand.&rdquo; The
+best catalog system is where everything is in an obvious place, where
+everything conforms to expectations. The best librarian is considerate of the
+patrons. The best library is calm, safe, and boring. And the best database is
+exactly the same.</p>
 
 <p>As Alec Baldwin&rsquo;s database consultant explained to a team of application
-developers he was brought in for the day to train in <em><a href="https://www.youtube.com/watch?v=O6ybfVT9gxA">Glengarry Glen
-Ross</a></em>, it comes down to three simple letters, LCD:</p>
+developers in <em><a href="https://www.youtube.com/watch?v=O6ybfVT9gxA">Glengarry Glen Ross</a></em>, it comes down to three simple
+letters, ABC:</p>
 
 <ul>
-<li>Lowest</li>
-<li>Common</li>
-<li>Denominator</li>
+<li>Always</li>
+<li>Be</li>
+<li>Considerate</li>
 </ul>
 
-<p>Always target the lowest common denominator. ANSI SQL isn&rsquo;t the LCD; you want
-to be targeting the subset of the subset of ANSI SQL which is truly portable.</p>
+<p>Always think of your users first. Not just the application users, who are
+insulated from your database by an ablative layer of code and really only have
+one POV anyway, but also the DBAs who have to do backups, the engineers who
+have to build pipelines, the analysts who run queries, and executives who look
+at dashboards. Think about what <em>really</em> makes a database user happy. Hint:
+it&rsquo;s not using all the most advanced features.</p>
+
+<p>All of these types of users rotate your data 90&deg; and look at it through
+their own lens. That&rsquo;s why relational databases and third normal form are so
+successful in practice; they make these conceptual rotations easy and natural.</p>
+
+<p>Remember that the container is not the contents. Your data might live in a
+particular RDBMS today, but tomorrow it will be in Spark or Snowflake or SQL
+Server. Therefore, always target the lowest common denominator. Even ANSI SQL
+isn&rsquo;t the LCD; you want to be targeting the subset of the subset of ANSI SQL
+which is truly portable.</p>
 
 <p>Why? Because your data is eventually going to end up in another RDBMS, pumped
-over an ETL pipeline to a data warehouse of some kind by a tool like dbt or
-ADF. Any unique, advanced feature of a database that you use will cause
-headaches and make you enemies.</p>
+over an ETL pipeline to a data warehouse of some kind by a tool like ADF.
+Any unique, advanced feature of a database that you use will cause headaches
+and make you enemies.</p>
 
-<p>I know this firsthand because at one time or another I&rsquo;ve played each role.
-I&rsquo;ve been the application developer using PostGIS spatial types in my
-application and explaining to the data team about spherical coordinate systems,
-polygons, and R-trees and why we absolutely needed them and couldn&rsquo;t just use:</p>
+<p>I know this firsthand because at one time or another I&rsquo;ve been on every side.
+I&rsquo;ve been the application developer who used PostGIS spatial types in my
+application and had to explain to the data team why spherical coordinate
+systems, polygons, and R-trees were absolutely essential and, no, we couldn&rsquo;t
+just use:</p>
 
 <pre><code class="language-sql">    latitude NUMERIC(8,2),
     longitude NUMERIC(8,2)
 </code></pre>
 
-<p>even if that&rsquo;s their coding standard for their data warehouse. I&rsquo;ve been the
-data scientist parachuted into a hostile operational database and given three
-days to write a query to flatten it down into usable training data and wincing
-over every JSON extraction. And I&rsquo;ve been the guy advocating building a single
-data warehouse from three different databases built by different people at
-different companies before they were acquired and merged, dealing with the
-impedance mismatch that resulted. (If I never hear the phrase &ldquo;conformed
-dimension&rdquo; again in my life it will be too soon.) So I can tell you with great
-confidence and breadth of experience:</p>
+<p>even if that&rsquo;s the standard for their data warehouse. I&rsquo;ve also been the data
+scientist parachuted into a hostile operational database and given three days
+to write a query to extract usable training data for a machine learning model
+and wincing over every JSON extraction. And I&rsquo;ve been the guy who advocated for
+building a single data warehouse from three different databases built by
+different people at different companies before they were acquired and merged,
+and had to deal with the impedance mismatch that resulted. (If I never hear the
+phrase &ldquo;conformed dimension&rdquo; again in my life it will be too soon.) So I can
+tell you this with great confidence:</p>
 
-<p>Nobody likes a smart ass. Nobody ever says, &ldquo;wow, you leveraged <em>the shit</em> out
-of that unique, proprietary feature from your vendor of choice! You must really
-be on the cutting edge! It was a great business decision to lock us in like
-that, and we&rsquo;re really enjoying learning the ins-and-outs of every quirk of
-your <em>very special</em> database! And the ETL team, oh, they&rsquo;re just having <em>great</em>
-fun writing custom mapping logic! They were getting so <em>bored</em> using the
-default copy activity all the time!&rdquo; No, they just grit their teeth, smile, and
-ask how it can be mapped back to third normal form.</p>
+<p>Nobody likes a smart alec. Nobody ever says, &ldquo;wow, you sure leveraged <em>the
+heck</em> out of that unique, proprietary feature from your vendor of choice! It
+was a great business decision to lock us in like that, and we&rsquo;re really
+enjoying learning the ins and outs of every quirk of your <em>very special</em>
+database! And the ETL team, oh, they&rsquo;re just having <em>great</em> fun writing custom
+mapping logic! They were getting so <em>bored</em> using the default copy activity all
+the time!&rdquo; No, they just grit their teeth, smile, and ask how it can be mapped
+back to third normal form.</p>
 
 <h2 id="case-study-enum">Case Study: Enum</h2>
 
-<p>MySQL and Postgres have an <code>enum</code> type; Oracle, Databricks Delta, and Snowflake
-do not.</p>
+<p>Let&rsquo;s do an example. MySQL and Postgres have an <code>enum</code> type; Oracle, Databricks
+Delta, and Snowflake do not. But we&rsquo;re using Postgres, and <code>enum</code> seems like it
+was designed to model categorical types. Seems like a no-brainer, right?</p>
 
-<p>The poor DBA will probably grit their teeth and model your <code>enum</code> as a <code>CHECK</code>
-constraint on a string, which is wildly inefficient.</p>
+<p>Except your data won&rsquo;t stay in Postgres, so your data model, in the abstract,
+will need to be ported somewhere else, like Databricks Delta Lake.
+When that happens, the poor DBA will have to model your <code>enum</code> as strings
+with a <code>CHECK</code> constraint.</p>
 
-<p>Think also of the poor analysts and data scientists who have to use your
-database. SQL is their mother tongue and they think nothing of <code>LEFT JOIN</code>ing
-to a few reference tables to pick up human-readable columns&hellip; at the end of
-their query. In the meat of the logic, all the <code>CTAS</code> statements and
+<p>Think also of the poor analysts and data scientists who have to actually <em>use</em>
+your database. SQL is their mother tongue and they think nothing of <code>LEFT
+JOIN</code>ing to a few reference tables to pick up human-readable columns&hellip; at the
+end of their query. In the meat of the logic, all the <code>CTAS</code> statements and
 subqueries, they want to use fast, exact joins on primary keys.</p>
 
 <p>Here is some homework for you:</p>
 
-<p>1) I want to deprecate a code in an <code>enum</code>, but it is used in historical data
-and still meaningful there. If it was a ref table we would add a soft delete
+<p>1) I want to deprecate a value in an <code>enum</code>, but it is used in historical data
+and still meaningful there. If it were a ref table we would add a soft delete
 flag; how do I do the same thing with <code>enum</code>?</p>
 
-<p>2) I need to associate additional information to each code in my <code>enum</code>. For
+<p>2) I need to associate additional information with each code in my <code>enum</code>. For
 example, I have a State <code>enum</code>, but I also need to store the two-letter state
 abbreviations, and distinguish between states and territories. How would I do
 that with an <code>enum</code>?</p>
@@ -172,23 +193,22 @@ counts the number of orders. To be clear, it should return a row even for
 states where the count is zero, like <code>('Wisconsin', 0)</code>. Compare your answer
 to this query:</p>
 
-<pre><code class="language-sql">SELECT state.name, COUNT(orders.id) as n_orders
+<pre><code class="language-sql">SELECT state.name, COUNT(orders.id) AS n_orders
 FROM state
 LEFT JOIN orders ON state.id = orders.state_id
 GROUP BY state.name
 </code></pre>
 
-<p>Which one an analyst would prefer? Note also exactly what happened: in order
-to make it work, it flattened the <code>enum</code> back to the relational view on the fly.</p>
+<p>Which one would you prefer?</p>
 
 <h2 id="keep-it-boring">Keep it Boring</h2>
 
-<p>If the answer to literally every question about how to do some slightly
-advanced thing is &ldquo;use a lookup table,&rdquo; why not start with that in the first
-place?</p>
+<p>If the answer to every question about how to handle problems is &ldquo;use a lookup
+table,&rdquo; why not start with that in the first place? 3NF is popular precisely
+because it tends to not get in trouble in this way.</p>
 
-<p>You might argue, well, we could start there, but then migrate when these super
-advanced cases actually come up in practice. YAGNI! KISS!</p>
+<p>You might argue, well, why don&rsquo;t we start with <code>enum</code> today, but then migrate
+when these cases actually come up in practice. YAGNI! KISS!</p>
 
 <p>The problem there is that the refactoring isn&rsquo;t transparent at all. Relational
 databases have an &ldquo;interface,&rdquo; just like an API - that&rsquo;s why we can swap tables
@@ -202,7 +222,7 @@ models in application code, every snippet of saved SQL the analysts keep inside
 of DBeaver to quickly answer <em>ad hoc</em> questions from executives.</p>
 
 <p>Here is something absolutely key for application developers to understand: <em>the
-database is not for just you.</em> It is not your private place to persist a few
+database is not for just you.</em> It is not your private vault to persist a few
 objects so your application works. It is an integral part of your interface to
 the rest of the organization, the back office in particular. If your
 application is successful, executives will want dashboards with metrics,
@@ -210,28 +230,32 @@ analysts will want to do reporting, and data scientists will want to extract
 training data.</p>
 
 <p>If it&rsquo;s painless to migrate, it&rsquo;s only because <em>no one was using your database
-in the first place.</em> Your database was <em>already</em> a failure.</p>
+in the first place.</em> Your database was <em>already</em> a failure. (Obviously this
+only applies to data that you intend to share with others. If you&rsquo;re working on
+a hobby project you can do as you like.)</p>
 
 <p>But let&rsquo;s say you push through the change management nightmare, and get the
-State <code>enum</code> refactored to the <code>state</code> column, or whatever. Now you have a data
-model where some columns are <code>enum</code>s, some use the lookup table convention, and
-everyone has to check every single time they use any column.</p>
+State <code>enum</code> refactored to the <code>state_id</code> column, or whatever. Now you have a
+data model where some columns are <code>enum</code>s, some use the lookup table
+convention, and everyone has to check every single time they use any column.
+Well-designed data models follow clear conventions so that you hardly ever have
+to think.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>What if there was a better way? What if, and hear me out on that, we just&hellip;
-didn&rsquo;t do that? Any of that? Just built, plain ol&rsquo; boring data models that
-could be trivially instantiated on any RDBMS using conventions that everyone in
-the industry is familiar with? It would be like coming back to your favorite
-little bookstore, where everything is where it should be and you can always
-find what you&rsquo;re looking for, where all the customers are happy, the staff is
-unstressed, and even the cat seems to be in exactly the right spot.</p>
+<p>What if there was a better way? What if, and hear me out on this, we just&hellip;
+didn&rsquo;t do it? Any of that? What if we just built plain ol&rsquo; boring data models
+in 3NF that used precisely zero advanced features and can therefore be
+trivially instantiated on any RDBMS using conventions that everyone in the
+industry is familiar with? It would be like coming home to your favorite little
+library, where everything is where it should be and you can always find what
+you&rsquo;re looking for, where all the customers are happily browsing, the staff is
+relaxed, and even the cat seems to know in its heart that it&rsquo;s exactly where it
+should be.</p>
 
 <p>ABC: Always Be a Considerate data modeler. Design boring databases.</p>
 
-<p><small>
-The lovely cat photo is by <a href="https://unsplash.com/@diane_soko?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Diane Picchiottino</a> on <a href="https://unsplash.com/photos/a-cat-sleeping-on-top-of-a-book-shelf-3skIILnva1k?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>.
-</small></p>
+<p>The lovely cat photo is by <a href="https://unsplash.com/@diane_soko?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Diane Picchiottino</a> on <a href="https://unsplash.com/photos/a-cat-sleeping-on-top-of-a-book-shelf-3skIILnva1k?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>.</p>
 
     </article>
 
