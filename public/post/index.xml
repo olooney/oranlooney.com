@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; Copyright {year} Oran Looney</copyright>
-    <lastBuildDate>Wed, 13 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Considerate Data Modeler</title>
+      <link>https://www.oranlooney.com/post/considerate-data-modeler/</link>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/considerate-data-modeler/</guid>
+      <description>Database modeling is closer to library science than computer science. No one is impressed by a librarian who gets creative and files cook books under &amp;ldquo;G&amp;rdquo; for &amp;ldquo;Gourmand.&amp;rdquo; The best catalog system is where everything is in an obvious place, where everything confirms to expectations.
+As Alec Baldwin&amp;rsquo;s database consultant explained to a team of application developers he was brought in for the day to train, it comes down to three simple letters: L.</description>
+    </item>
     
     <item>
       <title>Why the Monty Hall Problem Drives People Crazy</title>
