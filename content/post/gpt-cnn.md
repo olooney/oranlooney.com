@@ -95,7 +95,7 @@ smaller size was just as good in terms of quality.
 
 > "Interest rates may go up, they may go down, or they may stay the same. I'm
 > sorry, but I really can't be any more vague than that." 
-> &mdash;Alan Greenspan
+> <br>&mdash;Alan Greenspan
 
 Given all that, it's likely that the number of feature dimensions used inside
 of GPT-4o is one of these:
@@ -340,7 +340,8 @@ Does that mean I was wrong about 169 tokens representing a `13x13` grid?
 Yes. Yes it does. My disappointment is immeasurable and my day is ruined.
 
 > "The great tragedy of science: the slaying of a beautiful hypothesis by an
-> ugly fact." &mdash;Thomas Huxley 
+> ugly fact." 
+> <br>&mdash;Thomas Huxley 
 
 But the `5x5` grid results are suggestive. GPT-4o really can keep track of 25
 distinct objects and their absolute positions within in an image. Maybe the

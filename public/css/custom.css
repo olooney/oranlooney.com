@@ -15,6 +15,7 @@ html .article pre code {
     /*border-left: solid 4px #b4c6c7;*/
 }
 html .article blockquote {
+  position: relative;
   margin-left: 0.5em;
   margin-right: 0.5em;
   padding-top: 0.7em;
@@ -22,15 +23,41 @@ html .article blockquote {
   padding-left: 2.5em;
   padding-right: 2.5em;
   border: 0;
-  background-color: #f8f8f8;
-  background-image: url('/img/quote_left.png'), url('/img/quote_right.png');
-  background-position: top left, bottom right;
+  color: #555;
+  font-style: italic;
+  font-size: 130%;
+}
+html .article blockquote::before,
+html .article blockquote::after {
+  position: absolute;
+  width: 40px;
+  height: 30px;
   background-repeat: no-repeat;
-  color: rgb(68,68,68);
+  background-size: 40px 30px;
+  content: "";
+  opacity: 0.3;
+}
+html .article blockquote::before {
+  top: 0;
+  left: 0;
+  background-image: url('/img/quote_left.png');
+}
+html .article blockquote::after {
+  right: 0;
+  bottom: 0;
+  background-image: url('/img/quote_right.png');
 }
 html .article blockquote > p {
     padding: 0;
     margin: 0;
+}
+html .article blockquote a,
+html .article blockquote a:visited {
+  color: #aa5555;
+}
+html .article blockquote a:hover,
+html .article blockquote a:active {
+  color: #c65555;
 }
 
 html .article {

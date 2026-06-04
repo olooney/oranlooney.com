@@ -37,10 +37,8 @@ watched how they used em dashes to mark interruptions and set off parenthetical
 remarks, the evidence quickly became damning. This experience is what really
 drove home the crucial importance of the em dash test for me.
 
-> <span style="font-size: 200%; font-style: italic;">
 > Ignorance of basic typography is the very essence of the
 > human soul.
-> </span>
 
 I encourage everyone to remain vigilant and actively police any online or
 real-life interactions you have with others. If someone uses an em dash (or
