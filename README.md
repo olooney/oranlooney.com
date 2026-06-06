@@ -9,6 +9,7 @@ Development
 * `python scripts/dev-server.py` to run a dev server that serves `/public` and auto-rebuilds on file changes.
 * Or manually: `blogdown::build_site()` in R to rebuild, then serve `/public` with a static server.
 * `python scripts/thumbnails.py` to rebuild the thumbnails for lead images.
+* `scripts/favicon/` contains the favicon source assets and conversion script.
 
 Notes:
 
@@ -63,5 +64,6 @@ Structure
 ├── themes/whiteplain/          # Site theme
 ├── config.toml                 # Hugo configuration
 ├── scripts/                    # Dev and testing scripts
+│   ├── favicon/                # Favicon source assets and conversion script
 │   └── bin/                    # Deployment scripts (staging, release, rollback)
 ```
