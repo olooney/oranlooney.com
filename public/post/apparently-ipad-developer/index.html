@@ -141,7 +141,7 @@ if ( checkUserAgent('iPad') ) {
    From the browser's point of view it looks like the window was resized from
    1024x768 to 768x1024; and you get the normal window resize event you'd expect.
 </p>
-<p>We use <a href="http://extjs.com/">ExtJS</a>, and their <a href="http://www.extjs.com/deploy/dev/examples/layout-browser/layout-browser.html">Layout framework</a> usually does a great 
+<p>We use <a href="https://extjs.com/">ExtJS</a>, and their <a href="https://www.extjs.com/deploy/dev/examples/layout-browser/layout-browser.html">Layout framework</a> usually does a great 
    job handling the window resize event on normal browsers.  It knew that 
    <em>something</em> had happened but didn't recalculate all the sizes correctly.  (To
    be fair, we use some pretty complicated layouts.) 
@@ -155,7 +155,7 @@ if ( checkUserAgent('iPad') ) {
 </code></pre><p>window.orientation is one of 0, 90, -90, or 180.  0 and 180 are portrait; 90 and
    -90 are landscape.  The onorientationchange event fires whenever it changes.
    For us, it was sufficient to say <code>viewport.doLayout()</code> on orientation change;
-   that gave <a href="http://extjs.com/">ExtJS</a> the hint it needed to get the sizes right.
+   that gave <a href="https://extjs.com/">ExtJS</a> the hint it needed to get the sizes right.
 </p>
 
 <h2>Double Click</h2>

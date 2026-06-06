@@ -10,13 +10,13 @@ image: /post/semantic-code_files/lead.jpg
 
 > [se-man-tic][SD] (si-man'tik) adj. <br> &nbsp; &nbsp;
 > 1. Of or relating to meaning, especially meaning in language.
-[SD]: http://www.answers.com/topic/semantic
+[SD]: https://www.answers.com/topic/semantic
 
 Programming destroys meaning.  When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &mdash; that's why it's called coding.
 
 At its worst programming is  *write-only*: the program accomplishes a task, but is incomprehensible to humans.  See, for example, [the story of Mel.][TSOM]  Such a program is correct, yet at the same time meaningless.
 
-[TSOM]: http://www.pbm.com/~lindahl/mel.html
+[TSOM]: https://www.pbm.com/~lindahl/mel.html
 
 Semantic Functions
 ------------------
@@ -41,7 +41,7 @@ Likewise, you can create new semantic symbols by writing functions that do one &
 
 The [Linux Coding Style][LCS] guide contains [good, practical advice][LCS] on how to write meaningful functions.  A program built out of such semantic functions will be more meaningful, hence more readable and understandable.
 
-[LCS]: http://lxr.linux.no/linux/Documentation/CodingStyle#L342
+[LCS]: https://lxr.linux.no/linux/Documentation/CodingStyle#L342
 
 
 Semantic Methods
@@ -58,7 +58,7 @@ and still be guaranteed constant-time access.  But this isn't semantic; you're s
 
 The client is busy trying to solve their own problem.  Having to write a even a simple algorithm (take the length, subtract one, get the element at that index) to get the last element is a distraction.    That shoud be [SEP][SEP]: Somebody Else's Problem.  (Specifically, Array's implementer.)
 
-[SEP]: http://everything2.com/e2node/Somebody%2520Else%2527s%2520Problem%2520Field
+[SEP]: https://everything2.com/e2node/Somebody%2520Else%2527s%2520Problem%2520Field
 
 Another example is the `.empty()` method provided for containers in the C++ STL.  Why not simply compare `.length()` to 0?  Because not all containers can compute their length in constant time.  `list<>`, which is implemented as a bi-directionally linked-list, must walk from the start node to the end code in to determine its own length.  However, to determine if it contains at least one node takes only constant time.
 

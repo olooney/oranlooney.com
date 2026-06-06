@@ -997,7 +997,7 @@ met the fairly stringent rules of the "from scratch" challenge.
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis
 [FN]: https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm
 [GC]: https://en.wikipedia.org/wiki/Generalized_coordinates
-[GRA]: http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf
+[GRA]: https://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf
 [HR]: https://en.wikipedia.org/wiki/Householder_transformation
 [IN]: https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation
 [JLL]: https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange
@@ -1005,7 +1005,7 @@ met the fairly stringent rules of the "from scratch" challenge.
 [KC]: https://en.wikipedia.org/wiki/Factor_analysis#Older_methods
 [KKT]: https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions
 [KM]: https://en.wikipedia.org/wiki/K-means_clustering
-[L25]: http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
+[L25]: https://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf
 [LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
 [LM]: https://en.wikipedia.org/wiki/Lagrange_multiplier
 [L]: https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another
@@ -1022,8 +1022,8 @@ met the fairly stringent rules of the "from scratch" challenge.
 [QRA]: https://en.wikipedia.org/wiki/QR_algorithm
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
 [RA]: https://arxiv.org/abs/0909.4061
-[RE]: http://users.ics.aalto.fi/harri/dityo/node6.html
-[RTS]: http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf
+[RE]: https://users.ics.aalto.fi/harri/dityo/node6.html
+[RTS]: https://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf
 [SOM]: https://en.wikipedia.org/wiki/Self-organizing_map
 [SP]: https://en.wikipedia.org/wiki/Scree_plot
 [SVD]: https://en.wikipedia.org/wiki/Singular_value_decomposition

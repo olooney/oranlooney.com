@@ -595,9 +595,9 @@ algorithm.
 [GMM]: https://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model
 [MND]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution
 [GP]: https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution
-[MLFS1]: http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
+[MLFS1]: https://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
 [MLFS6]: /post/ml-from-scratch-part-6-pca/
-[SD]: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf
+[SD]: https://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf
 [MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
 [LRV]: https://en.wikipedia.org/wiki/Latent_variable
 [FA]: https://en.wikipedia.org/wiki/Factor_analysis

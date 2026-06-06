@@ -359,7 +359,7 @@ are added, you can find them collected under the ["from scratch"][MLFS] tag.
 [QP]: https://en.wikipedia.org/wiki/Quadratic_programming
 [QRA]: https://en.wikipedia.org/wiki/QR_algorithm
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
-[RFCM]: http://longnow.org/essays/richard-feynman-and-connection-machine/
+[RFCM]: https://longnow.org/essays/richard-feynman-and-connection-machine/
 [RL]: https://en.wikipedia.org/wiki/Reinforcement_learning
 [RM]: https://en.wikipedia.org/wiki/Rasch_model
 [RPA]: https://en.wikipedia.org/wiki/Recursive_partitioning

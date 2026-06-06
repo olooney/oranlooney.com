@@ -209,7 +209,7 @@ We will use to so-called &ldquo;matrix form&rdquo; instead, which we will now de
 </div>
 
 <p>I didn&rsquo;t just pluck this out of thin air - there&rsquo;s a general way
-to turn <em>any</em> <a href="http://mathworld.wolfram.com/LinearRecurrenceEquation.html">linear recurrence relation</a> into a matrix which I&rsquo;ll
+to turn <em>any</em> <a href="https://mathworld.wolfram.com/LinearRecurrenceEquation.html">linear recurrence relation</a> into a matrix which I&rsquo;ll
 describe in a moment. But first let&rsquo;s prove the following theorem, which
 justifies our definition:</p>
 
@@ -275,7 +275,7 @@ expressed in matrix form and I&rsquo;ve described it myself in <a href="/post/co
 article</a>. Essentially, we use the first dimension to store the current
 value, and the rest of the vector as <a href="https://en.wikipedia.org/wiki/Shift_register">shift registers</a> to &ldquo;remember&rdquo;
 previous states. The recurrence relation is encoded along the first row and the
-ones along the <a href="http://mathworld.wolfram.com/Subdiagonal.html">subdiagonal</a> roll the history forward. It&rsquo;s actually easier
+ones along the <a href="https://mathworld.wolfram.com/Subdiagonal.html">subdiagonal</a> roll the history forward. It&rsquo;s actually easier
 to see in higher dimensions, so here&rsquo;s an example of encoding a linear
 recurrence relationship which uses the four most recent numbers instead of just
 two:</p>
@@ -311,7 +311,7 @@ two:</p>
 <p>If we squint at $\mathbf{F}&#95;1$, we can see it has this form too:
 the first row is $[ 1 \,\, 1 ]$ because recurrence relation is simply the
 sum of the previous two, while the second row $[ 1 \,\, 0 ]$ contains the $1$ on the
-<a href="http://mathworld.wolfram.com/Subdiagonal.html">subdiagonal</a> which &ldquo;remembers&rdquo; the previous value. The effect is
+<a href="https://mathworld.wolfram.com/Subdiagonal.html">subdiagonal</a> which &ldquo;remembers&rdquo; the previous value. The effect is
 to advance the state of the algorithm in almost the exact same way as the
 <code>interative_fib()</code> above:</p>
 

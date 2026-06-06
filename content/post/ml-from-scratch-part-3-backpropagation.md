@@ -661,11 +661,11 @@ and how this point-of-view unifies disparate topics in machine learning.
 [RLU]: https://en.wikipedia.org/wiki/Rectifier_(neural_networks)
 [BN]: https://towardsdatascience.com/batch-normalization-in-neural-networks-1ac91516821c
 [CNN]: https://en.wikipedia.org/wiki/Convolutional_neural_network
-[P]: http://cs231n.github.io/convolutional-networks/#pool
+[P]: https://cs231n.github.io/convolutional-networks/#pool
 [RN]: https://en.wikipedia.org/wiki/Residual_neural_network
 [RNN]: https://en.wikipedia.org/wiki/Recurrent_neural_network
 [MHD]: https://en.wikipedia.org/wiki/MNIST_database
-[GB]: http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf
+[GB]: https://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf
 [HE]: https://arxiv.org/pdf/1502.01852v1.pdf
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS]: /tags/from-scratch/
@@ -673,11 +673,11 @@ and how this point-of-view unifies disparate topics in machine learning.
 [MC]: https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf
 
 [GORM]: https://gormanalysis.com/introduction-to-neural-networks/
-[DL2]: http://neuralnetworksanddeeplearning.com/chap2.html
+[DL2]: https://neuralnetworksanddeeplearning.com/chap2.html
 [3B1B]: https://www.youtube.com/watch?v=tIeHLnjs5U8
 [VCD]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_dimension
 [MLP]: https://en.wikipedia.org/wiki/Multilayer_perceptron
-[BPH]: http://people.idsia.ch/~juergen/who-invented-backpropagation.html
+[BPH]: https://people.idsia.ch/~juergen/who-invented-backpropagation.html
 [YLC]: https://youtu.be/Svb1c6AkRzE
 [BA]: https://en.wikipedia.org/wiki/Backpropagation
 [AD]: https://en.wikipedia.org/wiki/Automatic_differentiation

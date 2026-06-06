@@ -354,7 +354,7 @@ about which cases the classifier could handle and which it could not.
 [DG]: https://en.wikipedia.org/wiki/Directed_graph
 [GGA]: https://cran.r-project.org/web/packages/GGally/index.html
 [HR]: https://en.wikipedia.org/wiki/Hierarchical_clustering
-[IG]: http://igraph.org/r/
+[IG]: https://igraph.org/r/
 [MC]: https://en.wikipedia.org/wiki/Multiclass_classification
 [MLP]: https://en.wikipedia.org/wiki/Multilayer_perceptron
 [M]: https://en.wikipedia.org/wiki/Metric_(mathematics)

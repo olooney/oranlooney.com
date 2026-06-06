@@ -98,7 +98,7 @@
 <aside class="toc">
   
 </aside>
-      <p>I recently wrote <a href="http://www.oranlooney.com/post/fibonacci/">an article</a> which was ostensibly about the Fibonacci
+      <p>I recently wrote <a href="https://www.oranlooney.com/post/fibonacci/">an article</a> which was ostensibly about the Fibonacci
 series but was really about optimization techniques. I wanted to follow up on
 its (extremely moderate) success by going in the exact opposite direction:
 by writing a Fibonacci function which is as <em>slow</em> as possible.</p>
@@ -642,8 +642,8 @@ a value of <code>4</code>.</p>
 
 <p>Of all the high-level programming languages I am aware of, I think only Ruby
 <a href="https://ruby-doc.org/core-2.5.0/Integer.html#method-i-times">comes close</a> to the idea that numbers should literally be their own <code>for</code>
-loops. Even LISP and Haskell require recursion, a separate <a href="http://zvon.org/other/haskell/Outputprelude/map_f.html">map</a> function,
-or a <a href="http://cl-cookbook.sourceforge.net/loop.html">loop macro</a>. (For code readability alone this is probably a good
+loops. Even LISP and Haskell require recursion, a separate <a href="https://zvon.org/other/haskell/Outputprelude/map_f.html">map</a> function,
+or a <a href="https://cl-cookbook.sourceforge.net/loop.html">loop macro</a>. (For code readability alone this is probably a good
 thing, though. In writing this article I&rsquo;ve found the lack of traditional
 signpost statements more confusing than elegant, and have had to use comments
 to indicate where such control flow statements were being used.)</p>
@@ -753,7 +753,7 @@ another bridge function. But how can we &ldquo;unpack&rdquo; a Church number?  R
 the Church encoding of $n$ is a function taking two arguments, a function $f$
 and a value $x$, and it applies $f$ to $x$ $n$ times: $f^n(x)$.  In our Python
 environment, this works even if $x$ and $f$ are not written in the lambda
-calculus.  Therefore we can follow the <a href="http://xunitpatterns.com/Test%20Spy.html">spy pattern</a> often used in unit
+calculus.  Therefore we can follow the <a href="https://xunitpatterns.com/Test%20Spy.html">spy pattern</a> often used in unit
 testing and pass in an function which will report how often it was called.</p>
 
 <pre><code>def church_to_int(n: Callable) -&gt; int:
@@ -1102,7 +1102,7 @@ ensures that <code>f</code> is in fact the same <code>fibonacci</code> function 
 <p>Because we make two separate recursive calls and don&rsquo;t do any caching, the
 number of calls to <code>fibonacci()</code> will grow roughly as $\mathcal{O}(2^n)$.  This
 is of course a terrible algorithm; it&rsquo;s the same one I called <code>naive_fib()</code> in
-my <a href="http://www.oranlooney.com/post/fibonacci/">earlier article</a> on optimizing the Fibonacci function. However, this
+my <a href="https://www.oranlooney.com/post/fibonacci/">earlier article</a> on optimizing the Fibonacci function. However, this
 is entirely in keeping with our goal of writing the slowest possible version!</p>
 
 <p>As before, we&rsquo;ll wrap this in bridge code to handle the translation between

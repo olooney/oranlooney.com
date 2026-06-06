@@ -104,13 +104,13 @@
       
 
 <blockquote>
-<p><a href="http://www.answers.com/topic/semantic">se-man-tic</a> (si-man&rsquo;tik) adj. <br> &nbsp; &nbsp;
+<p><a href="https://www.answers.com/topic/semantic">se-man-tic</a> (si-man&rsquo;tik) adj. <br> &nbsp; &nbsp;
 1. Of or relating to meaning, especially meaning in language.</p>
 </blockquote>
 
 <p>Programming destroys meaning.  When we program, we first replace concepts with symbols and then replace those symbols with arbitrary codes &mdash; that&rsquo;s why it&rsquo;s called coding.</p>
 
-<p>At its worst programming is  <em>write-only</em>: the program accomplishes a task, but is incomprehensible to humans.  See, for example, <a href="http://www.pbm.com/~lindahl/mel.html">the story of Mel.</a>  Such a program is correct, yet at the same time meaningless.</p>
+<p>At its worst programming is  <em>write-only</em>: the program accomplishes a task, but is incomprehensible to humans.  See, for example, <a href="https://www.pbm.com/~lindahl/mel.html">the story of Mel.</a>  Such a program is correct, yet at the same time meaningless.</p>
 
 <h2 id="semantic-functions">Semantic Functions</h2>
 
@@ -137,7 +137,7 @@
 <br>&mdash;Linus Torvalds</p>
 </blockquote>
 
-<p>The <a href="http://lxr.linux.no/linux/Documentation/CodingStyle#L342">Linux Coding Style</a> guide contains <a href="http://lxr.linux.no/linux/Documentation/CodingStyle#L342">good, practical advice</a> on how to write meaningful functions.  A program built out of such semantic functions will be more meaningful, hence more readable and understandable.</p>
+<p>The <a href="https://lxr.linux.no/linux/Documentation/CodingStyle#L342">Linux Coding Style</a> guide contains <a href="https://lxr.linux.no/linux/Documentation/CodingStyle#L342">good, practical advice</a> on how to write meaningful functions.  A program built out of such semantic functions will be more meaningful, hence more readable and understandable.</p>
 
 <h2 id="semantic-methods">Semantic Methods</h2>
 
@@ -153,7 +153,7 @@
 
 <p><em>How</em> is it better, you may ask?  Well, how should this code behave for an empty array?  With the <code>last()</code> method that decision is encapsulated in the Array class.  Even functions &ldquo;too simple to screw up&rdquo; can have edge cases anyone can miss when slamming out &ldquo;just one line of code.&rdquo;</p>
 
-<p>The client is busy trying to solve their own problem.  Having to write a even a simple algorithm (take the length, subtract one, get the element at that index) to get the last element is a distraction.    That shoud be <a href="http://everything2.com/e2node/Somebody%2520Else%2527s%2520Problem%2520Field">SEP</a>: Somebody Else&rsquo;s Problem.  (Specifically, Array&rsquo;s implementer.)</p>
+<p>The client is busy trying to solve their own problem.  Having to write a even a simple algorithm (take the length, subtract one, get the element at that index) to get the last element is a distraction.    That shoud be <a href="https://everything2.com/e2node/Somebody%2520Else%2527s%2520Problem%2520Field">SEP</a>: Somebody Else&rsquo;s Problem.  (Specifically, Array&rsquo;s implementer.)</p>
 
 <p>Another example is the <code>.empty()</code> method provided for containers in the C++ STL.  Why not simply compare <code>.length()</code> to 0?  Because not all containers can compute their length in constant time.  <code>list&lt;&gt;</code>, which is implemented as a bi-directionally linked-list, must walk from the start node to the end code in to determine its own length.  However, to determine if it contains at least one node takes only constant time.</p>
 

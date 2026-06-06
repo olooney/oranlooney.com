@@ -40,7 +40,7 @@ play around with hobby-level cryptography.
 
 
 [LCZ]: https://www.youtube.com/watch?v=-1oQLPRE21o
-[HSC]: http://practicalcryptography.com/ciphers/homophonic-substitution-cipher/
+[HSC]: https://practicalcryptography.com/ciphers/homophonic-substitution-cipher/
 [MQS]: https://www.scientificamerican.com/article/scientists-decipher-50-letters-from-mary-queen-of-scotts-before-her-beheading1/
 
 The Playfair Cipher
@@ -571,7 +571,7 @@ cipher, made this rather damning statement:
 > in the proposed solution.
 > <br>&mdash;[FBI][FBI]
 
-[FBI]: http://zodiackillerfacts.com/main/the-340-cipher-dead-ends/
+[FBI]: https://zodiackillerfacts.com/main/the-340-cipher-dead-ends/
 
 If we are to automate the search, we need to quantify this "sense of
 rightness."
@@ -1286,7 +1286,7 @@ space is low-dimensional and continuous instead of high-dimensional and discrete
 So while the optimization problems are technically in the same category, the
 specifics of each problem lead to a different choice of algorithm.
 
-[HYO]: http://hyperopt.github.io/hyperopt/
+[HYO]: https://hyperopt.github.io/hyperopt/
 
 Here is the inner core of the objective function, where we simply attempt
 the crack with specified parameters:

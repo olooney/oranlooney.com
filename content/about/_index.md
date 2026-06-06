@@ -84,7 +84,7 @@ are published live on the web where you can run them in your browser with
 [23]: https://letsencrypt.org/
 
 [BIY]: https://en.wikipedia.org/wiki/Baba_Is_You
-[CEC]: http://wormwiring.org/
+[CEC]: https://wormwiring.org/
 [FI]: https://www.youtube.com/@FoldingIdeas
 [WD]: /demos/
 [NP]: https://www.youtube.com/c/numberphile

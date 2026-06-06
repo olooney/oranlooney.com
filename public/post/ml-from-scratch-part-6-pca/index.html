@@ -167,7 +167,7 @@ component&rdquo; of our data. Then require that the second basis vector points
 also points in the direction of maximum variation in the plane orthogonal to
 the first, and so on until a new orthonormal basis is constructed.</li>
 <li>Seek a new basis for the data such that when we reconstruct the original
-matrix from only the $m$ most significant components the <a href="http://users.ics.aalto.fi/harri/dityo/node6.html">reconstruction
+matrix from only the $m$ most significant components the <a href="https://users.ics.aalto.fi/harri/dityo/node6.html">reconstruction
 error</a> is minimized.  Reconstruction error is usually defined as the
 <a href="https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm">Frobenius norm</a> of the difference between the original and
 reconstructed matrix, but <a href="https://stats.stackexchange.com/questions/130721/what-norm-of-the-reconstruction-error-is-minimized-by-the-low-rank-approximation">other definitions are possible.</a></li>
@@ -451,7 +451,7 @@ reconstructed matrix but interestingly enough the theorem holds for a few
 other metrics as well, suggesting it&rsquo;s a deep property of PCA and not some
 quirk of the Frobenius norm.</p>
 
-<p>I won&rsquo;t go through this derivation here - you can find <a href="http://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf">a presentation
+<p>I won&rsquo;t go through this derivation here - you can find <a href="https://people.csail.mit.edu/dsontag/courses/ml12/slides/lecture25.pdf">a presentation
 elsewhere</a> if you&rsquo;re interested in the details - but it&rsquo;s an extremely
 powerful point of view which goes straight to the heart of the dimensional
 reduction strategy. If we can reconstruct our original data almost exactly from
@@ -472,7 +472,7 @@ let&rsquo;s turn our attention to the concrete problem of implementing eigendeco
 
 <p>The modern approach to implementing PCA is to find the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition">Singular Value Decomposition</a> of a matrix $A$ which
 almost immediately gives us the eigenvalues of and eigenvectors of $A^T A$. The
-best known SVD algorithm is the <a href="http://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an
+best known SVD algorithm is the <a href="https://people.duke.edu/~hpgavin/SystemID/References/Golub+Reinsch-NM-1970.pdf">Golub-Reinsh Algorithm</a>. This is an
 iterative algorithm. Starting with $A&#95;1 = A$ we calculate $A&#95;{k+1}$ from $A&#95;k$
 until we achieve convergence.</p>
 
@@ -1078,7 +1078,7 @@ broad audience.</p>
 <p>Still, we haven&rsquo;t really solved the issue of having to choose an arbitrary
 threshold, have we? All we&rsquo;ve done is couch the choice in terms of a more
 intuitive metric.  I&rsquo;m not sure any definitive and universally accepted answer
-exists - but the wonderfully named paper <em><a href="http://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf">Repairing Tom Swift’s
+exists - but the wonderfully named paper <em><a href="https://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf">Repairing Tom Swift’s
 Electric Factor Analysis Machine</a></em> suggests one method, and I&rsquo;ve seen
 several references to this <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf">paper by Minka</a> which may represent the
 current state-of-the-art.</p>

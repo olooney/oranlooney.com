@@ -975,8 +975,8 @@ of performance to be found somewhere.
 [KT]: https://en.wikipedia.org/wiki/Karatsuba_algorithm
 [CR2]: /post/complex-r-part-2/
 [RRLA]: https://en.wikipedia.org/wiki/Recurrence_relation#Solving_via_linear_algebra
-[LRR]: http://mathworld.wolfram.com/LinearRecurrenceEquation.html
-[SD]: http://mathworld.wolfram.com/Subdiagonal.html
+[LRR]: https://mathworld.wolfram.com/LinearRecurrenceEquation.html
+[SD]: https://mathworld.wolfram.com/Subdiagonal.html
 [FGR]: https://www.quickanddirtytips.com/education/math/what-is-the-golden-ratio-and-how-is-it-related-to-the-fibonacci-sequence
 [STD]: https://en.wikipedia.org/wiki/Strategic_dominance
 [HA]: https://en.wikipedia.org/wiki/Hybrid_algorithm

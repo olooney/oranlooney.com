@@ -860,8 +860,8 @@ networks and backpropagation.][MLFS3]
 [HOR]: https://en.wikipedia.org/wiki/Householder_transformation
 [QFG]: https://www.cs.ubc.ca/~schmidtm/Courses/340-F16/linearQuadraticGradients.pdf
 [GMT]: https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem
-[MLE]: http://mathworld.wolfram.com/MaximumLikelihood.html
-[NEQ]: http://mathworld.wolfram.com/NormalEquation.html
+[MLE]: https://mathworld.wolfram.com/MaximumLikelihood.html
+[NEQ]: https://mathworld.wolfram.com/NormalEquation.html
 [QRD]: https://en.wikipedia.org/wiki/QR_decomposition
 [MLFS2]: /post/ml-from-scratch-part-2-logistic-regression/
 [MLFS3]: /post/ml-from-scratch-part-3-backpropagation/

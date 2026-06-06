@@ -477,7 +477,7 @@ future article.
 
 [SG]: https://en.wikipedia.org/wiki/Symmetry_group
 [DSU]: https://en.wikipedia.org/wiki/Schwartzian_transform
-[GP3]: http://www.gpower.hhu.de/
+[GP3]: https://www.gpower.hhu.de/
 [IH]: https://en.wikipedia.org/wiki/Icosahedron
 [C]: https://en.wikipedia.org/wiki/Craps
 [BM]: https://en.wikipedia.org/wiki/Bernard_de_Marigny

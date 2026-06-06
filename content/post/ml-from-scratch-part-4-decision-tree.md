@@ -494,9 +494,9 @@ practical algorithms appear to "work" because of these deeper theorems.
 [XGB]: https://blog.exploratory.io/introduction-to-extreme-gradient-boosting-in-exploratory-7bbec554ac7
 [SA]: https://en.wikipedia.org/wiki/Stirling%27s_approximation
 
-[WL1]: http://rob.schapire.net/papers/strengthofweak.pdf
+[WL1]: https://rob.schapire.net/papers/strengthofweak.pdf
 [WL2]: https://www.cis.upenn.edu/~mkearns/papers/boostnote.pdf
-[WL3]: http://www.face-rec.org/algorithms/Boosting-Ensemble/decision-theoretic_generalization.pdf
+[WL3]: https://www.face-rec.org/algorithms/Boosting-Ensemble/decision-theoretic_generalization.pdf
 [DT]: https://en.wikipedia.org/wiki/Decision_tree
 [G]: https://en.wikipedia.org/wiki/Greedy_algorithm
 [RP]: https://en.wikipedia.org/wiki/Recursive_partitioning 

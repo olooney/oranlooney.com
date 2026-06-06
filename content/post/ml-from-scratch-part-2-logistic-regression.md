@@ -1023,7 +1023,7 @@ particular.
 [A]: https://machinelearningmastery.com/adam-optimization-algorithm-for-deep-learning/
 [ALR]: https://www.amazon.com/Applied-Logistic-Regression-David-Hosmer/dp/0470582472/
 [SVM]: https://en.wikipedia.org/wiki/Support-vector_machine
-[OVA]: http://mlwiki.org/index.php/One-vs-All_Classification
+[OVA]: https://mlwiki.org/index.php/One-vs-All_Classification
 [COD]: https://www.kaggle.com/c/dogs-vs-cats
 [OF]: https://en.wikipedia.org/wiki/Overfitting
 [ERM]: https://en.wikipedia.org/wiki/Empirical_risk_minimization

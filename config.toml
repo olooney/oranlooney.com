@@ -6,6 +6,9 @@ languageCode = "en"
 paginate = 100
 summaryLength = 50
 
+[params]
+  description = "Oran Looney's personal blog about math, programming, machine learning, and data visualization."
+
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright {year} Oran Looney"
 
