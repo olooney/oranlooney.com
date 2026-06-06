@@ -19,11 +19,22 @@ class RebuildOnChangeHandler(SimpleHTTPRequestHandler):
     
     def do_GET(self):
         """Handle GET requests with auto-rebuild."""
-        if self.should_rebuild():
+        if self.should_rebuild() or self.requested_path_missing():
             self.rebuild_site()
         
         # Serve the request
         super().do_GET()
+    
+    def requested_path_missing(self):
+        """Check if the requested public file is missing and may need a rebuild."""
+        translated_path = Path(self.translate_path(self.path))
+        if translated_path.exists():
+            return False
+
+        if not self.path.endswith("/"):
+            return True
+
+        return not (translated_path / "index.html").exists()
     
     @classmethod
     def should_rebuild(cls):
