@@ -11,8 +11,7 @@ tags:
 image: /post/ml-from-scratch-part-0-introduction_files/lead.jpg
 ---
 
-Motivation
-----------
+<h2 id="motivation">Motivation</h2>
 
 > As an apprentice, every new magician must prove to his own satisfaction, at
 > least once, that there is truly great power in magic.
@@ -95,8 +94,7 @@ referenced it often. But at the end, his own notes would record his own
 complete derivation from start to finish and therefore serve as a testimonial
 to his own understanding.
 
-Ground Rules
-------------
+<h2 id="ground-rules">Ground Rules</h2>
 
 It was in the spirit of the above considerations that in the fall of 2018 I set
 myself a goal: I would, over the course of the next year, derive and implement
@@ -152,8 +150,7 @@ attempting to explain each algorithm in simple terms to a broad audience should
 help me to understand them a little better as well.
 
 
-Project Scope
--------------
+<h2 id="project-scope">Project Scope</h2>
 
 While I want to touch on every aspect of machine learning, there's little point
 in implementing minor variations of basically the same algorithms over and
@@ -201,8 +198,7 @@ Other candidates I considered but ultimately decided were out-of-scope:
   [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
   [JWD]: https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
 
-Bottom-Up Approach to Machine Learning
---------------------------------------
+<h2 id="bottom-up-approach-to-machine-learning">Bottom-Up Approach to Machine Learning</h2>
 
 In the spirit of the Feynman technique, let's spend a few minutes talking
 through the problem in plain English and see if we can understand why machine
@@ -311,7 +307,9 @@ example, let's say a data point is represented as the vector $\vec{x} \in
 Then, keeping in mind that we mostly want to stick to arithmetic, the simplest
 thing we could do is a dot product between these two vectors:
 
+<div>
 \[ f(\vec{x} ; \vec{p} ) = \vec{x} \cdot \vec{p} = \sum_{i=1}^n x_i p_i \]
+</div>
 
 That looks too simple to work, but in fact we'll see in the [next article in
 this series][MLFS1], that it works surprisingly well for a very large class of
@@ -323,8 +321,7 @@ problems as they arise. In particular we will see again and again how a well
 chosen representation will allow us to find very fast algorithms for learning
 optimal parameters. 
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 Next time, we'll start with [linear regression][MLFS1], followed by [logistic
 regression][MLFS2] and some simple [neural networks][MLFS3]. As new articles
@@ -373,4 +370,3 @@ are added, you can find them collected under the ["from scratch"][MLFS] tag.
 [TPOT]: https://automl.info/tpot/
 [USL]: https://en.wikipedia.org/wiki/Unsupervised_learning
 [VC]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory
-

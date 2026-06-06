@@ -28,15 +28,15 @@ another; my intention with this article is simply to derive the backpropagation
 algorithm, implement a working version from scratch, and to discuss the
 practical implications of introducing are more powerful representation.
 
-Representation
---------------
+<h2 id="representation">Representation</h2>
 
 A complete description of typical fully-connected feed-forward $L$-layer neural
 network can be given in just four equations: two boundary conditions for the
 input and output layers, and two recurrence relationships for the connections
 between layers:
 
-\[ 
+<div>
+\[
 	\begin{split} 
 		a^{(0)} & = X \\
 		z^{(i)} & = W^{(i)} a^{(i-1)} + b^{(i)} \\
@@ -44,16 +44,17 @@ between layers:
 		\hat{y} & = a^{(L)} 
 	\end{split}
 \]
+</div>
 
 Here $\sigma(x)$ is a sigmoid function, $W^{(i)}$ are matrices of weights
 connecting layers, $b^{(i)}$ are bias vectors, $X$ is the given matrix of data
 with one row per observation and one column per feature, and the final
-activation $a^{(L)}$ is also our prediction $\hat{y}$. 
+activation $a^{(L)}$ is also our prediction $\hat{y}$.
 
 (A brief aside about notation. A superscript inside of parentheses is a *layer
 index*; the parentheses are meant to distinguish it from an exponent. This
 notation is used so that ordinary subscripts can be used to refer to the
-individual elements of $W$ and $b$, for example, $W_{jk}^{(i)}$ is the element
+individual elements of $W$ and $b$, for example, $W&#95;{jk}^{(i)}$ is the element
 in the $j$-th row of the $k$-th column of the weight matrix $W^{(i)}$ for the
 $i$-th layer.)
 
@@ -75,9 +76,11 @@ will see me use this terminology in the code below especially when initializing
 the network.
 
 The parameters of the model are all the elements of every connection matrix
-$W^{(i)}$ plus the elements of the bias vectors $b^{(i)}$. In symbols: 
+$W^{(i)}$ plus the elements of the bias vectors $b^{(i)}$. In symbols:
 
+<div>
 \[ \Theta = (W^{(1)} ... W^{(L)}, b^{(1)} ... b^{(L)}) \]
+</div>
 
 A quick aside about the total number of parameters: Since every element of
 every weight matrix for every layer is a separate parameter, large neural
@@ -92,7 +95,9 @@ recurrence relation concrete by showing explicit examples for small $L$. For
 example, with zero hidden layers ($L=1$) a neural network reduces to the equation
 for logistic regression:
 
+<div>
 \[ \hat{y} =\sigma(W^{(1)} X + b^{(1)}) \]
+</div>
 
 If a zero-hidden-layer neural network is also trained with log-loss, both the
 model's representation and fitted parameters will be exactly the same as
@@ -101,28 +106,33 @@ equivalently neural nets as a generalization of LR.
 
 With one hidden layer ($L=2$) this expands to:
 
+<div>
 \[ \hat{y} =\sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) \]
+</div>
 
 A logistic regression of logistic regressions, if you will. As the chain grows
 longer the same pattern is repeated:
 
+<div>
 \[ \hat{y} =\sigma(W^{(3)} \sigma(W^{(2)} \sigma(W^{(1)} X + b^{(1)}) + b^{(2)}) + b^{(3)}) \]
+</div>
 
 These examples are only included for the sake of concreteness.  The recursive
 definitions will allow us to reason about a sequential neural network with any
 number of layers.
 
-Fitting
--------
+<h2 id="fitting">Fitting</h2>
 
 To fit the model to data, we find the parameters which minimize loss:
 $\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. Just as with logistic regression
 we use binary cross-entropy (a.k.a. log-loss) which means our loss function $J$
 is given by:
 
+<div>
 \[
 J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
 \]
+</div>
 
 Note that we have introduced a $1/N$ scale factor. We are free to do this
 because multiplying by a positive constant does not change the optimization
@@ -134,7 +144,9 @@ learning rate when fitting larger or smaller datasets.
 One condition which must be true at a local minima is that $\nabla_\Theta J =
 0$. That gives us the equations:
 
+<div>
 \[ \frac{\partial J}{\partial W^{(i)}} = 0, \frac{\partial J}{\partial b^{(i)}} = 0 \]
+</div>
 
 The notation used here is from matrix calculus, and we are taking partial
 derivatives with respect to a matrix (for $W$) or a vector (for $b$.) The
@@ -146,7 +158,8 @@ $\partial J / \partial a^{(L)}$ you can follow pretty much the same proof
 given in the [previous article on logistic regression.][MLFS2] For the
 others it is easy to verify from the above definitions that:
 
-\[ 
+<div>
+\[
 	\begin{split}
 		\color{blue}
 		\frac{\partial J}{\partial a^{(L)}} & \color{blue} = \frac{\partial J}{\partial \hat{y}} = \frac{1}{N} (y - \hat{y}) \\
@@ -158,6 +171,7 @@ others it is easy to verify from the above definitions that:
 		\frac{\partial z^{(i)}}{\partial W^{(i)}} & \color{maroon} = (a^{(i-1)})^T 
 	\end{split}
 \]
+</div>
 
 For the element-wise derivative of the sigmoid we use the slightly non-obvious
 fact that $\sigma'(x) = \sigma(x) (1-\sigma(x))$ which we proved in [Part
@@ -179,7 +193,8 @@ concretely, refer to these four equations.
 To take a partial derivative of $J$ with respect to any parameter in any layer
 we can use the chain rule. For $W^{(L)}$ we have:
 
-\[ 
+<div>
+\[
 	\frac{\partial J}{\partial W^{(L)}} = 
 	\Bigg(
 	\color{blue}
@@ -191,6 +206,7 @@ we can use the chain rule. For $W^{(L)}$ we have:
 	\color{maroon}
 	\frac{\partial z^{(L)}}{\partial W^{(L)}}
 \]
+</div>
 
 Where the dot product is defined as $x \cdot y = (x^T y)^T$.  This corresponds
 to the usual definition when $x$ and $y$ are vectors but is extended to
@@ -200,7 +216,8 @@ lets us write out the chain rule in the usual left-to-right manner.
 
 Next, let's do $W^{(L-1)}$:
 
-\[ 
+<div>
+\[
 	\frac{\partial J}{\partial W^{(L-1)}} = 
 	\Bigg(
 	\underbrace{
@@ -220,10 +237,12 @@ Next, let's do $W^{(L-1)}$:
 	\color{maroon}
 	\frac{\partial z^{(L-1)}}{\partial W^{(L-1)}}
 \]
+</div>
 
 Then $W^{(L-2)}$:
 
-\[ 
+<div>
+\[
 	\frac{\partial J}{\partial W^{(L-2)}} = 
 	\Bigg(
 	\underbrace{
@@ -246,6 +265,7 @@ Then $W^{(L-2)}$:
 	\color{maroon}
 	\frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
 \]
+</div>
 
 By now you should be starting to see a pattern emerge: as we go back layer by layer,
 the left-most part of the equation (blue and green) for layer $i$ is always the
@@ -259,6 +279,7 @@ with respect to the parameters of interest. And in between we between we have a
 growing (green) "body" of partial derivatives. To capture this insight
 in symbols, let's introduce a new recurrence relation:
 
+<div>
 \[
 	\begin{split} 
 	\color{purple} \delta^{(L)} & = \color{blue} \frac{\partial J}{\partial a^{(L)}} \color{black} \circ \color{green} \frac{\partial a^{(L)}}{\partial z^{(L)}} \color{black} \\
@@ -266,6 +287,7 @@ in symbols, let's introduce a new recurrence relation:
 	\frac{\partial J}{\partial W^{(i)}} & = \color{purple} \delta^{(i)} \color{black} \circ \color{maroon} \frac{\partial z^{(L-2)}}{\partial W^{(L-2)}}
 	\end{split}
 \]
+</div>
 
 It should also be clear that we can implement this iteratively if we start at
 layer $L$ and work backwards: If we save the result of the blue and green parts
@@ -286,8 +308,7 @@ expression with respect to a matrix (which is Matrix Calculus 101; see the
 [Cookbook][MC]). 
 
 
-Implementation
---------------
+<h2 id="implementation">Implementation</h2>
 
 The above equations are straight-forward to turn into working code. The only
 wrinkle is that while above we represented the bias as separate vectors
@@ -412,8 +433,8 @@ then iteratively compute $a^{(1)}$, $a^{(2)}$ until we reach $a^{(L)} = \hat{y}$
 			# the final activation layer does not have a bias node added.
 			self._activations.append(activation)
 
-For the backwards pass, we use `error` to mean $\partial J / \partial z_i$ and
-`delta` to mean $\partial J / \partial W_i$. We use the recurrence relations we
+For the backwards pass, we use `error` to mean $\partial J / \partial z&#95;i$ and
+`delta` to mean $\partial J / \partial W&#95;i$. We use the recurrence relations we
 derived from the chain rule to iteratively calculate the update for each layer
 counting down from $L$ to $1$.
 			
@@ -458,8 +479,7 @@ counting down from $L$ to $1$.
 				# update weights
 				W -= self.learning_rate * delta
 
-Testing
--------
+<h2 id="testing">Testing</h2>
 
 Real world data are messy. Instead of shopping around for a toy data set which
 exhibits all the properties we want, we'll cook up an idealized data set that
@@ -598,8 +618,7 @@ aren't a free lunch. But they do provide a framework for creating models with
 low bias even on very large and difficult problems... then it's our job to keep
 the variance in check.
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 That was backpropagation from scratch, our first look at neural networks.  We
 saw how a sequential feed-forward network could be represented as alternating

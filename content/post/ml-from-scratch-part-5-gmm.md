@@ -16,7 +16,7 @@ Consider the following motivating dataset:
 
 It is apparent that these data have some kind of structure; which is to say,
 they certainly are not drawn from a uniform or other simple distribution. In
-particular, there is at least one cluster of data in the lower left which is
+particular, there is at least one cluster of data in the lower right which is
 clearly separate from the rest. The question is: is it possible for a machine
 learning algorithm to automatically discover and model these kinds of
 structures without human assistance?
@@ -34,8 +34,7 @@ learning problem, and calls for a different set of techniques and algorithms
 entirely.
 
 
-Types of Unsupervised Learning
-------------------------------
+<h2 id="types-of-unsupervised-learning">Types of Unsupervised Learning</h2>
 
 There are two broad approaches to unsupervised learning: dimensionality
 reduction and cluster analysis.
@@ -67,29 +66,32 @@ will implement on particular clustering model called the [Gaussian mixture
 model][GMM], or just GMM for short. 
 
 
-Gaussian Mixture Models
------------------------
+<h2 id="gaussian-mixture-models">Gaussian Mixture Models</h2>
 
 The Gaussian mixture model is simply a "mix" of Gaussian distributions. In this
 case, "Gaussian" means the [multivariate normal distribution][MND]
 $\mathcal{N}(\boldsymbol{\mu}, \Sigma)$ and "mixture" means that several
 different gaussian distributions, all with different mean vectors
-$\boldsymbol{\mu}_j$ and different covariance matrices $\Sigma_j$, are combined
+$\boldsymbol{\mu}&#95;j$ and different covariance matrices $\Sigma&#95;j$, are combined
 by taking the weighted sum of the probability density functions:
 
+<div>
 \[ \begin{align}
     f_{GMM}(\mathbf{x}) = \sum^k_{j=1} \phi_j f_{\mathcal{N}(\boldsymbol{\mu}_j, \Sigma_j)}(\mathbf{x}) \tag{1}
    \end{align}
 \]
+</div>
 
 subject to:
 
+<div>
 \[
   \sum_{j=1}^k \phi_j = 1 \tag{2}
 \]
+</div>
 
 A single multivariate normal distribution has a single "hill" or "bump" located
-at $\boldsymbol{\mu}_i$; in contrast, a GMM is a multimodal distribution with
+at $\boldsymbol{\mu}&#95;i$; in contrast, a GMM is a multimodal distribution with
 on distinct bump per class. (Sometimes you get fewer than $k$ distinct local
 maxima in the p.d.f., if the bumps are sufficiently close together or if the
 weight of one class is zero or nearly so, but in general you get $k$ distinct
@@ -97,56 +99,67 @@ bumps.) This makes it well suited to modeling data like that seen in our
 motivating example above, where there seems to be more than one region on high
 density. 
 
-[![GMM p.d.f.](/post/ml-from-scratch-part-5-gmm_files/gmm_pdf.png)][GP]
+<a href="https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution"><img src="/post/ml-from-scratch-part-5-gmm_files/gmm_pdf.png" alt="GMM p.d.f." /></a>
 
 We can view this is as a two-step generative process. To generate the $i$-th example:
 
-1. Sample a random class index $C_i$ from the categorical distribution parameterized by $\boldsymbol{\phi} = (\phi_1, ... \phi_k)$.
-2. Sample a random vector $\mathbf{X}_i$ from the multivariate distribution associated to the $C_i$-th class.
+1. Sample a random class index $C&#95;i$ from the categorical distribution parameterized by $\boldsymbol{\phi} = (\phi&#95;1, ... \phi&#95;k)$.
+2. Sample a random vector $\mathbf{X}&#95;i$ from the multivariate distribution associated to the $C&#95;i$-th class.
 
-The $n$ independent samples $\mathbf{X}_i$ are the row vectors of the matrix $\mathbf{X}$. 
+The $n$ independent samples $\mathbf{X}&#95;i$ are the row vectors of the matrix $\mathbf{X}$.
 
 Symbolically, we write:
 
+<div>
 \[ \begin{align}
     C_i & \sim \text{Categorical}(k, \boldsymbol{\phi}) \tag{3} \\
     \mathbf{X}_i & \sim \mathcal{N}(\boldsymbol{\mu}_{C_i}, \Sigma_{C_i}) \tag{4} \\
    \end{align}
 \]
+</div>
 
 To fit a GMM model to a particular dataset, we attempt to find the [maximum likelihood estimate][MLE] of the parameters $\Theta$:
 
-\[\Theta = \{ \mathbf{\mu}_1, \Sigma_1, ..., \mathbf{\mu}_k, \Sigma_k \} \tag{5} \]
+<div>
+\[ \Theta = \{ \mathbf{\mu}_1, \Sigma_1, ..., \mathbf{\mu}_k, \Sigma_k \} \tag{5} \]
+</div>
 
 Because the $n \times m$ example matrix $\mathbf{X}$
-is assumed to be a realization of $n$ i.i.d. samples from $f_{GMM}(\mathbf{x})$, we can write down our likelihood function as
+is assumed to be a realization of $n$ i.i.d. samples from $f&#95;{GMM}(\mathbf{x})$, we can write down our likelihood function as
 
+<div>
 \[
   \mathcal{L}(\Theta; \mathbf{X}) = P(\mathbf{X};\Theta) = \prod_{i=1}^n \sum_{j=1}^k P(C_i=j) P(\mathbf{X}_i|C_i=j) \tag{6}
 \]
+</div>
 
-We know that $\mathbf{X}_i$ has a multivariate normal distribution with
+We know that $\mathbf{X}&#95;i$ has a multivariate normal distribution with
 parameters determined by the class, so the conditional probability
-$P(\mathbf{X}_i|C_i=j)$ can be written down pretty much directly from the
+$P(\mathbf{X}&#95;i|C&#95;i=j)$ can be written down pretty much directly from the
 definition:
 
+<div>
 \[
   P(\mathbf{X}_i|C_i=j) = \frac{1}{\sqrt{(2\pi)^k |\Sigma_j|}} \text{exp}\Bigg( 
     - \frac{(\mathbf{X}_i - \boldsymbol{\mu}_j)^T \Sigma_j^{-1} (\mathbf{X}_i - \boldsymbol{\mu}_j) }
          {2} 
   \Bigg) \tag{7}
 \]
+</div>
 
-Obtaining a formula for $P(C_i=j|\mathbf{X}_i)$ requires a little more work. We
+Obtaining a formula for $P(C&#95;i=j|\mathbf{X}&#95;i)$ requires a little more work. We
 know that the unconditional probability is given by the parameter vector
 $\boldsymbol{\phi}$:
 
+<div>
 \[
 P(C_i = j) = \phi_j \tag{8}
 \]
+</div>
 
 So using Bayes' theorem, we can write this in terms of equation (7):
 
+<div>
 \[
 \begin{align}
 P(C_i=j|\mathbf{X}_i) 
@@ -156,27 +169,27 @@ P(C_i=j|\mathbf{X}_i)
            {\sum_{l=1}^k P(\mathbf{X}_i|C_i=l)} \\
 \end{align} \tag{9}
 \]
+</div>
 
 If we substituted equation (7) into (9) we could get a more explicit but very
 ugly formula, so I leave that to the reader's imagination.
 
 Equations (6), (7), and (9), when taken together, constitute the complete
 likelihood function $\mathcal{L}(\Theta;\mathbf{X})$.  However, these equations
-have a problem - they depend on the unknown random variable $C_i$. This
-variable tells us which class each $\mathbf{X}_i$ was drawn from and makes it
+have a problem - they depend on the unknown random variable $C&#95;i$. This
+variable tells us which class each $\mathbf{X}&#95;i$ was drawn from and makes it
 much easier to reason about the distribution, but we don't actually know what
-$C_i$ is for any $i$. This is called a [latent random variable][LRV] and its
+$C&#95;i$ is for any $i$. This is called a [latent random variable][LRV] and its
 presence in our model causes a kind of chicken-and-egg problem. If we knew
-$\boldsymbol{\mu}_j$ and $\Sigma_j$ for $j = (1, 2, ..., k)$ then we could make
-a guess about what $C_i$ is by looking at which $\boldsymbol{\mu}_j$ is closest
-to $\mathbf{X}_i$. If we knew $C_i$, we could estimate $\boldsymbol{\mu}_j$ and
-$\Sigma_j$ by simply taking the mean and covariance over all $X_i$ where $C_i =
+$\boldsymbol{\mu}&#95;j$ and $\Sigma&#95;j$ for $j = (1, 2, ..., k)$ then we could make
+a guess about what $C&#95;i$ is by looking at which $\boldsymbol{\mu}&#95;j$ is closest
+to $\mathbf{X}&#95;i$. If we knew $C&#95;i$, we could estimate $\boldsymbol{\mu}&#95;j$ and
+$\Sigma&#95;j$ by simply taking the mean and covariance over all $X&#95;i$ where $C_i =
 j$. But how can we estimate these two sets of parameters together, if we don't
 know either when we start?
 
 
-The EM Algorithm
-----------------
+<h2 id="the-em-algorithm">The EM Algorithm</h2>
 
 The solution to our chicken-and-egg dilemma is an iterative algorithm called
 the [expectation-maximization algorithm][EM], or EM algorithm for short. The EM
@@ -187,9 +200,9 @@ algorithm, [item response theory][IRT], and of course [Gaussian mixture
 models][GMM].
 
 The EM algorithm requires us to introduce a pseudo-parameter to model the
-unknown latent variables $C_i$. Because $C_i$ can take on $k$ discrete values,
-this new parameter will be a $n \times k$ matrix where each element $w_{ij}$ is
-an estimate of $P(C_i = j|\mathbf{X}_i;\theta)$. Each element of this matrix
+unknown latent variables $C&#95;i$. Because $C&#95;i$ can take on $k$ discrete values,
+this new parameter will be a $n \times k$ matrix where each element $w&#95;{ij}$ is
+an estimate of $P(C&#95;i = j|\mathbf{X}&#95;i;\theta)$. Each element of this matrix
 represents the probability that the $i$-th data point came from cluster $j$.
 This pseudo-parameter is only used when fitting the model and will be discarded
 afterwards; in that sense it is not a true parameter of the model.
@@ -201,18 +214,18 @@ then we will study each in more detail in the following sections.
 
 In the E-step, we use our current best knowledge of the centers and shapes of
 each cluster to update our estimates of which data point came from which class.
-Concretely, we hold $\boldsymbol{\mu}_j$ and $\Sigma_j$ fixed and update
-$w_{ij}$ and $\boldsymbol{\phi}$.
+Concretely, we hold $\boldsymbol{\mu}&#95;j$ and $\Sigma&#95;j$ fixed and update
+$w&#95;{ij}$ and $\boldsymbol{\phi}$.
 
 In the M-step, we use our current best knowledge of which class each point
 belongs to to update and improve our estimates for the center and shape of each
-cluster. Concretely, we use $w_{ij}$ as *sample weights* when updating
-$\boldsymbol{\mu}_j$ and $\Sigma_j$ by taking weighted averages over $X$. For
-example, if $w_11 = 0.01$ and $w_11 = 0.99$ we know that the data point $X_1$
+cluster. Concretely, we use $w&#95;{ij}$ as *sample weights* when updating
+$\boldsymbol{\mu}&#95;j$ and $\Sigma&#95;j$ by taking weighted averages over $X$. For
+example, if $w&#95;11 = 0.01$ and $w&#95;11 = 0.99$ we know that the data point $X&#95;1$
 is unlikely to be in class 1, but very likely to be in class 2. Therefore, when
-estimating the center of the first class $\boldsymbol{\mu}_1$ we give $X_1$
+estimating the center of the first class $\boldsymbol{\mu}&#95;1$ we give $X&#95;1$
 almost negligible weight, but when estimating the center of the second class
-$\boldsymbol{\mu}_2$ we give $X_1$ almost full weight. This "pulls" the center
+$\boldsymbol{\mu}&#95;2$ we give $X&#95;1$ almost full weight. This "pulls" the center
 of each cluster towards those data points which are considered likely to be
 part of that cluster.
 
@@ -244,49 +257,57 @@ We will now treat the E-step and M-step for the particular case of the GMM in
 detail. 
 
 
-E-step
-------------------------
+<h2 id="e-step">E-step</h2>
 
-Given the that centroid $\boldsymbol{\mu}_j$ and covariance matrix $\Sigma_j$
-for class $j$ is fixed, we can update $w_{ij}$ by simply calculating the
-probability that $X_i$ came from each class and normalizing:
+Given the that centroid $\boldsymbol{\mu}&#95;j$ and covariance matrix $\Sigma&#95;j$
+for class $j$ is fixed, we can update $w&#95;{ij}$ by simply calculating the
+probability that $X&#95;i$ came from each class and normalizing:
 
+<div>
 \[ w_{ij} = \frac{ P(X_i|K=j) }{ P(K_i) } = \frac{ P(X_i|K=j) }{ \sum_{l=1}^k P(X_i|K=l) } \tag{10} \]
+</div>
 
-The conditional probablity $P(\mathbf{X}_i|K=j)$ is simply the multivariate
-normal distribution $\mathbf{X}_i ~ \mathcal{N}(\mu_i, \Sigma_i)$ so we can use
+The conditional probablity $P(\mathbf{X}&#95;i|K=j)$ is simply the multivariate
+normal distribution $\mathbf{X}&#95;i ~ \mathcal{N}(\mu&#95;i, \Sigma&#95;i)$ so we can use
 equation (4) above to calculate the probability density for each class, and
 then divide through by the total to normalize each row of $\mathbf{X}$ to 1.
-This gives us a concrete formula for the update to $w_ij$:
+This gives us a concrete formula for the update to $w&#95;ij$:
 
+<div>
 \[ w_{ij} = \frac{ f_{\mathcal{N}(\mu_i, \Sigma_i)}(\mathbf{X}_i) }
                  { \sum_{l=1}^k f_{\mathcal{N}(\mu_l, \Sigma_l)}(\mathbf{X}_i) } \tag{11}
 \]
+</div>
 
 The probability of each class $\phi$ can then be estimated by averaging over
 all examples in the training set:
 
+<div>
 \[ \phi_j = \sum_{i=1}^n w_{ij} \tag{12} \]
+</div>
 
 
-M-step
-------------------------
+<h2 id="m-step">M-step</h2>
 
-Forget about the past estimates we had for $\boldsymbol{\mu}_j$ or $\Sigma$.
+Forget about the past estimates we had for $\boldsymbol{\mu}&#95;j$ or $\Sigma$.
 Unlike gradient descent, the EM algorithm does not proceed by making small
 changes to the previous iteration's parameter estimates - instead, it makes a
 bold leap all the way to the *exact* estimate - but only in certain dimensions.
-In the M-step, we will calculate the ML estimates for $\boldsymbol{\mu}_j$ or
-$\Sigma$ assuming that $w_{ij}$ is held constant.
+In the M-step, we will calculate the ML estimates for $\boldsymbol{\mu}&#95;j$ or
+$\Sigma$ assuming that $w&#95;{ij}$ is held constant.
 
 How can we make such a leap? Well, we have a matrix of $n$ observations
-$\mathbf{X}_i$ with weights $w_i$ which we believe came from a multivariate
+$\mathbf{X}&#95;i$ with weights $w&#95;i$ which we believe came from a multivariate
 distribution $\mathcal{N}(\vec{\mu}, \mathbb{\Sigma})$. That means we can use
 the familiar formulas:
 
+<div>
 \[ \boldsymbol{\mu}_j = {1 \over {n}}\sum_{i=1}^n w_{ij} \mathbf{X}_i \tag{13} \]
+</div>
 
+<div>
 \[ \Sigma_j = \frac{1}{n} \sum_{i=1}^n w_{ij} ( \mathbf{X}_i - \boldsymbol{\mu}_j )( \mathbf{X}_i - \boldsymbol{\mu}_j )^T \tag{14} \]
+</div>
 
 These are in fact the [ML estimate][2] for these parameters for the
 multivariate normal distribution. As such, we don't need to worry about
@@ -295,8 +316,7 @@ estimates are already maximal! This is one of the neatest things about this
 algorithm.
 
 
-Implementation
----------------
+<h2 id="implementation">Implementation</h2>
 
 Turning the above mathematics into a working implementation is straight
 forward. The below program corresponds almost one-to-one (one line of code for
@@ -305,9 +325,9 @@ the `e_step()` method and equations (13) and (14) are used in the `m_step()`
 method. 
 
 One detail I did not treat above is initialization - while $\boldsymbol{\phi}$
-and $w_{ij}$ can use simple uniform initialization, for $\boldsymbol{\mu}$ it
-is better to choose a random index $i_j$ uniformly from $1$ to $n$ for each
-class and then initialize $\boldsymbol{\mu}_j = X_{i_j}$.  This ensures that
+and $w&#95;{ij}$ can use simple uniform initialization, for $\boldsymbol{\mu}$ it
+is better to choose a random index $i&#95;j$ uniformly from $1$ to $n$ for each
+class and then initialize $\boldsymbol{\mu}&#95;j = X&#95;{i&#95;j}$.  This ensures that
 each cluster centroid is inside the support of the underlying distribution and
 that they are initially spread out randomly throughout the space.
 
@@ -370,8 +390,7 @@ that they are initially spread out randomly throughout the space.
 			return np.argmax(weights, axis=1)
 
 
-Model Evaluation
-----------------
+<h2 id="model-evaluation">Model Evaluation</h2>
 
 We'll use the famous [iris][ID] dataset as a test case. This is the same
 dataset used as a motivating example at the beginning of the article, although
@@ -434,8 +453,7 @@ points in their own (blue) cluster, but the story with the other two clusters
 in the upper right is less clear-cut.
 
 
-Comparing to True Class Labels
-------------------------------
+<h2 id="comparing-to-true-class-labels">Comparing to True Class Labels</h2>
 
 Are the clusters discovered by the GMM model *meaningful*? Are they *correct*?
 For a real-world unsupervised learning problem, these questions can be hard to
@@ -489,8 +507,7 @@ learning algorithms are subject to a large number of caveats and limitations
 which I'll digress briefly to enumerate.
 
 
-Limitations
------------
+<h2 id="limitations">Limitations</h2>
 
 All unsupervised learning methods known today share certain limitations. 
 
@@ -547,8 +564,7 @@ too sparse to be amenable to traditional techniques; it is in these situations
 where the benefits of unsupervised learning can outweigh the negatives.
 
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 In this article, we have seen how unsupervised learning differs from supervised
 learning and the challenges that come along with that. We discussed a method
@@ -568,26 +584,24 @@ unsupervised learning algorithm besides clustering: a dimensionality reduction
 algorithm. 
 
 
-  [1]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Estimation_of_parameters
-  [2]: https://www.cs.cmu.edu/~epxing/Class/10701-08s/recitation/gaussian.pdf
-  [PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
-  [TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
-  [W2V]: https://en.wikipedia.org/wiki/Word2vec
-  [KM]: https://en.wikipedia.org/wiki/K-means_clustering
-  [EM]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
-  [LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
-  [GMM]: https://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model
-  [MND]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution
-  [GP]: https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution
-  [MLFS1]: http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
-  [MLFS6]: /post/ml-from-scratch-part-6-pca/
-  [SD]: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf
-  [MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
-  [LRV]: https://en.wikipedia.org/wiki/Latent_variable
-  [FA]: https://en.wikipedia.org/wiki/Factor_analysis
-  [IRT]: https://en.wikipedia.org/wiki/Item_response_theory
-  [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
-  [CD]: https://en.wikipedia.org/wiki/Coordinate_descent
-  [ID]: https://en.wikipedia.org/wiki/Iris_flower_data_set
-
-
+[1]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Estimation_of_parameters
+[2]: https://www.cs.cmu.edu/~epxing/Class/10701-08s/recitation/gaussian.pdf
+[PCA]: https://en.wikipedia.org/wiki/Principal_component_analysis
+[TSNE]: https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding
+[W2V]: https://en.wikipedia.org/wiki/Word2vec
+[KM]: https://en.wikipedia.org/wiki/K-means_clustering
+[EM]: https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm
+[LDA]: https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation
+[GMM]: https://en.wikipedia.org/wiki/Mixture_model#Gaussian_mixture_model
+[MND]: https://en.wikipedia.org/wiki/Multivariate_normal_distribution
+[GP]: https://mathematica.stackexchange.com/questions/15055/finding-distribution-parameters-of-a-gaussian-mixture-distribution
+[MLFS1]: http://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/
+[MLFS6]: /post/ml-from-scratch-part-6-pca/
+[SD]: http://www.cs.cmu.edu/~guestrin/Class/10701-S07/Slides/em-baumwelch.pdf
+[MLE]: https://en.wikipedia.org/wiki/Maximum_likelihood_estimation
+[LRV]: https://en.wikipedia.org/wiki/Latent_variable
+[FA]: https://en.wikipedia.org/wiki/Factor_analysis
+[IRT]: https://en.wikipedia.org/wiki/Item_response_theory
+[FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
+[CD]: https://en.wikipedia.org/wiki/Coordinate_descent
+[ID]: https://en.wikipedia.org/wiki/Iris_flower_data_set

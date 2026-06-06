@@ -75,8 +75,7 @@ important tools in machine learning: gradient descent.  Just as in [part
 an algorithm which could actually be used in production without too much
 embarrassment.
 
-The Logistic Function
----------------------
+<h2 id="the-logistic-function">The Logistic Function</h2>
 
 Before we get to the regression model, let's take a minute to make
 sure we have a good understanding of the logistic function and some
@@ -84,14 +83,13 @@ of its key properties.
 
 The logistic function (also called the sigmoid function) is given by:
 
+<div>
 \[ \sigma(x) = \frac{1}{1 + e^{-x}} \]
+</div>
 
 It looks like this:
 
-```{r echo=FALSE}
-curve(1/(1+exp(-x)), xlim=c(-6,6))
-title("Logistic Function")
-```
+<img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-1-1.png" width="672" />
 
 First, we note that its domain is $(-\infty, +\infty)$ and its
 range is $(0, 1)$. Therefore its output will always be a valid
@@ -103,12 +101,16 @@ are likely, while zero maps to exactly even odds.
 A few lines of simple algebra will show that its inverse function (also called
 the "logit" function) is given by
 
+<div>
 \[ \sigma^{-1}(x) = \ln{\frac{x}{1-x}} \]
+</div>
 
 Note that if $x = e^p$ where $p$ is a probability between 0 and 1,
 then we have
 
+<div>
 \[ \sigma^{-1}(e^p) = \frac{p}{1-p} \]
+</div>
 
 Where the right hand side is an *odds ratio*. So one interpretation of the
 logistic function is that it is the bijection between *log odds ratios* to *probabilities*.
@@ -122,7 +124,8 @@ way to show the following result is to use implicit differentiation, but
 I'll show a longer and less magical derivation which only uses the chain rule
 and basic algebra.
 
-\[ 
+<div>
+\[
 	\begin{split}
     \frac{d}{dx} \sigma(x) & = \frac{d}{dx} \frac{1}{1 + e^{-x}} \\
     & = \frac{-e^{-x}}{( 1+ e^{-x})^2}  \\
@@ -132,6 +135,7 @@ and basic algebra.
     & = \sigma(x) ( 1 - \sigma(x) ) 
 	\end{split}
 \]
+</div>
 
 So we can see that $\sigma'(x)$ can expressed as a simple quadratic function of
 $\sigma(x)$.  It's not often that a derivative can be most conveniently
@@ -149,20 +153,23 @@ element in a `numpy.ndarray` of any shape.
     def sigmoid(z):
         return 1 / (1 + np.exp(-z))
 
-Statistical Motivation
-----------------------
+<h2 id="statistical-motivation">Statistical Motivation</h2>
 
 Let $Y$ be a discrete random variable with support on $\{0, 1\}$ and let $X$ be a
-random $m$-vector.  Let's assume that the joint probability distribution $F_{X,Y}$
+random $m$-vector.  Let's assume that the joint probability distribution $F&#95;{X,Y}$
 of $X$ and $Y$ has the following sigmoid form for some real-valued vector $\Theta$:
 
+<div>
 \[ E[Y|X] = P(Y=1|X) = \sigma(X\Theta) \]
+</div>
 
 Now let's say $\mathbf{X}$ is an $n \times m$ matrix and $\mathbf{y}$ is an $n$-vector such that
-$(\mathbf{y}_i, \mathbf{X}_i)$ are $n$ realizations sampled independently from
-$F_{X,Y}$; then we can write down the likelihood function:
+$(\mathbf{y}&#95;i, \mathbf{X}&#95;i)$ are $n$ realizations sampled independently from
+$F&#95;{X,Y}$; then we can write down the likelihood function:
 
+<div>
 \[ L(\Theta; \mathbf{X}, \mathbf{y}) = \prod_{i=1}^n P(Y=1|X=\mathbf{X}_i)^{\mathbf{y}_i} P(Y=0|X=\mathbf{X}_i)^{(1 - \mathbf{y}_i)} \]
+</div>
 
 I should probably explain the notational trick used here: because $y \in
 \{0, 1\}$, the first factor will be reduced to a constant $1$ if $y = 0$ and
@@ -173,41 +180,50 @@ without an explicit if/else.
 We can simplify this expression by taking the log of both sides and working
 with the log-likelihood $\ell$ from now on:
 
-\[ 
+<div>
+\[
   \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
   = \sum_{i=1}^n \mathbf{y}_i \ln P(Y=1|X=\mathbf{X}_i) + 
   (1 - \mathbf{y}_i) \ln (1 - P(Y=1|X=\mathbf{X}_i) 
 \]
+</div>
 
 Substituting $\hat{\mathbf{y}} = P(Y=1|X)$:
 
-\[ 
+<div>
+\[
   \ell(\Theta; \mathbf{X},\mathbf{y}) = \ln L 
   = \sum_{i=1}^n \mathbf{y}_i \ln \hat{\mathbf{y}}_i + 
   (1 - \mathbf{\mathbf{y}}_i) \ln (1 - \hat{\mathbf{y}}_i) 
 \]
+</div>
 
 Because $\ln()$ is monotonically increasing, it suffices to minimize
 $\ell(\Theta; \mathbf{X}, \mathbf{y})$ with respect to $\Theta$ in order to find the maximum
 likelihood estimate.  Because $\ell$ is convex and has a continuous derivative, we
 can find this maximum by solving $\nabla \ell = 0$.
 
+<div>
 \[ \begin{align}
   \frac{\partial \ell}{\partial \Theta} 
   & = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta} -
                    \frac{(1-\mathbf{y}_i)}{(1-\hat{\mathbf{y}}_i)} \frac{\partial \hat{\mathbf{y}}_i}{\partial \Theta}
   \end{align}
 \]
+</div>
 
-We can use our earlier lemma $\sigma'(x) = \sigma(x)(1-\sigma(x))$ for the partial derivative of $\hat{y}$.  Note also that because $\hat{y}_i = \sigma(\mathbf{X}_i^T \Theta)$, we will pick up an additional $\mathbf{X}_i$ from the chain rule when differentiating by $\Theta$.
+We can use our earlier lemma $\sigma'(x) = \sigma(x)(1-\sigma(x))$ for the partial derivative of $\hat{y}$.  Note also that because $\hat{y}&#95;i = \sigma(\mathbf{X}&#95;i^T \Theta)$, we will pick up an additional $\mathbf{X}&#95;i$ from the chain rule when differentiating by $\Theta$.
 
+<div>
 \[ \begin{align}
 \frac{\partial \ell}{\partial \Theta} = \sum_{i=1}^n \frac{\mathbf{y}_i}{\hat{\mathbf{y}}_i} \hat{\mathbf{y}}_i (1-\hat{\mathbf{y}}_i) \mathbf{X}_i - \frac{(1-\mathbf{y}_i)}{(1-\hat{\mathbf{y}}_i)} \hat{\mathbf{y}}_i (1-\hat{\mathbf{y}}_i) \mathbf{X}_i 
    \end{align}
 \]
+</div>
 
 We can use simple algebra to simplify this a great deal, and in the end we are left with:
 
+<div>
 \[ \begin{align}
 \frac{\partial \ell}{\partial \Theta} 
  & = \sum_{i=1}^n \mathbf{X}_i ( \mathbf{y}_i (1 - \hat{\mathbf{y}}_i) - (1 - \mathbf{y}_i) \hat{\mathbf{y}}_i )  \\
@@ -216,26 +232,31 @@ We can use simple algebra to simplify this a great deal, and in the end we are l
  & = \mathbf{X}^T ( \mathbf{y}  - \hat{\mathbf{y}} ) \tag{1} \\
  \end{align}
 \]
+</div>
 
 Equation (1) is the clearest way to express the gradient, but because $\hat{\mathbf{y}}$ is an implicit function of $\mathbf{X}$ and
 $\Theta$ is can appear a little magical. A fully explicit version is:
 
+<div>
 \[
  \frac{\partial \ell}{\partial \Theta} = \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \Theta) ) \tag{2}
 \]
+</div>
 
 In plain english, this says: go through the rows of $\mathbf{X}$ one by one. For each row, figure out if the prediction $\hat{\mathbf{y}}$
-was too high or too low by computing the difference $\mathbf{y}_i  - \hat{\mathbf{y}}_i$. If it's too high, subtract the row $X_i$ from
-the gradient, and if it's too low, then add the row $X_i$ to the gradient, in each case weighting by the magnitude in the difference.
+was too high or too low by computing the difference $\mathbf{y}&#95;i  - \hat{\mathbf{y}}&#95;i$. If it's too high, subtract the row $X&#95;i$ from
+the gradient, and if it's too low, then add the row $X&#95;i$ to the gradient, in each case weighting by the magnitude in the difference.
 
 In theory, we can now find the minimum $\hat{\Theta}$ by simply solving equation (3):
 
+<div>
 \[
  \mathbf{X}^T ( \mathbf{y}  - \sigma(\mathbf{X} \hat{\Theta}) ) = 0 \tag{3}
 \]
+</div>
 
 Unfortunately, unlike the normal equation of ordinary least squares, equation (3) cannot be solved by the
-methods of linear algebra due to the presence of the non-linear $\sigma$ function. 
+methods of linear algebra due to the presence of the non-linear $\sigma$ function.
 However, it *is* amenable to numerical methods, which we will cover in great detail below.
 
 You may remark that equation (3) is almost suspiciously neat, but it's not really an accident. The reason
@@ -249,18 +270,13 @@ normal distribution instead of sigmoid. However, in practice these curves are
 extremely similar, and if you showed me an unlabeled plot with both of them I
 could not for the life of me tell you which is which:
 
-```{r, echo=FALSE}
-curve(1/(1+exp(-x)), xlim=c(-6,6), col='blue', ylab='p', xaxt='n')
-curve(pnorm(x/1.96), xlim=c(-6,6), add=TRUE, col='darkgreen')
-title("Sigmoid vs. Normal CDF")
-```
+<img src="/post/ml-from-scratch-part-2-logistic-regression_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 It's worth bearing in mind that logistic regression is so popular, not because
 there's some theorem which proves it's *the* model to use, but because it is
 the simplest and easiest to work with out of a family of equally valid choices.
 
-Gradient Descent
-----------------
+<h2 id="gradient-descent">Gradient Descent</h2>
 
 The state-of-the-art algorithm that we will use to solve (3) has a large number of moving parts and is
 somewhat overwhelming to understand at once. Therefore, we will implement it in layers,
@@ -272,18 +288,19 @@ concretely demonstrate the value of each added complication. The layers will be:
 3. Nesterov Accelerated Gradient
 4. Early Stopping
 
-Batch Gradient Descent
-----------------------
+<h2 id="batch-gradient-descent">Batch Gradient Descent</h2>
 
 Since we have both the loss function $J$ we want to minimize and its gradient $\nabla J$
 we can use an algorithm called gradient descent to find a minimum. 
 
 Gradient descent is an iterative method that simply updates an approximation of
 $\hat{\Theta}$ by taking a smalls step in the direction of steepest descent. Let us
-denote this sequence of approximations $\hat{\Theta}_t$. Initialize $\hat{\Theta}_0$
+denote this sequence of approximations $\hat{\Theta}&#95;t$. Initialize $\hat{\Theta}&#95;0$
 arbitrarily and use the following update rule for $t>0$:
 
+<div>
 \[ \hat{\Theta}_{i+1} := \hat{\Theta}_i - \alpha \nabla \ell (\hat{\Theta}_i) \]
+</div>
 
 For some suitable learning rate $\alpha$ this will always converge, and because
 $\ell$ is convex it will in fact always converge to the unique global minimum $\hat{\Theta}$
@@ -375,7 +392,7 @@ If we fit this naive model to a smallish dataset:
     %time model.fit(X_train, y_train)
     model.converged, model.iterations, model.loss
 
-    CPU times: user 2.78 s, sys: 3.31 s, total: 6.09 s 
+    CPU times: user 2.78 s, sys: 3.31 s, total: 6.09 s
     Wall time: 3.07 s
 
     (True, 1094, 0.063013434109990218)
@@ -467,8 +484,7 @@ is the slow convergence and poor runtime performance. If it takes us 3 seconds
 to fit 400 data points, how are we going to deal with 400,000 or 40 million?
 Why is this algorithm so slow, and is there anything we can do about it?
 
-Mini-batch Stochastic Gradient Descent
---------------------------------------
+<h2 id="mini-batch-stochastic-gradient-descent">Mini-batch Stochastic Gradient Descent</h2>
 
 Stochastic gradient descent may also have properties conceptually similar to
 simulated annealing which possibly allows it to "jump" out of shallow local
@@ -609,8 +625,7 @@ descent. And the final result has achieved similar test performance:
 ![Training/Validation Loss Curve Minibatch](/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_minibatch.png)
 
 
-Nesterov Accelerated Gradient
------------------------------
+<h2 id="nesterov-accelerated-gradient">Nesterov Accelerated Gradient</h2>
 
 But we aren't even close to done. The next bell-and-whistle on our "Making SGD
 Awesome" whistle-stop tour is a clever idea called momentum. While there are
@@ -623,17 +638,19 @@ is similar to nudging a golf ball in a given direction and allowing it to
 roll to a stop, hence the name, momentum. How can we achieve this is in a fair
 way and give the same weight to all batches? By relying on the convergence
 property of the geometric series. Let's say we checked the gradient and decided
-that we wanted to update our parameter $\Theta$ by a vector $v = (+2,-2)$. 
-Instead of applying that all in one update, we could apply $v_0 = (+1,-1)$
-the first step, $v_1 = (+\frac{1}{2}, -\frac{1}{2})$ the second step, $v_2 = (+\frac{1}{4}, -\frac{1}{4})$
+that we wanted to update our parameter $\Theta$ by a vector $v = (+2,-2)$.
+Instead of applying that all in one update, we could apply $v&#95;0 = (+1,-1)$
+the first step, $v&#95;1 = (+\frac{1}{2}, -\frac{1}{2})$ the second step, $v&#95;2 = (+\frac{1}{4}, -\frac{1}{4})$
 and so on out to infinity. Then by the limit of the geometric series, we
 know that the total contribution after a long time converges to $(+2,-2)$.
 More generally, we can choose any decay rate less than one and still enjoy
 convergence.
 
+<div>
 \[
 \sum_{n=0}^\infty a^n = 1 + a + a^2 + a^3 + ... = \frac{1}{1-a} \,\, \forall a \in \mathbb{R}, 0 \leq a \le 1
 \]
+</div>
 
 That leads to a rule (in pseudocode) like:
 
@@ -774,8 +791,7 @@ downside except for a loss in theoretical rigor. This piece of (black?) magic
 is called [early stopping.][ES]
 
 
-Early Stopping
---------------
+<h2 id="early-stopping">Early Stopping</h2>
 
 The basic idea behind early stopping is taken from looking at the shape of the
 above validation loss curve. If we want to minimize validation loss, and we
@@ -965,8 +981,7 @@ gradient descent.
 ![Training/Validation Loss Curve](/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_final.png)
 
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 That was logistic regression from scratch. In this article, we've learned about
 a simple but powerful classifier called logistic regression. We derived the

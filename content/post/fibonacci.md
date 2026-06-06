@@ -69,8 +69,7 @@ But we get to do a bit of linear algebra and try out some pretty interesting
 optimization techniques; that's what I call a good time!
 
 
-Matrix Form
------------
+<h2 id="matrix-form">Matrix Form</h2>
 
 There exist several [closed-form solutions][CFS] to Fibonacci sequence which gives
 us the false hope that there might be an $\mathcal{O}(1)$ solution. Unfortunately
@@ -79,6 +78,7 @@ We will use to so-called "matrix form" instead, which we will now describe in so
 
 Recall that the $n$-th Fibonacci number is given by the recurrence relation:
 
+<div>
 \[
     \begin{align}
         F_0 &= 0 \\
@@ -86,38 +86,46 @@ Recall that the $n$-th Fibonacci number is given by the recurrence relation:
         F_n &= F_{n-1} + F_{n-2}
     \end{align}
 \]
+</div>
 
 Define the first Fibonacci matrix to be:
 
+<div>
 \[
     \mathbf{F}_1 = \begin{bmatrix}
         1 & 1 \\
         1 & 0 
     \end{bmatrix}
 \]
+</div>
 
 And define the $n$-th Fibonacci matrix to be the $n$-th power:
 
+<div>
 \[
     \mathbf{F}_n = \mathbf{F}_1^n
 \]
+</div>
 
 I didn't just pluck this out of thin air - there's a general way
 to turn *any* [linear recurrence relation][LRR] into a matrix which I'll
 describe in a moment. But first let's prove the following theorem, which
 justifies our definition:
 
+<div>
 \[
     \forall n \in \mathbb{N}, \mathbf{F}_n = \begin{bmatrix}
         F_{n+1} & F_n \\
         F_n & F_{n-1}
     \end{bmatrix}
 \]
+</div>
 
-We proceed by induction. For the case of $n = 1$, the theorem is true by inspection because we know $F_0 = 0$ and $F_1 = F_2 = 1$.
+We proceed by induction. For the case of $n = 1$, the theorem is true by inspection because we know $F&#95;0 = 0$ and $F&#95;1 = F&#95;2 = 1$.
 
 Suppose it is true for $n-1$. Then we have:
 
+<div>
 \[
     \mathbf{F}_n = \mathbf{F}_1^{n} = \mathbf{F}_1^{n-1} \mathbf{F}_1 = 
     \begin{bmatrix}
@@ -129,9 +137,11 @@ Suppose it is true for $n-1$. Then we have:
         1 & 0 
     \end{bmatrix}
 \]
+</div>
 
 Multiplying these two matrices, we have:
 
+<div>
 \[
     \mathbf{F}_n = 
     \begin{bmatrix}
@@ -139,10 +149,12 @@ Multiplying these two matrices, we have:
         F_{n-1} + F_{n-2} & F_{n-1} 
     \end{bmatrix}
 \]
+</div>
 
 We can use the Fibonacci definition twice (once for each element of the first column) to
 get:
 
+<div>
 \[
     \mathbf{F}_n = 
     \begin{bmatrix}
@@ -150,6 +162,7 @@ get:
         F_{n} & F_{n-1} 
     \end{bmatrix}
 \]
+</div>
 
 Therefore if the theorem is true for $n-1$, it is also true for $n$. We have
 already shown it is true for $n = 1$, so by mathematical induction it is true
@@ -166,6 +179,7 @@ to see in higher dimensions, so here's an example of encoding a linear
 recurrence relationship which uses the four most recent numbers instead of just
 two:
 
+<div>
 \[
   y_{n+1} = c_0 y_n + c_1 y_{n-1} + c_2 y_{n-2} + c_3 y_{n-3} \\  
   \iff \\
@@ -191,14 +205,16 @@ two:
   y_{n-4} \\
   \end{bmatrix}
 \]
+</div>
 
-If we squint at $\mathbf{F}_1$, we can see it has this form too:
+If we squint at $\mathbf{F}&#95;1$, we can see it has this form too:
 the first row is $[ 1 \,\, 1 ]$ because recurrence relation is simply the
 sum of the previous two, while the second row $[ 1 \,\, 0 ]$ contains the $1$ on the
 [subdiagonal][SD] which "remembers" the previous value. The effect is
 to advance the state of the algorithm in almost the exact same way as the
 `interative_fib()` above:
 
+<div>
 \[
     \begin{bmatrix}
         1 & 1 \\
@@ -219,6 +235,7 @@ to advance the state of the algorithm in almost the exact same way as the
         F_{n}
     \end{bmatrix}
 \]
+</div>
 
 At first this may not seem at all helpful. But by framing the problem as taking
 the exponent of a matrix instead of repeated addition, we can derive two much
@@ -226,13 +243,13 @@ faster algorithms: a constant time $\mathcal{O}(n)$ approximate solution using
 eigenvalues, and a fast $\mathcal{O}(n \log n)$ exact solution.
 
 
-Eigenvalue Solution
--------------------
+<h2 id="eigenvalue-solution">Eigenvalue Solution</h2>
 
-Note that the matrix $\mathbf{F}_1$ is symmetric and real-valued. Therefore it
-has real eigenvalues which we'll call $\lambda_1$ and $\lambda_2$. The eigenvalue
-decomposition allows us to diagonalize $\mathbf{F}_1$ like so:
+Note that the matrix $\mathbf{F}&#95;1$ is symmetric and real-valued. Therefore it
+has real eigenvalues which we'll call $\lambda&#95;1$ and $\lambda&#95;2$. The eigenvalue
+decomposition allows us to diagonalize $\mathbf{F}&#95;1$ like so:
 
+<div>
 \[
     \mathbf{F}_1 = 
     \mathbf{Q} 
@@ -246,9 +263,11 @@ decomposition allows us to diagonalize $\mathbf{F}_1$ like so:
     \end{bmatrix}
     \mathbf{Q}^T
 \]
+</div>
 
-Writing $\mathbf{F}_1$ in this form makes it easy to square it:
+Writing $\mathbf{F}&#95;1$ in this form makes it easy to square it:
 
+<div>
 \[
     \begin{align}
      \mathbf{F}_1^2 & = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \\
@@ -261,9 +280,11 @@ Writing $\mathbf{F}_1$ in this form makes it easy to square it:
                     \mathbf{Q}^T
     \end{align}
 \]
+</div>
 
 or to raise it to an arbitrary power:
 
+<div>
 \[
      \mathbf{F_n} 
      = \mathbf{F}_1^n 
@@ -276,21 +297,24 @@ or to raise it to an arbitrary power:
         \end{bmatrix}
         \mathbf{Q}^T
 \]
+</div>
 
 We can calculate the two eigenvalues analytically by solving the
 characteristic equation $(1-\lambda)\lambda - 1 = 0$. Since this is a quadratic
 polynomial, we can use the quadratic equation to obtain both solutions in closed form:
 
+<div>
 \[
     \begin{align}
     \lambda_1 & = \frac{1 + \sqrt{5}}{2} \\
     \lambda_2 & = \frac{1 - \sqrt{5}}{2} 
     \end{align}
 \]
+</div>
 
 Where the largest eigenvalue is in fact $\phi$, the [golden ratio][GR]. The
 matrix formulation is an easy way to see [famous connection][FGR] between the
-Fibonacci numbers and $\phi$.  To calculate $F_n$ for large values of $n$, it
+Fibonacci numbers and $\phi$.  To calculate $F&#95;n$ for large values of $n$, it
 suffices to calculate $\phi^n$ and then do some constant time $\mathcal{O}(1)$
 bookkeeping, like so:
 
@@ -307,7 +331,7 @@ There's just one tiny little problem with it: $\phi$, being irrational, is not
 particularly convenient for numerical analysis. If we run the
 above Python program, it will use 64-bit floating point arithmetic and will
 never be able to precisely represent more than 15 decimal digits.  That only
-lets us calculate up to $F_{93}$ before we no longer have enough precision to exactly represent it. Past $F_{93}$, our
+lets us calculate up to $F&#95;{93}$ before we no longer have enough precision to exactly represent it. Past $F&#95;{93}$, our
 clever little "exact" eigenvalue algorithm is good for nothing but a rough
 approximation! 
 
@@ -318,8 +342,7 @@ theory, let's turn our attention to simply calculating the powers of an integer
 matrix.
 
 
-Fast Exponentiation
--------------------
+<h2 id="fast-exponentiation">Fast Exponentiation</h2>
 
 So far, all we've done is reformulate our problem so that instead of calculating
 $n$ terms in a sequence using simple addition, we now have to multiply $n$
@@ -331,20 +354,24 @@ Remain calm. There's a [trick][ES] to calculating large powers quickly. Imagine
 we want to calculate $x^n$ where $n$ is a power of two: $n = 2^m$. If
 we square $x$, then square it again, and keep doing that $m$ times, we get
 
+<div>
 \[ ((x^2)^2...)^2 = x^{2^m} = x^n \]
+</div>
 
-In other words, we only need to perform $m = \log_2 n$ matrix multiplications to 
-calculate $x^n$. 
+In other words, we only need to perform $m = \log&#95;2 n$ matrix multiplications to
+calculate $x^n$.
 
 We can generalize this to calculate any large power $n$ (not necessary a power
 of two) by first finding the largest power of two less than $n$ and factoring
 it out:
 
+<div>
 \[ x^n = x^{2^m} x^{n-2^m} \]
+</div>
 
 The left factor can be calculated by repeated squaring and the right factor by
 can calculated by recursively applying the same trick. However, we will never
-need to do that more than $\log_2 n$ times and each time the power of two gets
+need to do that more than $\log&#95;2 n$ times and each time the power of two gets
 smaller. 
 
 The upshot is that we can calculate $x^n$ in $\mathcal{O}(\log n)$
@@ -359,8 +386,7 @@ Nevertheless, the squaring by exponentiation trick hugely reduces the amount of
 work we have to do relative to the naive iterative solution.
 
 
-Matrix Implementation
----------------------
+<h2 id="matrix-implementation">Matrix Implementation</h2>
 
 Fun fact: Python has multiple precision baked in. If if an arithmetic operation
 on Python's `int()` type exceed the normal limits of a 64-bit integer, Python
@@ -369,7 +395,7 @@ convenient language for working with very large numbers.
 
 Now, we *could* just rely on [NumPy][NP]'s matrix multiplication, like so:
 
-    F1 = numpy.array([[1,1],[1,]], dtype='object') 
+    F1 = numpy.array([[1,1],[1,]], dtype='object')
     numpy.linalg.matrix_power(F1, n)
 
 This works. (Although strangely enough matrix multiplication with the `@`
@@ -433,8 +459,7 @@ the fast exponentiation by repeated squares described above:
         return matrix_power(F1, n)[1]
 
 
-Implicit Matrix Form
---------------------
+<h2 id="implicit-matrix-form">Implicit Matrix Form</h2>
 
 The above has reasonably good asymptotic performance but it bothers me that
 it's doing 8 multiplications each time. Luckily, because all Fibonacci matrices
@@ -442,6 +467,7 @@ are of a special form, we really only need to keep track of two elements in the
 right-hand column of the matrix. I call this this the "implicit matrix form." 
 Here is a Fibonacci matrix described with just two numbers, $a$ and $b$:
 
+<div>
 \[
 		\mathbf{F}_n 
 		= \begin{bmatrix}
@@ -449,12 +475,14 @@ Here is a Fibonacci matrix described with just two numbers, $a$ and $b$:
 			\color{lightgrey} a     & b
 		\end{bmatrix}
 \]
+</div>
 
 We can easily work out closed forms for multiplying and squaring matrices
 in this form. While the full expressions are a little complex - we never
 actually need to explicitly calculate the left-hand column, a fact I
 will indicate by graying those columns out:
 
+<div>
 \[
 	\begin{align}
 		\begin{bmatrix}
@@ -483,6 +511,7 @@ will indicate by graying those columns out:
 		\end{bmatrix}
 	\end{align}
 \]
+</div>
 
 Using the implicit matrix form, we can multiply two
 different Fibonacci matrices with just four multiplications, and we can
@@ -529,8 +558,7 @@ them.  The answer is simple - I benchmarked the various forms and found these
 expressions to be very slightly faster, at least when using large `mpz()`
 objects (which we'll get to in a moment.)
 
-Cython
-------
+<h2 id="cython">Cython</h2>
 
 Another thing to try -- something which *usually* helps a lot --
 is to try converting our program to [Cython][CY]. 
@@ -538,7 +566,7 @@ is to try converting our program to [Cython][CY].
 Unfortunately, the one type that we want to use, Python's native `int()` type, is
 represented by Cython as a C-style int - fixed precision signed integer. It
 doesn't have Python's ability to transparently handle large numbers. We can
-either use the native C `long` in which case we run into precision problems after $F_{93}$,
+either use the native C `long` in which case we run into precision problems after $F&#95;{93}$,
 or we can continue to use the Python `int()` type in which case we gain only a modest
 speed up.
 
@@ -582,8 +610,7 @@ the benefit of this quickly becomes irrelevant for large numbers.
 Never fret, though, because we can use something even *better*.
 
 
-The GNU Multiple Precision Arithmetic Library
---------------------------
+<h2 id="the-gnu-multiple-precision-arithmetic-library">The GNU Multiple Precision Arithmetic Library</h2>
 
 The GNU Multiple Precision Arithmetic Library, or [GMP][GMP] for short, is
 nothing short of a work of art. Often used for calculating $\pi$ to a number
@@ -610,17 +637,16 @@ a type-agnostic template function.
 You may also wonder why the large integer type is called `mpz`: the "mp" is for
 "multiple precision", just like the "MP" in "GMP," while the "z" stands for
 $\mathbb{Z}$, the conventional name for the set of integers. There is also `mpq`
-for the set of rationals $\mathbb{Q}$ and so on. 
+for the set of rationals $\mathbb{Q}$ and so on.
 
-Dynamic Programming Redux
--------------------------
+<h2 id="dynamic-programming-redux">Dynamic Programming Redux</h2>
 
 The GMP version is really quite extraordinarily fast, but if we look at the
 call graph we can still see some redundant effort. It turns out that we
 are recalculating each power of two every time we need it, resulting
 in this ever widening tree-shaped DFG:
 
-![naive DFG for fib(103)](/post/fibonacci_files/fib_103_dfg_bad.png "naïve DFG for fib(103)")
+<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naïve DFG for fib(103)" alt="naive DFG for fib(103)" />
 
 We can fix this with - you guessed it - dynamic programming! With dynamic
 programming, it's a good idea to only cache the results of sub-problems which
@@ -663,7 +689,7 @@ own function and apply memoization there.
 With the caching added for powers of two, we get a much smaller DFG, now an acyclic graph
 with no duplicate effort at all:
 
-![DFG for fib(103) with dynamic programming](/post/fibonacci_files/fib_103_dfg_dynamic_programming.png "DFG for fib(103) with dynamic programming")
+<img src="/post/fibonacci_files/fib_103_dfg_dynamic_programming.png" title="DFG for fib(103) with dynamic programming" alt="DFG for fib(103) with dynamic programming" />
 
 It should be clear from graph that in the worst case scenario, where $n = 2^m
 -1$, the cached algorithm performs a maximum of $2m$ multiplications, compared to the
@@ -679,8 +705,7 @@ but won't venture to prove it myself. It seems to roughly hold empirically:
 every time $n$ goes up by a factor of 10, time increases by about 20. (See the
 benchmarks below.)
 
-C++ Fibonacci
--------------
+<h2 id="c-fibonacci">C++ Fibonacci</h2>
 
 Now that we've exhausted my ideas for algorithmic optimizations, there's really
 only one thing approach left: micro-optimization. So far we've been working in
@@ -765,8 +790,7 @@ is spent in the GMP multiplication routines, and only a few microseconds are
 spent in Python. So we're not going to squeeze any more performance out that way.
 
 
-Final Python Fibonacci
-----------------------
+<h2 id="final-python-fibonacci">Final Python Fibonacci</h2>
 
 Our performance testing has revealed something interesting - there is no one
 implementation which [strictly dominates][STD] all the others over all possible
@@ -822,8 +846,7 @@ whether a better constant or better asymptotic performance is more beneficial.
 
 And that, as they say, is my final answer.
 
-Benchmarking Results
---------------------
+<h2 id="benchmarking-results">Benchmarking Results</h2>
 
 As I've been implementing these, I've been informally testing and benchmarking them with
 [IPython's %timeit magic.][ITM] But now that we have a large number of candidate
@@ -849,8 +872,7 @@ We can make a few observations:
   dynamic GMP solution for large numbers.
 
 
-Feynman Fuse Problem
--------------------
+<h2 id="feynman-fuse-problem">Feynman Fuse Problem</h2>
 
 We've made a lot of progress, and we've hit what I call a "fuse problem," after
 this anecdote from [Surely You're Joking, Mr. Feynman!][SYJ]:
@@ -887,8 +909,7 @@ In fact, it's recently come to my attention that GMP in fact has a dedicated
 [Fibonacci benchmark][GFB]. I can't compete with that! So I think we've taken
 it as far as we can reasonably go.
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 When I started this project, I would not have believed that my laptop could
 calculate the millionth Fibonacci number in a fraction of a second. Certainly the first few
@@ -911,7 +932,7 @@ New algorithms take even dedicated professionals by surprise. [Kolmogorov][AK]
 the conjecture that multiplication was necessarily $\mathcal{O}(n^2)$ in a
 lecture and a few weeks later his student [Karatsuba][AAK] showed how a few
 simple additions and subtractions would allow three multiplications to do the
-work of four, decreasing the bound to $\mathcal{O}(n^{\log_2 3})$. So simple,
+work of four, decreasing the bound to $\mathcal{O}(n^{\log&#95;2 3})$. So simple,
 yet until 1960 not one mathematician had ever thought of it. And yet it is this
 trick (and later more complicated versions in the same vein) that account for
 the almost magical speed of the GMP library. It's also closely related to the

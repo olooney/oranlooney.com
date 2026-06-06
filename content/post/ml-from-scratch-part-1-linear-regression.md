@@ -73,8 +73,7 @@ And after all, what's a little linear algebra between friends?
 [SMO]: https://en.wikipedia.org/wiki/Sequential_minimal_optimization 
 
 
-Statistical Motivation
-----------------------
+<h2 id="statistical-motivation">Statistical Motivation</h2>
 
 In this section we will use statistical considerations to motivate the
 definition of a particular mathematical optimization problem. Once we have
@@ -89,7 +88,9 @@ distribution $F(x, y; \Theta, \sigma)$ parameterized by a non-random parameter
 vector $\Theta$, a non-negative scalar $\sigma$, and a random error term
 $\epsilon \sim \mathcal{N}(0, \sigma^2)$. The model is:
 
+<div>
 \[ Y = X^T \Theta + \epsilon \]
+</div>
 
 Now suppose we sample $n$ independent observations from $F$. We place
 these into a real-valued $n\times m$ matrix $\mathbf{X}$ and a
@@ -102,6 +103,7 @@ distribution, we can see that:
 
 [R]: https://en.wikipedia.org/wiki/Realization_(probability)
 
+<div>
 \[ \begin{align}
 L(\Theta;\mathbf{X},\mathbf{y})
 & = P(\mathbf{X},\mathbf{y};\Theta) \\
@@ -109,6 +111,7 @@ L(\Theta;\mathbf{X},\mathbf{y})
 & = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi}\sigma} \text{exp}\Big(\frac{-(\mathbf{y}_i - \mathbf{X}_i^T\Theta)^2}{2\sigma^2} \Big) \\
 \end{align}
 \]
+</div>
 
 That looks pretty awful, but there are a couple easy things we can do to make
 it a look a lot simpler. First, that constant term out front doesn't matter at
@@ -118,6 +121,7 @@ stuff into the constant $C$ because we're only interested in $\Theta$ right now.
 Finally, we can take a log to get rid of the exponential and turn the product
 into a sum. All together, we get the log-likelihood expression:
 
+<div>
 \[ \begin{align}
 \ell(\Theta;\mathbf{X},\mathbf{y}) 
 & = \log L(\Theta;\mathbf{X},\mathbf{y}) \\
@@ -125,6 +129,7 @@ into a sum. All together, we get the log-likelihood expression:
 & = C - \lVert\mathbf{y} - \mathbf{X}\Theta\rVert^2 \\
 \end{align}
 \]
+</div>
 
 Now, because log is a monotonically increasing function, maximizing $\ell$ is the
 same as maximizing $L$. Furthermore, the constant $C$ has no effect whatsoever
@@ -132,7 +137,9 @@ on the location of the maximum. We can also remove the minus sign and consider
 the problem as a minimization problem instead. Therefore our [maximum
 likelihood estimate][MLE] of $\Theta$ for a given data set $(X, y)$ is simply:
 
+<div>
 \[ \hat{\Theta} \triangleq \underset{\Theta}{\text{argmin}} \, \lVert\mathbf{y} - \mathbf{X}\Theta\rVert^2 \]
+</div>
 
 If statistics isn't really your thing, I have some good news for you: we're
 quits with it. Everything in this final equation is now a real-valued vector or
@@ -140,7 +147,7 @@ matrix: there's not a random variable or probability distribution in sight.
 It's all over except for the linear algebra.
 
 What we did above was essentially a short sketch of the relevant parts of the [Gauss-Markov
-theorem][GMT]. In particular, we've shown that the OLS solution to $\mathbf{y} - \mathbf{X}\Theta$ *is* the 
+theorem][GMT]. In particular, we've shown that the OLS solution to $\mathbf{y} - \mathbf{X}\Theta$ *is* the
 Maximum Likelihood Estimate for the parameters of the particular statistical
 model we started with. This isn't true in general, but it is *exactly* true for linear regression
 with a normally distributed error term. The full Gauss-Markov theorem proves a bunch of other
@@ -163,8 +170,7 @@ those estimates is to solve the OLS problem for the data set.
 
 [ML0]: /post/ml-from-scratch-part-0-introduction/
 
-Ordinary Least Squares
-----------------------
+<h2 id="ordinary-least-squares">Ordinary Least Squares</h2>
 
 Note: for this next section, we're going to be doing some light vector
 calculus. I suggest you reference [the matrix cookbook][TMC] if any of the
@@ -173,7 +179,9 @@ notation or concepts aren't familiar.
 Let's call the right-hand side (the part we're trying to minimize) $J$. Then we
 have:
 
+<div>
 \[ J(\Theta) = \lVert \mathbf{y} - \mathbf{X}\Theta \rVert^2 \]
+</div>
 
 And the problem is to minimize $J$ with respect to $\Theta$. As optimization
 problems go, this one is pretty well behaved: it's continuous, quadratic, convex,
@@ -191,12 +199,15 @@ Now, it may not be obvious at first how to
 take the gradient of the squared norm of a vector, but recall that it is
 the inner product of that vector with its dual:
 
+<div>
 \[ \nabla_\Theta J = \nabla_\Theta \; (\mathbf{y} - \mathbf{X}\Theta)^T(\mathbf{y} - \mathbf{X}\Theta) \]
+</div>
 
 Expanding it out with FOIL:
 
 
-\[ 
+<div>
+\[
 \nabla_\Theta J = \nabla_\Theta \; (
 	\mathbf{y}^T \mathbf{y} 
 	- (\mathbf{X}\Theta)^T \mathbf{y} 
@@ -204,6 +215,7 @@ Expanding it out with FOIL:
 	+ \Theta^T (\mathbf{X}^T \mathbf{X}) \Theta 
 )
 \]
+</div>
    
 It's obvious that $\mathbf{y}^T \mathbf{y}$ is constant with respect to $\Theta$ so the first
 term simply vanishes.  It's less obvious but also true that the next two terms
@@ -214,11 +226,15 @@ quadratic form, and the [general rule][QFG] is $ \nabla x^T A x =
 itself is always symmetric ($X^T X = (X^T X)^T$) we can use the simpler form
 $\nabla x^T A x = 2 A x$.
 
+<div>
 \[ \nabla_\Theta J = - 2 \mathbf{X}^T \mathbf{y} + 2 \mathbf{X}^T \mathbf{X} \Theta \]
+</div>
 
 Setting this equal to zero at the minimum, which we will call $\hat{\Theta}$, and dividing both sides by two, we get:
 
+<div>
 \[ \mathbf{X}^T \mathbf{X} \hat{\Theta} = \mathbf{X}^T \mathbf{y} \tag{1} \]
+</div>
 
 This is the so-called [normal equation][NEQ]. The importance of this step is that we've reduced
 the original optimization problem to a system of linear equations which may be solved purely
@@ -231,13 +247,14 @@ Because $\mathbf{X}^T \mathbf{X}$ is square and non-singular and therefore inver
 *could* just left-multiply both sides by its inverse to get an explicit closed
 form for $\hat{\Theta}$:
 
+<div>
 \[ \hat{\Theta} = (\mathbf{X}^T \mathbf{X})^{-1} X^T \mathbf{y} \]
+</div>
 
 However, it turns out there is a faster and more numerically stable way of solving for
 $\hat{\Theta}$ which relies on the [QR Decomposition][QRD] of the matrix $\mathbf{X}$.
 
-QR Decomposition
-----------------
+<h2 id="qr-decomposition">QR Decomposition</h2>
 
 Since we're going to be both *implementing* and *relying on* the QR
 decomposition in a minute, it's worth making sure we understand how it works in
@@ -261,6 +278,7 @@ back-substitution. Back-substitution is easiest to explain with an example.
 Consider this system of equations in matrix form, where the matrix is
 upper-triangular:
 
+<div>
 \[
  \begin{bmatrix}
    2 & 1 & 3 \\\
@@ -279,11 +297,12 @@ upper-triangular:
    8 \\
   \end{bmatrix}
 \]
+</div>
 
-We start on the bottom row, which is simply an equation $4x_3 = 8$, so $x_3 =
+We start on the bottom row, which is simply an equation $4x&#95;3 = 8$, so $x_3 =
 2$. The second row represents the equation $x_2 + x_3 =2$, but we already know
-$x_3$, so we can substitute that back in to get $x_2 - 2 = 0$, so $x_2 = 0$.
-The top row is $2x_1 + x_2 + 3_x3 = 2x_1 + 6 = 2$, so $x_1 = -2$.  This is
+$x&#95;3$, so we can substitute that back in to get $x&#95;2 - 2 = 0$, so $x&#95;2 = 0$.
+The top row is $2x&#95;1 + x&#95;2 + 3&#95;x3 = 2x&#95;1 + 6 = 2$, so $x&#95;1 = -2$.  This is
 back-substitution, and it should be clear that we can do this quickly and
 efficiently for an upper-triangular matrix of any size. Furthermore, because we
 do at most one division per row, this method is very numerically stable. (If
@@ -311,15 +330,15 @@ That sets the rules and the goal of the game: we can apply any sequence of
 orthogonal transforms to a (square, non-singular) matrix $A$ that will bring it
 into upper triangular form. But what orthogonal transform will do that?
 
-Householder Reflections
------------------------
+<h2 id="householder-reflections">Householder Reflections</h2>
 
 Let's break it down into an even easier problem first.  How would I make *just
 one column* of $A$ zero below the diagonal? Or even more concretely, how would
-I make just the *first column* of $A$ zero except for the first element? 
+I make just the *first column* of $A$ zero except for the first element?
 
 Let's take a look at the "column view" of our matrix. It looks like this:
 
+<div>
 \[
 \begin{bmatrix}
     \vert & \vert & \vert \\
@@ -327,23 +346,26 @@ Let's take a look at the "column view" of our matrix. It looks like this:
     \vert & \vert & \vert
 \end{bmatrix}
 \]
+</div>
 
-We want $a_1$ to be zero except for the first element. What does that *mean*?
-Let's call our basis vectors $e_1 = [1\, 0\, 0]^T$, $e_2 = [0\, 1\, 0]^T$, $e_3
+We want $a&#95;1$ to be zero except for the first element. What does that *mean*?
+Let's call our basis vectors $e&#95;1 = [1\, 0\, 0]^T$, $e&#95;2 = [0\, 1\, 0]^T$, $e_3
 = [0\, 0\, 1]^T$. Every vector in our space is a linear combination of these
-basis vectors. So what it means for $a_1$ to be zero except for the first
-element is that $a_1$ is co-linear (in the same line) as $e_1$: $ H a_i =
+basis vectors. So what it means for $a&#95;1$ to be zero except for the first
+element is that $a&#95;1$ is co-linear (in the same line) as $e&#95;1$: $ H a_i =
 \alpha e_i$.
 
 We're going to do this with an orthogonal transformation. But orthogonal
-transformations are *length preserving*.  That means $\alpha = ||a_1||$.
-Therefore we need to find an orthogonal matrix that sends the vector $a_1$ to
-the vector $||a_1|| e_1$. Note that any two vectors lie in a plane. We could
+transformations are *length preserving*.  That means $\alpha = ||a&#95;1||$.
+Therefore we need to find an orthogonal matrix that sends the vector $a&#95;1$ to
+the vector $||a&#95;1|| e&#95;1$. Note that any two vectors lie in a plane. We could
 either *rotate* by the angle between the vectors:
 
+<div>
 \[
 \cos^{-1} \frac{a_1 \cdot e_1}{||a_1||}
 \]
+</div>
 
 or we can *reflect* across the line which bisects the two
 vectors in their plane. These two strategies are called the [Givens
@@ -356,19 +378,20 @@ arbitrary vector $x$ across that plane?  Well, if we subtracted $\langle x, v
 just keep going the same direction and for the same distance again, we'll end
 up a point on the other side of the plane $x'$.  Both $x$ and $x'$ project to
 the same point on the plane, and furthermore both are a distance $\langle x, v
-\rangle$ from the plane. In other words, this operation is a reflection. 
+\rangle$ from the plane. In other words, this operation is a reflection.
 
 This diagram from Wikipedia illustrates this beautifully. Stare at it until you
-can *see* that reflecting about the dotted plane sends $x$ to $||x||e_1$, and
+can *see* that reflecting about the dotted plane sends $x$ to $||x||e&#95;1$, and
 *believe* that $v$ is a unit vector orthogonal to the dotted plane of
 reflection.
 
-<a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="/post/ml-from-scratch-part-1-linear-regression_files/householder.svg"><img width="256" alt="Householder" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Householder.svg/256px-Householder.svg.png"></a>
+<a title="Bruguiea [CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)], from Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Householder.svg"><img width="256" alt="Householder" src="/post/ml-from-scratch-part-1-linear-regression_files/householder.svg"></a>
 
 Because a reflection is a linear transformation, we can express it as a matrix,
 which we will call $H$. Here is how we go from our geometric intuition to a
 matrix:
 
+<div>
 \[
 	\begin{align}
 	H x & \triangleq x - 2 \langle x, v \rangle v \\
@@ -378,11 +401,13 @@ matrix:
 		& = (I - 2 (v v^T)) x 
 	\end{align}
 \]
+</div>
 
 Here, note that $v v^T$ is the *outer* product of $v$ with itself so is a
-square matrix with elements $v_i v_j$. For example, if $v = [\frac{1}{\sqrt{2}} \,
+square matrix with elements $v&#95;i v&#95;j$. For example, if $v = [\frac{1}{\sqrt{2}} \,
 \frac{1}{\sqrt{2}} \, 0]^T$ (the 45&deg; line in the xy-plane) we get:
 
+<div>
 \[
  H = I - 2 v v^T =
  \begin{bmatrix}
@@ -401,13 +426,13 @@ square matrix with elements $v_i v_j$. For example, if $v = [\frac{1}{\sqrt{2}} 
    0 & 0 & 1 \\
  \end{bmatrix} 
 \]
+</div>
 
 We now know how to define reflections which zero out the subdiagonal of a target columns,
 and we know how to construct orthogonal matrices which perform that reflection.
 
 
-Implementing the Lemmas
------------------------
+<h2 id="implementing-the-lemmas">Implementing the Lemmas</h2>
 
 Given the above theoretical presentation, and copious inline comments, I hope
 you will now be able to read and understand the following code:
@@ -623,20 +648,25 @@ time making sure everything up to this point is correct.
 With our trusty tools in hand, we're ready to tackle linear regression properly.
 
 
-Implementing Linear Regression
-------------------------------
+<h2 id="implementing-linear-regression">Implementing Linear Regression</h2>
 
 Recall that our problem was to solve the normal equation:
 
+<div>
 \[ X^T X \hat{\Theta} = X^T y \]
+</div>
 
 If we now let $QR$ be the QR-decomposition of $X$:
 
+<div>
 \[ (R^T Q^T)(Q R) \hat{\Theta} = R^T Q^T y \]
+</div>
 
 Since $Q$ is orthogonal, $Q^T Q = I$ and we can simplify this to:
 
+<div>
 \[ R^T R \hat{\Theta} = R^T Q^T y \]
+</div>
 
 For the next step, we have to assume the $R$ is invertible. This is always the
 case if our original $X$ was free of multicollinearity.  It is also equivalent
@@ -656,7 +686,9 @@ In any case, let's just assume that $R^{-1}$ exists. We don't actually have to
 calculate it, though! The mere fact of its existence lets us left multiply both
 sides of the equation by $(R^T)^{-1}$ and cancel the $R^T$ on both sides, leaving only:
 
+<div>
 \[ R \hat{\Theta} = Q^T y \]
+</div>
 
 Because $R$ is an upper triangular matrix, we can use our `solve_triangular()`
 function to solve this equation very quickly. 
@@ -683,8 +715,7 @@ equations derived above to the final two lines of the `fit()` method.
 			return X @ self.theta_hat
 
 
-Testing
--------
+<h2 id="testing">Testing</h2>
 
 Note that while we follow the scikit-learn naming conventions, up to this point
 we haven't imported anything from sklearn. That's in keeping with the "from
@@ -773,7 +804,7 @@ $\hat{y}$ as a function of the independent variables $X$. In this case $X$ is
 13-dimensional so hard to visualized fully, so we will simply choose a few
 random pairs of dimensions dimensions so we can work in 2D. If the model has
 learned anything real about the relationship between $X$ and $y$, we should see
-two similar clouds of points for actual $y$ and predicted $\hat{y}$. 
+two similar clouds of points for actual $y$ and predicted $\hat{y}$.
 
 ![Prediction vs. Actual Scatterplot, training set and test set](/post/ml-from-scratch-part-1-linear-regression_files/predicted_vs_actual.png)
 
@@ -794,10 +825,9 @@ data:
 ![Predicted vs. Actual over pairs of independent variables](/post/ml-from-scratch-part-1-linear-regression_files/scatter.png)
 
 The eyeball test confirms that this model is fitting the data rather well,
-just as we'd expect when $r^2 = 0.75$. 
+just as we'd expect when $r^2 = 0.75$.
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 That was linear regression from scratch. There's a lot more that could be said
 about linear regression even as a black box predictive model: polynomial and

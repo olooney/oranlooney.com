@@ -44,8 +44,7 @@ called [Church encoding][CE].  If $\lambda$-calculus is machine code, then the
 [Church encoding][CE] is C.
 
 
-Goal
-----
+<h2 id="goal">Goal</h2>
 
 David Allen says to begin with the goal in mind, so let's take a look at what
 we're shooting for. As a blueprint, let's first look at a performance-naive
@@ -130,8 +129,7 @@ familiar, although the parentheses are in slightly different places. (In LISP,
 function application looks like `(minus n 2)` instead of `minus(n)(two)`.)
 
 
-The Pythonic Lambda Calculus
-----------------------------
+<h2 id="the-pythonic-lambda-calculus">The Pythonic Lambda Calculus</h2>
 
 In the $\lambda$-calculus there are only two operations: abstraction and
 application.  These two can be composed to write any program (computable
@@ -287,7 +285,7 @@ The above gives the *flavor* of the $\lambda$-calculus: abstraction, application
 $\alpha$-replacement and $\beta$-reduction.  Since the $\lambda$-calculus is
 [Turing complete][TC], this can be interpreted as implying that all programming
 can be reduced to abstraction and application, and all computation can be
-reduced to the $\beta$-reduction rule; all else is vanity and grasping at wind. 
+reduced to the $\beta$-reduction rule; all else is vanity and grasping at wind.
 
 But the examples I've used have share the weakness that if you go far enough
 down, you are relying on other operations. For example, `mult = lambda x:
@@ -303,8 +301,7 @@ encoding provides a roadmap... it  will however lead us to types and data
 structures very different than the native python `int` and `bool`!
 
 
-Formal Grammar
---------------
+<h2 id="formal-grammar">Formal Grammar</h2>
 
 The subset of Python which constitutes the Pythonic $\lambda$-calculus
 can fully described by this [BNF][BNF] specification:
@@ -382,8 +379,7 @@ followed the rules for introducing definitions! Later, we will show examples of
 running programs both ways.
 
 
-Church Booleans 
----------------
+<h2 id="church-booleans">Church Booleans</h2>
 
 We'll start with the simplest item on our shopping list: Boolean logic.
 There are only two Boolean values:
@@ -489,8 +485,7 @@ expression which represent your program. Finally, reverse the Church encoding
 to recover meaningful values.
 
 
-Church Numerals
----------------
+<h2 id="church-numerals">Church Numerals</h2>
 
 The Church encoding of the natural numbers, called Church numerals, defines the
 number $n$ to be a binary function (here, "binary" means taking two arguments)
@@ -509,7 +504,7 @@ This means that Church numbers are **not** an arbitrary sequence of symbols
 that only gain semantics because of the relations defined on them (as they are
 in [other models][ZFN]) but actually have behavior which is directly related to
 their meaning: the $n$-th Church number has the behavior of repeating a
-computation $n$ times. 
+computation $n$ times.
 
 For example, suppose we have a function called `greet` and we want to call it 3
 times. How would we implement the equivalent of a `for` or `while` loop in the
@@ -586,7 +581,7 @@ $n+m$ applications. The multiplication operator `mult` is similar, but does
 things in a slightly different order: it *first* defines a new function `g =
 n(f)` which applies `f` to some value n times, and *then* applies `g` to `x` m
 times.  Since each call to `g` ends up calling `f` $n$ times, the result is
-that `f` is applied to `x` $m \times n$ times. 
+that `f` is applied to `x` $m \times n$ times.
 
 Try to figure out `exp` for yourself. It's equivalent to $m^n$. It's not on the
 main line of functionality we need for the Fibonacci function, and it's very
@@ -690,8 +685,7 @@ This isn't all of number theory of course, but its enough to implement
 our little Fibonacci function!
 
 
-Predicates Involving Numbers
-----------------------------
+<h2 id="predicates-involving-numbers">Predicates Involving Numbers</h2>
 
 The first and most basic predict test we need is a check for zero. This
 will form the foundation of all the other predicates:
@@ -721,8 +715,7 @@ and `m` to be Church numbers, their return value is a Church Boolean. The main
 thing we wanted was `less_than`, which we will need for our Fibonacci function.
 
 
-Recursion
----------
+<h2 id="recursion">Recursion</h2>
 
 Rather than jumping straight into implementing recursion in the $\lambda$-calculus,
 let's take it slow and develop the idea in stages. Let's start with vanilla
@@ -892,7 +885,7 @@ Long stacks of parentheses appear to be an operational hazard when working with
 $\lambda$-calculus inspired languages.
 
 <a href="https://xkcd.com/297/">
-  <img 
+  <img
     alt="cartoon where parentheses are described as 'elegant weapons for a more... civilized age.'"
     src="https://imgs.xkcd.com/comics/lisp_cycles.png">
 </a>
@@ -947,8 +940,7 @@ defined by using the Boolean algebra we developed earlier to define operations
 on binary strings, but that is not what we are about today.
 
 
-Final Fibonacci
----------------
+<h2 id="final-fibonacci">Final Fibonacci</h2>
 
 Our shopping list is complete: we now have all the necessary tools to proceed
 to the endgame. All that remains is to implement the Fibonacci algorithm:
@@ -964,9 +956,9 @@ to the endgame. All that remains is to implement the Fibonacci algorithm:
 The `less_then(n)(two)` is a predicate that resolves to a Church Boolean.
 This Boolean is then used as an `if/else` statement returning `n` for the `if`
 branch or the recurance relation for the Fibonacci for the `else` branch. The
-`else` branch is simply the sum of $F_{n-1}$ and $F_{n-2}$. The `Y`-combinator
+`else` branch is simply the sum of $F&#95;{n-1}$ and $F&#95;{n-2}$. The `Y`-combinator
 ensures that `f` is in fact the same `fibonacci` function so we can call 
-`f(n-1)` and `f(n-2)` to calculuate $F_{n-1}$ and $F_{n-2}$. 
+`f(n-1)` and `f(n-2)` to calculuate $F&#95;{n-1}$ and $F&#95;{n-2}$.
 
 Because we make two separate recursive calls and don't do any caching, the
 number of calls to `fibonacci()` will grow roughly as $\mathcal{O}(2^n)$.  This
@@ -1010,10 +1002,9 @@ We can test that it is correct by exhibiting the first 20 Fibonacci numbers:
     20 6765
 
 
-How Slow is Slow?
------------------
+<h2 id="how-slow-is-slow">How Slow is Slow?</h2>
 
-As expected, this is rather slow, over 6 seconds to calculate $F_{20}$:
+As expected, this is rather slow, over 6 seconds to calculate $F&#95;{20}$:
 
     %time slow_fibonacci(20)
 
@@ -1065,8 +1056,7 @@ means that we spent less time simply iterating through `succ` and more time
 doing interesting things. Nevertheless, it spends a *lot* of time doing simple
 subtractions - this is one of the weak points of the Church numerals.
 
-Slower Than Slow
-----------------
+<h2 id="slower-than-slow">Slower Than Slow</h2>
 
 How could we make this even *slower*? Again, in a fair way, not just sprinkling
 no-ops and sleep statements throughout.
@@ -1092,8 +1082,7 @@ chained together, the motion is infinitesimal by the end.
 We're not actually going to do that, of course. This article is already way too
 long. But we *could.*  
 
-Macro Expansion
----------------
+<h2 id="macro-expansion">Macro Expansion</h2>
 
 Perhaps you don't believe that this is really a $\lambda$-calculus program; after
 all, it has all those "definitions" which look suspiciously like named
@@ -1141,8 +1130,7 @@ the same: all programs and data structures can be reduced to binary trees and
 all information about the program is somehow contained in the very structure of
 the tree itself.
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 All models of computation are equal, but some are more equal than others.  In
 theory, the $\lambda$-calculus is only a constant factor away from any other model

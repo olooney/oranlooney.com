@@ -29,9 +29,11 @@ The recursive partitioning algorithm is very intuitive. We start by finding
 a single feature and a single split point which divides our data in two. This
 is a rule of the form:
 
+<div>
 \[
 	X_i < C
 \]
+</div>
 
 All of the training data for which this rule is true we place in the left
 subset; and everything else in the right subset. Dividing a set into 
@@ -49,7 +51,7 @@ a little. But if we want a good prediction, we'll have to use more than one rule
 
 The way we do that is as follows. As we continue to apply the algorithm
 recursively, we grow a binary tree structure where each node contains a rule of
-the form $X_i < C$, although $i$ and $C$ will be different for each node. For a
+the form $X&#95;i < C$, although $i$ and $C$ will be different for each node. For a
 new data point, we can than start at the root node and trace a path down to a
 leaf node by taking the left fork when the condition is true, and the right
 fork when it is false. When we reach a leaf node, we can count how many
@@ -63,8 +65,7 @@ but belongs to what [Leo Breiman][LB], inventor of the [random forest][RF] algor
 on decision trees, calls the "[algorithmic culture][2C]" of statistical modeling. 
 
 
-Gini Impurity and Information Gain
-----------------------------------
+<h2 id="gini-impurity-and-information-gain">Gini Impurity and Information Gain</h2>
 
 The first thing we need to pin down is what we mean by "better" and "less
 balanced." There are two competing definitions; I'll describe both and then
@@ -74,20 +75,24 @@ The first, [Gini impurity][GI], is defined as the probability that a randomly ch
 will be misclassified if we randomly choose a prediction from the distribution
 of classes itself.
 
+<div>
 \[
     I_G(\mathbf{p}) = \sum_{i} \mathbf{p}_i \sum_{j \neq i} \mathbf{p}_j 
 \]
+</div>
 
 In the binary case, we usually simplify the notation and refer
-to $\mathbf{p}_1 = p$ and $\mathbf{p}_2 = 1-p$, yielding this
+to $\mathbf{p}&#95;1 = p$ and $\mathbf{p}&#95;2 = 1-p$, yielding this
 much simpler expression:
 
+<div>
 \[
 	\begin{align}
     I_G(p)     & = p(1-p) + (1-p)p = 2p(1-p) \\
 	\Delta I_G & = I_{\text{parent}} - p_{\text{left}} I_{\text{left}} - p_{\text{right}} I_{\text{right}}
 	\end{align}
 \]
+</div>
 
 Interestingly enough, this is *not* how we will actually make predictions --
 we will in fact always choose the most likely class. 
@@ -119,12 +124,14 @@ information gain is defined as the difference between the entropy of the parent
 node and the weighted sum of the entropies of all child nodes, but long story
 short, for the simple case with just two classes the formula looks like this:
 
+<div>
 \[
 	\begin{align}
 		       H & = -p \ln p - (1-p) \ln (1-p) \\
 		\Delta H & = H_{\text{parent}} - p_{\text{left}} H_{\text{left}} - p_{\text{right}} H_{\text{right}}
 	\end{align}
 \]
+</div>
 
 Both functions are symmetric about the line $x = 0.5$ and both are strongly
 concave. This turns out to be very important, because it means it's always possible
@@ -133,12 +140,7 @@ but instead give the exact same "goodness" score for many different candidate sp
 
 Modulo a scaling factor, entropy has almost the same shape as the Gini impurity:
 
-```{r gini_info, fig.retina=1, echo=FALSE}
-curve( 4*x*(1-x), xlim=c(0, 1), ylim=c(0, 1), col='blue', xlab="p", ylab="Normalized Score")
-curve( (x*log(x) + (1-x)*log(1-x))/log(0.5),n=1000, add=TRUE, col='darkgreen')
-title("Gini Impurity vs. Information Gain (Normalized)")
-legend("bottom", c("Gini Impurity", "Information Gain"), col=c("blue", "darkgreen"), lty=1)
-```
+<img src="/post/ml-from-scratch-part-4-decision-tree_files/figure-html/gini_info-1.png" />
 
 These small differences in shape don't usually result in different decisions
 about which feature to choose or where to make the split, so decision trees
@@ -147,16 +149,17 @@ performance. We will use Gini impurity because it is slightly cheaper to
 calculate a square than a log.
 
 
-Finding The Best Cut Point
---------------------------
+<h2 id="finding-the-best-cut-point">Finding The Best Cut Point</h2>
 
 At each stage, we have two decisions to make: which feature to use
 for the cut, and the exact value to cut out. Each rule is of the
 form
 
+<div>
 \[
     X_i \leq C
 \]
+</div>
 
 While it would be possible to simply brute force our way through all possible
 cut points, calculating Gini impurity from scratch each and every time, this is
@@ -217,8 +220,7 @@ and highest performance.
         return best_split_gini, best_split_value, column
 
 
-Building the Tree
------------------
+<h2 id="building-the-tree">Building the Tree</h2>
 
 The fundamental building block of a tree is the "Node." In our implementation,
 every node starts life as a leaf node, but when it the `.split()` method is
@@ -293,8 +295,7 @@ calculating $2^k$ separate filters, each comprised of the logical AND of
 $k$ separate comparisons. This is not usually faster than just applying
 the rules row-by-row. 
 
-Interface
----------
+<h2 id="interface">Interface</h2>
 
 The above Node class can be used directly to fit models but as we've done
 elsewhere in the series we give our model a user-friendly, scikit-learn style
@@ -321,8 +322,7 @@ deeper nodes.
         def predict(self, X):
             return (self.predict_proba(X)[:, 1] > 0.5).astype(int)
 
-Testing
--------
+<h2 id="testing">Testing</h2>
 
 The scikit-learn breast cancer dataset is a good choice for testing decision
 trees because it is high dimensional and highly non-linear.
@@ -351,7 +351,7 @@ hyper-parameter selection via cross-validation") performance is quite good:
      Accuracy: 0.9349736379613357
 
 This confusion matrix and accuracy are only part of the story - in particular, they are
-performance we see if we choose to define a positive test result as $p > 0.5$. We can get 
+performance we see if we choose to define a positive test result as $p > 0.5$. We can get
 a broader view the models performance over a range of possible thresholds with an ROC curve:
 
 ![ROC Curve](/post/ml-from-scratch-part-4-decision-tree_files/auc.png)
@@ -453,8 +453,7 @@ we get closer to the true decision boundary, the predictions become more
 probabilistic, and we may only be able to say that perhaps 87.5% of cases will
 be negative.
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 Today we saw a simple and intuitive algorithm tackle a difficult, highly
 non-linear problem and achieve surprisingly good out-of-the-box performance

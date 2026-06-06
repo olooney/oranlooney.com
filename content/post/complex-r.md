@@ -6,10 +6,6 @@ tags: ["R", "Math"]
 image: /post/complex-r_files/lead.png
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment="#")
-library(zoo)
-```
 
 R, like many scientific programming languages, has first-class support for
 complex numbers.  And, just as in most other programming languages, this
@@ -31,9 +27,11 @@ magical.
 
 A Pythagorean triple is an integer solution to the Pythagorean equation:
 
+<div>
 \[
 a^2 + b^2 = c^2 \quad\quad a,b,c \in \mathbb{N}^+ \tag{1}
 \]
+</div>
 
 You probably learned at least one of these in school -- the famous 3, 4, 5
 triangle:
@@ -49,9 +47,11 @@ A Gaussian integer is a complex number where both the real and imaginary parts
 are integers. The set of Gaussian integers is denoted by $\mathbb{Z}[i]$ and
 is defined as:
 
+<div>
 \[
   \mathbb{Z}[i] = \{ x + iy \mid x,y \in \mathbb{Z} \} \tag{2}
 \]
+</div>
 
 So one way of stating the problem of finding all Pythagorean triples is to find
 all Gaussian integers which are an integer distance away from the origin. The
@@ -59,18 +59,22 @@ distance of a complex number from the origin is called its "norm" and denoted
 $\lVert z \rVert$. We will call the set of Pythagorean triples $T$ and define
 it as:
 
+<div>
 \[
   T = \{ z \in \mathbb{Z}[i] \mid \lVert z \rVert \in \mathbb{Z} \} \tag{3}
 \]
+</div>
 
 Now, in general the norm of Gaussian integer will be the square root of an
 integer (the integer $x^2 + y^2$ to be precise.) Therefore if we square a
 Gaussian integer, it will have an integer norm and therefore represent a
 Pythagorean triple!
 
+<div>
 \[
 \forall z \in \mathbb{C}, z \in \mathbb{Z}[i] \implies z^2 \in T \tag{4}
 \]
+</div>
 
 So that's a pretty good start: just a few minutes work, and we've already found
 an *infinite number* of Pythagorean triples, and we have a computationally
@@ -88,7 +92,7 @@ thorough, we'll take all such pairs up to an arbitrary threshold.
 
 Now, if we wanted just one or two complex numbers, we could use the literal syntax:
 
-```{r literal}
+```r
 triples <- c( 3+4i, 5+12i, 9+12i )
 ```
 
@@ -96,7 +100,7 @@ But since want to construct them in bulk, we'll use the `complex()` constructor.
 constructor is [vectorized][RV]: by passing in two vectors of equal length we can
 construct a one-dimensional vector of complex numbers.
 
-```{r grid}
+```r
 n = 400
 grid <- expand.grid(u=1:(2*n), v=1:(2*n))
 grid <- grid[ grid$u > grid$v, ]
@@ -107,11 +111,24 @@ Per the theoretical discussion above, we can generate Pythagorean triples by
 simply squaring these.  All primitive math functions in R work just as well on
 complex numbers: `exp`, `log`, `sin`, `cos`and of course the power operator `^`:
 
-```{r squares}
+```r
 triples <- gaussian_integers^2
 
 # display the 10 with the smallest norm
 cat( triples[order(Mod(triples))][1:10], sep="\n")
+```
+
+```
+# 3+4i
+# 8+6i
+# 5+12i
+# 15+8i
+# 12+16i
+# 7+24i
+# 24+10i
+# 21+20i
+# 16+30i
+# 35+12i
 ```
 
 Did it work? We're certainly seeing some familiar pairings there, like $5+12i$
@@ -119,7 +136,7 @@ which maps to well-known triple $(5,12,13)$. To visualize them, we can simply
 pass our complex vector to R's `plot()` function -- it will conveniently plot
 them in the complex plane for us!
 
-```{r triples, fig.retina=1}
+```r
 triples <- triples[ Re(triples) <= n & Im(triples) <= n ]
 
 # helper function to colorize complex points by their angle.
@@ -135,12 +152,14 @@ plot(
 )
 ```
 
+<img src="/post/complex-r_files/figure-html/triples-1.png" />
+
 Now it turns out that our algorithm does not, in fact, generate all possible
 triples. For example, multiples are missing: if $(3,4,5)$ is a triple, then
 $(6,8,10)$ should be a triple, and $(9,12,15)$ should be a triple, and so on.
 So we have to expand our set to have all multiples.
 
-```{r multiples}
+```r
 
 multiples <- lapply(1:(floor(n/3)), function(m) triples*m)
 triples <- unique(do.call(c, multiples))
@@ -151,7 +170,7 @@ divide by two and get a new triple that was missed by the initial net we cast.
 But that's the end of the special cases -- with this final rule in place, we're
 now guaranteed to hit *every* Pythagorean triple.
 
-```{r halves}
+```r
 halves <- triples[ Re(triples) %% 2 == 0 & Im(triples) %% 2 == 0 ] / 2
 triples <- unique(c(triples, halves))
 ```
@@ -159,17 +178,19 @@ triples <- unique(c(triples, halves))
 Now all we need to is clean up duplicates and duplicate along the mirror line
 of symmetry...
 
-```{r cleanup}
+```r
 triples <- triples[ Re(triples) <= n & Im(triples) <= n]
 triples <- c(triples, complex(real=Im(triples), imaginary=Re(triples)))
 ```
 
 ..and we're finally ready to visualize the real solution.
 
-```{r plotall, fig.retina=1}
+```r
 plot(triples, col=argcolor(triples), pch=20)
 title(paste("All Pythagorean Triples Up to", n))
 ```
+
+<img src="/post/complex-r_files/figure-html/plotall-1.png" />
 
 ## A Closer Look
 
@@ -177,7 +198,7 @@ That's too many to really understand, although there are definitely
 patterns emerging. Let's zoom in and just plot a small region,but with more
 detail.
 
-```{r plotsmall, fig.retina=1}
+```r
 small_n = 25
 small_triples <- triples[ Re(triples) < small_n & Im(triples) < small_n ]
 small_triples <- small_triples[ order(Mod(small_triples), decreasing=TRUE) ]
@@ -223,6 +244,8 @@ text(
 )
 title(paste("Pythagorean Triples Up to", small_n))
 ```
+
+<img src="/post/complex-r_files/figure-html/plotsmall-1.png" />
 
 On the zoomed in view we can see each Pythagorean triple represented as a right
 triangle; that the integer multiples of solutions form a series of

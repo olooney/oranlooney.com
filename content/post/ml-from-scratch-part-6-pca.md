@@ -29,8 +29,7 @@ into a high dimensional data set, and end with a discussion a few more-or-less
 principled ways to choose how many dimensions to keep.
 
 
-What is PCA?
-------------
+<h2 id="what-is-pca">What is PCA?</h2>
 
 PCA is a *linear* dimensionality reduction technique. [Many][NLDR] non-linear
 [dimensionality][SOM] [reduction][AENN] [techniques][TSNE] exist, but linear
@@ -124,8 +123,7 @@ For now, let's explore the mathematics and show how PCA gives rise to a
 unique solution subject to the above constraints.
 
 
-Approach #1: The Direction of Maximal Variation
------------------------------------------------
+<h2 id="approach-1-the-direction-of-maximal-variation">Approach #1: The Direction of Maximal Variation</h2>
 
 Before we can define the direction of maximal variance, we must be
 clear about what we mean by variance in a given direction. First, let's say
@@ -133,7 +131,7 @@ that $\mathbf{x}$ is an $n$-dimensional random vector. This represents the
 population our data will be sampled from. Next, suppose you have some
 non-random vector $\mathbf{q} \in \mathbb{R}^n$. Assuming this vector is
 non-zero, it defines a line. What do mean by the phrase, "the variance of
-$\mathbf{x}$ in the direction of $\mathbf{q}$?" 
+$\mathbf{x}$ in the direction of $\mathbf{q}$?"
 
 <img src="/post/ml-from-scratch-part-6-pca_files/variance_along_q.png">
 
@@ -222,7 +220,7 @@ $$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ 
 
 Why is this the same as the above? Let's call the above function $f(\mathbf{q}, \lambda)$ write down the [KKT conditions][KKT]:
 
-$$ 
+$$
   \begin{align}
 	\nabla_\mathbf{q} f & = 0 \tag{7} \\
 	\frac{\partial f}{\partial \lambda} & = 0 \tag{8}
@@ -244,7 +242,7 @@ Suppose the matrix $\mathbf{X}$ is an $N \times n$ matrix with $N$ rows where
 each row vector is an independent realization of $\mathbf{x}$. Also assume
 (without loss of generality) that the mean of each column of $\mathbf{X}$ is
 zero. (This can always be accomplished by simply subtracting off a mean vector
-$\mathbf{\mu}$ before applying PCA.) 
+$\mathbf{\mu}$ before applying PCA.)
 
 We can estimate the covariance matrix of $\mathbf{X}$ as
 
@@ -279,8 +277,7 @@ We will discuss the algorithm necessary to compute $\mathbf{Q}$ and $\mathbf{\La
 below, but first let's discuss some alternative ways to motivate PCA.
 
 
-Approach #2: Diagonalizing the Covariance Matrix
-------------------------------------------------
+<h2 id="approach-2-diagonalizing-the-covariance-matrix">Approach #2: Diagonalizing the Covariance Matrix</h2>
 
 We could have skipped the entire "direction of maximal variation" and Lagrange
 multiplier argument if we had simply argued as follows: I want my features to
@@ -340,8 +337,7 @@ intuitive in some cases. Also, many software packages report the loading matrix
 instead of the eigenvectors on the basis that they are easier to interpret. 
 
 
-Approach #3: Minimizing Reconstruction Error
---------------------------------------------
+<h2 id="approach-3-minimizing-reconstruction-error">Approach #3: Minimizing Reconstruction Error</h2>
 
 The third and final way to motivate the mathematical formalism of PCA is to
 view it as a form of *compression*. Specifically, of all possible linear
@@ -370,18 +366,17 @@ With three separate theoretical justifications under our belt - which is two too
 let's turn our attention to the concrete problem of implementing eigendecomposition from scratch.
 
 
-Algorithm for Solving the Eigenproblem
---------------------------------------
+<h2 id="algorithm-for-solving-the-eigenproblem">Algorithm for Solving the Eigenproblem</h2>
 
 The modern approach to implementing PCA is to find the [Singular Value Decomposition][SVD] of a matrix $A$ which
 almost immediately gives us the eigenvalues of and eigenvectors of $A^T A$. The
 best known SVD algorithm is the [Golub-Reinsh Algorithm][GRA]. This is an
-iterative algorithm. Starting with $A_1 = A$ we calculate $A_{k+1}$ from $A_k$
+iterative algorithm. Starting with $A&#95;1 = A$ we calculate $A&#95;{k+1}$ from $A&#95;k$
 until we achieve convergence.
 
 For each step we first use [Householder reflections][HR] to reduce the matrix
-to bidiagonal form $A_k$, then use a [QR decomposition][QRD] of $X_k^T X_k$ to
-set many of the off-diagonal elements to zero. The resulting matrix $A_{k+1}$
+to bidiagonal form $A&#95;k$, then use a [QR decomposition][QRD] of $X&#95;k^T X&#95;k$ to
+set many of the off-diagonal elements to zero. The resulting matrix $A&#95;{k+1}$
 is [tridiagonal][TRI], but at each step the off-diagonal elements get smaller
 and smaller. This is very much like trying to get rid of all the air bubbles in
 wallpaper by flattening them with a stick, only to have new bubbles pop up.
@@ -460,8 +455,8 @@ reflections and QR decompositions:
 
 Using these we can implement the QR algorithm in just a few lines of code. 
 
-The QR algorithm is iterative: at each step, we calculate $A_{k+1}$ by taking
-the QR decomposition of $A_{k}$, reversing the order of Q and R, and
+The QR algorithm is iterative: at each step, we calculate $A&#95;{k+1}$ by taking
+the QR decomposition of $A&#95;{k}$, reversing the order of Q and R, and
 multiplying the matrices together. Each time we do this, the off-diagonals get
 smaller.
 
@@ -479,8 +474,7 @@ smaller.
         return eigenvalues, eigenvectors
 
 
-Implementing PCA
-----------------
+<h2 id="implementing-pca">Implementing PCA</h2>
 
 We made a number of simplifying assumptions in the above theory and now we have
 to pay with a corresponding amount of busywork to get our data into an
@@ -542,8 +536,7 @@ matrix. All of the hard work is done inside `eigen_decomposition()`.
         
 
 
-Wine Quality Example
---------------------
+<h2 id="wine-quality-example">Wine Quality Example</h2>
 
 The [wine quality data set][WQD] consists of 178 wines, each described in
 terms of 13 different objectively quantifiable chemical or optical properties such as the
@@ -766,8 +759,7 @@ And we can see the expected structure: eigenvalues descending from 4.7 to 0.1
 along the diagonal, and exactly 0 away from the diagonal.
 
 
-Visualizing the Components
---------------------------
+<h2 id="visualizing-the-components">Visualizing the Components</h2>
 
 PCA was applied only to the 13 features; the partition into three quality
 classes was not included. Still, we would like to know if the primary
@@ -882,8 +874,7 @@ enough to allow bias to creep in. As such, many people have asked themselves if
 there were not some rigorous decision rule that could be applied.
 
 
-Strategies for Choosing The Number of Dimensions
-------------------------------------------------
+<h2 id="strategies-for-choosing-the-number-of-dimensions">Strategies for Choosing The Number of Dimensions</h2>
 
 The oldest and most venerable method involves plotting the eigenvalues in
 descending order as a function of dimension number: whimsically called a [scree
@@ -981,8 +972,7 @@ Electric Factor Analysis Machine][RTS]* suggests one method, and I've seen
 several references to this [paper by Minka][ACD] which may represent the
 current state-of-the-art.
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 PCA is the archetypical dimensionality reduction method; just as
 [$k$-means][KM] is the archetypical clustering method. Now that we've

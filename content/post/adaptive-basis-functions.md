@@ -74,51 +74,60 @@ make the case in favor of learned representations we will first attempt
 the problem with several fixed representations and compare those attempts
 with a learned representation.
 
-The Function Approximation Problem
-----------------------------------
+<h2 id="the-function-approximation-problem">The Function Approximation Problem</h2>
 
-Given an i.i.d. random sample $\{(Y_i, X_i)\}_{i=1}^n$ where $X$ and $Y$ have joint probability
+Given an i.i.d. random sample $\{(Y&#95;i, X&#95;i)\}&#95;{i=1}^n$ where $X$ and $Y$ have joint probability
 distribution $F$, we wish to find a real-valued function $f : \mathbb{R} \mapsto \mathbb{R}$ such that:
 
+<div>
 \[ E[Y|X] = f(x) \]
+</div>
 
 Since we only have access to the random sample, we cannot hope to find
 an exact solution, but can find the best (in terms of MSE) function from some family of functions $\mathcal{F}$:
 
+<div>
 \[ \hat{f} = \underset{f \in \mathcal{F} }{{\text{argmin}}} \sum_i^n (f(x) - E[Y|X])^2 \tag{1} \]
+</div>
 
-The question then becomes how we choose a family $\mathcal{F}$ 
+The question then becomes how we choose a family $\mathcal{F}$
 that makes this optimization problem tractable. The obvious answer is to
 parameterize $\mathcal{F}$ in terms of $k$ real-valued parameters; then
 the optimization problem is to find the minimum of the loss function $J : \mathbb{R}^k \mapsto \mathbb{R}$
 which can be solved with standard techniques. 
 
 The standard way to define such a parameterization is to assume that $f$ is
-the weighted sum of $k$ fixed [basis functions][BF] $\psi_1, ..., \psi_k$ and
-let $\mathcal{F} = \text{span} \{ \psi_1, ..., \psi_k \}$.  Then, for any function $f \in \mathcal{F}$,
+the weighted sum of $k$ fixed [basis functions][BF] $\psi&#95;1, ..., \psi&#95;k$ and
+let $\mathcal{F} = \text{span} \{ \psi&#95;1, ..., \psi&#95;k \}$.  Then, for any function $f \in \mathcal{F}$,
 we can always write $f$ as a linear combination of basis functions:
 
+<div>
 \[ f(x) = \sum_{i=j}^k \beta_j \psi_j(x) \tag{2} \]
+</div>
 
 [BF]: https://en.wikipedia.org/wiki/Basis_function
 
 Substituting (2) into (1) above, we have an explicit loss function:
 
+<div>
 \[ J(\beta) = \sum_{i=1}^n (E[Y|X] - \sum_{j=1}{k} \beta_j \psi_j(x) )^2 \tag{3} \]
+</div>
 
 When $J$ is as small as possible, $\hat{f}$ is as close as possible to the target
 function $f$ as it is possible for any function in $V$ to be. We say that $\hat{f}$
-is the best approximation of $f$ for the given choice of basis functions $\psi_1, ..., \psi_N$.
+is the best approximation of $f$ for the given choice of basis functions $\psi&#95;1, ..., \psi&#95;N$.
 
 We will call the choice of parameters that minimize loss $\hat{\beta}$ and the corresponding
 function $\hat{f}$:
 
-\[ 
+<div>
+\[
     \begin{align}
         \hat{\beta} & = \text{argmin}_\beta J(\mathbf{\beta}) \tag{4} \\
         \hat{f}(x)  & = \sum_{j=1}^k \hat{\beta}_j \psi_j(x) \tag{5}
     \end{align}
 \]
+</div>
 
 We won't dwell too much today on the best way to actually solve this minimization problem
 but instead just use an off-the-shelf solver to quickly (in terms of programmer time)
@@ -126,8 +135,7 @@ get a workable solution. Instead, we'll focus on how the choice of basis functio
 our ability to approximate a function.
 
 
-Target Function
----------------
+<h2 id="target-function">Target Function</h2>
 
 For the examples below, we're going to need some target function $t(x) = E[Y|X]$.
 It should be continuous,
@@ -159,8 +167,7 @@ us lots of nasty inflections.
 
 I wouldn't say this function is pathological, but it's *juuust* hard enough to be interesting.
 
-Step Function Basis
--------------------
+<h2 id="step-function-basis">Step Function Basis</h2>
 
 To get warmed up, let's use the above basis function framework to calculate the best possible step
 function approximation of a function. Since our target function is continuous
@@ -223,8 +230,7 @@ represent slopes.
 ![Step Approximation](/post/adaptive-basis-functions_files/step_approx.png)
 
 
-Fixed Sigmoid Basis Functions
------------------------------
+<h2 id="fixed-sigmoid-basis-functions">Fixed Sigmoid Basis Functions</h2>
 
 Since we know our target function is continuous, it makes sense
 to likewise choose continuous basis functions. Since the step function
@@ -274,12 +280,11 @@ Note that the functions in this basis are only distinguished by their offset.
 While more visually appealing, this hasn't really done better than the step function basis.
 
 
-Orthogonal Basis Functions
---------------------------
+<h2 id="orthogonal-basis-functions">Orthogonal Basis Functions</h2>
 
 Families of orthogonal functions have a key property that 
 makes them especially useful as basis functions: you can determine
-the optimal coefficient $\beta_j$ without considering any of
+the optimal coefficient $\beta&#95;j$ without considering any of
 the other elements of $\mathbf{\beta}$.
 
 The Fourier series is one well-known example. The basis functions
@@ -355,8 +360,7 @@ chances of overfitting! We need to look for a way of approximating functions
 well while keeping the number of parameters under control.
 
 
-Adaptive Basis Functions
-------------------------
+<h2 id="adaptive-basis-functions">Adaptive Basis Functions</h2>
 
 Finally, we come to our ringer: the [adaptive basis function.][ABF] Within the
 context of function approximation, adaptive basis functions are a clear example
@@ -374,14 +378,16 @@ its own parameters, which we will learn in parallel with the coefficients.
 Note that this means we are leaving the additive assumption behind. While
 the model may still superficially *look* like an additive model:
 
+<div>
 \[ f(x) = \sum_{i=j}^N \beta_j \psi_j(x;\theta_j) \]
+</div>
 
-Each $\psi_j$ is now a parameterized function rather than a fixed basis function.
+Each $\psi&#95;j$ is now a parameterized function rather than a fixed basis function.
 This makes computing gradients much harder, and almost always means that the new
 optimization problem is no longer convex.
 
-There is also a trade-off in the number of parameters used: while we have fewer $\beta_j$
-parameters, we also have new $\theta_j$ parameters. Hopefully there will be some
+There is also a trade-off in the number of parameters used: while we have fewer $\beta&#95;j$
+parameters, we also have new $\theta&#95;j$ parameters. Hopefully there will be some
 sweet spot where each adaptive basis function is doing the work of many fixed basis functions!
 
 A good choice for adaptive basis functions is the sigmoid. We can add parameters that shift
@@ -509,8 +515,7 @@ almost always comes with a corresponding loss in convexity and consequently
 we can no longer guarantee convergence to a global minima.
 
 
-Conclusion
-----------
+<h2 id="conclusion">Conclusion</h2>
 
 Did I convince you that adaptive basis functions - and by extension learned representations in general - 
 "just work?" I'm not

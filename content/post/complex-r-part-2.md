@@ -6,10 +6,6 @@ tags: ["R", "Math"]
 image: /post/complex-r-part-2_files/lead.jpg
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment="#")
-library(zoo)
-```
 
 <small><em>This post is part of a series on complex number functionality in the
 R programming language. You may want to read [Part I][P1] before continuing if
@@ -56,7 +52,7 @@ autocorrelation. To get some interesting behavior, I will give it a strongly
 positive one day correlation, but then reverse it the next day. This should
 give us both decay and oscillations.
 
-```{r ts, fig.retina=1}
+```r
 set.seed(43)
 t_0 <- zoo(rnorm(n=100))
 t_1 <- lag(t_0, k=1, na.pad=TRUE)
@@ -68,12 +64,28 @@ title('Time Series With Autocorrelation')
 pacf(t) # Partial Autocorrelation Plot
 ```
 
+<img src="/post/complex-r-part-2_files/figure-html/ts-1.png" />
+
+<img src="/post/complex-r-part-2_files/figure-html/ts-2.png" />
+
 Next we construct the model. While I normally recommend the [forecast][FOR]
 package, we'll just use the built-in `ar()` function today.
 
-```{r ar, fig.retina=1}
+```r
 ar_model <- ar(t)
 ar_model
+```
+
+```
+#
+# Call:
+# ar(x = t)
+#
+# Coefficients:
+#       1        2        3        4        5
+#  0.5078  -0.4062   0.3481  -0.3960   0.2462
+#
+# Order selected 5  sigma^2 estimated as  1.19
 ```
 
 That's roughly what we'd expect based on how we constructed the time series and
@@ -81,10 +93,18 @@ what we saw on the partial autocorrelation plot: A strong positive
 autocorrelation at lag one, a slightly less strong negative autocorrelation at
 lag 2, then some harmonics. 
 
-```{r roots, fig.retina=1}
+```r
 ar_coefs <- ar_model$ar  # coefficients(ar_model) doesn't work, IDK why
 roots <- polyroot( c(1,-ar_coefs) )
 roots
+```
+
+```
+# [1]  0.7158218+1.1364815i -0.6823253+0.9974625i -0.6823253-0.9974625i
+# [4]  0.7158218-1.1364815i  1.5417367+0.0000000i
+```
+
+```r
 plot(
   1/roots, 
   ylim=c(-1,1), 
@@ -97,6 +117,8 @@ plot(
   )
 )
 ```
+
+<img src="/post/complex-r-part-2_files/figure-html/roots-1.png" />
 
 Just to be clear, we're plotting the *inverse* roots, so we'd expect them to be
 *inside* the unit circle if the process is stationary.
@@ -120,9 +142,10 @@ no getting away from the fact that a polynomial of degree two or higher might
 have complex roots.
 
 But there's another way of looking at an AR model - as a [discrete linear
-dynamical system.][LDS] Let's call the value of our at the $n$-th step $t_n$.
+dynamical system.][LDS] Let's call the value of our at the $n$-th step $t&#95;n$.
 Then we can define our state vectors to be
 
+<div>
 \[
 \boldsymbol{t}_n = \begin{bmatrix}
   t_n \\
@@ -132,16 +155,20 @@ Then we can define our state vectors to be
   t_{n-4} \\
   \end{bmatrix}
 \]
+</div>
 
-In other words, we just stack $t_n$ with it's first four lags. That may not
+In other words, we just stack $t&#95;n$ with it's first four lags. That may not
 seem like an improvement, but now we can write 
 
+<div>
 \[
 \boldsymbol{t}_{n+1} =\boldsymbol{F} \boldsymbol{t}_n
 \]
+</div>
 
 or more explicitly:
 
+<div>
 \[
   \begin{bmatrix}
   t_{n+1} \\
@@ -158,6 +185,7 @@ or more explicitly:
   t_{n-4} \\
   \end{bmatrix}
 \]
+</div>
 
 where $\boldsymbol{F}$ is the "forward time evolution" matrix. This basically
 says we can always compute the state of our time series at the next time step
@@ -166,6 +194,7 @@ have a good idea what the matrix $\boldsymbol{F}$ should look like. For one
 thing, it's clear that the four lagged components can simply be grabbed from
 the old state by shifting down by one:
 
+<div>
 \[
   \begin{bmatrix}
   t_{n+1} \\
@@ -189,10 +218,12 @@ the old state by shifting down by one:
   t_{n-4} \\
   \end{bmatrix}
 \]
+</div>
 
 And from the coefficients of the AR(1) model we built before, we know that
-$t_n$ can be expressed as a linear sum of $t_{n-1}$ through $t_{n-4}$:
+$t&#95;n$ can be expressed as a linear sum of $t&#95;{n-1}$ through $t&#95;{n-4}$:
 
+<div>
 \[
   \begin{bmatrix}
   t_{n+1} \\
@@ -216,6 +247,7 @@ $t_n$ can be expressed as a linear sum of $t_{n-1}$ through $t_{n-4}$:
   t_{n-4} \\
   \end{bmatrix}
 \]
+</div>
 
 So now that, we've determined the linear operator $\boldsymbol{F}$ for our
 dynamic system, we can ask what happens to the system 2 time-steps into the
@@ -223,9 +255,11 @@ future, then 3, and so on. It should be clear that we can simply apply
 $\boldsymbol{F}$ again and again to determine *any* future state, so that in
 general the state at time $n$ is
 
+<div>
 \[
 \boldsymbol{t}_n = \boldsymbol{F}^n \boldsymbol{t}_0
 \]
+</div>
 
 But raising a matrix to a power is particularly easy if we know its
 eigenvalues.  Let's say $\boldsymbol{F} = \boldsymbol{Q} \boldsymbol{\Lambda}
@@ -233,17 +267,20 @@ eigenvalues.  Let's say $\boldsymbol{F} = \boldsymbol{Q} \boldsymbol{\Lambda}
 orthogonal matrix and $\boldsymbol{\Lambda}$ is the diagonal matrix of
 eigenvalues. Then
 
+<div>
 \[
   \boldsymbol{F}^2 = \boldsymbol{F} \boldsymbol{F} =
   \boldsymbol{Q} \boldsymbol{\Lambda} \boldsymbol{Q}^{-1}
   \boldsymbol{Q} \boldsymbol{\Lambda} \boldsymbol{Q}^{-1}
   = \boldsymbol{Q} \boldsymbol{\Lambda}^2 \boldsymbol{Q}^{-1}
 \]
+</div>
 
 This clearly generalizes to any power by induction. Also, raising a diagonal
 matrix to a power is completely trivial: you simply raise each independent
 element to its power.
 
+<div>
 \[
 \boldsymbol{\Lambda}^n = \begin{bmatrix}
   \lambda_1^n & 0 & 0 & 0 & 0 \\
@@ -253,6 +290,7 @@ element to its power.
   0 & 0 & 0 & 0 & \lambda_5^n
 \end{bmatrix}
 \]
+</div>
 
 A few things are immediately obvious. Each eigenvalue is a complex number; so
 if its norm is less than 1 it will tend to 0 as $n$ increases, or if its norm
@@ -268,7 +306,7 @@ So now that I've hopefully impressed upon you the importance of eigenvalues is
 understanding the dynamics of our system, let's actually compute them. And,
 just for fun let's compare them to the roots of the lag polynomial from above. 
 
-```{r eigen}
+```r
 ar_matrix <- matrix( nrow=5, ncol=5, byrow=TRUE, c(
   0.5078, -0.4062,   0.3481,  -0.3960,   0.2462, 
        1,       0,        0,        0,        0,
@@ -296,7 +334,7 @@ are (to within numerical precision) exactly the same as the inverse roots!
 
 Yes, it's true. This is very obvious if we plot them together:
 
-```{r eigenplot, fig.retina=1}
+```r
 plot(
   ar_eigen$values, 
   ylim=c(-1,1), 
@@ -318,6 +356,8 @@ points(
   col='red'
 )
 ```
+
+<img src="/post/complex-r-part-2_files/figure-html/eigenplot-1.png" />
 
 They are exactly the same. You're welcome to prove this for yourself by writing
 down the characteristic polynomial for a matrix in this form and verifying it's
