@@ -23,6 +23,10 @@ searchTemplate = `
 `
 nunjucks.configure({ autoescape: true });
 
+function clearSearchResults() {
+    $('#output').html('<div class="search-status">No Search Results to Display</div>');
+}
+
 function escapeRegex(s) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -30,8 +34,11 @@ function escapeRegex(s) {
 function renderSearchResults() {
     // quit early if the search field is not yet rendered or if the data is not yet loaded.
     if ( !window.searchData ) return;
-    const searchString = $('#search-field').val();
-    if ( !searchString ) return;
+    const searchString = $('#search-field').val().trim();
+    if ( !searchString ) {
+        clearSearchResults();
+        return;
+    }
 
     // break the search string into RegExp-safe words
     const searchStrings = searchString.split(' ').map(word => word.trim()).filter(word => word.length).map(escapeRegex);

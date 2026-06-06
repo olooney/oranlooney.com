@@ -16,8 +16,7 @@ Notes:
 * files are not automatically removed from public. Empty it and rebuild after moving or deleting files.
 * Don't touch `themes/whiteplain/` if you can help it; make your change in `layouts/` instead.
 * Don't touch `style.css` either, make CSS changes in `/static/css/custom.css` instead.
-* When changing cache-busted static assets such as `/static/css/custom.css`, bump the corresponding `?v=` version in `layouts/partials/head.html` and any manually maintained static pages that reference it.
-* Remember to manually update `static/search/index.html` when changing shared header, social, CSS, or Font Awesome assets.
+* When changing cache-busted static assets such as `/static/css/custom.css`, bump the corresponding `?v=` version once per commit in `layouts/partials/head.html`.
 
 
 Testing
@@ -42,7 +41,7 @@ If something goes wrong:
 
 To see the analytics:
 
-* `uv run analytics.py`
+* `uv run scripts/analytics.py`
 
 
 Structure
@@ -53,10 +52,12 @@ Structure
 ├── content/                    # Blog posts and pages
 │   ├── post/                   # Articles
 │   ├── about/                  # About me
+│   ├── search/                 # Site search page
 │   ├── quotes/                 # Quotes & Poems
 │   └── archives/               # Archive List
 ├── public/                     # Generated static site (output)
 ├── static/                     # Static assets (images, fonts, etc)
+│   ├── css/                    # Local CSS overrides
 │   ├── demos/                  # Web demos
 ├── layouts/                    # Custom Hugo templates
 ├── themes/whiteplain/          # Site theme

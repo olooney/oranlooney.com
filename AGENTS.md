@@ -13,8 +13,7 @@ These instructions apply to the entire repository unless a more specific instruc
 - Treat `public/` as generated output and never touch it. You can, however, read it to review generated HTML.
 - Avoid editing `themes/whiteplain/`. Make local overrides in `layouts/`.
 - Avoid editing `style.css`. Make CSS changes in `static/css/custom.css`.
-- When changing cache-busted static assets such as `static/css/custom.css`, bump the corresponding `?v=` version once per commit in `layouts/partials/head.html` and any manually maintained static pages that reference it. Do not bump the version for every individual edit within the same commit.
-- After editing the shared header, social partial, CSS, or Font Awesome assets, review `static/search/index.html` and make equivalent edits to keep it in sync.
+- When changing cache-busted static assets such as `static/css/custom.css`, bump the corresponding `?v=` version once per commit in `layouts/partials/head.html`. Do not bump the version for every individual edit within the same commit.
 - Do not run deployment/staging/release commands unless the user explicitly asks.
 - Keep changes narrow and preserve the author’s voice. For prose edits, prefer spelling, grammar, clarity, and small rhythm fixes over rewriting.
 
@@ -22,6 +21,7 @@ These instructions apply to the entire repository unless a more specific instruc
 ## Content Structure
 
 - Blog posts live in `content/post/`.
+- Section pages such as search, quotes, about, and archives live under `content/<section>/`.
 - Static post assets generally live under `static/post/<post-slug>_files/` and are referenced as `/post/<post-slug>_files/...`.
 - Lead images are declared in front matter with `image: /post/<post-slug>_files/lead.jpg` or similar.
 - Front matter commonly includes:
