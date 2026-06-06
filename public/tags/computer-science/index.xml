@@ -18,8 +18,7 @@
       <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/grifters-skeptics-marks/</guid>
-      <description>We are in a golden age of grift. Where adventurers once flocked to California or the Yukon because &amp;ldquo;there was gold in them thar hills,&amp;rdquo; the fastest way to get rich today is by fleecing suckers. We&amp;rsquo;ve got crypto rug pulls, meme stocks, nutritional supplements, MLMs&amp;mdash;anything to make a quick buck.
-Fraud is hardly a new phenomenon. The Great Depression brought with it a wave of con artists, mythologized in movies such as Paper Moon or The Sting.</description>
+      <description>We are in a golden age of grift. Where adventurers once flocked to California or the Yukon because &amp;ldquo;there was gold in them thar hills,&amp;rdquo; the fastest way to get rich today is by fleecing suckers. We&amp;rsquo;ve got crypto rug pulls, meme stocks, nutritional supplements, MLMs&amp;mdash;anything to make a quick buck.</description>
     </item>
     
     <item>
@@ -28,8 +27,7 @@ Fraud is hardly a new phenomenon. The Great Depression brought with it a wave of
       <pubDate>Sat, 27 Sep 2025 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/history-of-computing-2/</guid>
-      <description>In part I of this two-part series we covered lookup tables and simple devices with at most a handful of moving parts. This time we&amp;rsquo;ll pick up in the 17th centuries, when computing devices started to became far more complex and the groundwork for later theoretical work began to be laid.
-Pascal We enter the era of mechanical calculators in 1642 when Pascal invented a machine, charmingly called the pascaline, which could perform addition and subtraction:</description>
+      <description>In part I of this two-part series we covered lookup tables and simple devices with at most a handful of moving parts. This time we&amp;rsquo;ll pick up in the 17th centuries, when computing devices started to became far more complex and the groundwork for later theoretical work began to be laid.</description>
     </item>
     
     <item>
@@ -39,7 +37,7 @@ Pascal We enter the era of mechanical calculators in 1642 when Pascal invented a
       
       <guid>https://www.oranlooney.com/post/history-of-computing/</guid>
       <description>What is a computer, really? Where did it come from? When did we realize we could trick rocks into doing our math homework for us?
-In this two-part series, I&amp;rsquo;ll cover the origin and early history of computing and computer science, starting in prehistoric Africa and ending in Victorian-era England. Not exhaustively (because that would require an entire book) but selectively, highlighting the most interesting innovations and focusing on the untold (or at least less well known) stories.</description>
+In this two-part series, I&amp;rsquo;ll cover the origin and early history of computing and computer science, starting in prehistoric Africa and ending in Victorian-era England.</description>
     </item>
     
     <item>
@@ -49,7 +47,7 @@ In this two-part series, I&amp;rsquo;ll cover the origin and early history of co
       
       <guid>https://www.oranlooney.com/post/slow-fibonacci/</guid>
       <description>I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
-This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?</description>
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring.</description>
     </item>
     
     <item>
@@ -59,8 +57,7 @@ This is not as easy as it sounds: any program can trivially be made slower, but 
       
       <guid>https://www.oranlooney.com/post/fibonacci/</guid>
       <description>A common example of recursion is the function to calculate the $n$-th Fibonacci number:
-def naive_fib(n): if n &amp;lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2)  This follows the mathematical definition very closely but it&amp;rsquo;s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:
-from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &amp;lt; 2: return n else: return memoized_fib(n-1) + memoized_fib(n-2)  or tabulation:</description>
+def naive_fib(n): if n &amp;lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2)  This follows the mathematical definition very closely but it&amp;rsquo;s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:</description>
     </item>
     
   </channel>

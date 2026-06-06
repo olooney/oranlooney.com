@@ -18,8 +18,7 @@
       <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/grifters-skeptics-marks/</guid>
-      <description>We are in a golden age of grift. Where adventurers once flocked to California or the Yukon because &amp;ldquo;there was gold in them thar hills,&amp;rdquo; the fastest way to get rich today is by fleecing suckers. We&amp;rsquo;ve got crypto rug pulls, meme stocks, nutritional supplements, MLMs&amp;mdash;anything to make a quick buck.
-Fraud is hardly a new phenomenon. The Great Depression brought with it a wave of con artists, mythologized in movies such as Paper Moon or The Sting.</description>
+      <description>We are in a golden age of grift. Where adventurers once flocked to California or the Yukon because &amp;ldquo;there was gold in them thar hills,&amp;rdquo; the fastest way to get rich today is by fleecing suckers. We&amp;rsquo;ve got crypto rug pulls, meme stocks, nutritional supplements, MLMs&amp;mdash;anything to make a quick buck.</description>
     </item>
     
     <item>
@@ -29,7 +28,7 @@ Fraud is hardly a new phenomenon. The Great Depression brought with it a wave of
       
       <guid>https://www.oranlooney.com/post/genji-ko/</guid>
       <description>You might think it&amp;rsquo;s unlikely for any interesting mathematics to arise from incense appreciation, but that&amp;rsquo;s only because you&amp;rsquo;re unfamiliar with the peculiar character of Muromachi (室町) era Japanese nobles.
-There has never been a group of people, in any time or place, who were so driven to display their sophistication and refinement. It wouldn&amp;rsquo;t do to merely put out a few sticks of incense; no, you would have to prove that your taste was more exquisite, your judgment more refined, your etiquette more oblique.</description>
+There has never been a group of people, in any time or place, who were so driven to display their sophistication and refinement.</description>
     </item>
     
     <item>
@@ -38,7 +37,7 @@ There has never been a group of people, in any time or place, who were so driven
       <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/angle-addition/</guid>
-      <description>One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the starting point, mainly based on convenience. This isn&amp;rsquo;t problematic or even particularly unusual in mathematics - as long as we can derive any of the other forms from any starting point, it makes little theoretical difference which we start from since they&amp;rsquo;re all equivalent anyway.</description>
+      <description>One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the starting point, mainly based on convenience. This isn&amp;rsquo;t problematic or even particularly unusual in mathematics: as long as we can derive any of the other forms from any starting point, it makes little difference which we start from.</description>
     </item>
     
     <item>
@@ -47,7 +46,11 @@ There has never been a group of people, in any time or place, who were so driven
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/kaprekar/</guid>
-      <description>Kaprekar&amp;rsquo;s routine is a simple arithmetic procedure which, when applied to four digit numbers, rapidly converges to the fixed point 6174, known as the Kaprekar constant. Unlike other famous iterative procedures such as the Collatz function, the somewhat arbitrary nature of the Kaprekar routine doesn&amp;rsquo;t hint at fundamental mathematical discoveries yet to be made; rather, its charm lies in its intuitive definition (requiring no more than elementary mathematics,) its oddly off-center fixed point of 6174, and its surprisingly rapid convergence (which requires only five iterations on average and never more than seven.</description>
+      <description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Kaprekar%27s_routine&#34;&gt;Kaprekar&amp;rsquo;s routine&lt;/a&gt; is a simple arithmetic procedure on four digit numbers which rapidly converges to the fixed point 6174, known as the
+Kaprekar constant. Unlike other famous iterative procedures such as the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Collatz_conjecture&#34;&gt;Collatz function&lt;/a&gt;, the &lt;em&gt;ad hoc&lt;/em&gt; nature of the Kaprekar routine
+doesn&amp;rsquo;t hint at fundamental mathematical discoveries yet to be made.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -56,8 +59,7 @@ There has never been a group of people, in any time or place, who were so driven
       <pubDate>Wed, 13 Sep 2023 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/playfair/</guid>
-      <description>In 2020, the Zodiac 340 cipher was finally cracked after more than 50 years of trying by amateur code breakers. While the effort to crack it was extremely impressive, the cipher itself was ultimately disappointing. A homophonic substitution cipher with a minor gimmick of writing diagonally, the main factor that prevented it from being solved much earlier was the several errors the Zodiac killer made when encoding it.
-Substitution ciphers, which operate at the level of a single character, are children&amp;rsquo;s toys, the kind of thing you might get a decoder ring for from the back of a magazine.</description>
+      <description>In 2020, the Zodiac 340 cipher was finally cracked after more than 50 years of trying by amateur code breakers. While the effort to crack it was extremely impressive, the cipher itself was ultimately disappointing. A homophonic substitution cipher with a minor gimmick of writing diagonally, the main factor that prevented it from being solved much earlier was the several errors the Zodiac killer made when encoding it.</description>
     </item>
     
     <item>
@@ -67,7 +69,7 @@ Substitution ciphers, which operate at the level of a single character, are chil
       
       <guid>https://www.oranlooney.com/post/viz-tsne/</guid>
       <description>Introduction Visualizing the results of a binary classifier is already a challenge, but having more than two classes aggravates the matter considerably.
-Let&amp;rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities. Instead of having two kinds of error, false positives and false negatives, we have $k(k-1)$ kinds of errors.</description>
+Let&amp;rsquo;s say we have $k$ classes. Then for each observation, there is one correct prediction and $k-1$ possible incorrect prediction. Instead of a $2 \times 2$ confusion matrix, we have a $k^2$ possibilities.</description>
     </item>
     
   </channel>

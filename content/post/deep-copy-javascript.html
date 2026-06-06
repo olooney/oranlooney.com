@@ -7,7 +7,11 @@ image: /post/deep-copy-javascript/lead.jpg
 ---
 
 <p class="archive-notice">
-    <b>Update 2017-10-23:</b> This article and code library have not kept up with the rapidly changing JavaScript landscape and are now hopelessly out of date. First came non-enumerable properties, and with ES2015 came the introduction of classes, proxies, symbols, and anonymous functions, all of which break the below logic. I'm afraid I no longer know how to fully copy the full menagerie of JavaScript objects while preserving relative references, and it's quite possible that no one else knows either. Nevertheless, the below essay may be of interest if you're interesting in the purely theoretical aspects of deep copying, which can be demonstrated just as well in JavaScript as any other language, so long as you don't go asking tricky questions about the newer features.
+    <b>Update 2017-10-23:</b> This article and code library have not kept up with the rapidly changing JavaScript landscape and are now hopelessly out of date. First came non-enumerable properties, and with ES2015 came the introduction of classes, proxies, symbols, and anonymous functions, all of which break the below logic. I'm afraid I no longer know how to fully copy the full menagerie of JavaScript objects correctly.
+</p>
+<p>In fact, it's quite possible no one on Earth does.</p>
+<p>
+    Nevertheless, the below essay may be of interest if you're interesting in the purely theoretical aspects of deep copying, which can be demonstrated just as well in JavaScript as any other language, so long as you don't go asking tricky questions about the newer features.
 </p>
   
 <p>I've been interested in writing a generic deep copy algorithm in JavaScript for a while.  The simple way to make a deep copy in JavaScript is to JSON-serialize and deserialize it (described <a href="#json-serial-deserial">below</a>) but this approach is very limited.  A while ago it occurred to me that that it should be possible to write a fully generic implementation in JavaScript thanks to the language's design.  This is interesting because most languages can't do this.  <br>

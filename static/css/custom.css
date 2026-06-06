@@ -11,9 +11,11 @@ html .article pre {
 	font-style: normal;
 }
 
+/*
 html .article pre code {
-    /*border-left: solid 4px #b4c6c7;*/
+    border-left: solid 4px #b4c6c7;
 }
+*/
 html .article blockquote {
   position: relative;
   margin-left: 0.5em;
@@ -129,6 +131,14 @@ html header.site-header nav.site-navi {
 	max-width: 900px;
 	margin: auto;
 	padding: 0 0.5em 0.5em;
+  align-items: flex-start;
+}
+html header.site-header .site-navi-items {
+  min-height: 50px;
+  align-items: center;
+}
+html header.site-header .site-navi-item {
+  line-height: 50px;
 }
 html .site-navi a:hover,
 html .site-navi a:active
@@ -176,11 +186,18 @@ html .author .author-avatar {
 }
 
 .site-header .author-social {
+  min-height: 50px;
   font-size: 13px;
-  margin-left: 5px;
+  margin: 10px 0 0 5px;
+  align-items: center;
 }
 .site-header ul.author-social li {
   margin: 0 8px 0 8px;
+}
+.site-header .author-social a {
+  display: flex;
+  align-items: center;
+  height: 50px;
 }
 html .author {
  float: left;
@@ -214,13 +231,10 @@ html .archives .archives-item > a:visited {
   color: #800000;
 }
 
-html .archives .archives-item {
-
-}
-
-html .archives .archives-item ul.taxonomies {
-
-}
+/*
+html .archives .archives-item { }
+html .archives .archives-item ul.taxonomies { }
+*/
 
 
 .list .article-readmore {
@@ -247,18 +261,13 @@ html .archives .archives-item ul.taxonomies {
   color: #007700;
 }
 
-.home-list .article .article-content{
-  text-overflow: ellipsis;
-  max-height: 130px;
-}
-
-
 /* About */
 .about {
   text-align: left;
 }
-.author {
-}
+/*
+.author {}
+*/
 .author-name {
   font-size: 1.2em;
   font-weight: bold;

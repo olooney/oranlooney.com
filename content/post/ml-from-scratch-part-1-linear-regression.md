@@ -12,11 +12,13 @@ image: /post/ml-from-scratch-part-1-linear-regression_files/lead.png
 ---
 
 To kick off this series, will start with something simple yet foundational:
-linear regression via [ordinary least squares][OLS]. 
-
-While not exciting, linear regression finds widespread use both as a standalone
+linear regression via [ordinary least squares][OLS]. While not particularly
+exciting, linear regression finds widespread use both as a standalone
 learning algorithm and as a building block in more advanced learning
-algorithms. The output layer of a deep neural network trained for regression
+algorithms. 
+<!--more-->
+
+The output layer of a deep neural network trained for regression
 with MSE loss, simple AR time series models, and the "local regression" part of
 LOWESS smoothing are all examples of linear regression being used as an
 ingredient in a more sophisticated model. 

@@ -4,6 +4,7 @@ theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"
 paginate = 100
+summaryLength = 50
 
 # Copyright notice. This is displayer in the footer.
 copyright = "&copy; Copyright {year} Oran Looney"

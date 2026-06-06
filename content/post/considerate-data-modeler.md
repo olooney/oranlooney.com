@@ -29,7 +29,7 @@ insulated from your database by an ablative layer of code and really only have
 one POV anyway, but also the DBAs who have to do backups, the engineers who
 have to build pipelines, the analysts who run queries, and executives who look
 at dashboards. Think about what *really* makes a database user happy. Hint:
-it's not using all the most advanced features.
+it's not using all the latest features.
 
 All of these types of users rotate your data 90&deg; and look at it through
 their own lenses. That's why relational databases and third normal form are so
@@ -170,9 +170,9 @@ Conclusion
 ----------
 
 What if there were a better way? What if, and hear me out on this, we just...
-didn't do it? Any of that complex stuff? What if we just built plain ol' boring data
-models in 3NF that used precisely zero advanced features and can therefore be
-trivially instantiated on any RDBMS using conventions that everyone in the
+didn't do it? Any of that complex stuff? What if we just built plain ol' boring
+data models in 3NF that used precisely zero advanced features and can therefore
+be trivially instantiated on any RDBMS using conventions that everyone in the
 industry is familiar with? It would be like coming home to your favorite little
 library, where everything is in its proper place be and you can always find
 what you're looking for, where all the customers are happily browsing, the
@@ -180,8 +180,6 @@ staff is relaxed, and even the cat seems to know in its heart that it's exactly
 where it should be.
 
 ABC: Always Be a Considerate data modeler. Design boring databases.
-
-The lovely cat photo is by [Diane Picchiottino][CA] on [Unsplash][UC].
 
 <hr>
 Footnotes
@@ -202,6 +200,9 @@ GROUP BY state.name
 <p>
   <a href="#maintext1">Back</a>
 </p>
+
+The lovely cat photo is by [Diane Picchiottino][CA] on [Unsplash][UC].
+
 
 [ABC]: https://www.youtube.com/watch?v=O6ybfVT9gxA
 [CA]: https://unsplash.com/@diane_soko?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText

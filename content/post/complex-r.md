@@ -9,10 +9,11 @@ image: /post/complex-r_files/lead.png
 
 R, like many scientific programming languages, has first-class support for
 complex numbers.  And, just as in most other programming languages, this
-functionality is ignored by the vast majority of users.
+functionality is ignored by the vast majority of users. Yet complex numbers
+can often offer surprisingly elegant formulations and solutions to problems.
+<!--more-->
 
-Yet complex numbers can often offer surprisingly elegant formulations and
-solutions to problems. I want to convince you that familiarizing yourself with
+I want to convince you that familiarizing yourself with
 R's excellent complex number functionality is well worth the effort and will
 pay off in two different ways: first by showing you how they are so
 amazingly useful you'll want to go out of your way to use them, and then by

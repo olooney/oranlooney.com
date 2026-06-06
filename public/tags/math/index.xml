@@ -18,7 +18,7 @@
       <pubDate>Wed, 13 May 2026 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/monty-hall/</guid>
-      <description>This essay isn&amp;rsquo;t to explain the solution to the Monty Hall problem&amp;mdash;you can look that up anywhere&amp;mdash;but to ask a related question: why does it seem to drive some people crazy? Why do they get so attached to their wrong answers, and so upset by the correct answer? That&amp;rsquo;s weird, right? People don&amp;rsquo;t usually care enough about math problems to get worked up over them, but there&amp;rsquo;s something about this particular problem that really pushes people&amp;rsquo;s buttons.</description>
+      <description>This essay isn&amp;rsquo;t to explain the solution to the Monty Hall problem&amp;mdash;you can look that up anywhere&amp;mdash;but to ask a related question: why does it seem to drive some people crazy? Why do they get so attached to their wrong answers, and so upset by the correct answer? That&amp;rsquo;s weird, right?</description>
     </item>
     
     <item>
@@ -27,8 +27,7 @@
       <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/grifters-skeptics-marks/</guid>
-      <description>We are in a golden age of grift. Where adventurers once flocked to California or the Yukon because &amp;ldquo;there was gold in them thar hills,&amp;rdquo; the fastest way to get rich today is by fleecing suckers. We&amp;rsquo;ve got crypto rug pulls, meme stocks, nutritional supplements, MLMs&amp;mdash;anything to make a quick buck.
-Fraud is hardly a new phenomenon. The Great Depression brought with it a wave of con artists, mythologized in movies such as Paper Moon or The Sting.</description>
+      <description>We are in a golden age of grift. Where adventurers once flocked to California or the Yukon because &amp;ldquo;there was gold in them thar hills,&amp;rdquo; the fastest way to get rich today is by fleecing suckers. We&amp;rsquo;ve got crypto rug pulls, meme stocks, nutritional supplements, MLMs&amp;mdash;anything to make a quick buck.</description>
     </item>
     
     <item>
@@ -37,8 +36,7 @@ Fraud is hardly a new phenomenon. The Great Depression brought with it a wave of
       <pubDate>Sat, 27 Sep 2025 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/history-of-computing-2/</guid>
-      <description>In part I of this two-part series we covered lookup tables and simple devices with at most a handful of moving parts. This time we&amp;rsquo;ll pick up in the 17th centuries, when computing devices started to became far more complex and the groundwork for later theoretical work began to be laid.
-Pascal We enter the era of mechanical calculators in 1642 when Pascal invented a machine, charmingly called the pascaline, which could perform addition and subtraction:</description>
+      <description>In part I of this two-part series we covered lookup tables and simple devices with at most a handful of moving parts. This time we&amp;rsquo;ll pick up in the 17th centuries, when computing devices started to became far more complex and the groundwork for later theoretical work began to be laid.</description>
     </item>
     
     <item>
@@ -48,7 +46,7 @@ Pascal We enter the era of mechanical calculators in 1642 when Pascal invented a
       
       <guid>https://www.oranlooney.com/post/history-of-computing/</guid>
       <description>What is a computer, really? Where did it come from? When did we realize we could trick rocks into doing our math homework for us?
-In this two-part series, I&amp;rsquo;ll cover the origin and early history of computing and computer science, starting in prehistoric Africa and ending in Victorian-era England. Not exhaustively (because that would require an entire book) but selectively, highlighting the most interesting innovations and focusing on the untold (or at least less well known) stories.</description>
+In this two-part series, I&amp;rsquo;ll cover the origin and early history of computing and computer science, starting in prehistoric Africa and ending in Victorian-era England.</description>
     </item>
     
     <item>
@@ -58,7 +56,7 @@ In this two-part series, I&amp;rsquo;ll cover the origin and early history of co
       
       <guid>https://www.oranlooney.com/post/genji-ko/</guid>
       <description>You might think it&amp;rsquo;s unlikely for any interesting mathematics to arise from incense appreciation, but that&amp;rsquo;s only because you&amp;rsquo;re unfamiliar with the peculiar character of Muromachi (室町) era Japanese nobles.
-There has never been a group of people, in any time or place, who were so driven to display their sophistication and refinement. It wouldn&amp;rsquo;t do to merely put out a few sticks of incense; no, you would have to prove that your taste was more exquisite, your judgment more refined, your etiquette more oblique.</description>
+There has never been a group of people, in any time or place, who were so driven to display their sophistication and refinement.</description>
     </item>
     
     <item>
@@ -67,7 +65,7 @@ There has never been a group of people, in any time or place, who were so driven
       <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/angle-addition/</guid>
-      <description>One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the starting point, mainly based on convenience. This isn&amp;rsquo;t problematic or even particularly unusual in mathematics - as long as we can derive any of the other forms from any starting point, it makes little theoretical difference which we start from since they&amp;rsquo;re all equivalent anyway.</description>
+      <description>One thing you may have noticed about the trigonometric functions sine and cosine is that they seem to have no agreed upon definition. Or rather, different authors choose different definitions as the starting point, mainly based on convenience. This isn&amp;rsquo;t problematic or even particularly unusual in mathematics: as long as we can derive any of the other forms from any starting point, it makes little difference which we start from.</description>
     </item>
     
     <item>
@@ -76,7 +74,11 @@ There has never been a group of people, in any time or place, who were so driven
       <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/kaprekar/</guid>
-      <description>Kaprekar&amp;rsquo;s routine is a simple arithmetic procedure which, when applied to four digit numbers, rapidly converges to the fixed point 6174, known as the Kaprekar constant. Unlike other famous iterative procedures such as the Collatz function, the somewhat arbitrary nature of the Kaprekar routine doesn&amp;rsquo;t hint at fundamental mathematical discoveries yet to be made; rather, its charm lies in its intuitive definition (requiring no more than elementary mathematics,) its oddly off-center fixed point of 6174, and its surprisingly rapid convergence (which requires only five iterations on average and never more than seven.</description>
+      <description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Kaprekar%27s_routine&#34;&gt;Kaprekar&amp;rsquo;s routine&lt;/a&gt; is a simple arithmetic procedure on four digit numbers which rapidly converges to the fixed point 6174, known as the
+Kaprekar constant. Unlike other famous iterative procedures such as the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Collatz_conjecture&#34;&gt;Collatz function&lt;/a&gt;, the &lt;em&gt;ad hoc&lt;/em&gt; nature of the Kaprekar routine
+doesn&amp;rsquo;t hint at fundamental mathematical discoveries yet to be made.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -85,8 +87,7 @@ There has never been a group of people, in any time or place, who were so driven
       <pubDate>Wed, 13 Sep 2023 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/playfair/</guid>
-      <description>In 2020, the Zodiac 340 cipher was finally cracked after more than 50 years of trying by amateur code breakers. While the effort to crack it was extremely impressive, the cipher itself was ultimately disappointing. A homophonic substitution cipher with a minor gimmick of writing diagonally, the main factor that prevented it from being solved much earlier was the several errors the Zodiac killer made when encoding it.
-Substitution ciphers, which operate at the level of a single character, are children&amp;rsquo;s toys, the kind of thing you might get a decoder ring for from the back of a magazine.</description>
+      <description>In 2020, the Zodiac 340 cipher was finally cracked after more than 50 years of trying by amateur code breakers. While the effort to crack it was extremely impressive, the cipher itself was ultimately disappointing. A homophonic substitution cipher with a minor gimmick of writing diagonally, the main factor that prevented it from being solved much earlier was the several errors the Zodiac killer made when encoding it.</description>
     </item>
     
     <item>
@@ -96,7 +97,7 @@ Substitution ciphers, which operate at the level of a single character, are chil
       
       <guid>https://www.oranlooney.com/post/slow-fibonacci/</guid>
       <description>I recently wrote an article which was ostensibly about the Fibonacci series but was really about optimization techniques. I wanted to follow up on its (extremely moderate) success by going in the exact opposite direction: by writing a Fibonacci function which is as slow as possible.
-This is not as easy as it sounds: any program can trivially be made slower, but this is boring. How can we make it slow in a fair and interesting way?</description>
+This is not as easy as it sounds: any program can trivially be made slower, but this is boring.</description>
     </item>
     
     <item>
@@ -106,8 +107,7 @@ This is not as easy as it sounds: any program can trivially be made slower, but 
       
       <guid>https://www.oranlooney.com/post/fibonacci/</guid>
       <description>A common example of recursion is the function to calculate the $n$-th Fibonacci number:
-def naive_fib(n): if n &amp;lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2)  This follows the mathematical definition very closely but it&amp;rsquo;s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:
-from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &amp;lt; 2: return n else: return memoized_fib(n-1) + memoized_fib(n-2)  or tabulation:</description>
+def naive_fib(n): if n &amp;lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2)  This follows the mathematical definition very closely but it&amp;rsquo;s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:</description>
     </item>
     
     <item>
@@ -117,7 +117,7 @@ from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &amp;l
       
       <guid>https://www.oranlooney.com/post/craps-game-variants/</guid>
       <description>Craps is a suprisingly fair game. I remember calculating the probability of winning craps for the first time in an undergraduate discrete math class: I went back through my calculations several times, certain there was a mistake somewhere. How could it be closer than $\frac{1}{36}$?
-(Spoiler Warning If you haven&amp;rsquo;t calculated these odds for yourself then you may want to do so before reading further. I&amp;rsquo;m about to spoil it for you rather thoroughly in the name of exploring a more general case.</description>
+(Spoiler Warning If you haven&amp;rsquo;t calculated these odds for yourself then you may want to do so before reading further.</description>
     </item>
     
     <item>
@@ -127,8 +127,7 @@ from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &amp;l
       
       <guid>https://www.oranlooney.com/post/complex-r-part-2/</guid>
       <description>This post is part of a series on complex number functionality in the R programming language. You may want to read Part I before continuing if you are not already comfortable with the basics.
-In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.
-In this second part, we&amp;rsquo;ll take a more in-depth look at some scenarios where complex numbers arise naturally &amp;ndash; where they are less of a choice an more of a necessity.</description>
+In Part I of this series, we dipped our toes in the water by explicitly creating some complex numbers and showing how they worked with the most basic mathematical operators, functions, and plots.</description>
     </item>
     
     <item>
@@ -137,8 +136,11 @@ In this second part, we&amp;rsquo;ll take a more in-depth look at some scenarios
       <pubDate>Sun, 17 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://www.oranlooney.com/post/complex-r/</guid>
-      <description>R, like many scientific programming languages, has first-class support for complex numbers. And, just as in most other programming languages, this functionality is ignored by the vast majority of users.
-Yet complex numbers can often offer surprisingly elegant formulations and solutions to problems. I want to convince you that familiarizing yourself with R&amp;rsquo;s excellent complex number functionality is well worth the effort and will pay off in two different ways: first by showing you how they are so amazingly useful you&amp;rsquo;ll want to go out of your way to use them, and then by showing you how they are so common and fundamental to modern analysis that you couldn&amp;rsquo;t avoid them if you wanted to.</description>
+      <description>&lt;p&gt;R, like many scientific programming languages, has first-class support for
+complex numbers.  And, just as in most other programming languages, this
+functionality is ignored by the vast majority of users. Yet complex numbers
+can often offer surprisingly elegant formulations and solutions to problems.
+&lt;/p&gt;</description>
     </item>
     
   </channel>

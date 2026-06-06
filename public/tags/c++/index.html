@@ -11,7 +11,7 @@
   <link href="/tags/c&#43;&#43;/index.xml" rel="feed" type="application/rss+xml" title="OranLooney.com" />
   <link rel="stylesheet" href="/css/style.css" media="all" />
   <link rel="stylesheet" href="/css/syntax.css" media="all" />
-  <link rel="stylesheet" href="/css/custom.css?v=5" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=6" media="all" />
 
   <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -100,7 +100,6 @@
         <div class="article-content">
           A common example of recursion is the function to calculate the $n$-th Fibonacci number:
 def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) + naive_fib(n-2)  This follows the mathematical definition very closely but it&rsquo;s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:
-from functools import lru_cache @lru_cache(100) def memoized_fib(n): if n &lt; 2: return n else: return memoized_fib(n-1) + memoized_fib(n-2)  or tabulation:
         </div>
         <div class="article-readmore"><a href="/post/fibonacci/">Read more...</a></div>
         <div class="article-floatclear"></div>

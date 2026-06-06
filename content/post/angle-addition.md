@@ -13,9 +13,8 @@ One thing you may have noticed about the trigonometric functions [sine and
 cosine][WSC] is that they seem to have no agreed upon definition. Or rather,
 different authors choose different definitions as the starting point, mainly
 based on convenience. This isn't problematic or even particularly unusual in
-mathematics - as long as we can derive any of the other forms from any starting
-point, it makes little theoretical difference which we start from since they're
-all equivalent anyway.
+mathematics: as long as we can derive any of the other forms from any starting
+point, it makes little  difference which we start from.
 
 The most common starting points are the series definitions, the solution to an
 initial value problem involving ordinary differential equations, or using
