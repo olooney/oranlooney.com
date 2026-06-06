@@ -32,7 +32,7 @@ at dashboards. Think about what *really* makes a database user happy. Hint:
 it's not using all the most advanced features.
 
 All of these types of users rotate your data 90&deg; and look at it through
-their own lens. That's why relational databases and third normal form are so
+their own lenses. That's why relational databases and third normal form are so
 successful in practice; they make these conceptual rotations easy and natural.
 
 Remember that the container is not the contents. Your data might live in a
@@ -91,15 +91,15 @@ When that happens, the poor DBA will have to model your `enum` as strings
 with a `CHECK` constraint.
 
 Think also of the poor analysts and data scientists who have to actually *use*
-your database. SQL is their mother tongue and they think nothing of `LEFT
-JOIN`ing to a few reference tables to pick up human-readable columns... at the
-end of their query. In the meat of the logic, all the `CTAS` statements and
+your database. SQL is their mother tongue and they think nothing of adding a
+couple of `LEFT JOIN` clauses to pick up human-readable columns... at the end
+of their query. In the meat of the logic, all the `CTAS` statements and
 subqueries, they want to use fast, exact joins on primary keys.
 
-Here is some homework for you:
+Here's some homework for you:
 
 1) I want to deprecate a value in an `enum`, but it is used in historical data
-and still meaningful there. If it were a ref table we would add a soft delete
+and still meaningful there. If it were a lookup table we could add a soft delete
 flag; how do I do the same thing with `enum`?
 
 2) I need to associate additional information with each code in my `enum`. For
@@ -107,10 +107,11 @@ example, I have a State `enum`, but I also need to store the two-letter state
 abbreviations, and distinguish between states and territories. How would I do
 that with an `enum`?
 
-3) Write a query that returns one row for every state in the State `enum` and
-counts the number of orders. To be clear, it should return a row even for 
-states where the count is zero, like `('Wisconsin', 0)`. Compare your answer 
-to this query:
+3) <span id="maintext1">Write</span> a query that returns one row for every
+state in the State `enum` and counts the number of orders. To be clear, it
+should return a row even for states where the count is zero, like
+`('Wisconsin', 0)`. Compare your answer<a href="#footnote1"><sup>*</sup></a> to
+this query:
 
 ```sql
 SELECT state.name, COUNT(orders.id) AS n_orders
@@ -133,7 +134,7 @@ You might argue, well, why don't we start with `enum` today, but then migrate
 when these cases actually come up in practice. YAGNI! KISS!
 
 The problem there is that the refactoring isn't transparent at all. Relational
-databases have an "interface," just like an API - that's why we can swap tables
+databases have an "interface," just like an API; that's why we can swap tables
 for views, for example. But the surface area of that interface is quite large:
 every table name, column name, and type.
 
@@ -143,6 +144,13 @@ will need to be rewritten. That means the custom maps in ETL pipelines, ORM
 models in application code, every snippet of saved SQL the analysts keep inside
 of DBeaver to quickly answer *ad hoc* questions from executives.
 
+But let's say you push through the change management nightmare and get the
+State `enum` refactored to the `state_id` column, or whatever. Now you have a
+data model where some columns use `enum`, some use the lookup table
+convention, and everyone has to check every single time they use any column.
+Well-designed data models follow clear conventions so that you hardly ever have
+to think.
+
 Here is something absolutely key for application developers to understand: *the
 database is not for just you.* It is not your private vault to persist a few
 objects so your application works. It is an integral part of your interface to
@@ -151,36 +159,50 @@ application is successful, executives will want dashboards with metrics,
 analysts will want to do reporting, and data scientists will want to extract
 training data.
 
-If it's painless to migrate, it's only because *no one was using your database
-in the first place.* Your database was *already* a failure. (Obviously this
-only applies to data that you intend to share with others. If you're working on
-a hobby project you can do as you like.)
+If it's painless to migrate, it's only because *no one was using your data in
+the first place.* Your database was *already* a failure. (Obviously this only
+applies to data that you intend to share with others. If you're working on a
+hobby project you can do as you like.)
 
-But let's say you push through the change management nightmare, and get the
-State `enum` refactored to the `state_id` column, or whatever. Now you have a
-data model where some columns are `enum`s, some use the lookup table
-convention, and everyone has to check every single time they use any column.
-Well-designed data models follow clear conventions so that you hardly ever have
-to think.
 
 
 Conclusion
 ----------
 
-What if there was a better way? What if, and hear me out on this, we just...
-didn't do it? Any of that? What if we just built plain ol' boring data models
-in 3NF that used precisely zero advanced features and can therefore be
+What if there were a better way? What if, and hear me out on this, we just...
+didn't do it? Any of that complex stuff? What if we just built plain ol' boring data
+models in 3NF that used precisely zero advanced features and can therefore be
 trivially instantiated on any RDBMS using conventions that everyone in the
 industry is familiar with? It would be like coming home to your favorite little
-library, where everything is where it should be and you can always find what
-you're looking for, where all the customers are happily browsing, the staff is
-relaxed, and even the cat seems to know in its heart that it's exactly where it
-should be.
+library, where everything is in its proper place be and you can always find
+what you're looking for, where all the customers are happily browsing, the
+staff is relaxed, and even the cat seems to know in its heart that it's exactly
+where it should be.
 
 ABC: Always Be a Considerate data modeler. Design boring databases.
 
-The lovely cat photo is by [Diane Picchiottino][cat-author] on [Unsplash][cat-photo].
+The lovely cat photo is by [Diane Picchiottino][CA] on [Unsplash][UC].
+
+<hr>
+Footnotes
+---------
+
+<p id="footnote1">
+  <sup><a href="#maintext1">*</a></sup>
+  Answer to homework question 3 in PostgreSQL:
+</p>
+
+```sql
+SELECT state.name, COUNT(orders.id) AS n_orders
+FROM unnest(enum_range(NULL::state)) AS state(name)
+LEFT JOIN orders ON orders.state = state.name
+GROUP BY state.name
+```
+
+<p>
+  <a href="#maintext1">Back</a>
+</p>
 
 [ABC]: https://www.youtube.com/watch?v=O6ybfVT9gxA
-[cat-author]: https://unsplash.com/@diane_soko?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
-[cat-photo]: https://unsplash.com/photos/a-cat-sleeping-on-top-of-a-book-shelf-3skIILnva1k?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+[CA]: https://unsplash.com/@diane_soko?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+[UC]: https://unsplash.com/photos/a-cat-sleeping-on-top-of-a-book-shelf-3skIILnva1k?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText

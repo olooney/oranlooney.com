@@ -85,6 +85,7 @@
 <li><a href="#case-study-enum">Case Study: Enum</a></li>
 <li><a href="#keep-it-boring">Keep it Boring</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#footnotes">Footnotes</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -117,7 +118,7 @@ at dashboards. Think about what <em>really</em> makes a database user happy. Hin
 it&rsquo;s not using all the most advanced features.</p>
 
 <p>All of these types of users rotate your data 90&deg; and look at it through
-their own lens. That&rsquo;s why relational databases and third normal form are so
+their own lenses. That&rsquo;s why relational databases and third normal form are so
 successful in practice; they make these conceptual rotations easy and natural.</p>
 
 <p>Remember that the container is not the contents. Your data might live in a
@@ -172,15 +173,15 @@ When that happens, the poor DBA will have to model your <code>enum</code> as str
 with a <code>CHECK</code> constraint.</p>
 
 <p>Think also of the poor analysts and data scientists who have to actually <em>use</em>
-your database. SQL is their mother tongue and they think nothing of <code>LEFT
-JOIN</code>ing to a few reference tables to pick up human-readable columns&hellip; at the
-end of their query. In the meat of the logic, all the <code>CTAS</code> statements and
+your database. SQL is their mother tongue and they think nothing of adding a
+couple of <code>LEFT JOIN</code> clauses to pick up human-readable columns&hellip; at the end
+of their query. In the meat of the logic, all the <code>CTAS</code> statements and
 subqueries, they want to use fast, exact joins on primary keys.</p>
 
-<p>Here is some homework for you:</p>
+<p>Here&rsquo;s some homework for you:</p>
 
 <p>1) I want to deprecate a value in an <code>enum</code>, but it is used in historical data
-and still meaningful there. If it were a ref table we would add a soft delete
+and still meaningful there. If it were a lookup table we could add a soft delete
 flag; how do I do the same thing with <code>enum</code>?</p>
 
 <p>2) I need to associate additional information with each code in my <code>enum</code>. For
@@ -188,10 +189,11 @@ example, I have a State <code>enum</code>, but I also need to store the two-lett
 abbreviations, and distinguish between states and territories. How would I do
 that with an <code>enum</code>?</p>
 
-<p>3) Write a query that returns one row for every state in the State <code>enum</code> and
-counts the number of orders. To be clear, it should return a row even for
-states where the count is zero, like <code>('Wisconsin', 0)</code>. Compare your answer
-to this query:</p>
+<p>3) <span id="maintext1">Write</span> a query that returns one row for every
+state in the State <code>enum</code> and counts the number of orders. To be clear, it
+should return a row even for states where the count is zero, like
+<code>('Wisconsin', 0)</code>. Compare your answer<a href="#footnote1"><sup>*</sup></a> to
+this query:</p>
 
 <pre><code class="language-sql">SELECT state.name, COUNT(orders.id) AS n_orders
 FROM state
@@ -211,7 +213,7 @@ because it tends to not get in trouble in this way.</p>
 when these cases actually come up in practice. YAGNI! KISS!</p>
 
 <p>The problem there is that the refactoring isn&rsquo;t transparent at all. Relational
-databases have an &ldquo;interface,&rdquo; just like an API - that&rsquo;s why we can swap tables
+databases have an &ldquo;interface,&rdquo; just like an API; that&rsquo;s why we can swap tables
 for views, for example. But the surface area of that interface is quite large:
 every table name, column name, and type.</p>
 
@@ -221,6 +223,13 @@ will need to be rewritten. That means the custom maps in ETL pipelines, ORM
 models in application code, every snippet of saved SQL the analysts keep inside
 of DBeaver to quickly answer <em>ad hoc</em> questions from executives.</p>
 
+<p>But let&rsquo;s say you push through the change management nightmare and get the
+State <code>enum</code> refactored to the <code>state_id</code> column, or whatever. Now you have a
+data model where some columns use <code>enum</code>, some use the lookup table
+convention, and everyone has to check every single time they use any column.
+Well-designed data models follow clear conventions so that you hardly ever have
+to think.</p>
+
 <p>Here is something absolutely key for application developers to understand: <em>the
 database is not for just you.</em> It is not your private vault to persist a few
 objects so your application works. It is an integral part of your interface to
@@ -229,33 +238,45 @@ application is successful, executives will want dashboards with metrics,
 analysts will want to do reporting, and data scientists will want to extract
 training data.</p>
 
-<p>If it&rsquo;s painless to migrate, it&rsquo;s only because <em>no one was using your database
-in the first place.</em> Your database was <em>already</em> a failure. (Obviously this
-only applies to data that you intend to share with others. If you&rsquo;re working on
-a hobby project you can do as you like.)</p>
-
-<p>But let&rsquo;s say you push through the change management nightmare, and get the
-State <code>enum</code> refactored to the <code>state_id</code> column, or whatever. Now you have a
-data model where some columns are <code>enum</code>s, some use the lookup table
-convention, and everyone has to check every single time they use any column.
-Well-designed data models follow clear conventions so that you hardly ever have
-to think.</p>
+<p>If it&rsquo;s painless to migrate, it&rsquo;s only because <em>no one was using your data in
+the first place.</em> Your database was <em>already</em> a failure. (Obviously this only
+applies to data that you intend to share with others. If you&rsquo;re working on a
+hobby project you can do as you like.)</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>What if there was a better way? What if, and hear me out on this, we just&hellip;
-didn&rsquo;t do it? Any of that? What if we just built plain ol&rsquo; boring data models
-in 3NF that used precisely zero advanced features and can therefore be
+<p>What if there were a better way? What if, and hear me out on this, we just&hellip;
+didn&rsquo;t do it? Any of that complex stuff? What if we just built plain ol&rsquo; boring data
+models in 3NF that used precisely zero advanced features and can therefore be
 trivially instantiated on any RDBMS using conventions that everyone in the
 industry is familiar with? It would be like coming home to your favorite little
-library, where everything is where it should be and you can always find what
-you&rsquo;re looking for, where all the customers are happily browsing, the staff is
-relaxed, and even the cat seems to know in its heart that it&rsquo;s exactly where it
-should be.</p>
+library, where everything is in its proper place be and you can always find
+what you&rsquo;re looking for, where all the customers are happily browsing, the
+staff is relaxed, and even the cat seems to know in its heart that it&rsquo;s exactly
+where it should be.</p>
 
 <p>ABC: Always Be a Considerate data modeler. Design boring databases.</p>
 
 <p>The lovely cat photo is by <a href="https://unsplash.com/@diane_soko?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Diane Picchiottino</a> on <a href="https://unsplash.com/photos/a-cat-sleeping-on-top-of-a-book-shelf-3skIILnva1k?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>.</p>
+
+<hr>
+
+<h2 id="footnotes">Footnotes</h2>
+
+<p id="footnote1">
+  <sup><a href="#maintext1">*</a></sup>
+  Answer to homework question 3 in PostgreSQL:
+</p>
+
+<pre><code class="language-sql">SELECT state.name, COUNT(orders.id) AS n_orders
+FROM unnest(enum_range(NULL::state)) AS state(name)
+LEFT JOIN orders ON orders.state = state.name
+GROUP BY state.name
+</code></pre>
+
+<p>
+  <a href="#maintext1">Back</a>
+</p>
 
     </article>
 
