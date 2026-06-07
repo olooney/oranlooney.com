@@ -3,7 +3,7 @@
   {{- $description := .Description | default .Summary | default .Site.Params.description | plainify | htmlUnescape | chomp -}}
   {{- $image := "" -}}
   {{- with .Params.image -}}
-    {{- $image = . | absURL -}}
+    {{- $image := . | absURL -}}
   {{- end -}}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
