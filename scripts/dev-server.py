@@ -91,32 +91,51 @@ class RebuildOnChangeHandler(SimpleHTTPRequestHandler):
         rscript = cls.find_rscript()
         if not rscript:
             print("[dev-server] Error: Rscript not found. Install R or add it to PATH.")
-            return
+            return False
         
         # Get the project root directory
         project_root = Path(__file__).parent.parent
         
         try:
-            result = subprocess.run(
-                [rscript, "-e", "blogdown::build_site()"],
-                capture_output=True,
+            # Run the build and capture output while streaming it to console
+            proc = subprocess.Popen(
+                [rscript, "-e", "options(blogdown.server.verbose = TRUE); blogdown::build_site()"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
                 text=True,
-                timeout=60,
                 cwd=str(project_root)
             )
             
-            if result.returncode == 0:
+            output_lines = []
+            has_error = False
+            
+            assert proc.stdout is not None
+            for line in proc.stdout:
+                print(line, end='')
+                output_lines.append(line)
+                # Check for Hugo errors, but ignore the generic "logged 1 error(s)" message
+                if line.startswith("Error:") and "logged 1 error(s)" not in line:
+                    has_error = True
+            
+            proc.wait(timeout=60)
+            
+            if proc.returncode == 0 and not has_error:
                 print("[dev-server] Build successful!")
                 cls.last_build_time = time.time()
+                return True
             else:
-                print(f"[dev-server] Build failed:\n{result.stderr}")
-                if result.stdout:
-                    print(f"[dev-server] Output:\n{result.stdout}")
+                if has_error:
+                    print(f"\n[dev-server] ERROR: Build failed due to Hugo errors (see above)")
+                else:
+                    print(f"[dev-server] ERROR: Build failed with return code {proc.returncode}")
+                return False
         
         except subprocess.TimeoutExpired:
-            print("[dev-server] Build timed out after 60 seconds.")
+            print("[dev-server] ERROR: Build timed out after 60 seconds.")
+            return False
         except Exception as e:
-            print(f"[dev-server] Build error: {e}")
+            print(f"[dev-server] ERROR: Build error: {e}")
+            return False
     
     def log_message(self, format, *args):
         """Log requests to stdout."""
