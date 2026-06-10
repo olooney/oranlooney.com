@@ -157,3 +157,24 @@ input:focus-visible {
     font-weight: bold;
     text-align: right;
 }
+
+@media (max-width: 600px) {
+    html:has(#flashcard-mask.is-open),
+    body:has(#flashcard-mask.is-open) {
+        overflow: hidden;
+    }
+
+    #flashcard-mask {
+        overflow: hidden;
+    }
+
+    .flashcard {
+        width: 92vw;
+        height: min(78vh, 680px);
+        aspect-ratio: auto;
+    }
+
+    .flashcard-face {
+        padding: 1.5rem;
+    }
+}

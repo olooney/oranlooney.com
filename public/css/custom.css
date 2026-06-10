@@ -133,6 +133,7 @@ html header.site-header nav.site-navi {
 	padding: 0 0.5em 0.5em;
   align-items: flex-start;
 }
+
 html header.site-header .site-navi-items {
   min-height: 50px;
   align-items: center;
@@ -151,6 +152,10 @@ html .site-navi a:active
         padding-right: 15px;
         border-right: 1px solid rgb(255, 255, 255, 0.3);
     }
+}
+
+.site-navi-items li {
+    padding-left: 10px;
 }
 
 html .site-footer {
@@ -195,7 +200,7 @@ html .author .author-avatar {
   align-items: center;
 }
 .site-header ul.author-social li {
-  margin: 0 8px 0 8px;
+  margin: 0 2px 0 6px;
 }
 .site-header .author-social a {
   display: flex;
