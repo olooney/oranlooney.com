@@ -38,9 +38,27 @@ input:focus-visible {
 }
 
 .flashcard-launch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     margin: 0;
-    padding: 0.5em 1em;
-    font-size: 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #800000;
+    font: inherit;
+    cursor: pointer;
+}
+
+.flashcard-launch:hover,
+.flashcard-launch:focus {
+    color: #AA0000;
+    text-decoration: underline;
+}
+
+.flashcard-launch:focus-visible {
+    outline: 1px solid #800000;
+    outline-offset: 3px;
 }
 
 #flashcard-mask {
@@ -70,7 +88,9 @@ input:focus-visible {
     height: 100%;
     transition: transform 420ms ease;
     transform-style: preserve-3d;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+    box-shadow:
+        18px 24px 36px rgba(0, 0, 0, 0.3),
+        6px 8px 12px rgba(0, 0, 0, 0.2);
     border: 1px solid #aaa;
 }
 
@@ -93,14 +113,27 @@ input:focus-visible {
 }
 
 .flashcard-back {
-    background: #f3f8f3;
+    background: #fff;
     transform: rotateY(180deg);
 }
 
 .flashcard-meta {
-    font-size: 1.5em;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.1em;
     color: #800000;
-    margin-bottom: 1rem;
+    margin: 0;
+}
+
+.flashcard-type-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #800000;
+    font-size: 1.1em;
+    line-height: 1;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .flashcard-text {

@@ -47,6 +47,10 @@ function filterQuotes() {
 
 // flashcards
 (function () {
+    // Progressive enhancement for the quotes page: the Markdown content remains
+    // the source of truth for the quote database, and this script derives a
+    // lightweight flashcard deck from the rendered quote paragraphs. Cards
+    // alternate between attribution prompts and quote-completion prompts.
     const MAX_QUOTE_WORDS = 100;
     const FLIP_DURATION_MS = 420;
     const button = document.getElementById("flashcard-button");
@@ -60,10 +64,12 @@ function filterQuotes() {
     let pointerStart = null;
     let nextPromptIsWhoSaid = true;
 
+    // Normalize rendered text for matching, measuring, and prompt display.
     function cleanText(text) {
         return text.replace(/\s+/g, " ").trim();
     }
 
+    // Escape text that will be inserted into generated flashcard HTML.
     function escapeHtml(text) {
         return String(text)
             .replace(/&/g, "&amp;")
@@ -73,10 +79,12 @@ function filterQuotes() {
             .replace(/'/g, "&#039;");
     }
 
+    // Find whitespace-delimited words while preserving positions for truncation.
     function wordMatches(text) {
-        return Array.from(String(text).matchAll(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu));
+        return Array.from(String(text).matchAll(/\S+/g));
     }
 
+    // Pick the matching closing quote to keep truncated prompts typographically balanced.
     function closingQuoteFor(text) {
         const firstChar = cleanText(text).charAt(0);
 
@@ -99,6 +107,7 @@ function filterQuotes() {
         return "";
     }
 
+    // Trim a quote to a fixed number of whitespace-delimited words.
     function ellipsizeWords(text, wordCount) {
         const cleaned = cleanText(text);
         const words = wordMatches(cleaned);
@@ -110,20 +119,26 @@ function filterQuotes() {
         const lastWord = words[wordCount - 1];
         const prompt = cleaned.slice(0, lastWord.index + lastWord[0].length).trim();
 
-        return prompt + "..." + closingQuoteFor(cleaned);
+        return prompt + "…" + closingQuoteFor(cleaned);
     }
 
+    // Count words using the same whitespace rule as prompt truncation.
     function countWords(text) {
         return wordMatches(text).length;
     }
 
+    // Turn a hidden-author prompt into a question without mangling trailing quotes.
     function questionizePrompt(text) {
         const questionized = text.replace(/\.(["'\u201d\u2019]?\s*)$/, "?$1");
         return questionized === text ? text + "?" : questionized;
     }
 
+    // Render one side of a flashcard from normalized quote data.
     function drawCardHtml(q, truncateQuote, hideAuthor, cardClass) {
         let quoteHtml;
+        const iconClass = cardClass.includes("prompt") ?
+            "fa-solid fa-question" :
+            "fa-solid fa-exclamation";
 
         if (cardClass === "flashcard-who-said-answer") {
             quoteHtml = '<span class="flashcard-quote-body">' +
@@ -154,6 +169,7 @@ function filterQuotes() {
         }
 
         return '<div class="flashcard-card ' + cardClass + '">' +
+            '<i class="flashcard-type-icon ' + iconClass + '" aria-hidden="true"></i>' +
             '<div class="flashcard-meta">' +
             escapeHtml(q.subject) +
             '</div>' +
@@ -163,6 +179,7 @@ function filterQuotes() {
             '</div>';
     }
 
+    // Find the nearest section headings that categorize a quote paragraph.
     function currentSectionFor(p) {
         let h2 = "";
         let h3 = "";
@@ -184,62 +201,89 @@ function filterQuotes() {
         return { h2, h3 };
     }
 
-    function isInPoemsSection(p) {
-        return currentSectionFor(p).h2.toLowerCase() === "poems";
+    // Exclude poetry from the generated flashcard deck.
+    function isInPoemsSection(section) {
+        return section.h2.toLowerCase() === "poems";
     }
 
-    function parseQuote(p) {
-        const section = currentSectionFor(p);
+    // Convert rendered quote HTML into normalized plain text.
+    function htmlToText(html) {
+        const template = document.createElement("template");
+        template.innerHTML = html;
+        return cleanText(template.content.textContent || "");
+    }
 
-        // Preserve original line breaks for previews
-        const rawText = (p.textContent || p.innerText || "").trim();
+    // Parse the quote body and attribution from the rendered Markdown separator.
+    function parseQuote(str) {
+        const parts = str.split("<br>—");
 
-        if (!rawText || isInPoemsSection(p)) {
-            return null;
+        if (parts.length !== 2) {
+            throw new Error("Quote must contain exactly one '<br>—' separator.");
         }
 
-        let author = "";
-        let quote = rawText;
+        const quote = parts[0].trim();
+        const author = parts[1].trim();
 
-        // Author: Quote
-        let match = rawText.match(/^([^:]{2,80}):\s*(.+)$/s);
+        if (!quote) {
+            throw new Error("Quote text is empty.");
+        }
 
-        if (match) {
-            author = cleanText(match[1]);
-            quote = match[2].trim();
-        } else {
-            // Quote — Author
-            match = rawText.match(/^(.+?)\s*—\s*([^—]{2,80})$/s);
+        if (!author) {
+            throw new Error("Author is empty.");
+        }
 
-            if (match) {
-                quote = match[1].trim();
-                author = cleanText(match[2]);
+        return [quote, author];
+    }
+
+    // Convert parse failures into skipped paragraphs instead of breaking the UI.
+    function safely(fn) {
+        return function (...args) {
+            try {
+                return fn.apply(this, args);
+            } catch (err) {
+                console.error(err?.message ?? String(err));
+                return undefined;
             }
-        }
-
-        if (countWords(quote) > MAX_QUOTE_WORDS) {
-            return null;
-        }
-
-        return {
-            author: author || "Unknown",
-            quote: quote,
-            originalHtml: p.innerHTML,
-            subject: [section.h2, section.h3].filter(Boolean).join(" - ")
         };
     }
 
+    // Build the flashcard data object for one rendered paragraph.
+    function quoteDataFromParagraph(p) {
+        const section = currentSectionFor(p);
+
+        if (isInPoemsSection(section)) {
+            return undefined;
+        }
+
+        const [quote, author] = parseQuote(p.innerHTML);
+        const quoteText = htmlToText(quote);
+
+        if (countWords(quoteText) > MAX_QUOTE_WORDS) {
+            return undefined;
+        }
+
+        return {
+            author: htmlToText(author),
+            quote: quoteText,
+            originalHtml: p.innerHTML,
+            subject: [section.h2, section.h3].filter(Boolean).join(" / ")
+        };
+    }
+
+    // Rebuild the in-memory deck from the current page content.
     function collectQuotes() {
-        quotes = Array.from(document.querySelectorAll("p"))
-            .map(parseQuote)
+        quotes = $("p").toArray()
+            .map(safely(quoteDataFromParagraph))
             .filter(Boolean);
     }
 
+    // Keep weak attributions out of the author-guessing prompt type.
     function canAskWhoSaid(q) {
         const author = q.author.trim();
         return !author.endsWith("?") && !/anonymous|attributed/i.test(author);
     }
 
+    // Select a random quote, optionally restricted to attribution-safe entries.
     function randomQuote(promptIsWhoSaid) {
         const eligibleQuotes = promptIsWhoSaid ? quotes.filter(canAskWhoSaid) : quotes;
 
@@ -250,6 +294,7 @@ function filterQuotes() {
         return eligibleQuotes[Math.floor(Math.random() * eligibleQuotes.length)];
     }
 
+    // Populate the front and back faces for the next card mode.
     function renderQuote(q, promptIsWhoSaid) {
 
         if (promptIsWhoSaid) {
@@ -262,6 +307,7 @@ function filterQuotes() {
         }
     }
 
+    // Advance to a random card, alternating between prompt styles.
     function nextCard() {
         if (!quotes.length) {
             collectQuotes();
@@ -288,6 +334,7 @@ function filterQuotes() {
         renderQuote(q, promptIsWhoSaid);
     }
 
+    // Initialize and show the flashcard overlay.
     function openFlashcards() {
         collectQuotes();
         showingAnswer = false;
@@ -298,6 +345,7 @@ function filterQuotes() {
         mask.setAttribute("aria-hidden", "false");
     }
 
+    // Hide the overlay and reset transient card state.
     function closeFlashcards() {
         mask.classList.remove("is-open");
         mask.setAttribute("aria-hidden", "true");
@@ -305,6 +353,7 @@ function filterQuotes() {
         showingAnswer = false;
     }
 
+    // Flip the current card, or advance after the answer has been shown.
     function flipOrAdvanceCard() {
         if (!showingAnswer) {
             card.classList.add("is-flipped");
@@ -319,6 +368,7 @@ function filterQuotes() {
         }
     }
 
+    // Avoid treating text selection as a card click.
     function hasSelectedText() {
         const selection = window.getSelection && window.getSelection();
         return selection && !selection.isCollapsed && selection.toString().trim() !== "";
