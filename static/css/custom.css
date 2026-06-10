@@ -157,8 +157,11 @@ html .site-footer {
 	padding: 0 1em;
 }
 html .breadcrumb {
-	padding-left: 10px;
+  padding-top: 0.75em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid #800000;
 	color: #800000;
+  font-size: 2em;
 }
 
 html hr { 
