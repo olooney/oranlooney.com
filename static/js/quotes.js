@@ -188,7 +188,41 @@ function filterQuotes() {
         return currentSectionFor(p).h2.toLowerCase() === "poems";
     }
 
+    function htmlToText(html) {
+        const template = document.createElement("template");
+        template.innerHTML = html;
+        return cleanText(template.content.textContent || "");
+    }
+
+    function parseHtmlAttributionMarker(p) {
+        const html = p.innerHTML;
+        const match = html.match(/<br\s*\/?>(?:\s|&nbsp;)*&mdash;([\s\S]*)$/i);
+
+        if (!match) {
+            return null;
+        }
+
+        const quoteHtml = html.slice(0, match.index);
+        const author = htmlToText(match[1]);
+
+        if (!author || /^["'“”‘’]/.test(author) || countWords(author) > 12) {
+            return null;
+        }
+
+        return {
+            author: author,
+            quote: htmlToText(quoteHtml),
+            originalHtml: p.innerHTML
+        };
+    }
+
     function parseHtmlAttribution(p) {
+        const markerAttribution = parseHtmlAttributionMarker(p);
+
+        if (markerAttribution) {
+            return markerAttribution;
+        }
+
         const clone = p.cloneNode(true);
         const breaks = Array.from(clone.querySelectorAll("br"));
         let attributionBreak = null;
@@ -252,7 +286,7 @@ function filterQuotes() {
             author = htmlAttribution.author;
             quote = htmlAttribution.quote;
             originalHtml = htmlAttribution.originalHtml;
-        } else {
+        } else if (!/^["'“”‘’]/.test(rawText)) {
             // Author: Quote
             let match = rawText.match(/^([^:]{2,80}):\s*(.+)$/s);
 
