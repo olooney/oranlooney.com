@@ -1,0 +1,38 @@
+{{ define "main" }}
+  <div class="main" role="main">
+    <article class="article quotes">
+      <h1 class="article-title">{{ .Title }}</h1>
+      <hr class="article-title-bottom">
+      <div class="quotes-toc-header">
+        <h2>Table of Contents</h2>
+        <button type="button" id="flashcard-button" class="flashcard-launch">
+            Flashcards
+        </button>
+      </div>
+      {{ .TableOfContents }}
+      <link rel="stylesheet" href="/css/quotes.css?v=2">
+      <div class="search-container">
+        <input 
+          type="text" 
+          id="searchInput" 
+          onkeyup="filterQuotes()" 
+          placeholder="Filter quotes..." 
+          class="search-form-control"
+        >
+      </div>
+      <div id="search-no-results" style="display: none">No matching quotes to display</div>
+
+
+      {{ .Content }}
+    </article>
+  </div>
+  <div id="flashcard-mask" aria-hidden="true">
+      <div class="flashcard" id="flashcard" role="dialog" aria-modal="true">
+          <div class="flashcard-inner">
+              <div class="flashcard-face flashcard-front" id="flashcard-front"></div>
+              <div class="flashcard-face flashcard-back" id="flashcard-back"></div>
+          </div>
+      </div>
+  </div>
+  <script src="/js/quotes.js?v=2"></script>
+{{ end }}

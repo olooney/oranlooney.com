@@ -3,20 +3,6 @@ title = "Quotes"
 date = "2022-11-11"
 +++
 
-<link rel="stylesheet" href="/css/quotes.css?v=2">
-<script src="/js/quotes.js"></script>
-<div class="search-container">
-  <input 
-    type="text" 
-    id="searchInput" 
-    onkeyup="filterQuotes()" 
-    placeholder="Filter quotes..." 
-    class="search-form-control"
-  >
-</div>
-<div id="search-no-results" style="display: none">No matching quotes to display</div>
-
-
 ## Programming
 
 ### Writing Code
@@ -1082,3 +1068,5 @@ there's always a prime between $n$ and $2n$.
 
 [NKCNB]: https://www.youtube.com/watch?v=ZpF1J9FnD4E
 [PHG]: https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/
+
+

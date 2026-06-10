@@ -1,3 +1,10 @@
+/* Mathjax Equations */
+
+mjx-container[jax="CHTML"][display="true"] {
+    text-align: left !important;
+}
+
+/* Searchbox */
 .search-container {
     margin-top: 20px;
     width: 100%;
@@ -15,4 +22,91 @@
 
 input:focus-visible {
   outline: none;
+}
+
+/* Flashcards */
+.quotes-toc-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.quotes-toc-header h2 {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.flashcard-launch {
+    margin: 0;
+    padding: 0.5em 1em;
+    font-size: 16px;
+}
+
+#flashcard-mask {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+#flashcard-mask.is-open {
+    display: flex;
+}
+
+.flashcard {
+    width: min(90vw, 520px);
+    aspect-ratio: 5 / 3;
+    perspective: 1200px;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 420ms ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+.flashcard.is-flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-face {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    padding: 2rem;
+    background: #fff;
+    backface-visibility: hidden;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.45;
+}
+
+.flashcard-back {
+    background: #efe;
+    transform: rotateY(180deg);
+}
+
+.flashcard-meta {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.flashcard-text {
+    font-size: 1.1rem;
+}
+
+.flashcard-author {
+    margin-top: 1rem;
+    font-weight: bold;
+    text-align: right;
 }

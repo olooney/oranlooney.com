@@ -4,15 +4,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quotes</title>
   <meta name="author" content="Oran Looney"/>
-  <meta name="description" content="No matching quotes to display
-Programming Writing Code “A procedure should fit on a page.” —David Tribble
+  <meta name="description" content="Programming Writing Code “A procedure should fit on a page.” —David Tribble
 “When in doubt, use brute force.” —Ken Thompson
 “The only three numbers a programmer should ever care about are zero, one, and infinity.” —Willem van der Poel
 “The most important single aspect of software development is to be clear about what you are trying to build."/>
   <link rel="canonical" href="https://www.oranlooney.com/quotes/"/>
   <meta property="og:title" content="Quotes"/>
-  <meta property="og:description" content="No matching quotes to display
-Programming Writing Code “A procedure should fit on a page.” —David Tribble
+  <meta property="og:description" content="Programming Writing Code “A procedure should fit on a page.” —David Tribble
 “When in doubt, use brute force.” —Ken Thompson
 “The only three numbers a programmer should ever care about are zero, one, and infinity.” —Willem van der Poel
 “The most important single aspect of software development is to be clear about what you are trying to build."/>
@@ -21,8 +19,7 @@ Programming Writing Code “A procedure should fit on a page.” —David Tribbl
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
   <meta name="twitter:title" content="Quotes"/>
-  <meta name="twitter:description" content="No matching quotes to display
-Programming Writing Code “A procedure should fit on a page.” —David Tribble
+  <meta name="twitter:description" content="Programming Writing Code “A procedure should fit on a page.” —David Tribble
 “When in doubt, use brute force.” —Ken Thompson
 “The only three numbers a programmer should ever care about are zero, one, and infinity.” —Willem van der Poel
 “The most important single aspect of software development is to be clear about what you are trying to build."/>
@@ -91,7 +88,12 @@ Programming Writing Code “A procedure should fit on a page.” —David Tribbl
     <article class="article quotes">
       <h1 class="article-title">Quotes</h1>
       <hr class="article-title-bottom">
-      <h2>Table of Contents</h2>
+      <div class="quotes-toc-header">
+        <h2>Table of Contents</h2>
+        <button type="button" id="flashcard-button" class="flashcard-launch">
+            Flashcards
+        </button>
+      </div>
       <nav id="TableOfContents">
 <ul>
 <li>
@@ -122,20 +124,20 @@ Programming Writing Code “A procedure should fit on a page.” —David Tribbl
 </ul></li>
 </ul>
 </nav>
-      
+      <link rel="stylesheet" href="/css/quotes.css?v=2">
+      <div class="search-container">
+        <input 
+          type="text" 
+          id="searchInput" 
+          onkeyup="filterQuotes()" 
+          placeholder="Filter quotes..." 
+          class="search-form-control"
+        >
+      </div>
+      <div id="search-no-results" style="display: none">No matching quotes to display</div>
 
-<p><link rel="stylesheet" href="/css/quotes.css?v=2">
-<script src="/js/quotes.js"></script>
-<div class="search-container">
-  <input 
-    type="text" 
-    id="searchInput" 
-    onkeyup="filterQuotes()" 
-    placeholder="Filter quotes..." 
-    class="search-form-control"
-  >
-</div>
-<div id="search-no-results" style="display: none">No matching quotes to display</div></p>
+
+      
 
 <h2 id="programming">Programming</h2>
 
@@ -1016,6 +1018,15 @@ there&rsquo;s always a prime between $n$ and $2n$.
 
     </article>
   </div>
+  <div id="flashcard-mask" aria-hidden="true">
+      <div class="flashcard" id="flashcard" role="dialog" aria-modal="true">
+          <div class="flashcard-inner">
+              <div class="flashcard-face flashcard-front" id="flashcard-front"></div>
+              <div class="flashcard-face flashcard-back" id="flashcard-back"></div>
+          </div>
+      </div>
+  </div>
+  <script src="/js/quotes.js?v=2"></script>
 
 
 <div class="site-footer">
