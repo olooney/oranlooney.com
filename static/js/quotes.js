@@ -191,31 +191,40 @@ function filterQuotes() {
     function parseHtmlAttribution(p) {
         const clone = p.cloneNode(true);
         const breaks = Array.from(clone.querySelectorAll("br"));
-        const lastBreak = breaks[breaks.length - 1];
-
-        if (!lastBreak) {
-            return null;
-        }
-
+        let attributionBreak = null;
         let authorText = "";
-        let node = lastBreak.nextSibling;
 
-        while (node) {
-            authorText += node.textContent || "";
-            node = node.nextSibling;
+        for (let i = breaks.length - 1; i >= 0; i--) {
+            let textAfterBreak = "";
+            let node = breaks[i].nextSibling;
+
+            while (node) {
+                textAfterBreak += node.textContent || "";
+                node = node.nextSibling;
+            }
+
+            textAfterBreak = cleanText(textAfterBreak);
+
+            if (/^—\s*\S/.test(textAfterBreak)) {
+                attributionBreak = breaks[i];
+                authorText = textAfterBreak.replace(/^—\s*/, "");
+                break;
+            }
         }
 
-        authorText = cleanText(authorText).replace(/^—\s*/, "");
-
-        if (!authorText) {
+        if (!attributionBreak || !authorText) {
             return null;
         }
 
-        while (lastBreak.nextSibling) {
-            lastBreak.nextSibling.remove();
+        if (/^["'“”‘’]/.test(authorText) || countWords(authorText) > 12) {
+            return null;
         }
 
-        lastBreak.remove();
+        while (attributionBreak.nextSibling) {
+            attributionBreak.nextSibling.remove();
+        }
+
+        attributionBreak.remove();
 
         return {
             author: authorText,
