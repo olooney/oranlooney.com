@@ -47,6 +47,8 @@ function filterQuotes() {
 
 // flashcards
 (function () {
+    const MAX_QUOTE_WORDS = 100;
+    const FLIP_DURATION_MS = 420;
     const button = document.getElementById("flashcard-button");
     const mask = document.getElementById("flashcard-mask");
     const card = document.getElementById("flashcard");
@@ -55,6 +57,8 @@ function filterQuotes() {
 
     let quotes = [];
     let showingAnswer = false;
+    let pointerStart = null;
+    let nextPromptIsWhoSaid = true;
 
     function cleanText(text) {
         return text.replace(/\s+/g, " ").trim();
@@ -69,11 +73,94 @@ function filterQuotes() {
             .replace(/'/g, "&#039;");
     }
 
+    function wordMatches(text) {
+        return Array.from(String(text).matchAll(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu));
+    }
+
+    function closingQuoteFor(text) {
+        const firstChar = cleanText(text).charAt(0);
+
+        if (firstChar === "\u201c") {
+            return "\u201d";
+        }
+
+        if (firstChar === "\u2018") {
+            return "\u2019";
+        }
+
+        if (firstChar === "\"") {
+            return "\"";
+        }
+
+        if (firstChar === "'") {
+            return "'";
+        }
+
+        return "";
+    }
+
     function ellipsizeWords(text, wordCount) {
-        const words = cleanText(text).split(/\s+/);
-        return words.length > wordCount
-            ? words.slice(0, wordCount).join(" ") + "..."
-            : words.join(" ");
+        const cleaned = cleanText(text);
+        const words = wordMatches(cleaned);
+
+        if (words.length <= wordCount) {
+            return cleaned;
+        }
+
+        const lastWord = words[wordCount - 1];
+        const prompt = cleaned.slice(0, lastWord.index + lastWord[0].length).trim();
+
+        return prompt + "..." + closingQuoteFor(cleaned);
+    }
+
+    function countWords(text) {
+        return wordMatches(text).length;
+    }
+
+    function questionizePrompt(text) {
+        const questionized = text.replace(/\.(["'\u201d\u2019]?\s*)$/, "?$1");
+        return questionized === text ? text + "?" : questionized;
+    }
+
+    function drawCardHtml(q, truncateQuote, hideAuthor, cardClass) {
+        let quoteHtml;
+
+        if (cardClass === "flashcard-who-said-answer") {
+            quoteHtml = '<span class="flashcard-quote-body">' +
+                escapeHtml(q.quote) +
+                '</span><br><span class="flashcard-author-body">&mdash;' +
+                escapeHtml(q.author) +
+                '</span>';
+
+        } else if (!truncateQuote && !hideAuthor) {
+            quoteHtml = q.originalHtml;
+        } else {
+            let quoteText = truncateQuote ? ellipsizeWords(q.quote, 3) : q.quote;
+
+            if (hideAuthor) {
+                quoteText = questionizePrompt(quoteText);
+            }
+
+            quoteHtml = escapeHtml(quoteText);
+
+            if (!hideAuthor) {
+                quoteHtml += '<br>&mdash;' + escapeHtml(q.author);
+            } else {
+                quoteHtml = 'Who said, ' + quoteHtml +
+                    '<br><span class="flashcard-author-placeholder">&mdash;' +
+                    escapeHtml(q.author) +
+                    '</span>';
+            }
+        }
+
+        return '<div class="flashcard-card ' + cardClass + '">' +
+            '<div class="flashcard-meta">' +
+            escapeHtml(q.subject) +
+            '</div>' +
+            '<div class="flashcard-text">' +
+            quoteHtml +
+            '</div>' +
+            '</div>';
     }
 
     function currentSectionFor(p) {
@@ -122,7 +209,7 @@ function filterQuotes() {
             quote = match[2].trim();
         } else {
             // Quote — Author
-            match = rawText.match(/^(.+?)\s+[—-]\s*([^—-]{2,80})$/s);
+            match = rawText.match(/^(.+?)\s*—\s*([^—]{2,80})$/s);
 
             if (match) {
                 quote = match[1].trim();
@@ -130,9 +217,14 @@ function filterQuotes() {
             }
         }
 
+        if (countWords(quote) > MAX_QUOTE_WORDS) {
+            return null;
+        }
+
         return {
             author: author || "Unknown",
             quote: quote,
+            originalHtml: p.innerHTML,
             subject: [section.h2, section.h3].filter(Boolean).join(" - ")
         };
     }
@@ -143,40 +235,30 @@ function filterQuotes() {
             .filter(Boolean);
     }
 
-    function renderQuote(q) {
-        const mode = Math.random() < 0.5 ? "quote-first" : "author-first";
+    function canAskWhoSaid(q) {
+        const author = q.author.trim();
+        return !author.endsWith("?") && !/anonymous|attributed/i.test(author);
+    }
 
-        if (mode === "quote-first") {
-            // Show full quote, preserving embedded quotes from the source
-            front.innerHTML =
-                '<div class="flashcard-text">' +
-                escapeHtml(q.quote) +
-                '</div>';
+    function randomQuote(promptIsWhoSaid) {
+        const eligibleQuotes = promptIsWhoSaid ? quotes.filter(canAskWhoSaid) : quotes;
 
-            back.innerHTML =
-                '<div class="flashcard-meta">' +
-                escapeHtml(q.subject) +
-                '</div>' +
-                '<div class="flashcard-author">' +
-                escapeHtml(q.author) +
-                '</div>';
+        if (!eligibleQuotes.length) {
+            return null;
+        }
+
+        return eligibleQuotes[Math.floor(Math.random() * eligibleQuotes.length)];
+    }
+
+    function renderQuote(q, promptIsWhoSaid) {
+
+        if (promptIsWhoSaid) {
+            front.innerHTML = drawCardHtml(q, false, true, "flashcard-who-said-prompt");
+            back.innerHTML = drawCardHtml(q, false, false, "flashcard-who-said-answer");
 
         } else {
-            // Show author + section + first few words
-            front.innerHTML =
-                '<div class="flashcard-meta">' +
-                escapeHtml(q.subject) +
-                '</div>' +
-                '<div class="flashcard-text">' +
-                escapeHtml(q.author) +
-                ': ' +
-                escapeHtml(ellipsizeWords(q.quote, 3)) +
-                '</div>';
-
-            back.innerHTML =
-                '<div class="flashcard-text">' +
-                escapeHtml(q.quote) +
-                '</div>';
+            front.innerHTML = drawCardHtml(q, true, false, "flashcard-complete-prompt");
+            back.innerHTML = drawCardHtml(q, false, false, "flashcard-complete-answer");
         }
     }
 
@@ -192,13 +274,24 @@ function filterQuotes() {
             return;
         }
 
-        const q = quotes[Math.floor(Math.random() * quotes.length)];
-        renderQuote(q);
+        const promptIsWhoSaid = nextPromptIsWhoSaid;
+        const q = randomQuote(promptIsWhoSaid);
+        nextPromptIsWhoSaid = !nextPromptIsWhoSaid;
+
+        if (!q) {
+            front.innerHTML =
+                '<div class="flashcard-text">No eligible quotes found.</div>';
+            back.innerHTML = '';
+            return;
+        }
+
+        renderQuote(q, promptIsWhoSaid);
     }
 
     function openFlashcards() {
         collectQuotes();
         showingAnswer = false;
+        nextPromptIsWhoSaid = true;
         card.classList.remove("is-flipped");
         nextCard();
         mask.classList.add("is-open");
@@ -212,15 +305,7 @@ function filterQuotes() {
         showingAnswer = false;
     }
 
-    button.addEventListener("click", openFlashcards);
-
-    mask.addEventListener("click", function () {
-        closeFlashcards();
-    });
-
-    card.addEventListener("click", function (event) {
-        event.stopPropagation();
-
+    function flipOrAdvanceCard() {
         if (!showingAnswer) {
             card.classList.add("is-flipped");
             showingAnswer = true;
@@ -230,8 +315,61 @@ function filterQuotes() {
 
             setTimeout(function () {
                 nextCard();
-            }, 210);
+            }, FLIP_DURATION_MS / 5);
         }
+    }
+
+    function hasSelectedText() {
+        const selection = window.getSelection && window.getSelection();
+        return selection && !selection.isCollapsed && selection.toString().trim() !== "";
+    }
+
+    button.addEventListener("click", openFlashcards);
+
+    mask.addEventListener("click", function () {
+        closeFlashcards();
+    });
+
+    card.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+
+    card.addEventListener("pointerdown", function (event) {
+        if (event.button !== 0) {
+            pointerStart = null;
+            return;
+        }
+
+        pointerStart = {
+            x: event.clientX,
+            y: event.clientY
+        };
+    });
+
+    card.addEventListener("pointerup", function (event) {
+        event.stopPropagation();
+
+        if (event.button !== 0) {
+            pointerStart = null;
+            return;
+        }
+
+        if (!pointerStart) {
+            return;
+        }
+
+        const distance = Math.hypot(
+            event.clientX - pointerStart.x,
+            event.clientY - pointerStart.y
+        );
+
+        pointerStart = null;
+
+        if (distance > 5 || hasSelectedText()) {
+            return;
+        }
+
+        flipOrAdvanceCard();
     });
 
     document.addEventListener("keydown", function (event) {

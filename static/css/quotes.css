@@ -71,6 +71,7 @@ input:focus-visible {
     transition: transform 420ms ease;
     transform-style: preserve-3d;
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid #aaa;
 }
 
 .flashcard.is-flipped .flashcard-inner {
@@ -92,17 +93,30 @@ input:focus-visible {
 }
 
 .flashcard-back {
-    background: #efe;
+    background: #f3f8f3;
     transform: rotateY(180deg);
 }
 
 .flashcard-meta {
-    font-weight: bold;
+    font-size: 1.5em;
+    color: #800000;
     margin-bottom: 1rem;
 }
 
 .flashcard-text {
     font-size: 1.1rem;
+}
+
+.flashcard-who-said-answer .flashcard-quote-body {
+    color: #999;
+}
+
+.flashcard-who-said-answer .flashcard-author-body {
+    color: inherit;
+}
+
+.flashcard-author-placeholder {
+    visibility: hidden;
 }
 
 .flashcard-author {
