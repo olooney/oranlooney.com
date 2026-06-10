@@ -922,9 +922,10 @@ because, as you can see, it can be easy to run out of space when a poem gets all
 
 <br><b>RSA Algorithm</b>
 \\[ p, q \in \mathbb{P} \\]
-\\[ n = pq \\]
-\\[ \phi = (p-1)(q-1) \\]
-\\[ \gcd(e, \phi) = 1 \land d \equiv e^{-1} (\mathrm{mod} \phi) \Rightarrow c = m^e (\mathrm{mod}\ n) \land m = c^d (\mathrm{mod}\ n) \\]
+\\[ n = pq , \ \phi = (p-1)(q-1) \\]
+\\[ \gcd(e, \phi) = 1 , \ d \equiv e^{-1} (\mathrm{mod} \, \phi) \\]
+\\[  c = m^e (\mathrm{mod}\ n) \\]
+\\[ \Rightarrow\quad m = c^d (\mathrm{mod}\ n) \\]
 Take two large prime numbers, $q$ and $p$. <br>
 Find the product $n$, and the totient $\phi$. <br>
 If $e$ and $\phi$ have GCD one <br>
