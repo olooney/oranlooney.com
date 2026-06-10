@@ -196,7 +196,7 @@ function filterQuotes() {
 
     function parseHtmlAttributionMarker(p) {
         const html = p.innerHTML;
-        const match = html.match(/<br\s*\/?>(?:\s|&nbsp;)*&mdash;([\s\S]*)$/i);
+        const match = html.match(/<br\s*\/?>(?:\s|&nbsp;)*(?:&mdash;|—)([\s\S]*)$/i);
 
         if (!match) {
             return null;
@@ -286,21 +286,25 @@ function filterQuotes() {
             author = htmlAttribution.author;
             quote = htmlAttribution.quote;
             originalHtml = htmlAttribution.originalHtml;
-        } else if (!/^["'“”‘’]/.test(rawText)) {
+        } else {
+            // Quote — Author. Use only a final attribution dash; dashes inside the
+            // quote body are allowed as long as they are not followed by the final
+            // short author-like suffix.
+            let match = rawText.match(/^([\s\S]+?)\s*—\s*([^—\n]{2,80})$/);
+
+            if (match && !/^["'“”‘’]/.test(cleanText(match[2])) && countWords(match[2]) <= 12) {
+                quote = match[1].trim();
+                author = cleanText(match[2]);
+            }
+        }
+
+        if (!author && !/^["'“”‘’]/.test(rawText)) {
             // Author: Quote
             let match = rawText.match(/^([^:]{2,80}):\s*(.+)$/s);
 
             if (match) {
                 author = cleanText(match[1]);
                 quote = match[2].trim();
-            } else {
-                // Quote — Author
-                match = rawText.match(/^(.+?)\s*—\s*([^—]{2,80})$/s);
-
-                if (match) {
-                    quote = match[1].trim();
-                    author = cleanText(match[2]);
-                }
             }
         }
 
