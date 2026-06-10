@@ -188,6 +188,42 @@ function filterQuotes() {
         return currentSectionFor(p).h2.toLowerCase() === "poems";
     }
 
+    function parseHtmlAttribution(p) {
+        const clone = p.cloneNode(true);
+        const breaks = Array.from(clone.querySelectorAll("br"));
+        const lastBreak = breaks[breaks.length - 1];
+
+        if (!lastBreak) {
+            return null;
+        }
+
+        let authorText = "";
+        let node = lastBreak.nextSibling;
+
+        while (node) {
+            authorText += node.textContent || "";
+            node = node.nextSibling;
+        }
+
+        authorText = cleanText(authorText).replace(/^—\s*/, "");
+
+        if (!authorText) {
+            return null;
+        }
+
+        while (lastBreak.nextSibling) {
+            lastBreak.nextSibling.remove();
+        }
+
+        lastBreak.remove();
+
+        return {
+            author: authorText,
+            quote: cleanText(clone.textContent || ""),
+            originalHtml: p.innerHTML
+        };
+    }
+
     function parseQuote(p) {
         const section = currentSectionFor(p);
 
@@ -200,20 +236,28 @@ function filterQuotes() {
 
         let author = "";
         let quote = rawText;
+        let originalHtml = p.innerHTML;
+        const htmlAttribution = parseHtmlAttribution(p);
 
-        // Author: Quote
-        let match = rawText.match(/^([^:]{2,80}):\s*(.+)$/s);
-
-        if (match) {
-            author = cleanText(match[1]);
-            quote = match[2].trim();
+        if (htmlAttribution) {
+            author = htmlAttribution.author;
+            quote = htmlAttribution.quote;
+            originalHtml = htmlAttribution.originalHtml;
         } else {
-            // Quote — Author
-            match = rawText.match(/^(.+?)\s*—\s*([^—]{2,80})$/s);
+            // Author: Quote
+            let match = rawText.match(/^([^:]{2,80}):\s*(.+)$/s);
 
             if (match) {
-                quote = match[1].trim();
-                author = cleanText(match[2]);
+                author = cleanText(match[1]);
+                quote = match[2].trim();
+            } else {
+                // Quote — Author
+                match = rawText.match(/^(.+?)\s*—\s*([^—]{2,80})$/s);
+
+                if (match) {
+                    quote = match[1].trim();
+                    author = cleanText(match[2]);
+                }
             }
         }
 
@@ -224,7 +268,7 @@ function filterQuotes() {
         return {
             author: author || "Unknown",
             quote: quote,
-            originalHtml: p.innerHTML,
+            originalHtml: originalHtml,
             subject: [section.h2, section.h3].filter(Boolean).join(" - ")
         };
     }
