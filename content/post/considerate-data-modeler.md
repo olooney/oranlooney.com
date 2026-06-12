@@ -8,7 +8,11 @@ tags:
 image: /post/considerate-data-modeler_files/lead.jpg
 ---
 
-What's your hot take on relational databases? Here's mine: Data modeling is
+What's your hot take on relational databases? 
+
+I have an opinion on the matter, or maybe more like an 
+<span class="shimmer">Opinion™</span>:
+Data modeling is
 closer to library science than computer science. No one is impressed by a
 librarian who gets creative and files cookbooks under "G" for "Gourmand." The
 best catalog system is where everything is in an obvious place, where

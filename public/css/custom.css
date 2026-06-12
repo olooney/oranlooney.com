@@ -11,11 +11,6 @@ html .article pre {
 	font-style: normal;
 }
 
-/*
-html .article pre code {
-    border-left: solid 4px #b4c6c7;
-}
-*/
 html .article blockquote {
   position: relative;
   margin-left: 0.5em;
@@ -239,12 +234,6 @@ html .archives .archives-item > a:visited {
   color: #800000;
 }
 
-/*
-html .archives .archives-item { }
-html .archives .archives-item ul.taxonomies { }
-*/
-
-
 .list .article-readmore {
   float: right;
 }
@@ -375,7 +364,6 @@ html .archives .archives-item ul.taxonomies { }
 
 
 /* Tables */
-
 .nowrap {
     white-space: nowrap;
 }
@@ -401,7 +389,6 @@ html .article table td {
 .drop-shadow {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
 }
-
 
 
 /* Embedded Youtube Videos */
@@ -471,4 +458,37 @@ section.terms ul li {
 
 .search-status {
   margin-bottom: 1em;
+}
+
+/* Text Shimmer Effect */
+.shimmer {
+  background: linear-gradient(
+    110deg, 
+    #444 0%, 
+    #444 23%, 
+    #bbb 30%, 
+    #aaa 37%, 
+    #555 45%, 
+    #333 52%, 
+    #555 63%, 
+    #bbb 70%, 
+    #aaa 70%, 
+    #555 90%, 
+    #555 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
 }
