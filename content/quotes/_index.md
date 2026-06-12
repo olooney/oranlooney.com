@@ -145,7 +145,7 @@ maintenance, and other housekeeping."
 <br>&mdash;Mary Shaw
 
 
-"[Thompson's rule for first-time telescope makers] It is faster to make a
+"Thompson's rule for first-time telescope makers: It is faster to make a
 four-inch mirror then a six-inch mirror than to make a six-inch mirror."
 <br>&mdash;Bill McKeeman
 
@@ -174,10 +174,10 @@ depended on by somebody."
 <br>&mdash;Hyrum's Law
 
 
-"\[Chesterton's Fence\] If you don't see the use of it, I certainly won't let you
+"If you don't see the use of it, I certainly won't let you
 clear it away. Go away and think. Then, when you can come back and tell me that
 you *do* see the use of it, I *may* allow you to destroy it."
-<br>&mdash;G. K. Chesterton
+<br>&mdash;G. K. Chesterton, *[Chesterton's Fence][CF]*
 
 
 "It is a profoundly erroneous truism that we should cultivate the habit of
@@ -253,7 +253,7 @@ level in which one can be absolutely precise."
 <br>&mdash;Edsger Dijkstra
 
 
-"\[...\] but there is one quality that cannot be purchased that way - and that
+"...but there is one quality that cannot be purchased that way&mdash;and that
 is reliability. The price of reliability is the pursuit of the utmost
 simplicity. It is a price which the very rich find most hard to pay."
 <br>&mdash;C.A.R. Hoare
@@ -961,7 +961,7 @@ We start with the constant called $\pi$<br>
 And then multiply by two $i$<br>
 Apply exponential<br>
 (This step is essential)<br>
-And one's the result - who knows why!
+And one's the result&mdash;who knows why!
 <br>&mdash;Dan Shved
 
 
@@ -1069,5 +1069,6 @@ there's always a prime between $n$ and $2n$.
 
 [NKCNB]: https://www.youtube.com/watch?v=ZpF1J9FnD4E
 [PHG]: https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/
+[CF]: https://en.wiktionary.org/wiki/Chesterton%27s_fence
 
 

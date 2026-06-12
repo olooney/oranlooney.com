@@ -45,6 +45,11 @@ function filterQuotes() {
     noResults.style.display = anyVisible ? "none" : "";
 }
 
+window.addEventListener("pageshow", function () {
+    var searchInput = document.getElementById("searchInput");
+    searchInput.value = "";
+});
+
 // flashcards
 (function () {
     // Progressive enhancement for the quotes page: the Markdown content remains
@@ -117,7 +122,9 @@ function filterQuotes() {
         }
 
         const lastWord = words[wordCount - 1];
-        const prompt = cleaned.slice(0, lastWord.index + lastWord[0].length).trim();
+        const prompt = cleaned.slice(0, lastWord.index + lastWord[0].length)
+            .trim()
+            .replace(/[\p{P}\p{S}]+$/gu, "");
 
         return prompt + "…" + closingQuoteFor(cleaned);
     }
@@ -273,6 +280,9 @@ function filterQuotes() {
     // Rebuild the in-memory deck from the current page content.
     function collectQuotes() {
         quotes = $("p").toArray()
+            .filter(function (p) {
+                return window.getComputedStyle(p).display !== "none";
+            })
             .map(safely(quoteDataFromParagraph))
             .filter(Boolean);
     }
