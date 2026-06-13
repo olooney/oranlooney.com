@@ -1,7 +1,8 @@
 Oranlooney.com
 ==============
 
-Personal website, built with Blogdown/Hugo. Uses MathJax and highlight.js.
+Personal website, built with Blogdown/Hugo.
+
 
 Development
 -----------
@@ -9,32 +10,52 @@ Development
 * `just serve` to run a dev server that serves `/public` and auto-rebuilds on file changes.
 * `just build` to run a one-shot Blogdown/Hugo build.
 * `just clean` to empty `/public`, or `just rebuild` to empty it and build again.
-* `just thumbnails` to rebuild the thumbnails for lead images.
-* `scripts/favicon/` contains the favicon source assets and conversion script.
+* `just thumbnails` (or `just thumb`) to rebuild the thumbnails for lead images.
 
-Notes:
+Notes
+-----
 
-* the public `public/` folder is auto-generated, but checked in because we can't trust blogdown to reproduce it exactly.
-* files are not automatically removed from public. Empty it and rebuild after moving or deleting files.
+* the public `public/` folder is auto-generated, but checked in because we can't trust blogdown to reproduce it
+  exactly on linux.
+* files are not automatically removed from `public/`. Empty it and rebuild after moving or deleting files.
 * Don't touch `themes/whiteplain/` if you can help it; make your change in `layouts/` instead.
 * Don't touch `style.css` either, make CSS changes in `/static/css/custom.css` instead.
-* When changing cache-busted static assets such as `/static/css/custom.css`, bump the corresponding `?v=` version once per commit in `layouts/partials/head.html`.
+* When changing cache-busted static assets such as `/static/css/custom.css`,
+  bump the corresponding `?v=` version once per commit in `layouts/partials/head.html`.
+* Hugo generates:
+    * `public/index.json` is used to power the client-side search.
+    * `public/index.xml` powers the RSS feed.
+    * `public/sitemap.xml` is a sitemap for crawlers.
+* `scripts/favicon/` contains the favicon source assets and conversion script.
+
+Progressive Enhancements:
+
+* MathJax (LaTex equations)
+* Hilight.js (Code syntax highlighter)
+* Font Awesome JS (icons)
+* Client-Side Search
+* Filter Quotes
+* Flashcards for Quotes
+* Console Owl
+* Playfair Torus
+* Shimmer Text in Considerate Data Modeler
 
 
 Testing
 ---------
 
 * Start the dev server with `just serve`.
-* Run `./scripts/setup-playwright.sh` to setup the test server, then `node scripts/check-mathjax.js`.
+* Run `./scripts/setup-playwright.sh` to set up the test server, then `node scripts/check-mathjax.js`.
 * Run `lychee .` in `/public/` to check links.
 
 
 Deployment
 ----------
 
-* `git push` to copy GitHub. 
-* `sudo scripts/bin/stage` and check staging.
-* `sudo scripts/bin/release` to copy staging to prod.
+* `git push` to copy to GitHub.
+* On the server:
+    * `sudo scripts/bin/stage` and check staging.
+    * `sudo scripts/bin/release` to copy staging to prod.
 
 If something goes wrong:
 
