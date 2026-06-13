@@ -26,6 +26,17 @@ These instructions apply to the entire repository unless a more specific instruc
 - After adding, moving, or modifying lead images, use `just thumbnails` to rebuild lead image thumbnails.
 
 
+## Browser Testing
+
+- Use the Playfair MCP server against `http://localhost:8080/`.
+- Test a screenshot of the home page `/`, first article, and `/about/` to verify the layout visually.
+- Test both JavaScript and no-JavaScript modes when checking progressive enhancement.
+- For `/search/`, test a real hit, a zero-result query, and the no-JS fallback message.
+- For `/quotes/`, test filtering, category anchors, flashcards, and readable no-JS content. Click through 4 flashcards.
+- For icon strips, DOM visibility is not enough; use `screenshot_page` to confirm Font Awesome glyphs visibly render.
+- In no-JS mode, confirm JS-only controls are hidden while normal links and content still work.
+- Make no code changes during browser testing, but only report results.
+
 ## Content Structure
 
 - Blog posts live in `content/post/`.
