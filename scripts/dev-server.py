@@ -162,7 +162,7 @@ class RebuildOnChangeHandler(SimpleHTTPRequestHandler):
     def start_build_process(cls, rscript: str, project_root: Path) -> subprocess.Popen[str]:
         """Start the R build subprocess."""
         return subprocess.Popen(
-            [rscript, "-e", "options(blogdown.server.verbose = TRUE); Sys.sleep(10); blogdown::build_site()"],
+            [rscript, "-e", "options(blogdown.server.verbose = TRUE); blogdown::build_site()"],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
