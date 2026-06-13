@@ -2,6 +2,7 @@
 
 ### Demos
 
+- [X] Flip Gallery
 - [ ] Soma Forest
   - [ ] add jump and crouch
   - [ ] explode trees on click
