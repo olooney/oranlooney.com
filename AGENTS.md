@@ -18,6 +18,14 @@ These instructions apply to the entire repository unless a more specific instruc
 - Keep changes narrow and preserve the author’s voice. For prose edits, prefer spelling, grammar, clarity, and small rhythm fixes over rewriting.
 
 
+## Development Commands
+
+- Use `just serve` to run the local dev server.
+- Use `just build` for a one-shot Blogdown/Hugo build.
+- Use `just clean` to empty `public/`, or `just rebuild` to clean and build.
+- Use `just thumbnails` to rebuild lead image thumbnails.
+
+
 ## Content Structure
 
 - Blog posts live in `content/post/`.

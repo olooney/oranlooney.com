@@ -6,9 +6,10 @@ Personal website, built with Blogdown/Hugo. Uses MathJax and highlight.js.
 Development
 -----------
 
-* `python scripts/dev-server.py` to run a dev server that serves `/public` and auto-rebuilds on file changes.
-* Or manually: `blogdown::build_site()` in R to rebuild, then serve `/public` with a static server.
-* `python scripts/thumbnails.py` to rebuild the thumbnails for lead images.
+* `just serve` to run a dev server that serves `/public` and auto-rebuilds on file changes.
+* `just build` to run a one-shot Blogdown/Hugo build.
+* `just clean` to empty `/public`, or `just rebuild` to empty it and build again.
+* `just thumbnails` to rebuild the thumbnails for lead images.
 * `scripts/favicon/` contains the favicon source assets and conversion script.
 
 Notes:
@@ -23,7 +24,7 @@ Notes:
 Testing
 ---------
 
-* Start the dev server `python scripts/dev-server.py`
+* Start the dev server with `just serve`.
 * Run `./scripts/setup-playwright.sh` to setup the test server, then `node scripts/check-mathjax.js`.
 * Run `lychee .` in `/public/` to check links.
 
