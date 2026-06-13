@@ -20,10 +20,10 @@ These instructions apply to the entire repository unless a more specific instruc
 
 ## Development Commands
 
-- Use `just serve` to run the local dev server.
-- Use `just build` for a one-shot Blogdown/Hugo build.
-- Use `just clean` to empty `public/`, or `just rebuild` to clean and build.
-- Use `just thumbnails` to rebuild lead image thumbnails.
+- Assume `just serve` is already running and serving on http://localhost:8080/
+- Never run `just build` or `just rebuild` yourself.
+- After moving or deleting files, use `just clean` to empty `public/`. Do not do this after adding or modifying files.
+- After adding, moving, or modifying lead images, use `just thumbnails` to rebuild lead image thumbnails.
 
 
 ## Content Structure

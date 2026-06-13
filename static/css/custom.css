@@ -1,5 +1,17 @@
 /* Articles */
 
+html:not(.js) .requires-js {
+  display: none;
+}
+
+html.js .requires-no-js {
+  display: none;
+}
+
+.search-no-js-message {
+  margin: 1em 0;
+}
+
 html .article {
     overflow-wrap: break-word;
 }

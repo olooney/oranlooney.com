@@ -325,7 +325,7 @@ window.addEventListener("pageshow", function () {
 
         if (!quotes.length) {
             front.innerHTML =
-                '<div class="flashcard-text">No quotes found.</div>';
+                '<div class="flashcard-text">No quotes found. Widen the quote filter to use flashcards.</div>';
             back.innerHTML = '';
             return;
         }

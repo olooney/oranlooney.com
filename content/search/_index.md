@@ -5,10 +5,16 @@ outputs = ["HTML"]
 searchable = false
 +++
 
-<div class="search-field-wrapper">
+<div class="requires-no-js search-no-js-message">
+  This site uses client-side search and requires JavaScript. You currently have JavaScript disabled and will need to
+  enable it to use this search feature. As an alternative, add <a href="https://duckduckgo.com/?q=site%3Awww.oranlooney.com"><code>site:www.oranlooney.com</code></a>
+  to your query in any 3rd party search engine.
+</div>
+
+<div class="search-field-wrapper requires-js">
   <input id="search-field" name="search-field" type="text" placeholder="Search...">
 </div>
-<div id="output">
+<div id="output" class="requires-js">
   <div class="search-status">No Search Results to Display</div>
 </div>
 

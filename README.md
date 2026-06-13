@@ -30,15 +30,13 @@ Notes
 
 Progressive Enhancements:
 
-* MathJax (LaTex equations)
-* Hilight.js (Code syntax highlighter)
-* Font Awesome JS (icons)
+* MathJax (LaTeX equations)
+* Highlight.js (Code syntax highlighter)
 * Client-Side Search
 * Filter Quotes
 * Flashcards for Quotes
 * Console Owl
 * Playfair Torus
-* Shimmer Text in Considerate Data Modeler
 
 
 Testing
