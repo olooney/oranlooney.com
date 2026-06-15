@@ -6,10 +6,19 @@
     <description>Recent content in Llm on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 05 Jun 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/tags/llm/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Code Quality Apocalypse Survival Guide</title>
+      <link>https://www.oranlooney.com/post/code-quality/</link>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/code-quality/</guid>
+      <description>Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming; agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a hawk and keep them on rails for best results.</description>
+    </item>
     
     <item>
       <title>A Picture is Worth 170 Tokens: How Does GPT-4o Encode Images?</title>

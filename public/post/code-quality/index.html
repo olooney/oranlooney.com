@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Code Quality Apocalypse Survival Guide</title>
+  <meta name="author" content="Oran Looney"/>
+  <meta name="description" content="Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming; agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a hawk and keep them on rails for best results."/>
+  <link rel="canonical" href="https://www.oranlooney.com/post/code-quality/"/>
+  <meta property="og:title" content="The Code Quality Apocalypse Survival Guide"/>
+  <meta property="og:description" content="Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming; agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a hawk and keep them on rails for best results."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://www.oranlooney.com/post/code-quality/"/>
+  <meta property="og:site_name" content="OranLooney.com"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="The Code Quality Apocalypse Survival Guide"/>
+  <meta name="twitter:description" content="Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming; agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a hawk and keep them on rails for best results."/>
+  <meta property="article:published_time" content="2026-06-15T00:00:00Z"/>
+  <meta property="article:tag" content="Future"/>
+  <meta property="article:tag" content="LLM"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="OWL" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="/css/style.css" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=8" media="all" />
+
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+<header class="site-header">
+  <nav class="site-navi">
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item">
+        <a href="/search/" title="Site Search"><i class="fa-solid fa-search"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/tags/" title="Article Tags"><i class="fa-solid fa-tag"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/archives/" title="Article Archives"><i class="fa-solid fa-archive"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/quotes/" title="Favorite Quotes"><i class="fa-solid fa-quote-right"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/demos/" title="Web Demos"><i class="fa-solid fa-dice"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/about/" title="About Me"><i class="fa-solid fa-info-circle"></i></a>
+      </li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://notebooks.oranlooney.com" target="_blank" title="Jupyter Notebooks"><i class="fa-regular fa-lightbulb"></i></a></li>
+    <li><a href="https://linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a></li>
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fa-brands fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fa-brands fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa-solid fa-flask"></i></a></li>
+  </ul>
+
+  </nav>
+</header>
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/code-quality_files/lead.jpg" class="article-image" />
+      
+      <h1 class="article-title">The Code Quality Apocalypse Survival Guide</h1>
+      
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-author">
+            by <a href="/about/">Oran Looney</a>
+        </li>
+        <li class="article-meta-date"><time>June 15, 2026</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/future/">
+            <i class="fas fa-tag"></i>
+            Future
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/llm/">
+            <i class="fas fa-tag"></i>
+            LLM
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#the-argument">The Argument</a></li>
+<li><a href="#nothing-new-under-the-sun">Nothing New Under the Sun</a></li>
+<li><a href="#the-tomato-in-the-fruit-salad">The Tomato in the Fruit Salad</a></li>
+<li><a href="#the-broken-learning-loop">The Broken Learning Loop</a></li>
+<li><a href="#regression-to-the-mean">Regression to the Mean</a></li>
+<li><a href="#the-knowledge-cutoff-problem">The Knowledge Cutoff Problem</a></li>
+<li><a href="#software-complexity">Software Complexity</a></li>
+<li><a href="#security">Security</a></li>
+<li><a href="#reliability">Reliability</a></li>
+<li><a href="#a-period-of-chaos">A Period of Chaos</a></li>
+<li><a href="#nobody-ever-really-cared-anyway">Nobody Ever Really Cared Anyway</a></li>
+<li><a href="#why-you-should-care-anyway">Why You <em>Should</em> Care Anyway</a></li>
+<li><a href="#what-ancient-greek-philosophers-teach-us-about-agentic-coding">What Ancient Greek Philosophers Teach Us About Agentic Coding</a></li>
+<li><a href="#using-llms-to-increase-code-quality">Using LLMs to Increase Code Quality</a></li>
+<li><a href="#congratulations-you-re-a-team-lead-now">Congratulations, You&rsquo;re a Team Lead Now!</a></li>
+<li><a href="#code-velocity-is-cursed">Code Velocity is Cursed</a></li>
+<li><a href="#how-to-succeed">How to Succeed</a></li>
+<li><a href="#a-mantra">A Mantra</a></li>
+<li><a href="#forecast">Forecast</a></li>
+<li><a href="#appendix-a-timeless-software-engineering-quotes">Appendix A: Timeless Software Engineering Quotes</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming;
+agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a
+hawk and keep them on rails for best results. There are a lot of conflicting views, a lot of soul searching,
+a lot of vague metaphors. Here are some of my favorites:</p>
+
+<ul>
+<li>Agents are chainsaws. You can fell a tree in a fraction of the time, but you can also cut off your own leg.
+And you still need to know <em>where</em> and <em>how</em> to cut; chainsaws can&rsquo;t think for you.</li>
+<li>Agents are junior developers. Fast, forgetful juniors straight off the street. They add bandwidth and velocity
+to a team, but left to their own devices they cause problems and create technical debt. It&rsquo;s your job to provide
+guidance and direction, so congratulations: you&rsquo;re a software engineering team lead now!</li>
+<li>Agents are the mischievous genies. They are good at granting the letter of your wish and utterly indifferent
+to what you <em>meant</em> to ask for. Riches, power, and fame are all yours to be had&hellip; if only you can articulate
+your heart&rsquo;s true desire precisely enough. If not&hellip; well, you can&rsquo;t say you hadn&rsquo;t been warned.</li>
+<li>Agents are the sorcerer&rsquo;s hat. To the apprentice, a source of endless, effortless power. Put it on, speak a
+few magic words, and inanimate matter comes alive and starts working for you. Look where that got him. The
+master sorcerer knows that this power is to be wielded with utmost caution.</li>
+</ul>
+
+<p>Like everyone, I&rsquo;ve been trying to make sense of all this. In fact, I was asked at work to get involved
+in a pilot project for agentic programming and give my opinion. The scope of the project was months, which
+was interesting because most of the hot takes you see online are based on much smaller, &ldquo;hello world!&rdquo; or
+weekend project level stuff. And, well, I did form an opinion. Several, in fact. I&rsquo;d go so far as to
+say that I developed <i>Opinions™</i>. Opinions about where all this is going, what it means for our
+industry, and for each of us individually.</p>
+
+<h2 id="the-argument">The Argument</h2>
+
+<p>In briefest outline, the argument is as follows. (Click to expand each section.)</p>
+
+<ul>
+<li>There is a code quality apocalypse coming.
+
+<ul>
+<li>That is to say, an age of unreliable, insecure, buggy, and brittle software.</li>
+<li>The direct cause will be agentic coding.
+
+<ul>
+<li>Knowledge cutoff: agents default to outdated patterns even when better ones exist.</li>
+<li>Context rot: agents struggle to understand large code bases as a whole.</li>
+<li>Broken learning loop: neither humans nor agents accumulate deep expertise.</li>
+</ul></li>
+<li>Industry-wide, it is inevitable.
+
+<ul>
+<li>Democratization will flood the field with people shipping production software for the first time.</li>
+<li>The institutional knowledge that kept systems secure and reliable will evaporate without hands-on work.</li>
+<li>Organization incentives will cause a race to the bottom.</li>
+</ul></li>
+<li>Poor code quality will doom projects and reduce real and perceived value.
+
+<ul>
+<li>Complexity grows combinatorially; agents provide only a linear increase in velocity.</li>
+<li>Higher velocity will not save you: you cannot linear your way out of a combinatorial problem.</li>
+<li>Projects will be short-lived, quickly reaching legacy code status.</li>
+<li>New projects will be started to replace them wholesale, which will then also fail for the same reasons.</li>
+<li>Security, reliability, and usability failures will be the most visible and costly manifestations.</li>
+</ul></li>
+</ul></li>
+<li>It is not, however, inevitable for every developer, team, or project.
+
+<ul>
+<li>These problems are structurally identical to the problems historically caused by cowboy programmers.
+
+<ul>
+<li>Therefore, the same software engineering practices will also work for agentic programming.</li>
+<li>It is possible to apply these practices to agentic coding.</li>
+</ul></li>
+<li>Developers with engineering discipline will compound their advantage; those without will compound their problems.</li>
+<li>Consequently, the industry will bifurcate into high and low skill work.
+
+<ul>
+<li>Developers offering short-lived, high-churn projects will be in high demand but even higher supply.</li>
+<li>High supply will inevitably drive wages down in an endless race to the bottom.</li>
+<li>Developers offering long-lived, reliable projects will be in less demand, but even lower supply.</li>
+<li>This will drive wages up as companies compete for &ldquo;talent,&rdquo; just as it did during the dot-com boom.</li>
+</ul></li>
+<li>To stay in the high skill category will take discipline and foresight, but no more than any other profession.</li>
+</ul></li>
+<li>You <em>can</em> survive the coming code quality apocalypse.
+
+<ul>
+<li>View yourself as a team lead, not a typist.</li>
+<li>Apply proven practices: code review, testing, observability, architectural discipline, merge discipline, etc.</li>
+<li>Take real ownership of your codebase.</li>
+<li>Continue to learn and invest in your own knowledge and skills as a long-term strategy.</li>
+</ul></li>
+</ul>
+
+<h2 id="nothing-new-under-the-sun">Nothing New Under the Sun</h2>
+
+<p>There&rsquo;s nothing new about having someone else handle all the details of
+curating a data set, performing the statistical analysis, and preparing a
+report with nice visuals. It&rsquo;s called &ldquo;being a PhD advisor.&rdquo;</p>
+
+<p>There&rsquo;s nothing new about having someone else write code for you while you try
+to reconcile what the executives are asking for with the user&rsquo;s actual
+workflows, draw high-level diagrams and dispense vague platitudes about keeping
+things simple. It&rsquo;s called, &ldquo;being a software architect.&rdquo;</p>
+
+<p>The only thing that&rsquo;s new is that people who would otherwise have to put in
+years of effort paying their dues down in the code mines are being forced into
+that kind of high-level thinking from day one. If code construction isn&rsquo;t the
+job, then what is?</p>
+
+<p>There&rsquo;s a lot of tension around the concept of a manager who &ldquo;used to code.&rdquo; In
+the best-case scenario, they developed a deep sense for what the work involved,
+what was important and what wasn&rsquo;t, that they&rsquo;ve reflected on and abstracted
+into a philosophy which helps guide how they run their team. In the worst case,
+you can get managers who spent a couple years writing terrible code in obsolete
+languages back in the 80s, and think nothing&rsquo;s changed in forty years. Somewhere
+in the middle you have people who quickly realized they weren&rsquo;t actually very
+good at coding and pivoted as soon as possible to something they could do better.</p>
+
+<p>But the general lesson is that supervisors have to know the job in order to be
+good supervisors. This isn&rsquo;t even specific to programming; as far as I know it
+applies across all industries.</p>
+
+<p>So, here&rsquo;s the problem in a nutshell. AI allows developers to skip the years of
+actual coding and go straight to high-level software engineering. Which
+necessarily puts them in the position of being a supervisor who doesn&rsquo;t know
+the job very well. Unfortunately, the skills for this high-level work aren&rsquo;t
+provided by a standard computer science degree; instead, developers are
+expected to learn them on the job over a long apprenticeship. Many developers
+never generalize, never move beyond code construction into thinking about
+architecture, reliability, and project management. I know I certainly haven&rsquo;t
+mastered those skills: I&rsquo;m very much a &ldquo;technical track&rdquo; guy.</p>
+
+<p>So if supervising agents calls for a qualitatively different set of skills than
+the way programming is traditionally taught in school, how are developers
+supposed to learn what they need to know? One answer is that you could just
+read the software engineering literature and follow the advice there. In my
+experience, however, it&rsquo;s not possible to even really understand the literature
+without having hands-on professional experience on comparable projects. This
+leads to ivory tower managers that can quote a lot of theoretical ideas but
+don&rsquo;t have the counterbalancing weight of experience to keep them grounded.</p>
+
+<h2 id="the-tomato-in-the-fruit-salad">The Tomato in the Fruit Salad</h2>
+
+<p>One of the failure modes I observed on a recent project that leaned heavily
+on agentic models was the difficulty of successfully merging code back into
+main. One particular developer got himself in hot water by letting the LLMs
+go off on their own for <em>six days</em> without rebasing or merging, after which it
+proved essentially impossible to re-integrate.</p>
+
+<p>Having one developer go off and write a bunch of code which can&rsquo;t be merged
+isn&rsquo;t a new problem. A first-year scrum master fresh out of an agile boot camp
+can diagnose that. Having a subset of the team go off in different directions
+and end up with competing code bases that take more time to integrate than the
+original development is the kind of classic horror story Fred Brooks was
+writing about in <em><a href="https://en.wikipedia.org/wiki/The_Mythical_Man-Month">The Mythical Man-Month</a></em> in 1975. TODO: of code without any
+consideration for merge discipline.</p>
+
+<p>But the nature of the mistake didn&rsquo;t really have anything to do with LLM agents
+at all. The LLM would have happily merged and rebased and done daily PRs to
+keep everything in sync, <em>if it had been instructed to do so.</em> The mistake
+really has nothing to do with LLMs or even programming: it&rsquo;s much more basic
+than that, deeply rooted in the traditional social dynamics of software projects.
+And those are the kinds of problems that LLMs absolutely do not help with.</p>
+
+<p>We know why projects fail; as an industry we&rsquo;ve been watching more than half of
+all our projects fail for more than seven decades. And we&rsquo;ve learned the root
+cause is rarely that the devs literally just didn&rsquo;t know how to code. No,
+failures are down to miscommunicated requirements, poorly planned timelines,
+poor communication. You know, the hard stuff.</p>
+
+<p>Crucially, projects don&rsquo;t fail because devs are dumb. Quite the contrary:
+everyone reading this was probably once the smartest kid in their class. The
+thing is, those developers that Brooks was writing about? The ones that made
+all kinds of boneheaded project management and engineering mistakes? They were
+really smart too.</p>
+
+<p>The reason is simple: intelligent people respond rationally to incentives and
+are good at finding clever ways to meet those incentives. If they&rsquo;re being
+incentivized to slam out code as quickly as possible without testing to meet a
+deadline, if their &ldquo;definition of done&rdquo; is to show a demo, they&rsquo;ll focus on
+that to the exclusion of all else. If the executives don&rsquo;t seem to care about
+code quality, they&rsquo;ll ignore it too.</p>
+
+<p>The problem is that the moment, and I mean the very nanosecond, the application
+reaches production and is being used by real users, executive priorities do a
+180. They no longer care about deadlines, but only care about bugs. All of
+your heroics are instantly forgotten, and now you&rsquo;re just a guy who rushed a
+buggy app into production and caused everybody all kinds of problems.</p>
+
+<p>All experienced developers learn this lesson the hard way. The smart ones only
+have to learn it once. It can&rsquo;t really be stated strongly enough or often
+enough: it&rsquo;s the engineer&rsquo;s responsibility to <em>ship</em>. That means thinking ahead
+to what a successful release looks like, and that in turn usually means pushing
+back against non-technical stakeholders who don&rsquo;t have the experience or
+visibility to see that far ahead.</p>
+
+<p>A demo isn&rsquo;t supposed to be a dog and pony show. It&rsquo;s not supposed to be fake.
+A TV chef can&rsquo;t show a recipe for roast chicken and then whip out a store-bought
+rotisserie chicken to show as the final result: the implicit contract is that the
+final product they show you was cooked with the exact same recipe you demonstrated.
+The same is true for software demos: yes, the users are going to ooh and aah
+over the visuals, but <em>only because they think it&rsquo;s real.</em></p>
+
+<p>The famous <a href="https://rampantgames.com/blog/?p=7745">&ldquo;black triangle&rdquo; story</a> illustrates what it means to show an honest
+demo: yes, it&rsquo;s only one triangle, but it exercises the entire stack, proving
+the underlying framework worked from top to bottom. If the team had simply shown
+a PNG of a black triangle (or more aptly some pre-rendered graphic) that would
+have said <em>nothing</em> about the state of the project or the capabilities of the team.
+It would have <em>profoundly</em> misrepresented what they were doing to management
+and stakeholders. It would have set themselves up for failure by setting false
+expectations.</p>
+
+<p>LLMs change some of the dynamics of coding, but they haven&rsquo;t changed this.
+Using agents to do your coding is more like being a team lead than a
+programmer. And where do team leads spend their time? What do they spend their
+time thinking about? Supervising junior developers (or coding agents) is only a
+small fraction of the job. Team leads need to think about the project at a
+higher level, thinking ahead, working on requirements and timelines, talking to
+people&mdash;you know, the real reasons projects commonly fail.</p>
+
+<p>In D&amp;D terms, seeing a software development project through to a successful
+conclusion is a wisdom check, not an intelligence check. Or rather, you have
+to make an int check every day to make progress, but if you fail you can just
+re-roll the next day. But at the end of the project you have to make one single
+Wisdom check and if you fail, the entire project fails with no chance to re-roll.
+Do you want to make that roll with advantage or disadvantage?</p>
+
+<h2 id="the-broken-learning-loop">The Broken Learning Loop</h2>
+
+<p>Apprenticeship, mentoring, and tribal knowledge: software teams live or die by
+these. Any human who does a job for years on end naturally picks up a few
+tricks, and developers (being generally quite bright) have an endless appetite
+for detail, creating internal mental models of their languages, tools,
+frameworks, and code base that would take a lifetime to write out&hellip; so of
+course they never do.</p>
+
+<p>Anyone who&rsquo;s worked on a process automation project (RPA) will know how much
+tribal knowledge is passed down through oral tradition that never makes it into
+any kind of official documentation; it&rsquo;s simply not possible to fully document
+every edge case and judgment call, and most organizations accept this and
+assign senior employees to mentor new hires.</p>
+
+<p>Software developers become more familiar with the specific languages,
+libraries, and patterns used in their current project. By constantly working
+the bug queue, they gain an intuitive sense for what kinds of mistakes are
+easiest to make, and a sense of which mistakes their end users care about
+most. Industry rule of thumb is that it takes a junior developer roughly a year
+to fully familiarize themselves with a given codebase.</p>
+
+<p>The first approach people try is loading them up with massive amounts of
+instructions in the form of system prompts.</p>
+
+<p>High needle-in-a-haystack performance gives the impression that LLMs are fully
+digesting huge context windows. This is very much not the case;
+needle-in-a-haystack style tasks are ideally suited to the &ldquo;dot product&rdquo;
+attention mechanism at the heart of the transformer architecture; just because
+they can find matching content from a large context does not mean they can
+effectively use all the context, especially if it includes all kinds of
+conditional &ldquo;if this then that&rdquo; rules. In practice, performance at obeying
+instructions starts to degrade fairly rapidly, so writing ever longer and more
+detailed system prompts yields diminishing returns.</p>
+
+<p>The modern approach of &ldquo;skills&rdquo; is promising precisely because it seeks to work
+around this exact issue. Instead of always overloading the LLM with
+instructions on every possible task, we divide up our instructions into topics
+and let the LLM pull in instructions on a specific topic as needed. For
+example, a Microsoft shop could provide a skill for PDFs that demonstrates how
+to access Azure Document Intelligence correctly; without this skill, it might
+equally well choose to generate code for AWS Textract or some other tool. Since
+the skill&rsquo;s instructions are only loaded up when the LLM detects that it has a
+task related to ingesting PDF documents, it doesn&rsquo;t clutter up the context
+window.</p>
+
+<p>This approach alleviates the pressure but does not entirely eliminate the
+underlying problem, which is that there is a limit to the amount of guidance we
+can provide to an LLM in a &ldquo;one-shot&rdquo; mode.</p>
+
+<p>The other side of the problem is that agentic programming also reduces human
+skill retention. Reading (or let&rsquo;s be honest here, briefly skimming) generated
+code simply doesn&rsquo;t teach you as much as actually writing something yourself.
+Retention will be very low, understanding vague and general.</p>
+
+<p>Long after autopilots were invented, pilots continued to handle all take-offs
+and landings manually. The rationale behind this is interesting. You might
+think you could let the autopilot handle easy cases under standard conditions
+and only have the pilot take over for more complex cases and adverse
+conditions. The problem with this is that then the pilot <em>won&rsquo;t have enough
+experience and skill to handle the difficult cases when they arise.</em> You can
+only go so far with simulation training; it&rsquo;s vitally important that pilots get
+plenty of real-world practice handling their aircraft during normal conditions.
+The nature of human skill acquisition is such that once something is second
+nature to us, we can use it in difficult situations outside of all previous
+experience almost automatically.</p>
+
+<p>The same basic lesson applies to human programmers and agentic programming.
+It&rsquo;s all well and good to talk about &ldquo;supervising,&rdquo; &ldquo;guiding,&rdquo; or &ldquo;instructing&rdquo;
+your agents, to briefly skim their output, but if you&rsquo;re not getting hands-on
+keyboard time writing code yourself every single day, you won&rsquo;t just stop
+learning, but start actively forgetting how to program. A couple of years from now,
+your guidance and review won&rsquo;t be worth anything, and you&rsquo;ll have no idea how
+to bail the LLM out when it gets into trouble; a couple of years after that,
+and all your outdated opinions and knowledge will be actively harmful, like a
+clueless middle manager who &ldquo;used to code.&rdquo; All of which will lead you down the
+gentle slope into letting the agents do all the coding for you. And after all,
+why fight it? In the age of agentic programming, maybe hands-on-keyboard coding
+just isn&rsquo;t a skill that&rsquo;s worth getting good at. Certainly the economic
+incentives won&rsquo;t be there. In the last few decades a ton of people learned how
+to program and entered the industry; now we&rsquo;ll see a reversal of that trend.
+Ten years from now programmers will be either hobbyists, academic specialists,
+or dinosaurs.</p>
+
+<h2 id="regression-to-the-mean">Regression to the Mean</h2>
+
+<p>LLMs are broad but not deep. The text corpus used to train LLMs is basically
+&ldquo;the internet&rdquo; as a whole, and when it comes to programming that means open
+source code repositories such as GitHub, Q&amp;A sites like Stack Overflow, and
+endless tutorial blog posts. However, this corpus has a significant bias
+towards smaller, self-contained projects and tutorials and guidance aimed at
+beginners.</p>
+
+<p>The average GitHub repository is not Django or Redis. It&rsquo;s a TODO app with
+twelve commits last updated six years ago that was engineered to the exacting
+standard of &ldquo;works on my machine.&rdquo;</p>
+
+<p>High quality advice is often separated from code examples. The LLM may have
+been trained on high quality textbooks like Elements of Statistical Learning,
+and if you specifically ask about best practices in empirical risk minimization
+it will be able to refer back to them. However, the code samples it draws from
+come from random Kaggle blog posts. TODO</p>
+
+<h2 id="the-knowledge-cutoff-problem">The Knowledge Cutoff Problem</h2>
+
+<p>Pydantic V2 was released in 2023, three years ago at the time of this writing,
+but LLMs still frequently attempt to use the older, deprecated V1 methods. Even
+when instructed to use V2, they frequently slip in one or two V1 constructs by
+accident, which must then be fixed iteratively. This is a direct consequence of
+how they are trained: a lot of the repos and blog posts they are relying on are
+outdated and were written against V1, and it doesn&rsquo;t have a strong sense that
+any particular Pydantic code example that it is training on is V1 or V2 because
+that is left implicit in the original source text. How often this occurs is
+strongly correlated with how advanced the work you&rsquo;re doing is; it does OK with
+defining simple Pydantic models and fields, starts to make mistakes when you
+use custom Fields or validators, and is more often confused than not when
+working with advanced constructs like iterating over the metadata for all the
+fields of a model. Not only are those deeper, more advanced features the aspect
+of the library that changed the most from V1 to V2, it&rsquo;s also the one where it
+has the fewest examples to learn from.</p>
+
+<p>While vendors actively attempt to fight this knowledge cutoff problem by
+training newer versions of LLMs on &ldquo;fresh&rdquo; facts such as recent news events,
+the fact that it&rsquo;s still an issue after three years with a fairly popular
+library like Pydantic shows how difficult the problem is. Libraries that make
+major changes to their interface, such as the &ldquo;runes&rdquo; Svelte introduced in
+version 5, are putting their developers into a difficult position. Developers
+can use those features manually right away, disregarding LLM tooling, or try to
+use some of their precious context to write instructions for dealing with the
+new syntax, or can wait until the LLMs have had time to catch up. Developers
+that rely entirely on so-called &ldquo;vibe coding&rdquo; might not even be aware that
+their LLMs are generating code that targets an older, deprecated version of the
+library.</p>
+
+<h2 id="software-complexity">Software Complexity</h2>
+
+<p>Software engineers over the last sixty years have learned one huge lesson the
+hard way: software complexity kills. One bad developer slamming out spaghetti
+code as fast as he or she can type can, in a single year, build a system that
+a team of ten good developers cannot maintain.</p>
+
+<p>I don&rsquo;t see why there&rsquo;s any particular reason to believe that LLMs will be
+exempt from this phenomenon. The problem at its heart has to do with the
+growing n! possible interactions between all the components of a poorly
+architected system. Even if an LLM can read and generate code 5x or 10x faster
+than a human, you can&rsquo;t fight a combinatorial explosion in complexity by merely
+being linearly faster.</p>
+
+<p>In fact, everything I&rsquo;ve seen so far puts the weight on the other end of the
+scale. By making it possible to generate huge amounts of code from scratch in a
+short period of time, they can (if unsupervised and unguided) generate a
+tremendous amount of duplicate, poorly factored code.</p>
+
+<p>The most pertinent fact about technical debt is that it takes a while to build
+up. It&rsquo;s invisible in the first few months of the project, feels manageable for
+the first year (it just feels like making small &ldquo;interest payments&rdquo; on the
+debt), but after a year or two the technical debt reaches a point where it
+dwarfs the basic cost of development: development velocity slows to a crawl,
+seemingly trivial new features take months to add, and no significant new
+features or major refactoring is even possible. In contrast, well-factored code
+bases actually show <em>increased</em> development velocity in years two through five,
+although every codebase will eventually age.</p>
+
+<h2 id="security">Security</h2>
+
+<p>Security is very difficult to get right for any kind of codebase that has an
+attack surface, such as a web application. A web application can appear to
+function perfectly while containing authentication bugs or injection
+vulnerabilities.</p>
+
+<p>Secure software development depends heavily on a kind of tribal knowledge
+bordering on institutional paranoia. Organizations accumulate checklists, review
+procedures, and threat models from previous incidents. Senior engineers know which
+operations require extra scrutiny because they remember the outage or breach
+from five years ago that established the rule in the first place.</p>
+
+<p>TODO: Long term, AI red teaming will identify and patch security issues early.</p>
+
+<h2 id="reliability">Reliability</h2>
+
+<p>Here&rsquo;s a useful case study: GitHub experienced a significant outage in 2025
+suspected to involve cascading failures. Word on the street was that this was
+directly related to AI-assisted infrastructure changes and automation
+interactions.</p>
+
+<p>Whether or not an LLM spat out the specific line of code that ended up causing
+the problem is almost beside the point.</p>
+
+<p>At a high level, what&rsquo;s really happening is simple:
+ as code velocity increases, the
+opportunity to accidentally create weird interactions increases too.
+Weird interactions lead to unpredictable behavior, which leads to production
+issues. And not the kind of issues that can be fixed by bouncing the server:
+we&rsquo;re talking about the kind of issues where the CEO wakes up the entire dev
+team at 2 AM for a 48-hour code-a-thon to figure out what even happened, and
+to repair the numerous cascading failures that it caused.</p>
+
+<p>A human developer who spent three weeks carefully implementing a subsystem
+usually develops some intuition about its failure modes. When stuff goes
+wrong, even in a very weird way, they&rsquo;ll have a complete mental model of what&rsquo;s
+happening and can usually diagnose it right away.</p>
+
+<p>An engineer supervising five agents generating ten thousand lines of code
+before lunch, on the other hand, will not. So the team will sit there pasting
+log error messages and stack traces into an LLM while the company burns to the
+ground.</p>
+
+<p>The danger isn&rsquo;t that the code LLMs write is wrong; the danger is that nobody
+fully understands why it works when it does, why it fails when it doesn&rsquo;t, or
+how to fix it when it goes wrong.</p>
+
+<h2 id="a-period-of-chaos">A Period of Chaos</h2>
+
+<p>Periods of rapid technological progress are chaotic.</p>
+
+<p>Hindsight has the tendency to flatten the messy reality into neat narratives.
+For the people stuck in the middle of it, the situation feels very different
+before the winners have been crowned. Competing frameworks proliferate. Best
+practices change every few months. Experts disagree publicly and with enormous
+confidence. Entire camps of developers reorganize themselves around mutually
+incompatible assumptions. Nobody really knows anything, everyone is confused;
+the only difference is the extent to which individuals are self-aware, in
+denial, or outright dishonest about this.</p>
+
+<p>The JavaScript ecosystem spent a decade cycling through
+successive waves of frameworks, packaging systems, build pipelines, state
+management patterns, testing philosophies, and deployment models. Every year
+brought a new raft of &ldquo;best practices,&rdquo; usually outright contradicting last
+year&rsquo;s consensus.</p>
+
+<p>As someone who lived through that, the current LLM ecosystem feels very
+similar. TODO Just when we seem to be getting a handle on things a newer,
+larger model drops which invalidates half the conclusions people drew from the
+previous benchmark cycle.</p>
+
+<p>Other than moving to the mountains and living in a <a href="https://en.wikipedia.org/wiki/H%C5%8Dj%C5%8Dki">ten-foot square hut</a>
+it&rsquo;s hard to know what to do.</p>
+
+<h2 id="nobody-ever-really-cared-anyway">Nobody Ever Really Cared Anyway</h2>
+
+<p>The good news is that no one ever really cared about code quality anyway. It
+was essentially invisible to executives, who almost universally viewed it as
+programmer excuses for not delivering faster.</p>
+
+<p>Software engineers pushed back, purely for their own sanity, and because they
+knew they&rsquo;d be the ones woken up at 2 am to debug some issue breaking the entire
+app.</p>
+
+<p>So, as strange as it sounds, the industry&rsquo;s focus on code quality arose almost
+accidentally, as an emergent outcome of the game played between engineers and
+executives. Execs don&rsquo;t care about code quality, but they <em>do</em> care about
+production failures, and they are smart enough to pay someone else and tell
+them that they were <em>accountable</em> for production failures, and reasonable
+enough to listen when those same people pushed back against crazy timelines or
+unreasonable expectations.</p>
+
+<p>We attained a kind of fragile equilibrium, purely by chance. LLM coding agents
+<em>break</em> that equilibrium: they are the ultimate yes men, and will immediately
+and joyously cave to any kind of pressure from above to &ldquo;just get it done.&rdquo;</p>
+
+<p>So, executives will get what they&rsquo;ve always asked for: apps coded quickly. Of
+course, just giving someone <em>exactly</em> what they ask for is often
+indistinguishable from sabotage.</p>
+
+<h2 id="why-you-should-care-anyway">Why You <em>Should</em> Care Anyway</h2>
+
+<p>How does software die? I don&rsquo;t mean abandoned due to lack of interest, I mean
+how does a good, useful code base reach a point where even the people who love
+it have to leave it behind?</p>
+
+<p>It happens gradually: the code base becomes more complex, less maintainable.</p>
+
+<p>The code base becomes brittle:</p>
+
+<dl>
+  <dt>brittle</dt>
+  <dd>code where any change tends to break other things.</dd>
+</dl>
+
+<p>More and more of it is basically <em>legacy code</em> that no one wants to touch.</p>
+
+<dl>
+  <dt>legacy code</dt>
+  <dd>any code that developers are afraid to change.</dd>
+</dl>
+
+<p>Developers respond by wrapping legacy code in layers so they don&rsquo;t have to
+touch the legacy code directly. This causes complexity to accumulate: what would
+have been a single straightforward function in a brand new application is now a
+stack of ten functions, each trying to leverage the lower layers but adding
+defaults, business rules, overrides, adapters and other cruft.</p>
+
+<dl>
+  <dt>cruft</dt>
+  <dd>redundant, overly complex, dysfunctional code.</dd>
+</dl>
+
+<p>As the code base becomes more complex, it becomes harder to change anything and
+the project accumulates technical debt.</p>
+
+<dl>
+  <dt>technical debt</dt>
+  <dd>a metaphor used to emphasize the cost of short-sighted architectural
+  decisions; we call it "debt" because we have to make "interest payments" in
+  the form of increased maintenance costs until it is cleaned up.</dd>
+</dl>
+
+<p>Small changes take forever; big changes essentially become impossible. Delivery
+velocity drops below what anyone would consider acceptable. The code base is
+put into maintenance mode: only essential bug fixes are made to keep the system
+running, and no new development is even being attempted. Users learn to live
+with the application in its current state, or move on to greener pastures.</p>
+
+<p>Eventually there isn&rsquo;t enough interest to sustain even that, and the code base
+is sunset.</p>
+
+<p>Now, here is the crucial point you need to understand. This doesn&rsquo;t happen on a
+fixed schedule: it happens faster or slower depending on code quality.</p>
+
+<p>Just as a person who takes care of themselves can live a long and healthy life,
+a code base with high code quality can continue to grow and deliver value for
+five, ten, twenty years. In fact, &ldquo;not leading to legacy code&rdquo; is the unifying
+principle behind all the disparate things that developers call clean code.</p>
+
+<dl>
+  <dt>clean code</dt>
+  <dd>code that is easy for humans to understand and modify without accidentally
+  breaking things.</dd>
+</dl>
+
+<p>On the flip side, projects that use the <a href="https://blog.codinghorror.com/the-big-ball-of-mud-and-other-architectural-disasters/">big ball of mud architecture</a> and
+have lots of code quality problems can reach legacy status in a matter of
+months, not years.</p>
+
+<p><img src="/post/code-quality_files/lifecycle_plot.png" alt="Product Life Cycle as a Function of Code Quality" /></p>
+
+<p>So, why did I just recap software engineering 101? Because nothing about these
+dynamics changes because of LLMs. They&rsquo;re at least as confused by messy code
+bases as humans are, maybe even more so. They&rsquo;re equally susceptible to falling
+into the trap of adding complexity to deal with existing complexity, causing
+the exact same positive feedback loop that kills projects. It has nothing to do
+with human vs. LLM, and everything to do with the very nature of complexity
+itself.</p>
+
+<p>You need to understand this: <em>You can&rsquo;t linear your way out of an exponential
+problem.</em> The only approach that has ever worked is to cut it off at the head.</p>
+
+<h2 id="what-ancient-greek-philosophers-teach-us-about-agentic-coding">What Ancient Greek Philosophers Teach Us About Agentic Coding</h2>
+
+<p>Why did ancient Athenians study mathematics, and send their children to be
+educated by sophists and philosophers? Even when you have slaves to do your
+work, you still have to <em>understand</em> what&rsquo;s going on in order to make good
+decisions. That&rsquo;s why learning mathematics is still valuable even if you don&rsquo;t
+do any calculations yourself. Abe Lincoln studied Euclid&rsquo;s <em>Elements</em> as a
+young lawyer. Euclid himself told King Ptolemy, &ldquo;there&rsquo;s no royal road to
+geometry.&rdquo; No one else can understand the world for you.</p>
+
+<p>With agentic coding, a lot of the details of syntax and code construction don&rsquo;t
+really matter. So what does matter? Architecture, design, domain modeling. This
+stuff isn&rsquo;t any &ldquo;softer&rdquo; or less technical; just more theoretical. And &ldquo;theoretical&rdquo;
+doesn&rsquo;t mean <em>easy</em>; just ask any physicist.</p>
+
+<p>We should actually focus <em>more</em> on theory if we have LLMs to do our
+coding. Think more about algorithmic complexity, data structures, architecture,
+software patterns, project management, and less about the day-to-day details of
+code construction and configuration.</p>
+
+<h2 id="using-llms-to-increase-code-quality">Using LLMs to Increase Code Quality</h2>
+
+<p>Used intentionally, LLMs can be used to <em>increase</em> code quality. Here are a
+few of the things I&rsquo;ve found they&rsquo;re actually quite good at&hellip; if you bother
+to ask them to do it:</p>
+
+<ul>
+<li>Correctness
+
+<ul>
+<li>Code Review</li>
+<li>Type Annotations and Type Checking</li>
+<li>Enforce Naming Conventions and Style Guides</li>
+<li>Detect Security Flaws</li>
+<li>Validate Config Files</li>
+<li>Diagnosing and Fixing Valgrind Issues</li>
+<li>Diagnosing and Fixing Profiling Issues</li>
+<li>Ensure Consistent Logging</li>
+<li>Adding I18N or ARIA Accessibility</li>
+</ul></li>
+<li>Translating Between Programming Languages or Frameworks
+
+<ul>
+<li>SQL &lt;&ndash;&gt; pandas &lt;&ndash;&gt; polars &lt;&ndash;&gt; spark</li>
+<li>Python &lt;&ndash;&gt; TypeScript &lt;&ndash;&gt; Rust</li>
+<li>SQLAlchemy &lt;&ndash;&gt; Django ORM &lt;&ndash;&gt; Prisma &lt;&ndash;&gt; LINQ</li>
+</ul></li>
+<li>Other Strong Use Cases:
+
+<ul>
+<li>Writing Regular Expressions</li>
+<li>Generating Plots with Matplotlib and Similar Libraries</li>
+<li>Writing LaTeX Equations</li>
+</ul></li>
+<li>Documentation
+
+<ul>
+<li>Keep Documentation in Sync with Code</li>
+<li>Check Spelling and Grammar in:
+
+<ul>
+<li>Comments</li>
+<li>Docstrings</li>
+<li>String Literals</li>
+<li>HTML Templates, etc.</li>
+</ul></li>
+<li>Generate Architecture Diagrams</li>
+</ul></li>
+<li>Testing
+
+<ul>
+<li>Write Unit Tests</li>
+<li>Write Fuzz Tests, Playwright Tests, etc.</li>
+<li>Generate Synthetic Test Data</li>
+</ul></li>
+</ul>
+
+<p>The general pattern is to put it into a loop with a test tool. It runs a tool like
+<code>pytest</code> or <code>valgrind</code>, reviews the output, makes fixes for issues reported, and
+runs it again until all issues are resolved.</p>
+
+<p>Best practices for this stuff don&rsquo;t really change at all with LLMs. You still
+have to remember to do them, but you don&rsquo;t have to do the drudge work yourself.
+But it&rsquo;s <em>way</em> faster and easier to say, &ldquo;Run cProfile on the load test script
+and diagnose and fix any significant bottlenecks.&rdquo;</p>
+
+<h2 id="congratulations-you-re-a-team-lead-now">Congratulations, You&rsquo;re a Team Lead Now!</h2>
+
+<p>Coding with LLM Agents feels exactly like being a team lead:</p>
+
+<ul>
+<li>Write Jira Tickets</li>
+<li>Discuss Project Scope</li>
+<li>Coordinate Day-to-Day Work</li>
+<li>Review Code</li>
+<li>Set Architectural Direction</li>
+<li>Debug Weird Issues</li>
+</ul>
+
+<p>On the other side of the equation, agent weaknesses are eerily familiar:</p>
+
+<ul>
+<li>Keeping up to date with recent library changes and versions</li>
+<li>Choosing and sticking to a single architecture or framework.</li>
+<li>Negotiating project scope.</li>
+<li>Sitting down and actually talking to business stakeholders.</li>
+<li>Premature optimization.</li>
+<li>Overengineering simple requirements.</li>
+<li>Getting lost down rabbit holes.</li>
+<li>Trouble understanding legacy code.</li>
+<li>Papering over real bugs with &ldquo;defensive&rdquo; programming.</li>
+<li>&ldquo;Fixing&rdquo; unit tests by having them not call real code.</li>
+<li>Not able to use interactive debuggers effectively.</li>
+</ul>
+
+<p>Sure seems like a junior developer to me.</p>
+
+<p>Therefore, almost all the project management best practices are still in play.</p>
+
+<h2 id="code-velocity-is-cursed">Code Velocity is Cursed</h2>
+
+<p>Increased velocity increases variance.</p>
+
+<p>It&rsquo;s not a sprint <em>or</em> a marathon, it&rsquo;s an obstacle course. Sometimes you&rsquo;re
+clicking along, writing code, testing it, checking it in, moving on to the next
+ticket. Just burning down the sprint backlog. And then you hit some weird
+configuration issue in a library you&rsquo;re using, nobody knows why or has ever
+seen anything like it, and you&rsquo;ve lost two days tracking it down. This is why
+project timelines are so hard to estimate: these obstacles occur independently and
+randomly in time, meaning the mean delivery time has a Poisson distribution.
+The Poisson distribution is right-skewed, meaning that it has a &ldquo;fat&rdquo; right-tail
+where some extremely large values appear surprisingly often.</p>
+
+<p>The higher code velocity with LLMs actually magnifies this effect. If a task
+would normally take you two weeks, spending two days waiting on a helpdesk
+ticket isn&rsquo;t really visible at the project management level. But if you&rsquo;re
+intending to vibe code the thing in a single afternoon, then that two-day delay
+is now a <em>factor of five</em> multiplier to delivery time, which is <em>very</em> visible.</p>
+
+<p>&ldquo;Developer heroics are project management failures.&rdquo;</p>
+
+<p>&ldquo;You can&rsquo;t code your way out of a problem you project managed your way into.&rdquo;</p>
+
+<h2 id="how-to-succeed">How to Succeed</h2>
+
+<p>The people who are seeing success with these tools, people like <a href="https://simonwillison.net/">Simon
+Willison</a>, are the people who are <em>already</em> capable of shipping software.
+They already have the skill and knowledge needed to write production quality
+code, pull requirements from actual stakeholders, and manage real-world
+projects. Skills won from hard years down in the software trenches. So, when they
+use agentic coding assistants, they just deliver faster. GPT and Claude are not
+the worst entry-level dev they&rsquo;ve had under them, not by a long shot; plus,
+they&rsquo;re eager and willing and hard-working, which counts for a lot.</p>
+
+<p>But maybe you&rsquo;re in a different boat. Maybe you&rsquo;re using agentic coding not
+to accelerate your current work, but to do stuff you&rsquo;ve never done before.
+Nothing wrong with that; LLMs have a very broad knowledge base and are very
+helpful when doing things outside one&rsquo;s own wheelhouse. An nginx config setting
+here, an advanced database query there, dealing with a vendor&rsquo;s query DSL every
+now and then, that kind of stuff. LLMs make us more <a href="https://ceri.msu.edu/_assets/pdfs/t-shaped-pdfs/Primer-on-the-T-professional.pdf">T-shaped</a>, which is a
+good thing. But there&rsquo;s a risk when you start using LLMs to do core work in an
+area outside your current expertise, and there&rsquo;s a right way and a wrong way
+to manage that risk.</p>
+
+<p>The risk is that the LLM will be a crutch, a layer that separates you from the
+underlying logic. You&rsquo;ll generate terrible code, which is fine, because all
+beginners do, but you <em>won&rsquo;t even know it,</em> because you never even look at the
+code that has your name in the <code>git blame</code>. And because you don&rsquo;t read it,
+you&rsquo;re not really learning. A month into the project you might not even know
+which ORM you&rsquo;re using or why you chose it.</p>
+
+<p>On top of that, the agent isn&rsquo;t learning either! Current gen LLMs have serious
+memory problems, problems that would get them a neurological diagnosis if they
+were human. Every time you close that chat window, they forget you, they forget
+your codebase. And every time you open a new chat window, they&rsquo;re looking at
+your code as if this is the first time in their life they&rsquo;ve ever seen it.
+Leonard from <a href="https://en.wikipedia.org/wiki/Memento_(film)">Memento</a> has nothing on them. And like Leonard, we try to
+work around the issue by writing little notes to ourselves, with similarly
+mixed results.</p>
+
+<p><img src="/post/code-quality_files/memento_tattoo.jpg" alt="Memento Tattoo" /></p>
+
+<p>All these little <code>AGENTS.md</code> or skills or other little documents and tricks
+we use to try to give the LLM <em>some</em> kind of memory are a pale substitute for
+the kind of deep familiarity a developer builds for their stack and code base
+over the span of a few years.</p>
+
+<p>So if <em>you&rsquo;re</em> not learning, and the <em>agent</em> isn&rsquo;t learning, then who really
+understands the code? The answer is no one. That&rsquo;s why I&rsquo;d say that&rsquo;s the wrong
+way to approach agentic programming.</p>
+
+<p>The right way is to be more like a team lead: lean into the work and read each
+line of code, develop expertise, provide guidance. Set your agentic coding
+buddy up for success by clearing blockers and building a project structure
+around it for the things it&rsquo;s <em>not</em> good at, things like QA testing, eliciting
+requirements, and managing expectations. You know, just like team leads and
+managers have done for their devs for decades.</p>
+
+<p>Above all, demonstrate <em>ownership</em> of the code base, real engineering
+ownership, like the engineer of record who signs off on a bridge. Learn and
+follow software engineering and project management best practices. Learn also
+from the LLM: ask it questions, read its code, invest in your own
+understanding.</p>
+
+<h2 id="a-mantra">A Mantra</h2>
+
+<p>Here is a mantra which has served me well when I find myself operating outside
+my comfort zone and forced to learn some new skill in real time:</p>
+
+<blockquote>
+<p>&ldquo;I don&rsquo;t know anything. In a year I&rsquo;ll be competent, in two I&rsquo;ll be an expert,
+but today I don&rsquo;t know anything. It will be a long time before I know how
+to do anything, and longer still until I know the right way to do it.&rdquo;</p>
+</blockquote>
+
+<p>That might seem weirdly negative, but it&rsquo;s actually designed to avoid the most
+common and dangerous pitfalls beginners make: jumping straight into having
+opinions about the &ldquo;right&rdquo; ways to do things.</p>
+
+<blockquote>
+<p>&ldquo;Some people will never learn anything, for this reason, because they
+understand everything too soon.&rdquo; <br>&mdash;Alexander Pope</p>
+</blockquote>
+
+<p>It&rsquo;s OK to not know what you&rsquo;re doing! Just breathe, relax. Nobody expects you
+to be an expert on day one. Just start, get moving, and pay attention to what
+works and what doesn&rsquo;t. Reach out for advice and guidance.</p>
+
+<p>There&rsquo;s nothing more ridiculous than claiming to be an expert in something that
+didn&rsquo;t exist until two years ago and has changed completely every six months
+since. That doesn&rsquo;t make me think you&rsquo;re a genius: it makes me think that your
+bar for &ldquo;expertise&rdquo; is extremely low. We&rsquo;re all just trying stuff, throwing
+spaghetti at the wall to see what sticks. It&rsquo;s good to <em>try</em> to make sense of
+things, to come up with theses and test them, to introduce theories that reduce
+complex evidence to elegant rules. All that work will pay off eventually. But
+today, every conclusion is tentative, every pat simplification subject to
+disruption, and nobody knows anything for certain. All we can do is to keep
+an open mind and keep trying new things.</p>
+
+<h2 id="forecast">Forecast</h2>
+
+<p>Code quality will drop like a rock for the next five years, which will manifest
+itself as less reliable applications and more security issues.</p>
+
+<p>Any democratization of a technology often creates a perceived drop in maturity, but
+what&rsquo;s really happened is that with the gatekeepers gone a huge number of people
+have entered the field. There are just as many experienced senior developers
+developing high quality codebases as before; but now they represent 1% of the
+coding population instead of 10%.</p>
+
+<p>Longer term, the industry will adapt. New tooling, new methodologies, new
+review processes, and new architectural conventions will emerge. Software
+engineering has repeatedly reinvented itself in response to increases in scale
+and complexity, and it will again:  as an industry we are uniquely well-situated
+to reinvent our own tooling to meet new challenges.</p>
+
+<h2 id="appendix-a-timeless-software-engineering-quotes">Appendix A: Timeless Software Engineering Quotes</h2>
+
+<p>Selections from my collection of [quotes][Q] that
+are apropos agentic programming, with commentary.</p>
+
+<blockquote>
+<p>&ldquo;It is a profoundly erroneous truism that we should cultivate the habit of
+thinking of what we are doing. The precise opposite is the case. Civilization
+advances by extending the number of important operations which we can perform
+without thinking about them.&rdquo;
+<br>&mdash;Alfred North Whitehead</p>
+</blockquote>
+
+<p>and</p>
+
+<blockquote>
+<p>&ldquo;It is unworthy of excellent men to lose hours like slaves in the labour of
+calculation which could safely be relegated to anyone else if machines were
+used.&rdquo;
+<br>&mdash;Gottfried Wilhelm Leibniz, 1685</p>
+</blockquote>
+
+<p>At the most fundamental philosophical level, at the broadest possible
+scale, despite the teething trouble, despite what we&rsquo;ll have to give up,
+agentic programming is still basically pushing in the right direction.</p>
+
+<blockquote>
+<p>&ldquo;The most important single aspect of software development is to be clear about
+what you are trying to build.&rdquo;
+<br>&mdash;Bjarne Stroustrup</p>
+</blockquote>
+
+<p>Agents can generate large amounts of activity, but they cannot compensate for unclear
+objectives. Precise goals, constraints, and success criteria are essential.</p>
+
+<blockquote>
+<p>&ldquo;The cardinal sin is to make a choice without knowing you are making one.&rdquo;
+<br>&mdash;Jonathan Shewchuk</p>
+</blockquote>
+
+<p>When you over-rely on agents, you&rsquo;re committing this &ldquo;cardinal sin&rdquo; on an industrial scale.</p>
+
+<blockquote>
+<p>&ldquo;Be careful that victories do not carry the seeds of future defeats.&rdquo;
+<br>&mdash;Ralph Stockman</p>
+</blockquote>
+
+<p>Quick wins with agentic programming can lead to maintenance, security, or reliability problems later.
+Watch them like a hawk and keep them on rails, especially in the early days of a project.</p>
+
+<blockquote>
+<p>Replicants are like any other machine&mdash;they&rsquo;re either a benefit or a hazard. If they&rsquo;re a benefit, it&rsquo;s not my problem.
+<br>&mdash;Rick Deckard</p>
+</blockquote>
+
+<p>Agentic programming comes with pros and cons. Your job is to leverage the benefits and mitigate the hazards.
+That requires having a very clear understanding of where they&rsquo;re strong and where they&rsquo;re weak.</p>
+
+<blockquote>
+<p>&ldquo;We build our computer [systems] the way we build our cities: over time, without a plan, on top of ruins.&rdquo;
+<br>&mdash;Ellen Ullman</p>
+</blockquote>
+
+<p>Truth be told, a lot of software engineering wisdom is aspirational, rather than achieved in practice.
+Agents will generate a ton of poorly designed systems, but so do we.</p>
+
+<blockquote>
+<p>&ldquo;As a programmer, it&rsquo;s your job to put yourself out-of-business. What you can
+do today can be automated tomorrow.&rdquo;
+<br>&mdash;Douglas McIlroy</p>
+</blockquote>
+
+<p>Or a similar idea in a more folksy idiom:</p>
+
+<blockquote>
+<p>&ldquo;People don&rsquo;t want to buy a quarter-inch drill; they want a quarter-inch hole.&rdquo;
+<br>&mdash;Theodore Levitt</p>
+</blockquote>
+
+<p>The goal was always to solve a problem, get to a solution; we use tools to get us there.</p>
+
+<blockquote>
+<p>&ldquo;If you can&rsquo;t write it down in English, you can&rsquo;t code it.&rdquo;
+<br>&mdash;Peter Halpern</p>
+</blockquote>
+
+<p>Ambiguous requirements remain problematic; work on your writing skills (which are
+really just critical thinking skills.) That was worth doing before LLM agents;
+now you have no excuse.</p>
+
+<blockquote>
+<p>&ldquo;[&hellip;] but there is one quality that cannot be purchased that way - and that
+is reliability. The price of reliability is the pursuit of the utmost
+simplicity. It is a price which the very rich find most hard to pay.&rdquo;
+<br>&mdash;C.A.R. Hoare</p>
+</blockquote>
+
+<p>Simplicity is stil the best path to reliability; agents don&rsquo;t change that dynamic.
+But they do make it easy to generate endless complexity at the click of button.</p>
+
+<blockquote>
+<p>&ldquo;Artificial Intelligence is not &lsquo;man versus machine.&rsquo; It is &lsquo;man with machines&rsquo;
+versus &lsquo;man without machines.&rsquo;&rdquo;
+<br>&mdash;Stephen Thaler</p>
+</blockquote>
+
+<p>The most effective use of agents is typically collaborative rather than competitive.
+Any benchmark for &ldquo;human&rdquo; vs. &ldquo;machine&rdquo; is fundamentally flawed; the right comparison
+is &ldquo;human without assistance&rdquo; vs. &ldquo;human with assistance.&rdquo;</p>
+
+<blockquote>
+<p>&ldquo;Trust, but verify.&rdquo;
+<br>&mdash;Russian Proverb</p>
+</blockquote>
+
+<p>Formally verify with type checks, unit testing, etc., in an agentic loop, and
+verify with human review by qualified developers at the end.</p>
+
+<blockquote>
+<p>&ldquo;There are two ways of constructing software. One way is to make it so simple
+that there are obviously no deficiencies. The other is to make it so complex
+that there are no obvious deficiencies.&rdquo;
+<br>&mdash;C.A.R. Hoare</p>
+</blockquote>
+
+<p>Agents default to the second mode. It takes engineering discipline to achieve the first.</p>
+
+<div>
+<link rel="stylesheet" href="/css/tree.css">
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+  $(".article > ul").eq(2).addClass("collapsible-tree");
+</script>
+<script src="/js/tree.js"></script>
+</div>
+
+    </article>
+
+    <hr>
+
+
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/considerate-data-modeler/" data-toggle="tooltip" data-placement="top" title="The Considerate Data Modeler">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+
+<div class="site-footer">
+  <div class="copyright">
+	  
+  </div>
+  <ul class="site-footer-items">
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js"></script>
+<script src="/js/custom.js"></script>
+
+
+<script>
+window.MathJax = {
+  loader: {
+    load: ['[tex]/color']
+  },
+
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    packages: {'[+]': ['color']}
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4.1.2/tex-chtml.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+
+
+</body>
+</html>
