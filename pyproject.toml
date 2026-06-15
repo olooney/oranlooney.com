@@ -1,0 +1,10 @@
+[project]
+name = "oranlooney.com"
+version = "1.0.0"
+description = ""
+dependencies = [
+    "Pillow",
+]
+
+[tool.uv]
+package = false
