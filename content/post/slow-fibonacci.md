@@ -1,4 +1,4 @@
----
+﻿---
 title: 'A Seriously Slow Fibonacci Function'
 author: Oran Looney
 date: 2019-07-06
@@ -44,7 +44,8 @@ called [Church encoding][CE].  If $\lambda$-calculus is machine code, then the
 [Church encoding][CE] is C.
 
 
-<h2 id="goal">Goal</h2>
+Goal
+----
 
 David Allen says to begin with the goal in mind, so let's take a look at what
 we're shooting for. As a blueprint, let's first look at a performance-naive
@@ -129,7 +130,8 @@ familiar, although the parentheses are in slightly different places. (In LISP,
 function application looks like `(minus n 2)` instead of `minus(n)(two)`.)
 
 
-<h2 id="the-pythonic-lambda-calculus">The Pythonic Lambda Calculus</h2>
+The Pythonic Lambda Calculus
+----------------------------
 
 In the $\lambda$-calculus there are only two operations: abstraction and
 application.  These two can be composed to write any program (computable
@@ -301,7 +303,8 @@ encoding provides a roadmap... it  will however lead us to types and data
 structures very different than the native python `int` and `bool`!
 
 
-<h2 id="formal-grammar">Formal Grammar</h2>
+Formal Grammar
+--------------
 
 The subset of Python which constitutes the Pythonic $\lambda$-calculus
 can fully described by this [BNF][BNF] specification:
@@ -379,7 +382,8 @@ followed the rules for introducing definitions! Later, we will show examples of
 running programs both ways.
 
 
-<h2 id="church-booleans">Church Booleans</h2>
+Church Booleans
+---------------
 
 We'll start with the simplest item on our shopping list: Boolean logic.
 There are only two Boolean values:
@@ -485,7 +489,8 @@ expression which represent your program. Finally, reverse the Church encoding
 to recover meaningful values.
 
 
-<h2 id="church-numerals">Church Numerals</h2>
+Church Numerals
+---------------
 
 The Church encoding of the natural numbers, called Church numerals, defines the
 number $n$ to be a binary function (here, "binary" means taking two arguments)
@@ -685,7 +690,8 @@ This isn't all of number theory of course, but its enough to implement
 our little Fibonacci function!
 
 
-<h2 id="predicates-involving-numbers">Predicates Involving Numbers</h2>
+Predicates Involving Numbers
+----------------------------
 
 The first and most basic predict test we need is a check for zero. This
 will form the foundation of all the other predicates:
@@ -715,7 +721,8 @@ and `m` to be Church numbers, their return value is a Church Boolean. The main
 thing we wanted was `less_than`, which we will need for our Fibonacci function.
 
 
-<h2 id="recursion">Recursion</h2>
+Recursion
+---------
 
 Rather than jumping straight into implementing recursion in the $\lambda$-calculus,
 let's take it slow and develop the idea in stages. Let's start with vanilla
@@ -940,7 +947,8 @@ defined by using the Boolean algebra we developed earlier to define operations
 on binary strings, but that is not what we are about today.
 
 
-<h2 id="final-fibonacci">Final Fibonacci</h2>
+Final Fibonacci
+---------------
 
 Our shopping list is complete: we now have all the necessary tools to proceed
 to the endgame. All that remains is to implement the Fibonacci algorithm:
@@ -1002,7 +1010,8 @@ We can test that it is correct by exhibiting the first 20 Fibonacci numbers:
     20 6765
 
 
-<h2 id="how-slow-is-slow">How Slow is Slow?</h2>
+How Slow is Slow?
+-----------------
 
 As expected, this is rather slow, over 6 seconds to calculate $F&#95;{20}$:
 
@@ -1056,7 +1065,8 @@ means that we spent less time simply iterating through `succ` and more time
 doing interesting things. Nevertheless, it spends a *lot* of time doing simple
 subtractions - this is one of the weak points of the Church numerals.
 
-<h2 id="slower-than-slow">Slower Than Slow</h2>
+Slower Than Slow
+----------------
 
 How could we make this even *slower*? Again, in a fair way, not just sprinkling
 no-ops and sleep statements throughout.
@@ -1082,7 +1092,8 @@ chained together, the motion is infinitesimal by the end.
 We're not actually going to do that, of course. This article is already way too
 long. But we *could.*  
 
-<h2 id="macro-expansion">Macro Expansion</h2>
+Macro Expansion
+---------------
 
 Perhaps you don't believe that this is really a $\lambda$-calculus program; after
 all, it has all those "definitions" which look suspiciously like named
@@ -1130,7 +1141,8 @@ the same: all programs and data structures can be reduced to binary trees and
 all information about the program is somehow contained in the very structure of
 the tree itself.
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 All models of computation are equal, but some are more equal than others.  In
 theory, the $\lambda$-calculus is only a constant factor away from any other model

@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 4: Decision Trees'
+﻿---
+title: 'ML From Scratch IV: Decision Trees'
 author: Oran Looney
 date: 2019-03-01
 tags:
@@ -65,7 +65,8 @@ but belongs to what [Leo Breiman][LB], inventor of the [random forest][RF] algor
 on decision trees, calls the "[algorithmic culture][2C]" of statistical modeling. 
 
 
-<h2 id="gini-impurity-and-information-gain">Gini Impurity and Information Gain</h2>
+Gini Impurity and Information Gain
+----------------------------------
 
 The first thing we need to pin down is what we mean by "better" and "less
 balanced." There are two competing definitions; I'll describe both and then
@@ -149,7 +150,8 @@ performance. We will use Gini impurity because it is slightly cheaper to
 calculate a square than a log.
 
 
-<h2 id="finding-the-best-cut-point">Finding The Best Cut Point</h2>
+Finding The Best Cut Point
+--------------------------
 
 At each stage, we have two decisions to make: which feature to use
 for the cut, and the exact value to cut out. Each rule is of the
@@ -220,7 +222,8 @@ and highest performance.
         return best_split_gini, best_split_value, column
 
 
-<h2 id="building-the-tree">Building the Tree</h2>
+Building the Tree
+-----------------
 
 The fundamental building block of a tree is the "Node." In our implementation,
 every node starts life as a leaf node, but when it the `.split()` method is
@@ -295,7 +298,8 @@ calculating $2^k$ separate filters, each comprised of the logical AND of
 $k$ separate comparisons. This is not usually faster than just applying
 the rules row-by-row. 
 
-<h2 id="interface">Interface</h2>
+Interface
+---------
 
 The above Node class can be used directly to fit models but as we've done
 elsewhere in the series we give our model a user-friendly, scikit-learn style
@@ -322,7 +326,8 @@ deeper nodes.
         def predict(self, X):
             return (self.predict_proba(X)[:, 1] > 0.5).astype(int)
 
-<h2 id="testing">Testing</h2>
+Testing
+-------
 
 The scikit-learn breast cancer dataset is a good choice for testing decision
 trees because it is high dimensional and highly non-linear.
@@ -453,7 +458,8 @@ we get closer to the true decision boundary, the predictions become more
 probabilistic, and we may only be able to say that perhaps 87.5% of cases will
 be negative.
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 Today we saw a simple and intuitive algorithm tackle a difficult, highly
 non-linear problem and achieve surprisingly good out-of-the-box performance

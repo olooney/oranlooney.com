@@ -2,19 +2,19 @@
 <html lang="en">
 <head><meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML From Scratch, Part 6: Principal Component Analysis</title>
+  <title>ML From Scratch VI: Principal Component Analysis</title>
   <meta name="author" content="Oran Looney"/>
   <meta name="description" content="In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
 In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto \mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and $m$ is less than or equal to $n$."/>
   <link rel="canonical" href="https://www.oranlooney.com/post/ml-from-scratch-part-6-pca/"/>
-  <meta property="og:title" content="ML From Scratch, Part 6: Principal Component Analysis"/>
+  <meta property="og:title" content="ML From Scratch VI: Principal Component Analysis"/>
   <meta property="og:description" content="In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
 In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto \mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and $m$ is less than or equal to $n$."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://www.oranlooney.com/post/ml-from-scratch-part-6-pca/"/>
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="ML From Scratch, Part 6: Principal Component Analysis"/>
+  <meta name="twitter:title" content="ML From Scratch VI: Principal Component Analysis"/>
   <meta name="twitter:description" content="In the previous article in this series we distinguished between two kinds of unsupervised learning (cluster analysis and dimensionality reduction) and discussed the former in some detail. In this installment we turn our attention to the later.
 In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto \mathbb{R}^m$ where $n$ is the dimension of the original data $\mathbf{X}$ and $m$ is less than or equal to $n$."/>
   <meta property="article:published_time" content="2019-09-16T00:00:00Z"/>
@@ -85,7 +85,7 @@ In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto \mathbb
   <div class="main" role="main">
     <article class="article">
       <img src="/post/ml-from-scratch-part-6-pca_files/lead.jpg" class="article-image" />
-      <h1 class="article-title">ML From Scratch, Part 6: Principal Component Analysis</h1>
+      <h1 class="article-title">ML From Scratch VI: Principal Component Analysis</h1>
       
 
       <hr class="article-title-bottom">
@@ -125,12 +125,24 @@ In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto \mathbb
 <ul>
 <li>
 <ul>
-<li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#what-is-pca">What is PCA?</a></li>
+<li><a href="#approach-1-the-direction-of-maximal-variation">Approach #1: The Direction of Maximal Variation</a>
 <ul>
 <li><a href="#an-ode-to-lagrange-multipliers">An Ode to Lagrange Multipliers</a></li>
 <li><a href="#finding-the-direction-of-maximal-variation">Finding the Direction of Maximal Variation</a></li>
+</ul></li>
+<li><a href="#approach-2-diagonalizing-the-covariance-matrix">Approach #2: Diagonalizing the Covariance Matrix</a>
+<ul>
 <li><a href="#a-brief-aside-about-loadings">A Brief Aside About Loadings</a></li>
 </ul></li>
+<li><a href="#approach-3-minimizing-reconstruction-error">Approach #3: Minimizing Reconstruction Error</a></li>
+<li><a href="#algorithm-for-solving-the-eigenproblem">Algorithm for Solving the Eigenproblem</a></li>
+<li><a href="#implementing-pca">Implementing PCA</a></li>
+<li><a href="#wine-quality-example">Wine Quality Example</a></li>
+<li><a href="#visualizing-the-components">Visualizing the Components</a></li>
+<li><a href="#strategies-for-choosing-the-number-of-dimensions">Strategies for Choosing The Number of Dimensions</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -194,7 +206,7 @@ reconstructed matrix, but <a href="https://stats.stackexchange.com/questions/130
 
 <p>That these very different motivations all lead to the same formal solution is
 reminiscent of the fact that the <a href="https://en.wikipedia.org/wiki/Model_of_computation">models of computation</a> proposed independently
-by Turing, Church, and Gödel turned out to all be equivalent. Just as this
+by Turing, Church, and GÃ¶del turned out to all be equivalent. Just as this
 triple convergence led some to believe that the definition of computation was
 discovered rather than merely invented, the fact that PCA keeps popping up
 suggests that it is in some fundamental way the &ldquo;right&rdquo; way to think about
@@ -1097,7 +1109,7 @@ broad audience.</p>
 <p>Still, we haven&rsquo;t really solved the issue of having to choose an arbitrary
 threshold, have we? All we&rsquo;ve done is couch the choice in terms of a more
 intuitive metric.  I&rsquo;m not sure any definitive and universally accepted answer
-exists - but the wonderfully named paper <em><a href="https://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf">Repairing Tom Swift’s
+exists - but the wonderfully named paper <em><a href="https://www.quantpsy.org/pubs/preacher_maccallum_2003.pdf">Repairing Tom Swiftâ€™s
 Electric Factor Analysis Machine</a></em> suggests one method, and I&rsquo;ve seen
 several references to this <a href="https://vismod.media.mit.edu/tech-reports/TR-514.pdf">paper by Minka</a> which may represent the
 current state-of-the-art.</p>

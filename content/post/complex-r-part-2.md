@@ -1,5 +1,5 @@
 ---
-title: "Complex Numbers in R, Part II"
+title: "Complex Numbers in R II"
 author: "Oran Looney"
 date: 2018-06-30
 tags: ["R", "Math"]
@@ -142,7 +142,12 @@ no getting away from the fact that a polynomial of degree two or higher might
 have complex roots.
 
 But there's another way of looking at an AR model - as a [discrete linear
-dynamical system.][LDS] Let's call the value of our at the $n$-th step $t&#95;n$.
+dynamical system.][LDS]
+
+Linear Dynamical Systems
+------------------------
+
+Let's call the value of our at the $n$-th step $t&#95;n$.
 Then we can define our state vectors to be
 
 <div>
@@ -320,6 +325,9 @@ df <- t(rbind(
   data.frame(t(sort(ar_eigen$values)))))
 colnames(df) <- c("Inverse AR(5) Roots", "Time Evolution Eigenvalues")
 ```
+
+Two Views, One System
+---------------------
 
 | Inverse AR(5) Roots | Time Evolution Eigenvalues |
 |:-------------------:|:--------------------------:|

@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 1: Linear Regression'
+﻿---
+title: 'ML From Scratch I: Linear Regression'
 author: Oran Looney
 date: 2018-11-29
 slug: ml-from-scratch-part-1-linear-regression
@@ -75,7 +75,8 @@ And after all, what's a little linear algebra between friends?
 [SMO]: https://en.wikipedia.org/wiki/Sequential_minimal_optimization 
 
 
-<h2 id="statistical-motivation">Statistical Motivation</h2>
+Statistical Motivation
+----------------------
 
 In this section we will use statistical considerations to motivate the
 definition of a particular mathematical optimization problem. Once we have
@@ -172,7 +173,8 @@ those estimates is to solve the OLS problem for the data set.
 
 [ML0]: /post/ml-from-scratch-part-0-introduction/
 
-<h2 id="ordinary-least-squares">Ordinary Least Squares</h2>
+Ordinary Least Squares
+----------------------
 
 Note: for this next section, we're going to be doing some light vector
 calculus. I suggest you reference [the matrix cookbook][TMC] if any of the
@@ -256,7 +258,8 @@ form for $\hat{\Theta}$:
 However, it turns out there is a faster and more numerically stable way of solving for
 $\hat{\Theta}$ which relies on the [QR Decomposition][QRD] of the matrix $\mathbf{X}$.
 
-<h2 id="qr-decomposition">QR Decomposition</h2>
+QR Decomposition
+----------------
 
 Since we're going to be both *implementing* and *relying on* the QR
 decomposition in a minute, it's worth making sure we understand how it works in
@@ -332,7 +335,8 @@ That sets the rules and the goal of the game: we can apply any sequence of
 orthogonal transforms to a (square, non-singular) matrix $A$ that will bring it
 into upper triangular form. But what orthogonal transform will do that?
 
-<h2 id="householder-reflections">Householder Reflections</h2>
+Householder Reflections
+-----------------------
 
 Let's break it down into an even easier problem first.  How would I make *just
 one column* of $A$ zero below the diagonal? Or even more concretely, how would
@@ -434,7 +438,8 @@ We now know how to define reflections which zero out the subdiagonal of a target
 and we know how to construct orthogonal matrices which perform that reflection.
 
 
-<h2 id="implementing-the-lemmas">Implementing the Lemmas</h2>
+Implementing the Lemmas
+-----------------------
 
 Given the above theoretical presentation, and copious inline comments, I hope
 you will now be able to read and understand the following code:
@@ -650,7 +655,8 @@ time making sure everything up to this point is correct.
 With our trusty tools in hand, we're ready to tackle linear regression properly.
 
 
-<h2 id="implementing-linear-regression">Implementing Linear Regression</h2>
+Implementing Linear Regression
+------------------------------
 
 Recall that our problem was to solve the normal equation:
 
@@ -717,7 +723,8 @@ equations derived above to the final two lines of the `fit()` method.
 			return X @ self.theta_hat
 
 
-<h2 id="testing">Testing</h2>
+Testing
+-------
 
 Note that while we follow the scikit-learn naming conventions, up to this point
 we haven't imported anything from sklearn. That's in keeping with the "from
@@ -829,7 +836,8 @@ data:
 The eyeball test confirms that this model is fitting the data rather well,
 just as we'd expect when $r^2 = 0.75$.
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 That was linear regression from scratch. There's a lot more that could be said
 about linear regression even as a black box predictive model: polynomial and

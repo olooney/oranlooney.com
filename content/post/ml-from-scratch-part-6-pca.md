@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 6: Principal Component Analysis'
+﻿---
+title: 'ML From Scratch VI: Principal Component Analysis'
 author: Oran Looney
 date: 2019-09-16
 tags:
@@ -29,7 +29,8 @@ into a high dimensional data set, and end with a discussion a few more-or-less
 principled ways to choose how many dimensions to keep.
 
 
-<h2 id="what-is-pca">What is PCA?</h2>
+What is PCA?
+------------
 
 PCA is a *linear* dimensionality reduction technique. [Many][NLDR] non-linear
 [dimensionality][SOM] [reduction][AENN] [techniques][TSNE] exist, but linear
@@ -66,7 +67,7 @@ be mathematically equivalent:
 
 That these very different motivations all lead to the same formal solution is
 reminiscent of the fact that the [models of computation][MOC] proposed independently
-by Turing, Church, and Gödel turned out to all be equivalent. Just as this
+by Turing, Church, and GÃ¶del turned out to all be equivalent. Just as this
 triple convergence led some to believe that the definition of computation was
 discovered rather than merely invented, the fact that PCA keeps popping up
 suggests that it is in some fundamental way the "right" way to think about
@@ -123,7 +124,8 @@ For now, let's explore the mathematics and show how PCA gives rise to a
 unique solution subject to the above constraints.
 
 
-<h2 id="approach-1-the-direction-of-maximal-variation">Approach #1: The Direction of Maximal Variation</h2>
+Approach #1: The Direction of Maximal Variation
+-----------------------------------------------
 
 Before we can define the direction of maximal variance, we must be
 clear about what we mean by variance in a given direction. First, let's say
@@ -277,7 +279,8 @@ We will discuss the algorithm necessary to compute $\mathbf{Q}$ and $\mathbf{\La
 below, but first let's discuss some alternative ways to motivate PCA.
 
 
-<h2 id="approach-2-diagonalizing-the-covariance-matrix">Approach #2: Diagonalizing the Covariance Matrix</h2>
+Approach #2: Diagonalizing the Covariance Matrix
+------------------------------------------------
 
 We could have skipped the entire "direction of maximal variation" and Lagrange
 multiplier argument if we had simply argued as follows: I want my features to
@@ -337,7 +340,8 @@ intuitive in some cases. Also, many software packages report the loading matrix
 instead of the eigenvectors on the basis that they are easier to interpret. 
 
 
-<h2 id="approach-3-minimizing-reconstruction-error">Approach #3: Minimizing Reconstruction Error</h2>
+Approach #3: Minimizing Reconstruction Error
+--------------------------------------------
 
 The third and final way to motivate the mathematical formalism of PCA is to
 view it as a form of *compression*. Specifically, of all possible linear
@@ -366,7 +370,8 @@ With three separate theoretical justifications under our belt - which is two too
 let's turn our attention to the concrete problem of implementing eigendecomposition from scratch.
 
 
-<h2 id="algorithm-for-solving-the-eigenproblem">Algorithm for Solving the Eigenproblem</h2>
+Algorithm for Solving the Eigenproblem
+--------------------------------------
 
 The modern approach to implementing PCA is to find the [Singular Value Decomposition][SVD] of a matrix $A$ which
 almost immediately gives us the eigenvalues of and eigenvectors of $A^T A$. The
@@ -474,7 +479,8 @@ smaller.
         return eigenvalues, eigenvectors
 
 
-<h2 id="implementing-pca">Implementing PCA</h2>
+Implementing PCA
+----------------
 
 We made a number of simplifying assumptions in the above theory and now we have
 to pay with a corresponding amount of busywork to get our data into an
@@ -536,7 +542,8 @@ matrix. All of the hard work is done inside `eigen_decomposition()`.
         
 
 
-<h2 id="wine-quality-example">Wine Quality Example</h2>
+Wine Quality Example
+--------------------
 
 The [wine quality data set][WQD] consists of 178 wines, each described in
 terms of 13 different objectively quantifiable chemical or optical properties such as the
@@ -759,7 +766,8 @@ And we can see the expected structure: eigenvalues descending from 4.7 to 0.1
 along the diagonal, and exactly 0 away from the diagonal.
 
 
-<h2 id="visualizing-the-components">Visualizing the Components</h2>
+Visualizing the Components
+--------------------------
 
 PCA was applied only to the 13 features; the partition into three quality
 classes was not included. Still, we would like to know if the primary
@@ -874,7 +882,8 @@ enough to allow bias to creep in. As such, many people have asked themselves if
 there were not some rigorous decision rule that could be applied.
 
 
-<h2 id="strategies-for-choosing-the-number-of-dimensions">Strategies for Choosing The Number of Dimensions</h2>
+Strategies for Choosing The Number of Dimensions
+------------------------------------------------
 
 The oldest and most venerable method involves plotting the eigenvalues in
 descending order as a function of dimension number: whimsically called a [scree
@@ -967,12 +976,13 @@ broad audience.
 Still, we haven't really solved the issue of having to choose an arbitrary
 threshold, have we? All we've done is couch the choice in terms of a more
 intuitive metric.  I'm not sure any definitive and universally accepted answer
-exists - but the wonderfully named paper *[Repairing Tom Swift’s
+exists - but the wonderfully named paper *[Repairing Tom Swiftâ€™s
 Electric Factor Analysis Machine][RTS]* suggests one method, and I've seen
 several references to this [paper by Minka][ACD] which may represent the
 current state-of-the-art.
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 PCA is the archetypical dimensionality reduction method; just as
 [$k$-means][KM] is the archetypical clustering method. Now that we've

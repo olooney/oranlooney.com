@@ -1,5 +1,5 @@
 ---
-title: "Complex Numbers in R, Part I"
+title: "Complex Numbers in R I"
 author: "Oran Looney"
 date: 2018-06-17
 tags: ["R", "Math"]

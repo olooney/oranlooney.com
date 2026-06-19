@@ -5,21 +5,20 @@
   <title>A Fairly Fast Fibonacci Function</title>
   <meta name="author" content="Oran Looney"/>
   <meta name="description" content="A common example of recursion is the function to calculate the $n$-th Fibonacci number:
-def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_fib(n-2)  This follows the mathematical definition very closely but it’s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:"/>
+def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_fib(n-2)  This follows the mathematical definition very closely but it’s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming."/>
   <link rel="canonical" href="https://www.oranlooney.com/post/fibonacci/"/>
   <meta property="og:title" content="A Fairly Fast Fibonacci Function"/>
   <meta property="og:description" content="A common example of recursion is the function to calculate the $n$-th Fibonacci number:
-def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_fib(n-2)  This follows the mathematical definition very closely but it’s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:"/>
+def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_fib(n-2)  This follows the mathematical definition very closely but it’s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://www.oranlooney.com/post/fibonacci/"/>
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
   <meta name="twitter:title" content="A Fairly Fast Fibonacci Function"/>
   <meta name="twitter:description" content="A common example of recursion is the function to calculate the $n$-th Fibonacci number:
-def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_fib(n-2)  This follows the mathematical definition very closely but it’s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming. Specifically, either the memoization:"/>
+def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_fib(n-2)  This follows the mathematical definition very closely but it’s performance is terrible: roughly $\mathcal{O}(2^n)$. This is commonly patched up with dynamic programming."/>
   <meta property="article:published_time" content="2019-02-19T00:00:00Z"/>
   <meta property="article:tag" content="Python"/>
-  <meta property="article:tag" content="C&#43;&#43;"/>
   <meta property="article:tag" content="Math"/>
   <meta property="article:tag" content="Computer Science"/>
   <meta name="theme-color" content="#ffffff"/>
@@ -101,12 +100,6 @@ def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_
           </a>&nbsp;
         </li>
         <li class="article-meta-tags">
-          <a href="/tags/c&#43;&#43;/">
-            <i class="fas fa-tag"></i>
-            C&#43;&#43;
-          </a>&nbsp;
-        </li>
-        <li class="article-meta-tags">
           <a href="/tags/math/">
             <i class="fas fa-tag"></i>
             Math
@@ -121,9 +114,31 @@ def naive_fib(n): if n &lt; 2: return n else: return naive_fib(n-1) &#43; naive_
       </ul>
       
 <aside class="toc">
-  
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#matrix-form">Matrix Form</a></li>
+<li><a href="#eigenvalue-solution">Eigenvalue Solution</a></li>
+<li><a href="#fast-exponentiation">Fast Exponentiation</a></li>
+<li><a href="#matrix-implementation">Matrix Implementation</a></li>
+<li><a href="#implicit-matrix-form">Implicit Matrix Form</a></li>
+<li><a href="#cython">Cython</a></li>
+<li><a href="#the-gnu-multiple-precision-arithmetic-library">The GNU Multiple Precision Arithmetic Library</a></li>
+<li><a href="#dynamic-programming-redux">Dynamic Programming Redux</a></li>
+<li><a href="#c-fibonacci">C++ Fibonacci</a></li>
+<li><a href="#final-python-fibonacci">Final Python Fibonacci</a></li>
+<li><a href="#benchmarking-results">Benchmarking Results</a></li>
+<li><a href="#feynman-fuse-problem">Feynman Fuse Problem</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
 </aside>
-      <p>A common example of recursion is the function to calculate the $n$-th Fibonacci number:</p>
+      
+
+<p>A common example of recursion is the function to calculate the $n$-th Fibonacci number:</p>
 
 <pre><code>def naive_fib(n):
     if n &lt; 2:
@@ -767,7 +782,7 @@ call graph we can still see some redundant effort. It turns out that we
 are recalculating each power of two every time we need it, resulting
 in this ever widening tree-shaped DFG:</p>
 
-<p><img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naïve DFG for fib(103)" alt="naive DFG for fib(103)" /></p>
+<p><img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naÃ¯ve DFG for fib(103)" alt="naive DFG for fib(103)" /></p>
 
 <p>We can fix this with - you guessed it - dynamic programming! With dynamic
 programming, it&rsquo;s a good idea to only cache the results of sub-problems which
@@ -1126,10 +1141,10 @@ of performance to be found somewhere.</p>
     <hr>
     <ul class="pager article-pager">
       <li class="pager-newer">
-          <a href="/post/ml-from-scratch-part-4-decision-tree/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 4: Decision Trees">&lt; Newer</a>
+          <a href="/post/ml-from-scratch-part-4-decision-tree/" data-toggle="tooltip" data-placement="top" title="ML From Scratch IV: Decision Trees">&lt; Newer</a>
       </li>
       <li class="pager-older">
-        <a href="/post/ml-from-scratch-part-3-backpropagation/" data-toggle="tooltip" data-placement="top" title="ML From Scratch, Part 3: Backpropagation">Older &gt;</a>
+        <a href="/post/ml-from-scratch-part-3-backpropagation/" data-toggle="tooltip" data-placement="top" title="ML From Scratch III: Backpropagation">Older &gt;</a>
       </li>
     </ul>
   </div>

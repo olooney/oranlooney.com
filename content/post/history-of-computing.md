@@ -1,5 +1,5 @@
 ---
-title: "The Prehistory of Computing, Part I"
+title: "The Prehistory of Computing I"
 author: "Oran Looney"
 date: 2025-09-21
 publishdate: 2025-09-21

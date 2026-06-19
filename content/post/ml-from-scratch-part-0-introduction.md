@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 0: Introduction'
+﻿---
+title: 'ML From Scratch: Introduction'
 author: "Oran Looney"
 date: '2018-11-11'
 slug: ml-from-scratch-part-0-introduction
@@ -11,7 +11,8 @@ tags:
 image: /post/ml-from-scratch-part-0-introduction_files/lead.jpg
 ---
 
-<h2 id="motivation">Motivation</h2>
+Motivation
+----------
 
 > As an apprentice, every new magician must prove to his own satisfaction, at
 > least once, that there is truly great power in magic.
@@ -38,7 +39,7 @@ anecdote:
 
 > Before the commercial announcement of the Connection Machine CM-1 and all of
 > our future products, Richard would give a sentence-by-sentence critique of
-> the planned presentation. "Don't say 'reflected acoustic wave.' Say [echo]."
+> the planned presentation. "Don't say 'reflected acoustic wave.' Say 'echo'."
 > Or, "Forget all that 'local minima' stuff. Just say there's a bubble caught
 > in the crystal and you have to shake it out." Nothing made him angrier than
 > making something simple sound complicated.
@@ -56,18 +57,18 @@ autobiography:
 
 > During the conference I was staying with my sister in Syracuse. I brought the
 > paper home and said to her, "I can't understand these things that Lee and Yang
-> are saying. It's all so complicated."
+> are saying. It's all so complicated."<br><br>
 > 
 > "No," she said, "what you mean is not that you can't understand it, but that
 > you didn't invent it. You didn't figure it out your own way, from hearing the
 > clue. What you should do is imagine you're a student again, and take this paper
 > upstairs, read every line of it, and check the equations. Then you'll
-> understand it very easily."
-> 
+> understand it very easily."<br><br>
+>
 > I took her advice, and checked through the whole thing, and found it to be very
 > obvious and simple. I had been afraid to read it, thinking it was too
 > difficult.
-> <br>&mdash;Richard Feynman, <i>Surely You're Joking, Mr. Feynman!</i>
+> <br>&mdash;Richard Feynman, <i>[Surely You're Joking, Mr. Feynman!][SYJ]</i>
 
 So in the context of math or physics, "create" means something closer to
 "derive from first principles by hand." This is a very strong criteria! If a
@@ -94,7 +95,8 @@ referenced it often. But at the end, his own notes would record his own
 complete derivation from start to finish and therefore serve as a testimonial
 to his own understanding.
 
-<h2 id="ground-rules">Ground Rules</h2>
+Ground Rules
+------------
 
 It was in the spirit of the above considerations that in the fall of 2018 I set
 myself a goal: I would, over the course of the next year, derive and implement
@@ -150,7 +152,8 @@ attempting to explain each algorithm in simple terms to a broad audience should
 help me to understand them a little better as well.
 
 
-<h2 id="project-scope">Project Scope</h2>
+Project Scope
+-------------
 
 While I want to touch on every aspect of machine learning, there's little point
 in implementing minor variations of basically the same algorithms over and
@@ -164,16 +167,12 @@ Here's a tentative list of algorithms I would like to tackle:
 
 |Problem|Model|Algorithm|Article|
 |:-------------------------:|:-----------------------:|:-------------------------------:|:----:|
-|Regression|Linear Regression| [QR Decomposition][QRD] | [Part 1][MLFS1] |
-|Classification|Logistic Regression| [Gradient Descent][GD] | [Part 2][MLFS2] |
-|Classification|Neural Network| [Backpropagation][BPA] | [Part 3][MLFS3] |
-|Classification|Decision Tree| [Recursive Partition][RPA] | [Part 4][MLFS4] |
-|Clustering| [Gaussian Mixture Model][GMM] | [EM Algorithm][EMA] | [Part 5][MLFS5] |
-|Dimension Reduction| [Principal Component Analysis][PCA] | [QR Eigenvalue Algorithm][QRA] | [Part 6][MLFS6] |
-|Recommendation| [Low-Rank Matrix Approximation][LRA] | [Alternating Projections][APA] | TBD |
-|Regression|General Additive Models| [Backfitting][BFA] | TBD |
-|Classification|Support Vector Machines| [SMO Algorithm][SMO] | TBD |
-
+|Regression|Linear Regression| [QR Decomposition][QRD] | [Part I][MLFS1] |
+|Classification|Logistic Regression| [Gradient Descent][GD] | [Part II][MLFS2] |
+|Classification|Neural Network| [Backpropagation][BPA] | [Part III][MLFS3] |
+|Classification|Decision Tree| [Recursive Partition][RPA] | [Part IV][MLFS4] |
+|Clustering| [Gaussian Mixture Model][GMM] | [EM Algorithm][EMA] | [Part V][MLFS5] |
+|Dimension Reduction| [Principal Component Analysis][PCA] | [QR Eigenvalue Algorithm][QRA] | [Part VI][MLFS6] |
 
 Other candidates I considered but ultimately decided were out-of-scope:
 
@@ -194,11 +193,15 @@ Other candidates I considered but ultimately decided were out-of-scope:
   models and solved with the EM algorithm.
 * [Felligi-Sunter Record Linkage][FS] - another take on the EM algorithm, and requiring to many 
   prerequisites like [Jaro-Winkler distance][JWD].
-  
-  [FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
-  [JWD]: https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
+* [Low-Rank Matrix Approximation][LRA] - used for recommendation engines.
+* [Support Vector Machines][SVM] -  implemented using the [SMO Algorithm][SMO], which is very interesting.
+* [Generalized Additive Models][GAM] - the [Backfitting][BFA] algorithm.
+* [Time Series Analysis][TSA] - notably [ARIMA][ARIMA] and friends.
+* [Multivariate Adaptive Regression Splines][MARS] - a very interesting non-parametric model.
 
-<h2 id="bottom-up-approach-to-machine-learning">Bottom-Up Approach to Machine Learning</h2>
+
+Bottom-Up Approach to Machine Learning
+--------------------------------------
 
 In the spirit of the Feynman technique, let's spend a few minutes talking
 through the problem in plain English and see if we can understand why machine
@@ -321,7 +324,8 @@ problems as they arise. In particular we will see again and again how a well
 chosen representation will allow us to find very fast algorithms for learning
 optimal parameters. 
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 Next time, we'll start with [linear regression][MLFS1], followed by [logistic
 regression][MLFS2] and some simple [neural networks][MLFS3]. As new articles
@@ -370,3 +374,10 @@ are added, you can find them collected under the ["from scratch"][MLFS] tag.
 [TPOT]: https://automl.info/tpot/
 [USL]: https://en.wikipedia.org/wiki/Unsupervised_learning
 [VC]: https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory
+[GAM]: https://en.wikipedia.org/wiki/Generalized_additive_model
+[TSA]: https://en.wikipedia.org/wiki/Time_series
+[ARIMA]: https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
+[MARS]: https://en.wikipedia.org/wiki/Multivariate_adaptive_regression_spline
+[FS]: https://courses.cs.washington.edu/courses/cse590q/04au/papers/WinklerEM.pdf
+[JWD]: https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
+[SYJ]: https://en.wikipedia.org/wiki/Surely_You%27re_Joking,_Mr._Feynman!

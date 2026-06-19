@@ -2,19 +2,19 @@
 <html lang="en">
 <head><meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML From Scratch, Part 5: Gaussian Mixture Models</title>
+  <title>ML From Scratch V: Gaussian Mixture Models</title>
   <meta name="author" content="Oran Looney"/>
   <meta name="description" content="Consider the following motivating dataset:
 It is apparent that these data have some kind of structure; which is to say, they certainly are not drawn from a uniform or other simple distribution. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest."/>
   <link rel="canonical" href="https://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/"/>
-  <meta property="og:title" content="ML From Scratch, Part 5: Gaussian Mixture Models"/>
+  <meta property="og:title" content="ML From Scratch V: Gaussian Mixture Models"/>
   <meta property="og:description" content="Consider the following motivating dataset:
 It is apparent that these data have some kind of structure; which is to say, they certainly are not drawn from a uniform or other simple distribution. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/"/>
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="ML From Scratch, Part 5: Gaussian Mixture Models"/>
+  <meta name="twitter:title" content="ML From Scratch V: Gaussian Mixture Models"/>
   <meta name="twitter:description" content="Consider the following motivating dataset:
 It is apparent that these data have some kind of structure; which is to say, they certainly are not drawn from a uniform or other simple distribution. In particular, there is at least one cluster of data in the lower right which is clearly separate from the rest."/>
   <meta property="article:published_time" content="2019-06-05T00:00:00Z"/>
@@ -85,7 +85,7 @@ It is apparent that these data have some kind of structure; which is to say, the
   <div class="main" role="main">
     <article class="article">
       <img src="/post/ml-from-scratch-part-5-gmm_files/lead.jpg" class="article-image" />
-      <h1 class="article-title">ML From Scratch, Part 5: Gaussian Mixture Models</h1>
+      <h1 class="article-title">ML From Scratch V: Gaussian Mixture Models</h1>
       
 
       <hr class="article-title-bottom">
@@ -121,9 +121,28 @@ It is apparent that these data have some kind of structure; which is to say, the
       </ul>
       
 <aside class="toc">
-  
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#types-of-unsupervised-learning">Types of Unsupervised Learning</a></li>
+<li><a href="#gaussian-mixture-models">Gaussian Mixture Models</a></li>
+<li><a href="#the-em-algorithm">The EM Algorithm</a></li>
+<li><a href="#e-step">E-step</a></li>
+<li><a href="#m-step">M-step</a></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#model-evaluation">Model Evaluation</a></li>
+<li><a href="#comparing-to-true-class-labels">Comparing to True Class Labels</a></li>
+<li><a href="#limitations">Limitations</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
 </aside>
-      <p>Consider the following motivating dataset:</p>
+      
+
+<p>Consider the following motivating dataset:</p>
 
 <p><img src="/post/ml-from-scratch-part-5-gmm_files/unlabled.png" alt="Unlabeled Data" /></p>
 

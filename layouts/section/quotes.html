@@ -3,23 +3,25 @@
     <article class="article quotes">
       <h1 class="article-title">{{ .Title }}</h1>
       <hr class="article-title-bottom">
-      <div class="quotes-toc-header">
-        <h2>Table of Contents</h2>
+      <aside class="toc quotes-toc">
+        {{ .TableOfContents }}
+      </aside>
+      <link rel="stylesheet" href="/css/quotes.css?v=5">
+      <div class="search-container requires-js">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            onkeyup="filterQuotes()" 
+            placeholder="Filter quotes..." 
+            class="search-form-control"
+          >
+        </div>
         <button type="button" id="flashcard-button" class="flashcard-launch requires-js">
           <i class="fa-regular fa-rectangle-list" aria-hidden="true"></i>
           <span>Flashcards</span>
         </button>
-      </div>
-      {{ .TableOfContents }}
-      <link rel="stylesheet" href="/css/quotes.css?v=5">
-      <div class="search-container requires-js">
-        <input 
-          type="text" 
-          id="searchInput" 
-          onkeyup="filterQuotes()" 
-          placeholder="Filter quotes..." 
-          class="search-form-control"
-        >
       </div>
       <div id="search-no-results" style="display: none">No matching quotes to display</div>
 

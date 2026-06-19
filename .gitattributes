@@ -1,1 +1,14 @@
 public/index.json -diff
+
+*.eot  -diff -grep
+*.otf  -diff -grep
+*.ttf  -diff -grep
+*.woff -diff -grep
+*.woff2 -diff -grep
+*.ogg -diff -grep
+
+# If these are JS font payloads, like Three.js helvetiker fonts:
+*.typeface.js     -diff -grep
+
+**/soma-forest/positions.json -diff -grep
+**/word-graph/data.json -diff -grep

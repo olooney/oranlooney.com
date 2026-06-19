@@ -1,6 +1,6 @@
 
 {{- if or .Params.toc (and (gt .WordCount 400 ) (ne .Params.toc "false")) }}
 <aside class="toc">
-  {{ .TableOfContents }}
+  {{ replace .TableOfContents "<ul>\n<li>\n<ul>" "<ul>\n<li>\n<ul>\n<li><a href=\"#introduction\">Introduction</a></li>" | safeHTML }}
 </aside>
 {{- end }}

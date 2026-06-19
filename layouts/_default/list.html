@@ -1,8 +1,17 @@
 
 {{ define "main" }}
   {{- if eq .Kind "taxonomy" }}
+  {{- $termName := .Data.Term }}
+  {{- $.Scratch.Set "displayTerm" .Data.Term }}
+  {{- range first 1 .Pages }}
+    {{- range .Params.tags }}
+      {{- if eq (. | urlize) ($termName | urlize) }}
+        {{- $.Scratch.Set "displayTerm" . }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
   <div class="breadcrumb">
-    <a href="{{ "/" | relURL }}{{ .Data.Plural | urlize }}/">{{ .Data.Plural | humanize }}</a> / {{ .Data.Term | humanize }}
+    <a href="{{ "/" | relURL }}{{ .Data.Plural | urlize }}/">{{ .Data.Plural | humanize }}</a> / {{ $.Scratch.Get "displayTerm" }}
   </div>
   {{- else if eq .Kind "section" }}
   <div class="breadcrumb">

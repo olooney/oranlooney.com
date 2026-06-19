@@ -21,22 +21,22 @@
 
 ### Content
 
-- [ ] Considerate Data Modeler
-  - [ ] Add satire tag
+- [X] Considerate Data Modeler
+  - [X] Add humor tag
 - [ ] Stacking Triangles / Angle Addition
   - [ ] better lead photo
   - [ ] even/odd argument
 - [ ] Adaptive Basis Function
   - [ ] better intro
-- [ ] ML From Scratch 0:
-  - [ ] fix project table
+- [X] ML From Scratch 0:
+  - [X] fix project table
 - [ ] Craps
   - [ ] remove symmetry
 - [X] Remove quote flashcard shadow
 
 ### Site-wide
 
-  - [ ] Multipart titles -> roman numerals
+  - [X] Multipart titles -> roman numerals
   - [ ] Drop C++ tag, maybe others
   - [ ] Start paging / infinite scrolling the home page?
   - [ ] Lazy Load + Fixed Height on thumbnails?

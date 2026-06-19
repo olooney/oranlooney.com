@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Humor on OranLooney.com</title>
+    <link>https://www.oranlooney.com/tags/humor/</link>
+    <description>Recent content in Humor on OranLooney.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 04 Jun 2026 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.oranlooney.com/tags/humor/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The Considerate Data Modeler</title>
+      <link>https://www.oranlooney.com/post/considerate-data-modeler/</link>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/considerate-data-modeler/</guid>
+      <description>What&amp;rsquo;s your hot take on relational databases?
+I have an opinion on the matter, or maybe more like an Opinion™: Data modeling is closer to library science than computer science. No one is impressed by a librarian who gets creative and files cookbooks under &amp;ldquo;G&amp;rdquo; for &amp;ldquo;Gourmand.&amp;rdquo; The best catalog system is where everything is in an obvious place, where everything conforms to expectations.</description>
+    </item>
+    
+    <item>
+      <title>A Modest Definition of Human Consciousness</title>
+      <link>https://www.oranlooney.com/post/em-dash/</link>
+      <pubDate>Thu, 23 Oct 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/em-dash/</guid>
+      <description>I bring you news of the single most important intellectual discovery of our generation: the hard problem of human consciousness has been solved.
+For a long time, the ability to select squares containing traffic lights was our best working definition of what it meant to be truly, deeply, authentically human, but this was never quite satisfactory.</description>
+    </item>
+    
+    <item>
+      <title>A History of Encabulation</title>
+      <link>https://www.oranlooney.com/post/encabulation/</link>
+      <pubDate>Thu, 01 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/encabulation/</guid>
+      <description>To celebrate the 100th anniversary of the birth of encabulation - dated from Dr. Wolfgang Albrecht Klossner&amp;rsquo;s first successful run in that historic barn on the outskirts of Eisenhüttenstadt - this article* collects in one place a number of resources that provide, if not a comprehensive history, at least a catalogue of the major milestones and concepts.</description>
+    </item>
+    
+    <item>
+      <title>So, Apparently I&#39;m an iPad Developer Now</title>
+      <link>https://www.oranlooney.com/post/apparently-ipad-developer/</link>
+      <pubDate>Wed, 28 Apr 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/apparently-ipad-developer/</guid>
+      <description>Last week my boss stopped by and dropped a brand spanking new iPad on my desk. &amp;ldquo;Make our application work on this,&amp;rdquo; he commanded. &amp;ldquo;You have two days before we demo it at the trade show.&amp;rdquo;
+Madness? No, these are web apps! You see, for the last couple years we&amp;rsquo;ve been working exclusively on AJAX applications: web pages stuffed with so much JavaScript they look and feel like desktop apps.</description>
+    </item>
+    
+  </channel>
+</rss>

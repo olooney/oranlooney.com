@@ -2,17 +2,9 @@ html {
   font-size: 1em;
 }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Noto Sans Japanese", "ヒラギノ角ゴ ProN W3", Meiryo, sans-serif;
   color: #444444;
   overflow-y: scroll;
   line-height: 1.2;
-}
-a {
-  color: #2060d0;
-  text-decoration: none;
-}
-a:hover, a:active {
-  color: #5090ff;
 }
 hr {
   height: 1px;
@@ -49,11 +41,6 @@ blockquote blockquote blockquote blockquote {
 }
 
 /* Site header */
-.site-header {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
 .site-navi {
   display: -webkit-flex;
   display: flex;
@@ -61,19 +48,14 @@ blockquote blockquote blockquote blockquote {
   justify-content: flex-end;
   -webkit-align-items: baseline;
   align-items: baseline;
-  padding-bottom: 8px;
 }
 .site-navi a {
   color: inherit;
   text-decoration: none;
 }
-.site-navi a:hover, .site-navi a:active {
-  color: gray;
-}
 .site-title {
   -webkit-flex-grow: 1;
   flex-grow: 1;
-  font-size: 2rem;
   margin: 0;
   margin-top: 10px;
   padding: 0;
@@ -97,7 +79,6 @@ blockquote blockquote blockquote blockquote {
   padding: 0;
 }
 .site-navi-items li {
-  padding-left: 20px;
   white-space: nowrap;
 }
 .site-header-bottom {
@@ -114,7 +95,6 @@ blockquote blockquote blockquote blockquote {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 20px;
-  font-size: 1.6em;
 }
 
 /* Code highlight */
@@ -138,7 +118,6 @@ blockquote blockquote blockquote blockquote {
 .article img {
   max-width: 100%;
   box-sizing: border-box;
-  border: solid 1px lightgray;
   padding: 4px;
 }
 .article > table {
@@ -166,7 +145,6 @@ blockquote blockquote blockquote blockquote {
 .article-image {
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 20px;
 }
 .article-title {
   margin: 0;
@@ -228,8 +206,6 @@ blockquote blockquote blockquote blockquote {
 .article-series .series-title a:hover, .article-series .series-title a:active {
   color: gray;
 }
-.article-series .active {
-}
 
 .article-share {
   list-style-type: none;
@@ -259,8 +235,6 @@ blockquote blockquote blockquote blockquote {
 
 .disqus-comments {
   margin-bottom: 40px;
-}
-.article-pager {
 }
 
 .toc {
@@ -293,18 +267,14 @@ blockquote blockquote blockquote blockquote {
 .pager-newer {
   margin-right: 40px;
 }
-.pager-older {
-}
 .pager-noitem {
   color: gray;
 }
 
 
 /* List page */
-.list {
-}
 .list .article {
-  padding-bottom: 40px;
+  padding-bottom: 5px;
   margin-bottom: 40px;
   border-bottom: solid 1px lightgray;
 }
@@ -323,10 +293,6 @@ blockquote blockquote blockquote blockquote {
   float: left;
   margin: 0;
   margin-right: 8px;
-}
-.list .article-content {
-}
-.list .article-readmore {
 }
 .list .article-floatclear {
   clear: both;
@@ -433,9 +399,6 @@ blockquote blockquote blockquote blockquote {
   -webkit-flex-grow: 0;
   flex-grow: 0;
 }
-.archives .archives-item > a:visited {
-  color: #a8a8a8;
-}
 .archives .archives-item time {
   -webkit-flex-grow: 1;
   flex-grow: 1;
@@ -493,10 +456,6 @@ blockquote blockquote blockquote blockquote {
   fill: currentColor;
 }
 
-.404 h1 {
-  text-align: center;
-}
-
 /* Mobile */
 @media screen and (max-width: 768px) {
   .site-header, .site-header-bottom, .main, .breadcrumb, .site-footer {
@@ -504,10 +463,7 @@ blockquote blockquote blockquote blockquote {
     box-sizing: border-box;
   }
   .list .article-image {
-    width: 100%;
     box-sizing: border-box;
-    float: none;
-    margin: 0;
   }
   .toc {
     display: none;

@@ -1,8 +1,8 @@
----
+﻿---
 title: "A Fairly Fast Fibonacci Function"
 author: "Oran Looney"
 date: 2019-02-19
-tags: ["Python", "C++", "Math", "Computer Science"]
+tags: ["Python", "Math", "Computer Science"]
 image: /post/fibonacci_files/lead.jpg
 ---
 
@@ -69,7 +69,8 @@ But we get to do a bit of linear algebra and try out some pretty interesting
 optimization techniques; that's what I call a good time!
 
 
-<h2 id="matrix-form">Matrix Form</h2>
+Matrix Form
+-----------
 
 There exist several [closed-form solutions][CFS] to Fibonacci sequence which gives
 us the false hope that there might be an $\mathcal{O}(1)$ solution. Unfortunately
@@ -243,7 +244,8 @@ faster algorithms: a constant time $\mathcal{O}(n)$ approximate solution using
 eigenvalues, and a fast $\mathcal{O}(n \log n)$ exact solution.
 
 
-<h2 id="eigenvalue-solution">Eigenvalue Solution</h2>
+Eigenvalue Solution
+-------------------
 
 Note that the matrix $\mathbf{F}&#95;1$ is symmetric and real-valued. Therefore it
 has real eigenvalues which we'll call $\lambda&#95;1$ and $\lambda&#95;2$. The eigenvalue
@@ -342,7 +344,8 @@ theory, let's turn our attention to simply calculating the powers of an integer
 matrix.
 
 
-<h2 id="fast-exponentiation">Fast Exponentiation</h2>
+Fast Exponentiation
+-------------------
 
 So far, all we've done is reformulate our problem so that instead of calculating
 $n$ terms in a sequence using simple addition, we now have to multiply $n$
@@ -386,7 +389,8 @@ Nevertheless, the squaring by exponentiation trick hugely reduces the amount of
 work we have to do relative to the naive iterative solution.
 
 
-<h2 id="matrix-implementation">Matrix Implementation</h2>
+Matrix Implementation
+---------------------
 
 Fun fact: Python has multiple precision baked in. If if an arithmetic operation
 on Python's `int()` type exceed the normal limits of a 64-bit integer, Python
@@ -459,7 +463,8 @@ the fast exponentiation by repeated squares described above:
         return matrix_power(F1, n)[1]
 
 
-<h2 id="implicit-matrix-form">Implicit Matrix Form</h2>
+Implicit Matrix Form
+--------------------
 
 The above has reasonably good asymptotic performance but it bothers me that
 it's doing 8 multiplications each time. Luckily, because all Fibonacci matrices
@@ -558,7 +563,8 @@ them.  The answer is simple - I benchmarked the various forms and found these
 expressions to be very slightly faster, at least when using large `mpz()`
 objects (which we'll get to in a moment.)
 
-<h2 id="cython">Cython</h2>
+Cython
+------
 
 Another thing to try -- something which *usually* helps a lot --
 is to try converting our program to [Cython][CY]. 
@@ -610,7 +616,8 @@ the benefit of this quickly becomes irrelevant for large numbers.
 Never fret, though, because we can use something even *better*.
 
 
-<h2 id="the-gnu-multiple-precision-arithmetic-library">The GNU Multiple Precision Arithmetic Library</h2>
+The GNU Multiple Precision Arithmetic Library
+---------------------------------------------
 
 The GNU Multiple Precision Arithmetic Library, or [GMP][GMP] for short, is
 nothing short of a work of art. Often used for calculating $\pi$ to a number
@@ -639,14 +646,15 @@ You may also wonder why the large integer type is called `mpz`: the "mp" is for
 $\mathbb{Z}$, the conventional name for the set of integers. There is also `mpq`
 for the set of rationals $\mathbb{Q}$ and so on.
 
-<h2 id="dynamic-programming-redux">Dynamic Programming Redux</h2>
+Dynamic Programming Redux
+-------------------------
 
 The GMP version is really quite extraordinarily fast, but if we look at the
 call graph we can still see some redundant effort. It turns out that we
 are recalculating each power of two every time we need it, resulting
 in this ever widening tree-shaped DFG:
 
-<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naïve DFG for fib(103)" alt="naive DFG for fib(103)" />
+<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naÃ¯ve DFG for fib(103)" alt="naive DFG for fib(103)" />
 
 We can fix this with - you guessed it - dynamic programming! With dynamic
 programming, it's a good idea to only cache the results of sub-problems which
@@ -705,7 +713,8 @@ but won't venture to prove it myself. It seems to roughly hold empirically:
 every time $n$ goes up by a factor of 10, time increases by about 20. (See the
 benchmarks below.)
 
-<h2 id="c-fibonacci">C++ Fibonacci</h2>
+C++ Fibonacci
+-------------
 
 Now that we've exhausted my ideas for algorithmic optimizations, there's really
 only one thing approach left: micro-optimization. So far we've been working in
@@ -790,7 +799,8 @@ is spent in the GMP multiplication routines, and only a few microseconds are
 spent in Python. So we're not going to squeeze any more performance out that way.
 
 
-<h2 id="final-python-fibonacci">Final Python Fibonacci</h2>
+Final Python Fibonacci
+----------------------
 
 Our performance testing has revealed something interesting - there is no one
 implementation which [strictly dominates][STD] all the others over all possible
@@ -846,7 +856,8 @@ whether a better constant or better asymptotic performance is more beneficial.
 
 And that, as they say, is my final answer.
 
-<h2 id="benchmarking-results">Benchmarking Results</h2>
+Benchmarking Results
+--------------------
 
 As I've been implementing these, I've been informally testing and benchmarking them with
 [IPython's %timeit magic.][ITM] But now that we have a large number of candidate
@@ -872,7 +883,8 @@ We can make a few observations:
   dynamic GMP solution for large numbers.
 
 
-<h2 id="feynman-fuse-problem">Feynman Fuse Problem</h2>
+Feynman Fuse Problem
+--------------------
 
 We've made a lot of progress, and we've hit what I call a "fuse problem," after
 this anecdote from [Surely You're Joking, Mr. Feynman!][SYJ]:
@@ -909,7 +921,8 @@ In fact, it's recently come to my attention that GMP in fact has a dedicated
 [Fibonacci benchmark][GFB]. I can't compete with that! So I think we've taken
 it as far as we can reasonably go.
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 When I started this project, I would not have believed that my laptop could
 calculate the millionth Fibonacci number in a fraction of a second. Certainly the first few

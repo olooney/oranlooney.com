@@ -137,7 +137,7 @@ html header.site-header .site-title {
 html header.site-header nav.site-navi {
 	max-width: 900px;
 	margin: auto;
-	padding: 0 0.5em 0.5em;
+	padding: 0 0.2em 0.2em;
   align-items: flex-start;
 }
 
@@ -168,6 +168,9 @@ html .site-navi a:active
 html .site-footer {
 	padding: 0 1em;
 }
+html .site-footer-item-rsslink .fa-rss {
+  font-size: 2em;
+}
 html .breadcrumb {
   padding-top: 0.75em;
   padding-bottom: 0.25em;
@@ -196,6 +199,76 @@ html .article-image {
 html aside.toc {
 	display: none;
 }
+@media screen and (min-width: 1440px) {
+  html .article {
+    position: relative;
+  }
+
+  html aside.toc {
+    display: block;
+    position: fixed;
+    top: 6em;
+    right: calc((100vw - 900px) / 2 - 300px);
+    float: none;
+    width: 300px;
+    max-height: calc(100vh - 9rem);
+    overflow-y: auto;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    border: 0;
+    font-size: 0.9em;
+    line-height: 1.2;
+  }
+
+  html aside.toc ul,
+  html aside.toc ol {
+    list-style-type: none;
+    color: #800000;
+    margin: 0;
+  }
+
+  html aside.toc a {
+    color: #800000;
+  }
+
+  html aside.toc a.active {
+    box-shadow: inset 0 -1px 0 #800000;
+  }
+
+  html aside.toc nav > ul {
+    padding-left: 0;
+  }
+  html aside.toc nav > ul > li > ul {
+    padding: 0 3em 0 2em;
+  }
+  html aside.toc li:has(> a) > ul {
+    display: none;
+  }
+  html aside.toc.quotes-toc li:has(> a) > ul {
+    display: block;
+  }
+  html aside.toc.quotes-toc ul,
+  html aside.toc.quotes-toc ol {
+    list-style-type: none;
+  }
+  html aside.toc.quotes-toc li::marker {
+    content: "";
+  }
+  html aside.toc.quotes-toc nav > ul > li > ul {
+    padding-left: 2em;
+  }
+  html aside.toc.quotes-toc nav > ul > li > ul > li > ul {
+    padding: 0.4em 0 0 1.5em;
+  }
+  html aside.toc ul li {
+    margin-bottom: 1em;
+  }
+  
+}
+
+
+
 html .author .author-avatar {
   background-size: 220px;
 }
@@ -448,14 +521,24 @@ section.terms ul li {
 
 /* Search */
 .search-field-wrapper {
+  position: relative;
   margin-top: 20px;
   width: 100%;
   margin-left: 0;
+}
+.search-field-wrapper .fa-magnifying-glass {
+  position: absolute;
+  top: 11px;
+  left: calc(50% - 2rem);
+  color: #800000;
+  opacity: 0.45;
+  pointer-events: none;
 }
 .search-field-wrapper input {
   width: 50%;
   min-width: 400px;
   padding: 10px;
+  padding-right: 2.25rem;
   margin-bottom: 20px;
   box-sizing: border-box;
   border: 1px solid #ccc;

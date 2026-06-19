@@ -89,14 +89,8 @@
     <article class="article quotes">
       <h1 class="article-title">Quotes</h1>
       <hr class="article-title-bottom">
-      <div class="quotes-toc-header">
-        <h2>Table of Contents</h2>
-        <button type="button" id="flashcard-button" class="flashcard-launch requires-js">
-          <i class="fa-regular fa-rectangle-list" aria-hidden="true"></i>
-          <span>Flashcards</span>
-        </button>
-      </div>
-      <nav id="TableOfContents">
+      <aside class="toc quotes-toc">
+        <nav id="TableOfContents">
 <ul>
 <li>
 <ul>
@@ -126,15 +120,23 @@
 </ul></li>
 </ul>
 </nav>
+      </aside>
       <link rel="stylesheet" href="/css/quotes.css?v=5">
       <div class="search-container requires-js">
-        <input 
-          type="text" 
-          id="searchInput" 
-          onkeyup="filterQuotes()" 
-          placeholder="Filter quotes..." 
-          class="search-form-control"
-        >
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            onkeyup="filterQuotes()" 
+            placeholder="Filter quotes..." 
+            class="search-form-control"
+          >
+        </div>
+        <button type="button" id="flashcard-button" class="flashcard-launch requires-js">
+          <i class="fa-regular fa-rectangle-list" aria-hidden="true"></i>
+          <span>Flashcards</span>
+        </button>
       </div>
       <div id="search-no-results" style="display: none">No matching quotes to display</div>
 

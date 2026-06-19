@@ -12,6 +12,7 @@ searchable = false
 </div>
 
 <div class="search-field-wrapper requires-js">
+  <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
   <input id="search-field" name="search-field" type="text" placeholder="Search...">
 </div>
 <div id="output" class="requires-js">

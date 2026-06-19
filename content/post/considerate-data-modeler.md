@@ -5,6 +5,7 @@ date: 2026-06-04
 publishdate: 2026-06-04
 tags:
   - Databases
+  - Humor
 image: /post/considerate-data-modeler_files/lead.jpg
 ---
 

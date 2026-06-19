@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 5: Gaussian Mixture Models'
+﻿---
+title: 'ML From Scratch V: Gaussian Mixture Models'
 author: Oran Looney
 date: 2019-06-05
 tags:
@@ -34,7 +34,8 @@ learning problem, and calls for a different set of techniques and algorithms
 entirely.
 
 
-<h2 id="types-of-unsupervised-learning">Types of Unsupervised Learning</h2>
+Types of Unsupervised Learning
+------------------------------
 
 There are two broad approaches to unsupervised learning: dimensionality
 reduction and cluster analysis.
@@ -66,7 +67,8 @@ will implement on particular clustering model called the [Gaussian mixture
 model][GMM], or just GMM for short. 
 
 
-<h2 id="gaussian-mixture-models">Gaussian Mixture Models</h2>
+Gaussian Mixture Models
+-----------------------
 
 The Gaussian mixture model is simply a "mix" of Gaussian distributions. In this
 case, "Gaussian" means the [multivariate normal distribution][MND]
@@ -189,7 +191,8 @@ j$. But how can we estimate these two sets of parameters together, if we don't
 know either when we start?
 
 
-<h2 id="the-em-algorithm">The EM Algorithm</h2>
+The EM Algorithm
+----------------
 
 The solution to our chicken-and-egg dilemma is an iterative algorithm called
 the [expectation-maximization algorithm][EM], or EM algorithm for short. The EM
@@ -257,7 +260,8 @@ We will now treat the E-step and M-step for the particular case of the GMM in
 detail. 
 
 
-<h2 id="e-step">E-step</h2>
+E-step
+------
 
 Given the that centroid $\boldsymbol{\mu}&#95;j$ and covariance matrix $\Sigma&#95;j$
 for class $j$ is fixed, we can update $w&#95;{ij}$ by simply calculating the
@@ -287,7 +291,8 @@ all examples in the training set:
 </div>
 
 
-<h2 id="m-step">M-step</h2>
+M-step
+------
 
 Forget about the past estimates we had for $\boldsymbol{\mu}&#95;j$ or $\Sigma$.
 Unlike gradient descent, the EM algorithm does not proceed by making small
@@ -316,7 +321,8 @@ estimates are already maximal! This is one of the neatest things about this
 algorithm.
 
 
-<h2 id="implementation">Implementation</h2>
+Implementation
+--------------
 
 Turning the above mathematics into a working implementation is straight
 forward. The below program corresponds almost one-to-one (one line of code for
@@ -390,7 +396,8 @@ that they are initially spread out randomly throughout the space.
 			return np.argmax(weights, axis=1)
 
 
-<h2 id="model-evaluation">Model Evaluation</h2>
+Model Evaluation
+----------------
 
 We'll use the famous [iris][ID] dataset as a test case. This is the same
 dataset used as a motivating example at the beginning of the article, although
@@ -453,7 +460,8 @@ points in their own (blue) cluster, but the story with the other two clusters
 in the upper right is less clear-cut.
 
 
-<h2 id="comparing-to-true-class-labels">Comparing to True Class Labels</h2>
+Comparing to True Class Labels
+------------------------------
 
 Are the clusters discovered by the GMM model *meaningful*? Are they *correct*?
 For a real-world unsupervised learning problem, these questions can be hard to
@@ -507,7 +515,8 @@ learning algorithms are subject to a large number of caveats and limitations
 which I'll digress briefly to enumerate.
 
 
-<h2 id="limitations">Limitations</h2>
+Limitations
+-----------
 
 All unsupervised learning methods known today share certain limitations. 
 
@@ -564,7 +573,8 @@ too sparse to be amenable to traditional techniques; it is in these situations
 where the benefits of unsupervised learning can outweigh the negatives.
 
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 In this article, we have seen how unsupervised learning differs from supervised
 learning and the challenges that come along with that. We discussed a method

@@ -1,4 +1,4 @@
----
+﻿---
 title: 'Adaptive Basis Functions'
 author: Oran Looney
 date: 2019-05-21
@@ -74,7 +74,8 @@ make the case in favor of learned representations we will first attempt
 the problem with several fixed representations and compare those attempts
 with a learned representation.
 
-<h2 id="the-function-approximation-problem">The Function Approximation Problem</h2>
+The Function Approximation Problem
+----------------------------------
 
 Given an i.i.d. random sample $\{(Y&#95;i, X&#95;i)\}&#95;{i=1}^n$ where $X$ and $Y$ have joint probability
 distribution $F$, we wish to find a real-valued function $f : \mathbb{R} \mapsto \mathbb{R}$ such that:
@@ -135,7 +136,8 @@ get a workable solution. Instead, we'll focus on how the choice of basis functio
 our ability to approximate a function.
 
 
-<h2 id="target-function">Target Function</h2>
+Target Function
+---------------
 
 For the examples below, we're going to need some target function $t(x) = E[Y|X]$.
 It should be continuous,
@@ -167,7 +169,8 @@ us lots of nasty inflections.
 
 I wouldn't say this function is pathological, but it's *juuust* hard enough to be interesting.
 
-<h2 id="step-function-basis">Step Function Basis</h2>
+Step Function Basis
+-------------------
 
 To get warmed up, let's use the above basis function framework to calculate the best possible step
 function approximation of a function. Since our target function is continuous
@@ -230,7 +233,8 @@ represent slopes.
 ![Step Approximation](/post/adaptive-basis-functions_files/step_approx.png)
 
 
-<h2 id="fixed-sigmoid-basis-functions">Fixed Sigmoid Basis Functions</h2>
+Fixed Sigmoid Basis Functions
+-----------------------------
 
 Since we know our target function is continuous, it makes sense
 to likewise choose continuous basis functions. Since the step function
@@ -280,7 +284,8 @@ Note that the functions in this basis are only distinguished by their offset.
 While more visually appealing, this hasn't really done better than the step function basis.
 
 
-<h2 id="orthogonal-basis-functions">Orthogonal Basis Functions</h2>
+Orthogonal Basis Functions
+--------------------------
 
 Families of orthogonal functions have a key property that 
 makes them especially useful as basis functions: you can determine
@@ -360,7 +365,8 @@ chances of overfitting! We need to look for a way of approximating functions
 well while keeping the number of parameters under control.
 
 
-<h2 id="adaptive-basis-functions">Adaptive Basis Functions</h2>
+Adaptive Basis Functions
+------------------------
 
 Finally, we come to our ringer: the [adaptive basis function.][ABF] Within the
 context of function approximation, adaptive basis functions are a clear example
@@ -515,7 +521,8 @@ almost always comes with a corresponding loss in convexity and consequently
 we can no longer guarantee convergence to a global minima.
 
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 Did I convince you that adaptive basis functions - and by extension learned representations in general - 
 "just work?" I'm not

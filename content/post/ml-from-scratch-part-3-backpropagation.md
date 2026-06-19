@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 3: Backpropagation'
+﻿---
+title: 'ML From Scratch III: Backpropagation'
 author: Oran Looney
 date: 2019-02-03
 tags:
@@ -28,7 +28,8 @@ another; my intention with this article is simply to derive the backpropagation
 algorithm, implement a working version from scratch, and to discuss the
 practical implications of introducing are more powerful representation.
 
-<h2 id="representation">Representation</h2>
+Representation
+--------------
 
 A complete description of typical fully-connected feed-forward $L$-layer neural
 network can be given in just four equations: two boundary conditions for the
@@ -121,7 +122,8 @@ These examples are only included for the sake of concreteness.  The recursive
 definitions will allow us to reason about a sequential neural network with any
 number of layers.
 
-<h2 id="fitting">Fitting</h2>
+Fitting
+-------
 
 To fit the model to data, we find the parameters which minimize loss:
 $\hat{\Theta} = \text{argmin} \, J(\Theta;X)$. Just as with logistic regression
@@ -308,7 +310,8 @@ expression with respect to a matrix (which is Matrix Calculus 101; see the
 [Cookbook][MC]). 
 
 
-<h2 id="implementation">Implementation</h2>
+Implementation
+--------------
 
 The above equations are straight-forward to turn into working code. The only
 wrinkle is that while above we represented the bias as separate vectors
@@ -479,7 +482,8 @@ counting down from $L$ to $1$.
 				# update weights
 				W -= self.learning_rate * delta
 
-<h2 id="testing">Testing</h2>
+Testing
+-------
 
 Real world data are messy. Instead of shopping around for a toy data set which
 exhibits all the properties we want, we'll cook up an idealized data set that
@@ -618,7 +622,8 @@ aren't a free lunch. But they do provide a framework for creating models with
 low bias even on very large and difficult problems... then it's our job to keep
 the variance in check.
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 That was backpropagation from scratch, our first look at neural networks.  We
 saw how a sequential feed-forward network could be represented as alternating

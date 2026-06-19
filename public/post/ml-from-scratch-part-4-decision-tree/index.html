@@ -2,17 +2,17 @@
 <html lang="en">
 <head><meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ML From Scratch, Part 4: Decision Trees</title>
+  <title>ML From Scratch IV: Decision Trees</title>
   <meta name="author" content="Oran Looney"/>
   <meta name="description" content="So far in this series we’ve followed one particular thread: linear regression -&gt; logistic regression -&gt; neural network. This is a very natural progression of ideas, but it really represents only one possible approach. Today we’ll switch gears and look at a model with completely different pedigree: the decision tree, sometimes also referred to as Classification and Regression Trees, or simply CART models."/>
   <link rel="canonical" href="https://www.oranlooney.com/post/ml-from-scratch-part-4-decision-tree/"/>
-  <meta property="og:title" content="ML From Scratch, Part 4: Decision Trees"/>
+  <meta property="og:title" content="ML From Scratch IV: Decision Trees"/>
   <meta property="og:description" content="So far in this series we’ve followed one particular thread: linear regression -&gt; logistic regression -&gt; neural network. This is a very natural progression of ideas, but it really represents only one possible approach. Today we’ll switch gears and look at a model with completely different pedigree: the decision tree, sometimes also referred to as Classification and Regression Trees, or simply CART models."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://www.oranlooney.com/post/ml-from-scratch-part-4-decision-tree/"/>
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="ML From Scratch, Part 4: Decision Trees"/>
+  <meta name="twitter:title" content="ML From Scratch IV: Decision Trees"/>
   <meta name="twitter:description" content="So far in this series we’ve followed one particular thread: linear regression -&gt; logistic regression -&gt; neural network. This is a very natural progression of ideas, but it really represents only one possible approach. Today we’ll switch gears and look at a model with completely different pedigree: the decision tree, sometimes also referred to as Classification and Regression Trees, or simply CART models."/>
   <meta property="article:published_time" content="2019-03-01T00:00:00Z"/>
   <meta property="article:tag" content="Python"/>
@@ -82,7 +82,7 @@
   <div class="main" role="main">
     <article class="article">
       <img src="/post/ml-from-scratch-part-4-decision-tree_files/lead.jpg" class="article-image" />
-      <h1 class="article-title">ML From Scratch, Part 4: Decision Trees</h1>
+      <h1 class="article-title">ML From Scratch IV: Decision Trees</h1>
       
 
       <hr class="article-title-bottom">
@@ -118,9 +118,24 @@
       </ul>
       
 <aside class="toc">
-  
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#gini-impurity-and-information-gain">Gini Impurity and Information Gain</a></li>
+<li><a href="#finding-the-best-cut-point">Finding The Best Cut Point</a></li>
+<li><a href="#building-the-tree">Building the Tree</a></li>
+<li><a href="#interface">Interface</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
 </aside>
-      <p>So far in this series we&rsquo;ve followed one particular thread: linear regression
+      
+
+<p>So far in this series we&rsquo;ve followed one particular thread: linear regression
 -&gt; logistic regression -&gt; neural network. This is a very natural progression of
 ideas, but it really represents only one possible approach. Today we&rsquo;ll switch
 gears and look at a model with completely different pedigree: the <a href="https://en.wikipedia.org/wiki/Decision_tree">decision

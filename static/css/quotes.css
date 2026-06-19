@@ -6,15 +6,31 @@ mjx-container[jax="CHTML"][display="true"] {
 
 /* Searchbox */
 .search-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     margin-top: 20px;
     width: 100%;
-    max-width: 600px;
     margin-left: 0;
+}
+.search-input-wrapper {
+    position: relative;
+    flex: 1 1 600px;
+    max-width: 600px;
+}
+.search-input-wrapper .fa-magnifying-glass {
+    position: absolute;
+    top: 11px;
+    right: 10px;
+    color: #800000;
+    opacity: 0.45;
+    pointer-events: none;
 }
 .search-form-control {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    padding-right: 2.25rem;
+    margin-bottom: 5px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -24,24 +40,11 @@ input:focus-visible {
   outline: none;
 }
 
-/* Flashcards */
-.quotes-toc-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
-    gap: 1rem;
-}
-
-.quotes-toc-header h2 {
-    flex: 1;
-    margin-bottom: 0;
-}
-
 .flashcard-launch {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    margin: 0;
+    margin: 0 0 2px auto;
     padding: 0;
     border: 0;
     background: transparent;

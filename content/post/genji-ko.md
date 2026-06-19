@@ -239,9 +239,10 @@ layout and simply put them in the order returned by `partitions()`:
 
 Good, but not perfect. The order is only vaguely similar, and the four Genji-mon
 rendered in red are the ones where our "optimal" layout has failed to reproduce
-the traditional design.
+the traditional design.<span id="maintext2"></span>
 
-<h2 id="maintext2">Genji-mon Order</h2>
+Genji-mon Order
+---------------
 
 In the introduction he wrote for a [book on ancient combinatorics][CAM], Knuth 
 <a href="/post/genji-ko_files/combanatorics_ancient_and_modern_page.png" target="_blank">mentions</a>
@@ -586,6 +587,8 @@ their activities. But I'm glad they did so, because they did something we mere
 number crunchers would not have thought to do: they made them beautiful.
 
 <hr>
+
+## Appendix
 
 ### Appendix A: Source Code
 

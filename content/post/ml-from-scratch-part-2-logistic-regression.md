@@ -1,5 +1,5 @@
----
-title: 'ML From Scratch, Part 2: Logistic Regression'
+﻿---
+title: 'ML From Scratch II: Logistic Regression'
 author: Oran Looney
 date: 2018-12-27
 tags:
@@ -75,7 +75,8 @@ important tools in machine learning: gradient descent.  Just as in [part
 an algorithm which could actually be used in production without too much
 embarrassment.
 
-<h2 id="the-logistic-function">The Logistic Function</h2>
+The Logistic Function
+---------------------
 
 Before we get to the regression model, let's take a minute to make
 sure we have a good understanding of the logistic function and some
@@ -153,7 +154,8 @@ element in a `numpy.ndarray` of any shape.
     def sigmoid(z):
         return 1 / (1 + np.exp(-z))
 
-<h2 id="statistical-motivation">Statistical Motivation</h2>
+Statistical Motivation
+----------------------
 
 Let $Y$ be a discrete random variable with support on $\{0, 1\}$ and let $X$ be a
 random $m$-vector.  Let's assume that the joint probability distribution $F&#95;{X,Y}$
@@ -276,7 +278,8 @@ It's worth bearing in mind that logistic regression is so popular, not because
 there's some theorem which proves it's *the* model to use, but because it is
 the simplest and easiest to work with out of a family of equally valid choices.
 
-<h2 id="gradient-descent">Gradient Descent</h2>
+Gradient Descent
+----------------
 
 The state-of-the-art algorithm that we will use to solve (3) has a large number of moving parts and is
 somewhat overwhelming to understand at once. Therefore, we will implement it in layers,
@@ -288,7 +291,8 @@ concretely demonstrate the value of each added complication. The layers will be:
 3. Nesterov Accelerated Gradient
 4. Early Stopping
 
-<h2 id="batch-gradient-descent">Batch Gradient Descent</h2>
+Batch Gradient Descent
+----------------------
 
 Since we have both the loss function $J$ we want to minimize and its gradient $\nabla J$
 we can use an algorithm called gradient descent to find a minimum. 
@@ -484,7 +488,8 @@ is the slow convergence and poor runtime performance. If it takes us 3 seconds
 to fit 400 data points, how are we going to deal with 400,000 or 40 million?
 Why is this algorithm so slow, and is there anything we can do about it?
 
-<h2 id="mini-batch-stochastic-gradient-descent">Mini-batch Stochastic Gradient Descent</h2>
+Mini-batch Stochastic Gradient Descent
+--------------------------------------
 
 Stochastic gradient descent may also have properties conceptually similar to
 simulated annealing which possibly allows it to "jump" out of shallow local
@@ -625,7 +630,8 @@ descent. And the final result has achieved similar test performance:
 ![Training/Validation Loss Curve Minibatch](/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_minibatch.png)
 
 
-<h2 id="nesterov-accelerated-gradient">Nesterov Accelerated Gradient</h2>
+Nesterov Accelerated Gradient
+-----------------------------
 
 But we aren't even close to done. The next bell-and-whistle on our "Making SGD
 Awesome" whistle-stop tour is a clever idea called momentum. While there are
@@ -791,7 +797,8 @@ downside except for a loss in theoretical rigor. This piece of (black?) magic
 is called [early stopping.][ES]
 
 
-<h2 id="early-stopping">Early Stopping</h2>
+Early Stopping
+--------------
 
 The basic idea behind early stopping is taken from looking at the shape of the
 above validation loss curve. If we want to minimize validation loss, and we
@@ -981,7 +988,8 @@ gradient descent.
 ![Training/Validation Loss Curve](/post/ml-from-scratch-part-2-logistic-regression_files/training_validation_loss_final.png)
 
 
-<h2 id="conclusion">Conclusion</h2>
+Conclusion
+----------
 
 That was logistic regression from scratch. In this article, we've learned about
 a simple but powerful classifier called logistic regression. We derived the

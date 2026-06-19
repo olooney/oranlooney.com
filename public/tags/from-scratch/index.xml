@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>ML From Scratch, Part 6: Principal Component Analysis</title>
+      <title>ML From Scratch VI: Principal Component Analysis</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-6-pca/</link>
       <pubDate>Mon, 16 Sep 2019 00:00:00 +0000</pubDate>
       
@@ -22,7 +22,7 @@ In dimensionality reduction we seek a function $f : \mathbb{R}^n \mapsto \mathbb
     </item>
     
     <item>
-      <title>ML From Scratch, Part 5: Gaussian Mixture Models</title>
+      <title>ML From Scratch V: Gaussian Mixture Models</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/</link>
       <pubDate>Wed, 05 Jun 2019 00:00:00 +0000</pubDate>
       
@@ -32,7 +32,7 @@ It is apparent that these data have some kind of structure; which is to say, the
     </item>
     
     <item>
-      <title>ML From Scratch, Part 4: Decision Trees</title>
+      <title>ML From Scratch IV: Decision Trees</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-4-decision-tree/</link>
       <pubDate>Fri, 01 Mar 2019 00:00:00 +0000</pubDate>
       
@@ -41,7 +41,7 @@ It is apparent that these data have some kind of structure; which is to say, the
     </item>
     
     <item>
-      <title>ML From Scratch, Part 3: Backpropagation</title>
+      <title>ML From Scratch III: Backpropagation</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-3-backpropagation/</link>
       <pubDate>Sun, 03 Feb 2019 00:00:00 +0000</pubDate>
       
@@ -50,7 +50,7 @@ It is apparent that these data have some kind of structure; which is to say, the
     </item>
     
     <item>
-      <title>ML From Scratch, Part 2: Logistic Regression</title>
+      <title>ML From Scratch II: Logistic Regression</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-2-logistic-regression/</link>
       <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
       
@@ -59,7 +59,7 @@ It is apparent that these data have some kind of structure; which is to say, the
     </item>
     
     <item>
-      <title>ML From Scratch, Part 1: Linear Regression</title>
+      <title>ML From Scratch I: Linear Regression</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-1-linear-regression/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
@@ -73,7 +73,7 @@ algorithms.
     </item>
     
     <item>
-      <title>ML From Scratch, Part 0: Introduction</title>
+      <title>ML From Scratch: Introduction</title>
       <link>https://www.oranlooney.com/post/ml-from-scratch-part-0-introduction/</link>
       <pubDate>Sun, 11 Nov 2018 00:00:00 +0000</pubDate>
       
