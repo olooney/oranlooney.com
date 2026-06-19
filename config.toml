@@ -1,6 +1,5 @@
 baseurl = "https://www.oranlooney.com/"
 title = "OranLooney.com"
-theme = "whiteplain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 languageCode = "en"
 paginate = 100
@@ -9,7 +8,7 @@ summaryLength = 50
 [params]
   description = "Oran Looney's personal blog about math, programming, machine learning, and data visualization."
 
-# Copyright notice. This is displayer in the footer.
+# Copyright notice. This is displayed in the footer.
 copyright = "&copy; Copyright {year} Oran Looney"
 
 [outputs]
@@ -19,7 +18,7 @@ copyright = "&copy; Copyright {year} Oran Looney"
 [params.author]
   name = "Oran Looney"
 
-  # Gravatar or Abatar image
+  # Gravatar image
   gravatar = "4fd33509c8963cefcdb6bf03af9c34cc"
   github = "olooney"
   linkedin = "oran-looney"

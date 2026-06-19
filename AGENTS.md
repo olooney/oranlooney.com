@@ -11,7 +11,6 @@ These instructions apply to the entire repository unless a more specific instruc
 ## Repository Guardrails
 
 - Treat `public/` as generated output and never touch it. You can, however, read it to review generated HTML.
-- Avoid editing `themes/whiteplain/`. Make local overrides in `layouts/`.
 - Avoid editing `style.css`. Make CSS changes in `static/css/custom.css`.
 - When changing cache-busted static assets such as `static/css/custom.css`, bump the corresponding `?v=` version once per commit in `layouts/partials/head.html`. Do not bump the version for every individual edit within the same commit. If you've already bumped the version in this session, don't bump it again.
 - Do not run deployment/staging/release commands unless the user explicitly asks.

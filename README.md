@@ -18,7 +18,6 @@ Notes
 * the public `public/` folder is auto-generated, but checked in because we can't trust blogdown to reproduce it
   exactly on linux.
 * files are not automatically removed from `public/`. Empty it and rebuild after moving or deleting files.
-* Don't touch `themes/whiteplain/` if you can help it; make your change in `layouts/` instead.
 * Don't touch `style.css` either, make CSS changes in `/static/css/custom.css` instead.
 * When changing cache-busted static assets such as `/static/css/custom.css`,
   bump the corresponding `?v=` version once per commit in `layouts/partials/head.html`.
@@ -81,7 +80,6 @@ Structure
 │   ├── css/                    # Local CSS overrides
 │   ├── demos/                  # Web demos
 ├── layouts/                    # Custom Hugo templates
-├── themes/whiteplain/          # Site theme
 ├── config.toml                 # Hugo configuration
 ├── scripts/                    # Dev and testing scripts
 │   ├── favicon/                # Favicon source assets and conversion script
