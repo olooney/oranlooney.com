@@ -155,7 +155,7 @@ equivalent key - they both perform the same encryption and decryption. This
 means there are effectively only $25!/25 = 24! = 6.2 \times 10^{23}$ possible
 keys. 
 
-<link rel="stylesheet" href="/post/playfair_files/playfair.css">
+<link rel="stylesheet" href="/post/playfair_files/playfair.css?v=1">
 
 <script type="module">
     import { renderPlayfairCanvas, renderPlayfairTorus } from '/post/playfair_files/playfair_torus.js';

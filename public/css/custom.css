@@ -523,20 +523,19 @@ section.terms ul li {
 .search-field-wrapper {
   position: relative;
   margin-top: 20px;
-  width: 100%;
+  width: min(100%, 600px);
   margin-left: 0;
 }
 .search-field-wrapper .fa-magnifying-glass {
   position: absolute;
   top: 11px;
-  left: calc(50% - 2rem);
+  right: 10px;
   color: #800000;
   opacity: 0.45;
   pointer-events: none;
 }
 .search-field-wrapper input {
-  width: 50%;
-  min-width: 400px;
+  width: 100%;
   padding: 10px;
   padding-right: 2.25rem;
   margin-bottom: 20px;

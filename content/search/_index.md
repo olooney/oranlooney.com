@@ -20,4 +20,4 @@ searchable = false
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.3/browser/nunjucks.min.js" integrity="sha256-+CJElYLgP9RjEvMt/VTU1+qF8CuntjliUUBKp26fPck=" crossorigin="anonymous"></script>
-<script src="/js/search.js?v=2"></script>
+<script src="/js/search.js?v=3"></script>
