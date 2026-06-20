@@ -1,13 +1,3 @@
-// capture references to all elements
-const svg = document.querySelector(".rose svg");
-const answerEl = document.querySelector(".rose .answer");
-const petalCountEl = document.getElementById("petal_count");
-const rerollButtonEl = document.getElementById("reroll");
-const revealButtonEl = document.getElementById("reveal");
-const hideButtonEl = document.getElementById("hide");
-const confirmRevealDialogEl = document.getElementById("rose-confirm");
-
-
 const PIP_POSITIONS = {
   1: [[60, 60]],
   2: [[30, 30], [90, 90]],
@@ -17,21 +7,50 @@ const PIP_POSITIONS = {
   6: [[30, 30], [30, 60], [30, 90], [90, 30], [90, 60], [90, 90]]
 };
 
-let dice = [];
-let revealed = false;
+export function initializeRoseWidget(selector) {
+  const root = document.querySelector(selector);
+
+  if (!root) {
+    throw new Error(`Rose widget root not found: ${selector}`);
+  }
+
+  const svg = root.querySelector('.rose svg');
+  const answerEl = root.querySelector('.rose .answer');
+  const petalCountEl = root.querySelector('#petal_count');
+  const rerollButtonEl = root.querySelector('#reroll');
+  const revealButtonEl = root.querySelector('#reveal');
+  const hideButtonEl = root.querySelector('#hide');
+  const confirmRevealDialogEl = root.querySelector('#rose-confirm');
+
+  for (const [name, element] of Object.entries({
+    svg,
+    answerEl,
+    petalCountEl,
+    rerollButtonEl,
+    revealButtonEl,
+    hideButtonEl,
+    confirmRevealDialogEl
+  })) {
+    if (!element) {
+      throw new Error(`Rose widget element not found: ${name}`);
+    }
+  }
+
+  let dice = [];
+  let revealed = false;
 
 // roll the five dice. In addition to the value shown, also add some random
 // x/y jitter and a small random rotation.
-function rollDice(n) {
+  function rollDice(n) {
   return Array.from({ length: n }, (_, i) => ({
     value: Math.floor(Math.random() * 6) + 1,
     x: (i * 154) + 50 + (Math.random() * 20 - 10),
     y: 25 + (Math.random() * 20 - 10),
     angle: 20 - 40 * Math.random()
   }));
-}
+  }
 
-function drawDice(dice) {
+  function drawDice(dice) {
   // clear out the SVG element entirely.
   svg.replaceChildren();
 
@@ -74,26 +93,26 @@ function drawDice(dice) {
 
     svg.appendChild(g);
   }
-}
+  }
 
 // calculate the current number of "petals" showing
-function computePetals(dice) {
+  function computePetals(dice) {
   return dice.reduce((sum, d) => {
     if (d.value === 3) return sum + 2;
     if (d.value === 5) return sum + 4;
     return sum;
   }, 0);
-}
+  }
 
 // reroll the dice and refresh the UI
-function reroll() {
+  function reroll() {
   dice = rollDice(5);
   drawDice(dice);
   petalCountEl.textContent = computePetals(dice);
-}
+  }
 
 // reveal the solution
-function reveal() {
+  function reveal() {
   if (revealed) return;
   revealed = true;
 
@@ -101,7 +120,7 @@ function reveal() {
   answerEl.classList.add("revealed");
 
   // reroll the answer until examples of both a 3 and 5 are visible.
-  while ( dice.every(d => d.value != 3) || dice.every(d => d.value != 5) ) {
+  while (dice.every(d => d.value !== 3) || dice.every(d => d.value !== 5)) {
     dice = rollDice(5);
   }
 
@@ -111,24 +130,24 @@ function reveal() {
 
   revealButtonEl.classList.add("hidden");
   hideButtonEl.classList.remove("hidden");
-}
+  }
 
 // show the modal dialog to confirm the reveal
-function revealDialog() {
+  function revealDialog() {
   if (!confirmRevealDialogEl.open) {
     confirmRevealDialogEl.showModal();
   }
-}
+  }
 
 // reveal the solution once confirmed
-function confirmReveal() {
+  function confirmReveal() {
   if (confirmRevealDialogEl.returnValue === "confirm") {
     reveal();
   }
-}
+  }
 
 // hide the solution
-function hide() {
+  function hide() {
   if (!revealed) return;
   revealed = false;
 
@@ -137,14 +156,14 @@ function hide() {
 
   revealButtonEl.classList.remove("hidden");
   hideButtonEl.classList.add("hidden");
-}
+  }
 
 // click handlers
-rerollButtonEl.addEventListener("click", reroll);
-hideButtonEl.addEventListener("click", hide);
-revealButtonEl.addEventListener("click", revealDialog);
-confirmRevealDialogEl.addEventListener("close", confirmReveal);
+  rerollButtonEl.addEventListener("click", reroll);
+  hideButtonEl.addEventListener("click", hide);
+  revealButtonEl.addEventListener("click", revealDialog);
+  confirmRevealDialogEl.addEventListener("close", confirmReveal);
 
-// initialize the game
-reroll();
+  reroll();
+}
 
