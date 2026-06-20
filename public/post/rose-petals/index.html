@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Rose Petals Teach Us about Induction</title>
+  <meta name="author" content="Oran Looney"/>
+  <meta name="description" content="Petals Around the Rose is a deep, profound lesson about the philosophical problem of induction disguised as a simple dice game.
+If you have never heard of it before, you can experience it yourself below. After that, we’ll try tackling it with a few different algorithmic approaches, and see if we can’t glean any insight into the fundamental problem of induction itself."/>
+  <link rel="canonical" href="https://www.oranlooney.com/post/rose-petals/"/>
+  <meta property="og:title" content="What Rose Petals Teach Us about Induction"/>
+  <meta property="og:description" content="Petals Around the Rose is a deep, profound lesson about the philosophical problem of induction disguised as a simple dice game.
+If you have never heard of it before, you can experience it yourself below. After that, we’ll try tackling it with a few different algorithmic approaches, and see if we can’t glean any insight into the fundamental problem of induction itself."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://www.oranlooney.com/post/rose-petals/"/>
+  <meta property="og:site_name" content="OranLooney.com"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="What Rose Petals Teach Us about Induction"/>
+  <meta name="twitter:description" content="Petals Around the Rose is a deep, profound lesson about the philosophical problem of induction disguised as a simple dice game.
+If you have never heard of it before, you can experience it yourself below. After that, we’ll try tackling it with a few different algorithmic approaches, and see if we can’t glean any insight into the fundamental problem of induction itself."/>
+  <meta property="article:published_time" content="2026-06-20T00:00:00Z"/>
+  <meta property="article:tag" content="Databases"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="OWL" />
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="/css/style.css?v=1" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css?v=1" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=9" media="all" />
+
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+<header class="site-header">
+  <nav class="site-navi">
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item">
+        <a href="/search/" title="Site Search"><i class="fa-solid fa-search"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/tags/" title="Article Tags"><i class="fa-solid fa-tag"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/archives/" title="Article Archives"><i class="fa-solid fa-archive"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/quotes/" title="Favorite Quotes"><i class="fa-solid fa-quote-right"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/demos/" title="Web Demos"><i class="fa-solid fa-dice"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/about/" title="About Me"><i class="fa-solid fa-info-circle"></i></a>
+      </li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://notebooks.oranlooney.com" target="_blank" title="Jupyter Notebooks"><i class="fa-regular fa-lightbulb"></i></a></li>
+    <li><a href="https://linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a></li>
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fa-brands fa-github"></i></a></li>
+    <li><a href="https://stackoverflow.com/users/273231/olooney" target="_blank" title="StackOverflow"><i class="fa-brands fa-stack-overflow"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa-solid fa-flask"></i></a></li>
+  </ul>
+
+  </nav>
+</header>
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/rose-petals_files/lead.jpg" class="article-image" />
+      <h1 class="article-title">What Rose Petals Teach Us about Induction</h1>
+      
+
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-author">
+            by <a href="/about/">Oran Looney</a>
+        </li>
+        <li class="article-meta-date"><time>June 20, 2026</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/databases/">
+            <i class="fas fa-tag"></i>
+            Databases
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#eda">EDA</a></li>
+<li><a href="#linear">Linear</a></li>
+<li><a href="#neural-nets">Neural Nets</a></li>
+<li><a href="#trees">Trees</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>Petals Around the Rose is a deep, profound lesson about the philosophical
+problem of induction disguised as a simple dice game.</p>
+
+<p>If you have never heard of it before, you can experience it yourself below.
+After that, we&rsquo;ll try tackling it with a few different algorithmic approaches,
+and see if we can&rsquo;t glean any insight into the fundamental problem of induction
+itself.</p>
+
+<div class="require-js">
+  <link rel="stylesheet" href="/demos/rose-petals/rose.css">
+  <script>
+    document.write('<div id="rose-petals-widget"></div>');
+
+    import('/demos/rose-petals/widget.js')
+      .then(module => module.loadRosePetalsWidget('#rose-petals-widget'))
+      .catch(error => {
+        console.error('Unable to load Rose Petals widget.', error);
+        document.getElementById('rose-petals-widget').hidden = true;
+      });
+  </script>
+</div>
+
+<p>Spoilers ahead!</p>
+
+<h2 id="overview">Overview</h2>
+
+<p><a href="https://github.com/olooney/rose-petals">Source code</a> and <a href="https://htmlpreview.github.io/?https://github.com/olooney/rose-petals/blob/main/docs/approaches/summary.html">summary report</a> are available on GitHub. Summary chart:</p>
+
+<p><img src="/post/rose-petals_files/summary_chart.png" alt="Summary chart of different approaches" /></p>
+
+<p>The key concept is <a href="https://en.wikipedia.org/wiki/Inductive_bias">inductive bias</a>. Models with an inductive bias that
+matches the specific structure of the problem can learn quickly, sometimes from
+just a handful of examples. Meanwhile, less specific, more general models with
+a larger hypothesis space to explore need far more examples to convince themselves
+that the patterns they&rsquo;re seeing are true.</p>
+
+<p>The summary makes the point in one picture: the more a model already &ldquo;knows&rdquo;
+about the shape of the problem, the less evidence it needs before it can settle
+on the rule.</p>
+
+<h2 id="eda">EDA</h2>
+
+<p>Before fitting anything, it helps to look at the data directly. The rule is not
+hidden in noise; it is sitting there in the symmetries of the dice.</p>
+
+<p><img src="/post/rose-petals_files/eda_heatmap.png" alt="eda_heatmap.png" /></p>
+
+<p>The heatmap is a blunt instrument, but even a blunt instrument can find the
+handle if the problem is simple enough.</p>
+
+<p><img src="/post/rose-petals_files/eda_bubble_chart.png" alt="eda_bubble_chart.png" /></p>
+
+<p>The bubble plot tells the same story from another angle. Some die faces matter
+in a way the others simply do not.</p>
+
+<h2 id="linear">Linear</h2>
+
+<p>A plain linear model is the obvious first baseline. It is also a useful reminder
+that obvious is not the same thing as appropriate.</p>
+
+<p><img src="/post/rose-petals_files/naive_linear.png" alt="naive_linear.png" /></p>
+
+<p>This model sees numbers, not dice faces. It can notice that five tends to matter
+more than two, but it has no natural way to express &ldquo;center pip&rdquo; or &ldquo;outer pip.&rdquo;</p>
+
+<p><img src="/post/rose-petals_files/categorical_linear.png" alt="categorical_linear.png" /></p>
+
+<p>One-hot features give the model a better vocabulary. Now it can treat each face
+as a separate case, which is already much closer to the structure of the game.</p>
+
+<h2 id="neural-nets">Neural Nets</h2>
+
+<p>Neural networks are often sold as a way to avoid feature engineering. Sometimes
+that is true. Sometimes it just means asking a very flexible model to rediscover
+the feature engineering for you.</p>
+
+<p><img src="/post/rose-petals_files/naive_nn.png" alt="naive_nn.png" /></p>
+
+<p>This is <em>after</em> we&rsquo;ve gone through hyperparameter optimization:</p>
+
+<p><img src="/post/rose-petals_files/nn_optuna_activation.png" alt="nn_optuna_activation.png" /></p>
+
+<p>Tuning changes the details of the failure mode, but not the basic fact that the
+network is still searching a large space for a small rule.</p>
+
+<p><img src="/post/rose-petals_files/nn_optuna_batch_size.png" alt="nn_optuna_batch_size.png" /></p>
+
+<p>Some settings are less bad than others. That is not quite the same thing as
+understanding the problem.</p>
+
+<p><img src="/post/rose-petals_files/nn_optuna_hidden2.png" alt="nn_optuna_hidden2.png" /></p>
+
+<p>More capacity gives the model more room to maneuver, but also more room to get
+lost.</p>
+
+<p><img src="/post/rose-petals_files/nn_hp_3d.png" alt="nn_hp_3d.png" /></p>
+
+<p>See it struggle to understand the structure:</p>
+
+<p><img src="/post/rose-petals_files/fcnn_animation.gif" alt="fcnn_animation.gif" /></p>
+
+<p>The animation is a useful gut check. The model is learning something, but it is
+not learning the thing in the way a human would describe it.</p>
+
+<p>Let&rsquo;s try Deepset, which has the correct inductive bias:</p>
+
+<p><img src="/post/rose-petals_files/deepset_petals_architecture.png" alt="deepset_petals_architecture.png" /></p>
+
+<p>The DeepSet architecture builds in the assumption that the order of the dice
+does not matter. That single assumption removes a great deal of irrelevant
+complexity.</p>
+
+<p>The difference is night and day:</p>
+
+<p><img src="/post/rose-petals_files/deepset.png" alt="deepset.png" /></p>
+
+<p>Once the model is allowed to think in sets, the rule becomes small again. It no
+longer has to learn five separate copies of the same idea.</p>
+
+<h2 id="trees">Trees</h2>
+
+<p>Compare the sharp, axis-aligned decision boundaries of decision
+trees to the softer ones found by stacking sigmoids together:</p>
+
+<p><img src="/post/rose-petals_files/nn_vs_tree.png" alt="nn_vs_tree.png" /></p>
+
+<p>Trees bring a different bias: they like discrete splits. That happens to be a
+pretty good fit for dice, though not as direct as telling the model that dice
+are an unordered set.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Why is induction a wicked problem? Because there is no one right approach,
+only approaches which fit a given data set. You might think you can cleverly
+avoid this problem by simply trying every possible approach, but in many
+ways that&rsquo;s the worst of all possible solutions: guaranteed to be slower
+and struggles with multiple hypothesis testing. No, what&rsquo;s needed is <em>insight</em>
+to guide us towards <em>reasonable</em> hypotheses, but this is the part that&rsquo;s
+currently unsolved. You might think LLMs can do it, and they can, sort of,
+but no better than we can, and <em>we</em> don&rsquo;t know how to do it efficiently
+yet.</p>
+
+<p>Our best approach is the collection of heuristics and methods called
+&ldquo;science,&rdquo; which you must have noticed is an almost unbelievable inefficient
+process. Scientific progress is measured in <em>lifetimes</em> spent for the smallest
+insight. It took us <em>thousands of years</em> to fit an ellipse through some
+points, or to realize that washing our hands was important. There&rsquo;s got to be
+a better way.</p>
+
+    </article>
+
+    <hr>
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/considerate-data-modeler/" data-toggle="tooltip" data-placement="top" title="The Considerate Data Modeler">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+<div class="site-footer">
+  <div class="copyright">
+	  
+  </div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-rsslink">
+      <a href="/index.xml" type="application/rss+xml" target="_blank" title="RSS">
+        <i class="fa-solid fa-rss"></i>
+      </a>
+    </li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/script.js?v=1"></script>
+<script src="/js/custom.js?v=1"></script>
+
+
+<script>
+window.MathJax = {
+  loader: {
+    load: ['[tex]/color']
+  },
+
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    packages: {'[+]': ['color']}
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4.1.2/tex-chtml.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

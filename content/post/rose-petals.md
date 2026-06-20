@@ -1,8 +1,8 @@
 ---
 title: "What Rose Petals Teach Us about Induction"
 author: "Oran Looney"
-date: 2026-06-13
-publishdate: 2026-06-13
+date: 2026-06-20
+publishdate: 2026-06-20
 tags:
   - Databases
 image: /post/rose-petals_files/lead.jpg
