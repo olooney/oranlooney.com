@@ -104,31 +104,29 @@ the feature engineering for you.
 
 ![naive_nn.png](/post/rose-petals_files/naive_nn.png)
 
-This is *after* we've gone through hyperparameter optimization:
+This is *after* we've gone through hyperparameter optimization.
+
+The sigmoid activation works best for this problem, which is notable because
+its not often the best choice for larger, deeper networks. However, it makes
+it easy to construct step functions, so it wins here:
 
 ![nn_optuna_activation.png](/post/rose-petals_files/nn_optuna_activation.png)
 
-Tuning changes the details of the failure mode, but not the basic fact that the
-network is still searching a large space for a small rule.
-
-![nn_optuna_batch_size.png](/post/rose-petals_files/nn_optuna_batch_size.png)
-
-Some settings are less bad than others. That is not quite the same thing as
-understanding the problem.
+There's a strong global minimum near 150 hidden neurons on the hidden layer:
 
 ![nn_optuna_hidden2.png](/post/rose-petals_files/nn_optuna_hidden2.png)
 
 More capacity gives the model more room to maneuver, but also more room to get
 lost.
 
-![nn_hp_3d.png](/post/rose-petals_files/nn_hp_3d.png)
-
-See it struggle to understand the structure:
+Watch it struggle to understand the "unordered set" structure of the problem:
 
 ![fcnn_animation.gif](/post/rose-petals_files/fcnn_animation.gif)
 
-The animation is a useful gut check. The model is learning something, but it is
-not learning the thing in the way a human would describe it.
+We can see the model is learning, but its not learning it the way a human
+would. Its not looking for rules, just building up and refining an intuition
+for where it's "high" or "low."
+
 
 Let's try Deepset, which has the correct inductive bias:
 
@@ -158,8 +156,8 @@ Trees bring a different bias: they like discrete splits. That happens to be a
 pretty good fit for dice, though not as direct as telling the model that dice
 are an unordered set.
 
-Notes on Observational Datasets vs. Controlled Experiments
-----------------------------------------------------------
+Observational Data is Harder to Learn From
+------------------------------------------
 
 How much easier the problem would be if we could *choose* which dice
 to get an answer for! We could set them to all 1, then all 2, and so forth
@@ -306,13 +304,25 @@ Promising Avenues
 Actually, that's not quite true: we've learned quite a bit about induction
 in the 400 years since Francis Bacon first took a stab at systematizing it.
 
-Here are the four subjects seem to offer some insight into the problem:
+Here are five subjects that seem to offer some insight into the problem:
 
 
-* Machine Learning - teaching machines to learn is teaching us a *lot* about how learning itself works.
-* Casual Statistics - also chock full of insights, in particular about endogeneity and causality. 
-* Computer Science - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.
-* Philosophy of Science - has something to say about rejecting certain classes of bad theories,
+**Machine Learning** - teaching machines to learn is teaching us a *lot* about how learning itself works.
+
+**Modern Statistics** - also chock full of insights, in particular about endogeneity and causality. 
+
+**Computer Science** - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.
+
+**Cognitive Psychology and Neuroscience** - For example, the "rostrolateral prefrontal cortex", a.k.a. [Brodmann area 10][BAT]:
+
+![Brodmann area 10](/post/rose-petals_files/brodmann_area_10.png "A cytoarchitecture diagram of the brain with Brodmann area 10 highlighted.")
+
+is an area of the brain is associated with high-level cognitive integration. It is unusually large in humans compared to other mammals.
+
+It's not the "Nous-center" of the brain; that's not how brains work. But it might play an important role, and its interesting that
+it's distinct from spatial reasoning, memory, and language, suggesting that abstract reason is somehow separate from those functions.
+
+**Philosophy of Science** - has something to say about rejecting certain classes of bad theories,
 and the [hypothetico-deductive method][HDM] in particular gets at something important. But while it provides some good advice
 on testing hypotheses and a few pitfalls to avoid, it doesn't have a lot to say on finding good hypotheses in the first place.
 
@@ -323,12 +333,15 @@ For that, we're still stuck with Feyerbend's "anything goes" and Aristotle's *no
 Conclusion
 ----------
 
-Why is induction a wicked problem? Because there is no one right approach,
-only approaches which fit a given data set.  No, what's needed is *insight*
-to guide us towards *reasonable* hypotheses, but this is the part that's
-currently unsolved. You might think LLMs can do it, and they can, sort of,
+*Why* is induction a wicked problem? *Why* is there no free lunch? I believe
+its ultimately computational&mdash;the space of all possible hypotheses is simply
+too large to brute force.  No, what's needed is *insight*
+to guide us towards *reasonable* hypotheses. This is the part that's
+currently unsolved. 
+
+You might think LLMs can do it, and they can, sort of,
 but no better than we can, and *we* don't know how to do it efficiently 
-yet. 
+yet.
 
 Our best approach is the collection of heuristics and methods called
 "science," which you must have noticed is an almost unbelievable inefficient
@@ -336,6 +349,10 @@ process. Scientific progress is measured in *lifetimes* spent for the smallest
 insight. It took us *thousands of years* to fit an ellipse through some
 points, or to realize that washing our hands was important. There's got to be
 a better way. 
+
+We already have so many pieces of the puzzle, so many good ideas. It's just
+that no one has been able to put them together yet. I really think someone will
+make a breakthrough in my lifetime. Maybe it will be you.
 
 
 
@@ -346,3 +363,4 @@ a better way.
 [RPSC]: https://github.com/olooney/rose-petals
 [RPSR]: https://htmlpreview.github.io/?https://github.com/olooney/rose-petals/blob/main/docs/approaches/summary.html
 [HDM]: https://en.wikipedia.org/wiki/Hypothetico-deductive_model
+[BAT]: https://en.wikipedia.org/wiki/Brodmann_area_10

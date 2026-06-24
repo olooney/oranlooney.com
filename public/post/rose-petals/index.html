@@ -109,7 +109,7 @@
 <li><a href="#linear">Linear</a></li>
 <li><a href="#neural-nets">Neural Nets</a></li>
 <li><a href="#trees">Trees</a></li>
-<li><a href="#notes-on-observational-datasets-vs-controlled-experiments">Notes on Observational Datasets vs. Controlled Experiments</a></li>
+<li><a href="#observational-data-is-harder-to-learn-from">Observational Data is Harder to Learn From</a></li>
 <li><a href="#did-any-of-these-ml-methods-truly-solve-it">Did Any of These ML Methods Truly Solve It?</a></li>
 <li><a href="#history-of-language-models">History of Language Models</a></li>
 <li><a href="#the-tragedy-of-auto-ml">The Tragedy of Auto ML</a></li>
@@ -214,31 +214,28 @@ the feature engineering for you.</p>
 
 <p><img src="/post/rose-petals_files/naive_nn.png" alt="naive_nn.png" /></p>
 
-<p>This is <em>after</em> we&rsquo;ve gone through hyperparameter optimization:</p>
+<p>This is <em>after</em> we&rsquo;ve gone through hyperparameter optimization.</p>
+
+<p>The sigmoid activation works best for this problem, which is notable because
+its not often the best choice for larger, deeper networks. However, it makes
+it easy to construct step functions, so it wins here:</p>
 
 <p><img src="/post/rose-petals_files/nn_optuna_activation.png" alt="nn_optuna_activation.png" /></p>
 
-<p>Tuning changes the details of the failure mode, but not the basic fact that the
-network is still searching a large space for a small rule.</p>
-
-<p><img src="/post/rose-petals_files/nn_optuna_batch_size.png" alt="nn_optuna_batch_size.png" /></p>
-
-<p>Some settings are less bad than others. That is not quite the same thing as
-understanding the problem.</p>
+<p>There&rsquo;s a strong global minimum near 150 hidden neurons on the hidden layer:</p>
 
 <p><img src="/post/rose-petals_files/nn_optuna_hidden2.png" alt="nn_optuna_hidden2.png" /></p>
 
 <p>More capacity gives the model more room to maneuver, but also more room to get
 lost.</p>
 
-<p><img src="/post/rose-petals_files/nn_hp_3d.png" alt="nn_hp_3d.png" /></p>
-
-<p>See it struggle to understand the structure:</p>
+<p>Watch it struggle to understand the &ldquo;unordered set&rdquo; structure of the problem:</p>
 
 <p><img src="/post/rose-petals_files/fcnn_animation.gif" alt="fcnn_animation.gif" /></p>
 
-<p>The animation is a useful gut check. The model is learning something, but it is
-not learning the thing in the way a human would describe it.</p>
+<p>We can see the model is learning, but its not learning it the way a human
+would. Its not looking for rules, just building up and refining an intuition
+for where it&rsquo;s &ldquo;high&rdquo; or &ldquo;low.&rdquo;</p>
 
 <p>Let&rsquo;s try Deepset, which has the correct inductive bias:</p>
 
@@ -266,7 +263,7 @@ trees to the softer ones found by stacking sigmoids together:</p>
 pretty good fit for dice, though not as direct as telling the model that dice
 are an unordered set.</p>
 
-<h2 id="notes-on-observational-datasets-vs-controlled-experiments">Notes on Observational Datasets vs. Controlled Experiments</h2>
+<h2 id="observational-data-is-harder-to-learn-from">Observational Data is Harder to Learn From</h2>
 
 <p>How much easier the problem would be if we could <em>choose</em> which dice
 to get an answer for! We could set them to all 1, then all 2, and so forth
@@ -398,25 +395,38 @@ because as of right now we don&rsquo;t have the faintest clue how to do it.</p>
 <p>Actually, that&rsquo;s not quite true: we&rsquo;ve learned quite a bit about induction
 in the 400 years since Francis Bacon first took a stab at systematizing it.</p>
 
-<p>Here are the four subjects seem to offer some insight into the problem:</p>
+<p>Here are five subjects that seem to offer some insight into the problem:</p>
 
-<ul>
-<li>Machine Learning - teaching machines to learn is teaching us a <em>lot</em> about how learning itself works.</li>
-<li>Casual Statistics - also chock full of insights, in particular about endogeneity and causality.</li>
-<li>Computer Science - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.</li>
-<li>Philosophy of Science - has something to say about rejecting certain classes of bad theories,
+<p><strong>Machine Learning</strong> - teaching machines to learn is teaching us a <em>lot</em> about how learning itself works.</p>
+
+<p><strong>Modern Statistics</strong> - also chock full of insights, in particular about endogeneity and causality.</p>
+
+<p><strong>Computer Science</strong> - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.</p>
+
+<p><strong>Cognitive Psychology and Neuroscience</strong> - For example, the &ldquo;rostrolateral prefrontal cortex&rdquo;, a.k.a. <a href="https://en.wikipedia.org/wiki/Brodmann_area_10">Brodmann area 10</a>:</p>
+
+<p><img src="/post/rose-petals_files/brodmann_area_10.png" alt="Brodmann area 10" title="A cytoarchitecture diagram of the brain with Brodmann area 10 highlighted." /></p>
+
+<p>is an area of the brain is associated with high-level cognitive integration. It is unusually large in humans compared to other mammals.</p>
+
+<p>It&rsquo;s not the &ldquo;Nous-center&rdquo; of the brain; that&rsquo;s not how brains work. But it might play an important role, and its interesting that
+it&rsquo;s distinct from spatial reasoning, memory, and language, suggesting that abstract reason is somehow separate from those functions.</p>
+
+<p><strong>Philosophy of Science</strong> - has something to say about rejecting certain classes of bad theories,
 and the <a href="https://en.wikipedia.org/wiki/Hypothetico-deductive_model">hypothetico-deductive method</a> in particular gets at something important. But while it provides some good advice
-on testing hypotheses and a few pitfalls to avoid, it doesn&rsquo;t have a lot to say on finding good hypotheses in the first place.</li>
-</ul>
+on testing hypotheses and a few pitfalls to avoid, it doesn&rsquo;t have a lot to say on finding good hypotheses in the first place.</p>
 
 <p>For that, we&rsquo;re still stuck with Feyerbend&rsquo;s &ldquo;anything goes&rdquo; and Aristotle&rsquo;s <em>nous</em>.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Why is induction a wicked problem? Because there is no one right approach,
-only approaches which fit a given data set.  No, what&rsquo;s needed is <em>insight</em>
-to guide us towards <em>reasonable</em> hypotheses, but this is the part that&rsquo;s
-currently unsolved. You might think LLMs can do it, and they can, sort of,
+<p><em>Why</em> is induction a wicked problem? <em>Why</em> is there no free lunch? I believe
+its ultimately computational&mdash;the space of all possible hypotheses is simply
+too large to brute force.  No, what&rsquo;s needed is <em>insight</em>
+to guide us towards <em>reasonable</em> hypotheses. This is the part that&rsquo;s
+currently unsolved.</p>
+
+<p>You might think LLMs can do it, and they can, sort of,
 but no better than we can, and <em>we</em> don&rsquo;t know how to do it efficiently
 yet.</p>
 
@@ -426,6 +436,10 @@ process. Scientific progress is measured in <em>lifetimes</em> spent for the sma
 insight. It took us <em>thousands of years</em> to fit an ellipse through some
 points, or to realize that washing our hands was important. There&rsquo;s got to be
 a better way.</p>
+
+<p>We already have so many pieces of the puzzle, so many good ideas. It&rsquo;s just
+that no one has been able to put them together yet. I really think someone will
+make a breakthrough in my lifetime. Maybe it will be you.</p>
 
     </article>
 
