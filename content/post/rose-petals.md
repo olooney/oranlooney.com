@@ -66,18 +66,16 @@ on the rule.
 EDA
 ---
 
-Before fitting anything, it helps to look at the data directly. The rule is not
-hidden in noise; it is sitting there in the symmetries of the dice.
+Before fitting anything, let's just *look* at the data. The right visualization
+can make patterns obvious.
+
+TODO: heatmap
 
 ![eda_heatmap.png](/post/rose-petals_files/eda_heatmap.png)
 
-The heatmap is a blunt instrument, but even a blunt instrument can find the
-handle if the problem is simple enough.
+TODO: bubble chart
 
 ![eda_bubble_chart.png](/post/rose-petals_files/eda_bubble_chart.png)
-
-The bubble plot tells the same story from another angle. Some die faces matter
-in a way the others simply do not.
 
 
 Linear
@@ -154,7 +152,7 @@ Trees
 Compare the sharp, axis-aligned decision boundaries of decision
 trees to the softer ones found by stacking sigmoids together:
 
-![nn_vs_tree.png](/post/rose-petals_files/nn_vs_tree.png)
+![nn_vs_tree.png](/post/rose-petals_files/nn_vs_tree.png "Side-by-side 3D response surfaces of a neural network and a decision tree.")
 
 Trees bring a different bias: they like discrete splits. That happens to be a
 pretty good fit for dice, though not as direct as telling the model that dice
@@ -180,7 +178,7 @@ Imagine if you had figured out the rule, and then were
 shown this generalization to twelve-sided dice. These dice
 are dodecahedron so have pentagonal faces. 
 
-![d12 showing five and six with pips](/post/rose-petals_files/pentagonal.png)
+![d12 showing five and six with pips](/post/rose-petals_files/pentagonal.png "Two pentagonal faces of a twelve-sided die, one displaying five pips and the other six.")
 
 If you had learned the rule "n-1 but only for odd n" then you
 would get it exactly wrong; but if you had listened to all the clues,
@@ -235,6 +233,14 @@ Nous
 If we can't brute force it, what's left? The Greek's called it *Nous*
 the minds capability to apprehend axioms. How do we do it? Nobody knows.
 
+Aristotle called this faculty *nous*: our capacity to discover first principles.
+Nous is not deduction, because deduction has to start from something.
+It is not mere observation, a piling up of facts; it is the mechanism
+that finds the pattern, that moves from the particular to the universal.
+
+It's hard to define, but if you solved Petals Around the Rose then I 
+don't *need* to define it for you: you experienced it yourself, first-hand.
+
 
 Einstein
 --------
@@ -264,18 +270,53 @@ be very simple, there's no reason at all to believe that a complex emergent
 phenomenon would even need to have any solution or explanation simpler than
 itself. 
 
+Wolfram once posed the "Rule 30 Challenge:" find a way to predict
+the long term behavior of a simple cellular automata without actually
+running the simulation. He offered a $30,000 prize which has so far
+gone unclaimed; if such a simple system can resist reduction, what 
+are the implications for real-world phenomena? How can there be any
+general method of finding the right rule if there is no rule to find?
 
-Also, Against Method, Paul Feyerabend
+![Rule 30, illustrated](/post/rose-petals_files/rule_30.png "Visualization of the Rule 30 cellular automata. Each row is computed from the row above by a simple rule, yet it displays aperiodic patterns.")
+
+
+Paul Feyerabend wrote a book called *Against Method*. He took a
+long, hard look at the history of science as it was actually
+practiced and pointed out that science didn't advance by any
+fixed, repeatable method; in fact, it is precisely when we 
+abandon all methodology and best practice that great leaps forward
+occur. To be clear, he wasn't against rigor or careful thinking,
+but against ossified, rigid methods, the kind that puts your brain
+on autopilot&mdash;in other words, precisely the kind of cargo
+cult adherence to prior art that tends to develop over time
+in any mature field. This suggests that any attempt to pin
+down some kind of general method of induction isn't just doomed:
+it's actively harmful.
+
+Luckily for me, this is more of a theoretical possibility,
+because as of right now we don't have the faintest clue how to do it. 
+
+![Summary of current progress](/post/rose-petals_files/combing_the_desert.jpg "Two soldiers explain to their superior officer that they haven't found anything yet.")
 
 
 
 Promising Avenues
 -----------------
 
-* Machine Learning - it's teaching us a *lot* about induction
-* Casual Statistics - also chock full of insights, in particular about endogeneity
+Actually, that's not quite true: we've learned quite a bit about induction
+in the 400 years since Francis Bacon first took a stab at systematizing it.
+
+Here are the four subjects seem to offer some insight into the problem:
+
+
+* Machine Learning - teaching machines to learn is teaching us a *lot* about how learning itself works.
+* Casual Statistics - also chock full of insights, in particular about endogeneity and causality. 
 * Computer Science - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.
-* Philosophy of Science - the [hypothetico-deductive method][HDM]
+* Philosophy of Science - has something to say about rejecting certain classes of bad theories,
+and the [hypothetico-deductive method][HDM] in particular gets at something important. But while it provides some good advice
+on testing hypotheses and a few pitfalls to avoid, it doesn't have a lot to say on finding good hypotheses in the first place.
+
+For that, we're still stuck with Feyerbend's "anything goes" and Aristotle's *nous*.
 
 
 
