@@ -4,19 +4,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>What Rose Petals Teach Us about Induction</title>
   <meta name="author" content="Oran Looney"/>
-  <meta name="description" content="Petals Around the Rose is a deep, profound lesson about the philosophical problem of induction disguised as a simple dice game.
-If you have never heard of it before, you can experience it yourself below. After that, we’ll try tackling it with a few different algorithmic approaches, and see if we can’t glean any insight into the fundamental problem of induction itself."/>
+  <meta name="description" content="What is the most important problem in your field, and why aren’t you working on it? —Richard Hamming
+ For me, the answer simple: “is there a general method for induction?” This problem is really hard, and there are even some good reasons to believe the answer is simply, “No,” but I remain optimistic."/>
   <link rel="canonical" href="https://www.oranlooney.com/post/rose-petals/"/>
   <meta property="og:title" content="What Rose Petals Teach Us about Induction"/>
-  <meta property="og:description" content="Petals Around the Rose is a deep, profound lesson about the philosophical problem of induction disguised as a simple dice game.
-If you have never heard of it before, you can experience it yourself below. After that, we’ll try tackling it with a few different algorithmic approaches, and see if we can’t glean any insight into the fundamental problem of induction itself."/>
+  <meta property="og:description" content="What is the most important problem in your field, and why aren’t you working on it? —Richard Hamming
+ For me, the answer simple: “is there a general method for induction?” This problem is really hard, and there are even some good reasons to believe the answer is simply, “No,” but I remain optimistic."/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://www.oranlooney.com/post/rose-petals/"/>
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
   <meta name="twitter:title" content="What Rose Petals Teach Us about Induction"/>
-  <meta name="twitter:description" content="Petals Around the Rose is a deep, profound lesson about the philosophical problem of induction disguised as a simple dice game.
-If you have never heard of it before, you can experience it yourself below. After that, we’ll try tackling it with a few different algorithmic approaches, and see if we can’t glean any insight into the fundamental problem of induction itself."/>
+  <meta name="twitter:description" content="What is the most important problem in your field, and why aren’t you working on it? —Richard Hamming
+ For me, the answer simple: “is there a general method for induction?” This problem is really hard, and there are even some good reasons to believe the answer is simply, “No,” but I remain optimistic."/>
   <meta property="article:published_time" content="2026-06-20T00:00:00Z"/>
   <meta property="article:tag" content="Databases"/>
   <meta name="theme-color" content="#ffffff"/>
@@ -109,6 +109,14 @@ If you have never heard of it before, you can experience it yourself below. Afte
 <li><a href="#linear">Linear</a></li>
 <li><a href="#neural-nets">Neural Nets</a></li>
 <li><a href="#trees">Trees</a></li>
+<li><a href="#notes-on-observational-datasets-vs-controlled-experiments">Notes on Observational Datasets vs. Controlled Experiments</a></li>
+<li><a href="#did-any-of-these-ml-methods-truly-solve-it">Did Any of These ML Methods Truly Solve It?</a></li>
+<li><a href="#history-of-language-models">History of Language Models</a></li>
+<li><a href="#the-tragedy-of-auto-ml">The Tragedy of Auto ML</a></li>
+<li><a href="#nous">Nous</a></li>
+<li><a href="#einstein">Einstein</a></li>
+<li><a href="#arguments-against-the-existence-of-any-such-method">Arguments Against the Existence of Any Such Method</a></li>
+<li><a href="#promising-avenues">Promising Avenues</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
 </ul>
@@ -116,8 +124,22 @@ If you have never heard of it before, you can experience it yourself below. Afte
 </aside>
       
 
+<blockquote>
+<p>What is the most important problem in your field, and why aren&rsquo;t you working on it?
+<br>&mdash;Richard Hamming</p>
+</blockquote>
+
+<p>For me, the answer simple: &ldquo;is there a general method for induction?&rdquo; This
+problem is really hard, and there are even some good reasons to believe the
+answer is simply, &ldquo;No,&rdquo; but I remain optimistic.</p>
+
+<p>What&rsquo;s needed is a simple, concrete example which illustrates the idea without
+any particular need for mathematical sophistication.</p>
+
 <p>Petals Around the Rose is a deep, profound lesson about the philosophical
 problem of induction disguised as a simple dice game.</p>
+
+<p>&ldquo;No Free Lunch&rdquo;.</p>
 
 <p>If you have never heard of it before, you can experience it yourself below.
 After that, we&rsquo;ll try tackling it with a few different algorithmic approaches,
@@ -246,13 +268,113 @@ trees to the softer ones found by stacking sigmoids together:</p>
 pretty good fit for dice, though not as direct as telling the model that dice
 are an unordered set.</p>
 
+<h2 id="notes-on-observational-datasets-vs-controlled-experiments">Notes on Observational Datasets vs. Controlled Experiments</h2>
+
+<p>How much easier the problem would be if we could <em>choose</em> which dice
+to get an answer for! We could set them to all 1, then all 2, and so forth
+and in 6 trials have a clear hypothesis for the true rule. A few dozen
+more experiments to confirm the independence of position, and we&rsquo;d know
+beyond a reasonable doubt.</p>
+
+<p>Instead, it&rsquo;s quite difficult to even remember all the random results
+we&rsquo;ve been shown so far.</p>
+
+<h2 id="did-any-of-these-ml-methods-truly-solve-it">Did Any of These ML Methods Truly Solve It?</h2>
+
+<p>Imagine if you had figured out the rule, and then were
+shown this generalization to twelve-sided dice. These dice
+are dodecahedron so have pentagonal faces.</p>
+
+<p><img src="/post/rose-petals_files/pentagonal.png" alt="d12 showing five and six with pips" /></p>
+
+<p>If you had learned the rule &ldquo;n-1 but only for odd n&rdquo; then you
+would get it exactly wrong; but if you had listened to all the clues,
+and <em>really</em> understood the rule, you&rsquo;d answer immediately and
+confidently, even though you are generalizing well outside anything in
+the original training set.</p>
+
+<p>Hinton on World Models,
+François Chollet&rsquo;s ARC-AGI on visual learning, etc.</p>
+
+<h2 id="history-of-language-models">History of Language Models</h2>
+
+<ul>
+<li>Markov</li>
+<li>RNN</li>
+<li>Transformer</li>
+</ul>
+
+<p>TODO: &ldquo;Next token predictor&rdquo; is a shallow understanding; these
+are all &ldquo;next token predictors&rdquo; but some of them work better than others.</p>
+
+<p>A better question is to ask what it is that makes the transformer a good
+model for language.</p>
+
+<p>Markov chain was too broad - it could learn any pattern, so needed a needed
+an infinite amount of data to learn anything.</p>
+
+<p>RNNs were too broad - by squeezing down all history and memory into a single
+state vector, they simply did too much violence to the underlying meaning.</p>
+
+<p>Transformers hit a sweet spot - by using recent history as a working memory,
+and focusing in on different parts of that history at different times, they
+are able to.</p>
+
+<h2 id="the-tragedy-of-auto-ml">The Tragedy of Auto ML</h2>
+
+<p>You might think you can cleverly
+avoid this problem by simply trying every possible approach, but in many
+ways that&rsquo;s the worst of all possible solutions: guaranteed to be slower
+and struggles with multiple hypothesis testing.</p>
+
+<p>What auto ML tools actually do is make very easy learning problems
+even easier. This is quite frankly not worth paying for.</p>
+
+<h2 id="nous">Nous</h2>
+
+<p>If we can&rsquo;t brute force it, what&rsquo;s left? The Greek&rsquo;s called it <em>Nous</em>
+the minds capability to apprehend axioms. How do we do it? Nobody knows.</p>
+
+<h2 id="einstein">Einstein</h2>
+
+<p>Einstein had an inductive bias towards pure geometry. It&rsquo;s largely
+the same bias which lead us towards string theory. It worked beautifully
+for some problems, and then didn&rsquo;t work on others.</p>
+
+<p>We have an algorithm, more or less: throw a thousand of the most
+brilliant, most creative brains at the problem and hope one of them has
+an idea. The process is spectacularly inefficient, and honestly a bit
+cruel towards the grad students.</p>
+
+<p>You can&rsquo;t linear your way out of an exponential problem. You&rsquo;re
+standing at the bottom of a cliff and hoping to scale it by sending
+in wave after wave of naive, optimistic grad students until you&rsquo;ve
+built a ramp out of their wasted lives? Good luck with that.</p>
+
+<h2 id="arguments-against-the-existence-of-any-such-method">Arguments Against the Existence of Any Such Method</h2>
+
+<p>Emergent phenomenon such a entropy, turbulence, evolution, arise out
+of complex systems and must be studied empirically. While there might
+be reason to believe the fundamental laws of nature must in some sense
+be very simple, there&rsquo;s no reason at all to believe that a complex emergent
+phenomenon would even need to have any solution or explanation simpler than
+itself.</p>
+
+<p>Also, Against Method, Paul Feyerabend</p>
+
+<h2 id="promising-avenues">Promising Avenues</h2>
+
+<ul>
+<li>Machine Learning - it&rsquo;s teaching us a <em>lot</em> about induction</li>
+<li>Casual Statistics - also chock full of insights, in particular about endogeneity</li>
+<li>Computer Science - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.</li>
+<li>Philosophy of Science - the <a href="https://en.wikipedia.org/wiki/Hypothetico-deductive_model">hypothetico-deductive method</a></li>
+</ul>
+
 <h2 id="conclusion">Conclusion</h2>
 
 <p>Why is induction a wicked problem? Because there is no one right approach,
-only approaches which fit a given data set. You might think you can cleverly
-avoid this problem by simply trying every possible approach, but in many
-ways that&rsquo;s the worst of all possible solutions: guaranteed to be slower
-and struggles with multiple hypothesis testing. No, what&rsquo;s needed is <em>insight</em>
+only approaches which fit a given data set.  No, what&rsquo;s needed is <em>insight</em>
 to guide us towards <em>reasonable</em> hypotheses, but this is the part that&rsquo;s
 currently unsolved. You might think LLMs can do it, and they can, sort of,
 but no better than we can, and <em>we</em> don&rsquo;t know how to do it efficiently

@@ -8,8 +8,20 @@ tags:
 image: /post/rose-petals_files/lead.jpg
 ---
 
+> What is the most important problem in your field, and why aren't you working on it?
+> <br>&mdash;Richard Hamming
+
+For me, the answer simple: "is there a general method for induction?" This
+problem is really hard, and there are even some good reasons to believe the
+answer is simply, "No," but I remain optimistic.
+
+What's needed is a simple, concrete example which illustrates the idea without
+any particular need for mathematical sophistication.
+
 Petals Around the Rose is a deep, profound lesson about the philosophical 
 problem of induction disguised as a simple dice game.
+
+"No Free Lunch". 
 
 If you have never heard of it before, you can experience it yourself below.
 After that, we'll try tackling it with a few different algorithmic approaches,
@@ -148,14 +160,130 @@ Trees bring a different bias: they like discrete splits. That happens to be a
 pretty good fit for dice, though not as direct as telling the model that dice
 are an unordered set.
 
+Notes on Observational Datasets vs. Controlled Experiments
+----------------------------------------------------------
+
+How much easier the problem would be if we could *choose* which dice
+to get an answer for! We could set them to all 1, then all 2, and so forth
+and in 6 trials have a clear hypothesis for the true rule. A few dozen
+more experiments to confirm the independence of position, and we'd know
+beyond a reasonable doubt.
+
+Instead, it's quite difficult to even remember all the random results
+we've been shown so far.
+
+
+Did Any of These ML Methods Truly Solve It?
+-------------------------------------------
+
+Imagine if you had figured out the rule, and then were
+shown this generalization to twelve-sided dice. These dice
+are dodecahedron so have pentagonal faces. 
+
+![d12 showing five and six with pips](/post/rose-petals_files/pentagonal.png)
+
+If you had learned the rule "n-1 but only for odd n" then you
+would get it exactly wrong; but if you had listened to all the clues,
+and *really* understood the rule, you'd answer immediately and 
+confidently, even though you are generalizing well outside anything in
+the original training set.
+
+Hinton on World Models,
+François Chollet's ARC-AGI on visual learning, etc.
+
+
+
+History of Language Models
+--------------------------
+
+* Markov
+* RNN
+* Transformer
+
+TODO: "Next token predictor" is a shallow understanding; these 
+are all "next token predictors" but some of them work better than others.
+
+A better question is to ask what it is that makes the transformer a good
+model for language.
+
+Markov chain was too broad - it could learn any pattern, so needed a needed
+an infinite amount of data to learn anything. 
+
+RNNs were too broad - by squeezing down all history and memory into a single
+state vector, they simply did too much violence to the underlying meaning.
+
+Transformers hit a sweet spot - by using recent history as a working memory,
+and focusing in on different parts of that history at different times, they
+are able to.
+
+
+The Tragedy of Auto ML
+----------------------
+
+You might think you can cleverly
+avoid this problem by simply trying every possible approach, but in many
+ways that's the worst of all possible solutions: guaranteed to be slower
+and struggles with multiple hypothesis testing.
+
+What auto ML tools actually do is make very easy learning problems
+even easier. This is quite frankly not worth paying for.
+
+
+Nous
+----
+
+If we can't brute force it, what's left? The Greek's called it *Nous*
+the minds capability to apprehend axioms. How do we do it? Nobody knows.
+
+
+Einstein
+--------
+
+Einstein had an inductive bias towards pure geometry. It's largely
+the same bias which lead us towards string theory. It worked beautifully
+for some problems, and then didn't work on others.
+
+We have an algorithm, more or less: throw a thousand of the most
+brilliant, most creative brains at the problem and hope one of them has
+an idea. The process is spectacularly inefficient, and honestly a bit
+cruel towards the grad students.
+
+You can't linear your way out of an exponential problem. You're
+standing at the bottom of a cliff and hoping to scale it by sending
+in wave after wave of naive, optimistic grad students until you've
+built a ramp out of their wasted lives? Good luck with that.
+
+
+Arguments Against the Existence of Any Such Method
+--------------------------------------------------
+
+Emergent phenomenon such a entropy, turbulence, evolution, arise out
+of complex systems and must be studied empirically. While there might
+be reason to believe the fundamental laws of nature must in some sense
+be very simple, there's no reason at all to believe that a complex emergent
+phenomenon would even need to have any solution or explanation simpler than
+itself. 
+
+
+Also, Against Method, Paul Feyerabend
+
+
+
+Promising Avenues
+-----------------
+
+* Machine Learning - it's teaching us a *lot* about induction
+* Casual Statistics - also chock full of insights, in particular about endogeneity
+* Computer Science - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.
+* Philosophy of Science - the [hypothetico-deductive method][HDM]
+
+
+
 Conclusion
 ----------
 
 Why is induction a wicked problem? Because there is no one right approach,
-only approaches which fit a given data set. You might think you can cleverly
-avoid this problem by simply trying every possible approach, but in many
-ways that's the worst of all possible solutions: guaranteed to be slower
-and struggles with multiple hypothesis testing. No, what's needed is *insight*
+only approaches which fit a given data set.  No, what's needed is *insight*
 to guide us towards *reasonable* hypotheses, but this is the part that's
 currently unsolved. You might think LLMs can do it, and they can, sort of,
 but no better than we can, and *we* don't know how to do it efficiently 
@@ -176,3 +304,4 @@ a better way.
 [DRP]: /demos/rose-petals/
 [RPSC]: https://github.com/olooney/rose-petals
 [RPSR]: https://htmlpreview.github.io/?https://github.com/olooney/rose-petals/blob/main/docs/approaches/summary.html
+[HDM]: https://en.wikipedia.org/wiki/Hypothetico-deductive_model
