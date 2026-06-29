@@ -4,21 +4,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>What Rose Petals Teach Us about Induction</title>
   <meta name="author" content="Oran Looney"/>
-  <meta name="description" content="What is the most important problem in your field, and why aren’t you working on it? —Richard Hamming
- For me, the answer simple: “is there a general method for induction?” This problem is really hard, and there are even some good reasons to believe the answer is simply, “No,” but I remain optimistic."/>
+  <meta name="description" content="Richard Hamming famously asked his colleagues at Bell Labs the following question: “What is the most important problem in your field, and why aren’t you working on it?” To which they probably replied, “Look, Dick, it’s eight-thirty in the morning. I haven’t even had my coffee yet. Who starts a conversation like that?"/>
   <link rel="canonical" href="https://www.oranlooney.com/post/rose-petals/"/>
   <meta property="og:title" content="What Rose Petals Teach Us about Induction"/>
-  <meta property="og:description" content="What is the most important problem in your field, and why aren’t you working on it? —Richard Hamming
- For me, the answer simple: “is there a general method for induction?” This problem is really hard, and there are even some good reasons to believe the answer is simply, “No,” but I remain optimistic."/>
+  <meta property="og:description" content="Richard Hamming famously asked his colleagues at Bell Labs the following question: “What is the most important problem in your field, and why aren’t you working on it?” To which they probably replied, “Look, Dick, it’s eight-thirty in the morning. I haven’t even had my coffee yet. Who starts a conversation like that?"/>
   <meta property="og:type" content="article"/>
   <meta property="og:url" content="https://www.oranlooney.com/post/rose-petals/"/>
   <meta property="og:site_name" content="OranLooney.com"/>
   <meta name="twitter:card" content="summary"/>
   <meta name="twitter:title" content="What Rose Petals Teach Us about Induction"/>
-  <meta name="twitter:description" content="What is the most important problem in your field, and why aren’t you working on it? —Richard Hamming
- For me, the answer simple: “is there a general method for induction?” This problem is really hard, and there are even some good reasons to believe the answer is simply, “No,” but I remain optimistic."/>
+  <meta name="twitter:description" content="Richard Hamming famously asked his colleagues at Bell Labs the following question: “What is the most important problem in your field, and why aren’t you working on it?” To which they probably replied, “Look, Dick, it’s eight-thirty in the morning. I haven’t even had my coffee yet. Who starts a conversation like that?"/>
   <meta property="article:published_time" content="2026-06-20T00:00:00Z"/>
-  <meta property="article:tag" content="Databases"/>
+  <meta property="article:tag" content="Philosophy"/>
+  <meta property="article:tag" content="Machine Learning"/>
+  <meta property="article:tag" content="LLM"/>
+  <meta property="article:tag" content="Visualization"/>
   <meta name="theme-color" content="#ffffff"/>
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -91,9 +91,27 @@
         </li>
         <li class="article-meta-date"><time>June 20, 2026</time></li>
         <li class="article-meta-tags">
-          <a href="/tags/databases/">
+          <a href="/tags/philosophy/">
             <i class="fas fa-tag"></i>
-            Databases
+            Philosophy
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/machine-learning/">
+            <i class="fas fa-tag"></i>
+            Machine Learning
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/llm/">
+            <i class="fas fa-tag"></i>
+            LLM
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/visualization/">
+            <i class="fas fa-tag"></i>
+            Visualization
           </a>&nbsp;
         </li>
       </ul>
@@ -104,18 +122,19 @@
 <li>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
+<li><a href="#the-game">The Game</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#eda">EDA</a></li>
 <li><a href="#linear">Linear</a></li>
 <li><a href="#neural-nets">Neural Nets</a></li>
 <li><a href="#trees">Trees</a></li>
-<li><a href="#observational-data-is-harder-to-learn-from">Observational Data is Harder to Learn From</a></li>
-<li><a href="#did-any-of-these-ml-methods-truly-solve-it">Did Any of These ML Methods Truly Solve It?</a></li>
+<li><a href="#observational-data">Observational Data</a></li>
+<li><a href="#did-they-really-solve-it">Did They Really Solve It?</a></li>
 <li><a href="#history-of-language-models">History of Language Models</a></li>
 <li><a href="#the-tragedy-of-auto-ml">The Tragedy of Auto ML</a></li>
-<li><a href="#nous">Nous</a></li>
-<li><a href="#einstein">Einstein</a></li>
-<li><a href="#arguments-against-the-existence-of-any-such-method">Arguments Against the Existence of Any Such Method</a></li>
+<li><a href="#greek-philosophy">Greek Philosophy</a></li>
+<li><a href="#scientific-method">Scientific Method</a></li>
+<li><a href="#arguments-against">Arguments Against</a></li>
 <li><a href="#promising-avenues">Promising Avenues</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></li>
@@ -124,24 +143,46 @@
 </aside>
       
 
-<blockquote>
-<p>What is the most important problem in your field, and why aren&rsquo;t you working on it?
-<br>&mdash;Richard Hamming</p>
-</blockquote>
+<p>Richard Hamming famously asked his colleagues at Bell Labs the following
+question: &ldquo;What is the most important problem in your field, and why aren&rsquo;t you
+working on it?&rdquo; To which they probably replied, &ldquo;Look, Dick, it&rsquo;s eight-thirty
+in the morning. I haven&rsquo;t even had my coffee yet. Who starts a conversation
+like that?&rdquo;</p>
 
-<p>For me, the answer simple: &ldquo;is there a general method for induction?&rdquo; This
-problem is really hard, and there are even some good reasons to believe the
-answer is simply, &ldquo;No,&rdquo; but I remain optimistic.</p>
+<p>For me, the answer to Hamming&rsquo;s challenge is obvious: &ldquo;is there a general
+method for induction?&rdquo; Now, you might think that the human race has a pretty
+good handle on induction, what with the scientific method and statistics and
+all that. But no: there&rsquo;s a hole in the very foundation of our understanding, a
+gap we can only cross haphazardly and occasionally.</p>
+
+<p>Hume simply called in the problem of induction; a catchier name is the No Free
+Lunch theorem, although its about as far from being  a &ldquo;theorem&rdquo; as its
+possible to get. And it is simple this: there is no general, systematic way to
+go from observation to understanding.</p>
+
+<p>If this is your first time encountering the idea, it&rsquo;s likely you don&rsquo;t see
+what the big deal is. Don&rsquo;t we all do this all the time, without even thinking
+about it? We do, but don&rsquo;t know <em>how</em> we do it, which causes problems. I mean,
+I don&rsquo;t want to oversell it, but its probably the limiting factor on all
+scientific progress, and possibly political and moral progress as well.</p>
+
+<p><img src="/post/rose-petals_files/bob.gif" alt="It changes you forever" /></p>
 
 <p>What&rsquo;s needed is a simple, concrete example which illustrates the idea without
-any particular need for mathematical sophistication.</p>
+any particular need for mathematical sophistication. I&rsquo;m going to give just
+such an example, show why choosing the right inductive bias is both crucial and
+really hard, and then connect it back to the themes above.</p>
+
+<p>Also, as is required by law for a blog post written in 2026, I&rsquo;ll connect it to
+large language models and explain why you&rsquo;re embarrassing yourself when you
+dismiss LLMs as &ldquo;merely next token predictors.&rdquo;</p>
+
+<h2 id="the-game">The Game</h2>
 
 <p>Petals Around the Rose is a deep, profound lesson about the philosophical
 problem of induction disguised as a simple dice game.</p>
 
-<p>&ldquo;No Free Lunch&rdquo;.</p>
-
-<p>If you have never heard of it before, you can experience it yourself below.
+<p>If you&rsquo;ve never heard of it before, you can experience it yourself below.
 After that, we&rsquo;ll try tackling it with a few different algorithmic approaches,
 and see if we can&rsquo;t glean any insight into the fundamental problem of induction
 itself.</p>
@@ -168,11 +209,29 @@ itself.</p>
 
 <p><img src="/post/rose-petals_files/summary_chart.png" alt="Summary chart of different approaches" /></p>
 
+<p>Here&rsquo;s how to read this chart. Various learning algorithms were gradually an
+increasing number of examples of the game. Each example consists of the five
+numbers for the five dice rolls as well as the correct number of petals around
+the rose for those dice. Each algorithm does its best to learn a function which
+maps the dice rolls to the number of petals. Then, its performance is evaluated
+on a <em>different</em> set of examples, ones it hasn&rsquo;t seen before and wasn&rsquo;t trained
+on. Whatever number the function outputs for a given dice roll is rounded to
+the nearest integer and marked correct if it exactly matches the true number of
+petals; if its off by even one it&rsquo;s marked incorrect. The test accuracy is the
+proportion dice rolls that it gets correct.</p>
+
+<p>Something very interesting is apparent in the shape of the curves. Each appears
+to require a certain minimum number of examples before they start to learn
+anything at all, but after that progress is extremely rapid and quickly
+saturates at 100%. This is true across a wide variety of algorithms having very
+different designs; the specific number of examples they need varies, but this
+pattern holds true across them all. Perhaps this mirrors your own experience?</p>
+
 <p>The key concept is <a href="https://en.wikipedia.org/wiki/Inductive_bias">inductive bias</a>. Models with an inductive bias that
 matches the specific structure of the problem can learn quickly, sometimes from
 just a handful of examples. Meanwhile, less specific, more general models with
-a larger hypothesis space to explore need far more examples to convince themselves
-that the patterns they&rsquo;re seeing are true.</p>
+a larger hypothesis space to explore need far more examples to convince
+themselves that the patterns they&rsquo;re seeing are true.</p>
 
 <p>The summary makes the point in one picture: the more a model already &ldquo;knows&rdquo;
 about the shape of the problem, the less evidence it needs before it can settle
@@ -193,18 +252,19 @@ can make patterns obvious.</p>
 
 <h2 id="linear">Linear</h2>
 
-<p>A plain linear model is the obvious first baseline. It is also a useful reminder
-that obvious is not the same thing as appropriate.</p>
+<p>An intentionally naive linear model serves as a baseline:</p>
 
 <p><img src="/post/rose-petals_files/naive_linear.png" alt="naive_linear.png" /></p>
 
-<p>This model sees numbers, not dice faces. It can notice that five tends to matter
-more than two, but it has no natural way to express &ldquo;center pip&rdquo; or &ldquo;outer pip.&rdquo;</p>
+<p>This algorithm <em>cannot</em> solve the problem. It never will; its hypothesis space is
+literally incapable of representing the true solution.</p>
 
-<p><img src="/post/rose-petals_files/categorical_linear.png" alt="categorical_linear.png" /></p>
+<p>We can make the</p>
 
 <p>One-hot features give the model a better vocabulary. Now it can treat each face
 as a separate case, which is already much closer to the structure of the game.</p>
+
+<p><img src="/post/rose-petals_files/categorical_linear.png" alt="categorical_linear.png" /></p>
 
 <h2 id="neural-nets">Neural Nets</h2>
 
@@ -237,25 +297,57 @@ lost.</p>
 would. Its not looking for rules, just building up and refining an intuition
 for where it&rsquo;s &ldquo;high&rdquo; or &ldquo;low.&rdquo;</p>
 
-<p>Let&rsquo;s try Deepset, which has the correct inductive bias:</p>
+<p>Let&rsquo;s try DeepSet, which has a different inductive bias. The DeepSet
+architecture bakes in the assumption that the order of the dice does not
+matter.</p>
 
 <p><img src="/post/rose-petals_files/deepset_petals_architecture.png" alt="deepset_petals_architecture.png" /></p>
 
-<p>The DeepSet architecture builds in the assumption that the order of the dice
-does not matter. That single assumption removes a great deal of irrelevant
-complexity.</p>
+<p>The code is almost embarassingly simple with pytorch:</p>
 
-<p>The difference is night and day:</p>
+<pre><code class="language-python">class DeepSetNN(nn.Module):
+    def __init__(
+        self, input_dim: int, phi_hidden_dim: int, phi_dim: int, rho_dim: int
+    ) -&gt; None:
+        super().__init__()
+        self.phi = nn.Sequential(
+            nn.Linear(input_dim, phi_hidden_dim),
+            nn.ReLU(),
+            nn.Linear(phi_hidden_dim, phi_dim),
+            nn.ReLU(),
+        )
+        self.rho = nn.Sequential(
+            nn.Linear(phi_dim, rho_dim),
+            nn.ReLU(),
+            nn.Linear(rho_dim, 1),
+        )
+
+    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+        phi_x = self.phi(x)
+        sum_phi = phi_x.sum(dim=1)
+        return self.rho(sum_phi)
+
+</code></pre>
+
+<p>Since this the case for the true rule, this inductive bias should help it learn
+the pattern more quickly, and in fact the difference is night and day:</p>
 
 <p><img src="/post/rose-petals_files/deepset.png" alt="deepset.png" /></p>
 
-<p>Once the model is allowed to think in sets, the rule becomes small again. It no
-longer has to learn five separate copies of the same idea.</p>
+<p>The DeepSet model doesn&rsquo;t have to &ldquo;relearn&rdquo; the rule separately for each die
+position; in fact, it&rsquo;s basically getting five independent &ldquo;lessons&rdquo; from each
+example, allowing it to learn the rule perfectly from just six examples (a
+total of 30 dice.)</p>
+
+<p>However, the risk is high: suppose the true rule <em>hadn&rsquo;t</em> been position
+independent? Then the DeepSet would have been completely unable to learn the
+rule at all (just like the naive linear example we first looked at) no matter
+how many examples it was shown.</p>
 
 <h2 id="trees">Trees</h2>
 
-<p>Compare the sharp, axis-aligned decision boundaries of decision
-trees to the softer ones found by stacking sigmoids together:</p>
+<p>Compare the sharp, axis-aligned decision boundaries of decision trees to the
+softer ones found by stacking sigmoids together:</p>
 
 <p><img src="/post/rose-petals_files/nn_vs_tree.png" alt="nn_vs_tree.png" title="Side-by-side 3D response surfaces of a neural network and a decision tree." /></p>
 
@@ -263,33 +355,31 @@ trees to the softer ones found by stacking sigmoids together:</p>
 pretty good fit for dice, though not as direct as telling the model that dice
 are an unordered set.</p>
 
-<h2 id="observational-data-is-harder-to-learn-from">Observational Data is Harder to Learn From</h2>
+<h2 id="observational-data">Observational Data</h2>
 
-<p>How much easier the problem would be if we could <em>choose</em> which dice
-to get an answer for! We could set them to all 1, then all 2, and so forth
-and in 6 trials have a clear hypothesis for the true rule. A few dozen
-more experiments to confirm the independence of position, and we&rsquo;d know
-beyond a reasonable doubt.</p>
+<p>How much easier the problem would be if we could <em>choose</em> which dice to get an
+answer for! We could set them to all 1, then all 2, and so forth and in 6
+trials have a clear hypothesis for the true rule. A few dozen more experiments
+to confirm the independence of position, and we&rsquo;d know beyond a reasonable
+doubt.</p>
 
-<p>Instead, it&rsquo;s quite difficult to even remember all the random results
-we&rsquo;ve been shown so far.</p>
+<p>Instead, it&rsquo;s quite difficult to even remember all the random results we&rsquo;ve
+been shown so far.</p>
 
-<h2 id="did-any-of-these-ml-methods-truly-solve-it">Did Any of These ML Methods Truly Solve It?</h2>
+<h2 id="did-they-really-solve-it">Did They Really Solve It?</h2>
 
-<p>Imagine if you had figured out the rule, and then were
-shown this generalization to twelve-sided dice. These dice
-are dodecahedron so have pentagonal faces.</p>
+<p>Imagine if you had figured out the rule, and then were shown this
+generalization to twelve-sided dice. These dice are dodecahedron so have
+pentagonal faces.</p>
 
 <p><img src="/post/rose-petals_files/pentagonal.png" alt="d12 showing five and six with pips" title="Two pentagonal faces of a twelve-sided die, one displaying five pips and the other six." /></p>
 
-<p>If you had learned the rule &ldquo;n-1 but only for odd n&rdquo; then you
-would get it exactly wrong; but if you had listened to all the clues,
-and <em>really</em> understood the rule, you&rsquo;d answer immediately and
-confidently, even though you are generalizing well outside anything in
-the original training set.</p>
+<p>If you had learned the rule &ldquo;n-1 but only for odd n&rdquo; then you would get it
+exactly wrong; but if you had listened to all the clues, and <em>really</em>
+understood the rule, you&rsquo;d answer immediately and confidently, even though you
+are generalizing well outside anything in the original training set.</p>
 
-<p>Hinton on World Models,
-François Chollet&rsquo;s ARC-AGI on visual learning, etc.</p>
+<p>Hinton on World Models, François Chollet&rsquo;s ARC-AGI on visual learning, etc.</p>
 
 <h2 id="history-of-language-models">History of Language Models</h2>
 
@@ -299,8 +389,8 @@ François Chollet&rsquo;s ARC-AGI on visual learning, etc.</p>
 <li>Transformer</li>
 </ul>
 
-<p>TODO: &ldquo;Next token predictor&rdquo; is a shallow understanding; these
-are all &ldquo;next token predictors&rdquo; but some of them work better than others.</p>
+<p>TODO: &ldquo;Next token predictor&rdquo; is a shallow understanding; these are all &ldquo;next
+token predictors&rdquo; but some of them work better than others.</p>
 
 <p>A better question is to ask what it is that makes the transformer a good
 model for language.</p>
@@ -317,15 +407,14 @@ are able to.</p>
 
 <h2 id="the-tragedy-of-auto-ml">The Tragedy of Auto ML</h2>
 
-<p>You might think you can cleverly
-avoid this problem by simply trying every possible approach, but in many
-ways that&rsquo;s the worst of all possible solutions: guaranteed to be slower
-and struggles with multiple hypothesis testing.</p>
+<p>You might think you can cleverly avoid this problem by simply trying every
+possible approach, but in many ways that&rsquo;s the worst of all possible solutions:
+guaranteed to be slower and struggles with multiple hypothesis testing.</p>
 
 <p>What auto ML tools actually do is make very easy learning problems
 even easier. This is quite frankly not worth paying for.</p>
 
-<h2 id="nous">Nous</h2>
+<h2 id="greek-philosophy">Greek Philosophy</h2>
 
 <p>If we can&rsquo;t brute force it, what&rsquo;s left? The Greek&rsquo;s called it <em>Nous</em>
 the minds capability to apprehend axioms. How do we do it? Nobody knows.</p>
@@ -338,7 +427,9 @@ that finds the pattern, that moves from the particular to the universal.</p>
 <p>It&rsquo;s hard to define, but if you solved Petals Around the Rose then I
 don&rsquo;t <em>need</em> to define it for you: you experienced it yourself, first-hand.</p>
 
-<h2 id="einstein">Einstein</h2>
+<h2 id="scientific-method">Scientific Method</h2>
+
+<p>TODO</p>
 
 <p>Einstein had an inductive bias towards pure geometry. It&rsquo;s largely
 the same bias which lead us towards string theory. It worked beautifully
@@ -354,92 +445,97 @@ standing at the bottom of a cliff and hoping to scale it by sending
 in wave after wave of naive, optimistic grad students until you&rsquo;ve
 built a ramp out of their wasted lives? Good luck with that.</p>
 
-<h2 id="arguments-against-the-existence-of-any-such-method">Arguments Against the Existence of Any Such Method</h2>
+<h2 id="arguments-against">Arguments Against</h2>
 
-<p>Emergent phenomenon such a entropy, turbulence, evolution, arise out
-of complex systems and must be studied empirically. While there might
-be reason to believe the fundamental laws of nature must in some sense
-be very simple, there&rsquo;s no reason at all to believe that a complex emergent
-phenomenon would even need to have any solution or explanation simpler than
-itself.</p>
+<p>Emergent phenomenon such a entropy, turbulence, evolution, arise out of complex
+systems and must be studied empirically. While there might be reason to believe
+the fundamental laws of nature must in some sense be very simple, there&rsquo;s no
+reason at all to believe that a complex emergent phenomenon would even need to
+have any solution or explanation simpler than itself.</p>
 
-<p>Wolfram once posed the &ldquo;Rule 30 Challenge:&rdquo; find a way to predict
-the long term behavior of a simple cellular automata without actually
-running the simulation. He offered a $30,000 prize which has so far
-gone unclaimed; if such a simple system can resist reduction, what
-are the implications for real-world phenomena? How can there be any
-general method of finding the right rule if there is no rule to find?</p>
+<p>Wolfram once posed the &ldquo;Rule 30 Challenge:&rdquo; find a way to predict the long term
+behavior of a simple cellular automata without actually running the simulation.
+He offered a $30,000 prize which has so far gone unclaimed; if such a simple
+system can resist reduction, what are the implications for real-world
+phenomena? How can there be any general method of finding the right rule if
+there is no rule to find?</p>
 
 <p><img src="/post/rose-petals_files/rule_30.png" alt="Rule 30, illustrated" title="Visualization of the Rule 30 cellular automata. Each row is computed from the row above by a simple rule, yet it displays aperiodic patterns." /></p>
 
-<p>Paul Feyerabend wrote a book called <em>Against Method</em>. He took a
-long, hard look at the history of science as it was actually
-practiced and pointed out that science didn&rsquo;t advance by any
-fixed, repeatable method; in fact, it is precisely when we
-abandon all methodology and best practice that great leaps forward
-occur. To be clear, he wasn&rsquo;t against rigor or careful thinking,
-but against ossified, rigid methods, the kind that puts your brain
-on autopilot&mdash;in other words, precisely the kind of cargo
-cult adherence to prior art that tends to develop over time
-in any mature field. This suggests that any attempt to pin
-down some kind of general method of induction isn&rsquo;t just doomed:
-it&rsquo;s actively harmful.</p>
+<p>Paul Feyerabend wrote a book called <em>Against Method</em>. He took a long, hard look
+at the history of science as it was actually practiced and pointed out that
+science didn&rsquo;t advance by any fixed, repeatable method; in fact, it is
+precisely when we abandon all methodology and best practice that great leaps
+forward occur. To be clear, he wasn&rsquo;t against rigor or careful thinking, but
+against ossified, rigid methods, the kind that puts your brain on
+autopilot&mdash;in other words, precisely the kind of cargo cult adherence to
+prior art that tends to develop over time in any mature field. This suggests
+that any attempt to pin down some kind of general method of induction isn&rsquo;t
+just doomed: it&rsquo;s actively harmful.</p>
 
-<p>Luckily for me, this is more of a theoretical possibility,
-because as of right now we don&rsquo;t have the faintest clue how to do it.</p>
+<p>Luckily for me, this is more of a theoretical possibility, because as of right
+now we don&rsquo;t have the faintest clue how to do it.</p>
 
 <p><img src="/post/rose-petals_files/combing_the_desert.jpg" alt="Summary of current progress" title="Two soldiers explain to their superior officer that they haven't found anything yet." /></p>
 
 <h2 id="promising-avenues">Promising Avenues</h2>
 
-<p>Actually, that&rsquo;s not quite true: we&rsquo;ve learned quite a bit about induction
-in the 400 years since Francis Bacon first took a stab at systematizing it.</p>
+<p>Actually, that&rsquo;s not quite true: we&rsquo;ve learned quite a bit about induction in
+the 400 years since Francis Bacon first took a stab at systematizing it.</p>
 
 <p>Here are five subjects that seem to offer some insight into the problem:</p>
 
-<p><strong>Machine Learning</strong> - teaching machines to learn is teaching us a <em>lot</em> about how learning itself works.</p>
+<p><strong>Machine Learning</strong> - teaching machines to learn is teaching us a <em>lot</em> about
+how learning itself works.</p>
 
-<p><strong>Modern Statistics</strong> - also chock full of insights, in particular about endogeneity and causality.</p>
+<p><strong>Modern Statistics</strong> - also chock full of insights, in particular about
+endogeneity and causality.</p>
 
-<p><strong>Computer Science</strong> - the difficulty of induction is intimately tied up with computability - it all comes down to bounded rationality.</p>
+<p><strong>Computer Science</strong> - the difficulty of induction is intimately tied up with
+computability - it all comes down to bounded rationality.</p>
 
-<p><strong>Cognitive Psychology and Neuroscience</strong> - For example, the &ldquo;rostrolateral prefrontal cortex&rdquo;, a.k.a. <a href="https://en.wikipedia.org/wiki/Brodmann_area_10">Brodmann area 10</a>:</p>
+<p><strong>Cognitive Psychology and Neuroscience</strong> - For example, the &ldquo;rostrolateral
+prefrontal cortex&rdquo;, a.k.a. <a href="https://en.wikipedia.org/wiki/Brodmann_area_10">Brodmann area 10</a>:</p>
 
 <p><img src="/post/rose-petals_files/brodmann_area_10.png" alt="Brodmann area 10" title="A cytoarchitecture diagram of the brain with Brodmann area 10 highlighted." /></p>
 
-<p>is an area of the brain is associated with high-level cognitive integration. It is unusually large in humans compared to other mammals.</p>
+<p>is an area of the brain is associated with high-level cognitive integration. It
+is unusually large in humans compared to other mammals.</p>
 
-<p>It&rsquo;s not the &ldquo;Nous-center&rdquo; of the brain; that&rsquo;s not how brains work. But it might play an important role, and its interesting that
-it&rsquo;s distinct from spatial reasoning, memory, and language, suggesting that abstract reason is somehow separate from those functions.</p>
+<p>It&rsquo;s not the &ldquo;Nous-center&rdquo; of the brain; that&rsquo;s not how brains work. But it
+might play an important role, and its interesting that it&rsquo;s distinct from
+spatial reasoning, memory, and language, suggesting that abstract reason is
+somehow separate from those functions.</p>
 
-<p><strong>Philosophy of Science</strong> - has something to say about rejecting certain classes of bad theories,
-and the <a href="https://en.wikipedia.org/wiki/Hypothetico-deductive_model">hypothetico-deductive method</a> in particular gets at something important. But while it provides some good advice
-on testing hypotheses and a few pitfalls to avoid, it doesn&rsquo;t have a lot to say on finding good hypotheses in the first place.</p>
+<p><strong>Philosophy of Science</strong> - has something to say about rejecting certain
+classes of bad theories, and the <a href="https://en.wikipedia.org/wiki/Hypothetico-deductive_model">hypothetico-deductive method</a> in
+particular gets at something important. But while it provides some good advice
+on testing hypotheses and a few pitfalls to avoid, it doesn&rsquo;t have a lot to say
+on finding good hypotheses in the first place.</p>
 
-<p>For that, we&rsquo;re still stuck with Feyerbend&rsquo;s &ldquo;anything goes&rdquo; and Aristotle&rsquo;s <em>nous</em>.</p>
+<p>For that, we&rsquo;re still stuck with Feyerbend&rsquo;s &ldquo;anything goes&rdquo; and Aristotle&rsquo;s
+<em>nous</em>.</p>
 
 <h2 id="conclusion">Conclusion</h2>
 
 <p><em>Why</em> is induction a wicked problem? <em>Why</em> is there no free lunch? I believe
-its ultimately computational&mdash;the space of all possible hypotheses is simply
-too large to brute force.  No, what&rsquo;s needed is <em>insight</em>
-to guide us towards <em>reasonable</em> hypotheses. This is the part that&rsquo;s
-currently unsolved.</p>
+its ultimately computational&mdash;the space of all possible hypotheses is
+simply too large to brute force.  No, what&rsquo;s needed is <em>insight</em> to guide us
+towards <em>reasonable</em> hypotheses. This is the part that&rsquo;s currently unsolved.</p>
 
-<p>You might think LLMs can do it, and they can, sort of,
-but no better than we can, and <em>we</em> don&rsquo;t know how to do it efficiently
-yet.</p>
+<p>You might think LLMs can do it, and they can, sort of, but no better than we
+can, and <em>we</em> don&rsquo;t know how to do it efficiently yet.</p>
 
-<p>Our best approach is the collection of heuristics and methods called
-&ldquo;science,&rdquo; which you must have noticed is an almost unbelievable inefficient
-process. Scientific progress is measured in <em>lifetimes</em> spent for the smallest
-insight. It took us <em>thousands of years</em> to fit an ellipse through some
-points, or to realize that washing our hands was important. There&rsquo;s got to be
-a better way.</p>
+<p>Our best approach is the collection of heuristics and methods called &ldquo;science,&rdquo;
+which you must have noticed is an almost unbelievable inefficient process.
+Scientific progress is measured in <em>lifetimes</em> spent for the smallest insight.
+It took us <em>thousands of years</em> to fit an ellipse through some points, or to
+realize that washing our hands was important. There&rsquo;s got to be a better way.</p>
 
 <p>We already have so many pieces of the puzzle, so many good ideas. It&rsquo;s just
-that no one has been able to put them together yet. I really think someone will
-make a breakthrough in my lifetime. Maybe it will be you.</p>
+that no one has been able to put them together yet. Ironically, what&rsquo;s needed
+is <em>nous</em>, that inductive leap to a single brilliant insight. I really think
+someone will make a breakthrough in my lifetime. Maybe it will be you.</p>
 
     </article>
 
