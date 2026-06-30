@@ -20,42 +20,40 @@ like that?"
 For me, the answer to Hamming's challenge is obvious: "is there a general
 method for induction?" Now, you might think that the human race has a pretty
 good handle on induction, what with the scientific method and statistics and
-all that. But no: there's a hole in the very foundation of our understanding, a
-gap we can only cross haphazardly and occasionally.
+all that. But no: there's a gap in the very foundation of our understanding
+which we can only cross haphazardly and occasionally.
 
-Hume simply called in the problem of induction; a catchier name is the No Free
-Lunch theorem, although its about as far from being  a "theorem" as its
-possible to get. And it is simple this: there is no general, systematic way to
+Hume called in the [problem of induction][POI]; a catchier name is the [No Free
+Lunch theorem][NFL], although its about as far from being a "theorem" as its
+possible to get. And it is simply this: there is no general, systematic way to
 go from observation to understanding.
 
-If this is your first time encountering the idea, it's likely you don't see
-what the big deal is. Don't we all do this all the time, without even thinking
-about it? We do, but don't know *how* we do it, which causes problems. I mean,
-I don't want to oversell it, but its probably the limiting factor on all
-scientific progress, and possibly political and moral progress as well.
-
-![It changes you forever](/post/rose-petals_files/bob.gif)
+If you haven't encountered it, it's likely you don't see what the big deal is.
+Don't we all do this all the time, without even thinking about it? We do, but
+we don't know *how* we do it, which means we don't know how to teach it, how to
+automate it, or if we're ever doing it right.
 
 What's needed is a simple, concrete example which illustrates the idea without
 any particular need for mathematical sophistication. I'm going to give just
-such an example, show why choosing the right inductive bias is both crucial and
-really hard, and then connect it back to the themes above.
+such an example, show how various algorithmic approaches fair, and try to
+explain the unavoidable tradeoff at the heart of the problem.
 
-Also, as is required by law for a blog post written in 2026, I'll connect it to
-large language models and explain why you're embarrassing yourself when you
-dismiss LLMs as "merely next token predictors." 
+If all goes well, you'll not only understand something fundamental about one of
+the most important unsolved problems out there, you'll have developed a
+practical intuition that will help you understand, for example, why [François
+Chollet][FC] introduced the [ARC-AGI benchmark][ARC], why AI researches keep
+talking about [world models][WM], and what it means to say the [transformer
+achitecture][TA] hits a sweet spot for language models.
+
 
 The Game
 --------
 
-Petals Around the Rose is a deep, profound lesson about the philosophical 
-problem of induction disguised as a simple dice game.
-
-If you've never heard of it before, you can experience it yourself below.
-After that, we'll try tackling it with a few different algorithmic approaches,
-and see if we can't glean any insight into the fundamental problem of induction
-itself.
-
+It starts with a game. This is a bit of nerd folklore, traditionally passed
+down by a friend who knows the trick and judges you to be the right kind of
+person to enjoy it, but I've replicated the experience as nearly as possible
+here. You don't have to solve it, necessarily, but you do have to make an
+honest effort if you are to fully grasp the underlying lesson.
 
 <div class="require-js">
   <link rel="stylesheet" href="/demos/rose-petals/rose.css">
@@ -71,14 +69,20 @@ itself.
   </script>
 </div>
 
-Spoilers ahead!
 
-Overview
---------
+Algorithmic Approaches
+----------------------
 
-[Source code][RPSC] and [summary report][RPSR] are available on GitHub. Summary chart:
+The next step is to try to solve it, not with human intuition and
+out-of-the-box thinking, but systematically and rigorously. To that end, I've
+thrown the problem at a variety of machine learning algorithms. Some of them
+solve it almost immediately, some struggle for a long time before noticing the
+pattern, and some never solve it all. We'll go case-by-case to try to
+understand why each approach faired well or badly, but first let's just take a
+look at the high level results:
 
 ![Summary chart of different approaches](/post/rose-petals_files/summary_chart.png)
+
 
 Here's how to read this chart. Various learning algorithms were gradually an
 increasing number of examples of the game. Each example consists of the five
@@ -90,6 +94,9 @@ on. Whatever number the function outputs for a given dice roll is rounded to
 the nearest integer and marked correct if it exactly matches the true number of
 petals; if its off by even one it's marked incorrect. The test accuracy is the
 proportion dice rolls that it gets correct.
+
+(By the way, the full [source code][RPSC] and [summary report][RPSR] are
+available on GitHub if you're interested in those details.)
 
 Something very interesting is apparent in the shape of the curves. Each appears
 to require a certain minimum number of examples before they start to learn
@@ -104,9 +111,9 @@ just a handful of examples. Meanwhile, less specific, more general models with
 a larger hypothesis space to explore need far more examples to convince
 themselves that the patterns they're seeing are true.
 
-The summary makes the point in one picture: the more a model already "knows"
-about the shape of the problem, the less evidence it needs before it can settle
-on the rule.
+The pattern is emerges is very clear: the more assumptions a model makes about
+the shape of the problem, the less evidence it needs before it can settle on
+the rule.
 
 
 EDA
@@ -257,7 +264,7 @@ Did They Really Solve It?
 -------------------------
 
 Imagine if you had figured out the rule, and then were shown this
-generalization to twelve-sided dice. These dice are dodecahedron so have
+generalization to twelve-sided dice. Such dice are dodecahedrons so have
 pentagonal faces. 
 
 ![d12 showing five and six with pips](/post/rose-petals_files/pentagonal.png "Two pentagonal faces of a twelve-sided die, one displaying five pips and the other six.")
@@ -384,7 +391,7 @@ Promising Avenues
 Actually, that's not quite true: we've learned quite a bit about induction in
 the 400 years since Francis Bacon first took a stab at systematizing it.
 
-Here are five subjects that seem to offer some insight into the problem:
+Here are some subjects that seem to offer some insight into the problem:
 
 
 **Machine Learning** - teaching machines to learn is teaching us a *lot* about
@@ -396,18 +403,31 @@ endogeneity and causality.
 **Computer Science** - the difficulty of induction is intimately tied up with
 computability - it all comes down to bounded rationality.
 
-**Cognitive Psychology and Neuroscience** - For example, the "rostrolateral
-prefrontal cortex", a.k.a. [Brodmann area 10][BAT]:
+**Cognitive Psychology** - 
+
+has developed instruments to isolate this kind of thinking, such as [Raven's
+progressive matrices][RPM]:
+
+![Raven's Progressive Matrices](/post/rose-petals_files/ravens_matrices.png "A 3x3 grid showing a typical example of Raven's progressive matrices.")
+
+[Guilford's Alternate Uses Task][AUT] ("how many uses for a brick can you think of?")
+
+[Remote Associates Test][RAT] (find connections between sets of words)
+
+**Neuroscience** - For example, the "rostrolateral prefrontal cortex", a.k.a. [Brodmann area 10][BAT]:
+
 
 ![Brodmann area 10](/post/rose-petals_files/brodmann_area_10.png "A cytoarchitecture diagram of the brain with Brodmann area 10 highlighted.")
 
-is an area of the brain is associated with high-level cognitive integration. It
-is unusually large in humans compared to other mammals.
+is an area of the brain is associated with high-level cognitive integration and
+has been shown in fMRI studies to be active when solving problems like Raven's
+progressive matrices. It is unusually large in humans compared to other
+mammals.
 
 It's not the "Nous-center" of the brain; that's not how brains work. But it
 might play an important role, and its interesting that it's distinct from
-spatial reasoning, memory, and language, suggesting that abstract reason is
-somehow separate from those functions.
+spatial reasoning, memory, and language, suggesting that this kind of reasoning
+is somehow distinct from those functions.
 
 **Philosophy of Science** - has something to say about rejecting certain
 classes of bad theories, and the [hypothetico-deductive method][HDM] in
@@ -448,3 +468,12 @@ someone will make a breakthrough in my lifetime. Maybe it will be you.
 [RPSR]: https://htmlpreview.github.io/?https://github.com/olooney/rose-petals/blob/main/docs/approaches/summary.html
 [HDM]: https://en.wikipedia.org/wiki/Hypothetico-deductive_model
 [BAT]: https://en.wikipedia.org/wiki/Brodmann_area_10
+[POI]: https://en.wikipedia.org/wiki/Problem_of_induction
+[NFL]: https://en.wikipedia.org/wiki/No_free_lunch_theorem
+[FC]: https://en.wikipedia.org/wiki/Fran%C3%A7ois_Chollet
+[ARC]: https://arcprize.org/arc-agi
+[WM]: https://en.wikipedia.org/wiki/World_model_(artificial_intelligence)
+[TA]: https://en.wikipedia.org/wiki/Transformer_(deep_learning)
+[RPM]: https://en.wikipedia.org/wiki/Raven%27s_Progressive_Matrices
+[AUT]: https://en.wikipedia.org/wiki/Guilford%27s_Alternate_Uses
+[RAT]: https://en.wikipedia.org/wiki/Remote_Associates_Test

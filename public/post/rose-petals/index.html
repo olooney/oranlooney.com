@@ -123,7 +123,7 @@
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#the-game">The Game</a></li>
-<li><a href="#overview">Overview</a></li>
+<li><a href="#algorithmic-approaches">Algorithmic Approaches</a></li>
 <li><a href="#eda">EDA</a></li>
 <li><a href="#linear">Linear</a></li>
 <li><a href="#neural-nets">Neural Nets</a></li>
@@ -152,40 +152,38 @@ like that?&rdquo;</p>
 <p>For me, the answer to Hamming&rsquo;s challenge is obvious: &ldquo;is there a general
 method for induction?&rdquo; Now, you might think that the human race has a pretty
 good handle on induction, what with the scientific method and statistics and
-all that. But no: there&rsquo;s a hole in the very foundation of our understanding, a
-gap we can only cross haphazardly and occasionally.</p>
+all that. But no: there&rsquo;s a gap in the very foundation of our understanding
+which we can only cross haphazardly and occasionally.</p>
 
-<p>Hume simply called in the problem of induction; a catchier name is the No Free
-Lunch theorem, although its about as far from being  a &ldquo;theorem&rdquo; as its
-possible to get. And it is simple this: there is no general, systematic way to
+<p>Hume called in the <a href="https://en.wikipedia.org/wiki/Problem_of_induction">problem of induction</a>; a catchier name is the <a href="https://en.wikipedia.org/wiki/No_free_lunch_theorem">No Free
+Lunch theorem</a>, although its about as far from being a &ldquo;theorem&rdquo; as its
+possible to get. And it is simply this: there is no general, systematic way to
 go from observation to understanding.</p>
 
-<p>If this is your first time encountering the idea, it&rsquo;s likely you don&rsquo;t see
-what the big deal is. Don&rsquo;t we all do this all the time, without even thinking
-about it? We do, but don&rsquo;t know <em>how</em> we do it, which causes problems. I mean,
-I don&rsquo;t want to oversell it, but its probably the limiting factor on all
-scientific progress, and possibly political and moral progress as well.</p>
-
-<p><img src="/post/rose-petals_files/bob.gif" alt="It changes you forever" /></p>
+<p>If you haven&rsquo;t encountered it, it&rsquo;s likely you don&rsquo;t see what the big deal is.
+Don&rsquo;t we all do this all the time, without even thinking about it? We do, but
+we don&rsquo;t know <em>how</em> we do it, which means we don&rsquo;t know how to teach it, how to
+automate it, or if we&rsquo;re ever doing it right.</p>
 
 <p>What&rsquo;s needed is a simple, concrete example which illustrates the idea without
 any particular need for mathematical sophistication. I&rsquo;m going to give just
-such an example, show why choosing the right inductive bias is both crucial and
-really hard, and then connect it back to the themes above.</p>
+such an example, show how various algorithmic approaches fair, and try to
+explain the unavoidable tradeoff at the heart of the problem.</p>
 
-<p>Also, as is required by law for a blog post written in 2026, I&rsquo;ll connect it to
-large language models and explain why you&rsquo;re embarrassing yourself when you
-dismiss LLMs as &ldquo;merely next token predictors.&rdquo;</p>
+<p>If all goes well, you&rsquo;ll not only understand something fundamental about one of
+the most important unsolved problems out there, you&rsquo;ll have developed a
+practical intuition that will help you understand, for example, why <a href="https://en.wikipedia.org/wiki/Fran%C3%A7ois_Chollet">François
+Chollet</a> introduced the <a href="https://arcprize.org/arc-agi">ARC-AGI benchmark</a>, why AI researches keep
+talking about <a href="https://en.wikipedia.org/wiki/World_model_(artificial_intelligence)">world models</a>, and what it means to say the <a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning)">transformer
+achitecture</a> hits a sweet spot for language models.</p>
 
 <h2 id="the-game">The Game</h2>
 
-<p>Petals Around the Rose is a deep, profound lesson about the philosophical
-problem of induction disguised as a simple dice game.</p>
-
-<p>If you&rsquo;ve never heard of it before, you can experience it yourself below.
-After that, we&rsquo;ll try tackling it with a few different algorithmic approaches,
-and see if we can&rsquo;t glean any insight into the fundamental problem of induction
-itself.</p>
+<p>It starts with a game. This is a bit of nerd folklore, traditionally passed
+down by a friend who knows the trick and judges you to be the right kind of
+person to enjoy it, but I&rsquo;ve replicated the experience as nearly as possible
+here. You don&rsquo;t have to solve it, necessarily, but you do have to make an
+honest effort if you are to fully grasp the underlying lesson.</p>
 
 <div class="require-js">
   <link rel="stylesheet" href="/demos/rose-petals/rose.css">
@@ -201,11 +199,15 @@ itself.</p>
   </script>
 </div>
 
-<p>Spoilers ahead!</p>
+<h2 id="algorithmic-approaches">Algorithmic Approaches</h2>
 
-<h2 id="overview">Overview</h2>
-
-<p><a href="https://github.com/olooney/rose-petals">Source code</a> and <a href="https://htmlpreview.github.io/?https://github.com/olooney/rose-petals/blob/main/docs/approaches/summary.html">summary report</a> are available on GitHub. Summary chart:</p>
+<p>The next step is to try to solve it, not with human intuition and
+out-of-the-box thinking, but systematically and rigorously. To that end, I&rsquo;ve
+thrown the problem at a variety of machine learning algorithms. Some of them
+solve it almost immediately, some struggle for a long time before noticing the
+pattern, and some never solve it all. We&rsquo;ll go case-by-case to try to
+understand why each approach faired well or badly, but first let&rsquo;s just take a
+look at the high level results:</p>
 
 <p><img src="/post/rose-petals_files/summary_chart.png" alt="Summary chart of different approaches" /></p>
 
@@ -219,6 +221,9 @@ on. Whatever number the function outputs for a given dice roll is rounded to
 the nearest integer and marked correct if it exactly matches the true number of
 petals; if its off by even one it&rsquo;s marked incorrect. The test accuracy is the
 proportion dice rolls that it gets correct.</p>
+
+<p>(By the way, the full <a href="https://github.com/olooney/rose-petals">source code</a> and <a href="https://htmlpreview.github.io/?https://github.com/olooney/rose-petals/blob/main/docs/approaches/summary.html">summary report</a> are
+available on GitHub if you&rsquo;re interested in those details.)</p>
 
 <p>Something very interesting is apparent in the shape of the curves. Each appears
 to require a certain minimum number of examples before they start to learn
@@ -369,7 +374,7 @@ been shown so far.</p>
 <h2 id="did-they-really-solve-it">Did They Really Solve It?</h2>
 
 <p>Imagine if you had figured out the rule, and then were shown this
-generalization to twelve-sided dice. These dice are dodecahedron so have
+generalization to twelve-sided dice. Such dice are dodecahedrons so have
 pentagonal faces.</p>
 
 <p><img src="/post/rose-petals_files/pentagonal.png" alt="d12 showing five and six with pips" title="Two pentagonal faces of a twelve-sided die, one displaying five pips and the other six." /></p>
@@ -483,7 +488,7 @@ now we don&rsquo;t have the faintest clue how to do it.</p>
 <p>Actually, that&rsquo;s not quite true: we&rsquo;ve learned quite a bit about induction in
 the 400 years since Francis Bacon first took a stab at systematizing it.</p>
 
-<p>Here are five subjects that seem to offer some insight into the problem:</p>
+<p>Here are some subjects that seem to offer some insight into the problem:</p>
 
 <p><strong>Machine Learning</strong> - teaching machines to learn is teaching us a <em>lot</em> about
 how learning itself works.</p>
@@ -494,18 +499,30 @@ endogeneity and causality.</p>
 <p><strong>Computer Science</strong> - the difficulty of induction is intimately tied up with
 computability - it all comes down to bounded rationality.</p>
 
-<p><strong>Cognitive Psychology and Neuroscience</strong> - For example, the &ldquo;rostrolateral
-prefrontal cortex&rdquo;, a.k.a. <a href="https://en.wikipedia.org/wiki/Brodmann_area_10">Brodmann area 10</a>:</p>
+<p><strong>Cognitive Psychology</strong> -</p>
+
+<p>has developed instruments to isolate this kind of thinking, such as <a href="https://en.wikipedia.org/wiki/Raven%27s_Progressive_Matrices">Raven&rsquo;s
+progressive matrices</a>:</p>
+
+<p><img src="/post/rose-petals_files/ravens_matrices.png" alt="Raven's Progressive Matrices" title="A 3x3 grid showing a typical example of Raven's progressive matrices." /></p>
+
+<p><a href="https://en.wikipedia.org/wiki/Guilford%27s_Alternate_Uses">Guilford&rsquo;s Alternate Uses Task</a> (&ldquo;how many uses for a brick can you think of?&rdquo;)</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Remote_Associates_Test">Remote Associates Test</a> (find connections between sets of words)</p>
+
+<p><strong>Neuroscience</strong> - For example, the &ldquo;rostrolateral prefrontal cortex&rdquo;, a.k.a. <a href="https://en.wikipedia.org/wiki/Brodmann_area_10">Brodmann area 10</a>:</p>
 
 <p><img src="/post/rose-petals_files/brodmann_area_10.png" alt="Brodmann area 10" title="A cytoarchitecture diagram of the brain with Brodmann area 10 highlighted." /></p>
 
-<p>is an area of the brain is associated with high-level cognitive integration. It
-is unusually large in humans compared to other mammals.</p>
+<p>is an area of the brain is associated with high-level cognitive integration and
+has been shown in fMRI studies to be active when solving problems like Raven&rsquo;s
+progressive matrices. It is unusually large in humans compared to other
+mammals.</p>
 
 <p>It&rsquo;s not the &ldquo;Nous-center&rdquo; of the brain; that&rsquo;s not how brains work. But it
 might play an important role, and its interesting that it&rsquo;s distinct from
-spatial reasoning, memory, and language, suggesting that abstract reason is
-somehow separate from those functions.</p>
+spatial reasoning, memory, and language, suggesting that this kind of reasoning
+is somehow distinct from those functions.</p>
 
 <p><strong>Philosophy of Science</strong> - has something to say about rejecting certain
 classes of bad theories, and the <a href="https://en.wikipedia.org/wiki/Hypothetico-deductive_model">hypothetico-deductive method</a> in
