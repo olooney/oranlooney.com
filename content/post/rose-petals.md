@@ -469,9 +469,8 @@ Aristotle didn't have a complete answer, but he did recognize the problem and
 knew that humans could in fact do it. He called this faculty [*nous*][N]: our
 capacity to discover first principles.
 
-It is not mere observation, a piling up of facts from sense; it is the
-mechanism. In his [book on logic][AO], Aristotle explained that *nous* is not
-deduction, because deduction has to start from something. It's the part of
+It is not mere observation, a piling up of facts from sense; in his [book on logic][AO], Aristotle explained that *nous* is
+distinct from deduction, because deduction has to start from something. It's the part of
 human reason that finds the pattern, that moves from the particular to the
 universal.
 
