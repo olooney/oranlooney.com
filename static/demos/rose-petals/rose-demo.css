@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    color: #444444;
+    font-family: Georgia, serif;
+    line-height: 1.2;
+}
+
+.rose {
+    font-size: 1.1em;
+}
+
+.rose h2,
+.rose h3,
+.rose h4 {
+    color: #800000;
+    font-weight: normal;
+}
+
+.rose a {
+    color: #800000;
+    text-decoration: none;
+}
+
+.rose a:hover,
+.rose a:active {
+    color: #AA0000;
+}
+
+    /* OWL Nav Header */
+header {
+    width: 100%;
+    background: #800000;
+}
+
+header nav {
+    text-align: center;
+    padding: 0.8em;
+}
+
+.site-title {
+    color: white;
+    text-decoration: none;
+    font-family: garamond, "Times New Roman", serif;
+    font-size: 44px;
+    line-height: 50px;
+    display: inline-block;
+}

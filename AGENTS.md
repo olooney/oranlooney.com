@@ -55,6 +55,7 @@ These instructions apply to the entire repository unless a more specific instruc
 ## Markdown Style
 
 - Use reference-style Markdown links for most prose links.
+- When the user asks to include post image assets, embed them with Markdown image syntax like `![alt text](/post/<post-slug>_files/image.png)` rather than plain links.
 - Link reference labels are usually short upper-case initialisms, for example `[ABC]`, `[WSC]`, or `[50PP]`.
 - Put link reference definitions at the bottom of the post, after any footnotes.
 - Preserve existing heading style within a post.

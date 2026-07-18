@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Petals Around the Rose</title>
   <link rel="stylesheet" href="rose.css" />
+   <link rel="stylesheet" href="rose-demo.css" />
 </head>
 <body>
   <header>
@@ -33,7 +34,7 @@
       </p>
       <p>
         You may reroll the dice as many times as necessary by clicking the
-        Reroll button, until you are confident know the rule. Then, click
+        Reroll button, until you are confident you know the rule. Then, click
         Reveal Solution to see the full explanation.
       </p>
 
@@ -70,7 +71,6 @@
       </ul>
       <p>The even numbered faces (2, 4, and 6) do not have a center pip, so contribute nothing to the total.</p>
       <p>Now that you have revealed the answer, petals will be shown in red; you may reroll to see other examples.</p>
-      <p>If you've read this far, you may also be interested in <a href="https://github.com/olooney/rose-petals">algorithmic approaches</a> to solving the game with various machine learning techniques.</p>
     </div>
   </div>
   <dialog id="rose-confirm">
@@ -80,6 +80,10 @@
       <button value="confirm">Reveal Solution</button>
     </form>
   </dialog>
-  <script src="rose.js" type="module"></script>
+  
+  <script type="module">
+    import { initializeRoseWidget } from './rose.js';
+    initializeRoseWidget('body');
+  </script>
 </body>
 </html>

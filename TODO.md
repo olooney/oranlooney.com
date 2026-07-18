@@ -24,7 +24,7 @@
 - [X] Considerate Data Modeler
   - [X] Add humor tag
 - [ ] Stacking Triangles / Angle Addition
-  - [ ] better lead photo
+  - [X] better lead photo
   - [ ] even/odd argument
 - [ ] Adaptive Basis Function
   - [ ] better intro
@@ -37,10 +37,10 @@
 ### Site-wide
 
   - [X] Multipart titles -> roman numerals
-  - [ ] Drop C++ tag, maybe others
-  - [ ] Start paging / infinite scrolling the home page?
-  - [ ] Lazy Load + Fixed Height on thumbnails?
-  - [ ] Larger RSS Icon
-  - [ ] Copyright in footer?
+  - [X] Drop C++ tag, maybe others
+  - [O] Start paging / infinite scrolling the home page?
+  - [X] Lazy Load + Fixed Height on thumbnails?
+  - [X] Larger RSS Icon
+  - [X] Copyright in footer?
   
 
