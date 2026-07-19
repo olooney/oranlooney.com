@@ -1,6 +1,7 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
 import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/PointerLockControls.js';
 
+/* Config */
 const SCALE = 8;
 const GROUND_SIZE = 500;
 const FOREST_SCALE = 7.0;
@@ -14,15 +15,74 @@ const GRAVITY = 32;
 const WALK_SPEED = 15;
 const RUN_SPEED = 30;
 const PLAYER_RADIUS = 2.0;
+const OPACITY_MIN = 0;
+const OPACITY_MAX = 1;
+const DEBUG_STEP_SECONDS = 1 / 60;
+const VECTOR3_COMPONENTS = 3;
+const LEFT_MOUSE_BUTTON = 0;
+const ANGLE_MIN = 0;
+const FULL_CIRCLE = Math.PI * 2;
+const TREE_HEIGHT_HALF_DIVISOR = 2;
+const BOARD_OFFSET = 1;
+const UNIT_CUBE_SIZE = 1;
+const CUBIE_PADDING = 0.005;
+const PIECE_OPACITY = 0.6;
+const EDGE_COLOR = 0x000000;
+const CAMERA_FOV = 60;
+const CAMERA_INITIAL_ASPECT = 1;
+const CAMERA_NEAR = 0.1;
+const CAMERA_FAR = 3000;
+const CAMERA_MIN_PITCH = -Math.PI / 2;
+const CAMERA_MAX_PITCH = Math.PI / 2;
+const PLAYER_START_X = 0;
+const PLAYER_START_Z = 20;
+const CLOUD_FIELD_CENTER_X = 0;
+const CLOUD_FIELD_CENTER_Z = 20;
+const FOG_COLOR = 0x87CEEB;
+const FOG_NEAR = 64;
+const FOG_FAR = 256;
+const DIRECTIONAL_LIGHT_COLOR = 0xffffff;
+const DIRECTIONAL_LIGHT_INTENSITY = 0.5;
+const DIRECTIONAL_LIGHT_POSITION = [4, 4, 0];
+const AMBIENT_LIGHT_COLOR = 0x808080;
+
+/* Ground */
+const GROUND_COLOR = 0xEBDDD1;
+const GROUND_Y = 0;
+const GROUND_ROTATION_X = -Math.PI / 2;
+const GRID_DIVISION_SIZE = 5;
+const GRID_COLOR_CENTER = 0x008800;
+const GRID_COLOR = 0x00AA00;
+const GRID_OPACITY = 0.5;
+const GRID_Y = 0.01;
+
+/* Trees */
+const TREE_HEIGHT_VARIATION_COUNT = 4;
+const TREE_HEIGHT_VARIATION_SCALE = 1.5;
+const BOARD_ROTATION_STEP = 10;
+const TRUNK_COLOR = 0x8B4513;
+const TRUNK_OPACITY = 0.7;
+const TRUNK_HEIGHT_PADDING = 0.1;
+const TRUNK_CENTER_X = 0;
+const TRUNK_CENTER_Z = 0;
+
+/* Explosions */
 const EXPLOSION_DISTANCE = 1.5;
 const EXPLOSION_TRIGGER_DISTANCE = 30;
 const EXPLOSION_SPEED = 0.3;
 const EXPLOSION_HANG_TIME = 2.0;
 const TARGET_OUTLINE_SIZE = 3.08;
+const TARGET_OUTLINE_COLOR = 0xffffff;
+const TARGET_OUTLINE_OPACITY = 0.5;
+const TARGET_OUTLINE_RENDER_ORDER = 1;
+
+/* SOMAP Mycelium Network */
 const SOMAP_MIN_SHARED_PIECES = 4;
 const SOMAP_NETWORK_Y = 0.04;
 const SOMAP_MIN_OPACITY = -0.1;
 const SOMAP_OPACITY_PER_SHARED_PIECE = 0.07;
+
+/* Clouds */
 const CLOUD_COUNT = 32;
 const CLOUD_FIELD_RADIUS = 1000;
 const CLOUD_MIN_HEIGHT = 100;
@@ -57,6 +117,8 @@ const CLOUD_LAYER_MIN_OFFSET_SCALE = 0.32;
 const CLOUD_LAYER_MAX_OFFSET_SCALE = 0.5;
 const CLOUD_MIN_Y_SCALE = 0.55;
 const CLOUD_MAX_Y_SCALE = 0.8;
+
+/* RNG */
 const RANDOM_INCREMENT = 0x6D2B79F5;
 const RANDOM_MULTIPLIER_ONE = 1;
 const RANDOM_SHIFT_ONE = 15;
@@ -64,21 +126,8 @@ const RANDOM_SHIFT_TWO = 7;
 const RANDOM_SHIFT_THREE = 14;
 const RANDOM_MULTIPLIER_TWO = 61;
 const RANDOM_UINT_MAX = 4294967296;
-const OPACITY_MIN = 0;
-const OPACITY_MAX = 1;
-const VECTOR3_COMPONENTS = 3;
-const LEFT_MOUSE_BUTTON = 0;
-const ANGLE_MIN = 0;
-const FULL_CIRCLE = Math.PI * 2;
-const TREE_HEIGHT_HALF_DIVISOR = 2;
-const BOARD_OFFSET = 1;
-const UNIT_CUBE_SIZE = 1;
-const CUBIE_PADDING = 0.005;
-const PIECE_OPACITY = 0.6;
-const EDGE_COLOR = 0x000000;
-const TARGET_OUTLINE_COLOR = 0xffffff;
-const TARGET_OUTLINE_OPACITY = 0.5;
-const TARGET_OUTLINE_RENDER_ORDER = 1;
+
+/* Skybox */
 const SKY_TEXTURE_WIDTH = 16;
 const SKY_TEXTURE_HEIGHT = 512;
 const SKY_RADIUS = 900;
@@ -90,6 +139,8 @@ const SKY_COLOR_STOPS = [
     [0.7, '#bfe3ff'],
     [1.0, '#eaf6ff']
 ];
+
+/* Help Instructions */
 const INSTRUCTION_LEFT = '50%';
 const INSTRUCTION_TOP = '25%';
 const INSTRUCTION_PADDING = '12px 16px';
@@ -98,41 +149,8 @@ const INSTRUCTION_BORDER = '1px solid #999';
 const INSTRUCTION_FONT = '32px sans-serif';
 const INSTRUCTION_Z_INDEX = '10';
 const INSTRUCTION_TRANSFORM = 'translate(-50%, -50%)';
-const CAMERA_FOV = 60;
-const CAMERA_INITIAL_ASPECT = 1;
-const CAMERA_NEAR = 0.1;
-const CAMERA_FAR = 3000;
-const CAMERA_MIN_PITCH = -Math.PI / 2;
-const CAMERA_MAX_PITCH = Math.PI / 2;
-const PLAYER_START_X = 0;
-const PLAYER_START_Z = 20;
-const CLOUD_FIELD_CENTER_X = 0;
-const CLOUD_FIELD_CENTER_Z = 20;
-const FOG_COLOR = 0x87CEEB;
-const FOG_NEAR = 64;
-const FOG_FAR = 256;
-const DIRECTIONAL_LIGHT_COLOR = 0xffffff;
-const DIRECTIONAL_LIGHT_INTENSITY = 0.5;
-const DIRECTIONAL_LIGHT_POSITION = [4, 4, 0];
-const AMBIENT_LIGHT_COLOR = 0x808080;
-const GROUND_COLOR = 0xEBDDD1;
-const GROUND_Y = 0;
-const GROUND_ROTATION_X = -Math.PI / 2;
-const GRID_DIVISION_SIZE = 5;
-const GRID_COLOR_CENTER = 0x008800;
-const GRID_COLOR = 0x00AA00;
-const GRID_OPACITY = 0.5;
-const GRID_Y = 0.01;
-const TREE_HEIGHT_VARIATION_COUNT = 4;
-const TREE_HEIGHT_VARIATION_SCALE = 1.5;
-const BOARD_ROTATION_STEP = 10;
-const TRUNK_COLOR = 0x8B4513;
-const TRUNK_OPACITY = 0.7;
-const TRUNK_HEIGHT_PADDING = 0.1;
-const TRUNK_CENTER_X = 0;
-const TRUNK_CENTER_Z = 0;
-const DEBUG_STEP_SECONDS = 1 / 60;
 
+/* Tetromino piece shapes */
 const tetrominos = [
     {"index": 0, "name": "L", "color": "green", "cubies": [[0, 0, 0], [0, 1, 0], [1, 0, 0], [2, 0, 0]]},
     {"index": 1, "name": "N", "color": "magenta", "cubies": [[0, 0, 0], [1, 0, 0], [1, 1, 0], [2, 1, 0]]},
@@ -142,7 +160,6 @@ const tetrominos = [
     {"index": 5, "name": "ΓR", "color": "purple", "cubies": [[0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 0, 1]]},
     {"index": 6, "name": "Γ", "color": "yellow", "cubies": [[0, 0, 0], [0, 1, 0], [1, 0, 0]]}
 ];
-
 tetrominos.forEach(tetromino => {
     tetromino.material = new THREE.MeshStandardMaterial({
         color: tetromino.color,
@@ -152,6 +169,7 @@ tetrominos.forEach(tetromino => {
     });
 });
 
+/* Set the scene */
 const cubieGeometry = new THREE.BoxGeometry(
     UNIT_CUBE_SIZE - CUBIE_PADDING * 2,
     UNIT_CUBE_SIZE - CUBIE_PADDING * 2,
@@ -182,6 +200,11 @@ const trunkMaterial = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide
 });
 
+/**
+ * Builds a renderable Soma cube tree crown from a 3D solution board.
+ * @param {number[][][]} board
+ * @returns {THREE.Group}
+ */
 function newBoardGroup(board) {
     const boardGroup = new THREE.Group();
     const pieceGroups = new Map();
@@ -256,6 +279,11 @@ function newBoardGroup(board) {
     return boardGroup;
 }
 
+/**
+ * Converts each colored piece in a solution into a canonical cubie-position signature.
+ * @param {number[][][]} solution
+ * @returns {string[]}
+ */
 function getPiecePositionSignatures(solution) {
     const piecePositions = tetrominos.map(() => []);
 
@@ -274,6 +302,13 @@ function getPiecePositionSignatures(solution) {
     return piecePositions.map(positions => positions.sort().join('|'));
 }
 
+/**
+ * Counts matching piece-position signatures between two indexed solutions.
+ * @param {string[][]} pieceSignatures
+ * @param {number} i
+ * @param {number} j
+ * @returns {number}
+ */
 function countSharedPieceSignatures(pieceSignatures, i, j) {
     let sharedPieces = 0;
 
@@ -286,6 +321,13 @@ function countSharedPieceSignatures(pieceSignatures, i, j) {
     return sharedPieces;
 }
 
+/**
+ * Counts how many colored pieces occupy identical cubies in two solutions.
+ * @param {number[][][][]} solutions
+ * @param {number} i
+ * @param {number} j
+ * @returns {number}
+ */
 function countSharedPieces(solutions, i, j) {
     return countSharedPieceSignatures([
         getPiecePositionSignatures(solutions[i]),
@@ -293,10 +335,22 @@ function countSharedPieces(solutions, i, j) {
     ], 0, 1);
 }
 
+/**
+ * Computes the line opacity for a SOMAP edge with the given shared-piece count.
+ * @param {number} sharedPieces
+ * @returns {number}
+ */
 function getSomapOpacity(sharedPieces) {
     return Math.min(OPACITY_MAX, SOMAP_MIN_OPACITY + SOMAP_OPACITY_PER_SHARED_PIECE * sharedPieces);
 }
 
+/**
+ * Builds the ground-level SOMAP network from shared piece positions.
+ * @param {number[][]} positions
+ * @param {number[][][][]} solutions
+ * @param {number} count
+ * @returns {THREE.Group}
+ */
 function newSomapNetwork(positions, solutions, count) {
     const pieceSignatures = solutions.slice(0, count).map(getPiecePositionSignatures);
     const edgePointsBySharedPieces = new Map();
@@ -340,6 +394,10 @@ function newSomapNetwork(positions, solutions, count) {
     return networkGroup;
 }
 
+/**
+ * Builds the gradient sky sphere enclosing the forest.
+ * @returns {THREE.Mesh}
+ */
 function newSky() {
     const skyCanvas = document.createElement('canvas');
         skyCanvas.width = SKY_TEXTURE_WIDTH;
@@ -379,6 +437,11 @@ function newSky() {
         return sky;
 }
 
+    /**
+     * Creates a deterministic pseudo-random number generator from a seed.
+     * @param {number} seed
+     * @returns {() => number}
+     */
 function newRandom(seed) {
     let state = seed;
 
@@ -392,14 +455,33 @@ function newRandom(seed) {
     };
 }
 
+/**
+ * Samples a random floating-point number in the given range.
+ * @param {() => number} random
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
 function randomBetween(random, min, max) {
     return min + random() * (max - min);
 }
 
+/**
+ * Samples a random integer in the inclusive range.
+ * @param {() => number} random
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
 function randomInt(random, min, max) {
     return Math.floor(randomBetween(random, min, max + 1));
 }
 
+/**
+ * Creates an unlit white cloud material with the given opacity.
+ * @param {number} opacity
+ * @returns {THREE.MeshBasicMaterial}
+ */
 function newCloudMaterial(opacity) {
     return new THREE.MeshBasicMaterial({
         color: CLOUD_COLOR,
@@ -411,12 +493,26 @@ function newCloudMaterial(opacity) {
     });
 }
 
+/**
+ * Builds the seeded field of blocky clouds around the given center.
+ * @param {number} centerX
+ * @param {number} centerZ
+ * @returns {THREE.Group}
+ */
 function newCloudField(centerX, centerZ) {
     const random = newRandom(CLOUD_SEED);
     const cloudGroup = new THREE.Group();
     const cloudGeometry = new THREE.BoxGeometry(UNIT_CUBE_SIZE, UNIT_CUBE_SIZE, UNIT_CUBE_SIZE);
     const cloudMaterials = CLOUD_MATERIAL_OPACITIES.map(newCloudMaterial);
 
+    /**
+     * Adds one cube to a cloud layer.
+     * @param {THREE.Group} parent
+     * @param {THREE.Vector3} position
+     * @param {number} size
+     * @param {number} depth
+     * @returns {{ position: THREE.Vector3, size: number, depth: number }}
+     */
     function addCloudCube(parent, position, size, depth) {
         const cube = new THREE.Mesh(cloudGeometry, cloudMaterials[depth]);
         cube.position.copy(position);
@@ -426,6 +522,13 @@ function newCloudField(centerX, centerZ) {
         return { position, size, depth };
     }
 
+    /**
+     * Adds one outward layer of smaller cubes around existing cloud cubes.
+     * @param {THREE.Group} parent
+     * @param {{ position: THREE.Vector3, size: number, depth: number }[]} sourceCubes
+     * @param {number} depth
+     * @returns {{ position: THREE.Vector3, size: number, depth: number }[]}
+     */
     function addCloudLayer(parent, sourceCubes, depth) {
         const nextCubes = [];
 
@@ -495,6 +598,13 @@ function newCloudField(centerX, centerZ) {
     return cloudGroup;
 }
 
+/**
+ * Renders an interactive first-person Soma cube forest into a container element.
+ * @param {number[][]} positions
+ * @param {number[][][][]} solutions
+ * @param {string} elementId
+ * @returns {void}
+ */
 function renderSomaCubeForest(positions, solutions, elementId) {
     const container = document.getElementById(elementId);
     container.style.position = 'relative';
@@ -566,7 +676,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         const treeHeight = TREE_HEIGHT + (i % TREE_HEIGHT_VARIATION_COUNT) / TREE_HEIGHT_VARIATION_SCALE;
 
         explodableCubes.push(boardGroup);
-    explodableCubies.push(...boardGroup.userData.cubies);
+        explodableCubies.push(...boardGroup.userData.cubies);
 
         boardGroup.rotation.y = i * BOARD_ROTATION_STEP;
 
@@ -619,6 +729,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     let debugControlsEnabled = false;
     let debugExplosionsFrozen = false;
 
+    /**
+     * Updates movement state when a keyboard control is pressed.
+     * @param {KeyboardEvent} event
+     * @returns {void}
+     */
     const onKeyDown = (event) => {
         switch (event.code) {
             case 'KeyW':
@@ -652,6 +767,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     };
 
+    /**
+     * Updates movement state when a keyboard control is released.
+     * @param {KeyboardEvent} event
+     * @returns {void}
+     */
     const onKeyUp = (event) => {
         switch (event.code) {
             case 'KeyW':
@@ -680,6 +800,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     };
 
+    /**
+     * Starts the normal exploded-view animation for a cube.
+     * @param {THREE.Group} boardGroup
+     * @returns {void}
+     */
     function triggerExplosion(boardGroup) {
         const explosion = boardGroup.userData.explosion;
 
@@ -692,6 +817,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     }
 
+    /**
+     * Holds a cube at full explosion for browser-driven inspection.
+     * @param {THREE.Group} boardGroup
+     * @returns {void}
+     */
     function holdExplosion(boardGroup) {
         const explosion = boardGroup.userData.explosion;
 
@@ -708,6 +838,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         applyExplosion(boardGroup);
     }
 
+    /**
+     * Explodes the currently targeted cube on left mouse click.
+     * @param {MouseEvent} event
+     * @returns {void}
+     */
     const onMouseDown = (event) => {
         if (event.button !== LEFT_MOUSE_BUTTON || !controls.isLocked) {
             return;
@@ -724,6 +859,10 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     document.addEventListener('keyup', onKeyUp);
     document.addEventListener('mousedown', onMouseDown);
 
+    /**
+     * Starts a jump when the player is grounded.
+     * @returns {void}
+     */
     function jump() {
         if (isGrounded) {
             verticalVelocity = JUMP_SPEED;
@@ -731,6 +870,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     }
 
+    /**
+     * Applies the current explosion progress to each colored piece group.
+     * @param {THREE.Group} boardGroup
+     * @returns {void}
+     */
     function applyExplosion(boardGroup) {
         const explosion = boardGroup.userData.explosion;
 
@@ -739,6 +883,12 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     }
 
+    /**
+     * Advances one cube's explosion animation state.
+     * @param {THREE.Group} boardGroup
+     * @param {number} delta
+     * @returns {void}
+     */
     function updateExplosion(boardGroup, delta) {
         const explosion = boardGroup.userData.explosion;
 
@@ -772,6 +922,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         applyExplosion(boardGroup);
     }
 
+    /**
+     * Keeps an inspected exploded cube open while it is targeted.
+     * @param {THREE.Group} boardGroup
+     * @returns {void}
+     */
     function refreshInspectedExplosion(boardGroup) {
         const explosion = boardGroup.userData.explosion;
 
@@ -788,6 +943,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     }
 
+    /**
+     * Finds the closest cube under the center-screen reticle.
+     * @param {{ includeDistance?: boolean }} [options]
+     * @returns {THREE.Group | { boardGroup: THREE.Group, distance: number } | null}
+     */
     function getTargetedCube(options = {}) {
         raycaster.setFromCamera(screenCenter, camera);
 
@@ -810,6 +970,10 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         return boardGroup;
     }
 
+    /**
+     * Updates target outline visibility and inspected explosion hold state.
+     * @returns {void}
+     */
     function updateTargetedCube() {
         const target = controls.isLocked || debugControlsEnabled ? getTargetedCube({ includeDistance: true }) : null;
 
@@ -837,6 +1001,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     }
 
+    /**
+     * Advances player movement, crouch, jump, and tree collision state.
+     * @param {number} delta
+     * @returns {void}
+     */
     function movePlayer(delta) {
         const player = controls.getObject();
         const speed = isRunning ? RUN_SPEED : WALK_SPEED;
@@ -905,26 +1074,53 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     }
 
     window.somaForestDebug = {
+        /**
+         * Enables pointer-lock-free debug controls.
+         * @returns {void}
+         */
         enable() {
             debugControlsEnabled = true;
             instructions.style.display = 'none';
         },
+        /**
+         * Disables pointer-lock-free debug controls.
+         * @returns {void}
+         */
         disable() {
             debugControlsEnabled = false;
             instructions.style.display = controls.isLocked ? 'none' : 'block';
         },
+        /**
+         * Freezes explosion animation updates.
+         * @returns {void}
+         */
         freezeExplosions() {
             debugExplosionsFrozen = true;
         },
+        /**
+         * Resumes explosion animation updates.
+         * @returns {void}
+         */
         resumeExplosions() {
             debugExplosionsFrozen = false;
         },
+        /**
+         * Rotates the debug camera by yaw and pitch deltas.
+         * @param {number} [yaw]
+         * @param {number} [pitch]
+         * @returns {void}
+         */
         look(yaw = 0, pitch = 0) {
             const player = controls.getObject();
 
             player.rotation.y += yaw;
             camera.rotation.x = Math.max(CAMERA_MIN_PITCH, Math.min(CAMERA_MAX_PITCH, camera.rotation.x + pitch));
         },
+        /**
+         * Sets debug movement button state.
+         * @param {{ forward?: boolean, backward?: boolean, left?: boolean, right?: boolean, running?: boolean, crouching?: boolean }} [movement]
+         * @returns {void}
+         */
         setMovement(movement = {}) {
             moveForward = Boolean(movement.forward);
             moveBackward = Boolean(movement.backward);
@@ -933,6 +1129,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
             isRunning = Boolean(movement.running);
             isCrouching = Boolean(movement.crouching);
         },
+        /**
+         * Advances the simulation by a fixed debug timestep.
+         * @param {number} [seconds]
+         * @returns {void}
+         */
         step(seconds = DEBUG_STEP_SECONDS) {
             movePlayer(seconds);
 
@@ -946,6 +1147,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
             renderer.render(scene, camera);
         },
         jump,
+        /**
+         * Explodes the current debug target, optionally holding it open.
+         * @param {{ hold?: boolean }} [options]
+         * @returns {boolean}
+         */
         explodeTarget(options = {}) {
             const target = getTargetedCube({ includeDistance: true });
 
@@ -961,6 +1167,10 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
             return false;
         },
+        /**
+         * Returns current debug camera, movement, and target state.
+         * @returns {{ position: number[], yaw: number, pitch: number, isGrounded: boolean, isCrouching: boolean, isRunning: boolean, debugExplosionsFrozen: boolean, targetDistance: number | null, hasTarget: boolean }}
+         */
         getState() {
             const player = controls.getObject();
             const target = getTargetedCube({ includeDistance: true });
@@ -979,6 +1189,10 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     };
 
+    /**
+     * Synchronizes renderer and camera dimensions with the container.
+     * @returns {void}
+     */
     function syncSize() {
         const width = container.clientWidth;
         const height = container.clientHeight || 1;
@@ -994,6 +1208,10 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
     let prevTime = performance.now();
 
+    /**
+     * Runs one animation frame for movement, explosions, targeting, and rendering.
+     * @returns {void}
+     */
     function animate() {
         requestAnimationFrame(animate);
 
