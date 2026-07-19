@@ -4,8 +4,8 @@
 
 - [X] Flip Gallery
 - [ ] Soma Forest
-  - [ ] add jump and crouch
-  - [ ] explode trees on click
+  - [X] add jump and crouch
+  - [X] explode trees on click
   - [ ] add Conway connections
 - [ ] A Random Walk in Z5
   - [ ] add mobile touch support
@@ -33,6 +33,8 @@
 - [ ] Craps
   - [ ] remove symmetry
 - [X] Remove quote flashcard shadow
+- [X] Rose Petals
+- [ ] Code Quality Apocalypse?
 
 ### Site-wide
 
@@ -42,5 +44,6 @@
   - [X] Lazy Load + Fixed Height on thumbnails?
   - [X] Larger RSS Icon
   - [X] Copyright in footer?
+  - [ ] Remove StackOverflow Link
   
 

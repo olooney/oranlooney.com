@@ -7,6 +7,17 @@ const FOREST_SCALE = 7.0;
 const TREE_HEIGHT = 4.0;
 const TRUNK_WIDTH = 0.6;
 const EYE_HEIGHT = 3;
+const CROUCH_EYE_HEIGHT = 1.7;
+const CROUCH_DURATION = 0.2;
+const JUMP_SPEED = 12;
+const GRAVITY = 32;
+const WALK_SPEED = 15;
+const RUN_SPEED = 30;
+const EXPLOSION_DISTANCE = 1.5;
+const EXPLOSION_TRIGGER_DISTANCE = 30;
+const EXPLOSION_SPEED = 0.3;
+const EXPLOSION_HANG_TIME = 2.0;
+const TARGET_OUTLINE_SIZE = 3.08;
 
 const tetrominos = [
     {"index": 0, "name": "L", "color": "green", "cubies": [[0, 0, 0], [0, 1, 0], [1, 0, 0], [2, 0, 0]]},
@@ -30,10 +41,20 @@ tetrominos.forEach(tetromino => {
 const padding = 0.005;
 const cubieGeometry = new THREE.BoxGeometry(1 - padding * 2, 1 - padding * 2, 1 - padding * 2);
 const edgesBoxGeometry = new THREE.BoxGeometry(1, 1, 1);
+const targetOutlineGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(TARGET_OUTLINE_SIZE, TARGET_OUTLINE_SIZE, TARGET_OUTLINE_SIZE));
+const targetOutlineMaterial = new THREE.LineBasicMaterial({
+    color: 0xffffff,
+    depthTest: false,
+    transparent: true,
+    opacity: 0.5
+});
 
 function newBoardGroup(board) {
     const boardGroup = new THREE.Group();
     const offset = 1;
+    const pieceGroups = new Map();
+    const pieces = [];
+    const cubies = [];
 
     for (let x = 0; x < board.length; x++) {
         for (let y = 0; y < board[x].length; y++) {
@@ -42,21 +63,60 @@ function newBoardGroup(board) {
 
                 if (tetrominoIndex > 0) {
                     const tetrominoData = tetrominos[tetrominoIndex - 1];
+                    let pieceGroup = pieceGroups.get(tetrominoIndex);
+
+                    if (!pieceGroup) {
+                        pieceGroup = new THREE.Group();
+                        pieceGroup.userData.directionSum = new THREE.Vector3();
+                        pieceGroup.userData.cubieCount = 0;
+                        pieceGroups.set(tetrominoIndex, pieceGroup);
+                        boardGroup.add(pieceGroup);
+                    }
 
                     const cubie = new THREE.Mesh(cubieGeometry, tetrominoData.material);
                     cubie.position.set(x - offset, y - offset, z - offset);
+                    cubie.userData.boardGroup = boardGroup;
 
                     const edgesGeometry = new THREE.EdgesGeometry(edgesBoxGeometry);
                     const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
                     const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
                     edges.position.copy(cubie.position);
 
-                    boardGroup.add(cubie);
-                    boardGroup.add(edges);
+                    pieceGroup.userData.directionSum.add(cubie.position);
+                    pieceGroup.userData.cubieCount += 1;
+                    pieceGroup.add(cubie);
+                    pieceGroup.add(edges);
+                    cubies.push(cubie);
                 }
             }
         }
     }
+
+    for (const pieceGroup of pieceGroups.values()) {
+        const direction = pieceGroup.userData.directionSum
+            .clone()
+            .divideScalar(pieceGroup.userData.cubieCount);
+
+        if (direction.lengthSq() > 0) {
+            direction.normalize();
+        }
+
+        pieces.push({ group: pieceGroup, direction });
+    }
+
+    boardGroup.userData.pieces = pieces;
+    boardGroup.userData.cubies = cubies;
+    boardGroup.userData.explosion = {
+        phase: 'idle',
+        elapsed: 0,
+        progress: 0
+    };
+
+    const targetOutline = new THREE.LineSegments(targetOutlineGeometry, targetOutlineMaterial);
+    targetOutline.visible = false;
+    targetOutline.renderOrder = 1;
+    boardGroup.add(targetOutline);
+    boardGroup.userData.targetOutline = targetOutline;
 
     return boardGroup;
 }
@@ -106,7 +166,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     container.style.position = 'relative';
 
     const instructions = document.createElement('div');
-    instructions.textContent = 'Click to capture the mouse. Then use WASD or arrow keys to move.';
+    instructions.textContent = 'Click to capture the mouse. Use WASD or arrow keys to move, hold Shift to run, Space to jump, hold C to crouch, and click cubes for an exploded view.';
     instructions.style.position = 'absolute';
     instructions.style.left = '50%';
     instructions.style.top = '25%';
@@ -157,6 +217,8 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     scene.add(forestGroup);
 
     const treeColliders = [];
+    const explodableCubes = [];
+    const explodableCubies = [];
     const PLAYER_RADIUS = 2.0;
 
     const count = Math.min(positions.length, solutions.length);
@@ -167,6 +229,9 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
         const boardGroup = newBoardGroup(board);
         const treeHeight = TREE_HEIGHT + (i % 4) / 1.5;
+
+        explodableCubes.push(boardGroup);
+        explodableCubies.push(...boardGroup.userData.cubies);
 
         boardGroup.rotation.y = i * 10;
 
@@ -195,6 +260,9 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     const controls = new PointerLockControls(camera, renderer.domElement);
     scene.add(controls.getObject());
 
+    const raycaster = new THREE.Raycaster();
+    const screenCenter = new THREE.Vector2(0, 0);
+
     controls.getObject().position.set(0, EYE_HEIGHT, 20);
 
     container.addEventListener('click', () => {
@@ -213,6 +281,13 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     let moveBackward = false;
     let moveLeft = false;
     let moveRight = false;
+    let isRunning = false;
+    let isCrouching = false;
+    let isGrounded = true;
+    let currentEyeHeight = EYE_HEIGHT;
+    let jumpOffset = 0;
+    let verticalVelocity = 0;
+    let targetedCube = null;
 
     const onKeyDown = (event) => {
         switch (event.code) {
@@ -231,6 +306,19 @@ function renderSomaCubeForest(positions, solutions, elementId) {
             case 'KeyD':
             case 'ArrowRight':
                 moveRight = true;
+                break;
+            case 'Space':
+                if (isGrounded && !event.repeat) {
+                    verticalVelocity = JUMP_SPEED;
+                    isGrounded = false;
+                }
+                break;
+            case 'KeyC':
+                isCrouching = true;
+                break;
+            case 'ShiftLeft':
+            case 'ShiftRight':
+                isRunning = true;
                 break;
         }
     };
@@ -253,11 +341,125 @@ function renderSomaCubeForest(positions, solutions, elementId) {
             case 'ArrowRight':
                 moveRight = false;
                 break;
+            case 'KeyC':
+                isCrouching = false;
+                break;
+            case 'ShiftLeft':
+            case 'ShiftRight':
+                isRunning = false;
+                break;
+        }
+    };
+
+    function triggerExplosion(boardGroup) {
+        const explosion = boardGroup.userData.explosion;
+
+        explosion.phase = 'out';
+        explosion.elapsed = 0;
+        boardGroup.userData.targetOutline.visible = false;
+
+        if (targetedCube === boardGroup) {
+            targetedCube = null;
+        }
+    }
+
+    const onMouseDown = (event) => {
+        if (event.button !== 0 || !controls.isLocked) {
+            return;
+        }
+
+        const target = getTargetedCube({ includeDistance: true });
+
+        if (target && target.distance <= EXPLOSION_TRIGGER_DISTANCE) {
+            triggerExplosion(target.boardGroup);
         }
     };
 
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
+    document.addEventListener('mousedown', onMouseDown);
+
+    function applyExplosion(boardGroup) {
+        const explosion = boardGroup.userData.explosion;
+
+        for (const piece of boardGroup.userData.pieces) {
+            piece.group.position.copy(piece.direction).multiplyScalar(EXPLOSION_DISTANCE * explosion.progress);
+        }
+    }
+
+    function updateExplosion(boardGroup, delta) {
+        const explosion = boardGroup.userData.explosion;
+
+        switch (explosion.phase) {
+            case 'out':
+                explosion.progress = Math.min(1, explosion.progress + delta / EXPLOSION_SPEED);
+
+                if (explosion.progress >= 1) {
+                    explosion.phase = 'hang';
+                    explosion.elapsed = 0;
+                }
+                break;
+            case 'hang':
+                explosion.elapsed += delta;
+
+                if (explosion.elapsed >= EXPLOSION_HANG_TIME) {
+                    explosion.phase = 'in';
+                    explosion.elapsed = 0;
+                }
+                break;
+            case 'in':
+                explosion.progress = Math.max(0, explosion.progress - delta / EXPLOSION_SPEED);
+
+                if (explosion.progress <= 0) {
+                    explosion.phase = 'idle';
+                    explosion.elapsed = 0;
+                }
+                break;
+        }
+
+        applyExplosion(boardGroup);
+    }
+
+    function getTargetedCube(options = {}) {
+        raycaster.setFromCamera(screenCenter, camera);
+
+        const intersections = raycaster.intersectObjects(explodableCubies, false);
+
+        if (intersections.length === 0) {
+            return null;
+        }
+
+        const intersection = intersections[0];
+        const boardGroup = intersection.object.userData.boardGroup;
+
+        if (options.includeDistance) {
+            return { boardGroup, distance: intersection.distance };
+        }
+
+        return boardGroup;
+    }
+
+    function updateTargetedCube() {
+        const target = controls.isLocked ? getTargetedCube({ includeDistance: true }) : null;
+        const nextTargetedCube = target?.distance <= EXPLOSION_TRIGGER_DISTANCE
+            && target.boardGroup.userData.explosion.phase === 'idle'
+            ? target.boardGroup
+            : null;
+
+        if (nextTargetedCube === targetedCube) {
+            return;
+        }
+
+        if (targetedCube) {
+            targetedCube.userData.targetOutline.visible = false;
+        }
+
+        targetedCube = nextTargetedCube;
+
+        if (targetedCube) {
+            targetedCube.userData.targetOutline.visible = true;
+        }
+    }
 
     function syncSize() {
         const width = container.clientWidth;
@@ -273,7 +475,6 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     syncSize();
 
     let prevTime = performance.now();
-    const speed = 30;
 
     function animate() {
         requestAnimationFrame(animate);
@@ -284,6 +485,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
         if (controls.isLocked) {
             const player = controls.getObject();
+            const speed = isRunning ? RUN_SPEED : WALK_SPEED;
 
             let moveX = 0;
             let moveZ = 0;
@@ -312,7 +514,23 @@ function renderSomaCubeForest(positions, solutions, elementId) {
                 controls.moveForward(moveZ);
             }
 
-            player.position.y = EYE_HEIGHT;
+            const targetEyeHeight = isCrouching ? CROUCH_EYE_HEIGHT : EYE_HEIGHT;
+            const crouchStep = (EYE_HEIGHT - CROUCH_EYE_HEIGHT) * delta / CROUCH_DURATION;
+            const eyeHeightDelta = targetEyeHeight - currentEyeHeight;
+            currentEyeHeight += Math.sign(eyeHeightDelta) * Math.min(Math.abs(eyeHeightDelta), crouchStep);
+
+            if (!isGrounded || verticalVelocity > 0) {
+                verticalVelocity -= GRAVITY * delta;
+                jumpOffset += verticalVelocity * delta;
+
+                if (jumpOffset <= 0) {
+                    jumpOffset = 0;
+                    verticalVelocity = 0;
+                    isGrounded = true;
+                }
+            }
+
+            player.position.y = currentEyeHeight + jumpOffset;
 
             for (const tree of treeColliders) {
                 const dx = player.position.x - tree.x;
@@ -329,8 +547,14 @@ function renderSomaCubeForest(positions, solutions, elementId) {
                 }
             }
 
-            player.position.y = EYE_HEIGHT;
+            player.position.y = currentEyeHeight + jumpOffset;
         }
+
+        for (const boardGroup of explodableCubes) {
+            updateExplosion(boardGroup, delta);
+        }
+
+        updateTargetedCube();
 
         renderer.render(scene, camera);
     }
