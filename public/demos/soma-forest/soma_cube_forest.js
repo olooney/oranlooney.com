@@ -13,11 +13,125 @@ const JUMP_SPEED = 12;
 const GRAVITY = 32;
 const WALK_SPEED = 15;
 const RUN_SPEED = 30;
+const PLAYER_RADIUS = 2.0;
 const EXPLOSION_DISTANCE = 1.5;
 const EXPLOSION_TRIGGER_DISTANCE = 30;
 const EXPLOSION_SPEED = 0.3;
 const EXPLOSION_HANG_TIME = 2.0;
 const TARGET_OUTLINE_SIZE = 3.08;
+const SOMAP_MIN_SHARED_PIECES = 4;
+const SOMAP_NETWORK_Y = 0.04;
+const SOMAP_MIN_OPACITY = -0.1;
+const SOMAP_OPACITY_PER_SHARED_PIECE = 0.07;
+const CLOUD_COUNT = 32;
+const CLOUD_FIELD_RADIUS = 1000;
+const CLOUD_MIN_HEIGHT = 100;
+const CLOUD_MAX_HEIGHT = 150;
+const CLOUD_CORE_MIN_CUBES = 2;
+const CLOUD_CORE_MAX_CUBES = 4;
+const CLOUD_DEPTH = 2;
+const CLOUD_SEED = 2;
+const CLOUD_SIZE_MULTIPLIERS = [1, 1.5, 2, 3];
+const CLOUD_MATERIAL_OPACITIES = [0.38, 0.24, 0.1];
+const CLOUD_COLOR = 0xffffff;
+const CLOUD_CORE_DEPTH = 0;
+const CLOUD_FIRST_LAYER_DEPTH = 1;
+const CLOUD_CORE_SIZE_MIN = 16;
+const CLOUD_CORE_SIZE_MAX = 26;
+const CLOUD_CORE_POSITION_SPREAD = 0.45;
+const CLOUD_CORE_MIN_Y_SPREAD = -0.14;
+const CLOUD_CORE_MAX_Y_SPREAD = 0.22;
+const CLOUD_CORE_MIN_SIZE_SCALE = 0.82;
+const CLOUD_CORE_MAX_SIZE_SCALE = 1.15;
+const CLOUD_LAYER_ONE_MIN_CUBES = 2;
+const CLOUD_LAYER_ONE_MAX_CUBES = 4;
+const CLOUD_LAYER_TWO_MIN_CUBES = 1;
+const CLOUD_LAYER_TWO_MAX_CUBES = 2;
+const CLOUD_LAYER_MIN_DIRECTION = -1;
+const CLOUD_LAYER_MAX_DIRECTION = 1;
+const CLOUD_LAYER_MIN_Y_DIRECTION = -0.35;
+const CLOUD_LAYER_MAX_Y_DIRECTION = 0.35;
+const CLOUD_LAYER_MIN_SIZE_SCALE = 0.48;
+const CLOUD_LAYER_MAX_SIZE_SCALE = 0.72;
+const CLOUD_LAYER_MIN_OFFSET_SCALE = 0.32;
+const CLOUD_LAYER_MAX_OFFSET_SCALE = 0.5;
+const CLOUD_MIN_Y_SCALE = 0.55;
+const CLOUD_MAX_Y_SCALE = 0.8;
+const RANDOM_INCREMENT = 0x6D2B79F5;
+const RANDOM_MULTIPLIER_ONE = 1;
+const RANDOM_SHIFT_ONE = 15;
+const RANDOM_SHIFT_TWO = 7;
+const RANDOM_SHIFT_THREE = 14;
+const RANDOM_MULTIPLIER_TWO = 61;
+const RANDOM_UINT_MAX = 4294967296;
+const OPACITY_MIN = 0;
+const OPACITY_MAX = 1;
+const VECTOR3_COMPONENTS = 3;
+const LEFT_MOUSE_BUTTON = 0;
+const ANGLE_MIN = 0;
+const FULL_CIRCLE = Math.PI * 2;
+const TREE_HEIGHT_HALF_DIVISOR = 2;
+const BOARD_OFFSET = 1;
+const UNIT_CUBE_SIZE = 1;
+const CUBIE_PADDING = 0.005;
+const PIECE_OPACITY = 0.6;
+const EDGE_COLOR = 0x000000;
+const TARGET_OUTLINE_COLOR = 0xffffff;
+const TARGET_OUTLINE_OPACITY = 0.5;
+const TARGET_OUTLINE_RENDER_ORDER = 1;
+const SKY_TEXTURE_WIDTH = 16;
+const SKY_TEXTURE_HEIGHT = 512;
+const SKY_RADIUS = 900;
+const SKY_WIDTH_SEGMENTS = 32;
+const SKY_HEIGHT_SEGMENTS = 16;
+const SKY_COLOR_STOPS = [
+    [0.0, '#1e3f66'],
+    [0.35, '#5fa9ff'],
+    [0.7, '#bfe3ff'],
+    [1.0, '#eaf6ff']
+];
+const INSTRUCTION_LEFT = '50%';
+const INSTRUCTION_TOP = '25%';
+const INSTRUCTION_PADDING = '12px 16px';
+const INSTRUCTION_BACKGROUND = 'rgba(255, 255, 255, 0.85)';
+const INSTRUCTION_BORDER = '1px solid #999';
+const INSTRUCTION_FONT = '32px sans-serif';
+const INSTRUCTION_Z_INDEX = '10';
+const INSTRUCTION_TRANSFORM = 'translate(-50%, -50%)';
+const CAMERA_FOV = 60;
+const CAMERA_INITIAL_ASPECT = 1;
+const CAMERA_NEAR = 0.1;
+const CAMERA_FAR = 3000;
+const CAMERA_MIN_PITCH = -Math.PI / 2;
+const CAMERA_MAX_PITCH = Math.PI / 2;
+const PLAYER_START_X = 0;
+const PLAYER_START_Z = 20;
+const CLOUD_FIELD_CENTER_X = 0;
+const CLOUD_FIELD_CENTER_Z = 20;
+const FOG_COLOR = 0x87CEEB;
+const FOG_NEAR = 64;
+const FOG_FAR = 256;
+const DIRECTIONAL_LIGHT_COLOR = 0xffffff;
+const DIRECTIONAL_LIGHT_INTENSITY = 0.5;
+const DIRECTIONAL_LIGHT_POSITION = [4, 4, 0];
+const AMBIENT_LIGHT_COLOR = 0x808080;
+const GROUND_COLOR = 0xEBDDD1;
+const GROUND_Y = 0;
+const GROUND_ROTATION_X = -Math.PI / 2;
+const GRID_DIVISION_SIZE = 5;
+const GRID_COLOR_CENTER = 0x008800;
+const GRID_COLOR = 0x00AA00;
+const GRID_OPACITY = 0.5;
+const GRID_Y = 0.01;
+const TREE_HEIGHT_VARIATION_COUNT = 4;
+const TREE_HEIGHT_VARIATION_SCALE = 1.5;
+const BOARD_ROTATION_STEP = 10;
+const TRUNK_COLOR = 0x8B4513;
+const TRUNK_OPACITY = 0.7;
+const TRUNK_HEIGHT_PADDING = 0.1;
+const TRUNK_CENTER_X = 0;
+const TRUNK_CENTER_Z = 0;
+const DEBUG_STEP_SECONDS = 1 / 60;
 
 const tetrominos = [
     {"index": 0, "name": "L", "color": "green", "cubies": [[0, 0, 0], [0, 1, 0], [1, 0, 0], [2, 0, 0]]},
@@ -33,25 +147,43 @@ tetrominos.forEach(tetromino => {
     tetromino.material = new THREE.MeshStandardMaterial({
         color: tetromino.color,
         transparent: true,
-        opacity: 0.6,
+        opacity: PIECE_OPACITY,
         side: THREE.DoubleSide
     });
 });
 
-const padding = 0.005;
-const cubieGeometry = new THREE.BoxGeometry(1 - padding * 2, 1 - padding * 2, 1 - padding * 2);
-const edgesBoxGeometry = new THREE.BoxGeometry(1, 1, 1);
+const cubieGeometry = new THREE.BoxGeometry(
+    UNIT_CUBE_SIZE - CUBIE_PADDING * 2,
+    UNIT_CUBE_SIZE - CUBIE_PADDING * 2,
+    UNIT_CUBE_SIZE - CUBIE_PADDING * 2
+);
+const edgesBoxGeometry = new THREE.BoxGeometry(UNIT_CUBE_SIZE, UNIT_CUBE_SIZE, UNIT_CUBE_SIZE);
+const edgesGeometry = new THREE.EdgesGeometry(edgesBoxGeometry);
+const edgesMaterial = new THREE.LineBasicMaterial({ color: EDGE_COLOR });
 const targetOutlineGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(TARGET_OUTLINE_SIZE, TARGET_OUTLINE_SIZE, TARGET_OUTLINE_SIZE));
 const targetOutlineMaterial = new THREE.LineBasicMaterial({
-    color: 0xffffff,
+    color: TARGET_OUTLINE_COLOR,
     depthTest: false,
     transparent: true,
-    opacity: 0.5
+    opacity: TARGET_OUTLINE_OPACITY
+});
+const targetHitboxGeometry = new THREE.BoxGeometry(TARGET_OUTLINE_SIZE, TARGET_OUTLINE_SIZE, TARGET_OUTLINE_SIZE);
+const targetHitboxMaterial = new THREE.MeshBasicMaterial({
+    color: TARGET_OUTLINE_COLOR,
+    transparent: true,
+    opacity: OPACITY_MIN,
+    depthWrite: false
+});
+const trunkGeometry = new THREE.BoxGeometry(TRUNK_WIDTH, UNIT_CUBE_SIZE, TRUNK_WIDTH);
+const trunkMaterial = new THREE.MeshStandardMaterial({
+    color: TRUNK_COLOR,
+    transparent: true,
+    opacity: TRUNK_OPACITY,
+    side: THREE.DoubleSide
 });
 
 function newBoardGroup(board) {
     const boardGroup = new THREE.Group();
-    const offset = 1;
     const pieceGroups = new Map();
     const pieces = [];
     const cubies = [];
@@ -74,11 +206,9 @@ function newBoardGroup(board) {
                     }
 
                     const cubie = new THREE.Mesh(cubieGeometry, tetrominoData.material);
-                    cubie.position.set(x - offset, y - offset, z - offset);
+                    cubie.position.set(x - BOARD_OFFSET, y - BOARD_OFFSET, z - BOARD_OFFSET);
                     cubie.userData.boardGroup = boardGroup;
 
-                    const edgesGeometry = new THREE.EdgesGeometry(edgesBoxGeometry);
-                    const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
                     const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
                     edges.position.copy(cubie.position);
 
@@ -114,17 +244,106 @@ function newBoardGroup(board) {
 
     const targetOutline = new THREE.LineSegments(targetOutlineGeometry, targetOutlineMaterial);
     targetOutline.visible = false;
-    targetOutline.renderOrder = 1;
+    targetOutline.renderOrder = TARGET_OUTLINE_RENDER_ORDER;
     boardGroup.add(targetOutline);
     boardGroup.userData.targetOutline = targetOutline;
+
+    const targetHitbox = new THREE.Mesh(targetHitboxGeometry, targetHitboxMaterial);
+    targetHitbox.userData.boardGroup = boardGroup;
+    boardGroup.add(targetHitbox);
+    boardGroup.userData.targetHitbox = targetHitbox;
 
     return boardGroup;
 }
 
+function getPiecePositionSignatures(solution) {
+    const piecePositions = tetrominos.map(() => []);
+
+    for (let x = 0; x < solution.length; x++) {
+        for (let y = 0; y < solution[x].length; y++) {
+            for (let z = 0; z < solution[x][y].length; z++) {
+                const tetrominoIndex = solution[x][y][z];
+
+                if (tetrominoIndex > 0) {
+                    piecePositions[tetrominoIndex - 1].push(`${x},${y},${z}`);
+                }
+            }
+        }
+    }
+
+    return piecePositions.map(positions => positions.sort().join('|'));
+}
+
+function countSharedPieceSignatures(pieceSignatures, i, j) {
+    let sharedPieces = 0;
+
+    for (let pieceIndex = 0; pieceIndex < tetrominos.length; pieceIndex++) {
+        if (pieceSignatures[i][pieceIndex] === pieceSignatures[j][pieceIndex]) {
+            sharedPieces += 1;
+        }
+    }
+
+    return sharedPieces;
+}
+
+function countSharedPieces(solutions, i, j) {
+    return countSharedPieceSignatures([
+        getPiecePositionSignatures(solutions[i]),
+        getPiecePositionSignatures(solutions[j])
+    ], 0, 1);
+}
+
+function getSomapOpacity(sharedPieces) {
+    return Math.min(OPACITY_MAX, SOMAP_MIN_OPACITY + SOMAP_OPACITY_PER_SHARED_PIECE * sharedPieces);
+}
+
+function newSomapNetwork(positions, solutions, count) {
+    const pieceSignatures = solutions.slice(0, count).map(getPiecePositionSignatures);
+    const edgePointsBySharedPieces = new Map();
+
+    for (let i = 0; i < count; i++) {
+        for (let j = i + 1; j < count; j++) {
+            const sharedPieces = countSharedPieceSignatures(pieceSignatures, i, j);
+
+            if (sharedPieces >= SOMAP_MIN_SHARED_PIECES) {
+                if (!edgePointsBySharedPieces.has(sharedPieces)) {
+                    edgePointsBySharedPieces.set(sharedPieces, []);
+                }
+
+                const [fromX, fromZ] = positions[i];
+                const [toX, toZ] = positions[j];
+
+                edgePointsBySharedPieces.get(sharedPieces).push(
+                    fromX * FOREST_SCALE, SOMAP_NETWORK_Y, fromZ * FOREST_SCALE,
+                    toX * FOREST_SCALE, SOMAP_NETWORK_Y, toZ * FOREST_SCALE
+                );
+            }
+        }
+    }
+
+    const networkGroup = new THREE.Group();
+
+    for (const [sharedPieces, edgePoints] of edgePointsBySharedPieces) {
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(edgePoints, VECTOR3_COMPONENTS));
+
+        const material = new THREE.LineBasicMaterial({
+            color: TRUNK_COLOR,
+            transparent: true,
+            opacity: getSomapOpacity(sharedPieces),
+            depthWrite: false
+        });
+
+        networkGroup.add(new THREE.LineSegments(geometry, material));
+    }
+
+    return networkGroup;
+}
+
 function newSky() {
     const skyCanvas = document.createElement('canvas');
-        skyCanvas.width = 16;
-        skyCanvas.height = 512;
+        skyCanvas.width = SKY_TEXTURE_WIDTH;
+        skyCanvas.height = SKY_TEXTURE_HEIGHT;
 
         const ctx = skyCanvas.getContext('2d');
 
@@ -135,10 +354,9 @@ function newSky() {
             skyCanvas.height
         );
 
-        gradient.addColorStop(0.0, '#1e3f66');
-        gradient.addColorStop(0.35, '#5fa9ff');
-        gradient.addColorStop(0.7, '#bfe3ff');
-        gradient.addColorStop(1.0, '#eaf6ff');
+        for (const [offset, color] of SKY_COLOR_STOPS) {
+            gradient.addColorStop(offset, color);
+        }
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, skyCanvas.width, skyCanvas.height);
@@ -147,7 +365,7 @@ function newSky() {
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearFilter;
 
-        const geometry = new THREE.SphereGeometry(900, 32, 16);
+        const geometry = new THREE.SphereGeometry(SKY_RADIUS, SKY_WIDTH_SEGMENTS, SKY_HEIGHT_SEGMENTS);
 
         const material = new THREE.MeshBasicMaterial({
             map: texture,
@@ -161,6 +379,122 @@ function newSky() {
         return sky;
 }
 
+function newRandom(seed) {
+    let state = seed;
+
+    return () => {
+        state += RANDOM_INCREMENT;
+        let value = state;
+        value = Math.imul(value ^ value >>> RANDOM_SHIFT_ONE, value | RANDOM_MULTIPLIER_ONE);
+        value ^= value + Math.imul(value ^ value >>> RANDOM_SHIFT_TWO, value | RANDOM_MULTIPLIER_TWO);
+
+        return ((value ^ value >>> RANDOM_SHIFT_THREE) >>> 0) / RANDOM_UINT_MAX;
+    };
+}
+
+function randomBetween(random, min, max) {
+    return min + random() * (max - min);
+}
+
+function randomInt(random, min, max) {
+    return Math.floor(randomBetween(random, min, max + 1));
+}
+
+function newCloudMaterial(opacity) {
+    return new THREE.MeshBasicMaterial({
+        color: CLOUD_COLOR,
+        transparent: opacity < OPACITY_MAX,
+        opacity,
+        depthWrite: false,
+        fog: false,
+        side: THREE.DoubleSide
+    });
+}
+
+function newCloudField(centerX, centerZ) {
+    const random = newRandom(CLOUD_SEED);
+    const cloudGroup = new THREE.Group();
+    const cloudGeometry = new THREE.BoxGeometry(UNIT_CUBE_SIZE, UNIT_CUBE_SIZE, UNIT_CUBE_SIZE);
+    const cloudMaterials = CLOUD_MATERIAL_OPACITIES.map(newCloudMaterial);
+
+    function addCloudCube(parent, position, size, depth) {
+        const cube = new THREE.Mesh(cloudGeometry, cloudMaterials[depth]);
+        cube.position.copy(position);
+        cube.scale.set(size, size * randomBetween(random, CLOUD_MIN_Y_SCALE, CLOUD_MAX_Y_SCALE), size);
+        parent.add(cube);
+
+        return { position, size, depth };
+    }
+
+    function addCloudLayer(parent, sourceCubes, depth) {
+        const nextCubes = [];
+
+        for (const sourceCube of sourceCubes) {
+            const childCount = depth === CLOUD_FIRST_LAYER_DEPTH
+                ? randomInt(random, CLOUD_LAYER_ONE_MIN_CUBES, CLOUD_LAYER_ONE_MAX_CUBES)
+                : randomInt(random, CLOUD_LAYER_TWO_MIN_CUBES, CLOUD_LAYER_TWO_MAX_CUBES);
+
+            for (let i = 0; i < childCount; i++) {
+                const direction = new THREE.Vector3(
+                    randomBetween(random, CLOUD_LAYER_MIN_DIRECTION, CLOUD_LAYER_MAX_DIRECTION),
+                    randomBetween(random, CLOUD_LAYER_MIN_Y_DIRECTION, CLOUD_LAYER_MAX_Y_DIRECTION),
+                    randomBetween(random, CLOUD_LAYER_MIN_DIRECTION, CLOUD_LAYER_MAX_DIRECTION)
+                );
+
+                if (direction.lengthSq() === 0) {
+                    direction.set(UNIT_CUBE_SIZE, GROUND_Y, GROUND_Y);
+                }
+
+                const size = sourceCube.size * randomBetween(random, CLOUD_LAYER_MIN_SIZE_SCALE, CLOUD_LAYER_MAX_SIZE_SCALE);
+                const offset = direction.multiplyScalar((sourceCube.size + size) * randomBetween(random, CLOUD_LAYER_MIN_OFFSET_SCALE, CLOUD_LAYER_MAX_OFFSET_SCALE));
+                const position = sourceCube.position.clone().add(offset);
+
+                nextCubes.push(addCloudCube(parent, position, size, depth));
+            }
+        }
+
+        return nextCubes;
+    }
+
+    for (let cloudIndex = 0; cloudIndex < CLOUD_COUNT; cloudIndex++) {
+        const angle = randomBetween(random, ANGLE_MIN, FULL_CIRCLE);
+        const radius = CLOUD_FIELD_RADIUS * Math.sqrt(random());
+        const cloud = new THREE.Group();
+        const coreCubes = [];
+        const coreCount = randomInt(random, CLOUD_CORE_MIN_CUBES, CLOUD_CORE_MAX_CUBES);
+        const coreSize = randomBetween(random, CLOUD_CORE_SIZE_MIN, CLOUD_CORE_SIZE_MAX);
+
+        cloud.position.set(
+            centerX + Math.cos(angle) * radius,
+            randomBetween(random, CLOUD_MIN_HEIGHT, CLOUD_MAX_HEIGHT),
+            centerZ + Math.sin(angle) * radius
+        );
+
+        for (let i = 0; i < coreCount; i++) {
+            const position = new THREE.Vector3(
+                randomBetween(random, -coreSize * CLOUD_CORE_POSITION_SPREAD, coreSize * CLOUD_CORE_POSITION_SPREAD),
+                randomBetween(random, coreSize * CLOUD_CORE_MIN_Y_SPREAD, coreSize * CLOUD_CORE_MAX_Y_SPREAD),
+                randomBetween(random, -coreSize * CLOUD_CORE_POSITION_SPREAD, coreSize * CLOUD_CORE_POSITION_SPREAD)
+            );
+            const size = coreSize * randomBetween(random, CLOUD_CORE_MIN_SIZE_SCALE, CLOUD_CORE_MAX_SIZE_SCALE);
+
+            coreCubes.push(addCloudCube(cloud, position, size, CLOUD_CORE_DEPTH));
+        }
+
+        let layerCubes = coreCubes;
+
+        for (let depth = CLOUD_FIRST_LAYER_DEPTH; depth <= CLOUD_DEPTH; depth++) {
+            layerCubes = addCloudLayer(cloud, layerCubes, depth);
+        }
+
+        const sizeMultiplier = CLOUD_SIZE_MULTIPLIERS[randomInt(random, 0, CLOUD_SIZE_MULTIPLIERS.length - 1)];
+        cloud.scale.setScalar(sizeMultiplier);
+        cloudGroup.add(cloud);
+    }
+
+    return cloudGroup;
+}
+
 function renderSomaCubeForest(positions, solutions, elementId) {
     const container = document.getElementById(elementId);
     container.style.position = 'relative';
@@ -168,14 +502,14 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     const instructions = document.createElement('div');
     instructions.textContent = 'Click to capture the mouse. Use WASD or arrow keys to move, hold Shift to run, Space to jump, hold C to crouch, and click cubes for an exploded view.';
     instructions.style.position = 'absolute';
-    instructions.style.left = '50%';
-    instructions.style.top = '25%';
-    instructions.style.transform = 'translate(-50%, -50%)';
-    instructions.style.padding = '12px 16px';
-    instructions.style.background = 'rgba(255, 255, 255, 0.85)';
-    instructions.style.border = '1px solid #999';
-    instructions.style.font = '32px sans-serif';
-    instructions.style.zIndex = '10';
+    instructions.style.left = INSTRUCTION_LEFT;
+    instructions.style.top = INSTRUCTION_TOP;
+    instructions.style.transform = INSTRUCTION_TRANSFORM;
+    instructions.style.padding = INSTRUCTION_PADDING;
+    instructions.style.background = INSTRUCTION_BACKGROUND;
+    instructions.style.border = INSTRUCTION_BORDER;
+    instructions.style.font = INSTRUCTION_FONT;
+    instructions.style.zIndex = INSTRUCTION_Z_INDEX;
     instructions.style.pointerEvents = 'none';
     container.appendChild(instructions);
 
@@ -183,34 +517,35 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 3000);
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, CAMERA_INITIAL_ASPECT, CAMERA_NEAR, CAMERA_FAR);
 
     const scene = new THREE.Scene();
     scene.background = null;
     scene.add(newSky());
-    scene.fog = new THREE.Fog(0x87CEEB, 64, 256);
+    scene.add(newCloudField(CLOUD_FIELD_CENTER_X, CLOUD_FIELD_CENTER_Z));
+    scene.fog = new THREE.Fog(FOG_COLOR, FOG_NEAR, FOG_FAR);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(4, 4, 0);
+    const directionalLight = new THREE.DirectionalLight(DIRECTIONAL_LIGHT_COLOR, DIRECTIONAL_LIGHT_INTENSITY);
+    directionalLight.position.set(...DIRECTIONAL_LIGHT_POSITION);
     scene.add(directionalLight);
 
-    const ambientLight = new THREE.AmbientLight(0x808080);
+    const ambientLight = new THREE.AmbientLight(AMBIENT_LIGHT_COLOR);
     scene.add(ambientLight);
 
     const groundGeometry = new THREE.PlaneGeometry(GROUND_SIZE, GROUND_SIZE);
     const groundMaterial = new THREE.MeshStandardMaterial({
-        color: 0xEBDDD1,
+        color: GROUND_COLOR,
         side: THREE.DoubleSide
     });
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
+    ground.rotation.x = GROUND_ROTATION_X;
+    ground.position.y = GROUND_Y;
     scene.add(ground);
 
-    const grid = new THREE.GridHelper(GROUND_SIZE, GROUND_SIZE / 5, 0x008800, 0x00AA00);
-    grid.material.opacity = 0.5;
+    const grid = new THREE.GridHelper(GROUND_SIZE, GROUND_SIZE / GRID_DIVISION_SIZE, GRID_COLOR_CENTER, GRID_COLOR);
+    grid.material.opacity = GRID_OPACITY;
     grid.material.transparent = true;
-    grid.position.y = 0.01;
+    grid.position.y = GRID_Y;
     scene.add(grid);
 
     const forestGroup = new THREE.Group();
@@ -219,32 +554,25 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     const treeColliders = [];
     const explodableCubes = [];
     const explodableCubies = [];
-    const PLAYER_RADIUS = 2.0;
 
     const count = Math.min(positions.length, solutions.length);
+    scene.add(newSomapNetwork(positions, solutions, count));
 
     for (let i = 0; i < count; i++) {
         const [px, py] = positions[i];
         const board = solutions[i];
 
         const boardGroup = newBoardGroup(board);
-        const treeHeight = TREE_HEIGHT + (i % 4) / 1.5;
+        const treeHeight = TREE_HEIGHT + (i % TREE_HEIGHT_VARIATION_COUNT) / TREE_HEIGHT_VARIATION_SCALE;
 
         explodableCubes.push(boardGroup);
-        explodableCubies.push(...boardGroup.userData.cubies);
+    explodableCubies.push(...boardGroup.userData.cubies);
 
-        boardGroup.rotation.y = i * 10;
-
-        const trunkGeometry = new THREE.BoxGeometry(TRUNK_WIDTH, treeHeight + 0.1, TRUNK_WIDTH);
-        const trunkMaterial = new THREE.MeshStandardMaterial({
-            color: 0x8B4513,
-            transparent: true,
-            opacity: 0.7,
-            side: THREE.DoubleSide
-        });
+        boardGroup.rotation.y = i * BOARD_ROTATION_STEP;
 
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        trunk.position.set(0, -treeHeight / 2, 0);
+        trunk.scale.y = treeHeight + TRUNK_HEIGHT_PADDING;
+        trunk.position.set(TRUNK_CENTER_X, -treeHeight / TREE_HEIGHT_HALF_DIVISOR, TRUNK_CENTER_Z);
         boardGroup.add(trunk);
 
         boardGroup.position.set(px * FOREST_SCALE, treeHeight, py * FOREST_SCALE);
@@ -252,7 +580,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
         treeColliders.push(new THREE.Vector3(
             boardGroup.position.x,
-            0,
+            GROUND_Y,
             boardGroup.position.z
         ));
     }
@@ -263,7 +591,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     const raycaster = new THREE.Raycaster();
     const screenCenter = new THREE.Vector2(0, 0);
 
-    controls.getObject().position.set(0, EYE_HEIGHT, 20);
+    controls.getObject().position.set(PLAYER_START_X, EYE_HEIGHT, PLAYER_START_Z);
 
     container.addEventListener('click', () => {
         controls.lock();
@@ -288,6 +616,8 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     let jumpOffset = 0;
     let verticalVelocity = 0;
     let targetedCube = null;
+    let debugControlsEnabled = false;
+    let debugExplosionsFrozen = false;
 
     const onKeyDown = (event) => {
         switch (event.code) {
@@ -308,9 +638,8 @@ function renderSomaCubeForest(positions, solutions, elementId) {
                 moveRight = true;
                 break;
             case 'Space':
-                if (isGrounded && !event.repeat) {
-                    verticalVelocity = JUMP_SPEED;
-                    isGrounded = false;
+                if (!event.repeat) {
+                    jump();
                 }
                 break;
             case 'KeyC':
@@ -363,8 +692,24 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         }
     }
 
+    function holdExplosion(boardGroup) {
+        const explosion = boardGroup.userData.explosion;
+
+        debugExplosionsFrozen = true;
+        explosion.phase = 'hang';
+        explosion.elapsed = 0;
+        explosion.progress = 1;
+        boardGroup.userData.targetOutline.visible = false;
+
+        if (targetedCube === boardGroup) {
+            targetedCube = null;
+        }
+
+        applyExplosion(boardGroup);
+    }
+
     const onMouseDown = (event) => {
-        if (event.button !== 0 || !controls.isLocked) {
+        if (event.button !== LEFT_MOUSE_BUTTON || !controls.isLocked) {
             return;
         }
 
@@ -378,6 +723,13 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
     document.addEventListener('mousedown', onMouseDown);
+
+    function jump() {
+        if (isGrounded) {
+            verticalVelocity = JUMP_SPEED;
+            isGrounded = false;
+        }
+    }
 
     function applyExplosion(boardGroup) {
         const explosion = boardGroup.userData.explosion;
@@ -420,10 +772,29 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         applyExplosion(boardGroup);
     }
 
+    function refreshInspectedExplosion(boardGroup) {
+        const explosion = boardGroup.userData.explosion;
+
+        if (explosion.phase === 'idle') {
+            return;
+        }
+
+        explosion.elapsed = 0;
+
+        if (explosion.phase === 'in') {
+            explosion.phase = 'hang';
+            explosion.progress = 1;
+            applyExplosion(boardGroup);
+        }
+    }
+
     function getTargetedCube(options = {}) {
         raycaster.setFromCamera(screenCenter, camera);
 
-        const intersections = raycaster.intersectObjects(explodableCubies, false);
+        const activeHitboxes = explodableCubes
+            .filter(boardGroup => boardGroup.userData.explosion.phase !== 'idle')
+            .map(boardGroup => boardGroup.userData.targetHitbox);
+        const intersections = raycaster.intersectObjects([...activeHitboxes, ...explodableCubies], false);
 
         if (intersections.length === 0) {
             return null;
@@ -440,7 +811,12 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     }
 
     function updateTargetedCube() {
-        const target = controls.isLocked ? getTargetedCube({ includeDistance: true }) : null;
+        const target = controls.isLocked || debugControlsEnabled ? getTargetedCube({ includeDistance: true }) : null;
+
+        if (target?.distance <= EXPLOSION_TRIGGER_DISTANCE) {
+            refreshInspectedExplosion(target.boardGroup);
+        }
+
         const nextTargetedCube = target?.distance <= EXPLOSION_TRIGGER_DISTANCE
             && target.boardGroup.userData.explosion.phase === 'idle'
             ? target.boardGroup
@@ -460,6 +836,148 @@ function renderSomaCubeForest(positions, solutions, elementId) {
             targetedCube.userData.targetOutline.visible = true;
         }
     }
+
+    function movePlayer(delta) {
+        const player = controls.getObject();
+        const speed = isRunning ? RUN_SPEED : WALK_SPEED;
+
+        let moveX = 0;
+        let moveZ = 0;
+
+        if (moveForward) {
+            moveZ += speed * delta;
+        }
+
+        if (moveBackward) {
+            moveZ -= speed * delta;
+        }
+
+        if (moveLeft) {
+            moveX -= speed * delta;
+        }
+
+        if (moveRight) {
+            moveX += speed * delta;
+        }
+
+        if (moveX !== 0) {
+            controls.moveRight(moveX);
+        }
+
+        if (moveZ !== 0) {
+            controls.moveForward(moveZ);
+        }
+
+        const targetEyeHeight = isCrouching ? CROUCH_EYE_HEIGHT : EYE_HEIGHT;
+        const crouchStep = (EYE_HEIGHT - CROUCH_EYE_HEIGHT) * delta / CROUCH_DURATION;
+        const eyeHeightDelta = targetEyeHeight - currentEyeHeight;
+        currentEyeHeight += Math.sign(eyeHeightDelta) * Math.min(Math.abs(eyeHeightDelta), crouchStep);
+
+        if (!isGrounded || verticalVelocity > 0) {
+            verticalVelocity -= GRAVITY * delta;
+            jumpOffset += verticalVelocity * delta;
+
+            if (jumpOffset <= 0) {
+                jumpOffset = 0;
+                verticalVelocity = 0;
+                isGrounded = true;
+            }
+        }
+
+        player.position.y = currentEyeHeight + jumpOffset;
+
+        for (const tree of treeColliders) {
+            const dx = player.position.x - tree.x;
+            const dz = player.position.z - tree.z;
+            const distance = Math.sqrt(dx * dx + dz * dz);
+
+            if (distance < PLAYER_RADIUS && distance > 0) {
+                const nx = dx / distance;
+                const nz = dz / distance;
+                const overlap = PLAYER_RADIUS - distance;
+
+                player.position.x += nx * overlap;
+                player.position.z += nz * overlap;
+            }
+        }
+
+        player.position.y = currentEyeHeight + jumpOffset;
+    }
+
+    window.somaForestDebug = {
+        enable() {
+            debugControlsEnabled = true;
+            instructions.style.display = 'none';
+        },
+        disable() {
+            debugControlsEnabled = false;
+            instructions.style.display = controls.isLocked ? 'none' : 'block';
+        },
+        freezeExplosions() {
+            debugExplosionsFrozen = true;
+        },
+        resumeExplosions() {
+            debugExplosionsFrozen = false;
+        },
+        look(yaw = 0, pitch = 0) {
+            const player = controls.getObject();
+
+            player.rotation.y += yaw;
+            camera.rotation.x = Math.max(CAMERA_MIN_PITCH, Math.min(CAMERA_MAX_PITCH, camera.rotation.x + pitch));
+        },
+        setMovement(movement = {}) {
+            moveForward = Boolean(movement.forward);
+            moveBackward = Boolean(movement.backward);
+            moveLeft = Boolean(movement.left);
+            moveRight = Boolean(movement.right);
+            isRunning = Boolean(movement.running);
+            isCrouching = Boolean(movement.crouching);
+        },
+        step(seconds = DEBUG_STEP_SECONDS) {
+            movePlayer(seconds);
+
+            if (!debugExplosionsFrozen) {
+                for (const boardGroup of explodableCubes) {
+                    updateExplosion(boardGroup, seconds);
+                }
+            }
+
+            updateTargetedCube();
+            renderer.render(scene, camera);
+        },
+        jump,
+        explodeTarget(options = {}) {
+            const target = getTargetedCube({ includeDistance: true });
+
+            if (target && target.distance <= EXPLOSION_TRIGGER_DISTANCE) {
+                if (options.hold) {
+                    holdExplosion(target.boardGroup);
+                } else {
+                    triggerExplosion(target.boardGroup);
+                }
+
+                return true;
+            }
+
+            return false;
+        },
+        getState() {
+            const player = controls.getObject();
+            const target = getTargetedCube({ includeDistance: true });
+
+            return {
+                position: player.position.toArray(),
+                yaw: player.rotation.y,
+                pitch: camera.rotation.x,
+                isGrounded,
+                isCrouching,
+                isRunning,
+                debugExplosionsFrozen,
+                targetDistance: target?.distance ?? null,
+                hasTarget: Boolean(target)
+            };
+        }
+    };
 
     function syncSize() {
         const width = container.clientWidth;
@@ -483,75 +1001,14 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         const delta = (time - prevTime) / 1000;
         prevTime = time;
 
-        if (controls.isLocked) {
-            const player = controls.getObject();
-            const speed = isRunning ? RUN_SPEED : WALK_SPEED;
-
-            let moveX = 0;
-            let moveZ = 0;
-
-            if (moveForward) {
-                moveZ += speed * delta;
-            }
-
-            if (moveBackward) {
-                moveZ -= speed * delta;
-            }
-
-            if (moveLeft) {
-                moveX -= speed * delta;
-            }
-
-            if (moveRight) {
-                moveX += speed * delta;
-            }
-
-            if (moveX !== 0) {
-                controls.moveRight(moveX);
-            }
-
-            if (moveZ !== 0) {
-                controls.moveForward(moveZ);
-            }
-
-            const targetEyeHeight = isCrouching ? CROUCH_EYE_HEIGHT : EYE_HEIGHT;
-            const crouchStep = (EYE_HEIGHT - CROUCH_EYE_HEIGHT) * delta / CROUCH_DURATION;
-            const eyeHeightDelta = targetEyeHeight - currentEyeHeight;
-            currentEyeHeight += Math.sign(eyeHeightDelta) * Math.min(Math.abs(eyeHeightDelta), crouchStep);
-
-            if (!isGrounded || verticalVelocity > 0) {
-                verticalVelocity -= GRAVITY * delta;
-                jumpOffset += verticalVelocity * delta;
-
-                if (jumpOffset <= 0) {
-                    jumpOffset = 0;
-                    verticalVelocity = 0;
-                    isGrounded = true;
-                }
-            }
-
-            player.position.y = currentEyeHeight + jumpOffset;
-
-            for (const tree of treeColliders) {
-                const dx = player.position.x - tree.x;
-                const dz = player.position.z - tree.z;
-                const distance = Math.sqrt(dx * dx + dz * dz);
-
-                if (distance < PLAYER_RADIUS && distance > 0) {
-                    const nx = dx / distance;
-                    const nz = dz / distance;
-                    const overlap = PLAYER_RADIUS - distance;
-
-                    player.position.x += nx * overlap;
-                    player.position.z += nz * overlap;
-                }
-            }
-
-            player.position.y = currentEyeHeight + jumpOffset;
+        if (controls.isLocked || debugControlsEnabled) {
+            movePlayer(delta);
         }
 
-        for (const boardGroup of explodableCubes) {
-            updateExplosion(boardGroup, delta);
+        if (!debugExplosionsFrozen) {
+            for (const boardGroup of explodableCubes) {
+                updateExplosion(boardGroup, delta);
+            }
         }
 
         updateTargetedCube();
@@ -562,4 +1019,4 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     animate();
 }
 
-export { renderSomaCubeForest };
+export { countSharedPieces, renderSomaCubeForest };
