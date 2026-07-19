@@ -3,10 +3,11 @@
 ### Demos
 
 - [X] Flip Gallery
-- [ ] Soma Forest
+- [X] Soma Forest
   - [X] add jump and crouch
   - [X] explode trees on click
-  - [ ] add Conway connections
+  - [X] add Conway connections
+  - [X] add clouds
 - [ ] A Random Walk in Z5
   - [ ] add mobile touch support
   - [ ] add snapshot / download
@@ -44,6 +45,6 @@
   - [X] Lazy Load + Fixed Height on thumbnails?
   - [X] Larger RSS Icon
   - [X] Copyright in footer?
-  - [ ] Remove StackOverflow Link
+  - [X] Remove StackOverflow Link
   
 
