@@ -60,6 +60,7 @@ const GRID_Y = 0.01;
 const TREE_HEIGHT_VARIATION_COUNT = 4;
 const TREE_HEIGHT_VARIATION_SCALE = 1.5;
 const BOARD_ROTATION_STEP = 10;
+const TARGET_ROTATION_STEP = Math.PI / 12;
 const TRUNK_COLOR = 0x8B4513;
 const TRUNK_OPACITY = 0.7;
 const TRUNK_HEIGHT_PADDING = 0.1;
@@ -141,12 +142,33 @@ const SKY_COLOR_STOPS = [
 ];
 
 /* Help Instructions */
+const INSTRUCTION_HTML = `
+    <div>
+    Welcome to the Soma Cube Forest! Here you will find all 480 possible solutions to the colored Soma puzzle, grouped by similarity.
+    The mycelium network underfoot connects solutions that differ in only two or three pieces.</div>
+    <ul style="margin: 10px 0 0 0; padding: 0 0 0 22px;">
+        <li>Click to capture the mouse</li>
+        <li>Esc: release the mouse and show controls</li>
+    </ul>
+    <p>Controls:</p>
+    <ul>
+        <li>Mouse: look around</li>
+        <li>WASD or arrow keys: move</li>
+        <li>Click cube: explode or collapse cube</li>
+        <li>Scrollwheel on cube: rotate cube</li>
+        <li>Shift: run</li>
+        <li>Space: jump</li>
+        <li>Hold C: crouch</li>
+    </ul>
+`;
 const INSTRUCTION_LEFT = '50%';
-const INSTRUCTION_TOP = '25%';
+const INSTRUCTION_TOP = '50%';
 const INSTRUCTION_PADDING = '12px 16px';
 const INSTRUCTION_BACKGROUND = 'rgba(255, 255, 255, 0.85)';
 const INSTRUCTION_BORDER = '1px solid #999';
-const INSTRUCTION_FONT = '32px sans-serif';
+const INSTRUCTION_FONT = '24px sans-serif';
+const INSTRUCTION_LINE_HEIGHT = '1.35';
+const INSTRUCTION_MAX_WIDTH = '560px';
 const INSTRUCTION_Z_INDEX = '10';
 const INSTRUCTION_TRANSFORM = 'translate(-50%, -50%)';
 
@@ -190,7 +212,8 @@ const targetHitboxMaterial = new THREE.MeshBasicMaterial({
     color: TARGET_OUTLINE_COLOR,
     transparent: true,
     opacity: OPACITY_MIN,
-    depthWrite: false
+    depthWrite: false,
+    side: THREE.DoubleSide
 });
 const trunkGeometry = new THREE.BoxGeometry(TRUNK_WIDTH, UNIT_CUBE_SIZE, TRUNK_WIDTH);
 const trunkMaterial = new THREE.MeshStandardMaterial({
@@ -610,7 +633,6 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     container.style.position = 'relative';
 
     const instructions = document.createElement('div');
-    instructions.textContent = 'Click to capture the mouse. Use WASD or arrow keys to move, hold Shift to run, Space to jump, hold C to crouch, and click cubes for an exploded view.';
     instructions.style.position = 'absolute';
     instructions.style.left = INSTRUCTION_LEFT;
     instructions.style.top = INSTRUCTION_TOP;
@@ -619,8 +641,11 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     instructions.style.background = INSTRUCTION_BACKGROUND;
     instructions.style.border = INSTRUCTION_BORDER;
     instructions.style.font = INSTRUCTION_FONT;
+    instructions.style.lineHeight = INSTRUCTION_LINE_HEIGHT;
+    instructions.style.maxWidth = INSTRUCTION_MAX_WIDTH;
     instructions.style.zIndex = INSTRUCTION_Z_INDEX;
     instructions.style.pointerEvents = 'none';
+    instructions.innerHTML = INSTRUCTION_HTML;
     container.appendChild(instructions);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -810,10 +835,42 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
         explosion.phase = 'out';
         explosion.elapsed = 0;
+        explosion.isCollapsingByClick = false;
         boardGroup.userData.targetOutline.visible = false;
 
         if (targetedCube === boardGroup) {
             targetedCube = null;
+        }
+    }
+
+    /**
+     * Starts the collapse animation for an already exploded cube.
+     * @param {THREE.Group} boardGroup
+     * @returns {void}
+     */
+    function collapseExplosion(boardGroup) {
+        const explosion = boardGroup.userData.explosion;
+
+        explosion.phase = 'in';
+        explosion.elapsed = 0;
+        explosion.isCollapsingByClick = true;
+        boardGroup.userData.targetOutline.visible = false;
+
+        if (targetedCube === boardGroup) {
+            targetedCube = null;
+        }
+    }
+
+    /**
+     * Explodes an idle cube or collapses a cube that is already exploding.
+     * @param {THREE.Group} boardGroup
+     * @returns {void}
+     */
+    function toggleExplosion(boardGroup) {
+        if (boardGroup.userData.explosion.phase === 'idle') {
+            triggerExplosion(boardGroup);
+        } else {
+            collapseExplosion(boardGroup);
         }
     }
 
@@ -829,6 +886,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         explosion.phase = 'hang';
         explosion.elapsed = 0;
         explosion.progress = 1;
+        explosion.isCollapsingByClick = false;
         boardGroup.userData.targetOutline.visible = false;
 
         if (targetedCube === boardGroup) {
@@ -839,7 +897,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     }
 
     /**
-     * Explodes the currently targeted cube on left mouse click.
+    * Explodes or collapses the currently targeted cube on left mouse click.
      * @param {MouseEvent} event
      * @returns {void}
      */
@@ -851,13 +909,34 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         const target = getTargetedCube({ includeDistance: true });
 
         if (target && target.distance <= EXPLOSION_TRIGGER_DISTANCE) {
-            triggerExplosion(target.boardGroup);
+            toggleExplosion(target.boardGroup);
         }
+    };
+
+    /**
+     * Rotates the currently targeted cube when the mouse wheel is scrolled.
+     * @param {WheelEvent} event
+     * @returns {void}
+     */
+    const onWheel = (event) => {
+        if (!controls.isLocked) {
+            return;
+        }
+
+        const target = getTargetedCube({ includeDistance: true });
+
+        if (!target || target.distance > EXPLOSION_TRIGGER_DISTANCE) {
+            return;
+        }
+
+        event.preventDefault();
+        target.boardGroup.rotation.y += Math.sign(event.deltaY) * TARGET_ROTATION_STEP;
     };
 
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
     document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('wheel', onWheel, { passive: false });
 
     /**
      * Starts a jump when the player is grounded.
@@ -894,6 +973,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
 
         switch (explosion.phase) {
             case 'out':
+                explosion.isCollapsingByClick = false;
                 explosion.progress = Math.min(1, explosion.progress + delta / EXPLOSION_SPEED);
 
                 if (explosion.progress >= 1) {
@@ -902,6 +982,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
                 }
                 break;
             case 'hang':
+                explosion.isCollapsingByClick = false;
                 explosion.elapsed += delta;
 
                 if (explosion.elapsed >= EXPLOSION_HANG_TIME) {
@@ -915,6 +996,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
                 if (explosion.progress <= 0) {
                     explosion.phase = 'idle';
                     explosion.elapsed = 0;
+                    explosion.isCollapsingByClick = false;
                 }
                 break;
         }
@@ -930,16 +1012,8 @@ function renderSomaCubeForest(positions, solutions, elementId) {
     function refreshInspectedExplosion(boardGroup) {
         const explosion = boardGroup.userData.explosion;
 
-        if (explosion.phase === 'idle') {
-            return;
-        }
-
-        explosion.elapsed = 0;
-
-        if (explosion.phase === 'in') {
-            explosion.phase = 'hang';
-            explosion.progress = 1;
-            applyExplosion(boardGroup);
+        if (explosion.phase === 'hang') {
+            explosion.elapsed = 0;
         }
     }
 
@@ -954,7 +1028,10 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         const activeHitboxes = explodableCubes
             .filter(boardGroup => boardGroup.userData.explosion.phase !== 'idle')
             .map(boardGroup => boardGroup.userData.targetHitbox);
-        const intersections = raycaster.intersectObjects([...activeHitboxes, ...explodableCubies], false);
+        const hitboxIntersections = raycaster.intersectObjects(activeHitboxes, false);
+        const intersections = hitboxIntersections.length > 0
+            ? hitboxIntersections
+            : raycaster.intersectObjects(explodableCubies, false);
 
         if (intersections.length === 0) {
             return null;
@@ -1148,7 +1225,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
         },
         jump,
         /**
-         * Explodes the current debug target, optionally holding it open.
+         * Explodes or collapses the current debug target, optionally holding it open.
          * @param {{ hold?: boolean }} [options]
          * @returns {boolean}
          */
@@ -1159,7 +1236,7 @@ function renderSomaCubeForest(positions, solutions, elementId) {
                 if (options.hold) {
                     holdExplosion(target.boardGroup);
                 } else {
-                    triggerExplosion(target.boardGroup);
+                    toggleExplosion(target.boardGroup);
                 }
 
                 return true;
