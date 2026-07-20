@@ -11,6 +11,8 @@ const CURSOR_STEPS_PER_FRAME = 32;
 
 let canvas;
 let ctx;
+let animationRequestId;
+let isPaused = false;
 
 let vector;
 let cursor;
@@ -48,8 +50,10 @@ function init() {
 
   clear();
   installMouseHandlers();
+  installControlHandlers();
+  updateDrawLabel();
 
-  requestAnimationFrame(frame);
+  resumeAnimation();
 }
 
 function clear() {
@@ -81,9 +85,13 @@ function draw(v) {
 
 // run many iterations of the simulation each animation frame.
 function frame() {
-  for (let i = 0; i < STEPS_PER_FRAME; i++) {
-    step(vector);
-    draw(vector);
+  animationRequestId = undefined;
+
+  if (!isPaused) {
+    for (let i = 0; i < STEPS_PER_FRAME; i++) {
+      step(vector);
+      draw(vector);
+    }
   }
 
   if (cursorActive) {
@@ -93,7 +101,72 @@ function frame() {
     }
   }
 
-  requestAnimationFrame(frame);
+  if (!isPaused || cursorActive) {
+    requestFrame();
+  }
+}
+
+function requestFrame() {
+  if (animationRequestId === undefined) {
+    animationRequestId = requestAnimationFrame(frame);
+  }
+}
+
+function installControlHandlers() {
+  const toggleButton = document.getElementById("toggle-animation");
+  const clearButton = document.getElementById("clear-canvas");
+  const downloadButton = document.getElementById("download-png");
+
+  toggleButton.addEventListener("click", toggleAnimation);
+  clearButton.addEventListener("click", clear);
+  downloadButton.addEventListener("click", downloadPng);
+}
+
+function updateDrawLabel() {
+  const drawLabel = document.getElementById("draw-label");
+  const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+  drawLabel.textContent = hasTouch ? "Press and Hold to Draw" : "Click and Hold to Draw";
+}
+
+function toggleAnimation() {
+  if (isPaused) {
+    resumeAnimation();
+  } else {
+    pauseAnimation();
+  }
+}
+
+function pauseAnimation() {
+  isPaused = true;
+
+  if (animationRequestId !== undefined) {
+    cancelAnimationFrame(animationRequestId);
+    animationRequestId = undefined;
+  }
+
+  updateToggleButton();
+}
+
+function resumeAnimation() {
+  isPaused = false;
+
+  requestFrame();
+
+  updateToggleButton();
+}
+
+function updateToggleButton() {
+  const toggleButton = document.getElementById("toggle-animation");
+  toggleButton.dataset.state = isPaused ? "paused" : "playing";
+  toggleButton.setAttribute("aria-label", isPaused ? "Resume animation" : "Pause animation");
+}
+
+function downloadPng() {
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = "z5.png";
+  link.click();
 }
 
 // mouse tracking
@@ -102,6 +175,10 @@ function installMouseHandlers() {
   canvas.addEventListener("mousemove", handleMouseMove);
   canvas.addEventListener("mouseleave", handleMouseLeave);
   canvas.addEventListener("mouseup", handleMouseUp);
+  canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+  canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+  canvas.addEventListener("touchend", handleTouchEnd);
+  canvas.addEventListener("touchcancel", handleTouchEnd);
 }
 
 function stopCursor() {
@@ -110,6 +187,7 @@ function stopCursor() {
 
 function startCursor() {
   cursorActive = true;
+  requestFrame();
 }
 
 function handleMouseDown(event) {
@@ -139,6 +217,22 @@ function handleMouseUp(event) {
   }
 }
 
+function handleTouchStart(event) {
+  event.preventDefault();
+  setCursorPositionFromTouchEvent(event);
+  startCursor();
+}
+
+function handleTouchMove(event) {
+  event.preventDefault();
+  setCursorPositionFromTouchEvent(event);
+  startCursor();
+}
+
+function handleTouchEnd() {
+  stopCursor();
+}
+
 function isLeftButton(event) {
   return event.button === 0;
 }
@@ -148,17 +242,28 @@ function isLeftButtonStillDown(event) {
 }
 
 function setCursorPositionFromMouseEvent(event) {
-  const point = getGridPointFromMouseEvent(event);
+  const point = getGridPointFromClientPoint(event);
 
   cursor[0] = point.y;
   cursor[1] = point.x;
 }
 
-function getGridPointFromMouseEvent(event) {
+function setCursorPositionFromTouchEvent(event) {
+  if (event.touches.length === 0) {
+    return;
+  }
+
+  const point = getGridPointFromClientPoint(event.touches[0]);
+
+  cursor[0] = point.y;
+  cursor[1] = point.x;
+}
+
+function getGridPointFromClientPoint(point) {
   const rect = canvas.getBoundingClientRect();
 
-  const canvasX = event.clientX - rect.left;
-  const canvasY = event.clientY - rect.top;
+  const canvasX = point.clientX - rect.left;
+  const canvasY = point.clientY - rect.top;
 
   const x = Math.floor((canvasX / rect.width) * GRID_WIDTH);
   const y = Math.floor((canvasY / rect.height) * GRID_HEIGHT);

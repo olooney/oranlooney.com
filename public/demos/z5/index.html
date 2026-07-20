@@ -2,11 +2,92 @@
 <html>
     <head>
         <title>A Random Walk in Z5</title>
+        <style>
+            .stage {
+                margin: 50px auto;
+                width: 512px;
+            }
+
+            .controls {
+                display: grid;
+                grid-template-columns: 1fr auto 1fr;
+                align-items: center;
+                margin-top: 14px;
+            }
+
+            .left-controls {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .draw-label {
+                color: #444;
+                font: 14px Arial, sans-serif;
+                text-align: center;
+            }
+
+            #download-png {
+                justify-self: end;
+            }
+
+            .control-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 30px;
+                padding: 0;
+                border: 1px solid #8f8f9d;
+                border-radius: 3px;
+                background: #f0f0f0;
+                color: #111;
+                box-sizing: border-box;
+                font: 14px Arial, sans-serif;
+                line-height: 1;
+                cursor: pointer;
+            }
+
+            .icon-button {
+                width: 34px;
+            }
+
+            .text-button {
+                padding: 0 10px;
+            }
+
+            .icon-button::before {
+                content: "";
+                display: block;
+            }
+
+            .icon-button[data-state="playing"]::before {
+                width: 12px;
+                height: 14px;
+                background: linear-gradient(to right, currentColor 0 4px, transparent 4px 8px, currentColor 8px 12px);
+            }
+
+            .icon-button[data-state="paused"]::before {
+                width: 0;
+                height: 0;
+                margin-left: 2px;
+                border-top: 7px solid transparent;
+                border-bottom: 7px solid transparent;
+                border-left: 11px solid currentColor;
+            }
+        </style>
     </head>
     <body>
-        <div style="margin: 50px auto; width:512px">
+        <div class="stage">
             <h3 style="text-align: center; font: 32px Arial ">A Random Walk in &Zopf;<sup style="font-size:0.6em;">5</sup></h3>
             <canvas id="ctx" height="512" width="512"></canvas>
+            <div class="controls">
+                <div class="left-controls">
+                    <button id="toggle-animation" class="control-button icon-button" type="button" aria-label="Pause animation" data-state="playing"></button>
+                    <button id="clear-canvas" class="control-button text-button" type="button">Clear</button>
+                </div>
+                <span id="draw-label" class="draw-label">Click to Draw</span>
+                <button id="download-png" class="control-button text-button" type="button">Download</button>
+            </div>
         </div>
         <script type="module" src="z5.js"></script>
     </body>

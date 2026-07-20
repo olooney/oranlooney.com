@@ -9,9 +9,10 @@
   - [X] explode trees on click
   - [X] add Conway connections
   - [X] add clouds
-- [ ] A Random Walk in Z5
-  - [ ] add mobile touch support
-  - [ ] add snapshot / download
+- [X] A Random Walk in Z5
+  - [X] add mobile touch support
+  - [X] add snapshot / download
+  - [X] clear button
 - [ ] Whack-a-Key
   - [ ] Add sound and music
 - [ ] Font Wars
