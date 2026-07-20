@@ -13,6 +13,9 @@ make sure the thumbnail will be the right size without distorting the image.
 from PIL import Image
 from glob import glob
 import os
+import re
+
+THUMBNAIL_SUFFIX = re.compile(r'\.\d+x\d+$')
 
 def flat( *nums ):
     'Build a tuple of ints from float or integer arguments. Useful because PIL crop and resize require integer points.'
@@ -57,29 +60,30 @@ def cropped_thumbnail(img, size):
         img = img.crop( flat(side_cut_line, 0,  side_cut_line + crop_size.width, crop_size.height) )
         
 
-    return img.resize(target.size, Image.LANCZOS)
+    return img.resize(target.size, Image.Resampling.LANCZOS)
 
-def lead_photos(size):
+def lead_photos(pattern, size):
     size = flat(*size)
 
-    #for filename in glob("static/post/*/lead*.{}x{}.*".format(*size)):
-    for filename in glob("static/post/*/lead.*"):
-        if '.{}x{}'.format(*size) not in filename:
-            # derive new filename
-            basename, ext = os.path.splitext(filename)
-            thumb_filename = basename + '.{}x{}'.format(*size) + ext
+    for filename in glob(pattern):
+        basename, ext = os.path.splitext(filename)
+        if THUMBNAIL_SUFFIX.search(basename):
+            continue
 
-            # if the thumbnail does not yet exist...
-            if not os.path.isfile(thumb_filename):
-                print('converting {}...'.format(filename))
+        thumb_filename = basename + '.{}x{}'.format(*size) + ext
 
-                # make the thumbnail image
-                img = Image.open(filename)
-                thumb = cropped_thumbnail(img, size)
-                thumb.save(thumb_filename, optimize=True)
-                print('saved {}.\n'.format(thumb_filename))
+        # if the thumbnail does not yet exist...
+        if not os.path.isfile(thumb_filename):
+            print('converting {}...'.format(filename))
+
+            # make the thumbnail image
+            img = Image.open(filename)
+            thumb = cropped_thumbnail(img, size)
+            thumb.save(thumb_filename, optimize=True)
+            print('saved {}.\n'.format(thumb_filename))
 
 if __name__ == '__main__':
-    lead_photos( (192, 128) )
+    lead_photos('static/post/*/lead.*', (192, 128))
+    lead_photos('static/demos/*/lead.*', (192, 160))
 
 
