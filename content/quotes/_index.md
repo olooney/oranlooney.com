@@ -429,6 +429,10 @@ be questioned."
 <br>&mdash;Richard Feynman
 
 
+"I beseech you, in the bowels of Christ, think it possible you may be mistaken!"
+<br>&mdash;Oliver Cromwell
+
+
 ### Statistics
 
 "Statistics is the grammar of science." 
@@ -735,6 +739,10 @@ arguments that will change his mind. This is proof neither of his own strength
 nor his teacher's weakness. When someone caught in an argument hardens to stone,
 there is just no more reasoning with them."
 <br>&mdash;Epictetus
+
+
+"'Tis the time's plague when madmen lead the blind."
+<br>&mdash;Shakespeare, *King Lear*
 
 
 "For the great enemy of truth is very often not the lie&mdash;deliberate,
