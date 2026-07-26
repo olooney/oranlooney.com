@@ -1,0 +1,49 @@
+ul.collapsible-tree,
+ul.collapsible-tree ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+}
+ul.collapsible-tree ul {
+  border-left: 2px solid #808080;
+}
+.collapsible-tree li {
+  margin: 0.5em 0;
+}
+.collapsible-tree .tree-line {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35em;
+  padding-right: 1.25em;
+}
+.collapsible-tree .tree-number {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.collapsible-tree .tree-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.collapsible-tree li.collapsible > .tree-line {
+  cursor: pointer;
+}
+.collapsible-tree li.collapsible > .tree-line::after {
+  content: "▸";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2em;
+  line-height: 1.6;
+  color: #800000;
+}
+.collapsible-tree li.collapsible.expanded > .tree-line::after {
+  content: "▾";
+}
+.collapsible-tree li.collapsible > ul {
+  display: none;
+}
+.collapsible-tree li.collapsible.expanded > ul {
+  display: block;
+}
