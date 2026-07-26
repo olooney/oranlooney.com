@@ -114,6 +114,36 @@ html .article p.caption {
 	display: none;
 }
 
+:root {
+  --muted-text-color: #666;
+}
+html .article dl {
+  margin: 1em 4em;
+  padding: 0;
+  font-size: 0.95em;
+  color: var(--muted-text-color);
+}
+
+html .article dt {
+  display: inline;
+  font-style: italic;
+  font-weight: 600;
+}
+
+html .article dt::after {
+  content: ": ";
+}
+
+html .article dd {
+  display: inline;
+  margin: 0;
+}
+
+html .article dd::after {
+  content: "";
+  display: block;
+}
+
 /* Site Layout */
 html body .main {
 	padding: 1em;
