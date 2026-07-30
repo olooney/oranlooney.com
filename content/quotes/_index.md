@@ -99,7 +99,7 @@ always refer to 'the number of lines of code spent.'"
 <br>&mdash;Edsger Dijkstra
 
 
-"As a programmer, it's your job to put yourself out-of-business. What you can
+"As a programmer, it's your job to put yourself out of business. What you can
 do today can be automated tomorrow."
 <br>&mdash;Douglas McIlroy
 
@@ -119,7 +119,7 @@ empty text file."
 
 
 "A specification, design, procedure, or test plan that will not fit on one page
-of 8.5-by-11 inch paper cannot be understood."
+of 8.5 x 11-inch paper cannot be understood."
 <br>&mdash;Mark Ardis 
 
 
@@ -129,7 +129,7 @@ development time. The remaining 10 percent of the code accounts for the other
 <br>&mdash;Tom Cargill 
 
 
-"Every twenty minute job is one broken bolt away from becoming a three day
+"Every twenty-minute job is one broken bolt away from becoming a three-day
 ordeal."
 <br>&mdash;Anonymous
 
@@ -256,7 +256,7 @@ level in which one can be absolutely precise."
 "...but there is one quality that cannot be purchased that way&mdash;and that
 is reliability. The price of reliability is the pursuit of the utmost
 simplicity. It is a price which the very rich find most hard to pay."
-<br>&mdash;C.A.R. Hoare
+<br>&mdash;C. A. R. Hoare
 
 
 "So much complexity in software comes from trying to make one thing do two
@@ -295,7 +295,7 @@ it."
 
 "The ability to simplify means to eliminate the unnecessary so that the
 necessary may speak."
-<br>&mdash;Hans Hoffman
+<br>&mdash;Hans Hofmann
 
 
 "Any intelligent fool can make things bigger, more complex, more violent. It
@@ -466,7 +466,7 @@ wiggle his trunk."
 
 
 "To consult the statistician after an experiment is finished is often merely to
-ask him to conduct a post mortem examination. He can perhaps say what the
+ask him to conduct a postmortem examination. He can perhaps say what the
 experiment died of."
 <br>&mdash;Ronald Fisher
 
@@ -480,7 +480,7 @@ procedure of its interpretation."
 <br>&mdash;Light, Singer and Willett
 
 
-"He uses statistics as a drunken man uses lamp-posts--for support rather than
+"He uses statistics as a drunken man uses lamp-posts&mdash;for support rather than
 illumination."
 <br>&mdash;Andrew Lang
 
@@ -556,7 +556,7 @@ world."
 "Programming, like all engineering, is a lot of work: we have to build
 everything from scratch. \[Machine\] Learning is more like farming, which lets
 nature do most of the work. Farmers combine seeds with nutrients to grow crops;
-\[Machine\] Learners combine knowledge with data to grow programs."
+Learners combine knowledge with data to grow programs."
 <br>&mdash;Pedro Domingos
 
 
@@ -585,8 +585,8 @@ test set error."
 <br>&mdash;Leo Breiman
 
 
-"The one nice thing about Random Forest is that is doesn't overfit \[as more
-trees are added\]. You can’t have too many trees: it just stabilizes."
+"The one nice thing about random forest is that it doesn't overfit \[as more
+trees are added\]. You can't have too many trees: it just stabilizes."
 <br>&mdash;Trevor Hastie
 
 
@@ -674,7 +674,7 @@ or around him, and so loses all respect for himself and for others."
 
 "Some of the greatest discoveries consist mainly in the clearing away of
 psychological roadblocks which obstruct the approach to reality; which is why,
-post factum, they appear so obvious."
+*post factum*, they appear so obvious."
 <br>&mdash;Arthur Koestler
 
 
@@ -747,7 +747,7 @@ there is just no more reasoning with them."
 
 "For the great enemy of truth is very often not the lie&mdash;deliberate,
 contrived and dishonest&mdash;but the myth&mdash;persistent, persuasive, and
-unrealistic. Too often we hold fast to the cliches of our forebears. We subject
+unrealistic. Too often we hold fast to the clichés of our forebears. We subject
 all facts to a prefabricated set of interpretations. We enjoy the comfort of
 opinion without the discomfort of thought."
 <br>&mdash;John F. Kennedy
@@ -787,7 +787,7 @@ and ignorance on the other."
 
 "Either America will destroy ignorance or ignorance will destroy the United
 States." 
-<br>&mdash;W.E.B. Du Bois
+<br>&mdash;W. E. B. Du Bois
 
 
 ## Humor
@@ -795,6 +795,11 @@ States."
 "Should array indices start at 0 or 1? My compromise of 0.5 was rejected
 without, I thought, proper consideration."
 <br>&mdash;Stan Kelly-Bootle
+
+
+"All problems in computer science can be solved by another level of indirection,
+except for the problem of too many layers of indirection."
+<br>&mdash;David Wheeler, [The Fundamental Theorem of Software Engineering][FTSE]
 
 
 "There are three types of lies: lies, damn lies, and statistics."
@@ -858,7 +863,7 @@ solve the problem well."
 
 
 "A mathematician is a device for turning coffee into theorems."
-<br>&mdash;Paul Erdos
+<br>&mdash;Paul Erdős
 
 
 "Corollary: A co-mathematician is a device for turning ffee into co-theorems."
@@ -884,8 +889,8 @@ art."
 <br>&mdash;Lew Lefton
 
 
-"Pointers are real. They’re what the hardware understands. Somebody has to deal
-with them. You can’t just place a LISP book on top of an x86 chip and hope that
+"Pointers are real. They're what the hardware understands. Somebody has to deal
+with them. You can't just place a LISP book on top of an x86 chip and hope that
 the hardware learns about lambda calculus by osmosis."
 <br>&mdash;James Mickens
 
@@ -945,7 +950,7 @@ reduced $\mathrm{mod}\ n$ gives secre-$c$!
 
 <br><b>A Certain Definite Integral</b><br>
 \\[ \int_1^{\sqrt[3]{3}} t^2dt \cos\left(\frac{3\pi}{9}\right) = \log(\sqrt[3]{e}) \\]
-The Integral $t$-squared $dt$ <br>
+The integral $t$-squared $dt$ <br>
 From one to the cube root of three <br>
 Times the cosine <br>
 Of three $\pi$ over nine<br>
@@ -956,7 +961,7 @@ Equals log of the cube root of $e$.
 <br><b>Mnemonic For Calculating Sixteen</b><br>
 \\[ ln(e^4)\sqrt{1024} + 6 \times 12 - 8 \times 23 = 16 \\]
 The log of $e$ to the four<br>
-Times the square root of one thousand twenty four<br>
+Times the square root of one thousand twenty-four<br>
 Adding six dozens please<br>
 Minus eight twenty-threes<br>
 Is sixteen, case closed, shut the door.
@@ -1078,5 +1083,6 @@ there's always a prime between $n$ and $2n$.
 [NKCNB]: https://www.youtube.com/watch?v=ZpF1J9FnD4E
 [PHG]: https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/
 [CF]: https://en.wiktionary.org/wiki/Chesterton%27s_fence
+[FTSE]: https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering
 
 
