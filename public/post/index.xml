@@ -6,10 +6,19 @@
     <description>Recent content in Posts on OranLooney.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 16 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 30 Jul 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://www.oranlooney.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Code Quality Apocalypse Survival Guide</title>
+      <link>https://www.oranlooney.com/post/code-quality/</link>
+      <pubDate>Thu, 30 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.oranlooney.com/post/code-quality/</guid>
+      <description>Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming; agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a hawk and keep them on rails for best results.</description>
+    </item>
     
     <item>
       <title>What Rose Petals Teach Us about Induction</title>
@@ -18,15 +27,6 @@
       
       <guid>https://www.oranlooney.com/post/rose-petals/</guid>
       <description>Richard Hamming famously used to ask his colleagues at Bell Labs this question: &amp;ldquo;What is the most important problem in your field, and why aren&amp;rsquo;t you working on it?&amp;rdquo; To which they probably replied, &amp;ldquo;Look, Dick, it&amp;rsquo;s eight-thirty in the morning. I haven&amp;rsquo;t even had my coffee yet. Who starts a conversation like that?</description>
-    </item>
-    
-    <item>
-      <title>The Code Quality Apocalypse Survival Guide</title>
-      <link>https://www.oranlooney.com/post/code-quality/</link>
-      <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.oranlooney.com/post/code-quality/</guid>
-      <description>Agents are going to take our jobs; agents are going to make us rich. Agents suck the joy out of programming; agents make hacking fun again. Just give them a token budget and get out of their way; watch them like a hawk and keep them on rails for best results.</description>
     </item>
     
     <item>

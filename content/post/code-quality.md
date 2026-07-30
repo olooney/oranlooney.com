@@ -1,8 +1,8 @@
 ---
 title: "The Code Quality Apocalypse Survival Guide"
 author: "Oran Looney"
-date: 2026-06-15
-publishdate: 2026-06-15
+date: 2026-07-30
+publishdate: 2026-07-30
 tags:
   - Future
   - LLM
@@ -19,7 +19,7 @@ searching, a lot of vague metaphors. Here are some of my favorites:
   And you still need to know *where* and *how* to cut; chainsaws can't think for you.
 * Agents are junior developers. Fast, forgetful juniors straight off the street. They add bandwidth and velocity 
   to a team, but left to their own devices they cause problems and create technical debt. It's your job to provide 
-  guidance and direction, so congratulations: you're a software engineering team lead now!
+  guidance and direction, so congratulations: you're a team lead now!
 * Agents are the sorcerer's hat. To the apprentice, a source of endless, effortless power. Put it on, speak a
   few magic words, and inanimate matter comes alive and starts working for you. Look where that got him. The 
   master sorcerer knows that power is to be wielded with utmost caution.
@@ -33,7 +33,7 @@ Several, in fact. I'd go so far as to say that I formed <span
 class="shimmer">Opinions™</span>. Opinions about where all this is going, what
 it means for our industry, and for each of us individually.
 
-The core thesis of article is that the ideas of traditional software
+The core thesis of article is that the tools of traditional software
 engineering can be used to understand the impact of coding agents, because
 those concepts were never really about human psychology specifically, but about
 things like managing complexity or handling uncertainty. We need to understand
@@ -46,7 +46,7 @@ for surviving it.
 The Argument
 ------------
 
-In briefest outline, the argument is as follows. (Click to expand each section.)
+In a [Wittgenstein-style][TLP] nested structure, the argument is as follows. (Click to expand each section.)
 
 - There is a code quality apocalypse coming.
     - That is to say, an age of unreliable, insecure, buggy, and brittle software.
@@ -80,6 +80,7 @@ In briefest outline, the argument is as follows. (Click to expand each section.)
     - View yourself as a team lead, not a typist.
     - Apply proven practices: code review, testing, observability, architectural discipline, merge discipline, etc.
     - Take real ownership of your codebase.
+    - Develop deep subject matter expertise in some real-world problem.
     - Continue to learn and invest in your own knowledge and skills as a long-term strategy.
 
 
@@ -100,6 +101,8 @@ The only thing that's new is that people who would otherwise have to put in
 years of effort paying their dues down in the code mines are being forced into
 that kind of high-level thinking from day one. If code construction isn't the
 job, then what is?
+
+![Sunset](/post/code-quality_files/sunset.jpg)
 
 There's a lot of tension around the concept of a manager who "used to code." In
 the best-case scenario, they developed a deep sense for what the work involved,
@@ -148,8 +151,9 @@ isn't a new problem. A first-year scrum master fresh out of an agile boot camp
 can diagnose that. Having a subset of the team go off in different directions
 and end up with competing code bases that take more time to integrate than the
 original development is the kind of classic horror story Fred Brooks was
-writing about in *[The Mythical Man-Month][MMM]* in 1975. TODO: of code without any
-consideration for merge discipline. 
+writing about in *[The Mythical Man-Month][MMM]* in 1975.
+
+![Mythical Man-Month Book Cover](/post/code-quality_files/mmm.png)
 
 But the nature of the mistake didn't really have anything to do with LLM agents
 at all. The LLM would have happily merged and rebased and done daily PRs to
@@ -294,6 +298,8 @@ The nature of human skill acquisition is such that once something is second
 nature to us, we can use it in difficult situations outside of all previous
 experience almost automatically.
 
+![Pilot and autopilot from the movie Airplane!](/post/code-quality_files/pilot_and_autopilot.jpg)
+
 The same basic lesson applies to human programmers and agentic programming.
 It's all well and good to talk about "supervising," "guiding," or "instructing"
 your agents, to briefly skim their output, but if you're not getting hands-on
@@ -312,39 +318,6 @@ Ten years from now programmers will be either hobbyists, academic specialists,
 or dinosaurs.
 
 
-The Knowledge Cutoff Problem
------------------------------
-
-Pydantic V2 was released in 2023, three years ago at the time of this writing,
-but LLMs still frequently attempt to use the older, deprecated V1 methods. Even
-when instructed to use V2, they frequently slip in one or two V1 constructs by
-accident, which must then be fixed iteratively. This is a direct consequence of
-how they are trained: a lot of the repos and blog posts they are relying on are
-outdated and were written against V1, and it doesn't have a strong sense that
-any particular Pydantic code example that it is training on is V1 or V2 because
-that is left implicit in the original source text. How often this occurs is
-strongly correlated with how advanced the work you're doing is; it does OK with
-defining simple Pydantic models and fields, starts to make mistakes when you
-use custom Fields or validators, and is more often confused than not when
-working with advanced constructs like iterating over the metadata for all the
-fields of a model. Not only are those deeper, more advanced features the aspect
-of the library that changed the most from V1 to V2, it's also the one where it
-has the fewest examples to learn from.
-
-While vendors actively attempt to fight this knowledge cutoff problem by
-training newer versions of LLMs on "fresh" facts such as recent news events,
-the fact that it's still an issue after three years with a fairly popular
-library like Pydantic shows how difficult the problem is. Libraries that make
-major changes to their interface, such as the "runes" Svelte introduced in
-version 5, are putting their developers into a difficult position. Developers
-can use those features manually right away, disregarding LLM tooling, or try to
-use some of their precious context to write instructions for dealing with the
-new syntax, or can wait until the LLMs have had time to catch up. Developers
-that rely entirely on so-called "vibe coding" might not even be aware that
-their LLMs are generating code that targets an older, deprecated version of the
-library.
-
-
 Software Complexity
 -------------------
 
@@ -352,6 +325,8 @@ Software engineers over the last sixty years have learned one huge lesson the
 hard way: software complexity kills. One bad developer slamming out spaghetti
 code as fast as he or she can type can, in a single year, build a system that
 a team of ten good developers cannot maintain.
+
+![Software Complexity, XKCD 1987](/post/code-quality_files/complexity.png)
 
 The thing about technical debt that makes it so dangerous is that it builds up
 slowly, invisibly, like emphysema. You don't even notice it for the first few
@@ -449,21 +424,18 @@ The JavaScript ecosystem spent a decade cycling through
 successive waves of frameworks, packaging systems, build pipelines, state
 management patterns, testing philosophies, and deployment models. Every year
 brought a new raft of "best practices," usually outright contradicting last
-year's consensus.
-
-As someone who lived through that, the current LLM ecosystem feels very
-similar. TODO Just when we seem to be getting a handle on things a newer,
-larger model drops which invalidates half the conclusions people drew from the
-previous benchmark cycle.
+year's consensus. As someone who lived through that, the current LLM ecosystem
+feels very familiar.
 
 Other than moving to the mountains and living in a [ten-foot square hut][HJK]
 it's hard to know what to do.
 
-[HJK]: https://en.wikipedia.org/wiki/H%C5%8Dj%C5%8Dki
+![Ten-foot square hut](/post/code-quality_files/hojoki.png)
 
 
-Nobody Ever Really Cared Anyway
--------------------------------
+
+Nobody Ever Really Cared...
+---------------------------
 
 The good news is that no one ever really cared about code quality anyway. It
 was essentially invisible to executives, who almost universally viewed it as
@@ -474,24 +446,35 @@ knew they'd be the ones woken up at 2 am to debug some issue breaking the entire
 app. 
 
 So, as strange as it sounds, the industry's focus on code quality arose almost
-accidentally, as an emergent outcome of the game played between engineers and
+accidentally, as an emergent outcome of a game played between engineers and
 executives. Execs don't care about code quality, but they *do* care about
-production failures, and they are smart enough to pay someone else and tell
-them that they were *accountable* for production failures, and reasonable
-enough to listen when those same people pushed back against crazy timelines or
-unreasonable expectations.
+production failures, and they are smart enough to make some else *accountable*
+for production failures, and reasonable enough to listen when those same people
+pushed back against crazy timelines or unreasonable expectations.
 
-We attained a kind of fragile equilibrium, purely by chance. LLM coding agents
-*break* that equilibrium: they are the ultimate yes men, and will immediately
-and joyously cave to any kind of pressure from above to "just get it done."
+As a result, we attained a fragile equilibrium, almost by chance. LLM coding agents
+*break* that equilibrium. They are the ultimate yes men, and immediately
+cave to any kind of pressure to just get it done. After all, they're rewarded for
+being "steerable," for following directions, not for pushing back on unreasonable demands.
 
-So, executives will get what they've always asked for: apps coded quickly. Of
-course, just giving someone *exactly* what they ask for is often
-indistinguishable from sabotage.
+There's a lot of talk these days about LLMs optimized for "long horizon" tasks... but
+by "long" they mean up to 24 hours of independent action, not the 2-5 year horizons
+that software engineers typically consider when they make architecture decisions for
+medium-to-large projects. Relative to a human engineer, even the best LLM agents
+are still incredibly short-sighted. Now, if the user was supplying that foresight,
+or even just instructing the agent to make good long term architecture decisions,
+maybe it wouldn't be so bad... unfortunately, the last few decades have trained
+executives and product owners that their job is to push hard for new features and
+shorter timelines, and that it's up to the developers to push back and worry about
+deployment, reliability, and quality. That dynamic isn't going to change overnight.
+
+So, executives will get what they've always dreamed of: apps coded up just
+as fast as they can think up new requirements. Of course, just giving someone
+*exactly* what they ask for is often indistinguishable from sabotage.
 
 
 Why You *Should* Care Anyway
---------------------------
+----------------------------
 
 How does software die? I don't mean abandoned due to lack of interest, I mean
 how does a good, useful code base reach a point where even the people who love
@@ -544,7 +527,7 @@ problem.* The only approach that has ever worked is to cut it off at the head.
 Using LLMs to Increase Code Quality
 -----------------------------------
 
-Used intentionally, LLMs can be used to *increase* code quality. Here are a
+It's not all bad news. Used intentionally, LLMs can be used to *increase* code quality. Here are a
 few of the things I've found they're actually quite good at... if you bother
 to ask them to do it:
 
@@ -658,8 +641,8 @@ painful as agents set ever higher expectations for velocity and consequently
 expose stakeholders to ever increasing variance and timeline uncertainty. 
 
 
-How to Succeed
----------------
+How to Thrive
+-------------
 
 The people who are seeing success with these tools, people like [Simon
 Willison][SW], are the people who are *already* capable of shipping software.
@@ -732,14 +715,13 @@ understanding.
 
 
 
-
-
 [TS]: https://ceri.msu.edu/_assets/pdfs/t-shaped-pdfs/Primer-on-the-T-professional.pdf
 [MF]: https://en.wikipedia.org/wiki/Memento_(film)
 [SW]: https://simonwillison.net/
 [BBM]: https://blog.codinghorror.com/the-big-ball-of-mud-and-other-architectural-disasters/
 [HMD]: https://news.ycombinator.com/item?id=49096969
-
+[TLP]: https://en.wikipedia.org/wiki/Tractatus_Logico-Philosophicus
+[HJK]: https://en.wikipedia.org/wiki/H%C5%8Dj%C5%8Dki
 
 <div>
 <link rel="stylesheet" href="/css/tree.css">
