@@ -8,7 +8,7 @@ date = "2022-11-11"
 ### Writing Code
 
 "A procedure should fit on a page."
-<br>&mdash;David Tribble 
+<br>&mdash;David Tribble
 
 
 "When in doubt, use brute force."
@@ -34,7 +34,7 @@ to pick features that don't fight each other."
 <br>&mdash;John Carmack
 
 
-"The road to programming hell is paved with global variables." 
+"The road to programming hell is paved with global variables."
 <br>&mdash;Steve McConnell
 
 
@@ -120,13 +120,13 @@ empty text file."
 
 "A specification, design, procedure, or test plan that will not fit on one page
 of 8.5 x 11-inch paper cannot be understood."
-<br>&mdash;Mark Ardis 
+<br>&mdash;Mark Ardis
 
 
 "The first 90 percent of the code accounts for the first 90 percent of the
 development time. The remaining 10 percent of the code accounts for the other
 90 percent of the development time."
-<br>&mdash;Tom Cargill 
+<br>&mdash;Tom Cargill
 
 
 "Every twenty-minute job is one broken bolt away from becoming a three-day
@@ -159,12 +159,12 @@ four-inch mirror then a six-inch mirror than to make a six-inch mirror."
 
 
 "We build our computer \[systems\] the way we build our cities: over time,
-without a plan, on top of ruins." 
+without a plan, on top of ruins."
 <br>&mdash;Ellen Ullman
 
 
 "Every great developer you know got there by solving problems they were
-unqualified to solve until they actually did it." 
+unqualified to solve until they actually did it."
 <br>&mdash;Patrick McKenzie
 
 
@@ -190,7 +190,7 @@ without thinking about them."
 ### Bugs
 
 "The first step in fixing a broken program is getting it to fail repeatably."
-<br>&mdash;Tom Duff 
+<br>&mdash;Tom Duff
 
 
 "Finding your bug is a process of confirming the many things that you believe
@@ -214,7 +214,7 @@ judiciously placed print statements."
 
 
 "Each new user of a new system uncovers a new class of bugs."
-<br>&mdash;Brian Kernighan 
+<br>&mdash;Brian Kernighan
 
 
 "In our business, one in a million is next Tuesday."
@@ -339,7 +339,7 @@ The Second Rule of Program Optimization (For Experts Only): Don't do it yet."
 
 "In non-I/O-bound programs, a few percent of the source code typically accounts
 for over half the run time."
-<br>&mdash;Donald Knuth 
+<br>&mdash;Donald Knuth
 
 
 "Programmers waste enormous amounts of time thinking about, or worrying about,
@@ -377,13 +377,13 @@ confusion of things."
 <br>&mdash;Isaac Newton
 
 
-"Models should be as simple as possible, but not more so." 
+"Models should be as simple as possible, but not more so."
 <br>&mdash;Attributed to Einstein
 
 
 "Science is simply common sense at its best, that is, rigidly accurate in
 observation, and merciless to fallacy in logic."
-<br>&mdash;Thomas Henry Huxley 
+<br>&mdash;Thomas Henry Huxley
 
 
 "Measure what is measurable, and make measurable what is not so."
@@ -404,7 +404,7 @@ understand everything too soon."
 <br>&mdash;Alexander Pope
 
 
-"It is a capital mistake to theorize before one has data." 
+"It is a capital mistake to theorize before one has data."
 <br>&mdash;Sir Arthur Conan Doyle
 
 
@@ -435,7 +435,7 @@ be questioned."
 
 ### Statistics
 
-"Statistics is the grammar of science." 
+"Statistics is the grammar of science."
 <br>&mdash;Karl Pearson
 
 
@@ -458,7 +458,7 @@ be content to begin with doubts he shall end in certainties."
 
 "With four parameters I can fit an elephant, and with five I can make him
 wiggle his trunk."
-<br>&mdash;John von Neumann 
+<br>&mdash;John von Neumann
 
 
 "If your experiment needs statistics, you ought to have done a better experiment."
@@ -491,14 +491,14 @@ may pick out from the whole armamentarium of scientific methodology."
 <br>&mdash;Edwin B. Wilson
 
 
-### Research 
+### Research
 
 "What I cannot create, I do not understand."
 <br>&mdash;Richard Feynman
 
 
 "Study hard what interests you the most in the most undisciplined, irreverent
-and original manner possible." 
+and original manner possible."
 <br>&mdash;Richard Feynman
 
 
@@ -525,7 +525,7 @@ attention to theoretical things; it will improve your practice."
 
 "It is unworthy of excellent men to lose hours like slaves in the labour of
 calculation which could safely be relegated to anyone else if machines were
-used." 
+used."
 <br>&mdash;Gottfried Wilhelm Leibniz, 1685
 
 
@@ -549,7 +549,7 @@ takes long hours of studying and uninterruptible concentration."
 
 "People worry that computers will get too smart and take over the world, but
 the real problem is that they're too stupid and they've already taken over the
-world." 
+world."
 <br>&mdash;Pedro Domingos
 
 
@@ -624,7 +624,7 @@ injured. But he is injured who abides in his error and ignorance."
 "One should respect public opinion insofar as is necessary to avoid starvation
 and keep out of prison, but anything that goes beyond this is voluntary
 submission to an unnecessary tyranny."
-<br>&mdash;Bertrand Russell 
+<br>&mdash;Bertrand Russell
 
 
 "If it can be destroyed by the truth, it deserves to be destroyed by the truth."
@@ -727,7 +727,7 @@ solutions, and pass them on."
 
 "The trouble with the world is that the stupid are cocksure and the intelligent
 full of doubt."
-<br>&mdash;Bertrand Russell 
+<br>&mdash;Bertrand Russell
 
 
 "Ignorance more frequently begets confidence than does knowledge."
@@ -758,8 +758,8 @@ answers."
 <br>&mdash;Thomas Pynchon, *Gravity's Rainbow*
 
 
-"I have a foreboding of an America in my children's or grandchildren's 
-time&mdash;when the United States is a service and information economy; when 
+"I have a foreboding of an America in my children's or grandchildren's
+time&mdash;when the United States is a service and information economy; when
 nearly all the manufacturing industries have slipped away to other countries;
 when awesome technological powers are in the hands of a very few, and no one
 representing the public interest can even grasp the issues; when the people
@@ -767,14 +767,14 @@ have lost the ability to set their own agendas or knowledgeably question those
 in authority; when, clutching our crystals and nervously consulting our
 horoscopes, our critical faculties in decline, unable to distinguish between
 what feels good and what's true, we slide, almost without noticing, back into
-superstition and darkness..." 
+superstition and darkness..."
 <br>&mdash;Carl Sagan
 
 
 "There is a cult of ignorance in the United States, and there has always been.
 The strain of anti-intellectualism has been a constant thread winding its way
 through our political and cultural life, nurtured by the false notion that
-democracy means that my ignorance is just as good as your knowledge." 
+democracy means that my ignorance is just as good as your knowledge."
 <br>&mdash;Isaac Asimov
 
 
@@ -786,7 +786,7 @@ and ignorance on the other."
 
 
 "Either America will destroy ignorance or ignorance will destroy the United
-States." 
+States."
 <br>&mdash;W. E. B. Du Bois
 
 
@@ -851,7 +851,7 @@ solve the problem well."
 
 
 "Eschew clever rules."
-<br>&mdash;Joe Condon 
+<br>&mdash;Joe Condon
 
 
 "The term 'exponential' is used quadratically too often."
@@ -872,7 +872,7 @@ solve the problem well."
 
 "Anyone who considers arithmetical methods of producing random numbers is, of
 course, in a state of sin."
-<br>&mdash;John von Neumann 
+<br>&mdash;John von Neumann
 
 
 "A statistician is someone who is good with numbers but lacks the personality
@@ -909,7 +909,7 @@ multithreading.' Nothhw tpe yawrve o oblems."
 <br>&mdash;John Carmack
 
 
-## Poems 
+## Poems
 
 <b>A Dozen, A Gross, A Score</b><br>
 \\[ \frac{12 + 144 + 20 + 3\sqrt{4}}{7 + 5 \times 11} = 9^2 + 0 \\]
@@ -959,7 +959,7 @@ Equals log of the cube root of $e$.
 
 
 <br><b>Mnemonic For Calculating Sixteen</b><br>
-\\[ ln(e^4)\sqrt{1024} + 6 \times 12 - 8 \times 23 = 16 \\]
+\\[ \ln(e^4)\sqrt{1024} + 6 \times 12 - 8 \times 23 = 16 \\]
 The log of $e$ to the four<br>
 Times the square root of one thousand twenty-four<br>
 Adding six dozens please<br>
