@@ -158,7 +158,7 @@ $m$ is less than or equal to $n$. That is, we want to map some high dimensional
 space into some lower dimensional space. (Contrast this with the map into a
 finite set sought by cluster analysis.)</p>
 
-<p>We will focus on one technique in particular: <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Primary Component
+<p>We will focus on one technique in particular: <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal Component
 Analysis</a>, usually abbreviated PCA.  We&rsquo;ll derive PCA from first
 principles, implement a working version (writing all the linear algebra code
 from scratch), show an example of how PCA helps us visualize and gain insight
@@ -898,7 +898,7 @@ along the diagonal, and exactly 0 away from the diagonal.</p>
 <h2 id="visualizing-the-components">Visualizing the Components</h2>
 
 <p>PCA was applied only to the 13 features; the partition into three quality
-classes was not included. Still, we would like to know if the primary
+classes was not included. Still, we would like to know if the principal
 components have something to say about these classes, so we will color code
 them with red, green, and blue.</p>
 
@@ -909,7 +909,7 @@ for c in np.unique(wine.target):
     color = ['red', 'green', 'blue'][c]
     X_class = X_prime[wine.target == c]
     plt.scatter(X_class[:, 0], X_class[:, 1]*0, color=color, alpha=0.3)
-plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.title(&quot;Principal Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC1&quot;)
 </code></pre>
 
@@ -933,7 +933,7 @@ for c in np.unique(wine.target):
     color = ['red', 'green', 'blue'][c]
     X_class = X_prime[wine.target == c]
     plt.scatter(X_class[:, 0], X_class[:, 1], color=color, alpha=0.6)
-plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.title(&quot;Principal Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC1&quot;)
 plt.ylabel(&quot;PC2&quot;)
 </code></pre>
@@ -960,7 +960,7 @@ for c in np.unique(wine.target):
     color = ['red', 'green', 'blue'][c]
     X_class = X_prime[wine.target == c]
     plt.scatter(X_class[:, 0], X_class[:, 2], color=color, alpha=0.6)
-plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.title(&quot;Principal Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC1&quot;)
 plt.ylabel(&quot;PC3&quot;)
 
@@ -969,7 +969,7 @@ for c in np.unique(wine.target):
     color = ['red', 'green', 'blue'][c]
     X_class = X_prime[wine.target == c]
     plt.scatter(X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
-plt.title(&quot;Primary Components of Wine Quality&quot;)
+plt.title(&quot;Principal Components of Wine Quality&quot;)
 plt.xlabel(&quot;PC2&quot;)
 plt.ylabel(&quot;PC3&quot;)
 </code></pre>
@@ -989,7 +989,7 @@ for c in np.unique(wine.target):
     ax.scatter(X_class[:, 0], X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
 
 # chart junk
-plt.title(&quot;First 3 Primary Components of Wine Quality&quot;)
+plt.title(&quot;First 3 Principal Components of Wine Quality&quot;)
 ax.set_xlabel('PC1')
 ax.set_ylabel('PC2')
 ax.set_zlabel('PC3')

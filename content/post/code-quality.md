@@ -33,11 +33,11 @@ Several, in fact. I'd go so far as to say that I formed <span
 class="shimmer">Opinions™</span>. Opinions about where all this is going, what
 it means for our industry, and for each of us individually.
 
-The core thesis of article is that the tools of traditional software
+The core thesis of this article is that the tools of traditional software
 engineering can be used to understand the impact of coding agents, because
 those concepts were never really about human psychology specifically, but about
 things like managing complexity or handling uncertainty. We need to understand
-how agents are different of course, where they're stronger or weaker, but once
+how agents are different, of course, where they're stronger or weaker, but once
 we do that we can use old frameworks to imagine what the software industry is
 going to be like in a few years, and from there we can work out a strategy
 for surviving it.
@@ -133,7 +133,7 @@ supposed to learn what they need to know? One answer is that you could just
 read the software engineering literature and follow the advice there. In my
 experience, however, it's not possible to even really understand the literature
 without having hands-on professional experience on comparable projects. This
-leads to ivory tower managers that can quote a lot of theoretical ideas but
+leads to managers who can quote a lot of theoretical ideas but
 don't have the counterbalancing weight of experience to keep them grounded.
 
 
@@ -141,21 +141,19 @@ The Tomato in the Fruit Salad
 -----------------------------
 
 One of the failure modes I observed on a recent project that leaned heavily
-on agentic models was the difficulty of successfully merging code back into
-main. One particular developer got himself in hot water by letting the LLMs 
-go off on their own for *six days* without rebasing or merging, after which it
-proved essentially impossible to re-integrate.
+on agentic models was integration drift: agents make it easy for work to
+continue for days without frequent rebases, reviews, or small PRs, until the
+branch has become its own little competing codebase.
 
-Having one developer go off and write a bunch of code which can't be merged
-isn't a new problem. A first-year scrum master fresh out of an agile boot camp
-can diagnose that. Having a subset of the team go off in different directions
-and end up with competing code bases that take more time to integrate than the
-original development is the kind of classic horror story Fred Brooks was
-writing about in *[The Mythical Man-Month][MMM]* in 1975.
+That isn't a new problem. A first-year scrum master fresh out of an agile boot
+camp can diagnose it. Having a subset of the team go off in different
+directions and end up with competing code bases that take more time to
+integrate than the original development is the kind of classic horror story
+Fred Brooks was writing about in *[The Mythical Man-Month][MMM]* in 1975.
 
 ![Mythical Man-Month Book Cover](/post/code-quality_files/mmm.png)
 
-But the nature of the mistake didn't really have anything to do with LLM agents
+But the nature of the failure didn't really have anything to do with LLM agents
 at all. The LLM would have happily merged and rebased and done daily PRs to
 keep everything in sync, *if it had been instructed to do so.* The mistake
 really has nothing to do with LLMs or even programming: it's much more basic
@@ -360,13 +358,13 @@ solved this problem somewhere else in the code base, or noticing that there are
 now three different places doing the same thing, and tends to spit out
 duplicate code. Worse, they tend to do things in wildly different ways each
 time, for example pulling in a different PDF parsing library each time it comes
-up, exploding the number of dependency.
+up, exploding the number of dependencies.
 
 I'm also fairly convinced that current-gen agents are heavily rewarded for
 producing "hello world" level stand-alone programs during RLHF, and not for
 generating well-factored or well-architected code. They can do that, if they
 are explicitly instructed to again and again, but their tendency seems to be
-hyperfocus on just the one task their working on. In other words, they let the
+to hyperfocus on just the one task they're working on. In other words, they let the
 complexity of the codebase balloon without regard for its overall architecture,
 and rack up technical debt like a teenager who just got handed their dad's
 credit card.
@@ -607,10 +605,10 @@ Therefore, almost all the project management best practices are still in play.
 Code Velocity is Cursed
 -----------------------
 
-This is kind of a subtle point, but its worth wrapping your head around because
-its going to have a huge impact on the way software development "feels" in the
-coming years: increased velocity increases variance. The faster the code
-delivery, the more turbulent the flow.
+This is kind of a subtle point, but it's worth wrapping your head around because
+it's going to have a huge impact on the way software development "feels" in the
+coming years: increased velocity makes schedule variance loom larger. The
+faster the code delivery, the more turbulent the flow.
 
 A good way to understand this intuitively is to realize that programming is not
 a sprint *or* a marathon, it's an obstacle course. Sometimes you're clicking
@@ -618,18 +616,20 @@ along, writing code, testing it, checking it in, moving on to the next ticket.
 Just burning down the sprint backlog. And then you hit some weird configuration
 issue in a library you're using, nobody knows why or has ever seen anything
 like it, and you've lost two days tracking it down. This is why project
-timelines are so hard to estimate: these obstacles occur independently and
-randomly in time, meaning the mean delivery time has a Poisson distribution.
-The Poisson distribution is right-skewed, meaning that it has a "fat"
-right-tail where some extremely large values appear surprisingly often.
+timelines are so hard to estimate: blockers tend to arrive independently and
+randomly in time. A natural model for the *number* of blockers in a given
+period is a Poisson distribution, while the time between blockers is
+exponential. Either way, the total delivery time becomes ordinary development
+time plus a random number of random delays, which gives you a right-skewed
+distribution with a long tail.
 
-The higher code velocity with LLMs magnifies this effect. If a task would
+The higher code velocity of LLMs magnifies this effect. If a task would
 normally take you two weeks, spending two days waiting on a helpdesk ticket
 isn't really visible at the project management level. But if you're intending
 to vibe code the thing in a single afternoon, then that two-day delay is now a
 *factor of five* multiplier to delivery time, which is *very* visible.
 
-This variance bubbles it way up and becomes visible to project managers, and 
+This variance bubbles its way up and becomes visible to project managers, and
 then to stakeholders. Ideally we would just educate them to be comfortable with
 the uncertain nature of software development, to put down their schedules and
 calendars and just let the features flow out at their natural pace, whatever

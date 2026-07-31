@@ -21,7 +21,7 @@ $m$ is less than or equal to $n$. That is, we want to map some high dimensional
 space into some lower dimensional space. (Contrast this with the map into a
 finite set sought by cluster analysis.)
 
-We will focus on one technique in particular: [Primary Component
+We will focus on one technique in particular: [Principal Component
 Analysis][PCA], usually abbreviated PCA.  We'll derive PCA from first
 principles, implement a working version (writing all the linear algebra code
 from scratch), show an example of how PCA helps us visualize and gain insight
@@ -770,7 +770,7 @@ Visualizing the Components
 --------------------------
 
 PCA was applied only to the 13 features; the partition into three quality
-classes was not included. Still, we would like to know if the primary
+classes was not included. Still, we would like to know if the principal
 components have something to say about these classes, so we will color code
 them with red, green, and blue.
 
@@ -781,7 +781,7 @@ Let's start by visualizing only the first component as points along a line:
         color = ['red', 'green', 'blue'][c]
         X_class = X_prime[wine.target == c]
         plt.scatter(X_class[:, 0], X_class[:, 1]*0, color=color, alpha=0.3)
-    plt.title("Primary Components of Wine Quality")
+    plt.title("Principal Components of Wine Quality")
     plt.xlabel("PC1")
 
 
@@ -805,7 +805,7 @@ components.
         color = ['red', 'green', 'blue'][c]
         X_class = X_prime[wine.target == c]
         plt.scatter(X_class[:, 0], X_class[:, 1], color=color, alpha=0.6)
-    plt.title("Primary Components of Wine Quality")
+    plt.title("Principal Components of Wine Quality")
     plt.xlabel("PC1")
     plt.ylabel("PC2")
 
@@ -831,7 +831,7 @@ to visualize with standard plotting tools, but we can use pairwise 2D plots:
         color = ['red', 'green', 'blue'][c]
         X_class = X_prime[wine.target == c]
         plt.scatter(X_class[:, 0], X_class[:, 2], color=color, alpha=0.6)
-    plt.title("Primary Components of Wine Quality")
+    plt.title("Principal Components of Wine Quality")
     plt.xlabel("PC1")
     plt.ylabel("PC3")
 
@@ -840,7 +840,7 @@ to visualize with standard plotting tools, but we can use pairwise 2D plots:
         color = ['red', 'green', 'blue'][c]
         X_class = X_prime[wine.target == c]
         plt.scatter(X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
-    plt.title("Primary Components of Wine Quality")
+    plt.title("Principal Components of Wine Quality")
     plt.xlabel("PC2")
     plt.ylabel("PC3")
 
@@ -859,7 +859,7 @@ a slightly more sophisticated projection on 2D:
         ax.scatter(X_class[:, 0], X_class[:, 1], X_class[:, 2], color=color, alpha=0.6)
         
     # chart junk
-    plt.title("First 3 Primary Components of Wine Quality")
+    plt.title("First 3 Principal Components of Wine Quality")
     ax.set_xlabel('PC1')
     ax.set_ylabel('PC2')
     ax.set_zlabel('PC3')

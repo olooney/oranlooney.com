@@ -152,11 +152,11 @@ Several, in fact. I&rsquo;d go so far as to say that I formed <span
 class="shimmer">Opinions™</span>. Opinions about where all this is going, what
 it means for our industry, and for each of us individually.</p>
 
-<p>The core thesis of article is that the tools of traditional software
+<p>The core thesis of this article is that the tools of traditional software
 engineering can be used to understand the impact of coding agents, because
 those concepts were never really about human psychology specifically, but about
 things like managing complexity or handling uncertainty. We need to understand
-how agents are different of course, where they&rsquo;re stronger or weaker, but once
+how agents are different, of course, where they&rsquo;re stronger or weaker, but once
 we do that we can use old frameworks to imagine what the software industry is
 going to be like in a few years, and from there we can work out a strategy
 for surviving it.</p>
@@ -273,27 +273,25 @@ supposed to learn what they need to know? One answer is that you could just
 read the software engineering literature and follow the advice there. In my
 experience, however, it&rsquo;s not possible to even really understand the literature
 without having hands-on professional experience on comparable projects. This
-leads to ivory tower managers that can quote a lot of theoretical ideas but
+leads to managers who can quote a lot of theoretical ideas but
 don&rsquo;t have the counterbalancing weight of experience to keep them grounded.</p>
 
 <h2 id="the-tomato-in-the-fruit-salad">The Tomato in the Fruit Salad</h2>
 
 <p>One of the failure modes I observed on a recent project that leaned heavily
-on agentic models was the difficulty of successfully merging code back into
-main. One particular developer got himself in hot water by letting the LLMs
-go off on their own for <em>six days</em> without rebasing or merging, after which it
-proved essentially impossible to re-integrate.</p>
+on agentic models was integration drift: agents make it easy for work to
+continue for days without frequent rebases, reviews, or small PRs, until the
+branch has become its own little competing codebase.</p>
 
-<p>Having one developer go off and write a bunch of code which can&rsquo;t be merged
-isn&rsquo;t a new problem. A first-year scrum master fresh out of an agile boot camp
-can diagnose that. Having a subset of the team go off in different directions
-and end up with competing code bases that take more time to integrate than the
-original development is the kind of classic horror story Fred Brooks was
-writing about in <em><a href="https://en.wikipedia.org/wiki/The_Mythical_Man-Month">The Mythical Man-Month</a></em> in 1975.</p>
+<p>That isn&rsquo;t a new problem. A first-year scrum master fresh out of an agile boot
+camp can diagnose it. Having a subset of the team go off in different
+directions and end up with competing code bases that take more time to
+integrate than the original development is the kind of classic horror story
+Fred Brooks was writing about in <em><a href="https://en.wikipedia.org/wiki/The_Mythical_Man-Month">The Mythical Man-Month</a></em> in 1975.</p>
 
 <p><img src="/post/code-quality_files/mmm.png" alt="Mythical Man-Month Book Cover" /></p>
 
-<p>But the nature of the mistake didn&rsquo;t really have anything to do with LLM agents
+<p>But the nature of the failure didn&rsquo;t really have anything to do with LLM agents
 at all. The LLM would have happily merged and rebased and done daily PRs to
 keep everything in sync, <em>if it had been instructed to do so.</em> The mistake
 really has nothing to do with LLMs or even programming: it&rsquo;s much more basic
@@ -490,13 +488,13 @@ solved this problem somewhere else in the code base, or noticing that there are
 now three different places doing the same thing, and tends to spit out
 duplicate code. Worse, they tend to do things in wildly different ways each
 time, for example pulling in a different PDF parsing library each time it comes
-up, exploding the number of dependency.</p>
+up, exploding the number of dependencies.</p>
 
 <p>I&rsquo;m also fairly convinced that current-gen agents are heavily rewarded for
 producing &ldquo;hello world&rdquo; level stand-alone programs during RLHF, and not for
 generating well-factored or well-architected code. They can do that, if they
 are explicitly instructed to again and again, but their tendency seems to be
-hyperfocus on just the one task their working on. In other words, they let the
+to hyperfocus on just the one task they&rsquo;re working on. In other words, they let the
 complexity of the codebase balloon without regard for its overall architecture,
 and rack up technical debt like a teenager who just got handed their dad&rsquo;s
 credit card.</p>
@@ -745,10 +743,10 @@ and diagnose and fix any significant bottlenecks.&rdquo;</p>
 
 <h2 id="code-velocity-is-cursed">Code Velocity is Cursed</h2>
 
-<p>This is kind of a subtle point, but its worth wrapping your head around because
-its going to have a huge impact on the way software development &ldquo;feels&rdquo; in the
-coming years: increased velocity increases variance. The faster the code
-delivery, the more turbulent the flow.</p>
+<p>This is kind of a subtle point, but it&rsquo;s worth wrapping your head around because
+it&rsquo;s going to have a huge impact on the way software development &ldquo;feels&rdquo; in the
+coming years: increased velocity makes schedule variance loom larger. The
+faster the code delivery, the more turbulent the flow.</p>
 
 <p>A good way to understand this intuitively is to realize that programming is not
 a sprint <em>or</em> a marathon, it&rsquo;s an obstacle course. Sometimes you&rsquo;re clicking
@@ -756,18 +754,20 @@ along, writing code, testing it, checking it in, moving on to the next ticket.
 Just burning down the sprint backlog. And then you hit some weird configuration
 issue in a library you&rsquo;re using, nobody knows why or has ever seen anything
 like it, and you&rsquo;ve lost two days tracking it down. This is why project
-timelines are so hard to estimate: these obstacles occur independently and
-randomly in time, meaning the mean delivery time has a Poisson distribution.
-The Poisson distribution is right-skewed, meaning that it has a &ldquo;fat&rdquo;
-right-tail where some extremely large values appear surprisingly often.</p>
+timelines are so hard to estimate: blockers tend to arrive independently and
+randomly in time. A natural model for the <em>number</em> of blockers in a given
+period is a Poisson distribution, while the time between blockers is
+exponential. Either way, the total delivery time becomes ordinary development
+time plus a random number of random delays, which gives you a right-skewed
+distribution with a long tail.</p>
 
-<p>The higher code velocity with LLMs magnifies this effect. If a task would
+<p>The higher code velocity of LLMs magnifies this effect. If a task would
 normally take you two weeks, spending two days waiting on a helpdesk ticket
 isn&rsquo;t really visible at the project management level. But if you&rsquo;re intending
 to vibe code the thing in a single afternoon, then that two-day delay is now a
 <em>factor of five</em> multiplier to delivery time, which is <em>very</em> visible.</p>
 
-<p>This variance bubbles it way up and becomes visible to project managers, and
+<p>This variance bubbles its way up and becomes visible to project managers, and
 then to stakeholders. Ideally we would just educate them to be comfortable with
 the uncertain nature of software development, to put down their schedules and
 calendars and just let the features flow out at their natural pace, whatever

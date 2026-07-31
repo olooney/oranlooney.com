@@ -132,7 +132,7 @@ is given by:
 
 <div>
 \[
-J = \frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
+J = -\frac{1}{N} \sum_i^N y_i \ln \hat{y}_i + (1-y_i) \ln (1-\hat{y}_i)
 \]
 </div>
 
