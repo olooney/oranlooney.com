@@ -1,5 +1,5 @@
 /* Font Wars Game Code
-Copyright 2011, Oran Looney
+Copyright 2026, Oran Looney
 MIT License, see README
 */
 
@@ -24,25 +24,78 @@ $(function() {
         'Crimson Text', 'Molengo', 'Veteran Typewritter', 'Bandriya', 'Manifestor', 'TheGoodMonolith'
     ];
 
+    var MAX_MULTIPLIER = 50;
+    var FAST_WORD_INTERVAL = 7;
+    var FAST_WORD_MAX_LENGTH = 8;
+    var FAST_WORD_MIN_POINTS = 1000;
+    var FAST_WORD_SPEED_MULTIPLIER = 1.8;
+    var FAST_WORD_MULTIPLIER_BONUS = 2;
+    var DIFFICULT_WORD_MIN_LENGTH = 10;
+    var DIFFICULT_WORD_MULTIPLIER_BONUS = 2;
+    var GAME_OVER_TITLE_FADE_MS = 1000;
+    var FINAL_SCORE_FADE_MS = 500;
+    var ACCURACY_BONUS_START_PERCENT = 95;
+    var ACCURACY_BONUS_STEP = 0.2;
+    var ACCURACY_BONUS_MAX_MULTIPLIER = 2.0;
+    var WPM_BONUS_START = 30;
+    var WPM_BONUS_STEP_WPM = 10;
+    var WPM_BONUS_STEP = 0.1;
+    var WPM_BONUS_MAX = 120;
+    var SURVIVAL_BONUS_STEP_MINUTES = 1;
+    var SURVIVAL_BONUS_STEP = 0.1;
+    var SURVIVAL_BONUS_MAX_MULTIPLIER = 2.0;
+
+    var BULLET_TIERS = [
+        { min: 1, bullet: '.', sound: 'laser-1', volume: 0.6 },
+        { min: 5, bullet: ':', sound: 'laser-2', volume: 0.8 },
+        { min: 10, bullet: '^', sound: 'laser-3', volume: 0.8 },
+        { min: 15, bullet: '!', sound: 'laser-4', volume: 0.7 },
+        { min: 20, bullet: '$', sound: 'laser-5', volume: 0.6 },
+        { min: 30, bullet: '^ ^', sound: 'laser-3', volume: 1.0 },
+        { min: 40, bullet: '! !', sound: 'laser-4', volume: 0.9 },
+        { min: 50, bullet: '$ $', sound: 'laser-5', volume: 1.0 }
+    ];
+
     var loadingScreen = true;
     var gameOver = false;
+    var paused = false;
+    var pausedAt = undefined;
+    var soundInitialized = false;
+    var spawnGeneration = 0;
+    var fastEligibleWords = 0;
     var points = 0;
     var multiplier = 1;
     var hits = 0;
+    var hitTimes = [];
     var misses = 0;
+    var missedLastKey = false;
     var startTime = new Date();
 
-    var bullets = ['.', ':', '|', '!', '$', '| |', '! !', '$ $'];
-    bullet = bullets[0];
+    var bulletTier = BULLET_TIERS[0];
+    bullet = bulletTier.bullet;
+
+    function getBulletTier(value) {
+        for ( var i=BULLET_TIERS.length-1; i>=0; i-- ) {
+            if ( value >= BULLET_TIERS[i].min ) return BULLET_TIERS[i];
+        }
+        return BULLET_TIERS[0];
+    }
+
+    function getBulletTierIndex(value) {
+        for ( var i=BULLET_TIERS.length-1; i>=0; i-- ) {
+            if ( value >= BULLET_TIERS[i].min ) return i;
+        }
+        return 0;
+    }
 
     function setMultiplier(newMultipier) {
         var oldMultiplier = multiplier || 1;
         multiplier = Math.max(newMultipier || 1, 1);
-        if ( multiplier > 50 ) multiplier = 50;
+        if ( multiplier > MAX_MULTIPLIER ) multiplier = MAX_MULTIPLIER;
 
         // change ammunition type
-        var bulletIndex = Math.min(Math.floor(multiplier/5), bullets.length-1);
-        bullet = bullets[bulletIndex];
+        bulletTier = getBulletTier(multiplier);
+        bullet = bulletTier.bullet;
 
         if ( multiplier <= 1 ) {
             return '';
@@ -56,22 +109,23 @@ $(function() {
     }
     setMultiplier(1);
 
+    function ensureSound() {
+        if ( soundInitialized ) return;
+        initSound();
+        soundInitialized = true;
+    }
+
     function initSound() { 
         // priority list - load these first!
         sound.music.load('fast', 'resources/sounds/Speed_Kills_1.ogg');
-        sound.fx.load('hit.', 'resources/sounds/39459__THE_bizniss__laser.ogg', 0.6, 7);
+        sound.fx.load('laser-1', 'resources/sounds/39459__THE_bizniss__laser.ogg', 1.0, 7);
         sound.fx.load('kill', 'resources/sounds/91924__Benboncan__Till_With_Bell.ogg');
         sound.fx.load('miss','resources/sounds/476177__unadamlar__wrong-choice.wav', 1.0);
 
-        sound.fx.load('hit:', 'resources/sounds/39456__THE_bizniss__laser_2.ogg', 0.8, 7);
-        sound.fx.load('hit|', 'resources/sounds/191594__leszek-szary__laser.wav', 0.8, 7);
-        sound.fx.load('hit!', 'resources/sounds/39458__THE_bizniss__laser_4.ogg', 0.6, 7);
-        sound.fx.load('hit$', 'resources/sounds/151022__bubaproducer__laser-shot-silenced.wav', 0.8, 7);
-
-        // double blasters are the same sound but louder
-        sound.fx.load('hit| |', 'resources/sounds/191594__leszek-szary__laser.wav', 1.0, 7);
-        sound.fx.load('hit! !', 'resources/sounds/39458__THE_bizniss__laser_4.ogg', 0.9, 7);
-        sound.fx.load('hit$ $', 'resources/sounds/151022__bubaproducer__laser-shot-silenced.wav', 1.0, 7);
+        sound.fx.load('laser-2', 'resources/sounds/39456__THE_bizniss__laser_2.ogg', 1.0, 7);
+        sound.fx.load('laser-3', 'resources/sounds/191594__leszek-szary__laser.wav', 1.0, 7);
+        sound.fx.load('laser-4', 'resources/sounds/39458__THE_bizniss__laser_4.ogg', 1.0, 7);
+        sound.fx.load('laser-5', 'resources/sounds/151022__bubaproducer__laser-shot-silenced.wav', 1.0, 7);
 
         sound.fx.load('die', 'resources/sounds/33245__ljudman__grenade.ogg');
 
@@ -217,44 +271,90 @@ $(function() {
     var spaceship = newSprite('spaceship', 'A');
     $(spaceship).css({
             'position' : 'absolute',
-            'left' : '50%',
-            'top' : '50%',
-            'margin-left' : function() {return -$(this).outerWidth()/2},
-            'margin-top' : function() {return -$(this).outerHeight()/2}
-    }).hide();
+            'margin-left' : 0,
+            'margin-top' : 0,
+            'opacity' : 0
+        });
+
+    function centerInWindow(mover) {
+        mover = $(mover);
+        return {
+            top: Math.floor($(window).scrollTop() + ($(window).height() - mover.outerHeight()) / 2),
+            left: Math.floor($(window).scrollLeft() + ($(window).width() - mover.outerWidth()) / 2)
+        };
+    }
+
+    function centerSpaceship() {
+        $(spaceship).css(centerInWindow(spaceship));
+    }
+
+    centerSpaceship();
+
+    function centerOf(sprite) {
+        sprite = $(sprite);
+        var p = sprite.position();
+        return {
+            top: p.top + sprite.outerHeight()/2,
+            left: p.left + sprite.outerWidth()/2
+        };
+    }
 
     function alignCenters(target, mover) {
-        target = $(target);
+        target = centerOf(target);
         mover = $(mover);
-        var p = target.position();
-        p.top = p.top + Math.floor(target.height()/2);
-        p.left = p.left + Math.floor(target.width()/2);
-        p.top = p.top - Math.floor(mover.height()/2);
-        p.left = p.left - Math.floor(mover.width()/2);
-        return p;
+        return {
+            top: Math.floor(target.top - mover.outerHeight()/2),
+            left: Math.floor(target.left - mover.outerWidth()/2)
+        };
     }
 
     var instructions = newSprite('instructions', [
-        '<h1>Font Wars</h1><br>',
-        /*
-        'Rules:<br>',
+        '<h1>Font Wars</h1>',
+        '<p>Press Space to Begin</p>'
+    ].join(''));
+
+    var instructionsPopup = newSprite('instructions-popup', [
+        '<div class="instructions-box">',
+        '<button type="button" class="instructions-close">Close</button>',
+        '<h2>Rules</h2>',
         '<ol><li>Type words as they appear</li>',
         '<li>The currently targeted word is underlined</li>',
         '<li>Hit Space, Backspace, or Esc to cancel targeting</li>',
         '<li>Complete words to increase score multiplier</li>',
-        '<li>The multiplier resets after every mistake</li>',
+        '<li>The multiplier drops after every mistake</li>',
         '<li>The game ends when any word reaches you</li>',
         '</ol>',
-        */
-        '<p>Press Space to begin<p>'
+        '</div>'
     ].join(''));
-    $(instructions).css({
-            'position' : 'absolute',
-            'left' : '50%',
-            'top' : '50%',
-            'margin-left' : function() {return -$(this).outerWidth()/2},
-            'margin-top' : function() {return -$(this).outerHeight()/2}
+    $(instructionsPopup).hide();
+    function closeInstructions() {
+        $(instructionsPopup).fadeOut(150, function() {
+            if ( paused ) {
+                $(pausedModal).fadeIn(150);
+            }
+        });
+    }
+    $(instructionsPopup).click(function(e) {
+        if ( e.target === instructionsPopup ) {
+            closeInstructions();
+        }
     });
+    $(instructionsPopup).find('.instructions-box').click(function(e) {
+        e.stopPropagation();
+    });
+    $(instructionsPopup).find('.instructions-close').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeInstructions();
+    });
+
+    var pausedModal = newSprite('paused-modal', [
+        '<div class="paused-box">',
+        '<h2>Paused</h2>',
+        '<p>Press any key to resume</p>',
+        '</div>'
+    ].join(''));
+    $(pausedModal).hide();
 
     var score = newSprite('score', '');
     $(score).css({ opacity: 0.7 });
@@ -289,55 +389,189 @@ $(function() {
         }
     }
     $(muteMusic).css({ opacity: 0.7 }).click(toggleMuteMusic);
-    if ( $.cookie('font-wars-music-muted') ) toggleMuteMusic();
+    if ( $.cookie('font-wars-music-muted') ) {
+        toggleMuteMusic();
+    }
+
+    var instructionsButton = newSprite('instructions-open', 'Instructions');
+    $(instructionsButton).css({ opacity: 0.7 }).click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        pauseGame();
+        $(pausedModal).hide();
+        $(instructionsPopup).fadeIn(150);
+    });
+
+    function pruneHitTimes(now) {
+        while ( hitTimes.length && now - hitTimes[0] > 10000 ) {
+            hitTimes.shift();
+        }
+    }
+
+    function calculateOverallWpm(now) {
+        var minutes = (now - startTime) / 6e4;
+        if ( minutes <= 0 ) {
+            return 0;
+        }
+        return Math.floor((hits / 5) / minutes);
+    }
+
+    function calculateRecentWpm(now) {
+        pruneHitTimes(now);
+        var windowDuration = Math.min(10000, Math.max(now - startTime, 1));
+        return Math.floor((hitTimes.length / 5) / (windowDuration / 6e4));
+    }
+
+    function formatBonusMultiplier(value) {
+        if ( Math.abs(value - Math.round(value)) < 0.01 ) {
+            return 'x' + Math.round(value);
+        }
+        return 'x' + value.toFixed(1);
+    }
+
+    function formatPoints(value) {
+        return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function formatBonusPoints(value) {
+        if ( value <= 0 ) {
+            return '0';
+        }
+        return '+' + formatPoints(value);
+    }
+
+    function calculateFinalScore(basePoints, accuracy, wpm, elapsedMinutes) {
+        var roundedAccuracy = Math.round(accuracy);
+        var accuracyMultiplier = 1;
+        if ( roundedAccuracy > ACCURACY_BONUS_START_PERCENT ) {
+            accuracyMultiplier += (roundedAccuracy - ACCURACY_BONUS_START_PERCENT) * ACCURACY_BONUS_STEP;
+        }
+        if ( accuracyMultiplier > ACCURACY_BONUS_MAX_MULTIPLIER ) {
+            accuracyMultiplier = ACCURACY_BONUS_MAX_MULTIPLIER;
+        }
+
+        var clampedWpm = Math.max(Math.min(wpm, WPM_BONUS_MAX), WPM_BONUS_START);
+        var wpmMultiplier = 1 + Math.floor((clampedWpm - WPM_BONUS_START) / WPM_BONUS_STEP_WPM) * WPM_BONUS_STEP;
+        wpmMultiplier = Math.round(wpmMultiplier * 10) / 10;
+
+        var survivalMultiplier = 1 + Math.floor(elapsedMinutes / SURVIVAL_BONUS_STEP_MINUTES) * SURVIVAL_BONUS_STEP;
+        if ( survivalMultiplier > SURVIVAL_BONUS_MAX_MULTIPLIER ) {
+            survivalMultiplier = SURVIVAL_BONUS_MAX_MULTIPLIER;
+        }
+
+        var accuracyBonus = Math.round(basePoints * (accuracyMultiplier - 1));
+        var afterAccuracy = basePoints + accuracyBonus;
+        var wpmBonus = Math.round(afterAccuracy * (wpmMultiplier - 1));
+        var afterWpm = afterAccuracy + wpmBonus;
+        var survivalBonus = Math.round(afterWpm * (survivalMultiplier - 1));
+
+        return {
+            accuracyMultiplier: accuracyMultiplier,
+            wpmMultiplier: wpmMultiplier,
+            survivalMultiplier: survivalMultiplier,
+            accuracyBonus: accuracyBonus,
+            wpmBonus: wpmBonus,
+            survivalBonus: survivalBonus,
+            finalScore: afterWpm + survivalBonus
+        };
+    }
+
+    function renderFinalScore(basePoints, accuracy, wpm, duration, elapsedMinutes, highScore) {
+        var result = calculateFinalScore(basePoints, accuracy, wpm, elapsedMinutes);
+        var highScoreValue = '';
+        if ( highScore.previousBest > 0 ) {
+            highScoreValue = formatPoints(highScore.previousBest);
+        }
+        var highScoreMessage = '';
+        if ( highScore.isNew ) {
+            highScoreMessage = '<tr class="score-new-high"><td colspan="4"><b>New High Score!</b></td></tr>';
+        }
+        return [
+            '<table class="score-bonus">',
+            '<tr><th colspan="2">Category</th><th>Bonus</th><th>Points</th></tr>',
+            '<tr><td>Points</td><td></td><td></td><td>' + formatPoints(basePoints) + '</td></tr>',
+            '<tr><td>Accuracy</td><td>' + accuracy + '%</td><td>' + formatBonusMultiplier(result.accuracyMultiplier) + '</td><td>' + formatBonusPoints(result.accuracyBonus) + '</td></tr>',
+            '<tr><td>WPM</td><td>' + wpm + '</td><td>' + formatBonusMultiplier(result.wpmMultiplier) + '</td><td>' + formatBonusPoints(result.wpmBonus) + '</td></tr>',
+            '<tr><td>Survival</td><td>' + duration + '</td><td>' + formatBonusMultiplier(result.survivalMultiplier) + '</td><td>' + formatBonusPoints(result.survivalBonus) + '</td></tr>',
+            '<tr class="score-total"><td colspan="3">Total Score</td><td><b>' + formatPoints(result.finalScore) + '</b></td></tr>',
+            '<tr class="score-best"><td>Previous Best</td><td></td><td></td><td>' + highScoreValue + '</td></tr>',
+            highScoreMessage,
+            '</table>'
+        ].join('');
+    }
+
+    function calculateAccuracy() {
+        if ( hits == 0 ) {
+            return 0;
+        }
+        return Math.floor(100 * hits / (hits + misses));
+    }
+
+    function formatDuration(now) {
+        var seconds = Math.floor((now - startTime)/1000);
+        var minutes = Math.floor(seconds/60);
+        seconds = seconds - minutes * 60;
+        if ( seconds < 10 ) seconds = '0' + seconds;
+        return minutes + ':' + seconds;
+    }
+
+    function elapsedMinutes(now) {
+        return (now - startTime) / 6e4;
+    }
+
+    function renderFinalScoreCard() {
+        var now = new Date();
+        var wpm = calculateOverallWpm(now);
+        var accuracy = calculateAccuracy();
+        var duration = formatDuration(now);
+        var finalScore = calculateFinalScore(points, accuracy, wpm, elapsedMinutes(now)).finalScore;
+        var highScore = handleHighScore(finalScore);
+        return [
+            renderFinalScore(points, accuracy, wpm, duration, elapsedMinutes(now), highScore),
+            '<div class="final-restart-prompt">Press Space to Restart</div>'
+        ].join('');
+    }
 
     function updateScore() {
-        var minutes = (new Date() - startTime) / 6e4;
-        if ( minutes < 0.1 ) { 
-            var wpm = 0;
-        } else {
-            var words = hits / 5;
-            var wpm = Math.floor(words/minutes);
+        var now = new Date();
+        var wpm = calculateRecentWpm(now);
+        if ( gameOver ) {
+            wpm = calculateOverallWpm(now);
         }
-
-        if ( hits == 0 ) {
-            var accuracy = 0;
-        } else {
-            var accuracy = Math.floor(100 * hits / (hits + misses));
-        }
+        var duration = formatDuration(now);
+        var accuracy = calculateAccuracy();
         
 
         var x = ' ' + multiplier + 'x';
         if ( gameOver ) {
-            x = '';
-            var seconds = Math.floor((new Date() - startTime)/1000);
-            var minutes = Math.floor(seconds/60);
-            var seconds = seconds - minutes * 60;
-            var duration = minutes + ' minutes ' + seconds + ' seconds';
-            var highScoreMessage = handleHighScore();
-            $(score).html('<b>' + points + ' Points</b><br>' + highScoreMessage + wpm + ' WPM<br>' + accuracy + '% Accuracy<br>' + duration);
+            return;
         } else {
-            $(score).html(points + ' Points<br>' + multiplier + 'x Multiplier<br>' + wpm + ' WPM<br>' + accuracy + '% Accuracy');
+            $(score).html(formatPoints(points) + ' Points<br>' + multiplier + 'x Multiplier<br>' + wpm + ' WPM<br>' + accuracy + '% Accuracy<br>' + duration + ' Survival');
         }
     }
     updateScore();
 
-    function handleHighScore() {
-        var message = '';
-        var previousHighScore = $.cookie('font-wars-high-score') || 0;
-        if ( points > previousHighScore ) {
-            $.cookie('font-wars-high-score', points, { expires: 999, path: '/' });
-            message = '<b>New High Score!</b><br>';
-        } else if ( previousHighScore > 0 ) {
-            message = 'Previous Best: ' + previousHighScore + '<br>';
+    setInterval(function() {
+        if ( !loadingScreen && !gameOver && !paused ) {
+            updateScore();
         }
-        return message;
+    }, 1000);
+
+    function handleHighScore(score) {
+        var previousHighScore = $.cookie('font-wars-high-score') || 0;
+        if ( score > previousHighScore ) {
+            $.cookie('font-wars-high-score', score, { expires: 999, path: '/' });
+            return { isNew: true, previousBest: previousHighScore };
+        }
+        return { isNew: false, previousBest: previousHighScore };
     }
 
 
     function pos(any) {
-        if ( !any['top'] || !any['left'] ) return $(any).position();
-        else return any;
+        if ( any && any['top'] !== undefined && any['left'] !== undefined ) {
+            return any;
+        }
+        return $(any).position();
     }
     function distance(a,b) {
         a = pos(a);
@@ -355,8 +589,145 @@ $(function() {
         return Math.floor(chars/5);
     }
 
-    function spawn() {
-        if ( gameOver ) return;
+    function spaceshipRadius() {
+        return Math.max($(spaceship).outerWidth(), $(spaceship).outerHeight()) / 2;
+    }
+
+    function enemyReachedSpaceship(enemy) {
+        if ( gameOver ) return true;
+        if ( !$.contains(document.body, enemy) ) {
+            return false;
+        }
+        if ( distance(centerOf(enemy), centerOf(spaceship)) >= spaceshipRadius() ) {
+            return false;
+        }
+        gameOver = true;
+        setTimeout(function() { die(); }, 1);
+        return true;
+    }
+
+    function getEnemyRemainingTime(enemy) {
+        var arrivalTime = $(enemy).data('arrivalTime');
+        if ( !arrivalTime ) {
+            return getAttackSpeed() / ($(enemy).data('speed') || 1.0);
+        }
+        return Math.max(arrivalTime - new Date().getTime(), 1);
+    }
+
+    function animateEnemy(enemy, duration, resetArrivalTime) {
+        if ( resetArrivalTime ) {
+            $(enemy).data('arrivalTime', new Date().getTime() + duration);
+        }
+        if ( duration < 1 ) {
+            duration = 1;
+        }
+        $(enemy).animate( alignCenters(spaceship, enemy), {
+            duration: duration,
+            easing: 'linear',
+            step: function() {
+                enemyReachedSpaceship(this);
+            },
+            complete: function() {
+                // the player dies when an enemy reaches the spaceship.
+                // the timeout is because we can't start the fade animation on this enemy from inside this callback.
+                enemyReachedSpaceship(this);
+            }
+        });
+    }
+
+    function resetScorePosition() {
+        $(score).stop(true, true).css({
+            display: 'block',
+            opacity: 0.7,
+            top: '',
+            left: '',
+            right: '10px',
+            bottom: '10px'
+        });
+    }
+
+    function pauseGame() {
+        if ( loadingScreen || gameOver || paused ) {
+            return;
+        }
+        paused = true;
+        pausedAt = new Date();
+        spawnGeneration++;
+        $('.enemy').stop();
+        if ( sound.music.current ) {
+            sound.music.current.pause();
+        }
+        for ( var i=0; i < sound.music.timeouts.length; i++ ) {
+            clearTimeout(sound.music.timeouts[i]);
+        }
+        sound.music.timeouts = [];
+        $(pausedModal).fadeIn(150);
+    }
+
+    function resumeGame() {
+        if ( !paused ) return;
+        var pauseDuration = new Date() - pausedAt;
+        startTime = new Date(startTime.getTime() + pauseDuration);
+        for ( var i=0; i < hitTimes.length; i++ ) {
+            hitTimes[i] = new Date(hitTimes[i].getTime() + pauseDuration);
+        }
+        paused = false;
+        pausedAt = undefined;
+        $(pausedModal).fadeOut(150);
+        if ( sound.music.current ) {
+            try {
+                sound.music.current.onended = function() {
+                    if ( !paused && !gameOver ) sound.music.loop('fast', 1.0, 10);
+                };
+                var play = sound.music.current.play();
+                if ( play && play.catch ) play.catch(function() { });
+            } catch ( e ) { }
+        }
+        $('.enemy').each(function() {
+            var arrivalTime = $(this).data('arrivalTime');
+            if ( arrivalTime ) {
+                $(this).data('arrivalTime', arrivalTime + pauseDuration);
+            }
+            animateEnemy(this, getEnemyRemainingTime(this), false);
+        });
+        spawn(spawnGeneration);
+        updateScore();
+    }
+
+    function startGame() {
+        spawnGeneration++;
+        points = 0;
+        hits = 0;
+        hitTimes = [];
+        misses = 0;
+        fastEligibleWords = 0;
+        missedLastKey = false;
+        startTime = new Date();
+        loadingScreen = false;
+        gameOver = false;
+        paused = false;
+        pausedAt = undefined;
+        setMultiplier(1);
+
+        ensureSound();
+        sound.music.stop();
+
+        $('.enemy, .bullet, .reticle, .spark, .spark-score, .game-over, .final-score-card').stop(true, true).remove();
+        resetScorePosition();
+        $(spaceship).stop(true, false).css({ opacity: 1 }).show();
+        centerSpaceship();
+        $(instructions).fadeOut(500);
+        $(instructionsPopup).fadeOut(500);
+        updateScore();
+
+        spawn(spawnGeneration);
+        sound.music.loop('fast', 1.0, 10);
+    }
+
+    function spawn(generation) {
+        if ( gameOver || paused || generation !== spawnGeneration ) {
+            return;
+        }
 
         // ambiguous starting letters are annoying.
         var word = words.random();
@@ -370,8 +741,18 @@ $(function() {
         
         var enemy = newSprite('enemy', word);
         
-        var fast = (word.length <= 8) && (points > 1000) && (Math.random() < 0.15);
-        var speed = fast ? 2 : 1.0;
+        var fastEligible = word.length <= FAST_WORD_MAX_LENGTH && points > FAST_WORD_MIN_POINTS;
+        if ( fastEligible ) {
+            fastEligibleWords++;
+        }
+        var fast = fastEligible && (fastEligibleWords % FAST_WORD_INTERVAL) === 0;
+        var speed = 1.0;
+        if ( fast ) {
+            speed = FAST_WORD_SPEED_MULTIPLIER;
+        }
+        $(enemy).data('speed', speed);
+        $(enemy).data('fast', fast);
+        $(enemy).data('difficult', word.length >= DIFFICULT_WORD_MIN_LENGTH);
 
         // use a random font for each enemy.
         var font = fonts.random();
@@ -396,45 +777,46 @@ $(function() {
 
         // auto-balancing logic
         var danger = attackingWordCount();
-        $(enemy).animate( alignCenters(spaceship, enemy), getAttackSpeed() / speed , 'linear', function() {
-            // the player dies when an enemy reaches the spaceship.
-            // the timeout is because we can't start the fade animation on this enemy from inside this callback.
-            if ( $.contains(document.body, this) ) setTimeout(function() { die(); }, 1);
-        });
+        animateEnemy(enemy, getAttackSpeed() / speed, true);
         var spawnInterval = 200 + 400*danger - 2*hits + 100 - 200*Math.random();
         if ( spawnInterval < 500 ) spawnInterval = 500;
-        setTimeout(spawn, spawnInterval);
+        setTimeout(function() { spawn(generation); }, spawnInterval);
     }
 
+    $(window).resize(function() {
+        centerSpaceship();
+        if ( gameOver || paused ) return;
+        $('.enemy').each(function() {
+            $(this).stop();
+            animateEnemy(this, getEnemyRemainingTime(this), false);
+        });
+    });
+
+    $(window).blur(pauseGame);
+
     function die() {
+        var generation = spawnGeneration;
         sound.music.volume(0, 500);
         sound.fx.play('die');
         $(spaceship).explode(alphabet, 3000);
         $(spaceship).explode(alphabet.toUpperCase(), 3000);
         gameOver = true;
 
-        updateScore();
+        $(score).stop(true, true).fadeOut(500);
 
         $('.enemy').stop();
         $('.enemy').animate({opacity: 'hide'}, 1000, 'linear', function() { $(this).remove(); });
         $(spaceship).animate({opacity: 0}, 2000, 'linear', function() {
             setTimeout(function() { 
+                if ( generation !== spawnGeneration ) return;
                 sound.music.play('ending', 1.0, 700);
                 $(newSprite('game-over', 'Game Over'))
-                    .css({ fontSize: '64px', width: '10em', opacity: 0 })
-                    .css({
-                        'position' : 'absolute',
-                        'left' : '50%',
-                        'top' : '50%',
-                        'margin-left' : function() {return -$(this).outerWidth()/2},
-                        'margin-top' : function() {return -$(this).outerHeight()/2}
-                    })
-                    .animate({ opacity: 1.0 }, 4000, undefined, function() {
-                        $(score).css($(score).position()).animate({
-                            opacity: 1.0,
-                            "top": 80 + ( $(window).height() - $(score).height() ) / 2 + $(window).scrollTop() + "px",
-                            left: ( $(window).width() - $(score).width() ) / 2 + $(window).scrollLeft() + "px",
-                        }, 1500);
+                    .css({ opacity: 0 })
+                    .animate({ opacity: 1.0 }, GAME_OVER_TITLE_FADE_MS, undefined, function() {
+                        if ( generation !== spawnGeneration ) return;
+                        $(newSprite('final-score-card', renderFinalScoreCard()))
+                            .css({ opacity: 0 })
+                            .animate({ opacity: 1.0 }, FINAL_SCORE_FADE_MS);
                     });
             }, 500);
         });
@@ -451,13 +833,31 @@ $(function() {
 
     // hit an enemy...
     $.fn.hit = function() {
+        var now = new Date();
         hits++;
+        missedLastKey = false;
+        hitTimes.push(now);
+        pruneHitTimes(now);
         points += multiplier;
-        sound.fx.play('hit' + bullet);
-        $(newSprite('bullet', bullet))
-            .css( $('.spaceship').position() )
+        sound.fx.play(bulletTier.sound, bulletTier.volume);
+        var bulletSprite = newSprite('bullet', bullet);
+        var shipCenter = centerOf(spaceship);
+        var targetCenter = centerOf(this);
+        var dx = targetCenter.left - shipCenter.left;
+        var dy = targetCenter.top - shipCenter.top;
+        var d = Math.sqrt(dx*dx + dy*dy) || 1;
+        var bulletStart = {
+            left: shipCenter.left - $(bulletSprite).outerWidth()/2 + 40 * dx/d,
+            top: shipCenter.top - $(bulletSprite).outerHeight()/2 + 40 * dy/d
+        };
+        var bulletEnd = {
+            left: targetCenter.left - $(bulletSprite).outerWidth()/2,
+            top: targetCenter.top - $(bulletSprite).outerHeight()/2
+        };
+        $(bulletSprite)
+            .css({ left: bulletStart.left + 'px', top: bulletStart.top + 'px' })
             .pointAt(this)
-            .animate( this.position(), distance(spaceship, this)/3, 'linear', function() { 
+            .animate( bulletEnd, distance(bulletStart, bulletEnd)/3, 'linear', function() { 
                 $(this).remove();}
             );
         var letter = this.html().charAt(0);
@@ -465,11 +865,22 @@ $(function() {
         this.spark(letter);
         if ( newWord.length === 0 ) {
             sound.fx.play('kill');
-            var msg = setMultiplier(multiplier+1);
-            if ( msg ) this.sparkScore(msg);
+            var multiplierBonus = 1;
+            if ( this.data('fast') ) {
+                multiplierBonus = Math.max(multiplierBonus, FAST_WORD_MULTIPLIER_BONUS);
+            }
+            if ( this.data('difficult') ) {
+                multiplierBonus = Math.max(multiplierBonus, DIFFICULT_WORD_MULTIPLIER_BONUS);
+            }
+            var multiplierMessage = setMultiplier(multiplier + multiplierBonus);
+            if ( multiplierMessage ) {
+                this.sparkScore(multiplierMessage);
+            }
             this.remove();
         } else {
-            if ( !this.hasClass('target') ) this.target();
+            if ( !this.hasClass('target') ) {
+                this.target();
+            }
             this.html(newWord);
         }
         return this;
@@ -479,11 +890,25 @@ $(function() {
     function miss(letter) { 
         misses++;
 
-        // round down to the nearest 5, then go 5 lower
-        setMultiplier(5*Math.floor(multiplier/5) - 5); 
+        if ( !missedLastKey ) {
+            var tierIndex = getBulletTierIndex(multiplier);
+            var penaltyTierIndex = Math.max(tierIndex - 1, 0);
+            setMultiplier(BULLET_TIERS[penaltyTierIndex].min);
+        }
+        missedLastKey = true;
 
         sound.fx.play('miss');
     }
+
+    function isApostropheKey(e) {
+        return e.key === "'" || e.which === 222 || e.keyCode === 222;
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if ( isApostropheKey(e) && !e.altKey && !e.ctrlKey && !e.metaKey ) {
+            e.preventDefault();
+        }
+    }, true);
 
     $(document).keydown(function(e) {
         $.cookie('debug-event-log', JSON.stringify({
@@ -495,33 +920,28 @@ $(function() {
             metaKey: e.metaKey
         }));
 
+        if ( paused ) {
+            resumeGame();
+            return;
+        }
+
         if ( gameOver ) {
-            // not much to do...
+            if ( e.which === 13 || e.keyCode === 32 ) {
+                startGame();
+            }
         } else if ( loadingScreen ) {
             if ( e.which === 13 || e.keyCode === 32 ) {
-                startTime = new Date();
-                loadingScreen = false;
-                initSound();
-                $(spaceship).show();
-                $(instructions).fadeOut(500);
-                spawn();
-                sound.music.loop('fast', 1.0, 10);
-
-                // without this, Chrome leaves trails behind some fonts
-                // as they move. This forces Chrome to redraw the background
-                // 50 times a second and therefore work around this issue.
-                /*
-                setInterval(function() {
-                    $('body').toggleClass('off-white');
-                }, 50);
-                */
+                startGame();
             }
+
         } else if ( e.keyCode === 8 || e.keyCode === 32 || e.keyCode === 27 ) { 
             // space, backspace, or escape: reset the target reticle
             var targets = $('.enemy.target');
             if ( targets.length ) {
                 targets.removeClass('target'); 
                 updateScore();
+            } else if ( e.keyCode === 27 ) {
+                pauseGame();
             }
         } else if ( e.altKey || e.ctrlKey ) {
             // ignore modifier keys

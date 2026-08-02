@@ -22,7 +22,18 @@ html, body {
 	font-size: 64px;
 	line-height: 64px;
 	font-family: sans-serif;
-	-webkit-transition: all 0.2s ease;
+}
+
+.bullet {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.enemy {
+	-webkit-transform: none !important;
+	-moz-transform: none !important;
+	transform: none !important;
 }
 
 .target {
@@ -34,41 +45,172 @@ html, body {
 	bottom: 10px;
 	font-size: 20px;
 	line-height: 25px;
-	height: 6em;
-	width: 10em;
+	height: auto;
+	width: 16em;
+	font-family: 'Arimo', sans-serif;
 }
+
+.score-bonus {
+	border-collapse: collapse;
+	margin-top: 0.5em;
+	margin-left: auto;
+	text-align: right;
+	font-size: 16px;
+	line-height: 20px;
+	width: 100%;
+}
+
+.score-bonus th,
+.score-bonus td {
+	padding: 0 0 0 0.75em;
+}
+
+.score-bonus th:first-child,
+.score-bonus td:first-child {
+	padding-left: 0;
+	text-align: left;
+}
+
+.score-total td {
+	border-top: 1px solid black;
+	padding-top: 0.2em;
+}
+
+.score-best td {
+	padding-top: 0.4em;
+}
+
 .spark-score {
 	font-family: 'Bentham', serif;
 }
-.mute-fx {
+.mute-fx,
+.mute-music,
+.instructions-open {
 	text-align: center;
 	border: 1px solid black;
 	right: 10px;
-	top: 10px;
 	font-size: 16px;
 	line-height: 16px;
 	height: 16px;
 	width: 7em;
+	font-family: 'Arimo', sans-serif;
+}
+
+.mute-fx {
+	top: 10px;
 }
 
 .mute-music {
-	text-align: center;
-	border: 1px solid black;
-	right: 10px;
 	top: 36px;
-	font-size: 16px;
-	line-height: 16px;
-	height: 16px;
-	width: 7em;
+}
+
+.instructions-open {
+	top: 62px;
 }
 
 .instructions {
+	left: 50%;
+	top: 50%;
 	font-size: 24px;
 	line-height: 30px;
 	height: 6em;
 	width: 22em;
 	background-color: white;
-	font-family: 'Bentham', serif;
+	font-family: 'Arimo', sans-serif;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.instructions-popup {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.35);
+	z-index: 10;
+}
+
+.instructions-box {
+	left: 50%;
+	top: 50%;
+	width: 24em;
+	height: auto;
+	padding: 1em 1.25em;
+	position: absolute;
+	background-color: white;
+	border: 1px solid black;
+	font-family: 'Arimo', sans-serif;
+	font-size: 20px;
+	line-height: 26px;
+	text-align: left;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.instructions-box h2 {
+	margin: 0 0 0.5em;
+	font-family: 'Arimo', sans-serif;
+	font-size: 32px;
+	line-height: 36px;
+}
+
+.instructions-box ol {
+	margin: 0;
+	padding-left: 1.5em;
+}
+
+.paused-modal {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.35);
+	z-index: 10;
+}
+
+.paused-box {
+	left: 50%;
+	top: 50%;
+	width: 18em;
+	height: auto;
+	padding: 1em 1.25em;
+	position: absolute;
+	background-color: white;
+	border: 1px solid black;
+	font-family: 'Arimo', sans-serif;
+	font-size: 20px;
+	line-height: 26px;
+	text-align: center;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.paused-box h2 {
+	margin: 0 0 0.5em;
+	font-size: 32px;
+	line-height: 36px;
+}
+
+.paused-box p {
+	margin: 0;
+}
+
+.instructions-close {
+	border: 1px solid black;
+	background-color: white;
+	font-family: 'Arimo', sans-serif;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.instructions-close {
+	float: right;
+	font-size: 16px;
 }
 
 .off-white {
@@ -79,6 +221,68 @@ html, body {
 	font-family: 'Arimo', sans-serif;
 	margin: 0px;
 	padding: 0px;
+}
+
+.instructions p,
+.final-restart-prompt {
+	-webkit-animation: arcade-throb 1.5s ease-in-out infinite;
+	animation: arcade-throb 1.5s ease-in-out infinite;
+}
+
+@-webkit-keyframes arcade-throb {
+	0%, 100% {
+		opacity: 0.3;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+@keyframes arcade-throb {
+	0%, 100% {
+		opacity: 0.3;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+.game-over {
+	left: 50%;
+	top: 50%;
+	width: 10em;
+	font-size: 64px;
+	font-family: 'Arimo', sans-serif;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.final-score-card {
+	left: 50%;
+	top: calc(50% + 80px);
+	width: 30em;
+	font-size: 18px;
+	line-height: 24px;
+	font-family: 'Arimo', sans-serif;
+	-webkit-transform: translate(-50%, 0);
+	-moz-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+}
+
+.final-score-card .score-bonus {
+	margin: 0.6em auto 0;
+}
+
+.score-new-high td {
+	padding-top: 0.4em;
+	text-align: center;
+}
+
+.final-restart-prompt {
+	margin-top: 1.1em;
+	font-size: 20px;
+	line-height: 26px;
 }
 
 .reticle {

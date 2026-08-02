@@ -1,5 +1,5 @@
 /* Font Wars Sound Library
-Copyright 2022, Oran Looney
+Copyright 2026, Oran Looney
 MIT License, see README
 */
 
@@ -9,6 +9,14 @@ var sound = {
 		multi: 3,
 		masterVolume: 1.0,
 
+		_reload: function(audio) {
+			try {
+				audio.pause();
+				audio.currentTime = 0;
+				audio.load();
+			} catch ( e ) { }
+		},
+
 		load: function(label, resource, volume, multi) {
 			if ( volume === undefined ) volume = 1.0;
 			if ( multi === undefined ) multi = this.multi;
@@ -17,10 +25,9 @@ var sound = {
 			this.sounds[label] = channels;
 			for ( var i=0; i<multi; i++ ) {
 				var audio = new Audio(resource);
+				audio.preload = 'auto';
 				channels.push(audio);
-				// *force* the audio to load.
-				audio.volume = 0;
-				audio.play(); 
+				audio.load();
 			}
 			return this;
 		},
@@ -39,14 +46,24 @@ var sound = {
 		play: function(label, volume) { 
 			return this._each(label, function(audio, i, channels) {
 				if( audio.ended == true || audio.currentTime == 0 ) {
-					if ( this.muted ) {
-						audio.volume = 0;
-					} else {
-						if ( volume === undefined ) volume = channels.volume;
-						audio.volume = this.masterVolume * volume;
+					try {
+						if ( this.muted ) {
+							audio.volume = 0;
+						} else {
+							if ( volume === undefined ) volume = channels.volume;
+							audio.volume = this.masterVolume * volume;
+						}
+						audio.currentTime = 0;
+						var play = audio.play();
+						if ( play && play.catch ) {
+							var fx = this;
+							play.catch(function() {
+								fx._reload(audio);
+							});
+						}
+					} catch ( e ) {
+						this._reload(audio);
 					}
-					audio.currentTime = 0;
-					audio.play();
 					return true;
 				}
 			});
@@ -75,8 +92,19 @@ var sound = {
 		timeouts: [],
 		current: undefined,
 
+		_reload: function(audio) {
+			try {
+				audio.pause();
+				audio.currentTime = 0;
+				audio.load();
+			} catch ( e ) { }
+		},
+
 		load: function(label, resource) {
-			this.tracks[label] = new Audio(resource);
+			var audio = new Audio(resource);
+			audio.preload = 'auto';
+			audio.load();
+			this.tracks[label] = audio;
 			return this;
 		},
 
@@ -110,7 +138,17 @@ var sound = {
 			} else {
 				this.current.volume = this.masterVolume * (volume);
 			}
-			this.current.play();
+			try {
+				var play = this.current.play();
+				if ( play && play.catch ) {
+					var music = this;
+					play.catch(function() {
+						music._reload(audio);
+					});
+				}
+			} catch ( e ) {
+				this._reload(audio);
+			}
 			return this;
 		},
 
@@ -139,16 +177,41 @@ var sound = {
 			if ( fade === undefined ) fade = 200;
 			this.stop()._start(label, 0).volume(volume, fade);
 
-			var timeToEnd = Math.round( (this.current.duration - this.current.currentTime ) * 1000 );
+			var music = this;
+			var audio = this.current;
+			var scheduled = false;
 
-			this._timeout(timeToEnd - fade, function() {
-				this.volume(0.0, fade);
-			});
+			function cleanup() {
+				audio.removeEventListener('loadedmetadata', schedule);
+				audio.removeEventListener('durationchange', schedule);
+				audio.removeEventListener('ended', finish);
+			}
 
-			this._timeout(timeToEnd, function() {
-				this.stop();
-				if ( callback ) callback.call(scope, this);
-			});
+			function finish() {
+				if ( audio !== music.current ) return;
+				cleanup();
+				music.stop();
+				if ( callback ) callback.call(scope, music);
+			}
+
+			function schedule() {
+				if ( scheduled || audio !== music.current || !isFinite(audio.duration) || audio.duration <= 0 ) return;
+				scheduled = true;
+				cleanup();
+
+				var timeToEnd = Math.round( (audio.duration - audio.currentTime ) * 1000 );
+
+				music._timeout(Math.max(timeToEnd - fade, 0), function() {
+					this.volume(0.0, fade);
+				});
+
+				music._timeout(Math.max(timeToEnd, 0), finish);
+			}
+
+			audio.addEventListener('loadedmetadata', schedule);
+			audio.addEventListener('durationchange', schedule);
+			audio.addEventListener('ended', finish);
+			schedule();
 		},
 
 		loop: function(label, volume, fade) {
