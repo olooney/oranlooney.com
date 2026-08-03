@@ -875,6 +875,10 @@ to be an accountant."
 <br>&mdash;Anonymous
 
 
+"There are no routine statistical questions, only questionable statistical routines."
+<br>&mdash;David Cox
+
+
 "Learning to program teaches you how to think. Computer science is a liberal
 art."
 <br>&mdash;Steve Jobs
