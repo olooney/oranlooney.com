@@ -3,7 +3,7 @@ name = "oranlooney.com"
 version = "1.0.0"
 description = ""
 dependencies = [
-    "Pillow",
+    "Pillow>=12.2.0",
 ]
 
 [tool.uv]

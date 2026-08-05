@@ -144,7 +144,8 @@ const SKY_COLOR_STOPS = [
 /* Help Instructions */
 const INSTRUCTION_HTML = `
     <div>
-    Welcome to the Soma Cube Forest! Here you will find all 480 possible solutions to the colored Soma puzzle, grouped by similarity.
+    Welcome to the Soma Cube Forest! Here you will find all 480 possible solutions (including mirrored variations, which doubles the count)
+    to the Soma puzzle, grouped by similarity.
     The mycelium network underfoot connects solutions that differ in only two or three pieces.</div>
     <ul style="margin: 10px 0 0 0; padding: 0 0 0 22px;">
         <li>Click to capture the mouse</li>
