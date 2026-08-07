@@ -10,7 +10,7 @@ A Fortran compiler is the hobgoblin of little minis.
 A French chopping center.
 A German, a Pole and a Czech left camp for a hike through the woods.
 A Hollywood producer calls a friend, another producer on the phone.
-A Horrifying Movie of Wierd Beauties and Shocking Monsters.
+A Horrifying Movie of Weird Beauties and Shocking Monsters.
 A LISP programmer knows the value of everything, but the cost of nothing.
 A LOVER in your arms!
 A Live Celebrity Gets Eaten by a Shark'.
@@ -34,7 +34,6 @@ A baby is God's opinion that the world should go on.
 A baby is an alimentary canal with a loud voice at one end and no responsibility at the other.
 A bachelor is a man who never made the same mistake once.
 A bachelor is a selfish, undeserving guy who has cheated some woman out of a divorce.
-A bachelor is an unaltared male.
 A bachelor never quite gets over the idea that he is a thing of beauty and a boy for ever.
 A backscratcher will always find new itches.
 A bad idea whose time has come.
@@ -97,7 +96,7 @@ A celestial object whose phase is very important to hackers.
 A central corporate headquarters decrees the form of all rites and practices.
 A certain amount of opposition is a help, not a hindrance.
 A certain old cat had made his home in the alley behind Gabe's bar for some time, subsisting on scraps and occasional handouts from the bartender.
-A certain small number of brain cells will deteriorate due to everday activity, but large amounts are weakened by intense mental effort and the assimilation of difficult concepts.
+A certain small number of brain cells will deteriorate due to everyday activity, but large amounts are weakened by intense mental effort and the assimilation of difficult concepts.
 A chemist who discovers a laundry additive that rhymes with bright.
 A chicken is an egg's way of producing more eggs.
 A child is a person who can't understand why someone would give away a perfectly good kitten.
@@ -107,7 +106,6 @@ A child, indeed, is a wonderful creature.
 A chronic disposition to inquiry deprives domestic felines of vital qualities.
 A circus foreman was making the rounds inspecting the big top when a scrawny little man entered the tent and walked up to him.
 A citizen of America will cross the ocean to fight for democracy, but won't cross the street to vote in a national election.
-A city in central Masschewsetts.
 A civilized race could not have found such a trick in the Library!
 A civilized race could not have stooped so low!
 A classic is something that everyone wants to have read and nobody wants to read.
@@ -123,8 +121,7 @@ A company is known by the men it keeps.
 A complex system that works is invariably found to have evolved from a simple system that works.
 A compliment is something like a kiss through a veil.
 A comprehensive plan of inaction.
-A compromise, I imagine.
-A computer lets you make more mistakes faster than any other invention, with the possible exceptions of handguns and Tequilla.
+A computer lets you make more mistakes faster than any other invention, with the possible exceptions of handguns and Tequila.
 A computer owner who can read the manual.
 A computer salesman visits a company president for the purpose of selling the president one of the latest talking computers.
 A computer scientist is someone who fixes things that aren't broken.
@@ -245,7 +242,6 @@ A friend is a present you give yourself.
 A friend of mine is into Voodoo Acupuncture.
 A friend of mine won't get a divorce, because he hates lawyers more than he hates his wife.
 A full belly makes a dull brain.
-A furore Normanorum libera nos, O Domine!
 A gallows was erected in front of the city gates.
 A gambler's biggest thrill is winning a bet.
 A gangster assembled an engineer, a chemist, and a physicist.
@@ -294,7 +290,7 @@ A halted retreat Is nerve-wracking and dangerous.
 A hammer sometimes misses its mark - a bouquet never.
 A handful of friends is worth more than a wagon of gold.
 A happy fly A man like me?
-A hard-luck actor who appeared in one coloossal disaster after another finally got a break, a broken leg to be exact.
+A hard-luck actor who appeared in one colossal disaster after another finally got a break, a broken leg to be exact.
 A healthy male adult bore consumes each year one and a half times his own weight in other people's patience.
 A healthy understanding of the way the universe works.
 A help wanted add for a photo journalist asked the rhetorical question: If you found yourself in a situation where you could either save a drowning man, or you could take a Pulitzer prize winning photograph of him drowning, what shutter speed and setting would you use?
@@ -441,14 +437,13 @@ A memorandum is written not to inform the reader, but to protect the writer.
 A method for transforming energy into solid waste.
 A method is given to construct the desired proof.
 A method of publicizing inventions so others can copy them.
-A method of solution is perfect if we can forsee from the start, and even prove, that following that method we shall attain our aim.
+A method of solution is perfect if we can foresee from the start, and even prove, that following that method we shall attain our aim.
 A mighty creature is the germ, Though smaller than the pachyderm.
 A miller received from a wizard a wonderful machine that just ground salt out of itself all day long.
 A mind is a terrible thing to have leaking out your ears.
 A mind is a wonderful thing to waste.
 A mischievous, magical spirit associated with screen displays.
 A mistake carried out to perfection.
-A modem is a baudy house.
 A modest woman, dressed out in all her finery, is the most tremendous object in the whole creation.
 A month later, returning, the mad scientist went to the engineer's cell and found it long empty.
 A more convincing form of proof by example.
@@ -475,7 +470,6 @@ A new chef from India was fired a week after starting the job.
 A new concept in abuser interfaces.
 A new level of software disintegration.
 A new road or a secret gate, Let them pass!
-A new supply of round tuits has arrived and are available from Mary.
 A newspaper is a circulating library with high blood pressure.
 A nice place to visit, but you can't stay here for long.
 A nickel ain't worth a dime anymore.
@@ -534,7 +528,6 @@ A plucked goose doesn't lay golden eggs.
 A plumbing system is very much like your electrical system, except that instead of electricity, it has water, and instead of wires, it has pipes, and instead of radios and waffle irons, it has faucets and toilets.
 A poet who reads his verse in public may have other nasty habits.
 A point around which something revolves; axis.
-A point here, a point there, and a lot of bull inbetween.
 A political man can have as his aim the realization of freedom, but he has no means to realize it other than through violence.
 A politician who has tenure.
 A popular story circulating during his presidency concerned the night he was roused by his wife crying, Wake up!
@@ -576,7 +569,7 @@ A ranger was walking through the forest and encountered a hunter carrying a shot
 A rather plaintive Is it up?
 A reader reports that the Army calls them vertically deployed anti- personnel devices.
 A reader reports that when the patient died, the attending doctor recorded the following on the patient's chart: Patient failed to fulfill his wellness potential.
-A real diplomat is one who can cut his neighbor's throat without having his neighbour notice it.
+A real diplomat is one who can cut his neighbor's throat without having his neighbor notice it.
 A real friend is someone you can use over and over again.
 A real friend isn't someone you use once and then throw away.
 A real gentleman never takes bases unless he really has to.
@@ -657,7 +650,7 @@ A surprising property of a program.
 A swift-flowing steam does not grow stagnant.
 A synagogue that closes for the Jewish holidays.
 A synonym is a word you use when you can't spell the word you first thought of.
-A tail is quite essential for your acrobatic talents: You would not be so agile if you lacked its counterbalance; And when not being utilitized to aid in locomotion, It often serves to illustrate the state of your emotion.
+A tail is quite essential for your acrobatic talents: You would not be so agile if you lacked its counterbalance; And when not being utilized to aid in locomotion, It often serves to illustrate the state of your emotion.
 A tall, dark stranger will have more fun than you.
 A tautology is a thing which is tautological.
 A team effort is a lot of people doing what I say.
@@ -737,7 +730,6 @@ A woman, especially if she have the misfortune of knowing anything, should conce
 A word that strikes no pleasure?
 A word to the wise is enough.
 A word to the wise is often enough to start an argument.
-A word to the wise: a credentials dicksize war is usually a bad idea on the net.
 A world lacking gravy is a tragic place!
 A would-be disciple came to Nasrudin's hut on the mountain-side.
 A writer is congenitally unable to tell the truth and that is why we call what he writes fiction.
@@ -842,13 +834,9 @@ Actually, typing random strings in the Finder does the equivalent of filename co
 Actually, what I'd like is a little toy spaceship!
 Ada is the work of an architect, not a computer scientist.
 Adam and Eve had many advantages, but the principal one was, that they escaped teething.
-Add 1 seaspoon of tugar and beat again.
-Add 2 orge laggs, 2 cups of fried druit and beat untill high.
 Add a picture of his factory.
-Add bablespoon of brown gugar, or whatever color you have.
 Add lemon juice and rind.
 Add little to little and there will be a big pile.
-Adde parvum parvo manus acervus erit.
 Adding manpower to a late software project makes it later.
 Adding sound to movies would be like putting lipstick on the Venus de Milo.
 Addition makes an alcohol, Of types there are but three.
@@ -871,7 +859,6 @@ Affected with a high degree of intellectual independence.
 Afflicted with an impediment in one's reach.
 Afghanistan, I lost my corkscrew, and we were forced to live on nothing but food and water for days.
 Aforesaid installation shall occur in a manner consistent with the reverse of the procedures described in step one of this self-same document, being careful to note that the rotation should occur in a clockwise direction, this point also being non-negotiable.
-Africa is primerally inhabited by Elks, Moose and Knights of Pithiests.
 After 13 minutes' flight a booster engine would give acceleration up to 25,820 mph; after 44 minutes 9,800 solar cells would unfold; after 80 days a computer would calculate the final course corrections and after 100 days the craft would cirlce the unknown planet, scanning the mysterious cloud in Lost and forgotten be, darker than the darkness, Where gates stand for ever shut, till the world is mended.
 After 35 years, I have finished a comprehensive study of European comparative law.
 After Goliath's defeat, giants ceased to command respect.
@@ -900,7 +887,7 @@ After an hour's wait he was just a few feet from the booth when a voice called o
 After an instrument has been assembled, extra components will be found on the bench.
 After any salary raise, you will have less money at the end of the month than you did before.
 After being reported missing a day or two later, rangers found two bears, one a male, one a female, looking suspiciously overstuffed.
-After considerable thought, he settled on an naming the car either Belchazar or Beaumadine, but remained in a quandry about the final choice.
+After considerable thought, he settled on an naming the car either Belchazar or Beaumadine, but remained in a quandary about the final choice.
 After dinner they went upstairs and I saw your wife kissing him.
 After everyone has gone to sleep two lone cavalry officers stand watch over the camp.
 After forty hours in the air, George turned to Harry, and said, Harry, I think we've drifted off course!
@@ -939,7 +926,6 @@ After what you all have done, I find being 'inhuman' a compliment.
 After working late, a valiant warrior gets lost on his way home.
 After working with it.
 After years of interacting with this other man, sharing hopes and fears that he wouldn't confide in his priest or psychiatrist, he'll finally let down his guard in a fit of drunken sentimentality and say something like, You know, for someone who's such a jerk, I guess you're OK.
-After years of research, scientists recently reported that there is, indeed, arroz in Spanish Harlem.
 After your lover has gone you will still have PEANUT BUTTER!
 Afternoon very favorable for romance.
 Against his wishes, a math teacher's classroom was remodeled.
@@ -972,7 +958,7 @@ Ain't nothin' an old man can do for me but bring me a message from a young man.
 Ain't that something what happened today.
 Air is water with holes in it.
 Air pollution is really making us pay through the nose.
-Airline personnel walk around, apologising profusely to customers in hushed voices, pointing from time to time to the sleek, powerful jets outside the terminal on the field.
+Airline personnel walk around, apologizing profusely to customers in hushed voices, pointing from time to time to the sleek, powerful jets outside the terminal on the field.
 Airplanes are interesting toys but of no military value.
 Al didn't smile for forty years.
 Alan Turing thought about criteria to settle the question of whether machines can think, a question of which we now know that it is about as relevant as the question of whether submarines can swim.
@@ -1049,7 +1035,6 @@ All husbands are alike, but they have different faces so you can tell them apart
 All in all, it was all just bricks in the wall.
 All intelligent species own cats.
 All is fear in love and war.
-All is sound and imagery and Appledom.
 All is well that ends well.
 All it costs is my soul!
 All kings is mostly rapscallions.
@@ -1087,7 +1072,6 @@ All parameters are hard-coded.
 All parts should go together without forcing.
 All passengers believe they got there.
 All patties would be heated up and then cooled back down in electronic devices immediately before serving.
-All phone calls are obscene.
 All possibility of understanding is rooted in the ability to say no.
 All power corrupts, but we need electricity.
 All principles of gravity are negated by fear.
@@ -1095,7 +1079,6 @@ All proffered samples of learning must go to the same assay-room and be subjecte
 All programmers are optimists.
 All programmers are playwrights and all computers are lousy actors.
 All progress is based upon a universal innate desire of every organism to live beyond its income.
-All right, you degenerates!
 All science is either physics or stamp collecting.
 All seems condemned in the long run to approximate a state akin to Gaussian noise.
 All snakes who wish to remain in Ireland will please raise their right hands.
@@ -1106,7 +1089,6 @@ All that glitters has a high refractive index.
 All that glitters is not gold; all that wander are not lost.
 All that is gold does not glitter, Not all those who wander are lost; The old that is strong does not wither, Deep roots are not reached by the frost.
 All the big corporations depreciate their possessions, and you can, too, provided you use them for business purposes.
-All the cans look identical.
 All the computers were linked together.
 All the easy problems have been solved.
 All the evidence concerning the universe has not yet been collected, so there's still hope.
@@ -1122,13 +1104,11 @@ All the passions make us commit faults; love makes us commit the most ridiculous
 All the people are so happy now, their heads are caving in.
 All the postmasters in small towns read all the postcards.
 All the really good ideas I ever had came to me while I was milking a cow.
-All the rest are myths.
 All the schedules, the brochures, The bright-colored posters full of lies, Promise rides to a distant country That no longer exists.
 All the simple programs have been written.
 All the student hackers loved that fractal Puff But DCS did not like Puff, and finally said, Enough!
 All the taxes paid over a lifetime by the average American are spent by the government in less than a second.
 All the terrible temper tantrums, crying, and threats are eliminated.
-All the trees are red.
 All the troubles you have will pass away very quickly.
 All the villagers but the stupidest ran off to spread the wonderful news.
 All the world's a stage and most of us are desperately unrehearsed.
@@ -1149,7 +1129,7 @@ All true wisdom is found on T-shirts.
 All warranty and guarantee clauses become null and void upon payment of invoice.
 All wars are civil wars, because all men are brothers.
 All we know is the phenomenon: we spend our time sending messages to each other, talking and trying to listen at the same time, exchanging information.
-All were courtmartialed and shot, except Hidalgo, because he was a priest.
+All were court-martialed and shot, except Hidalgo, because he was a priest.
 All will be suspended, and I don't care if it wrecks the National League for five years.
 All work and no pay makes a housewife.
 All you do is sit at a typewriter and open a vein.
@@ -1388,7 +1368,7 @@ Antonio Antonio Uttered a dismal moanio And went off and hid Or I'm told that he
 Anxious to find shelter for the night, he walked over to a farmhouse and knocked on the front door.
 Any activity that can't be done while smoking should be avoided.
 Any animal leading a blind person shall be deemed to be a cat.
-Any attempt to prove otherwise constitutes unacceptable behaviour.
+Any attempt to prove otherwise constitutes unacceptable behavior.
 Any automobile that, when left unattended, attracts shopping carts.
 Any circuit design must contain at least one part which is obsolete, two parts which are unobtainable, and three parts which are still under development.
 Any clod can have the facts, but having opinions is an art.
@@ -1408,7 +1388,7 @@ Any given program will expand to fill all available memory.
 Any given program will expand to fill available memory.
 Any given program, when running, is obsolete.
 Any given spoonful will likely have an IQ of 1, but occasional spoonfuls may have an IQ more than six times that!
-Any man who has lived at all knows the follies and wickedness he's capabe of.
+Any man who has lived at all knows the follies and wickedness he's capable of.
 Any man who hates dogs and babies can't be all bad.
 Any medium powerful enough to extend man's reach is powerful enough to topple his world.
 Any member introducing a dog into the Society's premises shall be liable to a fine of one pound.
@@ -1434,7 +1414,7 @@ Any two philosophers can tell each other all they know in two hours.
 Any violent rearrangement of feline matter is impermanent.
 Any woman is a volume if one knows how to read her.
 Anybody can win, unless there happens to be a second entry.
-Anybody that wants the presidency so much that he'll spend two years organising and campaigning for it is not to be trusted with the office.
+Anybody that wants the presidency so much that he'll spend two years organizing and campaigning for it is not to be trusted with the office.
 Anybody who doesn't cut his speed at the sight of a police car is probably parked.
 Anybody who goes on a tour is a Bozo.
 Anybody with money to burn will easily find someone to tend the fire.
@@ -1451,7 +1431,6 @@ Anyone who considers protocol unimportant has never dealt with a cat.
 Anyone who expects a source of power from the transformation of these atoms is talking moonshine.
 Anyone who goes to a psychiatrist ought to have his head examined.
 Anyone who has attended a USENIX conference in a fancy hotel can tell you that a sentence like You're one of those computer people, aren't you?
-Anyone who has been putting off work until they got a round tuit now has no excuse for further procrastination.
 Anyone who has had a bull by the tail knows five or six more things than someone who hasn't.
 Anyone who imagines that all fruits ripen at the same time as the strawberries, knows nothing about grapes.
 Anyone who is capable of getting themselves made President should on no account be allowed to do the job.
@@ -1493,23 +1472,19 @@ Apply only to affected area.
 Approaching her, he introduced himself and, after some quiet conversation, said, I'm afraid you and I don't really fit in with this jaded group.
 Approaching the back door he was startled to see an apparition of the old cat mournfully holding its severed tail out, silently pleading for Gabe to put the tail back on its corpse so that it could go on to the kitty afterworld complete.
 Approaching the gates of the monastery, Hakuin found Ken the Zen preaching to a group of disciples.
-April 1 This is the day upon which we are reminged of what we are on the other three hundred and sixty-four.
-April 2, 1751 Issac Newton becomes discouraged when he falls up a flight of stairs.
+April 1: This is the day upon which we are reminded of what we are on the other three hundred and sixty-four.
+April 2, 1751: Issac Newton becomes discouraged when he falls up a flight of stairs.
 April is the cruellest month.
 Aquavit is also considered useful for medicinal purposes, an essential ingredient in what I was once told is the Norwegian cure for the common cold.
 Aquavit may be hard to find and expensive to boot.
-Arbitrary systems, pl.
 Archibald Leach Edward G.
 Are Frogs Turing Compatible?
-Are perfect orgasms beginning to bore you?
-Are the STEWED PRUNES still in the HAIR DRYER?
 Are they really bitter?
 Are they taking no-fault insurance lying down?
 Are we beginning all over again to produce our credentials?
 Are we laid back yet?
 Are we live or on tape?
 Are we on STRIKE yet?
-Are we running light with overbyte?
 Are we, as the saying goes, giving away the store?
 Are you ever going to do the dishes?
 Are you having fun yet?
@@ -1539,7 +1514,7 @@ Armageddon never looked so good.
 Armaments Chapter One, verses nine through twenty-seven: Bro.
 Armed men surrounded the jet.
 Armenians and Azerbaijanis in Stepanakert, capital of the Nagorno-Karabakh autonomous region, rioted over much needed spelling reform in the Soviet Union.
-Army officiers there of the perilous situation.
+Army officers there of the perilous situation.
 Army unit was in a house surrounded by Cuban forces.
 Around computers it is difficult to find the correct unit of time to measure progress.
 Around the FUTURE and BEYOND REPAIR!
@@ -5232,19 +5207,11 @@ How many Harvard MBA's does it take to screw in a lightbulb?
 How many IBM 370's does it take to execute a job?
 How many IBM CPU's does it take to do a logical right shift?
 How many IBM CPU's does it take to execute a job?
-How many IBM types does it take to change a light bulb?
 How many Martians does it take to screw in a lightbulb?
-How many Marxists does it take to screw in a lightbulb?
 How many NASA managers does it take to screw in a lightbulb?
-How many Oregonians does it take to screw in a light bulb?
-How many QA engineers does it take to screw in a lightbulb?
-How many Unix hacks does it take to change a light bulb?
-How many WASPs does it take to change a lightbulb?
 How many Zen Buddhist does it take to change a light bulb?
 How many Zen masters does it take to screw in a light bulb?
-How many bureaucrats does it take to screw in a light bulb?
 How many college football players does it take to screw in a lightbulb?
-How many coming men has one known!
 How many comrades have we lost in this way?
 How many elephants can you fit in a VW Bug?
 How many existentialists does it take to screw in a lightbulb?
@@ -5257,7 +5224,7 @@ How many journalists does it take to screw in a lightbulb?
 How many lawyers does it take to change a light bulb?
 How many marketing people does it take to change a lightbulb?
 How many mathematicians does it take to screw in a lightbulb?
-How many nuclear engineers does it take to change a light bulb ?
+How many nuclear engineers does it take to change a light bulb?
 How many people work here?
 How many priests are needed for a Boston Mass?
 How many psychiatrists does it take to change a light bulb?
@@ -5348,7 +5315,6 @@ Humanity has the stars in its future, and that future is too important to be los
 Humans are communications junkies.
 Humans exposed to the oxygen concentrations die within a few minutes.
 Hummingbirds never remember the words to songs.
-Humor in the Court: Q.
 Humor is a drug which it's the fashion to abuse.
 Humoring them costs nothing and adds happiness in a world in which happiness is always in short supply.
 Humorists always sit at the children's table.
@@ -5362,7 +5328,6 @@ Hurd beer: Long advertised by the popular and politically active GNU brewery, so
 Husbands, good or bad, always have rivals.
 Hustling the senoritas, While they dance beneath the stars.
 Hyphenate between sy-llables and avoid un-necessary hyphens.
-I Bachtrian or Dromedary?
 I DO want your money, because god wants your money!
 I DON'T THINK I'M ALONE when I say I'd like to see more and more planets fall under the ruthless domination of our solar system.
 I GUESS I'LL NEVER FORGET HER.
@@ -6582,7 +6547,7 @@ I'd love to go out with you, but I've been scheduled for a karma transplant.
 I'd love to go out with you, but it's my parakeet's bowling night.
 I'd love to go out with you, but my favorite commercial is on TV.
 I'd love to go out with you, but the last time I went out, I never came back.
-I'd love to go out with you, but the man on television told me to say tuned.
+I'd love to go out with you, but the man on television told me to stay tuned.
 I'd love to go out with you, but there are important world issues that need worrying about.
 I'd love to kiss you, but I just washed my hair.
 I'd never join any club that would have the likes of me as a member.
@@ -19247,3 +19212,145 @@ Youth is the trustee of posterity.
 Youth is when you blame all your troubles on your parents; maturity is when you learn that everything is the fault of the younger generation.
 Zebras are colored with dark stripes on a light background.
 Zeus gave Leda the bird.
+'Tis the time's plague when madmen lead the blind.
+A Bayesian is one who, vaguely expecting a horse, and catching a glimpse of a donkey, strongly believes he has seen a mule.
+A mathematician is a device for turning coffee into theorems. Corollary: A co-mathematician is a device for turning ffee into co-theorems.
+A procedure should fit on a page.
+A ship in harbor is safe, but that's not what ships are built for.
+A specification, design, procedure, or test plan that will not fit on one page of 8.5 x 11-inch paper cannot be understood.
+A statistician is a person who draws a mathematically precise line from an unwarranted assumption to a foregone conclusion.
+A statistician is someone who is good with numbers but lacks the personality to be an accountant.
+A wise man proportions his belief to the evidence.
+All knowledge degenerates into probability.
+All models are wrong, but some are useful.
+All problems in computer science can be solved by another level of indirection, except for the problem of too many layers of indirection.
+Amateurs talk strategy and professionals talk logistics.
+Any intelligent fool can make things bigger, more complex, more violent. It takes a touch of genius - and a lot of courage - to move in the opposite direction.
+Any program is a model of a model within a theory of a model of an abstraction of some portion of the world or of some universe of discourse.
+Anyone who considers arithmetical methods of producing random numbers is, of course, in a state of sin.
+Artificial Intelligence is not 'man versus machine.' It is 'man with machines' versus 'man without machines.'
+As a programmer, it's your job to put yourself out of business. What you can do today can be automated tomorrow.
+As one Google Translate engineer put it, 'when you go from 10,000 training examples to 10 billion training examples, it all starts to work. Data trumps everything.'
+Be careful that victories do not carry the seeds of future defeats.
+Beware of bugs in the above code; I have only proved it correct, not tried it.
+Build one to throw away - you will anyway.
+Building a four-foot tower requires a steady hand, a level surface, and 10 undamaged beer cans. Building a 400-foot tower doesn't merely require 100 times as many beer cans.
+Coming up with features is difficult, time-consuming, and requires expert knowledge. 'Applied machine learning' is basically feature engineering.
+Complexity kills. It sucks the life out of developers, it makes products difficult to plan, build, and test, it introduces security challenges and it causes end-users and administrators frustration.
+Controlling complexity is the essence of computer programming.
+Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.
+Each new user of a new system uncovers a new class of bugs.
+Either America will destroy ignorance or ignorance will destroy the United States.
+Eschew clever rules.
+Every great developer you know got there by solving problems they were unqualified to solve until they actually did it.
+Every time I fire a linguist, the performance of the speech recognizer goes up.
+Every twenty-minute job is one broken bolt away from becoming a three-day ordeal.
+Everything is interesting if you go into it deeply enough.
+Facts do not cease to exist because they are ignored.
+Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question which can always be made precise.
+Finding your bug is a process of confirming the many things that you believe are true - until you find one which is not true.
+He uses statistics as a drunken man uses lamp-posts: for support rather than illumination.
+He who aims to keep abreast is forever second best.
+Hofstadter's law: It always takes longer than you expect, even when you take into account Hofstadter's law.
+Humankind cannot bear very much reality.
+I beseech you, in the bowels of Christ, think it possible you may be mistaken!
+I have wished to understand the hearts of men. I have wished to know why the stars shine. And I have tried to apprehend the Pythagorean power by which number holds sway above the flux.
+I would rather have questions that can't be answered than answers that can't be questioned.
+If a man will begin with certainties, he shall end in doubts; but if he will be content to begin with doubts he shall end in certainties.
+If it can be destroyed by the truth, it deserves to be destroyed by the truth.
+If it works, it's obsolete.
+If it's your decision, it's design; if not, it's a requirement.
+If people do not believe that mathematics is simple, it is only because they do not realize how complicated life is.
+If they can get you asking the wrong questions, they don't have to worry about answers.
+If we'd asked the customers what they wanted, they would have said, 'faster horses.'
+If you can't write it down in English, you can't code it.
+If you don't see the use of it, I certainly won't let you clear it away. Go away and think. Then, when you can come back and tell me that you *do* see the use of it, I *may* allow you to destroy it.
+If your experiment needs statistics, you ought to have done a better experiment.
+Ignorance more frequently begets confidence than does knowledge.
+In non-I/O-bound programs, a few percent of the source code typically accounts for over half the run time.
+In our business, one in a million is next Tuesday.
+Inside every large program is a small program trying to get out.
+It ain't what you don't know that gets you in trouble. It's what you know for sure that just ain't so.
+It is a capital mistake to theorize before one has data.
+It is unworthy of excellent men to lose hours like slaves in the labour of calculation which could safely be relegated to anyone else if machines were used.
+Knowledge is a process of piling up facts. Wisdom lies in simplification.
+Knowledge is power. France is Bacon.
+Learning to program teaches you how to think. Computer science is a liberal art.
+Less than 10 percent of the code has to do with the ostensible purpose of the system; the rest deals with input-output, data validation, data structure maintenance, and other housekeeping.
+Make it work, make it right, make it fast.
+Measure what is measurable, and make measurable what is not so.
+Measuring programming progress by lines of code is like measuring aircraft building progress by weight.
+Men must be taught as if you taught them not, And things unknown proposed as things forgot.
+Models should be as simple as possible, but not more so.
+No one has ever found a bug in a piece of vaporware.
+Nothing is more permanent than a temporary solution.
+On a log-log plot, my grandmother fits on a straight line.
+One should respect public opinion insofar as is necessary to avoid starvation and keep out of prison, but anything that goes beyond this is voluntary submission to an unnecessary tyranny.
+Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations.
+Our responsibility is to do what we can, learn what we can, improve the solutions, and pass them on.
+People don't want to buy a quarter-inch drill; they want a quarter-inch hole.
+People worry that computers will get too smart and take over the world, but the real problem is that they're too stupid and they've already taken over the world.
+Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
+Science is simply common sense at its best, that is, rigidly accurate in observation, and merciless to fallacy in logic.
+Should array indices start at 0 or 1? My compromise of 0.5 was rejected without, I thought, proper consideration.
+Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make matters worse: complexity sells better.
+Simplicity is hard to build, easy to use, and hard to charge for. Complexity is easy to build, hard to use, and easy to charge for.
+Simplicity is prerequisite for reliability.
+So much complexity in software comes from trying to make one thing do two things.
+Some of the greatest discoveries consist mainly in the clearing away of psychological roadblocks which obstruct the approach to reality; which is why, *post factum*, they appear so obvious.
+Some people will never learn anything, for this reason, because they understand everything too soon.
+Some people, when confronted with a problem, think 'I know, I'll use multithreading.' Nothhw tpe yawrve o oblems.
+Sometimes, the elegant implementation is a function. Not a method. Not a class. Not a framework. Just a function.
+Statistics is the grammar of science.
+Statistics means never having to say you're certain.
+Study hard what interests you the most in the most undisciplined, irreverent and original manner possible.
+Such is modern computing: everything simple is made too complicated because it's easy to fiddle with: everything complicated stays complicated because it is hard to fix.
+Taking fun as simply fun, and earnestness in earnest, shows how thoroughly thou none of the two discernest.
+The ability to simplify means to eliminate the unnecessary so that the necessary may speak.
+The actual and physical conduct of an experiment must govern the statistical procedure of its interpretation.
+The cardinal sin is to make a choice without knowing you are making one.
+The cheapest, fastest, and most reliable components of a computer system are those that aren't there.
+The essence of XML is this: the problem it solves is not hard, and it does not solve the problem well.
+The fastest I/O is no I/O.
+The first 90 percent of the code accounts for the first 90 percent of the development time. The remaining 10 percent of the code accounts for the other 90 percent of the development time.
+The first step in fixing a broken program is getting it to fail repeatably.
+The greatest thing you'll ever learn is just to love and be loved in return.
+The key to understanding complicated things is to know what not to look at.
+The most effective debugging tool is still careful thought, coupled with judiciously placed print statements.
+The most important single aspect of software development is to be clear about what you are trying to build.
+The only good is knowledge and the only evil is ignorance.
+The only relevant test of the validity of a hypothesis is comparison of its predictions with experience.
+The only three numbers a programmer should ever care about are zero, one, and infinity.
+The psychological profiling of a programmer is mostly the ability to shift levels of abstraction, from low level to high level. To see something in the small and to see something in the large.
+The purpose of abstraction is not to be vague, but to create a new semantic level in which one can be absolutely precise.
+The purpose of software engineering is to control complexity, not to create it.
+The question of whether a computer can think is no more interesting than the question of whether a submarine can swim.
+The road to programming hell is paved with global variables.
+The secret to success is an even number of sign errors.
+The term 'exponential' is used quadratically too often.
+The trouble with the world is that the stupid are cocksure and the intelligent full of doubt.
+The whole point of getting things done is knowing what to leave undone.
+The world would be a much simpler place if one could bring about social change merely by making a logically consistent moral argument.
+There are only two hard problems in computer science: cache invalidation, naming things, and off-by-one errors.
+There are three types of lies: lies, damn lies, and statistics.
+There are two ways of constructing software. One way is to make it so simple that there are obviously no deficiencies. The other is to make it so complex that there are no obvious deficiencies.
+This too shall pass.
+Thompson's rule for first-time telescope makers: It is faster to make a four-inch mirror then a six-inch mirror than to make a six-inch mirror.
+To consult the statistician after an experiment is finished is often merely to ask him to conduct a postmortem examination. He can perhaps say what the experiment died of.
+Trust, but verify.
+Truth is ever to be found in simplicity, and not in the multiplicity and confusion of things.
+UNIX is simple. It just takes a genius to understand its simplicity.
+Violence is the last refuge of the incompetent.
+We build our computer systems the way we build our cities: over time, without a plan, on top of ruins.
+We try things. Occasionally they even work.
+What I cannot create, I do not understand.
+When I do good I feel good, when I do bad I feel bad, and that's my religion.
+When in doubt, use brute force.
+When you believe in things that you don't understand, then you suffer: superstition ain't the way.
+With a sufficient number of users of an API, it does not matter what you promise in the contract: all observable behaviors of your system will be depended on by somebody.
+With four parameters I can fit an elephant, and with five I can make him wiggle his trunk.
+Without requirements or design, programming is the art of adding bugs to an empty text file.
+You can't fix by analysis what you bungled by design.
+You either believe in the law of the excluded middle, or you don't.
+You know that algorithm that all the papers make fun of in their intro? Implement that and forget the rest of the paper.
+You think you know when you can learn, are more sure when you can write, even more when you can teach, but certain when you can program.

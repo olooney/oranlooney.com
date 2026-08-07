@@ -22,7 +22,7 @@ const KEYPRESS_SOUNDS = [
     '../whack/resources/koiroylers-keyboard-press-351952.mp3',
 ];
 const DING_SOUND = '../font-wars/resources/sounds/91924__Benboncan__Till_With_Bell.ogg';
-
+const SENTENCE_FILES = Array.from({ length: 20 }, (_, i) => `sentences-${String(i + 1).padStart(2, '0')}.txt`);
 // --- Colors ---
 const COLOR_BG = '#ffffff';
 const COLOR_TEXT = '#000000';
@@ -176,11 +176,14 @@ class Game {
 
     async loadSentences() {
         try {
-            const response = await fetch('sentences.txt', { cache: 'no-store' });
+            const texts = await Promise.all(SENTENCE_FILES.map(async (filename) => {
+                const response = await fetch(filename, { cache: 'no-store' });
 
-            if (!response.ok) throw new Error(`sentences.txt returned ${response.status}`);
+                if (!response.ok) throw new Error(`${filename} returned ${response.status}`);
 
-            const text = await response.text();
+                return response.text();
+            }));
+            const text = texts.join('\n');
             const sentences = text.split('\n').map(line => line.trim()).filter(Boolean);
 
             this.sentences = shuffle(sentences);
@@ -193,6 +196,8 @@ class Game {
 
     reset() {
         this.frame = 0;
+        this.playFrames = 0;
+        this.timerStarted = false;
         this.titleScreen = true;
         this.gameOver = false;
         this.gameOverFrame = 0;
@@ -329,7 +334,7 @@ class Game {
     }
 
     computeWpm() {
-        const playFrames = this.gameOver ? Math.min(this.gameOverFrame, GAME_FRAMES) : Math.min(this.frame, GAME_FRAMES);
+        const playFrames = Math.min(this.playFrames, GAME_FRAMES);
         const minutes = Math.max(playFrames / 60 / 60, 1 / 60);
         const lineText = this.visibleLines().current.text;
         const currentCorrectChars = countCreditedCharacters(this.typedLine, lineText);
@@ -338,7 +343,7 @@ class Game {
     }
 
     timeLeftFrames() {
-        return Math.max(GAME_FRAMES - this.frame, 0);
+        return Math.max(GAME_FRAMES - this.playFrames, 0);
     }
 
     currentErrorCount() {
@@ -354,7 +359,11 @@ class Game {
 
         if (this.loading || this.loadError || this.titleScreen || this.gameOver) return;
 
-        if (this.frame >= GAME_FRAMES) {
+        if (!this.timerStarted) return;
+
+        this.playFrames++;
+
+        if (this.playFrames >= GAME_FRAMES) {
             this.finishGame();
         }
     }
@@ -569,7 +578,7 @@ class Game {
         this.ctx.save();
 
         const scoreFont = 28;
-        const rightX = this.width - 72;
+    const scoreBoxRight = this.width / 2 + 160;
         let y = this.height / 2 - scoreFont * 2.4;
         const framesSinceOver = this.frame - this.gameOverFrame;
 
@@ -577,24 +586,25 @@ class Game {
         this.ctx.textAlign = 'right';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillStyle = COLOR_TEXT;
-        this.ctx.fillText(`WPM: ${this.finalWpm}`, rightX, y);
+        this.ctx.fillText(`WPM: ${this.finalWpm}`, scoreBoxRight, y);
         y += scoreFont * 1.4;
-        this.ctx.fillText(`ERRORS: ${this.incorrectWords}`, rightX, y);
+        this.ctx.fillText(`ERRORS: ${this.incorrectWords}`, scoreBoxRight, y);
         y += scoreFont * 1.4;
         this.ctx.fillStyle = COLOR_DIM;
-        this.ctx.fillText(`PREVIOUS BEST: ${this.previousHighScore}`, rightX, y);
+        this.ctx.fillText(`PREVIOUS BEST: ${this.previousHighScore}`, scoreBoxRight, y);
 
         if (this.newHighScore) {
             y += scoreFont * 1.6;
             this.ctx.fillStyle = COLOR_GOOD;
-            this.ctx.fillText('NEW HIGH SCORE!', rightX, y);
+            this.ctx.fillText('NEW HIGH SCORE!', scoreBoxRight, y);
         }
 
         if (framesSinceOver >= GAME_OVER_DELAY) {
             this.ctx.font = `${scoreFont * 0.9}px monospace`;
             this.ctx.fillStyle = COLOR_DIM;
             this.ctx.globalAlpha = promptThrobAlpha(framesSinceOver);
-            this.ctx.fillText('Press space to restart', rightX, this.height - 32);
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('Press space to restart', this.width / 2, this.height - 32);
         }
 
         this.ctx.restore();
@@ -606,7 +616,7 @@ class Game {
         if (this.loading) {
             this.drawCenteredTitle('Typer-B', 'Loading sentences...');
         } else if (this.loadError) {
-            this.drawCenteredTitle('Typer-B', 'Could not load sentences.txt');
+            this.drawCenteredTitle('Typer-B', 'Could not load sentences');
         } else if (this.titleScreen) {
             this.drawCenteredTitle('Typer-B', 'Press space to start');
         } else if (this.gameOver) {
@@ -650,6 +660,7 @@ class Game {
 
         if (this.typedLine.length >= currentText.length && (e.key === ' ' || e.key === 'Enter')) {
             e.preventDefault();
+            this.timerStarted = true;
             this.advanceLine();
             return;
         }
@@ -661,6 +672,7 @@ class Game {
 
         if (this.typedLine.length >= currentText.length) return;
 
+        this.timerStarted = true;
         this.typedLine += e.key;
     }
 }

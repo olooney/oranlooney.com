@@ -13,11 +13,11 @@
   - [X] add mobile touch support
   - [X] add snapshot / download
   - [X] clear button
-- [ ] Whack-a-Key
-  - [ ] Add sound and music
-- [ ] Font Wars
-  - [ ] modernize initialization
-  - [ ] fix sound loading
+- [X] Whack-a-Key
+  - [X] Add sound and music
+- [X] Font Wars
+  - [X] modernize initialization
+  - [X] fix sound loading
 - [ ] Parabolic Rectangle
   - [ ] Abstract out sound
   - [ ] autoplay with reinforcement learning / genetic search
