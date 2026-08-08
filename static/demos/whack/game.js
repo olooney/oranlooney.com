@@ -32,11 +32,14 @@ const LOW_HP_WARNING_THRESHOLD = 2;
 const PROMPT_THROB_SECONDS = 1.5;
 const KEYPRESS_SOUND_CHANNELS = 4;
 const KEYPRESS_SOUND_VOLUME = 0.7;
+const ERROR_SOUND_CHANNELS = 1;
+const ERROR_SOUND_VOLUME = 1.0;
 const KEYPRESS_SOUNDS = [
     'resources/dragon-studio-single-key-press-393908.mp3',
     'resources/freesound_community-mech-keyboard-02-102918.mp3',
     'resources/koiroylers-keyboard-press-351952.mp3',
 ];
+const ERROR_SOUND = '../font-wars/resources/sounds/476177__unadamlar__wrong-choice.wav';
 
 // --- Colors ---
 const COLOR_HP_FULL = '#222222';
@@ -58,8 +61,13 @@ const COLOR_LETTER_FLASH = '#cc0000';
 const COLOR_SCORE = '#000000';
 const COLOR_GAME_OVER = '#000000';
 const COLOR_CONTINUE = '#555555';
+const PAUSE_OVERLAY_ALPHA = 0.35;
 const HIGH_SCORE_COOKIE = 'whackHighScore';
 const HIGH_SCORE_COOKIE_MAX_AGE = 365 * 24 * 60 * 60;
+const SOUND_MUTED_COOKIE = 'whackSoundMuted';
+const SOUND_BUTTON_WIDTH = 132;
+const SOUND_BUTTON_HEIGHT = 32;
+const SOUND_BUTTON_MARGIN = 16;
 
 // --- QWERTY keyboard layout - letters and numbers only ---
 const KEYBOARD = [
@@ -76,13 +84,14 @@ const LETTERS = KEYBOARD.slice(1).flat();
 const ALL_KEYS = KEYBOARD.flat();
 
 class KeypressSounds {
-    constructor() {
-        this.sounds = KEYPRESS_SOUNDS.map((url) => ({
-            channels: Array.from({ length: KEYPRESS_SOUND_CHANNELS }, () => {
+    constructor(urls = KEYPRESS_SOUNDS, channels = KEYPRESS_SOUND_CHANNELS, volume = KEYPRESS_SOUND_VOLUME) {
+        this.muted = false;
+        this.sounds = urls.map((url) => ({
+            channels: Array.from({ length: channels }, () => {
                 const audio = new Audio(url);
 
                 audio.preload = 'auto';
-                audio.volume = KEYPRESS_SOUND_VOLUME;
+                audio.volume = volume;
                 audio.load();
 
                 return audio;
@@ -91,7 +100,13 @@ class KeypressSounds {
         }));
     }
 
+    setMuted(muted) {
+        this.muted = muted;
+    }
+
     play() {
+        if (this.muted) return;
+
         const sound = this.sounds[Math.floor(Math.random() * this.sounds.length)];
         const audio = sound.channels[sound.nextChannel];
 
@@ -118,6 +133,12 @@ function hasModifierKey(e) {
     return e.shiftKey || e.ctrlKey || e.altKey || e.metaKey;
 }
 
+function isResumeKey(e) {
+    const key = e.key.toUpperCase();
+
+    return ALL_KEYS.includes(key) || isControlKey(key) || e.key === 'Escape';
+}
+
 function readHighScore() {
     const cookies = document.cookie ? document.cookie.split('; ') : [];
     const prefix = `${HIGH_SCORE_COOKIE}=`;
@@ -132,6 +153,17 @@ function readHighScore() {
 
 function writeHighScore(score) {
     document.cookie = `${HIGH_SCORE_COOKIE}=${encodeURIComponent(score)}; max-age=${HIGH_SCORE_COOKIE_MAX_AGE}; path=/; SameSite=Lax`;
+}
+
+function readSoundMuted() {
+    const cookies = document.cookie ? document.cookie.split('; ') : [];
+    const prefix = `${SOUND_MUTED_COOKIE}=`;
+
+    return cookies.some(cookie => cookie === `${prefix}true`);
+}
+
+function writeSoundMuted(muted) {
+    document.cookie = `${SOUND_MUTED_COOKIE}=${muted}; max-age=${HIGH_SCORE_COOKIE_MAX_AGE}; path=/; SameSite=Lax`;
 }
 
 function promptThrobAlpha(frame) {
@@ -171,9 +203,11 @@ class Game {
     reset() {
         this.score = 0;
         this.frame = 0;
+        this.simFrame = 0;
         this.flashUntil = 0;
         this.difficulty = 1.0;
         this.gameOver = false;
+        this.paused = false;
         this.gameOverFrame = 0;
         this.finalWpm = 0;
         this.displayWpm = 0;
@@ -209,16 +243,16 @@ class Game {
             if (state.on) continue;
 
             // or if they're still flashing
-            const flash = this.frame < state.flashUntil;
+            const flash = this.simFrame < state.flashUntil;
             if (flash) continue;
 
             // or if they were just cleared or drained
-            const coolingDown = this.frame < state.cooldownUntil;
+            const coolingDown = this.simFrame < state.cooldownUntil;
             if (coolingDown) continue;
 
             // flip the key on and start the drain animation
             state.on = true;
-            state.startFrame = this.frame;
+            state.startFrame = this.simFrame;
             state.graceUntil = 0;
             return;
         }
@@ -231,18 +265,18 @@ class Game {
             const state = this.keys[k];
 
             // when a key expires before the user types it:
-            if (state.on && this.frame - state.startFrame >= lifetime) {
+            if (state.on && this.simFrame - state.startFrame >= lifetime) {
                 // take damage
                 this.hp -= HP_DAMAGE;
 
                 // background flash
-                this.flashUntil = this.frame + FLASH_DURATION;
+                this.flashUntil = this.simFrame + FLASH_DURATION;
 
                 // letter flash
                 state.on = false;
                 state.flashUntil = this.flashUntil;
-                state.graceUntil = this.frame + EXPIRED_KEY_GRACE_FRAMES;
-                state.cooldownUntil = this.frame + KEY_COOLDOWN_FRAMES;
+                state.graceUntil = this.simFrame + EXPIRED_KEY_GRACE_FRAMES;
+                state.cooldownUntil = this.simFrame + KEY_COOLDOWN_FRAMES;
             }
         }
     }
@@ -280,14 +314,14 @@ class Game {
     }
 
     updateDisplayedWpm(force) {
-        if (!force && this.frame - this.lastWpmUpdateFrame < WPM_UPDATE_FRAMES) return;
+        if (!force && this.simFrame - this.lastWpmUpdateFrame < WPM_UPDATE_FRAMES) return;
 
         this.displayWpm = this.computeWpm();
-        this.lastWpmUpdateFrame = this.frame;
+        this.lastWpmUpdateFrame = this.simFrame;
     }
 
     trimHitTimestamps() {
-        const windowStart = this.frame - WPM_WINDOW_FRAMES;
+        const windowStart = this.simFrame - WPM_WINDOW_FRAMES;
 
         while (this.hitTimestamps.length > 0 && this.hitTimestamps[0] < windowStart) {
             this.hitTimestamps.shift();
@@ -298,6 +332,7 @@ class Game {
         if (this.hp <= 0) {
             this.hp = 0;
             this.gameOver = true;
+            this.paused = false;
             this.gameOverFrame = this.frame;
             this.finalWpm = this.displayWpm;
             this.previousHighScore = readHighScore();
@@ -313,12 +348,13 @@ class Game {
     update() {
         this.frame++;
 
-        if (this.titleScreen || this.gameOver) return;
+        if (this.titleScreen || this.gameOver || this.paused) return;
 
+        this.simFrame++;
         this.playFrames++;
         this.difficulty += DIFFICULTY_RAMP;
 
-        if (this.frame % this.spawnInterval() === 1) {
+        if (this.simFrame % this.spawnInterval() === 1) {
             this.spawnKey();
         }
 
@@ -327,10 +363,22 @@ class Game {
         this.checkGameOver();
     }
 
+    pauseGame() {
+        if (this.titleScreen || this.gameOver || this.paused) return;
+
+        this.paused = true;
+    }
+
+    resumeGame() {
+        if (!this.paused) return;
+
+        this.paused = false;
+    }
+
     drawBackground() {
         this.ctx.save();
 
-        const flash = !this.gameOver && this.frame < this.flashUntil;
+        const flash = !this.gameOver && this.simFrame < this.flashUntil;
         this.ctx.fillStyle = flash ? COLOR_FLASH : COLOR_BG;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -380,7 +428,7 @@ class Game {
         const keySize = Math.min(this.width / 12, this.height / 6);
         const gap = keySize * 0.15;
         const fontSize = keySize * 0.6;
-        const startY = keySize * 0.5;
+        const startY = Math.max(keySize * 0.5, SOUND_BUTTON_MARGIN + SOUND_BUTTON_HEIGHT + 8);
         const lifetime = this.keyLifetime();
 
         this.ctx.font = `bold ${fontSize}px monospace`;
@@ -396,13 +444,13 @@ class Game {
                 const state = this.keys[key];
 
                 if (state.on) {
-                    const elapsed = this.frame - state.startFrame;
+                    const elapsed = this.simFrame - state.startFrame;
                     const progress = Math.min(elapsed / lifetime, 1);
 
                     this.drawOnKey(x, y, keySize, key, progress);
                 } else {
 
-                    const flash = !this.gameOver && this.frame < state.flashUntil;
+                    const flash = !this.gameOver && this.simFrame < state.flashUntil;
                     this.drawOffKey(x, y, keySize, key, flash);
                 }
             }
@@ -503,7 +551,7 @@ class Game {
 
         const keySize = Math.min(this.width / 12, this.height / 6);
         const gap = keySize * 0.15;
-        const startY = keySize * 0.5;
+        const startY = Math.max(keySize * 0.5, SOUND_BUTTON_MARGIN + SOUND_BUTTON_HEIGHT + 8);
 
         const barY = startY + 4 * (keySize + gap) + gap;
         const barWidth = this.width * 0.9;
@@ -516,13 +564,13 @@ class Game {
         const emptyW = barWidth - filledW;
         let fillColor = COLOR_HP_FULL;
 
-        if (!this.gameOver && this.frame < this.hpHealFlashUntil) {
-            const progress = (this.hpHealFlashUntil - this.frame) / HP_HEAL_FLASH_DURATION;
+        if (!this.gameOver && this.simFrame < this.hpHealFlashUntil) {
+            const progress = (this.hpHealFlashUntil - this.simFrame) / HP_HEAL_FLASH_DURATION;
             fillColor = mixColor(COLOR_HP_FULL, COLOR_HP_HEAL, progress);
         } else if (!this.gameOver && this.hp <= LOW_HP_WARNING_THRESHOLD) {
             const danger = LOW_HP_WARNING_THRESHOLD - this.hp + 1;
             const speed = 0.07 + 0.05 * danger;
-            const pulse = 0.5 - 0.5 * Math.cos(this.frame * speed);
+            const pulse = 0.5 - 0.5 * Math.cos(this.simFrame * speed);
             const strength = Math.min(0.25 + 0.2 * danger + pulse * (0.2 + 0.12 * danger), 1);
 
             fillColor = mixColor(COLOR_HP_FULL, COLOR_HP_DANGER, strength);
@@ -582,6 +630,69 @@ class Game {
         this.ctx.restore();
     }
 
+    drawPauseOverlay() {
+        this.ctx.save();
+
+        this.ctx.fillStyle = COLOR_SCORE;
+        this.ctx.globalAlpha = PAUSE_OVERLAY_ALPHA;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.globalAlpha = 1;
+
+        const boxWidth = Math.min(this.width - 96, 420);
+        const boxHeight = 120;
+        const boxX = (this.width - boxWidth) / 2;
+        const boxY = (this.height - boxHeight) / 2;
+
+        this.ctx.fillStyle = COLOR_BG;
+        this.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        this.ctx.strokeStyle = COLOR_SCORE;
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeRect(boxX + 0.5, boxY + 0.5, boxWidth - 1, boxHeight - 1);
+
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = COLOR_SCORE;
+        this.ctx.font = 'bold 30px monospace';
+        this.ctx.fillText('Paused', this.width / 2, boxY + 42);
+        this.ctx.font = '20px monospace';
+        this.ctx.fillStyle = COLOR_SCORE;
+        this.ctx.fillText('Press any key to resume', this.width / 2, boxY + 82);
+
+        this.ctx.restore();
+    }
+
+    soundButtonBounds() {
+        return {
+            x: this.width - SOUND_BUTTON_WIDTH - SOUND_BUTTON_MARGIN,
+            y: SOUND_BUTTON_MARGIN,
+            width: SOUND_BUTTON_WIDTH,
+            height: SOUND_BUTTON_HEIGHT,
+        };
+    }
+
+    drawSoundToggle(muted) {
+        const bounds = this.soundButtonBounds();
+
+        this.ctx.save();
+        this.ctx.fillStyle = COLOR_BG;
+        this.ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        this.ctx.strokeStyle = COLOR_SCORE;
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeRect(bounds.x + 0.5, bounds.y + 0.5, bounds.width - 1, bounds.height - 1);
+        this.ctx.font = 'bold 14px monospace';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = COLOR_SCORE;
+        this.ctx.fillText(muted ? 'Unmute Sound' : 'Mute Sound', bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+        this.ctx.restore();
+    }
+
+    isSoundToggleAt(x, y) {
+        const bounds = this.soundButtonBounds();
+
+        return x >= bounds.x && x <= bounds.x + bounds.width && y >= bounds.y && y <= bounds.y + bounds.height;
+    }
+
     draw() {
         this.drawBackground();
 
@@ -594,11 +705,28 @@ class Game {
             this.drawKeyboard();
             this.drawHpBar();
             this.drawHud();
+
+            if (this.paused) {
+                this.drawSoundToggle(soundMuted);
+                this.drawPauseOverlay();
+            }
+        }
+
+        if (!this.paused) {
+            this.drawSoundToggle(soundMuted);
         }
     }
 
     keydown(e) {
         if (hasModifierKey(e)) {
+            return;
+        }
+
+        if (this.paused) {
+            if (!isResumeKey(e)) return;
+
+            e.preventDefault();
+            this.resumeGame();
             return;
         }
 
@@ -608,6 +736,7 @@ class Game {
         // title screen state
         if (this.titleScreen) {
             if (this.keys[key] || isControlKey(key)) {
+                e.preventDefault();
                 this.reset();
                 this.titleScreen = false;
             }
@@ -619,6 +748,7 @@ class Game {
             const framesSinceOver = this.frame - this.gameOverFrame;
 
             if (this.keys[key] || isControlKey(key)) {
+                e.preventDefault();
                 if (framesSinceOver >= GAME_OVER_DELAY) {
                     keypressSounds.play();
                     this.reset();
@@ -628,21 +758,27 @@ class Game {
             return;
         }
 
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            this.pauseGame();
+            return;
+        }
+
         // main gameplay state
         if (!this.keys[key]) {
             return;
         }
 
-        keypressSounds.play();
-
+        e.preventDefault();
         const state = this.keys[key];
 
         if (state.on) {
             // handle a successful hit
+            keypressSounds.play();
             state.on = false;
-            state.cooldownUntil = this.frame + KEY_COOLDOWN_FRAMES;
+            state.cooldownUntil = this.simFrame + KEY_COOLDOWN_FRAMES;
             this.score += HIT_REWARD;
-            this.hitTimestamps.push(this.frame);
+            this.hitTimestamps.push(this.simFrame);
             this.trimHitTimestamps();
             this.updateDisplayedWpm(false);
             this.hitsSinceHeal++;
@@ -652,14 +788,15 @@ class Game {
 
                 if (this.hp < MAX_HP) {
                     this.hp = Math.min(MAX_HP, this.hp + HP_HEAL_AMOUNT);
-                    this.hpHealFlashUntil = this.frame + HP_HEAL_FLASH_DURATION;
+                    this.hpHealFlashUntil = this.simFrame + HP_HEAL_FLASH_DURATION;
                 }
             }
         } else {
-            const inExpiredKeyGrace = this.frame <= state.graceUntil;
+            errorSound.play();
+            const inExpiredKeyGrace = this.simFrame <= state.graceUntil;
 
             // handle an eroneous key
-            this.flashUntil = this.frame + FLASH_DURATION;
+            this.flashUntil = this.simFrame + FLASH_DURATION;
             state.flashUntil = this.flashUntil;
 
             if (!inExpiredKeyGrace) {
@@ -676,8 +813,32 @@ class Game {
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const keypressSounds = new KeypressSounds();
+const errorSound = new KeypressSounds([ERROR_SOUND], ERROR_SOUND_CHANNELS, ERROR_SOUND_VOLUME);
+let soundMuted = readSoundMuted();
+
+keypressSounds.setMuted(soundMuted);
+errorSound.setMuted(soundMuted);
+
 const game = new Game(ctx, canvas.clientWidth, canvas.clientHeight);
 document.addEventListener('keydown', (e) => game.keydown(e));
+canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * canvas.width / rect.width;
+    const y = (e.clientY - rect.top) * canvas.height / rect.height;
+
+    if (!game.isSoundToggleAt(x, y)) return;
+
+    soundMuted = !soundMuted;
+    keypressSounds.setMuted(soundMuted);
+    errorSound.setMuted(soundMuted);
+    writeSoundMuted(soundMuted);
+});
+window.addEventListener('blur', () => game.pauseGame());
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        game.pauseGame();
+    }
+});
 
 // run the main loop in a fixed-time accumulator
 let lastTime = performance.now();

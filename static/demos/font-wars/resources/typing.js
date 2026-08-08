@@ -32,6 +32,7 @@ $(function() {
     var FAST_WORD_MULTIPLIER_BONUS = 2;
     var DIFFICULT_WORD_MIN_LENGTH = 10;
     var DIFFICULT_WORD_MULTIPLIER_BONUS = 2;
+    var GAME_OVER_RESTART_DELAY_MS = 2000;
     var GAME_OVER_TITLE_FADE_MS = 1000;
     var FINAL_SCORE_FADE_MS = 500;
     var ACCURACY_BONUS_START_PERCENT = 95;
@@ -58,6 +59,7 @@ $(function() {
 
     var loadingScreen = true;
     var gameOver = false;
+    var gameOverAt = undefined;
     var paused = false;
     var pausedAt = undefined;
     var soundInitialized = false;
@@ -705,6 +707,7 @@ $(function() {
         startTime = new Date();
         loadingScreen = false;
         gameOver = false;
+        gameOverAt = undefined;
         paused = false;
         pausedAt = undefined;
         setMultiplier(1);
@@ -793,6 +796,11 @@ $(function() {
     });
 
     $(window).blur(pauseGame);
+    $(document).on('visibilitychange', function() {
+        if ( document.hidden ) {
+            pauseGame();
+        }
+    });
 
     function die() {
         var generation = spawnGeneration;
@@ -801,6 +809,7 @@ $(function() {
         $(spaceship).explode(alphabet, 3000);
         $(spaceship).explode(alphabet.toUpperCase(), 3000);
         gameOver = true;
+        gameOverAt = new Date();
 
         $(score).stop(true, true).fadeOut(500);
 
@@ -904,6 +913,18 @@ $(function() {
         return e.key === "'" || e.which === 222 || e.keyCode === 222;
     }
 
+    function hasModifierKey(e) {
+        return e.altKey || e.ctrlKey || e.metaKey;
+    }
+
+    function isTypingKey(e) {
+        return (e.which > 64 && e.which < 91) || isApostropheKey(e);
+    }
+
+    function isResumeKey(e) {
+        return !hasModifierKey(e) && (isTypingKey(e) || e.which === 13 || e.keyCode === 8 || e.keyCode === 32 || e.keyCode === 27);
+    }
+
     document.addEventListener('keydown', function(e) {
         if ( isApostropheKey(e) && !e.altKey && !e.ctrlKey && !e.metaKey ) {
             e.preventDefault();
@@ -921,21 +942,31 @@ $(function() {
         }));
 
         if ( paused ) {
-            resumeGame();
+            if ( isResumeKey(e) ) {
+                e.preventDefault();
+                resumeGame();
+            }
             return;
         }
 
         if ( gameOver ) {
-            if ( e.which === 13 || e.keyCode === 32 ) {
-                startGame();
+            if ( !hasModifierKey(e) && (e.which === 13 || e.keyCode === 32) ) {
+                e.preventDefault();
+                if ( gameOverAt && new Date() - gameOverAt >= GAME_OVER_RESTART_DELAY_MS ) {
+                    startGame();
+                }
             }
         } else if ( loadingScreen ) {
-            if ( e.which === 13 || e.keyCode === 32 ) {
+            if ( !hasModifierKey(e) && (e.which === 13 || e.keyCode === 32) ) {
+                e.preventDefault();
                 startGame();
             }
 
+        } else if ( hasModifierKey(e) ) {
+            // leave browser shortcut handling intact.
         } else if ( e.keyCode === 8 || e.keyCode === 32 || e.keyCode === 27 ) { 
             // space, backspace, or escape: reset the target reticle
+            e.preventDefault();
             var targets = $('.enemy.target');
             if ( targets.length ) {
                 targets.removeClass('target'); 
@@ -943,8 +974,6 @@ $(function() {
             } else if ( e.keyCode === 27 ) {
                 pauseGame();
             }
-        } else if ( e.altKey || e.ctrlKey ) {
-            // ignore modifier keys
         } else {
             // normal typing
             var key = e.which;
@@ -958,6 +987,7 @@ $(function() {
                 return;
              }
 
+            e.preventDefault();
             // shoot a letter off the targeted word, or start a new word
             var target = $('.enemy.target').first();
             if ( target.length ) {

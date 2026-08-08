@@ -2,7 +2,7 @@
 const GAME_SECONDS = 120;
 const TICK_RATE = 1000 / 60;
 const GAME_FRAMES = GAME_SECONDS * 60;
-const GAME_OVER_DELAY = 3 * 60;
+const GAME_OVER_DELAY = 2 * 60;
 const PROMPT_THROB_SECONDS = 1.5;
 const KEYS_PER_WORD = 5;
 const LINE_TARGET_CHARS = 80;
@@ -14,14 +14,21 @@ const KEYPRESS_SOUND_CHANNELS = 4;
 const KEYPRESS_SOUND_VOLUME = 0.7;
 const DING_SOUND_CHANNELS = 2;
 const DING_SOUND_VOLUME = 0.75;
+const ERROR_SOUND_CHANNELS = 1;
+const ERROR_SOUND_VOLUME = 1.0;
 const HIGH_SCORE_COOKIE = 'typerBHighScore';
 const HIGH_SCORE_COOKIE_MAX_AGE = 365 * 24 * 60 * 60;
+const SOUND_MUTED_COOKIE = 'typerBSoundMuted';
+const SOUND_BUTTON_WIDTH = 132;
+const SOUND_BUTTON_HEIGHT = 32;
+const SOUND_BUTTON_MARGIN = 16;
 const KEYPRESS_SOUNDS = [
     '../whack/resources/dragon-studio-single-key-press-393908.mp3',
     '../whack/resources/freesound_community-mech-keyboard-02-102918.mp3',
     '../whack/resources/koiroylers-keyboard-press-351952.mp3',
 ];
 const DING_SOUND = '../font-wars/resources/sounds/91924__Benboncan__Till_With_Bell.ogg';
+const ERROR_SOUND = '../font-wars/resources/sounds/476177__unadamlar__wrong-choice.wav';
 const SENTENCE_FILES = Array.from({ length: 20 }, (_, i) => `sentences-${String(i + 1).padStart(2, '0')}.txt`);
 // --- Colors ---
 const COLOR_BG = '#ffffff';
@@ -33,6 +40,8 @@ const COLOR_PANEL = '#eeeeee';
 const COLOR_BAR = '#222222';
 const COLOR_BAR_EMPTY = '#bbbbbb';
 const HIGHLIGHT_ALPHA = 0.5;
+const PAUSE_OVERLAY_ALPHA = 0.35;
+const MISSING_CHARACTER = '\u0000';
 
 function hasModifierKey(e) {
     return e.ctrlKey || e.altKey || e.metaKey;
@@ -40,6 +49,10 @@ function hasModifierKey(e) {
 
 function isPrintableKey(e) {
     return e.key.length === 1;
+}
+
+function isResumeKey(e) {
+    return isPrintableKey(e) || e.key === 'Backspace' || e.key === 'Enter' || e.key === 'Escape';
 }
 
 function readHighScore() {
@@ -56,6 +69,17 @@ function readHighScore() {
 
 function writeHighScore(score) {
     document.cookie = `${HIGH_SCORE_COOKIE}=${encodeURIComponent(score)}; max-age=${HIGH_SCORE_COOKIE_MAX_AGE}; path=/; SameSite=Lax`;
+}
+
+function readSoundMuted() {
+    const cookies = document.cookie ? document.cookie.split('; ') : [];
+    const prefix = `${SOUND_MUTED_COOKIE}=`;
+
+    return cookies.some(cookie => cookie === `${prefix}true`);
+}
+
+function writeSoundMuted(muted) {
+    document.cookie = `${SOUND_MUTED_COOKIE}=${muted}; max-age=${HIGH_SCORE_COOKIE_MAX_AGE}; path=/; SameSite=Lax`;
 }
 
 function promptThrobAlpha(frame) {
@@ -97,6 +121,18 @@ function countWordsWithMistakes(typed, target) {
     return count;
 }
 
+function completedWordHasMistake(typed, target) {
+    const typedLength = typed.length;
+
+    if (typedLength === 0 || (typedLength < target.length && target[typedLength] !== ' ')) {
+        return false;
+    }
+
+    const wordStart = target.lastIndexOf(' ', typedLength - 1) + 1;
+
+    return typed.slice(wordStart, typedLength) !== target.slice(wordStart, typedLength);
+}
+
 function countCreditedCharacters(typed, target) {
     const wordPattern = /\S+/g;
     let match;
@@ -128,6 +164,7 @@ function countCreditedCharacters(typed, target) {
 
 class SoundPool {
     constructor(urls, channels, volume) {
+        this.muted = false;
         this.sounds = urls.map((url) => ({
             channels: Array.from({ length: channels }, () => {
                 const audio = new Audio(url);
@@ -142,7 +179,13 @@ class SoundPool {
         }));
     }
 
+    setMuted(muted) {
+        this.muted = muted;
+    }
+
     play() {
+        if (this.muted) return;
+
         const sound = this.sounds[Math.floor(Math.random() * this.sounds.length)];
         const audio = sound.channels[sound.nextChannel];
 
@@ -174,24 +217,31 @@ class Game {
         this.loadSentences();
     }
 
-    async loadSentences() {
-        try {
-            const texts = await Promise.all(SENTENCE_FILES.map(async (filename) => {
+    loadSentences() {
+        let failedFiles = 0;
+
+        SENTENCE_FILES.forEach(async (filename) => {
+            try {
                 const response = await fetch(filename, { cache: 'no-store' });
 
                 if (!response.ok) throw new Error(`${filename} returned ${response.status}`);
 
-                return response.text();
-            }));
-            const text = texts.join('\n');
-            const sentences = text.split('\n').map(line => line.trim()).filter(Boolean);
+                const text = await response.text();
+                const sentences = text.split('\n').map(line => line.trim()).filter(Boolean);
 
-            this.sentences = shuffle(sentences);
-            this.loading = false;
-        } catch (e) {
-            this.loading = false;
-            this.loadError = true;
-        }
+                if (sentences.length === 0) throw new Error(`${filename} is empty`);
+
+                this.sentences.push(...shuffle(sentences));
+                this.loading = false;
+            } catch (e) {
+                failedFiles++;
+
+                if (failedFiles === SENTENCE_FILES.length && this.sentences.length === 0) {
+                    this.loading = false;
+                    this.loadError = true;
+                }
+            }
+        });
     }
 
     reset() {
@@ -200,6 +250,7 @@ class Game {
         this.timerStarted = false;
         this.titleScreen = true;
         this.gameOver = false;
+        this.paused = false;
         this.gameOverFrame = 0;
         this.startIndex = 0;
         this.streamText = '';
@@ -297,6 +348,7 @@ class Game {
         const lines = this.visibleLines();
 
         this.gameOver = true;
+        this.paused = false;
         this.gameOverFrame = this.frame;
         this.finalWpm = this.computeWpm();
         this.incorrectWords += countWordsWithMistakes(this.typedLine, lines.current.text);
@@ -324,13 +376,68 @@ class Game {
 
     advanceLine() {
         const lines = this.visibleLines();
+        const wordErrors = countWordsWithMistakes(this.typedLine, lines.current.text);
 
-        this.incorrectWords += countWordsWithMistakes(this.typedLine, lines.current.text);
+        this.incorrectWords += wordErrors;
         this.completedCorrectChars += countCreditedCharacters(this.typedLine, lines.current.text);
         this.lineStart = lines.next.start;
         this.typedLine = '';
         this.ensureStreamLength(this.lineStart);
         dingSound.play();
+    }
+
+    currentWordRange(text) {
+        const cursor = this.typedLine.length;
+        const start = text.lastIndexOf(' ', Math.max(cursor - 1, 0)) + 1;
+        const space = text.indexOf(' ', cursor);
+
+        return {
+            start,
+            end: space === -1 ? text.length : space,
+        };
+    }
+
+    completeCurrentWord(text) {
+        const range = this.currentWordRange(text);
+        const wasMistyped = this.typedLine.length >= range.end && completedWordHasMistake(this.typedLine, text);
+
+        this.typedLine += MISSING_CHARACTER.repeat(Math.max(range.end - this.typedLine.length, 0));
+
+        const isMistyped = completedWordHasMistake(this.typedLine, text);
+
+        if (isMistyped && !wasMistyped) {
+            errorSound.play();
+        }
+
+        return {
+            isMistyped,
+            isLastWord: range.end === text.length,
+        };
+    }
+
+    markCurrentWordMistyped(text) {
+        const range = this.currentWordRange(text);
+
+        if (this.typedLine.length < range.end || completedWordHasMistake(this.typedLine, text)) {
+            return false;
+        }
+
+        const errorIndex = Math.max(range.start, range.end - 1);
+
+        this.typedLine = this.typedLine.slice(0, errorIndex)
+            + MISSING_CHARACTER
+            + this.typedLine.slice(errorIndex + 1);
+        return true;
+    }
+
+    advanceWord(text) {
+        const completed = this.completeCurrentWord(text);
+
+        if (completed.isLastWord) {
+            this.advanceLine();
+        } else {
+            this.typedLine += ' ';
+        }
     }
 
     computeWpm() {
@@ -354,10 +461,22 @@ class Game {
         return this.incorrectWords + this.currentErrorCount();
     }
 
+    pauseGame() {
+        if (this.loading || this.loadError || this.titleScreen || this.gameOver || this.paused) return;
+
+        this.paused = true;
+    }
+
+    resumeGame() {
+        if (!this.paused) return;
+
+        this.paused = false;
+    }
+
     update() {
         this.frame++;
 
-        if (this.loading || this.loadError || this.titleScreen || this.gameOver) return;
+        if (this.loading || this.loadError || this.titleScreen || this.gameOver || this.paused) return;
 
         if (!this.timerStarted) return;
 
@@ -560,7 +679,7 @@ class Game {
     drawGame() {
         const lines = this.visibleLines();
         const panelX = 0;
-        const panelY = 14;
+        const panelY = 56;
         const panelW = this.width - panelX * 2;
         const panelH = 76;
         const textInset = this.ctx.measureText('M').width / 2;
@@ -610,6 +729,69 @@ class Game {
         this.ctx.restore();
     }
 
+    drawPauseOverlay() {
+        this.ctx.save();
+
+        this.ctx.fillStyle = COLOR_TEXT;
+        this.ctx.globalAlpha = PAUSE_OVERLAY_ALPHA;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.globalAlpha = 1;
+
+        const boxWidth = Math.min(this.width - 96, 420);
+        const boxHeight = 120;
+        const boxX = (this.width - boxWidth) / 2;
+        const boxY = (this.height - boxHeight) / 2;
+
+        this.ctx.fillStyle = COLOR_BG;
+        this.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+        this.ctx.strokeStyle = COLOR_TEXT;
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeRect(boxX + 0.5, boxY + 0.5, boxWidth - 1, boxHeight - 1);
+
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = COLOR_TEXT;
+        this.ctx.font = 'bold 30px monospace';
+        this.ctx.fillText('Paused', this.width / 2, boxY + 42);
+        this.ctx.font = '20px monospace';
+        this.ctx.fillStyle = COLOR_TEXT;
+        this.ctx.fillText('Press any key to resume', this.width / 2, boxY + 82);
+
+        this.ctx.restore();
+    }
+
+    soundButtonBounds() {
+        return {
+            x: this.width - SOUND_BUTTON_WIDTH - SOUND_BUTTON_MARGIN,
+            y: SOUND_BUTTON_MARGIN,
+            width: SOUND_BUTTON_WIDTH,
+            height: SOUND_BUTTON_HEIGHT,
+        };
+    }
+
+    drawSoundToggle(muted) {
+        const bounds = this.soundButtonBounds();
+
+        this.ctx.save();
+        this.ctx.fillStyle = COLOR_BG;
+        this.ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        this.ctx.strokeStyle = COLOR_TEXT;
+        this.ctx.lineWidth = 1;
+        this.ctx.strokeRect(bounds.x + 0.5, bounds.y + 0.5, bounds.width - 1, bounds.height - 1);
+        this.ctx.font = 'bold 14px monospace';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = COLOR_TEXT;
+        this.ctx.fillText(muted ? 'Unmute Sound' : 'Mute Sound', bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+        this.ctx.restore();
+    }
+
+    isSoundToggleAt(x, y) {
+        const bounds = this.soundButtonBounds();
+
+        return x >= bounds.x && x <= bounds.x + bounds.width && y >= bounds.y && y <= bounds.y + bounds.height;
+    }
+
     draw() {
         this.drawBackground();
 
@@ -624,6 +806,15 @@ class Game {
         } else {
             this.drawGame();
             this.drawHud();
+
+            if (this.paused) {
+                this.drawSoundToggle(soundMuted);
+                this.drawPauseOverlay();
+            }
+        }
+
+        if (!this.paused) {
+            this.drawSoundToggle(soundMuted);
         }
     }
 
@@ -631,6 +822,14 @@ class Game {
         if (hasModifierKey(e)) return;
 
         if (this.loading || this.loadError) return;
+
+        if (this.paused) {
+            if (!isResumeKey(e)) return;
+
+            e.preventDefault();
+            this.resumeGame();
+            return;
+        }
 
         if (this.titleScreen) {
             if (e.key === ' ') {
@@ -643,10 +842,18 @@ class Game {
         if (this.gameOver) {
             const framesSinceOver = this.frame - this.gameOverFrame;
 
-            if (framesSinceOver >= GAME_OVER_DELAY && e.key === ' ') {
+            if (e.key === ' ') {
                 e.preventDefault();
-                this.startGame();
+                if (framesSinceOver >= GAME_OVER_DELAY) {
+                    this.startGame();
+                }
             }
+            return;
+        }
+
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            this.pauseGame();
             return;
         }
 
@@ -658,22 +865,48 @@ class Game {
 
         const currentText = this.visibleLines().current.text;
 
-        if (this.typedLine.length >= currentText.length && (e.key === ' ' || e.key === 'Enter')) {
+        if (e.key === ' ') {
             e.preventDefault();
             this.timerStarted = true;
-            this.advanceLine();
+            this.advanceWord(currentText);
+            return;
+        }
+
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+            if (this.currentWordRange(currentText).end === currentText.length) {
+                this.timerStarted = true;
+                this.advanceWord(currentText);
+            }
             return;
         }
 
         if (!isPrintableKey(e)) return;
 
         e.preventDefault();
-        keypressSounds.play();
 
         if (this.typedLine.length >= currentText.length) return;
 
+        const range = this.currentWordRange(currentText);
+
+        if (this.typedLine.length >= range.end) {
+            if (this.markCurrentWordMistyped(currentText)) {
+                errorSound.play();
+            }
+            return;
+        }
+
+        const typedLine = this.typedLine + e.key;
+
+        if (completedWordHasMistake(typedLine, currentText)) {
+            errorSound.play();
+        } else {
+            keypressSounds.play();
+        }
+
         this.timerStarted = true;
-        this.typedLine += e.key;
+        this.typedLine = typedLine;
     }
 }
 
@@ -681,11 +914,37 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const keypressSounds = new SoundPool(KEYPRESS_SOUNDS, KEYPRESS_SOUND_CHANNELS, KEYPRESS_SOUND_VOLUME);
 const dingSound = new SoundPool([DING_SOUND], DING_SOUND_CHANNELS, DING_SOUND_VOLUME);
+const errorSound = new SoundPool([ERROR_SOUND], ERROR_SOUND_CHANNELS, ERROR_SOUND_VOLUME);
+let soundMuted = readSoundMuted();
+
+keypressSounds.setMuted(soundMuted);
+dingSound.setMuted(soundMuted);
+errorSound.setMuted(soundMuted);
+
 const game = new Game(ctx, canvas.clientWidth, canvas.clientHeight);
 if (new URLSearchParams(location.search).has('debug')) {
     globalThis.typerBGame = game;
 }
 document.addEventListener('keydown', (e) => game.keydown(e));
+canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * canvas.width / rect.width;
+    const y = (e.clientY - rect.top) * canvas.height / rect.height;
+
+    if (!game.isSoundToggleAt(x, y)) return;
+
+    soundMuted = !soundMuted;
+    keypressSounds.setMuted(soundMuted);
+    dingSound.setMuted(soundMuted);
+    errorSound.setMuted(soundMuted);
+    writeSoundMuted(soundMuted);
+});
+window.addEventListener('blur', () => game.pauseGame());
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        game.pauseGame();
+    }
+});
 
 let lastTime = performance.now();
 let accumulator = 0;
