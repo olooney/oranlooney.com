@@ -353,7 +353,7 @@ $(function() {
     var pausedModal = newSprite('paused-modal', [
         '<div class="paused-box">',
         '<h2>Paused</h2>',
-        '<p>Press any key to resume</p>',
+        '<p>Press Space to resume</p>',
         '</div>'
     ].join(''));
     $(pausedModal).hide();
@@ -796,7 +796,7 @@ $(function() {
     });
 
     $(window).blur(pauseGame);
-    $(document).on('visibilitychange', function() {
+    document.addEventListener('visibilitychange', function() {
         if ( document.hidden ) {
             pauseGame();
         }
@@ -909,8 +909,16 @@ $(function() {
         sound.fx.play('miss');
     }
 
+    function eventKey(e) {
+        return e.key || (e.originalEvent && e.originalEvent.key) || '';
+    }
+
+    function eventCode(e) {
+        return e.code || (e.originalEvent && e.originalEvent.code) || '';
+    }
+
     function isApostropheKey(e) {
-        return e.key === "'" || e.which === 222 || e.keyCode === 222;
+        return eventKey(e) === "'" || e.which === 222 || e.keyCode === 222;
     }
 
     function hasModifierKey(e) {
@@ -918,11 +926,15 @@ $(function() {
     }
 
     function isTypingKey(e) {
-        return (e.which > 64 && e.which < 91) || isApostropheKey(e);
+        return /^[a-z]$/i.test(eventKey(e)) || isApostropheKey(e);
     }
 
-    function isResumeKey(e) {
-        return !hasModifierKey(e) && (isTypingKey(e) || e.which === 13 || e.keyCode === 8 || e.keyCode === 32 || e.keyCode === 27);
+    function isSpaceKey(e) {
+        return eventKey(e) === ' ' || eventCode(e) === 'Space' || e.which === 32 || e.keyCode === 32;
+    }
+
+    function isUnmodifiedSpaceKey(e) {
+        return !e.shiftKey && !hasModifierKey(e) && isSpaceKey(e);
     }
 
     document.addEventListener('keydown', function(e) {
@@ -942,7 +954,7 @@ $(function() {
         }));
 
         if ( paused ) {
-            if ( isResumeKey(e) ) {
+            if ( isUnmodifiedSpaceKey(e) ) {
                 e.preventDefault();
                 resumeGame();
             }
@@ -950,37 +962,36 @@ $(function() {
         }
 
         if ( gameOver ) {
-            if ( !hasModifierKey(e) && (e.which === 13 || e.keyCode === 32) ) {
+            if ( isUnmodifiedSpaceKey(e) ) {
                 e.preventDefault();
                 if ( gameOverAt && new Date() - gameOverAt >= GAME_OVER_RESTART_DELAY_MS ) {
                     startGame();
                 }
             }
         } else if ( loadingScreen ) {
-            if ( !hasModifierKey(e) && (e.which === 13 || e.keyCode === 32) ) {
+            if ( isUnmodifiedSpaceKey(e) ) {
                 e.preventDefault();
                 startGame();
             }
 
         } else if ( hasModifierKey(e) ) {
             // leave browser shortcut handling intact.
-        } else if ( e.keyCode === 8 || e.keyCode === 32 || e.keyCode === 27 ) { 
+        } else if ( eventKey(e) === 'Backspace' || isSpaceKey(e) || eventKey(e) === 'Escape' ) { 
             // space, backspace, or escape: reset the target reticle
             e.preventDefault();
             var targets = $('.enemy.target');
             if ( targets.length ) {
                 targets.removeClass('target'); 
                 updateScore();
-            } else if ( e.keyCode === 27 ) {
+            } else if ( eventKey(e) === 'Escape' ) {
                 pauseGame();
             }
         } else {
             // normal typing
-            var key = e.which;
             var letter = '';
-            if ( key > 64 && key < 91 ) {
-                letter = String.fromCharCode(key + 32);
-            } else if ( key === 222 ) {
+            if ( /^[a-z]$/i.test(eventKey(e)) ) {
+                letter = eventKey(e).toLowerCase();
+            } else if ( isApostropheKey(e) ) {
                 letter = "'"; // apostrophes are used in some words...
             } else {
                 // non-handled keydown, do nothing
