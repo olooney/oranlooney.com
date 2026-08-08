@@ -60,6 +60,15 @@ These instructions apply to the entire repository unless a more specific instruc
 - Put link reference definitions at the bottom of the post, after any footnotes.
 - Preserve existing heading style within a post.
 - Preserve MathJax syntax such as `$...$`, `\frac{...}{...}`, and display math already present in the file.
+- Use `$...$` for inline MathJax and `\\[...\\]` for display MathJax. Do not use `$$...$$` display delimiters. The doubled backslashes preserve MathJax's `\[...\]` delimiters through Hugo's Markdown processing. For example:
+
+  ```markdown
+  Inline math: $x^2$.
+
+  \\[
+  x^2 + y^2 = z^2
+  \\]
+  ```
 - Use fenced code blocks with explicit language tags where appropriate.
 - Existing posts may contain raw HTML for layout, images, footnotes, and special formatting. Preserve it all exactly; it's there for a reason.
 

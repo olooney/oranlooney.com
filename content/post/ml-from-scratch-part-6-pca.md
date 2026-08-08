@@ -143,17 +143,17 @@ which we will write as the matrix product $\mathbf{q}^T \mathbf{x}$. This new
 quantity is clearly a scalar random variable, so we can apply the variance
 operator to get a scalar measure of variance.
 
-$$ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} $$
+\\[ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} \\]
 
 Does this suffice to allow us to define a direction of maximal variation? Not
 quite. If we try to pose the naive optimization problem:
 
-$$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} $$
+\\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} \\]
 
 We can easily prove no solution exists. Proof: Assume that $\mathbf{a}$ is the maximum. There
 always exists another vector $\mathbf{b} = 2 \mathbf{a}$ which implies that:
 
-$$\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] > \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] \tag{3}$$.
+\\[\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] > \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ]. \tag{3}\\]
 
 Which implies that $\mathbf{a}$ was not the maximum after all, which is absurd.
 Q.E.D.  The upshot is that we must impose some additional constraint.
@@ -161,11 +161,11 @@ Q.E.D.  The upshot is that we must impose some additional constraint.
 Recall that a dot product is only a projection in a geometric sense if $\mathbf{q}$ is a
 *unit* vector. Why don't we impose the condition
 
-$$ \mathbf{q}^T \mathbf{q} = 1 \tag{4} $$
+\\[ \mathbf{q}^T \mathbf{q} = 1 \tag{4} \\]
 
 To obtain the *constrained* optimization problem 
 
-$$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} $$
+\\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} \\]
 
 Well at least this *has* a solution, even if it isn't immediately obvious how
 to solve it. We can't simply set partial derivative with respect to
@@ -218,16 +218,13 @@ have a closed form solution) gives an *exact* solution where the constraint is
 It's easy to use too, at least in our simple case. We introduce the Lagrange
 multiplier $\lambda$ and rewrite our optimization as follows:
 
-$$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} $$
+\\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} \\]
 
 Why is this the same as the above? Let's call the above function $f(\mathbf{q}, \lambda)$ write down the [KKT conditions][KKT]:
 
-$$
-  \begin{align}
-	\nabla_\mathbf{q} f & = 0 \tag{7} \\
-	\frac{\partial f}{\partial \lambda} & = 0 \tag{8}
-  \end{align}
-$$
+\\[ \nabla_\mathbf{q} f = 0 \tag{7} \\]
+
+\\[ \frac{\partial f}{\partial \lambda} = 0 \tag{8} \\]
 
 But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ which is simply
 our unit vector constraint... this guarantees that when we solve (7) and (8),
@@ -248,16 +245,16 @@ $\mathbf{\mu}$ before applying PCA.)
 
 We can estimate the covariance matrix of $\mathbf{X}$ as
 
-$$ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} $$
+\\[ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} \\]
 
-$$ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{10} $$
+\\[ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{10} \\]
 
-$$ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \tag{11} $$
+\\[ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \tag{11} \\]
 
 Dividing by two and moving each term to opposite sides of the equation, we get the
 familiar equation for the eigenproblem:
 
-$$ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \tag{12} $$
+\\[ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \tag{12} \\]
 
 This shows that every "direction of maximal variation" is in fact an eigenvector
 of the covariance matrix, and the variance in that direction is the corresponding
@@ -273,7 +270,7 @@ Define $\mathbf{Q}$ to be the $n \times n$ *right* eigenvalue matrix (meaning
 each *column* is an eigenvector) and $\mathbf{\Lambda}$ is the diagonal $n \times n$
 matrix containing eigenvalues along the diagonal. 
 
-$$ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} $$
+\\[ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} \\]
 
 We will discuss the algorithm necessary to compute $\mathbf{Q}$ and $\mathbf{\Lambda}$
 below, but first let's discuss some alternative ways to motivate PCA.
@@ -296,11 +293,11 @@ $\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T$.
 The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$,
 yielding a new, transformed data set $\mathbf{X}'$.
 
-$$ \mathbf{X}' = \mathbf{X} \mathbf{Q} \tag{14} $$
+\\[ \mathbf{X}' = \mathbf{X} \mathbf{Q} \tag{14} \\]
 
 When we then estimate the empirical covariance of $\mathbf{X}'$, we find
 
-$$ \begin{align}
+\\[ \begin{align}
 \mathbf{C}' & = \frac{\mathbf{X}'^T \mathbf{X}'}{n} \tag{15} \\
 & = \frac{(\mathbf{X}\mathbf{Q})^T (\mathbf{X}\mathbf{Q})}{n} \\
 & = \frac{\mathbf{Q}^T \mathbf{X}^T \mathbf{X}\mathbf{Q}}{n} \\
@@ -308,7 +305,7 @@ $$ \begin{align}
 & = \mathbf{Q}^T \mathbf{C} \mathbf{Q} \\
 & = \mathbf{\Lambda}
 \end{align}
-$$
+\\]
 
 Because $\mathbf{\Lambda}$ is a diagonal matrix, we've shown that the empirical
 covariance of our transformed data set is diagonal; which is to say, all of the
@@ -329,7 +326,7 @@ eigenvector matrix $\mathbf{Q}$ is only one of two common ways to define the
 transformed data $\mathbf{X}'$. Alternatively, we could have used the so-called
 "[loadings][L]" matrix, defined like so:
 
-$$ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \tag{16} $$
+\\[ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \tag{16} \\]
 
 The square root of a matrix may seem strange to you, but recall that
 $\mathbf{\Lambda}$ is diagonal, so this just means the element-wise square root

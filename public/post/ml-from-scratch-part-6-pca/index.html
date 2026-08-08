@@ -278,17 +278,17 @@ which we will write as the matrix product $\mathbf{q}^T \mathbf{x}$. This new
 quantity is clearly a scalar random variable, so we can apply the variance
 operator to get a scalar measure of variance.</p>
 
-<p>$$ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} $$</p>
+<p>\[ \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{1} \]</p>
 
 <p>Does this suffice to allow us to define a direction of maximal variation? Not
 quite. If we try to pose the naive optimization problem:</p>
 
-<p>$$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} $$</p>
+<p>\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \tag{2} \]</p>
 
 <p>We can easily prove no solution exists. Proof: Assume that $\mathbf{a}$ is the maximum. There
 always exists another vector $\mathbf{b} = 2 \mathbf{a}$ which implies that:</p>
 
-<p>$$\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] &gt; \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] \tag{3}$$.</p>
+<p>\[\operatorname{Var}[ \mathbf{b}^T \mathbf{x}]  = 4 \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ] &gt; \operatorname{Var}[ \mathbf{a}^T \mathbf{x} ]. \tag{3}\]</p>
 
 <p>Which implies that $\mathbf{a}$ was not the maximum after all, which is absurd.
 Q.E.D.  The upshot is that we must impose some additional constraint.</p>
@@ -296,11 +296,11 @@ Q.E.D.  The upshot is that we must impose some additional constraint.</p>
 <p>Recall that a dot product is only a projection in a geometric sense if $\mathbf{q}$ is a
 <em>unit</em> vector. Why don&rsquo;t we impose the condition</p>
 
-<p>$$ \mathbf{q}^T \mathbf{q} = 1 \tag{4} $$</p>
+<p>\[ \mathbf{q}^T \mathbf{q} = 1 \tag{4} \]</p>
 
 <p>To obtain the <em>constrained</em> optimization problem</p>
 
-<p>$$ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} $$</p>
+<p>\[ \underset{\mathbf{q}}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] \quad\quad \text{such that} \, \mathbf{q}^T \mathbf{q} = 1 \tag{5} \]</p>
 
 <p>Well at least this <em>has</em> a solution, even if it isn&rsquo;t immediately obvious how
 to solve it. We can&rsquo;t simply set partial derivative with respect to
@@ -352,16 +352,13 @@ have a closed form solution) gives an <em>exact</em> solution where the constrai
 <p>It&rsquo;s easy to use too, at least in our simple case. We introduce the Lagrange
 multiplier $\lambda$ and rewrite our optimization as follows:</p>
 
-<p>$$ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} $$</p>
+<p>\[ \underset{\mathbf{q} ,\, \lambda}{\operatorname{argmax}} \operatorname{Var}[ \mathbf{q}^T \mathbf{x} ] + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{6} \]</p>
 
 <p>Why is this the same as the above? Let&rsquo;s call the above function $f(\mathbf{q}, \lambda)$ write down the <a href="https://en.wikipedia.org/wiki/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions">KKT conditions</a>:</p>
 
-<p>$$
-  \begin{align}
-    \nabla_\mathbf{q} f &amp; = 0 \tag{7} <br />
-    \frac{\partial f}{\partial \lambda} &amp; = 0 \tag{8}
-  \end{align}
-$$</p>
+<p>\[ \nabla_\mathbf{q} f = 0 \tag{7} \]</p>
+
+<p>\[ \frac{\partial f}{\partial \lambda} = 0 \tag{8} \]</p>
 
 <p>But equation (8) is simply $\mathbf{q}^T \mathbf{q} - 1 = 0$ which is simply
 our unit vector constraint&hellip; this guarantees that when we solve (7) and (8),
@@ -381,16 +378,16 @@ $\mathbf{\mu}$ before applying PCA.)</p>
 
 <p>We can estimate the covariance matrix of $\mathbf{X}$ as</p>
 
-<p>$$ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} $$</p>
+<p>\[ \mathbf{C} = \frac{\mathbf{X}^T \mathbf{X}}{n} \tag{9} \]</p>
 
-<p>$$ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{10} $$</p>
+<p>\[ f = \mathbf{q}^T \mathbf{C} \mathbf{q} + \lambda (1 - \mathbf{q}^T \mathbf{q}) \tag{10} \]</p>
 
-<p>$$ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \tag{11} $$</p>
+<p>\[ \nabla f = 2 \mathbf{C} \mathbf{q} - 2 \lambda \mathbf{q} \tag{11} \]</p>
 
 <p>Dividing by two and moving each term to opposite sides of the equation, we get the
 familiar equation for the eigenproblem:</p>
 
-<p>$$ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \tag{12} $$</p>
+<p>\[ \mathbf{C} \mathbf{q} = \lambda \mathbf{q} \tag{12} \]</p>
 
 <p>This shows that every &ldquo;direction of maximal variation&rdquo; is in fact an eigenvector
 of the covariance matrix, and the variance in that direction is the corresponding
@@ -406,7 +403,7 @@ of $\mathbf{C}$.</p>
 each <em>column</em> is an eigenvector) and $\mathbf{\Lambda}$ is the diagonal $n \times n$
 matrix containing eigenvalues along the diagonal.</p>
 
-<p>$$ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} $$</p>
+<p>\[ \mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T \tag{13} \]</p>
 
 <p>We will discuss the algorithm necessary to compute $\mathbf{Q}$ and $\mathbf{\Lambda}$
 below, but first let&rsquo;s discuss some alternative ways to motivate PCA.</p>
@@ -427,11 +424,11 @@ $\mathbf{C} = \mathbf{Q} \mathbf{\Lambda} \mathbf{Q}^T$.</p>
 <p>The resulting right eigenvector matrix $\mathbf{Q}$ can be applied to $X$,
 yielding a new, transformed data set $\mathbf{X}&lsquo;$.</p>
 
-<p>$$ \mathbf{X}&rsquo; = \mathbf{X} \mathbf{Q} \tag{14} $$</p>
+<p>\[ \mathbf{X}&rsquo; = \mathbf{X} \mathbf{Q} \tag{14} \]</p>
 
 <p>When we then estimate the empirical covariance of $\mathbf{X}&lsquo;$, we find</p>
 
-<p>$$ \begin{align}
+<p>\[ \begin{align}
 \mathbf{C}&rsquo; &amp; = \frac{\mathbf{X}&lsquo;^T \mathbf{X}&lsquo;}{n} \tag{15} <br />
 &amp; = \frac{(\mathbf{X}\mathbf{Q})^T (\mathbf{X}\mathbf{Q})}{n} <br />
 &amp; = \frac{\mathbf{Q}^T \mathbf{X}^T \mathbf{X}\mathbf{Q}}{n} <br />
@@ -439,7 +436,7 @@ yielding a new, transformed data set $\mathbf{X}&lsquo;$.</p>
 &amp; = \mathbf{Q}^T \mathbf{C} \mathbf{Q} <br />
 &amp; = \mathbf{\Lambda}
 \end{align}
-$$</p>
+\]</p>
 
 <p>Because $\mathbf{\Lambda}$ is a diagonal matrix, we&rsquo;ve shown that the empirical
 covariance of our transformed data set is diagonal; which is to say, all of the
@@ -459,7 +456,7 @@ eigenvector matrix $\mathbf{Q}$ is only one of two common ways to define the
 transformed data $\mathbf{X}&lsquo;$. Alternatively, we could have used the so-called
 &ldquo;<a href="https://stats.stackexchange.com/questions/143905/loadings-vs-eigenvectors-in-pca-when-to-use-one-or-another">loadings</a>&rdquo; matrix, defined like so:</p>
 
-<p>$$ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \tag{16} $$</p>
+<p>\[ \mathbf{L} = \mathbf{Q} \sqrt{\mathbf{\Lambda}} \tag{16} \]</p>
 
 <p>The square root of a matrix may seem strange to you, but recall that
 $\mathbf{\Lambda}$ is diagonal, so this just means the element-wise square root
