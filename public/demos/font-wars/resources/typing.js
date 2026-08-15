@@ -80,10 +80,8 @@ $(function() {
     bullet = bulletTier.bullet;
 
     function getBulletTier(value) {
-        for ( var i=BULLET_TIERS.length-1; i>=0; i-- ) {
-            if ( value >= BULLET_TIERS[i].min ) return BULLET_TIERS[i];
-        }
-        return BULLET_TIERS[0];
+        const index = getBulletTierIndex(value);
+        return BULLET_TIERS[index];
     }
 
     function getBulletTierIndex(value) {
@@ -104,15 +102,12 @@ $(function() {
 
         if ( multiplier <= 1 ) {
             return '';
-        } else if ( multiplier === 5 || (multiplier % 10 === 0) ) {
+        } else if ( getBulletTierIndex(newMultipier) > getBulletTierIndex(oldMultiplier) ) {
             return 'level up!';
-        } else if ( multiplier > oldMultiplier ) {
-            return multiplier + 'X';
-        } else {
-            return '';
         }
+        
+        return multiplier + 'X';
     }
-    setMultiplier(1);
 
     function ensureSound() {
         if ( soundInitialized ) return;
@@ -721,7 +716,7 @@ $(function() {
         gameOverAt = undefined;
         paused = false;
         pausedAt = undefined;
-        setMultiplier(1);
+        setMultiplier(49);
 
         ensureSound();
         sound.music.stop();
