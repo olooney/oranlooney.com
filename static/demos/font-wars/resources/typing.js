@@ -716,7 +716,7 @@ $(function() {
         gameOverAt = undefined;
         paused = false;
         pausedAt = undefined;
-        setMultiplier(49);
+        setMultiplier(1);
 
         ensureSound();
         sound.music.stop();
