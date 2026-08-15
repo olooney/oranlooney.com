@@ -7,13 +7,18 @@ $(function() {
 
     var reticleSvg = '<svg id="color-fill" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="300" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon class="hex" points="300,150 225,280 75,280 0,150 75,20 225,20"></polygon></svg>';
 
-    var words = ['still', 'loading', 'words'];
+    var words = ['still', 'loading', 'words', 'thank', 'you', 'for', 'being', 'patient'];
+    var wordIndex = 0;
 
+    /*
     $.get('resources/words.txt', function(data) {
         words = data.split('\n')
             .map(word => word.trim())
-            .filter(word => word);
+            .filter(word => word)
+            .shuffle();
+        wordIndex = 0;
     });
+    */
 
     var alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -190,10 +195,20 @@ $(function() {
         return this;
     }
 
-
     Array.prototype.random = function() {
-        return this[ Math.floor(Math.random() * this.length) ]
+        return this[ Math.floor(Math.random() * this.length) ];
     }
+
+    Array.prototype.shuffle = function shuffle() {
+        for (let i = this.length - 1; i > 0; i--) {
+            // Generate a random index from 0 to i
+            const j = Math.floor(Math.random() * (i + 1));
+            [this[i], this[j]] = [this[j], this[i]];
+        }
+        return this;
+    }
+
+
 
     // creates a new sprite on the document
     function newSprite(cls, content) { 
@@ -727,16 +742,29 @@ $(function() {
         sound.music.loop('fast', 1.0, 10);
     }
 
+    function nextWord() {
+        const word = words[wordIndex];
+
+        // cycle through the words again
+        wordIndex++;
+        if (wordIndex >= words.length ) {
+            words.shuffle();
+            wordIndex = 0;
+        }
+
+        return word;
+    }
+
     function spawn(generation) {
         if ( gameOver || paused || generation !== spawnGeneration ) {
             return;
         }
 
-        // ambiguous starting letters are annoying.
-        var word = words.random();
+        // avoid ambiguous starting letters
+        var word = nextWord();
         for ( var i=0; i<10; i++ ) {
             if ( $('.enemy').startsWith(word.charAt(0)).length ) {
-                word = words.random();
+                word = nextWord();
             } else {
                 break;
             }
