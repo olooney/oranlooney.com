@@ -10,7 +10,6 @@ $(function() {
     var words = ['still', 'loading', 'words', 'thank', 'you', 'for', 'being', 'patient'];
     var wordIndex = 0;
 
-    /*
     $.get('resources/words.txt', function(data) {
         words = data.split('\n')
             .map(word => word.trim())
@@ -18,7 +17,6 @@ $(function() {
             .shuffle();
         wordIndex = 0;
     });
-    */
 
     var alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -207,8 +205,6 @@ $(function() {
         }
         return this;
     }
-
-
 
     // creates a new sprite on the document
     function newSprite(cls, content) { 
