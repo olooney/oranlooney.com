@@ -64,10 +64,6 @@ autobiography:
 > clue. What you should do is imagine you're a student again, and take this paper
 > upstairs, read every line of it, and check the equations. Then you'll
 > understand it very easily."<br><br>
->
-> I took her advice, and checked through the whole thing, and found it to be very
-> obvious and simple. I had been afraid to read it, thinking it was too
-> difficult.
 > <br>&mdash;Richard Feynman, <i>[Surely You're Joking, Mr. Feynman!][SYJ]</i>
 
 So in the context of math or physics, "create" means something closer to
@@ -191,7 +187,7 @@ Other candidates I considered but ultimately decided were out-of-scope:
 * [Learning-to-Rank][LTR] - e.g. [Bradley-Terry-Luce][BTL], etc. These can
   generally be reduced to logistic regression or viewed as latent variable
   models and solved with the EM algorithm.
-* [Felligi-Sunter Record Linkage][FS] - another take on the EM algorithm, and requiring to many 
+* [Felligi-Sunter Record Linkage][FS] - another take on the EM algorithm, but requiring too many 
   prerequisites like [Jaro-Winkler distance][JWD].
 * [Low-Rank Matrix Approximation][LRA] - used for recommendation engines.
 * [Support Vector Machines][SVM] -  implemented using the [SMO Algorithm][SMO], which is very interesting.
