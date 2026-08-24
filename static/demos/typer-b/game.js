@@ -1,4 +1,5 @@
 // --- Gameplay ---
+const TITLE = 'Typing Test';
 const GAME_SECONDS = 120;
 const TICK_RATE = 1000 / 60;
 const GAME_FRAMES = GAME_SECONDS * 60;
@@ -34,6 +35,7 @@ const SENTENCE_FILES = Array.from({ length: 20 }, (_, i) => `sentences-${String(
 const COLOR_BG = '#ffffff';
 const COLOR_TEXT = '#000000';
 const COLOR_DIM = '#555555';
+const COLOR_INACTIVE = '#888888';
 const COLOR_GOOD = '#22cc22';
 const COLOR_BAD = '#cc0000';
 const COLOR_PANEL = '#eeeeee';
@@ -41,7 +43,7 @@ const COLOR_BAR = '#222222';
 const COLOR_BAR_EMPTY = '#bbbbbb';
 const HIGHLIGHT_ALPHA = 0.5;
 const PAUSE_OVERLAY_ALPHA = 0.35;
-const MISSING_CHARACTER = '\u0000';
+const MISSING_CHARACTER = ' ';
 
 function hasModifierKey(e) {
     return e.ctrlKey || e.altKey || e.metaKey;
@@ -568,6 +570,7 @@ class Game {
 
     drawLetterErrorHighlights(line, typed, start, end, x, y, fontSize) {
         let letterX = x;
+        console.log(typed);
 
         for (let i = start; i < end; i++) {
             const expected = line[i];
@@ -575,6 +578,13 @@ class Game {
             const letterWidth = this.ctx.measureText(expected).width;
 
             if (actual !== expected) {
+                // show actual mistyped character above the line
+                this.ctx.save();
+                this.ctx.fillStyle = COLOR_BAD;
+                this.ctx.fillText(actual, letterX, y-fontSize-3);
+                this.ctx.restore();
+
+                // red highlight around individual error
                 this.fillHighlight(COLOR_BAD, letterX, y - 2, letterWidth, fontSize + 2);
             }
 
@@ -595,7 +605,8 @@ class Game {
         }
 
         this.ctx.save();
-        this.ctx.font = `${fontSize}px monospace`;
+        this.ctx.font = `${fontSize}px "SFMono-Regular", Consolas, Menlo, monospace`;
+                        
         this.ctx.textBaseline = 'top';
 
         let cursorX = x;
@@ -626,7 +637,7 @@ class Game {
                 this.drawLetterErrorHighlights(line, typed, token.start, end, cursorX, cursorY, fontSize);
             }
 
-            this.ctx.fillStyle = active ? COLOR_TEXT : COLOR_DIM;
+            this.ctx.fillStyle = active ? COLOR_TEXT : COLOR_INACTIVE;
             this.ctx.fillText(token.text, cursorX, cursorY);
             cursorX += tokenWidth;
         }
@@ -679,10 +690,10 @@ class Game {
     drawGame() {
         const lines = this.visibleLines();
         const panelX = 0;
-        const panelY = 56;
+        const panelY = 70;
         const panelW = this.width - panelX * 2;
         const panelH = 76;
-        const textInset = this.ctx.measureText('M').width / 2;
+        const textInset = 20;
 
         this.ctx.save();
         this.ctx.fillStyle = COLOR_PANEL;
@@ -796,11 +807,11 @@ class Game {
         this.drawBackground();
 
         if (this.loading) {
-            this.drawCenteredTitle('Typer-B', 'Loading sentences...');
+            this.drawCenteredTitle(TITLE, 'Loading sentences...');
         } else if (this.loadError) {
-            this.drawCenteredTitle('Typer-B', 'Could not load sentences');
+            this.drawCenteredTitle(TITLE, 'Could not load sentences');
         } else if (this.titleScreen) {
-            this.drawCenteredTitle('Typer-B', 'Press space to start');
+            this.drawCenteredTitle(TITLE, 'Press space to start');
         } else if (this.gameOver) {
             this.drawGameOver();
         } else {
