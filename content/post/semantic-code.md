@@ -2,6 +2,7 @@
 title: "Semantic Code"
 author: "Oran Looney"
 date: 2008-04-30
+home: false
 tags: 
     - Python
     - Philosophy

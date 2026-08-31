@@ -3,6 +3,7 @@ title: "Eight Billion People"
 author: "Oran Looney"
 date: 2022-11-14
 publishdate: 2022-11-12
+home: false
 tags:
   - Future
   - Philosophy

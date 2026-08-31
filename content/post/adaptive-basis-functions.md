@@ -2,6 +2,7 @@
 title: 'Adaptive Basis Functions'
 author: Oran Looney
 date: 2019-05-21
+home: false
 tags:
   - Python
   - Statistics

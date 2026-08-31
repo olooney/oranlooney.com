@@ -2,7 +2,10 @@
 title: "Complex Numbers in R II"
 author: "Oran Looney"
 date: 2018-06-30
-tags: ["R", "Math"]
+home: false
+tags:
+  - R
+  - Math
 image: /post/complex-r-part-2_files/lead.jpg
 ---
 

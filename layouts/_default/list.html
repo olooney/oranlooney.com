@@ -20,7 +20,11 @@
   {{- end }}
   <div class="main" role="main">
     <section class="list {{ .Kind }}-list">
-      {{- $paginator := .Paginator }}
+      {{- $.Scratch.Set "listPages" .Pages }}
+      {{- if eq .Kind "home" }}
+        {{- $.Scratch.Set "listPages" (where .Pages "Params.home" "ne" false) }}
+      {{- end }}
+      {{- $paginator := .Paginate ($.Scratch.Get "listPages") }}
       {{- range $paginator.Pages }}
       <article class="article">
         <a href="{{ .Permalink | relURL }}" class="article-titles">
