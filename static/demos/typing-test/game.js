@@ -261,6 +261,7 @@ class Game {
         this.lineStart = 0;
         this.typedLine = '';
         this.completedCorrectChars = 0;
+        this.keystrokeErrors = 0;
         this.incorrectWords = 0;
         this.finalWpm = 0;
         this.previousHighScore = readHighScore();
@@ -417,19 +418,28 @@ class Game {
         };
     }
 
-    markCurrentWordMistyped(text) {
-        const range = this.currentWordRange(text);
+    hasErroneousSpace(range) {
+        return this.typedLine.slice(range.start, range.end).includes(MISSING_CHARACTER);
+    }
 
-        if (this.typedLine.length < range.end || completedWordHasMistake(this.typedLine, text)) {
-            return false;
+    nextWordFirstCharacter(text, range) {
+        if (range.end < text.length) {
+            return text[range.end + 1];
         }
 
-        const errorIndex = Math.max(range.start, range.end - 1);
+        return this.visibleLines().next.text[0];
+    }
 
-        this.typedLine = this.typedLine.slice(0, errorIndex)
-            + MISSING_CHARACTER
-            + this.typedLine.slice(errorIndex + 1);
-        return true;
+    jumpToNextWord(text, range, key) {
+        if (range.end === text.length) {
+            this.advanceLine();
+            this.typedLine = key;
+            return;
+        }
+
+        const nextWordStart = range.end + 1;
+
+        this.typedLine += MISSING_CHARACTER.repeat(nextWordStart - this.typedLine.length) + key;
     }
 
     advanceWord(text) {
@@ -519,7 +529,7 @@ class Game {
         const secondsLeft = Math.ceil(this.timeLeftFrames() / 60);
         const mins = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
         const secs = String(secondsLeft % 60).padStart(2, '0');
-        const errors = this.gameOver ? this.incorrectWords : this.displayErrorCount();
+        const wordErrors = this.gameOver ? this.incorrectWords : this.displayErrorCount();
         const barX = 48;
         const barW = this.width - barX * 2;
         const barH = 10;
@@ -531,7 +541,7 @@ class Game {
         const tickX = barX + barW * (WPM_TICK / WPM_BAR_MAX);
         const wpmText = `WPM: ${String(wpm).padEnd(3, ' ')}`;
         const timeText = `TIME: ${mins}:${secs}`;
-        const errorText = `ERRORS: ${errors}`;
+        const errorText = `KEY ERR: ${this.keystrokeErrors}  WORD ERR: ${wordErrors}`;
 
         this.ctx.save();
 
@@ -554,6 +564,7 @@ class Game {
         this.ctx.fillText(wpmText, barX, textY);
         this.ctx.textAlign = 'center';
         this.ctx.fillText(timeText, this.width / 2, textY);
+        this.ctx.font = 'bold 16px monospace';
         this.ctx.textAlign = 'right';
         this.ctx.fillText(errorText, this.width - barX, textY);
 
@@ -718,7 +729,9 @@ class Game {
         this.ctx.fillStyle = COLOR_TEXT;
         this.ctx.fillText(`WPM: ${this.finalWpm}`, scoreBoxRight, y);
         y += scoreFont * 1.4;
-        this.ctx.fillText(`ERRORS: ${this.incorrectWords}`, scoreBoxRight, y);
+        this.ctx.fillText(`KEY ERRORS: ${this.keystrokeErrors}`, scoreBoxRight, y);
+        y += scoreFont * 1.4;
+        this.ctx.fillText(`WORD ERRORS: ${this.incorrectWords}`, scoreBoxRight, y);
         y += scoreFont * 1.4;
         this.ctx.fillStyle = COLOR_DIM;
         this.ctx.fillText(`PREVIOUS BEST: ${this.previousHighScore}`, scoreBoxRight, y);
@@ -876,13 +889,6 @@ class Game {
 
         const currentText = this.visibleLines().current.text;
 
-        if (e.key === ' ') {
-            e.preventDefault();
-            this.timerStarted = true;
-            this.advanceWord(currentText);
-            return;
-        }
-
         if (e.key === 'Enter') {
             e.preventDefault();
 
@@ -897,15 +903,35 @@ class Game {
 
         e.preventDefault();
 
-        if (this.typedLine.length >= currentText.length) return;
-
         const range = this.currentWordRange(currentText);
+        const nextWordFirstCharacter = this.nextWordFirstCharacter(currentText, range);
+
+        if (this.hasErroneousSpace(range) && e.key === nextWordFirstCharacter) {
+            this.timerStarted = true;
+            this.jumpToNextWord(currentText, range, e.key);
+            keypressSounds.play();
+            return;
+        }
 
         if (this.typedLine.length >= range.end) {
-            if (this.markCurrentWordMistyped(currentText)) {
+            this.timerStarted = true;
+
+            if (e.key === ' ') {
+                if (range.end === currentText.length) {
+                    this.advanceLine();
+                } else {
+                    this.typedLine += ' ';
+                    keypressSounds.play();
+                }
+            } else {
+                this.keystrokeErrors++;
                 errorSound.play();
             }
             return;
+        }
+
+        if (e.key !== currentText[this.typedLine.length]) {
+            this.keystrokeErrors++;
         }
 
         const typedLine = this.typedLine + e.key;
