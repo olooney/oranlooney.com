@@ -30,7 +30,7 @@ const KEYPRESS_SOUNDS = [
 ];
 const DING_SOUND = '../font-wars/resources/sounds/91924__Benboncan__Till_With_Bell.ogg';
 const ERROR_SOUND = '../font-wars/resources/sounds/476177__unadamlar__wrong-choice.wav';
-const SENTENCE_FILES = Array.from({ length: 20 }, (_, i) => `sentences-${String(i + 1).padStart(2, '0')}.txt`);
+const SENTENCE_FILES = Array.from({ length: 20 }, (_, i) => `data/sentences-${String(i + 1).padStart(2, '0')}.txt`);
 // --- Colors ---
 const COLOR_BG = '#ffffff';
 const COLOR_TEXT = '#000000';
