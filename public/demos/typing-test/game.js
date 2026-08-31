@@ -541,7 +541,7 @@ class Game {
         const tickX = barX + barW * (WPM_TICK / WPM_BAR_MAX);
         const wpmText = `WPM: ${String(wpm).padEnd(3, ' ')}`;
         const timeText = `TIME: ${mins}:${secs}`;
-        const errorText = `KEY ERR: ${this.keystrokeErrors}  WORD ERR: ${wordErrors}`;
+        const errorText = `ERRORS: ${this.keystrokeErrors}/${wordErrors}`;
 
         this.ctx.save();
 
@@ -564,7 +564,6 @@ class Game {
         this.ctx.fillText(wpmText, barX, textY);
         this.ctx.textAlign = 'center';
         this.ctx.fillText(timeText, this.width / 2, textY);
-        this.ctx.font = 'bold 16px monospace';
         this.ctx.textAlign = 'right';
         this.ctx.fillText(errorText, this.width - barX, textY);
 
