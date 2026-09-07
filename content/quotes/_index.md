@@ -62,6 +62,10 @@ small and to see something in the large."
 <br>&mdash;Alistair Cockburn
 
 
+"Focus is a matter of deciding what things you're not going to do."
+<br>&mdash;John Carmack
+
+
 "Hofstadter's law: It always takes longer than you expect, even when you take
 into account Hofstadter's law."
 <br>&mdash;Douglas Hofstadter
@@ -73,7 +77,7 @@ as many beer cans."
 <br>&mdash;Steve McConnell
 
 
-"Organizations which design systems ([...]) are constrained to produce designs
+"Organizations which design systems [...] are constrained to produce designs
 which are copies of the communication structures of these organizations."
 <br>&mdash;Melvin Conway
 
@@ -166,6 +170,12 @@ without a plan, on top of ruins."
 "Every great developer you know got there by solving problems they were
 unqualified to solve until they actually did it."
 <br>&mdash;Patrick McKenzie
+
+
+"It is the essence of modern engineering not only to be able to check one's
+own work but also to have one's work checked and to be able to check the work
+of others."
+<br>&mdash;Henry Petroski
 
 
 "With a sufficient number of users of an API, it does not matter what you
@@ -802,6 +812,12 @@ except for the problem of too many layers of indirection."
 <br>&mdash;David Wheeler, [The Fundamental Theorem of Software Engineering][FTSE]
 
 
+"The most amazing achievement of the computer software industry is its
+continuing cancellation of the steady and staggering gains made by the computer
+hardware industry."
+<br>&mdash;Henry Petroski
+
+
 "There are three types of lies: lies, damn lies, and statistics."
 <br>&mdash;Benjamin Disraeli
 
@@ -821,6 +837,11 @@ be given as a parameter."
 "It ain't what you don't know that gets you in trouble. It's what you know for
 sure that just ain't so."
 <br>&mdash;Josh Billings?
+
+
+"Any sufficiently complicated C or Fortran program contains an ad hoc,
+informally-specified, bug-ridden, slow implementation of half of Common Lisp."
+<br>&mdash;Philip Greenspun, [Greenspun's Tenth Rule][GTR]
 
 
 "A statistician is a person who draws a mathematically precise line from an
@@ -860,6 +881,10 @@ solve the problem well."
 
 "Statistics means never having to say you're certain."
 <br>&mdash;Rob Hyndman
+
+
+"Weeks of coding can save you hours of planning."
+<br>&mdash;Anonymous
 
 
 "A mathematician is a device for turning coffee into theorems."
@@ -1084,5 +1109,6 @@ there's always a prime between $n$ and $2n$.
 [PHG]: https://briefpoems.wordpress.com/2016/02/23/grooks-brief-poems-by-piet-hein/
 [CF]: https://en.wiktionary.org/wiki/Chesterton%27s_fence
 [FTSE]: https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering
+[GTR]: https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule
 
 
