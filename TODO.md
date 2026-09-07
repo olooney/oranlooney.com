@@ -48,5 +48,6 @@
   - [X] Larger RSS Icon
   - [X] Copyright in footer?
   - [X] Remove StackOverflow Link
+  - [X] Fix and lint non-ASCII characters
   
 
