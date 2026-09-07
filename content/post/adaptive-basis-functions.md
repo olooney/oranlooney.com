@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'Adaptive Basis Functions'
 author: Oran Looney
 date: 2019-05-21

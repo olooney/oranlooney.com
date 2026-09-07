@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'A Seriously Slow Fibonacci Function'
 author: Oran Looney
 date: 2019-07-06

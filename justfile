@@ -20,3 +20,6 @@ thumbnails:
     {{python}} ./scripts/thumbnails.py
 
 alias thumb := thumbnails
+
+lint *args:
+    {{python}} ./scripts/lint.py {{args}}

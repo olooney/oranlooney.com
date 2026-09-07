@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch III: Backpropagation'
 author: Oran Looney
 date: 2019-02-03

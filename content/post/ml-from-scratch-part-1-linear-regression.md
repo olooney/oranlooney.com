@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch I: Linear Regression'
 author: Oran Looney
 date: 2018-11-29

@@ -1,4 +1,4 @@
-﻿---
+---
 title: "A Fairly Fast Fibonacci Function"
 author: "Oran Looney"
 date: 2019-02-19
@@ -654,7 +654,7 @@ call graph we can still see some redundant effort. It turns out that we
 are recalculating each power of two every time we need it, resulting
 in this ever widening tree-shaped DFG:
 
-<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naÃ¯ve DFG for fib(103)" alt="naive DFG for fib(103)" />
+<img src="/post/fibonacci_files/fib_103_dfg_bad.png" title="naive DFG for fib(103)" alt="naive DFG for fib(103)" />
 
 We can fix this with - you guessed it - dynamic programming! With dynamic
 programming, it's a good idea to only cache the results of sub-problems which

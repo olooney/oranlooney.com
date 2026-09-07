@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch II: Logistic Regression'
 author: Oran Looney
 date: 2018-12-27

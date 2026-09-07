@@ -171,7 +171,7 @@ beads up, carry one over there, slide a few back down. Multiplication and
 division? Same story: the algorithms are encoded in muscle memory and can be
 executed very quickly, almost without conscious thought.
 
-In other words, the abacus isn't just a calculator; it’s a prototypical
+In other words, the abacus isn't just a calculator; it's a prototypical
 [register machine][CSRM].
 
 Feynman tells [this story][FVA] about winning against an abacus in a cube root
@@ -605,7 +605,7 @@ science.
 [AL]: https://en.wikipedia.org/wiki/Ada_Lovelace
 [APT]: https://en.wikipedia.org/wiki/Approximation_theory
 [ARTH]: https://en.wikipedia.org/wiki/Arithmometer
-[ASM]: https://en.wikipedia.org/wiki/American_system_of_manufacturing#History "American System of Manufacturing – History"
+[ASM]: https://en.wikipedia.org/wiki/American_system_of_manufacturing#History "American System of Manufacturing - History"
 [AV]: https://en.wikipedia.org/wiki/Adriaan_Vlacq
 [AWMT]: https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/
 [BCI]: https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface

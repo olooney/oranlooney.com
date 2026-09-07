@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch V: Gaussian Mixture Models'
 author: Oran Looney
 date: 2019-06-05

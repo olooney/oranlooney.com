@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch IV: Decision Trees'
 author: Oran Looney
 date: 2019-03-01

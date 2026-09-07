@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch VI: Principal Component Analysis'
 author: Oran Looney
 date: 2019-09-16
@@ -67,7 +67,7 @@ be mathematically equivalent:
 
 That these very different motivations all lead to the same formal solution is
 reminiscent of the fact that the [models of computation][MOC] proposed independently
-by Turing, Church, and GÃ¶del turned out to all be equivalent. Just as this
+by Turing, Church, and Gödel turned out to all be equivalent. Just as this
 triple convergence led some to believe that the definition of computation was
 discovered rather than merely invented, the fact that PCA keeps popping up
 suggests that it is in some fundamental way the "right" way to think about
@@ -973,7 +973,7 @@ broad audience.
 Still, we haven't really solved the issue of having to choose an arbitrary
 threshold, have we? All we've done is couch the choice in terms of a more
 intuitive metric.  I'm not sure any definitive and universally accepted answer
-exists - but the wonderfully named paper *[Repairing Tom Swiftâ€™s
+exists - but the wonderfully named paper *[Repairing Tom Swift's
 Electric Factor Analysis Machine][RTS]* suggests one method, and I've seen
 several references to this [paper by Minka][ACD] which may represent the
 current state-of-the-art.

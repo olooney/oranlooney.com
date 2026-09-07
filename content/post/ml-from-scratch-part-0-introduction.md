@@ -1,4 +1,4 @@
-﻿---
+---
 title: 'ML From Scratch: Introduction'
 author: "Oran Looney"
 date: '2018-11-11'
