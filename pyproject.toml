@@ -4,6 +4,7 @@ version = "1.0.0"
 description = ""
 dependencies = [
     "Pillow>=12.2.0",
+    "polars>=1.33.0",
 ]
 
 [tool.uv]

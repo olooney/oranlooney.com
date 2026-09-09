@@ -95,7 +95,7 @@ lifetime the machine never worked well enough to see any practical adoption.
 Despite its flaws, other inventors could see its potential and for the next [two
 centuries][MC18], the Leibniz wheel and the [Pinwheel calculator][PWC] (a variation
 which also traces back to Leibniz's 1685 book) would dominate the field. Nearly
-every mechanical calculator produced in this time derived from Leibniz’s ideas.
+every mechanical calculator produced in this time derived from Leibniz's ideas.
 
 Two centuries later, the Leibniz wheel would form the basis of the first
 commercially successful mechanical calculator, the [Colmar arithmometer][ARTH]. 
@@ -110,7 +110,7 @@ So why did the Colmar succeed where Leibniz failed? The answer is simple: the
 vast improvement in precision machining techniques in the intervening
 centuries.
 
-While we don’t have time to go into the full [history][MTH] of [precision][GB]
+While we don't have time to go into the full [history][MTH] of [precision][GB]
 [machining][IPO] during the [industrial][DENG] [revolution][ASM], suffice it to
 say that what was impossible for a lone craftsman in the 17th century was
 commonplace by the 19th. Leibniz himself lamented the difficulties, saying:
@@ -454,7 +454,7 @@ computing.
 [AL]: https://en.wikipedia.org/wiki/Ada_Lovelace
 [APT]: https://en.wikipedia.org/wiki/Approximation_theory
 [ARTH]: https://en.wikipedia.org/wiki/Arithmometer
-[ASM]: https://en.wikipedia.org/wiki/American_system_of_manufacturing#History "American System of Manufacturing – History"
+[ASM]: https://en.wikipedia.org/wiki/American_system_of_manufacturing#History "American System of Manufacturing - History"
 [AV]: https://en.wikipedia.org/wiki/Adriaan_Vlacq
 [AWMT]: https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/
 [BCI]: https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface

@@ -23,3 +23,6 @@ alias thumb := thumbnails
 
 lint *args:
     {{python}} ./scripts/lint.py {{args}}
+
+sizes *args:
+    {{python}} ./scripts/sizes.py {{args}}

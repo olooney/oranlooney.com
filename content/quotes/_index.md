@@ -694,6 +694,11 @@ psychological roadblocks which obstruct the approach to reality; which is why,
 <br>&mdash;Socrates
 
 
+"All fortune is good fortune; for it either rewards, disciplines, amends, or
+punishes, and so is either useful or just."
+<br>&mdash;Boethius, *[The Consolation of Philosophy][TCOP]*
+
+
 "Violence is the last refuge of the incompetent."
 <br>&mdash;Isaac Asimov
 
@@ -1110,5 +1115,6 @@ there's always a prime between $n$ and $2n$.
 [CF]: https://en.wiktionary.org/wiki/Chesterton%27s_fence
 [FTSE]: https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering
 [GTR]: https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule
+[TCOP]: https://en.wikipedia.org/wiki/The_Consolation_of_Philosophy
 
 
