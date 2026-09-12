@@ -12,10 +12,12 @@ the broader field of machine learning, so you should probably think of me as a
 Data Scientist or a Machine Learning Engineer.
 
 I hold master's degrees in physics and math, and have worked in the healthcare
-and insurance sectors doing software development and data science for two
-decades. These days, I'm professionally interested in data science, machine
-learning, applied statistics, software architecture, and occasionally data
-visualization.
+and insurance sectors doing software development, data science, and ML
+engineering for [more than two decades][RPDF].
+These days, I'm professionally interested in data science, machine learning,
+applied statistics, software architecture, and data visualization.
+I'm not looking for work, but am always willing to talk about interesting
+problems.
 
 <!--
 I am actively looking for a new position; if you're hiring, please take a look
