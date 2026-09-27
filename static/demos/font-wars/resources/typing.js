@@ -1012,6 +1012,8 @@ $(function() {
                 letter = eventKey(e).toLowerCase();
             } else if ( isApostropheKey(e) ) {
                 letter = "'"; // apostrophes are used in some words...
+            } else if ( eventKey(e) === '-' ) {
+                letter = '-';
             } else {
                 // non-handled keydown, do nothing
                 return;

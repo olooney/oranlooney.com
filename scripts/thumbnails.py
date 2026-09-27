@@ -5,9 +5,8 @@ This is often inconvenient since the size of the returned thumbnail cannot be pr
 library solves this for square thumbnails by cropping the image to a square and then resizing it. However,
 this only works for exact squares.
 
-This function generalizes that approach to work for thumbnails of any aspect ratio. The returned thumbnail
-is always exactly the requested size, and edges (left/right or top/bottom) are cropped off to adjust to
-make sure the thumbnail will be the right size without distorting the image.
+This script supports two fixed-size thumbnail strategies: center-cropping for post lead images and fitting
+the full image on a white background for demo gallery images, where UI details near the edges matter.
 '''
 
 from PIL import Image
@@ -62,7 +61,15 @@ def cropped_thumbnail(img, size):
 
     return img.resize(target.size, Image.Resampling.LANCZOS)
 
-def lead_photos(pattern, size):
+def contained_thumbnail(img, size):
+    thumbnail = img.convert('RGBA')
+    thumbnail.thumbnail(size, Image.Resampling.LANCZOS)
+    canvas = Image.new('RGBA', size, 'white')
+    offset = ((size[0] - thumbnail.width) // 2, (size[1] - thumbnail.height) // 2)
+    canvas.alpha_composite(thumbnail, offset)
+    return canvas.convert('RGB')
+
+def lead_photos(pattern, size, thumbnailer=cropped_thumbnail, overwrite=False):
     size = flat(*size)
 
     for filename in glob(pattern):
@@ -72,18 +79,18 @@ def lead_photos(pattern, size):
 
         thumb_filename = basename + '.{}x{}'.format(*size) + ext
 
-        # if the thumbnail does not yet exist...
-        if not os.path.isfile(thumb_filename):
+        # If the thumbnail does not yet exist, unless regeneration was requested.
+        if overwrite or not os.path.isfile(thumb_filename):
             print('converting {}...'.format(filename))
 
             # make the thumbnail image
-            img = Image.open(filename)
-            thumb = cropped_thumbnail(img, size)
-            thumb.save(thumb_filename, optimize=True)
+            with Image.open(filename) as img:
+                thumb = thumbnailer(img, size)
+                thumb.save(thumb_filename, optimize=True)
             print('saved {}.\n'.format(thumb_filename))
 
 if __name__ == '__main__':
     lead_photos('static/post/*/lead.*', (192, 128))
-    lead_photos('static/demos/*/lead.*', (192, 160))
+    lead_photos('static/demos/*/lead.*', (192, 160), contained_thumbnail)
 
 

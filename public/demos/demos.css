@@ -1,112 +1,150 @@
+:root {
+    color: #444;
+    font-family: Georgia, serif;
+    line-height: 1.2;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    min-height: 100vh;
     margin: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+}
+
+.site-header {
+    width: 100%;
+    background: #800000;
+    color: #fff;
+}
+
+.site-navi {
+    width: calc(100% - 32px);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0.2em 0.2em;
+}
+
+.site-title {
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin-top: 10px;
+    color: inherit;
+    font-family: Garamond, "Times New Roman", serif;
+    font-size: 44px;
+    font-weight: normal;
+    line-height: 50px;
+    text-decoration: none;
+}
+
+.site-title:hover,
+.site-title:focus-visible {
+    color: #ddd;
+}
+
+.main {
+    width: calc(100% - 32px);
+    max-width: 900px;
+    margin: 0 auto;
+    flex: 1;
+}
+
+.breadcrumb {
+    width: calc(100% - 1em);
+    margin: 0 auto 24px;
+    padding: 0.75em 0 0.25em;
+    border-bottom: 1px solid #800000;
+    color: #800000;
+    font-size: 2em;
+    font-weight: normal;
 }
 
 .grid-container {
-    --card-width: 240px;
-    --grid-gap: 20px;
-
     display: grid;
-    grid-template-columns: var(--card-width);
-    gap: var(--grid-gap);
-    justify-content: center;
-    width: calc(100% - 32px);
-    max-width: calc((var(--card-width) * 3) + (var(--grid-gap) * 2));
-    margin: 32px auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
 }
 
 .grid-item {
-    text-align: center;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    box-sizing: border-box;
-    width: var(--card-width);
-    padding: 5px;
+    min-width: 0;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    background: #fff;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .grid-item a {
-    color: #800000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     height: 100%;
+    padding: 12px 12px 10px;
+    display: grid;
+    grid-template-rows: 160px auto;
+    gap: 9px;
+    align-items: center;
+    color: #800000;
+    text-align: center;
     text-decoration: none;
 }
 
 .grid-item img {
-    width: min(100%, 192px);
+    display: block;
+    width: 192px;
+    max-width: 100%;
     height: 160px;
+    margin: auto;
     object-fit: contain;
-    border-radius: 10px;
-    display: inline-block;
 }
 
 .grid-item p {
-    margin: 2px;
-    font-size: 1.1em;
+    margin: 0;
+    font-size: 1.05em;
+    line-height: 1.25;
 }
 
-.grid-item a:hover {
-    text-decoration: underline;
+.grid-item:hover {
+    border-color: #a66;
+    box-shadow: 0 2px 8px rgba(80, 0, 0, 0.12);
 }
 
-@media (hover: hover) {
-    .grid-item {
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .grid-item:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-}
-
-header {
-    width: 100%;
-    background: #800000;
-}
-
-header nav {
-    text-align: center;
-    padding: 0.8em;
-}
-
-.site-title {
-    color: white;
-    text-decoration: none;
-    font-family: garamond, "Times New Roman", serif;
-    font-size: 44px;
-    line-height: 50px;
-    display: inline-block;
+.grid-item a:focus-visible {
+    outline: 2px solid #800000;
+    outline-offset: 3px;
 }
 
 .site-footer {
-    margin-top: auto;
-    width: 100%;
-    background-color: #f8f8f8;
-    text-align: center;
-    padding: 10px 0;
-    border-top: 1px solid #ccc;
-}
-
-.copyright {
-    font-size: 0.9em;
+    width: calc(100% - 32px);
+    max-width: 900px;
+    margin: 70px auto 20px;
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
     color: #666;
+    font-size: 0.8rem;
 }
 
-@media (min-width: 536px) {
+@media (max-width: 720px) {
     .grid-container {
-        grid-template-columns: repeat(2, var(--card-width));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
     }
 }
 
-@media (min-width: 792px) {
+@media (max-width: 460px) {
+    .main,
+    .site-footer,
+    .site-navi {
+        width: calc(100% - 24px);
+    }
+
     .grid-container {
-        grid-template-columns: repeat(3, var(--card-width));
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .grid-item {
+        transition: none;
     }
 }

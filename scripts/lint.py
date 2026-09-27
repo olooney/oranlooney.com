@@ -59,6 +59,7 @@ JAPANESE_REGEX = re.compile(
 )
 
 FIX_REGEX = re.compile("|".join(map(re.escape, FIXES)) +  r"|[^\x00-\x7F]+")
+TYPABLE_WORD_REGEX = re.compile(r"^[A-Za-z'-]+$")
 
 class FixError(ValueError):
     pass
@@ -93,6 +94,20 @@ def build_arg_parser():
 def caret_diff(line: str, fixed: str) -> str:
     diff = [ (" " if cl == cf else "^") for cl, cf in zip(line, fixed) ]
     return "".join(diff)
+
+def lint_words(filename: Path) -> int:
+    with open(filename, encoding="utf-8") as file:
+        words = [line.rstrip("\r\n") for line in file]
+
+    invalid_words = [
+        (line_number, word)
+        for line_number, word in enumerate(words, start=1)
+        if not TYPABLE_WORD_REGEX.fullmatch(word)
+    ]
+    for line_number, word in invalid_words:
+        print(f"\nfile {filename}: Untypable word {word!r} on line {line_number}.")
+
+    return len(invalid_words)
 
 def main(args: argparse.Namespace):
     total_problems = 0
@@ -146,6 +161,9 @@ def main(args: argparse.Namespace):
                 else:
                     and_removed_bom = " and removed UTF BOM" if has_bom else ""
                     print(f"{fixed_line_count} problems {action_taken}{and_removed_bom}.")
+
+    words_filename = Path(__file__).resolve().parent.parent / "static/demos/font-wars/resources/words.txt"
+    total_problems += lint_words(words_filename)
 
     if args.verbose >= 1:
         print(f"scanned {len(filenames)} files and {action_taken} {total_problems} problems total.")

@@ -34,6 +34,7 @@ html, body {
 	-webkit-transform: none !important;
 	-moz-transform: none !important;
 	transform: none !important;
+	white-space: nowrap;
 }
 
 .target {

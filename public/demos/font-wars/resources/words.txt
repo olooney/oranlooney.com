@@ -1,5 +1,7 @@
+Cartesian
 I
 I'll
+Jabberwocky
 a
 abase
 abate
@@ -92,6 +94,7 @@ alone
 along
 already
 also
+alternative
 although
 always
 am
@@ -118,6 +121,7 @@ anarchy
 anathema
 and
 anecdote
+anecdotes
 angle
 animal
 animus
@@ -131,6 +135,7 @@ answer
 antagonism
 anthropomorphic
 antipathy
+antiquarian
 antiquated
 antivirus
 anxiety
@@ -239,6 +244,7 @@ averageness
 aversion
 avocation
 away
+awry
 axiom
 baby
 back
@@ -302,12 +308,12 @@ better
 between
 bewilder
 big
+bikeshed
 birds
 bit
 black
 blanch
 bland
-blandish
 blatant
 blight
 blighted
@@ -324,6 +330,7 @@ board
 boast
 boat
 body
+boilerplate
 boisterous
 bolster
 bolt
@@ -336,7 +343,7 @@ born
 bot
 both
 bottom
-bouillon
+bounce
 box
 branches
 brawn
@@ -352,6 +359,7 @@ brother
 brought
 brown
 browser
+brusquely
 bucolic
 build
 building
@@ -405,7 +413,6 @@ careen
 carefully
 carrion
 carry
-cartesian
 cartoonishly
 case
 castigate
@@ -472,6 +479,7 @@ cleave
 climbed
 clinical
 close
+clothed
 clothes
 cloud
 coalesce
@@ -502,9 +510,11 @@ commendable
 commiserate
 commission
 commit
+commodity
 common
 company
 compare
+compartmentalized
 compatibility
 compel
 compendium
@@ -522,6 +532,7 @@ computational
 computer
 computing
 conceit
+conceited
 concept
 conceptualization
 concern
@@ -607,6 +618,8 @@ cower
 cows
 coy
 crabbed
+crackpot
+crank
 craven
 create
 credence
@@ -622,6 +635,7 @@ crone
 crops
 cross
 crowd
+crunch
 cryptic
 cryptography
 culmination
@@ -778,6 +792,7 @@ disperse
 disport
 disposition
 dispute
+disquieting
 disquisition
 dissemble
 dissemination
@@ -801,6 +816,7 @@ documentation
 does
 doesn't
 dog
+dogfooding
 dogged
 dogma
 dogmatic
@@ -877,6 +893,7 @@ emblazon
 emboss
 embroil
 emend
+emergent
 emetic
 emollient
 emolument
@@ -893,11 +910,11 @@ encroach
 encroachment
 encumber
 end
+end-to-end
 endemic
 endogenous
 endorphin
 endow
-endue
 enduring
 energy
 enervate
@@ -1056,6 +1073,7 @@ feign
 felicitous
 fell
 felt
+fertilizes
 fervent
 fervid
 fetid
@@ -1120,6 +1138,7 @@ foment
 food
 foolhardy
 foot
+footgun
 footnote
 for
 force
@@ -1155,7 +1174,6 @@ frieze
 from
 front
 frontier
-fructify
 frugal
 fruit
 frustrate
@@ -1170,6 +1188,7 @@ furnish
 furtive
 fusion
 fuzz
+fuzzing
 fuzzy
 gadfly
 gainsay
@@ -1179,6 +1198,7 @@ game
 garble
 garden
 garish
+garner
 garrulous
 gas
 gauche
@@ -1202,6 +1222,7 @@ gird
 girl
 gist
 give
+gizmo
 glass
 glib
 glitchy
@@ -1217,6 +1238,7 @@ got
 gouge
 governance
 government
+graffiti
 granary
 grandiloquence
 grandiloquent
@@ -1298,6 +1320,7 @@ his
 history
 hit
 hoary
+hobbyist
 hold
 hole
 holistic
@@ -1314,6 +1337,7 @@ horse
 hot
 hours
 house
+housekeeping
 hovel
 how
 however
@@ -1382,6 +1406,7 @@ improvident
 impugn
 in
 inadvertent
+inauspicious
 incandescent
 inches
 inchoate
@@ -1470,6 +1495,7 @@ interdict
 interest
 interface
 interfaces
+interloper
 intermediate
 interminable
 internet
@@ -1486,6 +1512,7 @@ intractable
 intransigent
 intrepid
 intrigue
+intriguing
 introvert
 inundate
 inured
@@ -1509,7 +1536,6 @@ it's
 itinerant
 its
 itself
-jabberwocky
 jaded
 jargon
 jeer
@@ -1523,6 +1549,7 @@ jubilant
 jumped
 just
 justify
+juvenile
 juxtapose
 juxtaposition
 keen
@@ -1534,6 +1561,7 @@ kind
 kindle
 kinetic
 king
+kludge
 knack
 knew
 knight
@@ -1584,6 +1612,7 @@ libertine
 library
 lie
 life
+lifelessness
 lifted
 light
 like
@@ -1650,6 +1679,7 @@ manipulate
 mannered
 many
 map
+map-reduce
 mapping
 mar
 maraud
@@ -1741,6 +1771,7 @@ mitochondrion
 mnemonic
 mock
 mode
+model-free
 modeler
 modeling
 modern
@@ -1755,6 +1786,7 @@ monad
 monetary
 money
 monism
+monkeypatch
 monotonous
 months
 moon
@@ -1829,6 +1861,7 @@ note
 nothing
 notice
 notion
+notoriety
 noun
 novel
 now
@@ -1956,6 +1989,7 @@ peculiar
 pedagogue
 pedantic
 pedestrian
+pejorative
 pellucid
 penchant
 pendulous
@@ -2020,7 +2054,9 @@ pillory
 pinion
 pinnacle
 pique
+pitched
 pithy
+pittance
 placate
 place
 placebo
@@ -2086,6 +2122,7 @@ prelude
 premise
 prepared
 preposterous
+prescient
 presentation
 presumptuous
 preternatural
@@ -2139,7 +2176,6 @@ psychology
 public
 pucker
 pugnacious
-puissant
 pulled
 pummel
 pundit
@@ -2150,7 +2186,7 @@ purvey
 pushed
 pusillanimous
 put
-quadraceps
+quadriceps
 quaff
 quagmire
 quail
@@ -2318,6 +2354,7 @@ rose
 round
 rout
 row
+rubber-ducking
 rubric
 rudiment
 rue
@@ -2435,6 +2472,7 @@ singularity
 sinister
 sinuous
 sir
+sirens
 sister
 sit
 six
@@ -2453,6 +2491,8 @@ sleek
 sleep
 sleight
 slew
+slick
+slipstream
 slithy
 slowly
 sluice
@@ -2460,6 +2500,8 @@ small
 smattering
 smell
 smiled
+smothered
+smugly
 sniff
 snow
 so
@@ -2488,6 +2530,7 @@ sordid
 sound
 south
 southern
+souvenir
 space
 spam
 spangle
@@ -2514,6 +2557,7 @@ squalor
 squander
 square
 squeamish
+squib
 staid
 stake
 stanch
@@ -2564,6 +2608,7 @@ students
 study
 stultify
 stump
+stupefied
 stupendous
 subdue
 subject
@@ -2761,9 +2806,11 @@ turbid
 turn
 turpitude
 tutelage
+twenty-first
 two
 type
 typography
+tyrants
 tyro
 ubiquitous
 ulterior
@@ -2772,6 +2819,7 @@ umbrage
 unaffected
 unanimity
 unassuming
+unattainable
 uncanny
 uncle
 unconscionable
@@ -2789,6 +2837,7 @@ undulate
 unexceptionable
 unfaltering
 ungainly
+unhinged
 unimpeachable
 unit
 universals
@@ -2825,6 +2874,7 @@ utilizing
 utter
 vacate
 vacillate
+vacuous
 vagary
 vague
 vain
@@ -2849,6 +2899,8 @@ veracious
 verb
 verbose
 veritable
+version
+vertigo
 very
 vestige
 vestigial
@@ -2860,6 +2912,7 @@ vilify
 village
 vim
 vindicate
+vindication
 vindictive
 vintner
 virtual
@@ -2948,6 +3001,7 @@ win
 wind
 window
 wings
+winsome
 winter
 wire
 wisdom
@@ -2981,6 +3035,7 @@ wrong
 wrote
 wry
 xenophobic
+yak-shaving
 yard
 yardstick
 yawn
@@ -3004,6 +3059,7 @@ zenith
 zephyr
 zeppelin
 zero
+zero-shot
 zest
 zestful
 zigzag
