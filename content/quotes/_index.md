@@ -396,6 +396,11 @@ observation, and merciless to fallacy in logic."
 <br>&mdash;Thomas Henry Huxley
 
 
+"The great obstacle to discovering the shape of the earth, the continents, and
+the oceans was not ignorance, but the illusion of knowledge."
+<br>&mdash;Daniel J. Boorstin
+
+
 "Measure what is measurable, and make measurable what is not so."
 <br>&mdash;Galileo Galilei
 
@@ -745,6 +750,11 @@ full of doubt."
 <br>&mdash;Bertrand Russell
 
 
+"Our knowledge can be only finite, while our ignorance must necessarily be
+infinite."
+<br>&mdash;Karl Popper
+
+
 "Ignorance more frequently begets confidence than does knowledge."
 <br>&mdash;Charles Darwin
 
@@ -754,6 +764,11 @@ arguments that will change his mind. This is proof neither of his own strength
 nor his teacher's weakness. When someone caught in an argument hardens to stone,
 there is just no more reasoning with them."
 <br>&mdash;Epictetus
+
+
+"I prefer the company of peasants because they have not been educated
+sufficiently to reason incorrectly."
+<br>&mdash;Michel de Montaigne
 
 
 "'Tis the time's plague when madmen lead the blind."

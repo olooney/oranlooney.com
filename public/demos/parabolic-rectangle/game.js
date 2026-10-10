@@ -1,4 +1,4 @@
-// global gravity constant
+// global constants
 const G = 0.5;
 const UPDATE_HZ = 60;
 const DELTA_TIME = 1000 / UPDATE_HZ;
@@ -203,7 +203,6 @@ class Autoplay extends GamePlay {
         const predictedY = bird.y + bird.dy * dt + 0.5 * G * dt * dt;
         const shouldFlap = predictedY > targetY;
         const canFlap = game.frame >= this.lastButtonFrame + Math.ceil(0.3 * UPDATE_HZ);
-        console.log(dt, targetY, predictedY, shouldFlap ? "FLAP": " ", canFlap ? "!" : "?");
 
         if (shouldFlap && canFlap) {
             this.lastButtonFrame = game.frame;
