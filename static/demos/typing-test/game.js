@@ -580,7 +580,6 @@ class Game {
 
     drawLetterErrorHighlights(line, typed, start, end, x, y, fontSize) {
         let letterX = x;
-        console.log(typed);
 
         for (let i = start; i < end; i++) {
             const expected = line[i];
