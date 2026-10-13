@@ -832,6 +832,11 @@ except for the problem of too many layers of indirection."
 <br>&mdash;David Wheeler, [The Fundamental Theorem of Software Engineering][FTSE]
 
 
+"There are only five probabilities the average human can handle: 99 percent,
+one percent, 100 percent, zero, and 50-50. That's it."
+<br>&mdash;Richard Thaler
+
+
 "The most amazing achievement of the computer software industry is its
 continuing cancellation of the steady and staggering gains made by the computer
 hardware industry."
