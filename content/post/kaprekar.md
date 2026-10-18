@@ -170,7 +170,7 @@ animation:
 
 This allows us to see collapses occurring with each iteration and observe the
 complex but obviously non-random structure that emerges. (The static images
-for each iteration are available in the [Jupyter notebook][JH].)
+for each iteration are available in the [Jupyter notebook][JNB].)
 
 The diagonal structure we notice above seems prominent in this visualization as
 well; in fact, it seems to get even more pronounced as the number of iterations
@@ -375,7 +375,7 @@ but hard to interpret. The color-coded graph showing individual transitions
 is complex but rewards close study and the "diagonal neighbor" structure is even
 more apparent on this graph than on the 100x100 views.
 
-Source code for this project is available as a Jupyter notebook ([.html][JH], [.ipynb][JNB]).
+Source code for this project is available as a [Jupyter notebook][JNB].
 
 
 [RS]: https://en.wikipedia.org/wiki/Range_(statistics)
@@ -383,6 +383,5 @@ Source code for this project is available as a Jupyter notebook ([.html][JH], [.
 [KR]: https://en.wikipedia.org/wiki/Kaprekar%27s_routine
 [CC]: https://en.wikipedia.org/wiki/Collatz_conjecture
 [BP]: https://en.wikipedia.org/wiki/Birthday_problem
-[JH]: /post/kaprekar_files/Kaprekar.html
-[JNB]: /post/kaprekar_files/Kaprekar.ipynb
+[JNB]: https://notebooks.oranlooney.com/lab/index.html?path=kaprekar.ipynb
 [GVZ]: https://graphviz.org/
