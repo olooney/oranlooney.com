@@ -959,6 +959,11 @@ multithreading.' Nothhw tpe yawrve o oblems."
 <br>&mdash;John Carmack
 
 
+"When you have eliminated the impossible, whatever remains is often more
+improbable than your having made a mistake in one of your impossibility proofs."
+<br>&mdash;Steven Kass
+
+
 ## Poems
 
 <b>A Dozen, A Gross, A Score</b><br>
