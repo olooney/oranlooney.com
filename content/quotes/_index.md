@@ -847,6 +847,10 @@ hardware industry."
 <br>&mdash;Benjamin Disraeli
 
 
+"The nice thing about standards is that you have so many to choose from."
+<br>&mdash;Andrew Tanenbaum
+
+
 "There are only two hard problems in computer science: cache invalidation,
 naming things, and off-by-one errors."
 <br>&mdash;Leon Bambrick
@@ -962,6 +966,12 @@ multithreading.' Nothhw tpe yawrve o oblems."
 "When you have eliminated the impossible, whatever remains is often more
 improbable than your having made a mistake in one of your impossibility proofs."
 <br>&mdash;Steven Kass
+
+
+"Exercise control in your experiments, for the data is full of noise.
+But let this not blind you to what signal there is; many models strive for
+linearity, and everywhere theories are full of insight."
+<br>&mdash;with apologies to Max Ehrmann
 
 
 ## Poems
