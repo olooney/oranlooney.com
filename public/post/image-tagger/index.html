@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Superabundance of Books, Neatly Arranged</title>
+  <meta name="author" content="Oran Looney"/>
+  <meta name="description" content="It started innocently enough. I’d see an interesting book cover and right-click to save it to a Dropbox folder. Using a VLM to annotate and categorize images for easy searchability just seemed like the logical next step.
+I knew I had a problem when I started using cosine similarity on image embedding vectors to weed out duplicates, but it wasn’t until I started using classic CV algorithms to detect quadrangles so I could automate the process of cropping and orthorectifying book covers that my friends started to worry about me."/>
+  <link rel="canonical" href="https://www.oranlooney.com/post/image-tagger/"/>
+  <meta property="og:title" content="A Superabundance of Books, Neatly Arranged"/>
+  <meta property="og:description" content="It started innocently enough. I’d see an interesting book cover and right-click to save it to a Dropbox folder. Using a VLM to annotate and categorize images for easy searchability just seemed like the logical next step.
+I knew I had a problem when I started using cosine similarity on image embedding vectors to weed out duplicates, but it wasn’t until I started using classic CV algorithms to detect quadrangles so I could automate the process of cropping and orthorectifying book covers that my friends started to worry about me."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://www.oranlooney.com/post/image-tagger/"/>
+  <meta property="og:site_name" content="OranLooney.com"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="A Superabundance of Books, Neatly Arranged"/>
+  <meta name="twitter:description" content="It started innocently enough. I’d see an interesting book cover and right-click to save it to a Dropbox folder. Using a VLM to annotate and categorize images for easy searchability just seemed like the logical next step.
+I knew I had a problem when I started using cosine similarity on image embedding vectors to weed out duplicates, but it wasn’t until I started using classic CV algorithms to detect quadrangles so I could automate the process of cropping and orthorectifying book covers that my friends started to worry about me."/>
+  <meta property="article:published_time" content="2026-11-11T00:00:00Z"/>
+  <meta property="article:tag" content="Computer Vision"/>
+  <meta property="article:tag" content="LLM"/>
+  <meta property="article:tag" content="Visualization"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="OWL" />
+
+  <meta name="generator" content="Hugo 0.42.1" />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="/css/style.css?v=1" media="all" />
+  <link rel="stylesheet" href="/css/syntax.css?v=1" media="all" />
+  <link rel="stylesheet" href="/css/custom.css?v=10" media="all" />
+
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"
+  ></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+<header class="site-header">
+  <nav class="site-navi">
+    <a href="/" class="site-title">OWL</a>
+    <ul class="site-navi-items">
+      <li class="site-navi-item">
+        <a href="/search/" title="Site Search"><i class="fa-solid fa-search"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/tags/" title="Article Tags"><i class="fa-solid fa-tag"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/archives/" title="Article Archives"><i class="fa-solid fa-archive"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/quotes/" title="Favorite Quotes"><i class="fa-solid fa-quote-right"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/demos/" title="Web Demos"><i class="fa-solid fa-dice"></i></a>
+      </li>
+      <li class="site-navi-item">
+        <a href="/about/" title="About Me"><i class="fa-solid fa-info-circle"></i></a>
+      </li>
+    </ul>
+    
+  <ul class="author-social">
+    <li><a href="https://notebooks.oranlooney.com" target="_blank" title="Jupyter Notebooks"><i class="fa-regular fa-lightbulb"></i></a></li>
+    <li><a href="/books/" title="Book Wall"><i class="fa-solid fa-book-open"></i></a></li>
+    <li><a href="https://linkedin.com/in/oran-looney" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a></li>
+    <li><a href="https://github.com/olooney" target="_blank"  title="github"><i class="fa-brands fa-github"></i></a></li>
+    <li><a href="https://stats.stackexchange.com/users/48250/olooney" target="_blank" title="CrossValidated"><i class="fa-solid fa-flask"></i></a></li>
+  </ul>
+
+  </nav>
+</header>
+
+
+  <div class="main" role="main">
+    <article class="article">
+      <img src="/post/image-tagger_files/lead.jpg" class="article-image" />
+      <h1 class="article-title">A Superabundance of Books, Neatly Arranged</h1>
+      
+
+      <hr class="article-title-bottom">
+      <ul class="article-meta">
+        <li class="article-meta-author">
+            by <a href="/about/">Oran Looney</a>
+        </li>
+        <li class="article-meta-date"><time>November 11, 2026</time></li>
+        <li class="article-meta-tags">
+          <a href="/tags/computer-vision/">
+            <i class="fas fa-tag"></i>
+            Computer Vision
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/llm/">
+            <i class="fas fa-tag"></i>
+            LLM
+          </a>&nbsp;
+        </li>
+        <li class="article-meta-tags">
+          <a href="/tags/visualization/">
+            <i class="fas fa-tag"></i>
+            Visualization
+          </a>&nbsp;
+        </li>
+      </ul>
+      
+      <p>It started innocently enough. I&rsquo;d see an interesting book cover and
+right-click to save it to a Dropbox folder. Using a VLM to annotate and
+categorize images for easy searchability just seemed like the logical next step.</p>
+
+<p>I knew I had a problem when I started using cosine similarity on image embedding
+vectors to weed out duplicates, but it wasn&rsquo;t until I
+started using classic CV algorithms to detect quadrangles so I could automate the process of
+cropping and orthorectifying book covers that my friends started
+to worry about me.</p>
+
+<p>Oran, they said. This can&rsquo;t go on. You&rsquo;ve already collected nearly a thousand images.
+When are you going to stop?</p>
+
+<p>Oh, that&rsquo;s easy, I replied. When I hit 1,260. You could have supplied a calligraphy
+class with the blankness of their stares.</p>
+
+<p>You don&rsquo;t understand, I insisted. 1,260 is perfect. Well, not a <em>perfect</em> number, <em>per se</em>.
+Superabundant. And highly composite too!
+But don&rsquo;t you see? That&rsquo;s <em>better</em> than perfect.
+That&rsquo;s what makes it so perfect! Look, I&rsquo;ve made a graph:</p>
+
+<p><img src="/post/image-tagger_files/divisors.png" alt="Wall Divisibility Graph" /></p>
+
+<p>That&rsquo;s when I learned an important lesson:
+sometimes having visual aids prepared ahead of time doesn&rsquo;t make you seem <em>less</em> crazy.
+I know it seems unfair, but that&rsquo;s just how the world works.</p>
+
+<p>Organizing Images</p>
+
+<p><a href="https://www.oranlooney.com/books/">https://www.oranlooney.com/books/</a></p>
+
+<p><a href="https://github.com/olooney/image-tagger">https://github.com/olooney/image-tagger</a>
+<a href="https://olooney.github.io/image-tagger/docs/example/dedupe_review.html">https://olooney.github.io/image-tagger/docs/example/dedupe_review.html</a>
+<a href="https://olooney.github.io/image-tagger/docs/example/wall.html">https://olooney.github.io/image-tagger/docs/example/wall.html</a>
+<a href="https://olooney.github.io/image-tagger/docs/example/gallery.html">https://olooney.github.io/image-tagger/docs/example/gallery.html</a>
+<a href="https://olooney.github.io/image-tagger/docs/example/transform_review.html">https://olooney.github.io/image-tagger/docs/example/transform_review.html</a></p>
+
+<p><a href="https://notebooks.oranlooney.com/lab/index.html?path=highly_composite.ipynb">https://notebooks.oranlooney.com/lab/index.html?path=highly_composite.ipynb</a></p>
+
+<p><img src="/post/image-tagger_files/1260_ranks.png" alt="Hasse Diagram 1260" /></p>
+
+<p>/demos/1260/</p>
+
+<p><img src="/post/image-tagger_files/etsy_grid.jpg" alt="Etsy Grid" /></p>
+
+    </article>
+
+    <hr>
+    <ul class="pager article-pager">
+      <li class="pager-newer pager-noitem">&lt; Newer</li>
+      <li class="pager-older">
+        <a href="/post/rose-petals/" data-toggle="tooltip" data-placement="top" title="What Rose Petals Teach Us about Induction">Older &gt;</a>
+      </li>
+    </ul>
+  </div>
+
+<div class="site-footer">
+  <div class="copyright">
+	  
+  </div>
+  <ul class="site-footer-items">
+    <li class="site-footer-item-rsslink">
+      <a href="/index.xml" type="application/rss+xml" target="_blank" title="RSS">
+        <i class="fa-solid fa-rss"></i>
+      </a>
+    </li>
+  </ul>
+  <div class="powerdby">
+    Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+  </div>
+</div>
+<script src="/js/custom.js?v=1"></script>
+
+
+<script>
+window.MathJax = {
+  loader: {
+    load: ['[tex]/color']
+  },
+
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    packages: {'[+]': ['color']}
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4.1.2/tex-chtml.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

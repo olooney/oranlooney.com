@@ -5,6 +5,7 @@ date: 2024-06-05
 publishdate: 2024-06-05
 tags:
   - Machine Learning
+  - Computer Vision
   - LLM
 image: /post/gpt-cnn_files/lead.jpg
 ---

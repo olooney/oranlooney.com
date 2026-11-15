@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.oranlooney.com/post/image-tagger/</loc>
+    <lastmod>2026-11-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/post/rose-petals/</loc>
     <lastmod>2026-07-16T00:00:00+00:00</lastmod>
   </url>
@@ -193,6 +198,12 @@
   </url>
   
   <url>
+    <loc>https://www.oranlooney.com/tags/computer-vision/</loc>
+    <lastmod>2026-11-11T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.oranlooney.com/tags/databases/</loc>
     <lastmod>2026-06-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -236,7 +247,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/tags/llm/</loc>
-    <lastmod>2026-07-16T00:00:00+00:00</lastmod>
+    <lastmod>2026-11-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -254,7 +265,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/</loc>
-    <lastmod>2026-07-16T00:00:00+00:00</lastmod>
+    <lastmod>2026-11-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -266,7 +277,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/post/</loc>
-    <lastmod>2026-07-16T00:00:00+00:00</lastmod>
+    <lastmod>2026-11-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -296,13 +307,7 @@
   
   <url>
     <loc>https://www.oranlooney.com/tags/visualization/</loc>
-    <lastmod>2026-07-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.oranlooney.com/tags/web/</loc>
-    <lastmod>2010-04-28T00:00:00+00:00</lastmod>
+    <lastmod>2026-11-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
