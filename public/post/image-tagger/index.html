@@ -112,7 +112,33 @@ I knew I had a problem when I started using cosine similarity on image embedding
         </li>
       </ul>
       
-      <p>It started innocently enough. I&rsquo;d see an interesting book cover and
+<aside class="toc">
+  <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#organizing-images">Organizing Images</a></li>
+<li><a href="#orthorectification">Orthorectification</a></li>
+<li><a href="#safe-for-work">Safe for Work</a></li>
+<li><a href="#semantic-similarity-grid">Semantic Similarity Grid</a></li>
+<li><a href="#number-theory">Number Theory</a></li>
+<li><a href="#color-theory">Color Theory</a>
+<ul>
+<li><a href="#overall-impression">Overall Impression</a></li>
+<li><a href="#emotional-balance">Emotional Balance</a></li>
+</ul></li>
+<li><a href="#mistakes">Mistakes</a>
+<ul>
+<li><a href="#pipeline-orientation">Pipeline Orientation</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+</aside>
+      
+
+<p>It started innocently enough. I&rsquo;d see an interesting book cover and
 right-click to save it to a Dropbox folder. Using a VLM to annotate and
 categorize images for easy searchability just seemed like the logical next step.</p>
 
@@ -139,7 +165,38 @@ That&rsquo;s what makes it so perfect! Look, I&rsquo;ve made a graph:</p>
 sometimes having visual aids prepared ahead of time doesn&rsquo;t make you seem <em>less</em> crazy.
 I know it seems unfair, but that&rsquo;s just how the world works.</p>
 
-<p>Organizing Images</p>
+<h2 id="organizing-images">Organizing Images</h2>
+
+<p>Tags, categories, genres, descriptions.</p>
+
+<p>Review tool. My initial idea is this wouldn&rsquo;t be necessary - I
+could just edit the plaintext <code>metadata.csv</code> file directly. But
+this quickly proved onerous because I&rsquo;d have to first find the
+exact row to edit. Putting the form side-by-side with the image
+made things much easier, as did the simple dropdowns (which save
+immediately, avoiding an extra click) and action buttons.</p>
+
+<p>Another really nice thing was being able to use yellow highlighting
+to flag common issues, like oversize images or high NSFW scores.</p>
+
+<h2 id="orthorectification">Orthorectification</h2>
+
+<p>Hough transform and maximum quadrangle.</p>
+
+<p>Neither algorithm works. Having the VLM &ldquo;guess&rdquo; which one will work
+<em>doesn&rsquo;t</em> work. Running both and having the VLM decide which one
+worked better worked a little. Giving the VLM the opportunity to
+adjust the output a little worked even better.</p>
+
+<p>We still needed a human eye though. I&rsquo;d say about 40% of the time,
+the recommendation could be accepted without modification. 50% of
+the time, a couple of corners would need to be tweaked by a few
+pixels, but it still provided a good starting point, which saved a
+lot of time. And about 10% of the time, I&rsquo;d just have to do it
+manually.</p>
+
+<p>So, we definitely needed an interactive tool for doing the perspective
+correction and crop.</p>
 
 <p><a href="https://www.oranlooney.com/books/">https://www.oranlooney.com/books/</a></p>
 
@@ -149,13 +206,127 @@ I know it seems unfair, but that&rsquo;s just how the world works.</p>
 <a href="https://olooney.github.io/image-tagger/docs/example/gallery.html">https://olooney.github.io/image-tagger/docs/example/gallery.html</a>
 <a href="https://olooney.github.io/image-tagger/docs/example/transform_review.html">https://olooney.github.io/image-tagger/docs/example/transform_review.html</a></p>
 
-<p><a href="https://notebooks.oranlooney.com/lab/index.html?path=highly_composite.ipynb">https://notebooks.oranlooney.com/lab/index.html?path=highly_composite.ipynb</a></p>
-
 <p><img src="/post/image-tagger_files/1260_ranks.png" alt="Hasse Diagram 1260" /></p>
 
 <p>/demos/1260/</p>
 
+<h2 id="safe-for-work">Safe for Work</h2>
+
+<p>Proved challenging because the open source content moderation models
+I tried seemed trained only to detect nude photography and gave
+painting and book covers a pass. I needed a model which could detect
+mildly risque book covers, not just explicit pornography.</p>
+
+<p>The best model I found for this purpose was OpenAI&rsquo;s multimodal
+content moderation API, which did a good job at assigning middling
+scores to mildly risque book covers:</p>
+
+<p><img src="/post/image-tagger_files/risque.png" alt="Venus on the Half-Shell, by Kilgore Trout" /></p>
+
+<h2 id="semantic-similarity-grid">Semantic Similarity Grid</h2>
+
 <p><img src="/post/image-tagger_files/etsy_grid.jpg" alt="Etsy Grid" /></p>
+
+<ul>
+<li>Vintage signs in the lower left</li>
+<li>Cute things in the lower right</li>
+<li>Clay figures upper right</li>
+<li>Masks center right</li>
+<li>Toys, games and puzzles center left</li>
+<li>Antiques upper left</li>
+</ul>
+
+<h2 id="number-theory">Number Theory</h2>
+
+<p>There are several ways to operationalize our intuition about what it means for a number like 1260 to have &ldquo;lots&rdquo; of divisors.</p>
+
+<p>It starts with an <em>ad hoc</em> definition about the percentage of numbers between 1 and 20 which divide it (not too far from Plato&rsquo;s discussion of 5040) and proceeds to two definitions involving the divisor function $\sigma_z(n)$: highly composite numbers and superabundant numbers. The numbers 1260 and 5040 share the infinitely rare property of being both highly composite and highly abundant; I say &ldquo;infinitely rare&rdquo; because there are only a finite number of numbers with both properties; <a href="https://oeis.org/A166981">449 of them</a>, in fact.</p>
+
+<p>See my <a href="https://notebooks.oranlooney.com/lab/index.html?path=highly_composite.ipynb">JupyterLite notebook</a> on highly composite and superabundant numbers for further exploration.</p>
+
+<h2 id="color-theory">Color Theory</h2>
+
+<p>I used a simple <a href="/post/image-tagger_files/color_cluster_treemap.py">script</a> to flatten
+the wall down to its essential colors:</p>
+
+<p><img src="/post/image-tagger_files/book_wall_colors.png" alt="Color Scheme" /></p>
+
+<h3 id="overall-impression">Overall Impression</h3>
+
+<ul>
+<li>Nostalgic and timeless - The terracotta, mustard, olive, and brown tones recall vintage book covers, old libraries, and mid-century interiors.</li>
+<li>Warm and inviting - The earthy reds and soft neutrals create a sense of comfort and belonging without feeling excessively cheerful.</li>
+<li>Intellectual and contemplative - Charcoal, slate blue, muted purple, and dark brown suggest seriousness, concentration, and introspection.</li>
+<li>Creative but restrained - The bright orange, yellow, and teal provide visual stimulation, balanced by subdued, desaturated surroundings.</li>
+<li>Grounded and authentic - The naturalistic colors evoke craftsmanship, organic materials, permanence, and an appreciation for things that age well.</li>
+</ul>
+
+<h3 id="emotional-balance">Emotional Balance</h3>
+
+<p>The palette has several interesting tensions:</p>
+
+<ul>
+<li>Warmth versus melancholy: The reds and ochres feel welcoming, but the extensive dark and muted areas add a slightly wistful quality.</li>
+<li>Energy versus stillness: Orange and yellow create moments of excitement, while the large charcoal, olive, and gray regions slow the visual rhythm.</li>
+<li>Nostalgia versus modernity: The earthy colors feel historical, while the flat geometric arrangement and teal introduce a contemporary sensibility.</li>
+<li>Individuality versus cohesion: The colors are varied and expressive, but their generally restrained saturation makes them feel related.
+In five words: Nostalgic, thoughtful, grounded, creative, comforting.</li>
+</ul>
+
+<p>The strongest impression is that of a quiet, intellectually stimulating environment with warmth and character - more like a thoughtfully curated personal library than a bright, energetic commercial space.</p>
+
+<h2 id="mistakes">Mistakes</h2>
+
+<p>The original idea was to have the user be able to use the filesystem as
+intended - moving images around, renaming them, editing them - and the
+metadata would just sit off to the side, treating the image file itself
+as the source of truth but providing additional annotation.</p>
+
+<p>What is the essence of an image? Not the filename; one of the main functions
+of the pipeline is to rename files with a clean, meaningful filename. Not a
+hash of the image contents; the pipeline can resize or crop images, convert
+it between image formats.</p>
+
+<p>You can try to put an ID in the image EXIF data, but lots of tools (like MS Paint)
+will strip that out when they touch an image.</p>
+
+<p>If I had to do it all over again, I&rsquo;d put all the metadata in a sqlite3 database,
+and I&rsquo;d use one database for all directories being managed, instead of one metadata
+CSV and one vectors.npz per directory.</p>
+
+<p>I think the identity problem could be solved if you watch the file system for changes
+with something like <a href="https://pypi.org/project/watchdog/">watchdog</a>. If the contents change but the filename stays
+the same, you can update size and other metadata. If the file extension changes, you
+can infer it&rsquo;s actually the same image. If a new file appears which has the same
+content as another at the same time the original disappears, you can infer that it
+was moved. If a new image is saved with new contents and a new filename, you can
+check the EXIF data for a unique ID. The only case that can&rsquo;t really be covered is
+if all three change simultaneously - for example, if the user opens an image in
+MS Paint, crops it, and saves it as a new filename. The system would initially
+detect that as a whole new image, but the semantic dedupe would later be able to
+match and collapse them.</p>
+
+<p>HTMX + Vanilla JavaScript worked OK. Very simple, very agent friendly. But the
+tension between CLI and web app isn&rsquo;t great. The fundamental reason why the pure
+CLI design doesn&rsquo;t work for this use case is because images are visual. You can
+really work with them in the terminal. If I had to do it all over, I&rsquo;d treat the
+web app as the primary interface, with the CLI reserved for bulk operations or
+scripting.</p>
+
+<p>Its becoming clear to me that &ldquo;human in the loop&rdquo; often requires a UI of some sort.</p>
+
+<h3 id="pipeline-orientation">Pipeline Orientation</h3>
+
+<p>Another thing I&rsquo;d do differently is flip it from batch-oriented commands to
+item-oriented processing. That is, instead of first doing all the conversions,
+then all the tagging, then all the NSFW scoring, then all the quadrangle detection,
+I&rsquo;d run all those steps for a single image, make it available for review, then
+move on to the next image. This would let the user review images incrementally
+instead of waiting for the batch to complete. The batch-oriented design was
+dictated by the CLI design, where it made sense to have separate subcommands
+which accepted a directory as a command line argument. This is another indication
+that this use case would have been better served by designing it as an application
+and not a CLI tool.</p>
 
     </article>
 
