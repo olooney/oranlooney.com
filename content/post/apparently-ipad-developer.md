@@ -3,7 +3,6 @@ title: "So, Apparently I'm an iPad Developer Now"
 author: "Oran Looney"
 date: 2010-04-28
 tags:
-    - Web
     - JavaScript
     - Humor
 image: /post/apparently-ipad-developer/lead.jpg
