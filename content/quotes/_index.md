@@ -517,6 +517,11 @@ and original manner possible."
 <br>&mdash;Richard Feynman
 
 
+"Man only plays when he is in the fullest sense of the word a human being,
+and he is only fully a human being when he plays."
+<br>&mdash;Friedrich Schiller
+
+
 "Everything is interesting if you go into it deeply enough."
 <br>&mdash;Richard Feynman
 
@@ -818,6 +823,10 @@ and ignorance on the other."
 "Either America will destroy ignorance or ignorance will destroy the United
 States."
 <br>&mdash;W. E. B. Du Bois
+
+
+"Against stupidity the gods themselves contend in vain."
+<br>&mdash;Friedrich Schiller
 
 
 ## Humor
