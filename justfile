@@ -22,7 +22,11 @@ thumbnails:
 alias thumb := thumbnails
 
 lint *args:
+    {{python}} ./scripts/setup_merge_driver.py --check
     {{python}} ./scripts/lint.py {{args}}
+
+setup-merge-driver:
+    {{python}} ./scripts/setup_merge_driver.py
 
 sizes *args:
     {{python}} ./scripts/sizes.py {{args}}

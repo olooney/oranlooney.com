@@ -1,4 +1,4 @@
-public/index.json -diff
+public/index.json -diff merge=ours
 
 *.eot  -diff -grep
 *.otf  -diff -grep
