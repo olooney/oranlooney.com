@@ -414,9 +414,9 @@ predictions with experience."
 <br>&mdash;Rob Balder
 
 
-"Some people will never learn anything, for this reason, because they
-understand everything too soon."
-<br>&mdash;Alexander Pope
+"Resolution and a plan are better than a sword, because a man whets his own
+edges on them."
+<br>&mdash;Gene Wolfe, *The Book of the New Sun*
 
 
 "It is a capital mistake to theorize before one has data."
@@ -678,7 +678,7 @@ view is wronger than both of them put together."
 mind, since our ways are governed by the artificial categories into which we
 place essentially undifferentiated things, things weaker than our words for
 them."
-<br>&mdash;Gene Wolfe, *Book of the New Sun*
+<br>&mdash;Gene Wolfe, *The Book of the New Sun*
 
 
 "Men must be taught as if you taught them not / And things unknown proposed as
@@ -771,6 +771,11 @@ there is just no more reasoning with them."
 <br>&mdash;Epictetus
 
 
+"Some people will never learn anything, for this reason: because they
+understand everything too soon."
+<br>&mdash;Alexander Pope
+
+
 "I prefer the company of peasants because they have not been educated
 sufficiently to reason incorrectly."
 <br>&mdash;Michel de Montaigne
@@ -804,6 +809,13 @@ horoscopes, our critical faculties in decline, unable to distinguish between
 what feels good and what's true, we slide, almost without noticing, back into
 superstition and darkness..."
 <br>&mdash;Carl Sagan
+
+
+"The most difficult subjects can be explained to the most slow-witted man if
+he has not formed any idea of them already; but the simplest thing cannot be
+made clear to the most intelligent man if he is firmly persuaded that he knows
+already, without a shadow of doubt, what is laid before him."
+<br>&mdash;Leo Tolstoy
 
 
 "There is a cult of ignorance in the United States, and there has always been.
