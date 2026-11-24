@@ -921,6 +921,12 @@ solve the problem well."
 <br>&mdash;Russian Proverb
 
 
+"One of the main causes of the fall of the Roman Empire was that&mdash;lacking
+zero&mdash;they had no way to indicate successful termination of their C
+programs."
+<br>&mdash;Robert Firth
+
+
 "Eschew clever rules."
 <br>&mdash;Joe Condon
 
